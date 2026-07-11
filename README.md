@@ -1,57 +1,38 @@
-## 极客时间文档
+# 极客时间文档
 
-极客时间 markdown & pdf 文档
+使用 Astro 静态展示仓库中的极客时间 Markdown。文章保持原有的“分类 / 课程 / 文档”目录结构；每个课程的 `mkdocs.yml` 仅用于保留原始文章顺序。
 
-----
+## 本地开发
 
-* 看 markdown文档，推荐: https://github.com/uaxe/geektime-docs 🌟🌟🌟
-* 看 pdf文档，推荐: https://github.com/uaxe/geektime-pdfs 🌟🌟🌟
-* 看 音视频，推荐: https://github.com/zkep/my-geektime 🌟🌟🌟🌟🌟
+需要 Node.js 22 或更高版本。
 
-### [全文搜索](https://github.com/uaxe/geektime-docs/blob/master/fultext-search/README.md)
-感谢 [KonghaYao](https://github.com/KonghaYao) 提供全文搜索功能
-
-###  markdown 在线文档
-
- * [github](https://uaxe.github.io/geektime-docs/) 
- * [netlify](https://geektime-docs.netlify.app/)  
-
-> tips: 在线文档支持 PC 浏览器，也支持移动端浏览器
-
-### 本地部署
-
-#### docker方式
-> 该方式实现了服务端代理请求图片，解决裂图，放心使用
 ```shell
-docker run -d -p 8091:8091 --restart always  --name geektime-docs  zkep/geektime-docs
-```
-浏览器访问：<http://127.0.0.1:8091/>
-
-#### 源码方式
-```shell
-git clone --single-branch --branch master --depth 1 https://github.com/uaxe/geektime-docs.git
-
-pip install mkdocs-material
-
-cd geektime-docs/后端-架构/说透中台/
-
-mkdocs serve
+npm install
+npm run dev
 ```
 
-浏览器访问：<http://127.0.0.1:8000/>
+开发服务器启动后访问终端显示的地址。生产构建：
 
+```shell
+npm run build
+npm run preview
+```
 
-#### 本项目markdown文档全部由 [my-geektime](https://github.com/zkep/my-geektime) 生成
+## Docker 部署
 
+先在本机生成静态 HTML，再构建只包含 Nginx 和静态文件的镜像。这避免 Docker 构建时的 Node.js 内存压力：
 
+```shell
+sh scripts/build-static.sh
+docker build -t geektime-docs .
+docker run -d --restart always --name geektime-docs -p 8091:8091 geektime-docs
+```
 
-## 贡献者
+浏览器访问 <http://127.0.0.1:8091/>。
 
-<a href="https://github.com/uaxe/geektime-docs/graphs/contributors"><img src="https://opencollective.com/geektime-docs/contributors.svg?width=890" /></a>
+## 内容约定
 
-   
-
-
-
-
-
+- 顶层目录是分类，第二层目录是课程，课程内 `docs/*.md` 是文章。
+- 文章首个一级标题用作页面标题；没有一级标题时使用文件名。
+- 文章目录展示二级、三级标题；代码块会使用 Astro 内置 Shiki 高亮。
+- Markdown 文档均由 [my-geektime](https://github.com/zkep/my-geektime) 生成。

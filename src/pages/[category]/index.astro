@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { categories, getSiteIndex, href } from '../../lib/content';
+
+export async function getStaticPaths() {
+  return categories.map((category) => ({ params: { category }, props: { category } }));
+}
+
+const { category } = Astro.props;
+const courses = (await getSiteIndex()).filter((course) => course.category === category);
+---
+
+<BaseLayout title={`${category} · 极客时间文档`}>
+  <div class="container">
+    <Breadcrumbs category={category} />
+    <section class="page-intro compact"><h1>{category}</h1><p>{courses.length} 门课程</p></section>
+    <section class="course-grid">
+      {courses.map((course) => <a class="course-card" href={href(category, course.name)}><h2>{course.name}</h2><span>{course.articles.length} 篇文章</span></a>)}
+    </section>
+  </div>
+</BaseLayout>

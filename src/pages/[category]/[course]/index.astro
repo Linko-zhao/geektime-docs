@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { getSiteIndex, href, toIndexedArticle } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const courses = await getSiteIndex();
+  return courses.map((course) => ({ params: { category: course.category, course: course.name }, props: { course } }));
+}
+
+const { course } = Astro.props;
+const articles = course.articles.map((entry, index) => toIndexedArticle(course.category, course.name, entry, index));
+const introduction = articles.find((article) => article.slug === course.name || article.slug.toLowerCase() === 'index');
+---
+
+<BaseLayout title={`${course.name} · 极客时间文档`}>
+  <div class="container">
+    <Breadcrumbs category={course.category} course={course.name} />
+    <section class="page-intro compact"><h1>{course.name}</h1><p>{articles.length} 篇文章，按课程原始顺序排列。</p></section>
+    {introduction && (
+      <section class="course-introduction">
+        <h2>课程简介</h2>
+        <p>课程介绍已作为一篇独立文章保留，阅读后可返回此页继续选择其他文章。</p>
+        <a href={href(introduction.category, introduction.course, introduction.slug)}>阅读《{introduction.title}》</a>
+      </section>
+    )}
+    <ol class="article-list">
+      {articles.map((article) => <li><a href={href(article.category, article.course, article.slug)}>{article.title}</a></li>)}
+    </ol>
+  </div>
+</BaseLayout>

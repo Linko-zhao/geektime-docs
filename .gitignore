@@ -146,6 +146,11 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# Astro / Node.js
+node_modules/
+dist/
+.astro/
+
 # mypy
 .mypy_cache/
 .dmypy.json

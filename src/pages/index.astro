@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { categories, getSiteIndex, href } from '../lib/content';
+
+const courses = await getSiteIndex();
+---
+
+<BaseLayout>
+  <section class="page-intro">
+    <p class="eyebrow">Markdown 文档库</p>
+    <h1>极客时间文档</h1>
+    <p>按当前文件夹层级浏览全部技术课程。</p>
+  </section>
+  <section class="category-grid" aria-label="课程分类">
+    {categories.map((category) => {
+      const grouped = courses.filter((course) => course.category === category);
+      return <a class="category-card" href={href(category)}><h2>{category}</h2><span>{grouped.length} 门课程</span></a>;
+    })}
+  </section>
+</BaseLayout>

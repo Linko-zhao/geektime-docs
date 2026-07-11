@@ -1,0 +1,41 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import ArticleSidebar from '../../../components/ArticleSidebar.astro';
+import TableOfContents from '../../../components/TableOfContents.astro';
+import { getSiteIndex, href, toIndexedArticle } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const courses = await getSiteIndex();
+  return courses.flatMap((course) => course.articles.map((entry, order) => ({
+    params: { category: course.category, course: course.name, article: entry.id.split('/').at(-1) || '' },
+    props: { course, entry, order },
+  })));
+}
+
+const { course, entry, order } = Astro.props;
+const articles = course.articles.map((item, index) => toIndexedArticle(course.category, course.name, item, index));
+const article = articles[order];
+const { Content, headings } = await render(entry);
+const previous = articles[order - 1];
+const next = articles[order + 1];
+---
+
+<BaseLayout title={`${article.title} · ${course.name}`}>
+  <div class="article-shell">
+    <ArticleSidebar articles={articles} activeSlug={article.slug} />
+    <div class="article-main">
+      <Breadcrumbs category={course.category} course={course.name} article={article.title} />
+      <article class="prose">
+        <h1>{article.title}</h1>
+        <Content />
+      </article>
+      <nav class="article-pagination" aria-label="文章翻页">
+        {previous ? <a href={href(previous.category, previous.course, previous.slug)}>← {previous.title}</a> : <span />}
+        {next && <a href={href(next.category, next.course, next.slug)}>{next.title} →</a>}
+      </nav>
+    </div>
+    <TableOfContents headings={headings} />
+  </div>
+</BaseLayout>

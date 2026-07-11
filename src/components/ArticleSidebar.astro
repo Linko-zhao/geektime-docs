@@ -1,0 +1,23 @@
+---
+import { href, type IndexedArticle } from '../lib/content';
+
+interface Props {
+  articles: IndexedArticle[];
+  activeSlug: string;
+}
+
+const { articles, activeSlug } = Astro.props;
+---
+
+<aside class="article-sidebar" aria-label="课程文章">
+  <h2>课程文章</h2>
+  <ol>
+    {articles.map((article) => (
+      <li>
+        <a class:list={{ active: article.slug === activeSlug }} href={href(article.category, article.course, article.slug)} aria-current={article.slug === activeSlug ? 'page' : undefined}>
+          {article.title}
+        </a>
+      </li>
+    ))}
+  </ol>
+</aside>

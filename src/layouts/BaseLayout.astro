@@ -1,0 +1,27 @@
+---
+import '../styles/site.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = '极客时间文档' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="极客时间 Markdown 文档" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">极客时间文档</a>
+      <span>技术课程 Markdown 阅读站</span>
+    </header>
+    <main><slot /></main>
+    <footer>极客时间文档 · 由 Astro 静态生成</footer>
+  </body>
+</html>
