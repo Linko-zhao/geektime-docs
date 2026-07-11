@@ -214,6 +214,7 @@ Codis 在数据迁移方面要比 Redis Cluster 做得更优秀，而且 Codis �
 我当时在对 Codis 开发新的组件时，被 Codis 的优秀设计深深折服。当然，它的缺点也很明显，组件比较多，部署略复杂。另外，因为是基于 Redis 3.2.8 做的二次开发，所以升级 Redis Server 比较困难，新特性也就自然无法使用。
 
 现在 Codis 已经不再维护，但是作为国人开发的 Redis 集群解决方案，其设计思想还是非常值得学习的。也推荐 Go 开发者，读一读 Codis 源码，质量非常高，对于 Go 语言的进阶也会有很大收获！</p>2020-11-11</li><br/><li><span>杨逸林</span> 👍（16） 💬（1）<p>我简单用 Google 搜了下，主流的 Redis 集群方案大概分为三种：
+
 1. Redis Cluster
 2. 大厂&#47;小项目组 开源的解决方案—— Twitter 开源的 Twemproxy、Codis
 3. 买专有的 Redis 服务器—— Aliyun AparaCache（这个开源的没有 slot 的实现）、AWS ElasticCache

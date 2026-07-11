@@ -49,7 +49,7 @@ Python程序被划分成“块（block）”，块分为三种：模块、类和
 a = 2 #模块级变量
 class myclass:
     def __init__(self, x):
-        self.x = x    
+        self.x = x
     def foo(self, b):
         c = a + self.x + b  #引用了外部变量a
         return c
@@ -187,7 +187,7 @@ compiler_visit_expr1(struct compiler *c, expr_ty e)
 {
     switch (e->kind) {
 ...
-.    
+.
     case BinOp_kind:
         VISIT(c, expr, e->v.BinOp.left);    //遍历左侧子树
         VISIT(c, expr, e->v.BinOp.right);   //遍历右侧子树

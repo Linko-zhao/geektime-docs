@@ -142,13 +142,13 @@ Learner每次接到请求后，首先要确认本地的数据是否足够新，�
 
 ## 学习资料
 
-Anastassia Ailamaki et al.: [*Data Page Layouts for Relational Databases on Deep Memory Hierarchies*](http://research.cs.wisc.edu/multifacet/papers/vldbj02_pax.pdf)
+Anastassia Ailamaki et al.: [_Data Page Layouts for Relational Databases on Deep Memory Hierarchies_](http://research.cs.wisc.edu/multifacet/papers/vldbj02_pax.pdf)
 
-Harald Lang et al: [*Data Blocks: Hybrid OLTP and OLAP on Compressed Storage using both Vectorization and Compilation*](http://db.in.tum.de/downloads/publications/datablocks.pdf)
+Harald Lang et al: [_Data Blocks: Hybrid OLTP and OLAP on Compressed Storage using both Vectorization and Compilation_](http://db.in.tum.de/downloads/publications/datablocks.pdf)
 
-Jay Kreps: [*Questioning the Lambda Architecture*](https://www.oreilly.com/radar/questioning-the-lambda-architecture/)
+Jay Kreps: [_Questioning the Lambda Architecture_](https://www.oreilly.com/radar/questioning-the-lambda-architecture/)
 
-Nigel Rayner et al.: [*Hybrid Transaction/Analytical Processing Will Foster Opportunities for Dramatic Business Innovation*](https://www.gartner.com/en/documents/2657815)
+Nigel Rayner et al.: [_Hybrid Transaction/Analytical Processing Will Foster Opportunities for Dramatic Business Innovation_](https://www.gartner.com/en/documents/2657815)
 <div><strong>精选留言（10）</strong></div><ul>
 <li><span>游弋云端</span> 👍（4） 💬（0）<p>可以后台启动一个轮询日志增量的线程，当差异大于一定量的时候触发实际的数据同步。或者在心跳包中增加一个版本用于比对，当差异大的时候，触发主动同步。这样不用等到请求到达时触发，省掉这个等待时延。但是由于是Raft的非成员节点，怎么做都会有一定的数据差异，单对于大多OLAP分析场景应该是足够使用了。</p>2020-09-18</li><br/><li><span>tt</span> 👍（2） 💬（0）<p>没有接触过OLAP。
 

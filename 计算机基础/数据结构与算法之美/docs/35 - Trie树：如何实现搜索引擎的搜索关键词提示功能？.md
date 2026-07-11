@@ -48,7 +48,7 @@ Trie树，也叫“字典树”。顾名思义，它是一个树形结构。它�
 class BinaryTreeNode {
   char data;
   BinaryTreeNode left;
-  BinaryTreeNode right;  
+  BinaryTreeNode right;
 }
 ```
 

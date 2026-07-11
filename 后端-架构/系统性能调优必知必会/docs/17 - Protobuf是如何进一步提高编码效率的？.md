@@ -29,7 +29,7 @@ Protobuf将这3个字段名预分配了3个数字，定义在proto文件中：
 ```
 message Person {
   string name = 1;
-  uint32 id = 2;  
+  uint32 id = 2;
 
   enum SexType {
     MALE = 0;

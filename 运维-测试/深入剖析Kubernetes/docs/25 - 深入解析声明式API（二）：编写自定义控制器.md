@@ -17,21 +17,21 @@ main函数的主要工作就是，定义并初始化一个自定义控制器（C
 ```
 func main() {
   ...
-  
+
   cfg, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
   ...
   kubeClient, err := kubernetes.NewForConfig(cfg)
   ...
   networkClient, err := clientset.NewForConfig(cfg)
   ...
-  
+
   networkInformerFactory := informers.NewSharedInformerFactory(networkClient, ...)
-  
+
   controller := NewController(kubeClient, networkClient,
   networkInformerFactory.Samplecrd().V1().Networks())
-  
+
   go networkInformerFactory.Start(stopCh)
- 
+
   if err = controller.Run(2, stopCh); err != nil {
     glog.Fatalf("Error running controller: %s", err.Error())
   }
@@ -155,12 +155,12 @@ func (c *Controller) Run(threadiness int, stopCh <-chan struct{}) error {
   if ok := cache.WaitForCacheSync(stopCh, c.networksSynced); !ok {
     return fmt.Errorf("failed to wait for caches to sync")
   }
-  
+
   ...
   for i := 0; i < threadiness; i++ {
     go wait.Until(c.runWorker, time.Second, stopCh)
   }
-  
+
   ...
   return nil
 }
@@ -183,22 +183,22 @@ func (c *Controller) runWorker() {
 
 func (c *Controller) processNextWorkItem() bool {
   obj, shutdown := c.workqueue.Get()
-  
+
   ...
-  
+
   err := func(obj interface{}) error {
     ...
     if err := c.syncHandler(key); err != nil {
      return fmt.Errorf("error syncing '%s': %s", key, err.Error())
     }
-    
+
     c.workqueue.Forget(obj)
     ...
     return nil
   }(obj)
-  
+
   ...
-  
+
   return true
 }
 
@@ -206,29 +206,29 @@ func (c *Controller) syncHandler(key string) error {
 
   namespace, name, err := cache.SplitMetaNamespaceKey(key)
   ...
-  
+
   network, err := c.networksLister.Networks(namespace).Get(name)
   if err != nil {
     if errors.IsNotFound(err) {
       glog.Warningf("Network does not exist in local cache: %s/%s, will delete it from Neutron ...",
       namespace, name)
-      
+
       glog.Warningf("Network: %s/%s does not exist in local cache, will delete it from Neutron ...",
     namespace, name)
-    
+
      // FIX ME: call Neutron API to delete this network by name.
      //
      // neutron.Delete(namespace, name)
-     
+
      return nil
   }
     ...
-    
+
     return err
   }
-  
+
   glog.Infof("[Neutron] Try to process network: %#v ...", network)
-  
+
   // FIX ME: Do diff().
   //
   // actualNetwork, exists := neutron.Get(namespace, name)
@@ -238,7 +238,7 @@ func (c *Controller) syncHandler(key string) error {
   // } else if !reflect.DeepEqual(actualNetwork, network) {
   //   neutron.Update(namespace, name)
   // }
-  
+
   return nil
 }
 ```
@@ -328,7 +328,7 @@ I0915 12:52:54.346914   25245 controller.go:127] Started workers
 首先，创建一个Network对象：
 
 ```
-$ cat example/example-network.yaml 
+$ cat example/example-network.yaml
 apiVersion: samplecrd.k8s.io/v1
 kind: Network
 metadata:
@@ -336,8 +336,8 @@ metadata:
 spec:
   cidr: "192.168.0.0/16"
   gateway: "192.168.0.1"
-  
-$ kubectl apply -f example/example-network.yaml 
+
+$ kubectl apply -f example/example-network.yaml
 network.samplecrd.k8s.io/example-network created
 ```
 
@@ -365,7 +365,7 @@ I0915 12:53:18.064650   25245 controller.go:183] Successfully synced 'default/ex
 这时候，我来修改一下这个YAML文件的内容，如下所示：
 
 ```
-$ cat example/example-network.yaml 
+$ cat example/example-network.yaml
 apiVersion: samplecrd.k8s.io/v1
 kind: Network
 metadata:
@@ -380,7 +380,7 @@ spec:
 然后，我们执行了kubectl apply命令来提交这次更新，如下所示：
 
 ```
-$ kubectl apply -f example/example-network.yaml 
+$ kubectl apply -f example/example-network.yaml
 network.samplecrd.k8s.io/example-network configured
 ```
 
@@ -419,13 +419,13 @@ I0915 12:54:09.738854   25245 controller.go:183] Successfully synced 'default/ex
 ```
 func main() {
   ...
-  
+
   kubeInformerFactory := kubeinformers.NewSharedInformerFactory(kubeClient, time.Second*30)
-  
+
   controller := NewController(kubeClient, exampleClient,
   kubeInformerFactory.Apps().V1().Deployments(),
   networkInformerFactory.Samplecrd().V1().Networks())
-  
+
   go kubeInformerFactory.Start(stopCh)
   ...
 }

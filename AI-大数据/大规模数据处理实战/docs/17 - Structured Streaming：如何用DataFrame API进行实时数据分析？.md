@@ -72,7 +72,7 @@ socketDataFrame = spark
 df = … // 这个DataFrame代表学校学生的数据流，schema是{name: string, age: number, height: number, grade: string}
 df.select("name").where("age > 10") // 返回年龄大于10岁的学生名字列表
 df.groupBy("grade").count() // 返回每个年级学生的人数
-df.sort_values([‘age’], ascending=False).head(100) //返回100个年龄最大的学生 
+df.sort_values([‘age’], ascending=False).head(100) //返回100个年龄最大的学生
 ```
 
 在这个例子中，通过第二行我们可以得到所有年龄在10岁以上的学生名字，第三行可以得到每个年级学生的人数，第四行得到100个年龄最大的学生信息。此外，DataFrame还支持很多基本的查询操作，在此不做赘述。

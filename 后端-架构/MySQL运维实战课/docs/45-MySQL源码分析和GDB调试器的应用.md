@@ -296,14 +296,14 @@ innobase/trx/trx0trx.cc中有一个函数trx\_recover\_for\_mysql，看起来和
 函数trx\_resurrect中用到了rseg-&gt;insert\_undo\_list，rseg-&gt;update\_undo\_list，分析这几个列表的数据怎么添加，最终可能会发现下面这个调用链路。这里我就不具体展开了。
 
 ```plain
-trx_rsegs_init -> trx_rseg_mem_create -> 
+trx_rsegs_init -> trx_rseg_mem_create ->
  -> trx_undo_lists_init -> trx_undo_mem_init
 ```
 
 你还可以分析trx\_sys\_init\_at\_db\_start是什么时候调用的。最终你可能会发现大致的调用链路是这样的。
 
 ```plain
-mysqld_main -> process_bootstrap -> dd::init -> Dictionary_impl::init 
+mysqld_main -> process_bootstrap -> dd::init -> Dictionary_impl::init
  -> bootstrap::initialize -> DDSE_dict_init -> innobase_ddse_dict_init
  -> innobase_init_files -> srv_start -> trx_sys_init_at_db_start
 ```
@@ -373,7 +373,7 @@ Binlog\_recovery::recover在函数open\_binlog中调用。open\_binlog判断当�
 继续分析，能找到下面这个调用链路。
 
 ```plain
-mysqld_main -> init_server_components -> open_binlog 
+mysqld_main -> init_server_components -> open_binlog
   -> Binlog_recovery::recover -> ha_recover
 ```
 
@@ -386,7 +386,7 @@ mysqld_main -> init_server_components -> open_binlog
 从代码中，还能找到下面这个调用链路。
 
 ```plain
-trx_recovery_rollback_thread -> trx_recovery_rollback 
+trx_recovery_rollback_thread -> trx_recovery_rollback
   -> trx_rollback_or_clean_recovered -> trx_rollback_or_clean_resurrected
 ```
 
@@ -397,8 +397,8 @@ trx\_recovery\_rollback\_thread是回滚线程的主函数，这个线程在srv\
 调用链路大概这这样的。
 
 ```plain
-mysqld_main -> init_server_components -> ha_post_recover 
-  -> post_recover_handlerton -> post_recover 
+mysqld_main -> init_server_components -> ha_post_recover
+  -> post_recover_handlerton -> post_recover
   -> innobase_post_recover -> srv_start_threads_after_ddl_recovery
 ```
 
@@ -569,7 +569,7 @@ Thread 44 "connection" hit Breakpoint 5, IndexScanIterator<false>::IndexScanIter
 我们先看一下当前mysqld进程的运行参数。
 
 ```plain
-# ps -elf | grep mysqld 
+# ps -elf | grep mysqld
 
 ... /opt/mysql8.0/bin/mysqld --defaults-file=/data/mysql8.0/my.cnf --basedir=/opt/mysql8.0 --datadir=/data/mysql8.0/data --plugin-dir=/opt/mysql8.0/lib/plugin --user=mysql --log-error=/data/mysql8.0/log/alert.log --open-files-limit=1024 --pid-file=/data/mysql8.0/run/mysqld.pid --socket=/data/mysql8.0/run/mysql.sock --port=3380
 ```

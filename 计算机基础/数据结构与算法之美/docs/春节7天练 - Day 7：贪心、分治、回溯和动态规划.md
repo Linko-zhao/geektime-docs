@@ -1,6 +1,6 @@
 你好，我是王争。今天是节后的第一个工作日，也是我们“春节七天练”的最后一篇。
 
-* * *
+---
 
 ## 几种算法思想必知必会的代码实现
 
@@ -59,7 +59,7 @@
 
 中文版：[https://leetcode-cn.com/problems/triangle/](https://leetcode-cn.com/problems/triangle/)
 
-* * *
+---
 
 到此为止，七天的练习就结束了。这些题目都是我精选出来的，是基础数据结构和算法中最核心的内容。建议你一定要全部手写练习。如果一遍搞不定，你可以结合前面的章节，多看几遍，反复练习，直到能够全部搞定为止。
 
@@ -86,38 +86,38 @@ func firstMissingPositive(nums []int) int {
 		return 1
 	}
 
-	var arr = make([]bool, len(nums)+1)
-	var idx = 1
-	for i := 0; i &lt; len(nums); i++ {
-		if nums[i] &gt;= 0 &amp;&amp; nums[i] &lt; len(arr) {
-			arr[nums[i]] = true
-		}
-	}
+    var arr = make([]bool, len(nums)+1)
+    var idx = 1
+    for i := 0; i &lt; len(nums); i++ {
+    	if nums[i] &gt;= 0 &amp;&amp; nums[i] &lt; len(arr) {
+    		arr[nums[i]] = true
+    	}
+    }
 
-	for i := 1; i &lt; len(arr); i++ {
-		if arr[i] == false {
-			idx = i
-			break
-		} else {
-			idx = i + 1
-		}
-	}
+    for i := 1; i &lt; len(arr); i++ {
+    	if arr[i] == false {
+    		idx = i
+    		break
+    	} else {
+    		idx = i + 1
+    	}
+    }
 
-	return idx
+    return idx
+
 }
-Day 7:
-3. 买卖股票的最佳时机(Python)
+Day 7: 3. 买卖股票的最佳时机(Python)
 class Solution:
-    def maxProfit(self, prices):
-        if not prices:
-            return 0
-        min_price = prices[0]
-        res = 0
-        for i in prices[1:]:
-            min_price = min(min_price, i)
-            if res &lt; i - min_price:
-                res = i - min_price
-        return res
+def maxProfit(self, prices):
+if not prices:
+return 0
+min_price = prices[0]
+res = 0
+for i in prices[1:]:
+min_price = min(min_price, i)
+if res &lt; i - min_price:
+res = i - min_price
+return res
 </p>2019-02-11</li><br/><li><span>明翼</span> 👍（0） 💬（1）<p>请教下老师，遇到一个问题，给多个银行账号，假如每个账号每天都有交易，这样在坐标中可以画出时间和交易金额的曲线，求哪个曲线的更平滑或波动更大，银行账号的交易额度可能相差很大，银行账号交易梳理可能多个。</p>2019-09-03</li><br/><li><span>好运连连</span> 👍（0） 💬（1）<p>老师，请教下。关于物流中转路线，应该采用哪种算法合适？</p>2019-07-10</li><br/><li><span>黄丹</span> 👍（4） 💬（0）<p>课程的最后一天，也是新年上班的第一天，感谢王老师的教育和陪伴，祝您生活开心，工作顺利。
 今天的题目比前几天的都难一点，只做了三题，太累了TaT。对于动态规划和贪心总觉得很巧妙，如果想不到动态转移方程式，就很难做，但要是想到了，真的是豁然开朗。对于这一类题，还是要多锻炼，找动态转移方程式要从最后一个结果出发，去想这个结果可以由什么得到，知道之前所有结点的信息，如何推导出当前结点的信息，其实和高中学的归纳法有一点点像。 
 下面给出我今天做的三题的解题思路和代码
@@ -172,29 +172,31 @@ package main
 import &quot;fmt&quot;
 
 func maxProfit(prices []int) int {
-	max := -1
-	for i := 0; i &lt; len(prices); i++ {
-		for j := i + 1; j &lt; len(prices); j++ {
-			profit := prices[j] - prices[i]
-			if profit &gt; 0 &amp;&amp; profit &gt; max {
-				max = profit
-			}
-		}
-	}
+max := -1
+for i := 0; i &lt; len(prices); i++ {
+for j := i + 1; j &lt; len(prices); j++ {
+profit := prices[j] - prices[i]
+if profit &gt; 0 &amp;&amp; profit &gt; max {
+max = profit
+}
+}
+}
 
-	if max == -1 {
-		return 0
-	}
+    if max == -1 {
+    	return 0
+    }
 
-	return max
+    return max
+
 }
 
 func main() {
-	testData1 := []int{7, 1, 5, 3, 6, 4}
-	testData2 := []int{7, 6, 4, 3, 1}
+testData1 := []int{7, 1, 5, 3, 6, 4}
+testData2 := []int{7, 6, 4, 3, 1}
 
-	fmt.Println(maxProfit(testData1))
-	fmt.Println(maxProfit(testData2))
+    fmt.Println(maxProfit(testData1))
+    fmt.Println(maxProfit(testData2))
+
 }
 </p>2019-02-11</li><br/><li><span>虎虎❤️</span> 👍（1） 💬（0）<p>正则表达式
 public boolean isMatch(String s, String p) {
@@ -227,6 +229,7 @@ public boolean isMatch(String s, String p) {
         }
     }
     return dp[s.length()][p.length()];
+
 }
 
 leetcode的排名第一的答案，搬过来了</p>2019-02-10</li><br/><li><span>云之崖</span> 👍（0） 💬（0）<p>1年左右断断续续，终于学完了所有章节，这些练习题大部分不看提示都能搞得定了。</p>2021-01-22</li><br/><li><span>xxxxL</span> 👍（0） 💬（0）<p>请问这个在哪里呢（详细可看 @Smallfly 整理的 Minimum Path Sum）</p>2020-01-18</li><br/><li><span>大风歌</span> 👍（0） 💬（0）<p>第一遍</p>2020-01-09</li><br/><li><span>好运连连</span> 👍（0） 💬（0）<p>老师，具体的是这样，比如物流公司，用户下单，需要根据最短路线或者最少花费来找出合适的中转路线。 比如需要送货到B城市，A城市发货，但是，很多路线，需要选最合适的路线，比如A到D中转再到E中转最后送货到B。</p>2019-07-10</li><br/>

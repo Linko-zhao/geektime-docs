@@ -72,7 +72,7 @@ if let userName = login.userNameOK {
 上面这段代码表示的是，当用户名和密码都没有问题时再进行登录处理。那么，我们使用 guard 语法时，可以改写如下：
 
 ```
-guard 
+guard
   let userName = login.userNameOK,
   let password = login.passwordOK,
   else {
@@ -99,7 +99,7 @@ guard
 ```
 func saveRSS(rss: RSS?, store: Store?) {
     guard let rss = rss else {
-        return 
+        return
     }
     guard let store = store else {
         return

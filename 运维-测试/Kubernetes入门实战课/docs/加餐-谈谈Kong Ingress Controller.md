@@ -178,7 +178,7 @@ spec:
   ...
   selector:
     app: ingress-kong-dep         # 重命名
-  type: NodePort                  # 改类型 
+  type: NodePort                  # 改类型
 ```
 
 在我们专栏的配套GitHub项目里，你也可以直接找到改好的YAML 文件。  
@@ -228,9 +228,8 @@ kind: Ingress
 metadata:
   name: kong-ing
   annotations:
-    konghq.com/host-aliases: "kong.dev, kong.ops"  #注意这里
-spec:
-  ...
+    konghq.com/host-aliases: "kong.dev, kong.ops" #注意这里
+spec: ...
 ```
 
 使用 `kubectl apply` 更新Ingress，再用curl来测试一下：

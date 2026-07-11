@@ -103,8 +103,8 @@ mod tests {
 ```rust
 pub trait CookieStore: Send + Sync {
     fn set_cookies(
-        &self, 
-        cookie_headers: &mut dyn Iterator<Item = &HeaderValue>, 
+        &self,
+        cookie_headers: &mut dyn Iterator<Item = &HeaderValue>,
         url: &Url
     );
     fn cookies(&self, url: &Url) -> Option<HeaderValue>;
@@ -147,7 +147,7 @@ pub trait Fetch {
 ```rust
 pub trait Fetch {
     type Error;
-    fn fetch<'a>(&'a self) -> 
+    fn fetch<'a>(&'a self) ->
         Result<Pin<Box<dyn Future<Output = String> + Send + 'a>>, Self::Error>;
 }
 ```
@@ -420,21 +420,21 @@ impl<'a, 'b> Executor for Shell<'a, 'b> {
 测试结果如下：
 
 ```bash
-generics                time:   [3.0995 ns 3.1549 ns 3.2172 ns]                      
+generics                time:   [3.0995 ns 3.1549 ns 3.2172 ns]
                         change: [-96.890% -96.810% -96.732%] (p = 0.00 < 0.05)
                         Performance has improved.
 Found 5 outliers among 100 measurements (5.00%)
   4 (4.00%) high mild
   1 (1.00%) high severe
 
-trait object            time:   [4.0348 ns 4.0934 ns 4.1552 ns]                          
+trait object            time:   [4.0348 ns 4.0934 ns 4.1552 ns]
                         change: [-96.024% -95.893% -95.753%] (p = 0.00 < 0.05)
                         Performance has improved.
 Found 8 outliers among 100 measurements (8.00%)
   3 (3.00%) high mild
   5 (5.00%) high severe
 
-boxed object            time:   [65.240 ns 66.473 ns 67.777 ns]                         
+boxed object            time:   [65.240 ns 66.473 ns 67.777 ns]
                         change: [-67.403% -66.462% -65.530%] (p = 0.00 < 0.05)
                         Performance has improved.
 Found 2 outliers among 100 measurements (2.00%)
@@ -460,21 +460,21 @@ impl<'a, 'b> Executor for Shell<'a, 'b> {
 新的测试结果不出所料：
 
 ```bash
-generics                time:   [4.6901 ms 4.7267 ms 4.7678 ms]                      
+generics                time:   [4.6901 ms 4.7267 ms 4.7678 ms]
                         change: [+145694872% +148496855% +151187366%] (p = 0.00 < 0.05)
                         Performance has regressed.
 Found 7 outliers among 100 measurements (7.00%)
   3 (3.00%) high mild
   4 (4.00%) high severe
 
-trait object            time:   [4.7452 ms 4.7912 ms 4.8438 ms]                          
+trait object            time:   [4.7452 ms 4.7912 ms 4.8438 ms]
                         change: [+109643581% +113478268% +116908330%] (p = 0.00 < 0.05)
                         Performance has regressed.
 Found 7 outliers among 100 measurements (7.00%)
   4 (4.00%) high mild
   3 (3.00%) high severe
 
-boxed object            time:   [4.7867 ms 4.8336 ms 4.8874 ms]                          
+boxed object            time:   [4.7867 ms 4.8336 ms 4.8874 ms]
                         change: [+6935303% +7085465% +7238819%] (p = 0.00 < 0.05)
                         Performance has regressed.
 Found 8 outliers among 100 measurements (8.00%)
@@ -511,17 +511,15 @@ trait object调用时间是generics的9.78倍...居然差这么多!!
 </p>2021-10-23</li><br/><li><span>大汉十三将</span> 👍（2） 💬（1）<p>唉[苦涩] 看不懂了</p>2023-03-09</li><br/><li><span>罗杰</span> 👍（1） 💬（1）<p>最近在优化 Go 写的即时对战服务，的确堆内存的分配是消耗性能的一大杀手，泛型的消耗相比堆内存的消耗，应该是可以忽略的。但在高频次的调用上，如果可以优化掉不使用泛型，代码理解与维护上没有问题，也还是尽可能避免使用泛型吧。</p>2021-10-21</li><br/><li><span>Bruce</span> 👍（0） 💬（1）<p>有见到trait中，除了关联类型type，还有用const定义的占位符，可以讲讲具体的吗</p>2021-11-04</li><br/><li><span>D. D</span> 👍（0） 💬（1）<p>实现部分需要修改的并不多，把StrategyFn的泛型参数去掉，把reader声明为可变，并在调用函数时传入BufReader的可变引用即可。
 我个人觉得修改之后没有带来什么好处，之前的泛型参数并不复杂，而且反而觉得实现时的 Read Write trait bounds让代码读起来很清晰 😂</p>2021-10-20</li><br/><li><span>进击的Lancelot</span> 👍（1） 💬（0）<p>思考题：实现上修改的地方并不多，只需修改 StrategyFn、match_with 和 default_strategy 的函数签名，将其中的泛型参数去除，然后在调用的地方传入相关的引用即可。比较上，rgrep 的泛型参数还是比较简单直观的，代码也并不会很臃肿，这里用 dynamic trait object 来替换没什么必要。
 
-
-在泛型参数的版本中，传递进来的 BufReader&lt;R&gt; 不需要是可变的，而改用 trait object 就需要使用 &amp;mut dyn BufRead 而不能是 &amp;dyn BufRead？ 我尝试将 mut 关键字去掉，在调用 lines 方法时，产生了 “the `lines` method cannot be invoked on a trait object, this has a `Sized` requirement”。我查阅了 rust 文档，BufRead 中 lines 函数的实现为  
-
+在泛型参数的版本中，传递进来的 BufReader&lt;R&gt; 不需要是可变的，而改用 trait object 就需要使用 &amp;mut dyn BufRead 而不能是 &amp;dyn BufRead？ 我尝试将 mut 关键字去掉，在调用 lines 方法时，产生了 “the `lines` method cannot be invoked on a trait object, this has a `Sized` requirement”。我查阅了 rust 文档，BufRead 中 lines 函数的实现为
 
 fn lines(self) -&gt; Lines&lt;Self&gt; where Self: Sized, { Lines { buf: self } }
-
 
 因此，这里想向老师请教两个问题：
 
 1. 为什么 &amp;mut dyn BufRead 对象能够调用 lines 方法，而 &amp;dyn BufRead 则不行？
 2. 根据第十三讲中所说，只有满足对象安全的前提下才能调用 trait object 的方法，而满足对象安全的情况之一，是不允许携带泛型参数，因为 Rust 里带泛型的类型在编译时会做单态化，而 trait object 是运行时的产物，两者不能兼容。那这里的 lines 方法返回值为 Line&lt;Self&gt;，其中 &lt;Self&gt; 应该算是泛型参数吧，那为什么还能调用呢？
+
 </p>2022-09-16</li><br/><li><span>A.Y.</span> 👍（1） 💬（0）<p>老师好，我这边想咨询一个问题：如果使用trait object将一个闭包放入了map中，然后需要在其他的线程中取出这个闭包执行，该怎么做呢？最近测试了一下，发现编译器提示错误，好像闭包的 trait object并没有实现Sync</p>2022-05-07</li><br/><li><span>jimmy</span> 👍（0） 💬（0）<p>We’ve mentioned that, in Rust, we refrain from calling structs and enums “objects” to distinguish them from other languages’ objects. In a struct or enum, the data in the struct fields and the behavior in impl blocks are separated, whereas in other languages, the data and behavior combined into one concept is often labeled an object. However, trait objects are more like objects in other languages in the sense that they combine data and behavior. But trait objects differ from traditional objects in that we can’t add data to a trait object. Trait objects aren’t as generally useful as objects in other languages: their specific purpose is to allow abstraction across common behavior.
   --from《The Rust Programming Language》：5. Using Trait Objects That Allow for Values of Different Types</p>2024-02-20</li><br/><li><span>阿海</span> 👍（0） 💬（0）<p>二刷课程了，朋友们，有没有Rust岗位推荐呢</p>2023-05-20</li><br/><li><span>老实人Honey</span> 👍（0） 💬（0）<p>重新读trait object</p>2022-04-09</li><br/>
 </ul>

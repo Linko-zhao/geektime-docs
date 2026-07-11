@@ -168,7 +168,7 @@ typedef struct quicklistNode {
     struct quicklistNode *next;     //后一个quicklistNode
     unsigned char *zl;              //quicklistNode指向的ziplist
     unsigned int sz;                //ziplist的字节大小
-    unsigned int count : 16;        //ziplist中的元素个数 
+    unsigned int count : 16;        //ziplist中的元素个数
     unsigned int encoding : 2;   //编码格式，原生字节数组或压缩存储
     unsigned int container : 2;  //存储方式
     unsigned int recompress : 1; //数据是否被压缩
@@ -446,7 +446,6 @@ ziplist 超过上述任一配置，添加新元素就会新建 ziplist 插入到
 4、最后调用string2ll尝试将string value编码为long long(转换成功为1失败为0)
 5、若转换成功，编码类型放到encoding中，值放到v中
 
-
 根据第三步个人判断，传入的int值大小不会超过32位，那么最大值应该就是int32的最大值
 </p>2021-08-08</li><br/><li><span>Geek_0cfc2d</span> 👍（1） 💬（1）<p>老师，有个问题想请教一下：
 listpack 中如果不考虑逆序查询，entry 其实使用 encoding+data 就可以，那 entry 中最后一个 len 其实是为了逆序遍历而加入的，这样理解对吗？ </p>2022-02-23</li><br/><li><span>辉度</span> 👍（1） 💬（0）<p>课后题：
@@ -462,18 +461,18 @@ listpack 中如果不考虑逆序查询，entry 其实使用 encoding+data 就�
 文章中：
 “ziplist 新增某个元素或修改某个元素时，可能会导致后续元素的 prevlen 占用空间都发生变化，从而引起连锁更新问题，导致每个元素的空间都要重新分配”
 
-每个元素都会进行内存重分配是不是有问题？还望解答</p>2022-01-05</li><br/><li><span>路遥知码力</span> 👍（0） 💬（1）<p>quicklist里的quicklistnode存储ziplist，每个quicklistnode里的ziplist是怎么拆分进入不同的node里的？</p>2021-09-28</li><br/><li><span>test</span> 👍（0） 💬（0）<p>entey-encoding算是哈夫曼编码？</p>2021-09-04</li><br/><li><span>嘉木</span> 👍（0） 💬（1）<p>unsigned long lpEncodeBacklen(unsigned char *buf, uint64_t l) { 
-	&#47;&#47;编码类型和实际数据的总长度小于等于127，entry-len长度为1字节 
-	if (l &lt;= 127) { ... return 1; } 
-	else if (l &lt; 16383) { &#47;&#47;编码类型和实际数据的总长度大于127但小于16383，entry-len长度为2字节 ... return 2; } 
-	else if (l &lt; 2097151) {&#47;&#47;编码类型和实际数据的总长度大于16383但小于2097151，entry-len长度为3字节 ... return 3; } 
-	else if (l &lt; 268435455) { &#47;&#47;编码类型和实际数据的总长度大于2097151但小于268435455，entry-len长度为4字节 ... return 4; } 
-	else { &#47;&#47;否则，entry-len长度为5字节 ... return 5; }
+每个元素都会进行内存重分配是不是有问题？还望解答</p>2022-01-05</li><br/><li><span>路遥知码力</span> 👍（0） 💬（1）<p>quicklist里的quicklistnode存储ziplist，每个quicklistnode里的ziplist是怎么拆分进入不同的node里的？</p>2021-09-28</li><br/><li><span>test</span> 👍（0） 💬（0）<p>entey-encoding算是哈夫曼编码？</p>2021-09-04</li><br/><li><span>嘉木</span> 👍（0） 💬（1）<p>unsigned long lpEncodeBacklen(unsigned char *buf, uint64_t l) {
+&#47;&#47;编码类型和实际数据的总长度小于等于127，entry-len长度为1字节
+if (l &lt;= 127) { ... return 1; }
+else if (l &lt; 16383) { &#47;&#47;编码类型和实际数据的总长度大于127但小于16383，entry-len长度为2字节 ... return 2; }
+else if (l &lt; 2097151) {&#47;&#47;编码类型和实际数据的总长度大于16383但小于2097151，entry-len长度为3字节 ... return 3; }
+else if (l &lt; 268435455) { &#47;&#47;编码类型和实际数据的总长度大于2097151但小于268435455，entry-len长度为4字节 ... return 4; }
+else { &#47;&#47;否则，entry-len长度为5字节 ... return 5; }
 }
 
 老师您好，
 对于backlen的编码计算这段代码有点疑惑：
-除了第一个if判断是&lt;=之外，后面的if判断为什么是&lt;，而不是&lt;=了呢？ 
+除了第一个if判断是&lt;=之外，后面的if判断为什么是&lt;，而不是&lt;=了呢？
 比如16383，按照&lt;=判断，编码为7f ff，最高位为0，表示下个字节不属于backlen，这样backlen只使用2个字节；
 但是按照源码逻辑的话，16383编码为00 ff ff了，backlen使用了3个字节，这样的话不是浪费了一个字节吗？
 </p>2021-09-04</li><br/><li><span>慢动作</span> 👍（0） 💬（1）<p>listpack有对应的quicklist吗？数组类型存储有最优大小吧，过大以后中间插入代价会很大？</p>2021-08-24</li><br/>

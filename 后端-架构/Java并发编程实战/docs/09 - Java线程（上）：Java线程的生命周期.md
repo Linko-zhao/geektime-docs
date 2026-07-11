@@ -196,62 +196,64 @@ InterruptedException - if any thread has interrupted the current thread. The int
 但是有个疑问，jvm中blocked状态的线程和waitting状态的线程，除了处在不同的队列之外，还有没有什么区别呀？我这里问的区别包括jvm和os两个层面，谢谢老师</p>2019-03-19</li><br/><li><span>yang</span> 👍（8） 💬（1）<p>
 public class TestThread {
 
-	public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
-		Worker t = new Worker();
-		t.start();
+    	Worker t = new Worker();
+    	t.start();
 
-		Thread.sleep(2000);
-		
-		System.out.println(&quot;-1-1-1-&quot;);
-		t.interrupt();
-		System.out.println(&quot;000000&quot;);
-		Thread.sleep(2000);
-		t.stop();
-		System.out.println(&quot;000111&quot;);
-		Thread.sleep(2000);
-		t.join();
-		System.out.println(&quot;111111&quot;);
-	}
+    	Thread.sleep(2000);
+
+    	System.out.println(&quot;-1-1-1-&quot;);
+    	t.interrupt();
+    	System.out.println(&quot;000000&quot;);
+    	Thread.sleep(2000);
+    	t.stop();
+    	System.out.println(&quot;000111&quot;);
+    	Thread.sleep(2000);
+    	t.join();
+    	System.out.println(&quot;111111&quot;);
+    }
 
 }
 
 class Worker extends Thread {
 
-	@Override
-	public void run() {
-		int i = 0;
-		while (i&lt;20) {
-			if (Thread.currentThread().isInterrupted()) {
-				break;
-			}
-			++i;
-			System.out.println(Thread.currentThread().getName() + &quot;i: &quot; + i);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				&#47;&#47; TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+    @Override
+    public void run() {
+    	int i = 0;
+    	while (i&lt;20) {
+    		if (Thread.currentThread().isInterrupted()) {
+    			break;
+    		}
+    		++i;
+    		System.out.println(Thread.currentThread().getName() + &quot;i: &quot; + i);
+    		try {
+    			Thread.sleep(1000);
+    		} catch (InterruptedException e) {
+    			&#47;&#47; TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
+    }
+
 }
 
-----------------------------------------------------------------------------
+---
+
 忽然发现极客时间网页版的留言窗口好小啊，都看不到自己上面写的东西...
 ----------------------------------------------------------------------------
 
 1. 如果worker中没有sleep方法，则调用th.interrupt()方法会真正的中断th线程，并且不会抛出InterruptException 但是该演示代码不能体现锁的释放；
 2. 如果worer中有sleep方法，则调用th.interrupt()方法会抛 java.lang.InterruptException(), 是针对sleep方法抛出的
-	同样的Object的wait() wait(带参) 也会抛出java.lang.InterruptException()而从当前的wait&#47;blocked状态被中断（唤醒）
-	那也就是说，throws InterruptedException 的方法 在线程被调用interrupt()方法后，会被从当前状态中断
-	至于调用interrupy()方法后线程的状态属于哪种，取决于interrupt方法前的执行的方法使得当前线程处于哪种状态，
-	老师的总结很到位，需要好好理解，感受~！
+   同样的Object的wait() wait(带参) 也会抛出java.lang.InterruptException()而从当前的wait&#47;blocked状态被中断（唤醒）
+   那也就是说，throws InterruptedException 的方法 在线程被调用interrupt()方法后，会被从当前状态中断
+   至于调用interrupy()方法后线程的状态属于哪种，取决于interrupt方法前的执行的方法使得当前线程处于哪种状态，
+   老师的总结很到位，需要好好理解，感受~！
 3. 无论worder的run中有没有slee()方法，stop都会直接中断线程，当前演示代码也无法演示锁没有被释放
 4. join()总是在等待被调用的线程执行完毕
 5. while循环放在try里面, 在调用th.interrupt之后，可以有效捕获InterruptException 从而使th线程中断
 
-说的有点多了， 大家多多讨论~！~！~！
+说的有点多了， 大家多多讨论~！~~！~~！
 
 </p>2019-03-20</li><br/><li><span>悟</span> 👍（8） 💬（3）<p>老师 stop方法直接杀掉线程了，什么不会释放锁呢</p>2019-03-19</li><br/><li><span>ZOU志伟</span> 👍（6） 💬（1）<p>老师，我有个疑问，文章中讲到线程调用阻塞式 API 时，不会转换到 BLOCKED 状态，而是保持RUNNABLE状态，想知道这些阻塞式API是什么？</p>2019-03-22</li><br/><li><span>向往的生活</span> 👍（6） 💬（3）<p>当线程 A 处于 WAITING、TIMED_WAITING 状态时，如果其他线程调用线程 A 的 interrupt() 方法，会使线程 A 返回到 RUNNABLE 状态，同时线程 A 的代码会触发 InterruptedException 异常。此时如果线程A获取不到锁，岂不是会立马又变成BLOCKED 状态？</p>2019-03-19</li><br/>
 </ul>

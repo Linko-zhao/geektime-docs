@@ -94,14 +94,14 @@ public abstract class JdbcTemplate {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Object rtnObj = null;
-		
+
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databasename=DEMO;user=sa;password=Sql2016;");
 
 			stmt = con.prepareStatement(sql);
 			rs = stmt.executeQuery();
-			
+
 			//调用返回数据处理方法，由程序员自行实现
 			rtnObj = doInStatement(rs);
 		}
@@ -113,7 +113,7 @@ public abstract class JdbcTemplate {
 				rs.close();
 				stmt.close();
 				con.close();
-			} catch (Exception e) {			
+			} catch (Exception e) {
 			}
 		}
 		return rtnObj;
@@ -151,7 +151,7 @@ public class UserJdbcImpl extends JdbcTemplate {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return rtnUser;
 	}
 }
@@ -172,7 +172,7 @@ public class UserService {
 		String sql = "select id, name,birthday from users where id="+userid;
 		JdbcTemplate jdbcTemplate = new UserJdbcImpl();
 		User rtnUser = (User)jdbcTemplate.query(sql);
-		
+
 		return rtnUser;
 	}
 }
@@ -242,13 +242,13 @@ public class Task {
 	public Object query(StatementCallback stmtcallback) {
 		Connection con = null;
 		Statement stmt = null;
-		
+
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databasename=DEMO;user=sa;password=Sql2016;");
 
 			stmt = con.createStatement();
-			
+
 			return stmtcallback.doInStatement(stmt);
 		}
 		catch (Exception e) {
@@ -258,9 +258,9 @@ public class Task {
 			try {
 				stmt.close();
 				con.close();
-			} catch (Exception e) {				
+			} catch (Exception e) {
 			}
-		}		
+		}
 		return null;
 	}
 ```
@@ -292,7 +292,7 @@ public interface StatementCallback {
 	public User getUserInfo(int userid) {
 		final String sql = "select id, name,birthday from users where id="+userid;
 		return (User)jdbcTemplate.query(
-				(stmt)->{			
+				(stmt)->{
 					ResultSet rs = stmt.executeQuery(sql);
 					User rtnUser = null;
 					if (rs.next()) {
@@ -351,7 +351,7 @@ public interface PreparedStatementCallback {
 public User getUserInfo(int userid) {
 		final String sql = "select id, name,birthday from users where id=?";
 		return (User)jdbcTemplate.query(sql, new Object[]{new Integer(userid)},
-			(pstmt)->{			
+			(pstmt)->{
 				ResultSet rs = pstmt.executeQuery();
 				User rtnUser = null;
 				if (rs.next()) {
@@ -386,7 +386,7 @@ import java.sql.ResultSet;
 import com.minis.beans.factory.annotation.Autowired;
 import com.minis.jdbc.core.JdbcTemplate;
 import com.test.entity.User;
-	
+
 public class UserService {
 		@Autowired
 		JdbcTemplate jdbcTemplate;
@@ -457,9 +457,9 @@ public class SingleConnectionDataSource implements DataSource {
 	private String url;
 	private String username;
 	private String password;
-	private Properties connectionProperties;	
+	private Properties connectionProperties;
 	private Connection connection;
-	
+
     //默认构造函数
 	public SingleConnectionDataSource() {
 	}

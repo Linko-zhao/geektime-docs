@@ -177,7 +177,7 @@ public double actionPrice(Customer customer) {
 
 ```
     Customer customer = new VIP();
-    new VIPOnlyMerchant().actionPrice(customer); // 编译出错    
+    new VIPOnlyMerchant().actionPrice(customer); // 编译出错
 ```
 
 当然，如果你实在想要调用这个桥接方法，那么你可以选择使用反射机制。
@@ -218,7 +218,7 @@ class NaiveMerchant extends Merchant
          0: aload_0
          1: aload_1
          2: invokevirtual actionPrice:(LCustomer;)Ljava/lang/Double;
-         5: areturn         
+         5: areturn
 ```
 
 我之前曾提到过，class文件里允许出现两个同名、同参数类型但是不同返回类型的方法。这里的原方法和桥接方法便是其中一个例子。由于该桥接方法同样标注了ACC\_SYNTHETIC，因此，当在Java程序中调用NaiveMerchant.actionPrice时，我们只会调用到原方法。
@@ -287,6 +287,7 @@ Java程序中的泛型信息会被擦除。具体来说，Java编译器将选取
   }
 
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>钱</span> 👍（61） 💬（1）<p>本节还是比较容易理解的，也搞清楚了泛型相关的疑惑点，非常感谢。
 小结如下：
@@ -311,7 +312,6 @@ Java程序中的泛型信息会被擦除。具体来说，Java编译器将选取
 var定义变量必须直接初始化，基于初始化的值做类型推导，javac编译期间的语法糖
 
 所以不能声明函数的参数为var类型
-
 
 foreach语法糖，对于实现了迭代器Iterable&lt;T&gt;接口的类型，使用迭代器方法；
 foreach对于数组和变长参数的处理方式与上述略有不同，先求数组长度，再做类似while循环遍历

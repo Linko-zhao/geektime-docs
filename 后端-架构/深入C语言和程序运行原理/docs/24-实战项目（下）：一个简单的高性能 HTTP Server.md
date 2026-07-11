@@ -180,7 +180,7 @@ int __calcFibRecursion(int n) {
 }
 
 int calcFibonacci(int n) {
-  // return __calcFibTCO(n, 0, 1);  // TCO version. 
+  // return __calcFibTCO(n, 0, 1);  // TCO version.
   return __calcFibRecursion(n);  // recursion version.
 }
 ```
@@ -359,7 +359,7 @@ mkdir build && cd build && cmake .. && cmake --build . && ./fibserv
 # cmake ..  
 ...
 Could not find a package configuration file provided by &quot;uriparser&quot;
-... 
+...
 
 为了跑老师的项目，本地安装了libgtest-dev和源码编译安装 uriparser，项目才跑起来。不知有没有简单的办法，类似go mod tidy 或者go get xxx 获取go项目的依赖呢？</p>2022-06-18</li><br/><li><span>brian</span> 👍（0） 💬（0）<p>老师啊，epoll和异步io都没有用上，不能算高性能吧</p>2023-04-28</li><br/><li><span>lunar</span> 👍（0） 💬（0）<p>第一次跑C项目 还要自己装一下第三方库,学习的路上又踏出了一步 -DURIPARSER_BUILD_DOCS=OFF</p>2022-03-20</li><br/>
 </ul>

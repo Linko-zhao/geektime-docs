@@ -300,17 +300,17 @@ release:
 
 
     # 拷贝 bin目录下的脚本、config中的配置文件、编译成功的可执行文件
-    cp -rf target/release/placement-center $(BUILD_FOLD)/${PACKAGE_FOLD_NAME}/libs 
+    cp -rf target/release/placement-center $(BUILD_FOLD)/${PACKAGE_FOLD_NAME}/libs
     cp -rf bin/* $(BUILD_FOLD)/${PACKAGE_FOLD_NAME}/bin
     cp -rf config/* $(BUILD_FOLD)/${PACKAGE_FOLD_NAME}/config
     chmod -R 777 $(BUILD_FOLD)/${PACKAGE_FOLD_NAME}/bin/*
-    
+
     # 将目录打包成.tar.gz 文件
     cd $(BUILD_FOLD) && tar zcvf ${PACKAGE_FOLD_NAME}.tar.gz ${PACKAGE_FOLD_NAME} && rm -rf ${PACKAGE_FOLD_NAME}
     echo "build release package success. ${PACKAGE_FOLD_NAME}.tar.gz "
 
 
-test: 
+test:
     sh ./scripts/integration-testing.sh
 clean:
     cargo clean
@@ -329,7 +329,7 @@ make clean # 清理编译文件
 
 1. 首先，定义了 TARGET、BUILD\_FOLD、VERSION、PACKAGE\_FOLD\_NAME 4 个变量，分别表示项目的名称、构建完成后的包的存放目录、包的版本、项目名称+版本号组成的安装包的名称。
 2. release target 里面是一段 shell 代码，拆解开来主要有下面四部分逻辑：
-   
+
    1. 创建对应目录
    2. 编译 release 包
    3. 拷贝 bin 目录下的脚本、config 中的配置文件、编译成功的可执行文件

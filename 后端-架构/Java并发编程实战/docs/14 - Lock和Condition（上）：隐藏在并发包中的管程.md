@@ -20,10 +20,10 @@ Java SDK并发包内容很丰富，包罗万象，但是我觉得最核心的还
 
 ```
 // 支持中断的API
-void lockInterruptibly() 
+void lockInterruptibly()
   throws InterruptedException;
 // 支持超时的API
-boolean tryLock(long time, TimeUnit unit) 
+boolean tryLock(long time, TimeUnit unit)
   throws InterruptedException;
 // 支持非阻塞获取锁的API
 boolean tryLock();
@@ -40,7 +40,7 @@ class X {
   int value;
   public void addOne() {
     // 获取锁
-    rtl.lock();  
+    rtl.lock();
     try {
       value+=1;
     } finally {
@@ -98,7 +98,7 @@ class X {
   }
   public void addOne() {
     // 获取锁
-    rtl.lock();  
+    rtl.lock();
     try {
       value = 1 + get(); ①
     } finally {
@@ -120,7 +120,7 @@ public ReentrantLock() {
 }
 //根据公平策略参数创建锁
 public ReentrantLock(boolean fair){
-    sync = fair ? new FairSync() 
+    sync = fair ? new FairSync()
                 : new NonfairSync();
 }
 ```
@@ -187,22 +187,22 @@ class Account {
 
 下面是jdk的源码
 final boolean nonfairTryAcquire(int acquires) {
-    final Thread current = Thread.currentThread();&#47;&#47;获取当前线程实例
-    int c = getState();&#47;&#47;获取state变量的值,即当前锁被重入的次数
-    if (c == 0) {   &#47;&#47;state为0,说明当前锁未被任何线程持有
-        if (compareAndSetState(0, acquires)) { &#47;&#47;以cas方式获取锁
-            setExclusiveOwnerThread(current);  &#47;&#47;将当前线程标记为持有锁的线程
-            return true;&#47;&#47;获取锁成功,非重入
-        }
-    }
-    else if (current == getExclusiveOwnerThread()) { &#47;&#47;当前线程就是持有锁的线程,说明该锁被重入了
-        int nextc = c + acquires;&#47;&#47;计算state变量要更新的值
-        if (nextc &lt; 0) &#47;&#47; overflow
-            throw new Error(&quot;Maximum lock count exceeded&quot;);
-        setState(nextc);&#47;&#47;非同步方式更新state值
-        return true;  &#47;&#47;获取锁成功,重入
-    }
-    return false;     &#47;&#47;走到这里说明尝试获取锁失败
+final Thread current = Thread.currentThread();&#47;&#47;获取当前线程实例
+int c = getState();&#47;&#47;获取state变量的值,即当前锁被重入的次数
+if (c == 0) { &#47;&#47;state为0,说明当前锁未被任何线程持有
+if (compareAndSetState(0, acquires)) { &#47;&#47;以cas方式获取锁
+setExclusiveOwnerThread(current); &#47;&#47;将当前线程标记为持有锁的线程
+return true;&#47;&#47;获取锁成功,非重入
+}
+}
+else if (current == getExclusiveOwnerThread()) { &#47;&#47;当前线程就是持有锁的线程,说明该锁被重入了
+int nextc = c + acquires;&#47;&#47;计算state变量要更新的值
+if (nextc &lt; 0) &#47;&#47; overflow
+throw new Error(&quot;Maximum lock count exceeded&quot;);
+setState(nextc);&#47;&#47;非同步方式更新state值
+return true; &#47;&#47;获取锁成功,重入
+}
+return false; &#47;&#47;走到这里说明尝试获取锁失败
 }
 
 </p>2019-07-04</li><br/><li><span>linqw</span> 👍（25） 💬（15）<p>class Account {
@@ -244,16 +244,16 @@ java层面的互斥（管程）保证了原子性。
 个人理解：公平锁是直接先进入AQS同步队列，抢占锁。非公平锁，是先抢占锁，若没有抢到则进入AQS同步队列，等待唤醒。
 
 非公平锁代码：
-	final void lock() {
-            if (compareAndSetState(0, 1))
-                setExclusiveOwnerThread(Thread.currentThread());
-            else
-                acquire(1);
-        }
+final void lock() {
+if (compareAndSetState(0, 1))
+setExclusiveOwnerThread(Thread.currentThread());
+else
+acquire(1);
+}
 公平锁：
-	 final void lock() {
-            acquire(1);
-        }
+final void lock() {
+acquire(1);
+}
 
 acquire(1)是当前线程抢占锁，若没有抢到则加入到同步队列中。公平锁和非公平锁逻辑一致。</p>2019-09-25</li><br/><li><span>Liam</span> 👍（9） 💬（1）<p>1 不会出现死锁，因为不存在阻塞的情况
 2 线程较多的情况会导致部分线程始终无法获取到锁，导致活锁</p>2019-03-30</li><br/><li><span>zyz</span> 👍（7） 💬（1）<p>老师，lock是用aqs实现的，aqs是用了volatile＋cas操作系统原子操作保证线程安全的，这个也是管程吗？</p>2019-08-21</li><br/><li><span>朱小豪</span> 👍（7） 💬（1）<p>应该是少了个break跳出循环，然后这个例子是会产生死锁的，因为满足了死锁产生的条件。</p>2019-03-30</li><br/>

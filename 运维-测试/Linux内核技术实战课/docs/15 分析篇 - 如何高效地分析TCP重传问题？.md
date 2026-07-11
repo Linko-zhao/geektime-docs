@@ -88,20 +88,20 @@ $ tshark -r tcpdumpfile -R tcp.analysis.retransmission
 如果你觉得实现内核模块比较麻烦，可以借助ftrace框架来使用Kprobe。Brendan Gregg实现的[tcpretrans](https://github.com/brendangregg/perf-tools/blob/master/net/tcpretrans)采用的就是这种方式，你也可以直接使用它这个工具来追踪TCP重传。不过，该工具也有一些缺陷，因为它是通过读取/proc/net/tcp这个文件来解析是什么在重传，所以它能解析的信息比较有限，而且如果TCP连接持续时间较短（比如短连接），那么该工具就无法解析出来了。另外，你在使用它时需要确保你的内核已经打开了ftrace的tracing功能，也就是/sys/kernel/debug/tracing/tracing\_on中的内容需要为1；在CentOS-6上，还需要/sys/kernel/debug/tracing/tracing\_enabled也为1。
 
 ```
-$ cat /sys/kernel/debug/tracing/tracing_on 
+$ cat /sys/kernel/debug/tracing/tracing_on
 1
 ```
 
 如果为0的话，你需要打开它们，例如：
 
 ```
-$ echo 1 > /sys/kernel/debug/tracing/tracing_on 
+$ echo 1 > /sys/kernel/debug/tracing/tracing_on
 ```
 
 然后在追踪结束后，你需要来关闭他们：
 
 ```
-$ echo 0 > /sys/kernel/debug/tracing/tracing_on 
+$ echo 0 > /sys/kernel/debug/tracing/tracing_on
 ```
 
 由于Kprobe是通过异常（Exception）这种方式来工作的，所以它还是有一些性能开销的，在TCP发包快速路径上还是要避免使用Kprobe。不过，由于重传路径是慢速路径，所以在重传路径上添加Kprobe也无需担心性能开销。

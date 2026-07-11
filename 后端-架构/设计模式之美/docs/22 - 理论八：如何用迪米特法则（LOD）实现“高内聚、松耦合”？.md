@@ -68,7 +68,7 @@ public class NetworkTransporter {
 
 public class HtmlDownloader {
   private NetworkTransporter transporter;//通过构造函数或IOC注入
-  
+
   public Html downloadHtml(String url) {
     Byte[] rawHtml = transporter.send(new HtmlRequest(url));
     return new Html(rawHtml);
@@ -78,7 +78,7 @@ public class HtmlDownloader {
 public class Document {
   private Html html;
   private String url;
-  
+
   public Document(String url) {
     this.url = url;
     HtmlDownloader downloader = new HtmlDownloader();
@@ -108,7 +108,7 @@ public class NetworkTransporter {
 ```
 public class HtmlDownloader {
   private NetworkTransporter transporter;//通过构造函数或IOC注入
-  
+
   // HtmlDownloader这里也要有相应的修改
   public Html downloadHtml(String url) {
     HtmlRequest htmlRequest = new HtmlRequest(url);
@@ -127,7 +127,7 @@ public class HtmlDownloader {
 public class Document {
   private Html html;
   private String url;
-  
+
   public Document(String url, Html html) {
     this.html = html;
     this.url = url;
@@ -138,11 +138,11 @@ public class Document {
 // 通过一个工厂方法来创建Document
 public class DocumentFactory {
   private HtmlDownloader downloader;
-  
+
   public DocumentFactory(HtmlDownloader downloader) {
     this.downloader = downloader;
   }
-  
+
   public Document createDocument(String url) {
     Html html = downloader.downloadHtml(url);
     return new Document(url, html);
@@ -161,7 +161,7 @@ public class Serialization {
     //...
     return serializedResult;
   }
-  
+
   public Object deserialize(String str) {
     Object deserializedResult = ...;
     //...
@@ -212,7 +212,7 @@ public class Serialization implements Serializable, Deserializable {
     ...
     return serializedResult;
   }
-  
+
   @Override
   public Object deserialize(String str) {
     Object deserializedResult = ...;
@@ -223,7 +223,7 @@ public class Serialization implements Serializable, Deserializable {
 
 public class DemoClass_1 {
   private Serializable serializer;
-  
+
   public Demo(Serializable serializer) {
     this.serializer = serializer;
   }
@@ -232,7 +232,7 @@ public class DemoClass_1 {
 
 public class DemoClass_2 {
   private Deserializable deserializer;
-  
+
   public Demo(Deserializable deserializer) {
     this.deserializer = deserializer;
   }
@@ -259,7 +259,7 @@ public class Serializer { // 参看JSON的接口定义
   public String serialize(Object object) { //... }
   public String serializeMap(Map map) { //... }
   public String serializeList(List list) { //... }
-  
+
   public Object deserialize(String objectString) { //... }
   public Map deserializeMap(String mapString) { //... }
   public List deserializeList(String listString) { //... }
@@ -292,34 +292,35 @@ public class Serializer { // 参看JSON的接口定义
 “接口隔离原则”是客户端不应该被强迫依赖不需要的接口，和“迪米特法则”中的有限知识异曲同工，接口簇会更加“单一职责”实现方式“基于接口而非实现编程”，达到的目的是高内聚，松耦合。
 
 区别：
+
 1. 各种原则最终的目的是为了实现“高内聚、松耦合”。
 2. 单一职责原则 主要是指导类和模块，避免大而全，提高内聚性。
 3. 接口隔离和迪米特(最小知识)主要指导“松耦合”，解耦使用方的依赖。
-4. 基于接口而非实现编程：主要是解耦接口和实现，是指导思想，提高扩展性。</p>2020-11-16</li><br/><li><span>戒惜舍得</span> 👍（4） 💬（2）<p>相近的功能。 怎么算相近啊。学晕了。</p>2019-12-27</li><br/><li><span>提姆</span> 👍（3） 💬（2）<p>老师您好，请问一下Document的修改为什么会使用到Factory的方式去产生？我对这一步的修改没有很大的感受，我这里的认知是Document只是单纯对文件的操作，那是不是可以透过HtmlDownloader实现相关取得文件的接口，像是IDownloader之类的名称，并直接回传Document这个类(亦或者对此类做其它的延伸)，未来也可以实现其它像是json等其他格式的downloader，不知道我这个想法是不是可行？</p>2020-07-07</li><br/><li><span>大方方</span> 👍（0） 💬（2）<p>我想知道假如 
+4. 基于接口而非实现编程：主要是解耦接口和实现，是指导思想，提高扩展性。</p>2020-11-16</li><br/><li><span>戒惜舍得</span> 👍（4） 💬（2）<p>相近的功能。 怎么算相近啊。学晕了。</p>2019-12-27</li><br/><li><span>提姆</span> 👍（3） 💬（2）<p>老师您好，请问一下Document的修改为什么会使用到Factory的方式去产生？我对这一步的修改没有很大的感受，我这里的认知是Document只是单纯对文件的操作，那是不是可以透过HtmlDownloader实现相关取得文件的接口，像是IDownloader之类的名称，并直接回传Document这个类(亦或者对此类做其它的延伸)，未来也可以实现其它像是json等其他格式的downloader，不知道我这个想法是不是可行？</p>2020-07-07</li><br/><li><span>大方方</span> 👍（0） 💬（2）<p>我想知道假如
 
-Public class NetworkTransporter { 
-   &#47;&#47; 省略属性和其他方法...    
- public Byte[] send(HtmlRequest htmlRequest) {      
+Public class NetworkTransporter {
+&#47;&#47; 省略属性和其他方法...  
+public Byte[] send(HtmlRequest htmlRequest) {
 
-   &#47;&#47;...    }}
-中的send 方法，必须需要HtmelRequest 才能实现功能呢？ 老师修改后，参数上看起来是不依赖外部对象了，但是在很多其他实际操作时，很有可能还是需要用到外部对象来解决问题。 这种情况是不是需要做类扩展，在扩展中再具体引用HtmlRequest ?</p>2020-06-29</li><br/><li><span>斐波那契</span> 👍（0） 💬（3）<p>老师 我有一个问题：在项目开发中，我写了一个类A 里面定义了一个方法，后来又写了一个类B 发现在B里面要用到A里面定义的那个方法(基本上一模一样)，但是A跟B本身是两个不相关的类 这个时候要怎么解决? PS:这个方法不能算作是工具类，只是一段数据集的处理逻辑 那是否是搞一个抽象类 然后让A和B继承这个抽象类 把那个方法写进抽象类里?</p>2019-12-29</li><br/><li><span>prowu</span> 👍（0） 💬（2）<p>一直有一个消息结构与程序内部数据结构取舍的问题：程序内部是否直接复用消息协议的结构？比如：通讯消息使用的是protobuf协议，那程序内部的逻辑是直接使用protobuf的数据结构，还是自己在定义一套结构体？如果直接使用protobuf协议，那程序就紧耦合于协议了（这边就是与protobuf绑在一起了），如果自己在定义一套结构体，那就要多一层协议与内部结构的转换。</p>2019-12-28</li><br/><li><span>知行合一</span> 👍（386） 💬（9）<p>目的都是实现高内聚低耦合，但是出发的角度不一样，单一职责是从自身提供的功能出发，迪米特法则是从关系出发，针对接口而非实现编程是使用者的角度，殊途同归。</p>2019-12-23</li><br/><li><span>下雨天</span> 👍（239） 💬（12）<p>1.单一职责原则	
-适用对象:模块，类，接口 
-侧重点:高内聚，低耦合	
+&#47;&#47;... }}
+中的send 方法，必须需要HtmelRequest 才能实现功能呢？ 老师修改后，参数上看起来是不依赖外部对象了，但是在很多其他实际操作时，很有可能还是需要用到外部对象来解决问题。 这种情况是不是需要做类扩展，在扩展中再具体引用HtmlRequest ?</p>2020-06-29</li><br/><li><span>斐波那契</span> 👍（0） 💬（3）<p>老师 我有一个问题：在项目开发中，我写了一个类A 里面定义了一个方法，后来又写了一个类B 发现在B里面要用到A里面定义的那个方法(基本上一模一样)，但是A跟B本身是两个不相关的类 这个时候要怎么解决? PS:这个方法不能算作是工具类，只是一段数据集的处理逻辑 那是否是搞一个抽象类 然后让A和B继承这个抽象类 把那个方法写进抽象类里?</p>2019-12-29</li><br/><li><span>prowu</span> 👍（0） 💬（2）<p>一直有一个消息结构与程序内部数据结构取舍的问题：程序内部是否直接复用消息协议的结构？比如：通讯消息使用的是protobuf协议，那程序内部的逻辑是直接使用protobuf的数据结构，还是自己在定义一套结构体？如果直接使用protobuf协议，那程序就紧耦合于协议了（这边就是与protobuf绑在一起了），如果自己在定义一套结构体，那就要多一层协议与内部结构的转换。</p>2019-12-28</li><br/><li><span>知行合一</span> 👍（386） 💬（9）<p>目的都是实现高内聚低耦合，但是出发的角度不一样，单一职责是从自身提供的功能出发，迪米特法则是从关系出发，针对接口而非实现编程是使用者的角度，殊途同归。</p>2019-12-23</li><br/><li><span>下雨天</span> 👍（239） 💬（12）<p>1.单一职责原则
+适用对象:模块，类，接口
+侧重点:高内聚，低耦合
 思考角度:自身
 
 2.接口隔离原则
-适用对象:接口，函数	
-侧重点:低耦合	
+适用对象:接口，函数
+侧重点:低耦合
 思考角度:调用者
 
-3.基于接口而非实现编程 
-适用对象:接口，抽象类	
-侧重点:低耦合 
+3.基于接口而非实现编程
+适用对象:接口，抽象类
+侧重点:低耦合
 思考角度:调用者
 
-4.迪米特法则	
-适用对象:模块，类	
-侧重点:低耦合	
+4.迪米特法则
+适用对象:模块，类
+侧重点:低耦合
 思考角度:类关系</p>2019-12-25</li><br/><li><span>Ken张云忠</span> 👍（58） 💬（0）<p>“高内聚、松耦合”“单一职责原则”“接口隔离原则”“基于接口而非实现编程”“迪米特法则”，它们之间的区别和联系吗？
 区别:
 高内聚、松耦合:是一个重要的设计思想,能够有效地提高代码的可读性和可维护性,缩小功能改动导致的代码改动范围.
@@ -353,18 +354,18 @@ LoD如何使用：
 4、不要调用全局变量（包括可变对象、可变单例）
 例如：
 class HtmlDownloader{
-  Html html;
-  public void downloadHtml(Transporter trans, String url){
-    if(checkUrl(url)){&#47;&#47; ok 自己的实例方法
-      &#47;&#47; return
-    }
-    rawData = trans.send(uri);&#47;&#47; ok 参数对象的方法
-    Html html = createHtml(rawData); &#47;&#47; ok 它创建的对象
-    html.save();&#47;&#47; ok  它创建对象的方法
-  )
-  private boolean checkUrl(String url){
-    &#47;&#47; check
-  }
+Html html;
+public void downloadHtml(Transporter trans, String url){
+if(checkUrl(url)){&#47;&#47; ok 自己的实例方法
+&#47;&#47; return
+}
+rawData = trans.send(uri);&#47;&#47; ok 参数对象的方法
+Html html = createHtml(rawData); &#47;&#47; ok 它创建的对象
+html.save();&#47;&#47; ok  它创建对象的方法
+)
+private boolean checkUrl(String url){
+&#47;&#47; check
+}
 }
 
 参考：

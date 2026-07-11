@@ -235,20 +235,20 @@ top - 23:21:36 up 11 days,  5:37,  5 users,  load average: 40.53, 49.79, 53.30
 Tasks: 335 total,   1 running, 332 sleeping,   2 stopped,   0 zombie
 %Cpu(s): 82.5 us,  8.7 sy,  0.0 ni, 3.0 id,  0.0 wa,  0.0 hi,  3.2 si,  2.6 st
 KiB Mem : 16265984 total,  2802952 free,  7089284 used,  6373748 buff/cache
-KiB Swap:        0 total,        0 free,        0 used.  8759980 avail Mem 
+KiB Swap:        0 total,        0 free,        0 used.  8759980 avail Mem
 
 
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                                 
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 26573 root      20   0 8930960 837008  15792 S  231.5  5.1 113:46.65 java -Dapp.id=svc-mall-order -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.s+
 26973 root      20   0 8920512 810820  15776 S  173.7  5.0 112:24.54 java -Dapp.id=svc-mall-order -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.s+
 24386 root      20   0 8864356 702676  15764 S  98.7  4.3 295:33.69 java -Dapp.id=svc-mall-portal -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.+
 17778 root      20   0 8982272 803984  16888 S  97.4  4.9 375:15.37 java -Dapp.id=svc-mall-portal -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.+
  1087 root      20   0 2574160 132160  31928 S  25.6  0.8   1637:21 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubern+
 25589 root      20   0 8839392 585348  15772 S  20.8  3.6 160:58.44 java -Dapp.id=svc-mall-auth -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.se+
- 1095 root      20   0  998512  86168  13100 S   6.5  0.5 837:37.56 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock                                  
+ 1095 root      20   0  998512  86168  13100 S   6.5  0.5 837:37.56 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 29226 root      20   0 8906120 881632  13700 S   5.8  5.4 760:36.91 java -Dapp.id=svc-mall-search -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.+
 28206 root      20   0 7960552 341564  15700 S   4.9  2.1  66:28.23 java -Dapp.id=svc-mall-search -javaagent:/opt/skywalking/agent/skywalking-agent.jar -Dskywalking.agent.+
- 9844 root      20   0 1632416  47092  16676 S   2.9  0.3 559:35.51 calico-node -felix                                                                                      
+ 9844 root      20   0 1632416  47092  16676 S   2.9  0.3 559:35.51 calico-node -felix
  9646 polkitd   20   0 4327012  97744   4752 S   2.6  0.6  25:26.93 /usr/local/lib/erlang/
 ```
 
@@ -295,7 +295,6 @@ KiB Swap:        0 total,        0 free,        0 used.  8759980 avail Mem
 1、用相同的member_id登录，之前登录获取的token不会失效？为什么会存在一个用户的多个不同token呢？
 
 2、文中：&quot;在查看了全局监控数据之后，数据库的资源如下所示&quot;，这里为什么是数据库的资源？应该就是全局监控的结果吧
-
 
 3、文中：”我们在前面提到，在拆分响应时间的过程中，发现是 Order 服务消耗的时间多。而 Order 服务又是当前这个场景中最需要资源的应用，那我们就先把 Auth、Portal 之类的服务移走。“移到其它worker？这些是不是物理机资源不足造成的？为什么不能一个服务就在一个worker上？
 

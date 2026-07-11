@@ -27,29 +27,29 @@ module sys_bus (
     // cpu -> imem
     input  [31:0] cpu_imem_addr,
     output [31:0] cpu_imem_data,
-    output [31:0] imem_addr,            	
-    input  [31:0] imem_data, 
-  
+    output [31:0] imem_addr,
+    input  [31:0] imem_data,
+
     // cpu -> bus
-    input  [31:0] cpu_dmem_addr,        
-    input  [31:0] cpu_dmem_data_in,     
-    input         cpu_dmem_wen,        
+    input  [31:0] cpu_dmem_addr,
+    input  [31:0] cpu_dmem_data_in,
+    input         cpu_dmem_wen,
     output reg [31:0] cpu_dmem_data_out,
-  
-    // bus -> ram 
-    input  [31:0] dmem_read_data,     
-    output [31:0] dmem_write_data,    
-    output [31:0] dmem_addr,           
+
+    // bus -> ram
+    input  [31:0] dmem_read_data,
+    output [31:0] dmem_write_data,
+    output [31:0] dmem_addr,
     output reg    dmem_wen,
-  
-    // bus -> rom 
+
+    // bus -> rom
     input  [31:0] dmem_rom_read_data,
-    output [31:0] dmem_rom_addr, 
-  
+    output [31:0] dmem_rom_addr,
+
     // bus -> uart
-    input  [31:0] uart_read_data,   
-    output [31:0] uart_write_data,   
-    output [31:0] uart_addr,         
+    input  [31:0] uart_read_data,
+    output [31:0] uart_write_data,
+    output [31:0] uart_addr,
     output reg    uart_wen
 );
     assign imem_addr = cpu_imem_addr;
@@ -161,7 +161,7 @@ module dmem(
     output reg [31:0] dout
 );
     reg [31:0] dmem_reg[0:4095];
-    
+
     always @(posedge clk) begin
         if(we) begin
             dmem_reg[addr] <= din;
@@ -293,7 +293,7 @@ TEST_HEX := ./sim/asm/build/test.dat
 
 # 编译汇编程序，输出二进制指令
 asm:
-	make -C ./sim/asm 
+	make -C ./sim/asm
 	python ./sim/asm/word2byte.py
 
 # 对CPU进行仿真
@@ -366,15 +366,17 @@ Makefile:11: recipe for target &#39;asm&#39; failed
 make: *** [asm] Error 2
 请问这个出错是什么原因呢</p>2022-08-28</li><br/><li><span>Liu Zheng</span> 👍（0） 💬（2）<p>老师，想问一下，这里汇编代码里面没发送一个字符延时1ms是为了匹配uart的波特率吗？请问这个mini cpu的串口的波特率是在哪里指明的啊？是固定在uart的verilog代码的某个地方了吗？</p>2022-08-22</li><br/><li><span>云海</span> 👍（0） 💬（1）<p>为什么我运行 make asm 的时候出现这样的error？谢谢
 
-make -C .&#47;sim&#47;asm 
+make -C .&#47;sim&#47;asm
 make[1]: Entering directory &#39;&#47;home&#47;yh&#47;ws&#47;riscv&#47;Geek-time-computer-foundation&#47;lesson06~11&#47;mini_cpu&#47;sim&#47;asm&#39;
-+ AS src&#47;miniCPU_sim.asm build&#47;miniCPU_sim.o
-make[1]: riscv32-unknown-elf-as: Command not found
-Makefile:27: recipe for target &#39;build&#47;miniCPU_sim.o&#39; failed
-make[1]: *** [build&#47;miniCPU_sim.o] Error 127
-make[1]: Leaving directory &#39;&#47;home&#47;yh&#47;ws&#47;riscv&#47;Geek-time-computer-foundation&#47;lesson06~11&#47;mini_cpu&#47;sim&#47;asm&#39;
-Makefile:11: recipe for target &#39;asm&#39; failed
-make: *** [asm] Error 2
+
+- AS src&#47;miniCPU_sim.asm build&#47;miniCPU_sim.o
+  make[1]: riscv32-unknown-elf-as: Command not found
+  Makefile:27: recipe for target &#39;build&#47;miniCPU_sim.o&#39; failed
+  make[1]: *** [build&#47;miniCPU_sim.o] Error 127
+  make[1]: Leaving directory &#39;&#47;home&#47;yh&#47;ws&#47;riscv&#47;Geek-time-computer-foundation&#47;lesson06~11&#47;mini_cpu&#47;sim&#47;asm&#39;
+  Makefile:11: recipe for target &#39;asm&#39; failed
+  make: *** [asm] Error 2
+
 </p>2022-08-20</li><br/><li><span>TableBear</span> 👍（0） 💬（1）<p>好难o(╥﹏╥)o</p>2022-08-19</li><br/><li><span>苏流郁宓</span> 👍（0） 💬（1）<p>哈佛结构？</p>2022-08-19</li><br/><li><span>范廷东</span> 👍（0） 💬（0）<p>跑通这个案例，需要用ubuntu或centos的虚拟机？需要安装什么工具？
 
 这些能不能补充说一下；</p>2024-02-23</li><br/><li><span>氢原子</span> 👍（0） 💬（0）<p>计算机两大体系结构分别是冯诺依曼体系结构和哈弗体系结构，可以自己设计第三个体系结构吗？</p>2023-09-13</li><br/>

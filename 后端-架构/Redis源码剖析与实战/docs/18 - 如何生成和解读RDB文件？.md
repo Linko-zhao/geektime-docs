@@ -98,7 +98,7 @@ if (rioWrite(rdb,eofmark,RDB_EOF_MARK_SIZE) == 0) goto werr; //再次写入40字
 第二步，执行flushall命令，清空当前的数据库：
 
 ```
-./redis-cli flushall   
+./redis-cli flushall
 ```
 
 第三步，使用redis-cli登录刚启动的Redis server，执行set命令插入一个String类型的键值对，再执行hmset命令插入一个Hash类型的键值对。执行save命令，将当前数据库内容保存到RDB文件中。这个过程如下所示：
@@ -371,9 +371,8 @@ if (rioWrite(rdb,&cksum,8) == 0) goto werr;
     4、【间接调用】：backgroundSaveDoneHandler(1261行) -&gt; backgroundSaveDoneHandlerDisk&#47;backgroundSaveDoneHandlerSocket -&gt; updateSlavesWaitingBgsave -&gt; startBgsaveForReplication -&gt; rdbSaveBackground
         如果当前的进程角度是rdb_child_pid子进程，在结束bgsave后可能有机器在等待RDB文件，那么会调用 updateSlavesWaitingBgsave，从而间接的可能调用startBgsaveForReplication函数
 
-
 补充总结：
-    本期老师主要介绍了Redis的持久化做法和RDB文件的编码方式，包括文件头部的编码方式，文件的键值对写入的编码方式，还有写入的触发时机等等，也方便我们日后自行解析RDB文件。
+本期老师主要介绍了Redis的持久化做法和RDB文件的编码方式，包括文件头部的编码方式，文件的键值对写入的编码方式，还有写入的触发时机等等，也方便我们日后自行解析RDB文件。
 
     此外在本次源码中多次出现了RIO的标识，这里解释一下，RIO其实是unix下的一款IO包，起本质是封装了操作系统I&#47;O，能通过缓冲区的方式调用操作系统I&#47;O去对文件进行读写，此外Redis在保存RDB文件也使用了一些技巧，例如在rdbSave函数中，文件是先写入tmpfile（临时文件）的，最后通过rename的方式修改文件名字来替换掉整个文件，这是安全的文件写入方式，如果在写入期间掉电也并不会导致旧RDB文件损坏，但是也证明在磁盘预留上是需要双倍空间的。</p>2021-09-08</li><br/><li><span>Kaito</span> 👍（9） 💬（1）<p>1、RDB 文件是 Redis 的数据快照，以「二进制」格式存储，相比 AOF 文件更小，写盘和加载时间更短
 

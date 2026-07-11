@@ -37,31 +37,31 @@
 我跟你分享一个极品的提交注释，你可以参考一下。
 
 > switch to Flask-XML-RPC dependency
-> 
+>
 > CR: PBX-2222
-> 
+>
 > The Flask-XML-RPC-Re fork has Python 3 support, but it has a couple
-> 
+>
 > other problems.
-> 
+>
 > 1. test suite does not pass
 > 2. latest code is not tagged
 > 3. uncompiled source code is not distributed via PyPI
-> 
+>
 > The Flask-XML-RPC module is essentially dead upstream, but it is
-> 
+>
 > packaged in EPEL 7 and Fedora. This module will get us far enough to  
 > the
-> 
+>
 > point that we can complete phase one for this project.
-> 
+>
 > When we care about Python 3, we can drop XML-RPC entirely and get the
-> 
+>
 > service consumers to switch to a REST API instead.
-> 
+>
 > (Note, with this change, the Travis CI tests will fail for Python 3.  
 > The
-> 
+>
 > solution is to drop XML-RPC support.)
 
 这时，肯定有人会问，花这么大力气做这个事情，会不会有点得不偿失呢？从局部来看，的确如此。但是，换个角度想，当其他人看到你的改动，或者是评审你的代码的时候，如果通过提交记录就能清晰地了解你的意图，而不是一脸蒙地把你叫过来，让你再讲一遍，这样节约的时间比当时你书写提交记录的时间要多得多。

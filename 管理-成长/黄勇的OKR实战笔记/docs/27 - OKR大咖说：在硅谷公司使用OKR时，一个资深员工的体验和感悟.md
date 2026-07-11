@@ -1,9 +1,9 @@
-> From 黄勇：  
->   
-> 每家公司都有一套自己的管理和协作方式，每位领导者都有一套自己的实施心经。为了让你能够更加全面地了解目前国内外互联网公司（包括创业公司）的实施流程和落地标准等内容，更多元化地了解各位大咖对 OKR 的想法，我和极客时间团队一起为你策划了“OKR 大咖说”栏目。在这个栏目中，我会邀请不同公司的大咖来从不同的角度为你分享他们的实施心经。  
->   
-> 今天邀请到的是庄振运老师，他博士毕业于佐治亚理工学院，在美国硅谷工作了10年时间。他曾在 LinkedIn（领英） 工作过 4 年，2017年加入Facebook（脸书），也曾在 Oracle、Salesforce 等公司工作过，且这些公司都在使用OKR工作法。  
->   
+> From 黄勇：
+>
+> 每家公司都有一套自己的管理和协作方式，每位领导者都有一套自己的实施心经。为了让你能够更加全面地了解目前国内外互联网公司（包括创业公司）的实施流程和落地标准等内容，更多元化地了解各位大咖对 OKR 的想法，我和极客时间团队一起为你策划了“OKR 大咖说”栏目。在这个栏目中，我会邀请不同公司的大咖来从不同的角度为你分享他们的实施心经。
+>
+> 今天邀请到的是庄振运老师，他博士毕业于佐治亚理工学院，在美国硅谷工作了10年时间。他曾在 LinkedIn（领英） 工作过 4 年，2017年加入Facebook（脸书），也曾在 Oracle、Salesforce 等公司工作过，且这些公司都在使用OKR工作法。
+>
 > 他长期从事计算机性能方面的学术研究和工程技术优化，在互联网、无线网络、分布式系统、Java、操作系统和存储系统等多个领域发表过 40余篇国际论文和10 多个国际专利。
 
 你好，我叫庄振运。现在在加州硅谷上班，主要从事互联网容量管理和性能优化等方面的工作。我曾经在硅谷几家公司，比如LinkedIn和Facebook工作过。这些公司都或多或少地采用了OKR的方式来管理，对公司团队和员工的工作目标和具体执行都起到了很好地促进作用。
@@ -108,12 +108,12 @@ OKR长度，普遍采用半年或者季度，不同周期各有优点。咱们�
 
 > (目标：初稿) Partner with Hadoop Team。  
 > (目标：意见) What is the purpose of this object? why it is important?  
-> (目标：终稿）Partner with Hadoop Dev Team to build org-based resource accounting system, in order for the company to budget the cost/usage  
->   
+> (目标：终稿）Partner with Hadoop Dev Team to build org-based resource accounting system, in order for the company to budget the cost/usage
+>
 > (关键结果1：初稿) Work with Hadoop team to develop APIs.  
 > (关键结果1：意见) This sounds like a task, please focus on the end result, is it anAPI to provide user-level job information?  
-> (关键结果1：终稿) Design/develop APIs to support various needs includinguser-level job informationaggregation, in July.  
->   
+> (关键结果1：终稿) Design/develop APIs to support various needs includinguser-level job informationaggregation, in July.
+>
 > (关键结果2：初稿) Using the API to generate automatedusage reports.  
 > (关键结果2：意见) This is a clear key result, but it would be good to be specificabout what will the automated result contains.  
 > (关键结果2：终稿) Using the API to generate automated reports, containing theorgs, resource usage of CPU and memory, in August.

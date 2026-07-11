@@ -29,61 +29,54 @@ npm install pinia@next
 然后在src/main.js中，我们导入createPinia方法，通过createPinia方法创建Pinia的实例后，再通过app.use方法注册Pinia。
 
 ```javascript
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import App from './App.vue'
-const pinia = createPinia()
-const app = createApp(App)
-app.use(pinia).mount('#app')
-
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+const pinia = createPinia();
+const app = createApp(App);
+app.use(pinia).mount("#app");
 ```
 
 然后我们可以在store文件夹中创建一个count.js。下面的代码中我们通过Pinia的defineStore方法定义了一个store，store内部通过state返回一个对象，并且通过Actions配置修改数据的方法add。这里使用的语法和Vuex比较类似，只是删除了Mutation的概念，**统一使用Actions来配置**。
 
 ```javascript
+import { defineStore } from "pinia";
 
-
-import { defineStore } from 'pinia'
-
-export const useCounterStore = defineStore('count', {
-  id:'count',
-  state: () => {
-    return { count: 1 }
-  },
-  actions: {
-    add() {
-      this.count++
-    },
-  },
-})
-
+export const useCounterStore = defineStore("count", {
+  id: "count",
+  state: () => {
+    return { count: 1 };
+  },
+  actions: {
+    add() {
+      this.count++;
+    },
+  },
+});
 ```
 
 然后我们可以使用Composition的方式在代码中使用store。注意上面的store返回的其实就是一个Composition风格的函数，使用useCounterStore返回count后，可以在add方法中直接使用count.add触发Actions，实现数据的修改。
 
 ```javascript
-import { useCounterStore } from '../stores/count'
+import { useCounterStore } from "../stores/count";
 
-const count = useCounterStore()
-function add(){
-  count.add()
+const count = useCounterStore();
+function add() {
+  count.add();
 }
-
-    
 ```
 
 **我们也可以使用Composition风格的语法，去创建一个store。**使用ref或者reactive包裹后，通过defineStore返回，这样store就非常接近我们自己分装的Composition语法了，也去除了很多Vuex中特有的概念，学习起来更加简单。
 
 ```javascript
-export const useCounterStore = defineStore('count', () => {
-  const count = ref(0)
-  function increment() {
-    count.value++
-  }
+export const useCounterStore = defineStore("count", () => {
+  const count = ref(0);
+  function increment() {
+    count.value++;
+  }
 
-  return { count, increment }
-})
-
+  return { count, increment };
+});
 ```
 
 ## Pinna源码
@@ -358,7 +351,7 @@ function createOptionsStore<
 
       return removeSubscription
     }
-    
+
 
   const store: Store<Id, S, G, A> = reactive(
     assign({}， partialStore )

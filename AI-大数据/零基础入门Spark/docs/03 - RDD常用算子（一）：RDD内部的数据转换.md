@@ -269,55 +269,56 @@ val cleanedPairRDD: RDD[String] = wordPairRDD.filter(f)
 from hashlib import md5
 from pyspark import SparkContext
 
-
 def f(partition):
-    m = md5()
-    for word in partition:
-        m.update(word.encode(&quot;utf8&quot;))
-        yield m.hexdigest()
-
+m = md5()
+for word in partition:
+m.update(word.encode(&quot;utf8&quot;))
+yield m.hexdigest()
 
 lineRDD = SparkContext().textFile(&quot;.&#47;wikiOfSpark.txt&quot;)
 kvRDD = (
-    lineRDD.flatMap(lambda line: line.split(&quot; &quot;))
-    .filter(lambda word: word != &quot;&quot;)
-    .mapPartitions(f)
-    .map(lambda word: (word, 1))
+lineRDD.flatMap(lambda line: line.split(&quot; &quot;))
+.filter(lambda word: word != &quot;&quot;)
+.mapPartitions(f)
+.map(lambda word: (word, 1))
 )
 
 kvRDD.foreach(print)
 
-``` 
+```
 
 #相邻+过滤特殊字符
-``` 
+```
+
 from pyspark import SparkContext
 
 # 定义特殊字符列表
-special_char_list = [&quot;&amp;&quot;, &quot;|&quot;, &quot;#&quot;, &quot;^&quot;, &quot;@&quot;]
-# 定义判定函数f
-def f(s):
-    words = s.split(&quot;-&quot;)
-    b1 = words[0] in special_char_list
-    b2 = words[1] in special_char_list
-    return (not b1) and (not b2)
 
+special_char_list = [&quot;&amp;&quot;, &quot;|&quot;, &quot;#&quot;, &quot;^&quot;, &quot;@&quot;]
+
+# 定义判定函数f
+
+def f(s):
+words = s.split(&quot;-&quot;)
+b1 = words[0] in special_char_list
+b2 = words[1] in special_char_list
+return (not b1) and (not b2)
 
 # 定义拼接函数word_pair
-def word_pair(line):
-    words = line.split(&quot; &quot;)
-    for i in range(len(words) - 1):
-        yield words[i] + &quot;-&quot; + words[i + 1]
 
+def word_pair(line):
+words = line.split(&quot; &quot;)
+for i in range(len(words) - 1):
+yield words[i] + &quot;-&quot; + words[i + 1]
 
 lineRDD = SparkContext().textFile(&quot;.&#47;wikiOfSpark.txt&quot;)
 cleanedPairRDD = lineRDD.flatMap(word_pair).filter(f)
 cleanedPairRDD.foreach(print)
 
-``` </p>2021-09-21</li><br/><li><span>Geek_a30533</span> 👍（4） 💬（1）<p>对scala的函数定义格式不是很清楚，那边绕了好几次，有一个小疑问，在flatMap里的匿名函数f
+```</p>2021-09-21</li><br/><li><span>Geek_a30533</span> 👍（4） 💬（1）<p>对scala的函数定义格式不是很清楚，那边绕了好几次，有一个小疑问，在flatMap里的匿名函数f
 
-line =&gt; {  
-			val words: Array[String] = line.split(&quot; &quot;)  
+line =&gt; {
+			val words: Array[String] = line.split(&quot; &quot;)
 			for (i &lt;- 0 until words.length - 1) yield words(i) + &quot;-&quot; + words(i+1)
 		}
 
@@ -367,14 +368,14 @@ object NeighboringWordCount {
     }
   }
 }</p>2022-01-03</li><br/><li><span>孙浩</span> 👍（0） 💬（1）<p>吴老师，mapPartitions的是不是也避免了对象锁的问题，因为partitions对应的也是任务数。</p>2021-11-05</li><br/><li><span>小强</span> 👍（0） 💬（1）<p>import org.apache.spark.rdd.RDD
- 
+
 &#47;&#47; 这里的下划线&quot;_&quot;是占位符，代表数据文件的根目录
 val rootPath: String = &quot;&#47;home&#47;gxchen&#47;Spark&#47;01-wordCount&quot;
 val file: String = s&quot;${rootPath}&#47;wikiOfSpark.txt&quot;
- 
+
 &#47;&#47; 读取文件内容
 val lineRDD: RDD[String] = spark.sparkContext.textFile(file)
- 
+
 &#47;&#47; 以行为单位做分词
 val wordPairRDD: RDD[String] = lineRDD.flatMap(line =&gt; {
 	val words: Array[String] = line.split(&quot; &quot;)
@@ -385,7 +386,7 @@ val wordPairRDD: RDD[String] = lineRDD.flatMap(line =&gt; {
 
 &#47;&#47; 定义特殊字符列表
 val list: List[String] = List(&quot;&amp;&quot;, &quot;|&quot;, &quot;#&quot;, &quot;^&quot;, &quot;@&quot;)
- 
+
 &#47;&#47; 定义判定函数f
 def f(s: String): Boolean = {
 	val words: Array[String] = s.split(&quot;-&quot;)
@@ -393,7 +394,7 @@ def f(s: String): Boolean = {
 	val b2: Boolean = list.contains(words(1))
 	return !b1 &amp;&amp; !b2 &#47;&#47; 返回不在特殊字符列表中的词汇对
 }
- 
+
 &#47;&#47; 使用filter(f)对RDD进行过滤
 val cleanWordPairRDD: RDD[String] = wordPairRDD.filter(f)
 
@@ -401,7 +402,7 @@ val cleanWordPairRDD: RDD[String] = wordPairRDD.filter(f)
 val kvRDD: RDD[(String, Int)] = cleanWordPairRDD.map(wordPair =&gt; (wordPair, 1))
 &#47;&#47; 按照单词做分组计数
 val wordPairCounts: RDD[(String, Int)] = kvRDD.reduceByKey((x, y) =&gt; x + y)
- 
+
 &#47;&#47; 打印词频最高的5个词汇
 wordPairCounts.map{case (k, v) =&gt; (v, k)}.sortByKey(false).take(5)
 
@@ -419,3 +420,4 @@ java.lang.ArrayIndexOutOfBoundsException: 1
 
 21&#47;10&#47;24 04:58:42 WARN TaskSetManager: Lost task 0.0 in stage 2.0 (TID 2) (localhost executor driver): java.lang.ArrayIndexOutOfBoundsException: 0</p>2021-10-24</li><br/>
 </ul>
+```

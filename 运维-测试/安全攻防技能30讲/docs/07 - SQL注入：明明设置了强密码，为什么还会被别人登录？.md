@@ -118,7 +118,7 @@ SQL注入破坏可用性十分简单，可以通过完全消耗服务器的资�
 ```
 String sql = "SELECT * FROM Users WHERE UserId = ?";
 PreparedStatement statement = connection.prepareStatement(sql);
-statement.setInt(1, userId); 
+statement.setInt(1, userId);
 ResultSet results = statement.executeQuery();
 
 ```
@@ -146,7 +146,7 @@ delimiter $$　　#将语句的结束符号从分号;临时改为两个$$(可以
 CREATE PROCEDURE select_user(IN p_id INTEGER)
 BEGIN
 　 SELECT * FROM Users WHERE UserId = p_id;
-END$$ 
+END$$
 delimiter;　　#将语句的结束符号恢复为分号
 
 call select_user(1);
@@ -206,7 +206,7 @@ SELECT name FROM user WHERE id = 1 AND (SELECT LENGTH(DATABASE()) = 4);
 
 2. 确定数据库名字 通过 ASCII 码方式
 
-SELECT name FROM user WHERE id = 1 AND (SELECT ASCII(SUBSTRING(DATABASE(), 1, 1)) &lt; 128); 
+SELECT name FROM user WHERE id = 1 AND (SELECT ASCII(SUBSTRING(DATABASE(), 1, 1)) &lt; 128);
 
 根据 ASCII 码猜测是可以使用二分法来猜测。假设的到的结果是 test。
 
@@ -219,17 +219,17 @@ SELECT name FROM user WHERE id = 1 AND ((SELECT COUNT(*) FROM information_schema
 获取到列的多少列之后，就可以获取到每一列的长度了。
 
 4. 获取列长
-SELECT name FROM user WHERE id = 1  AND ((SELECT LENGTH(column_name) FROM information_schema.COLUMNS WHERE table_name = &#39;user&#39; AND TABLE_SCHEMA = &#39;test&#39; LIMIT 0, 1) = 2);
-
+   SELECT name FROM user WHERE id = 1 AND ((SELECT LENGTH(column_name) FROM information_schema.COLUMNS WHERE table_name = &#39;user&#39; AND TABLE_SCHEMA = &#39;test&#39; LIMIT 0, 1) = 2);
 
 最后，获取每一列的具体值。
 
 5. 获取列名，同样是使用 ASCII 码方式
-SELECT name FROM user WHERE id = 1  AND ((SELECT ASCII(SUBSTRING(column_name, 1, 1)) FROM information_schema.COLUMNS WHERE table_name = &#39;user&#39; AND TABLE_SCHEMA = &#39;test&#39; LIMIT 0, 1) &lt; 120)
+   SELECT name FROM user WHERE id = 1 AND ((SELECT ASCII(SUBSTRING(column_name, 1, 1)) FROM information_schema.COLUMNS WHERE table_name = &#39;user&#39; AND TABLE_SCHEMA = &#39;test&#39; LIMIT 0, 1) &lt; 120)
 
 为了故事的顺利发展这里我假设我们已知表名 user，但是我们可以根据同样的逻辑从 information_schema.TABLES 表中获取 test 库的所有表信息。
 
 最后，我感觉这个方式有点傻啊，因为它依赖一些很特定的条件，比如后端没有做 SQL 注入的防护，而且还必须结合前端页面的反应。</p>2019-12-23</li><br/><li><span>小晏子</span> 👍（8） 💬（1）<p>研究了下盲注的文章，长见识了，以前只是大概知道sql注入，知道最简单的方式，盲注这种方法还是第一次接触，针对这个思考题，可以按如下方式获取其他字段，思路如下，可以写脚本实现，还有前提是能够进行盲注，
+
 1. 先判断字段的第一个字符是否在a-z中，如下所示，
 
 select Username from Users where UserId = 1 and 1 = (select 1 from information_schema.columns WHERE table_name=&#39;Users’ and COLUMN_NAME REGEXP &#39;^[a-z]&#39;)

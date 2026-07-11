@@ -244,26 +244,27 @@ leader处理不一致是通过强制follower直接复制自己的日志来解决
 
 谢谢老师</p>2021-01-27</li><br/><li><span>Index</span> 👍（4） 💬（2）<p>关于etcd的raft实现源码有个问题
 func ExampleNode() {
-	c := &amp;Config{}
-	n := StartNode(c, nil)
-	defer n.Stop()
+c := &amp;Config{}
+n := StartNode(c, nil)
+defer n.Stop()
 
-	&#47;&#47; stuff to n happens in other goroutines
+    &#47;&#47; stuff to n happens in other goroutines
 
-	&#47;&#47; the last known state
-	var prev pb.HardState
-	for {
-		&#47;&#47; Ready blocks until there is new state ready.
-		rd := &lt;-n.Ready()
-		if !isHardStateEqual(prev, rd.HardState) {
-			saveStateToDisk(rd.HardState)
-			prev = rd.HardState
-		}
+    &#47;&#47; the last known state
+    var prev pb.HardState
+    for {
+    	&#47;&#47; Ready blocks until there is new state ready.
+    	rd := &lt;-n.Ready()
+    	if !isHardStateEqual(prev, rd.HardState) {
+    		saveStateToDisk(rd.HardState)
+    		prev = rd.HardState
+    	}
 
-		saveToDisk(rd.Entries)
-		go applyToStore(rd.CommittedEntries)
-		sendMessages(rd.Messages)
-	}
+    	saveToDisk(rd.Entries)
+    	go applyToStore(rd.CommittedEntries)
+    	sendMessages(rd.Messages)
+    }
+
 }
 
 网络，存储都是用户自己实现的，如果这里在处理存储和发送消息很慢，这样不会影响到心跳吗？比如心跳默认是1s，那如果处理存储和网络的时间经常超过1s，岂不是心跳就时常超时，集群经常处于选举的状态吗？求解答</p>2021-01-29</li><br/><li><span>青鸟飞鱼</span> 👍（4） 💬（5）<p>主从复制缺点是因为主节点崩溃后，没有选主机制（是否可以考虑redis的哨兵选主）呢？还是因为数据一致性呢（raft保持强一致性的话，也是通过某些机制保证强一致性（主节点读或者ReadIndex））</p>2021-01-27</li><br/><li><span>Geek_aaa517</span> 👍（3） 💬（2）<p>raft日志跟wal日志没太搞明白，分别是什么作用呢</p>2021-03-20</li><br/><li><span>春风</span> 👍（3） 💬（1）<p>假如老的 Leader A 因为网络问题无法连通 B、C 节点，这时候根据状态图，我们知道它将不停自增任期号，发起选举。等 A 节点网络异常恢复后，那么现有 Leader 收到了新的任期号，就会触发新一轮 Leader 选举，影响服务的可用性。

@@ -336,7 +336,7 @@ winner = winner ? sdsnew(winner) : NULL;
 sentinelHandleRedisInstance 函数逻辑如下：
 
 void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
-    ...
+...
 
     &#47;* Every kind of instance *&#47;
     &#47;&#47; 判断主观下线
@@ -353,58 +353,58 @@ void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
         sentinelFailoverStateMachine(ri);
         sentinelAskMasterStateToOtherSentinels(ri,SENTINEL_NO_FLAGS);
     }
+
 }
 
 可以看到，无论主库还是从库，哨兵都判断了「主观下线」，但只有主库才判断「客观下线」和「故障切换」。</p>2021-09-28</li><br/><li><span>曾轼麟</span> 👍（8） 💬（0）<p>首先回到老师的问题：哨兵会判断从节点的主观下线和客观下线吗？
 答:根据代码，我认为只会判断主观下线，并且在当前实例中，主观下线的slave实例是不能被选举的。
 
 1、首先我们会发现在sentinelHandleDictOfRedisInstances函数中是存在递归调用的，当发现传入的instances是master的时候会继续对其slaves和sentinels进行递归调用，代码如下：
-        if (ri-&gt;flags &amp; SRI_MASTER) {
-            &#47;&#47;对哨兵和slaves都进行判断
-            sentinelHandleDictOfRedisInstances(ri-&gt;slaves);
-            sentinelHandleDictOfRedisInstances(ri-&gt;sentinels);
-            if (ri-&gt;failover_state == SENTINEL_FAILOVER_STATE_UPDATE_CONFIG) {
-                switch_to_promoted = ri;
-            }
-        }
-
+if (ri-&gt;flags &amp; SRI_MASTER) {
+&#47;&#47;对哨兵和slaves都进行判断
+sentinelHandleDictOfRedisInstances(ri-&gt;slaves);
+sentinelHandleDictOfRedisInstances(ri-&gt;sentinels);
+if (ri-&gt;failover_state == SENTINEL_FAILOVER_STATE_UPDATE_CONFIG) {
+switch_to_promoted = ri;
+}
+}
 
 2、但是在调用sentinelHandleRedisInstance中的时候，只有msater才会进行【客观下线】判断，而其他实例只会进行【主观下线】判断
 
 调用路径如下：
-    master实例: sentinelHandleRedisInstance -&gt; sentinelCheckSubjectivelyDown -&gt; sentinelCheckObjectivelyDown
-    其它实例: sentinelHandleRedisInstance -&gt; sentinelCheckSubjectivelyDown
+master实例: sentinelHandleRedisInstance -&gt; sentinelCheckSubjectivelyDown -&gt; sentinelCheckObjectivelyDown
+其它实例: sentinelHandleRedisInstance -&gt; sentinelCheckSubjectivelyDown
 
 在sentinelHandleRedisInstance中判断【客观下线】的代码如下所示：
-        &#47;* Only masters 只有master才执行 *&#47;
-        if (ri-&gt;flags &amp; SRI_MASTER) {
-            &#47;&#47;判断客观下线
-            sentinelCheckObjectivelyDown(ri);
-            if (sentinelStartFailoverIfNeeded(ri))
-                sentinelAskMasterStateToOtherSentinels(ri,SENTINEL_ASK_FORCED);
-            &#47;&#47;调用状态机方法
-            sentinelFailoverStateMachine(ri);
-            sentinelAskMasterStateToOtherSentinels(ri,SENTINEL_NO_FLAGS);
-        }
+&#47;* Only masters 只有master才执行 *&#47;
+if (ri-&gt;flags &amp; SRI_MASTER) {
+&#47;&#47;判断客观下线
+sentinelCheckObjectivelyDown(ri);
+if (sentinelStartFailoverIfNeeded(ri))
+sentinelAskMasterStateToOtherSentinels(ri,SENTINEL_ASK_FORCED);
+&#47;&#47;调用状态机方法
+sentinelFailoverStateMachine(ri);
+sentinelAskMasterStateToOtherSentinels(ri,SENTINEL_NO_FLAGS);
+}
 
 3、已经被标记了主观下线的slave，在执行sentinelSelectSlave的时候会直接跳过，我理解是在当前投票实例的角度，如果某个slave是主观下线的，它在该实例的投票是不能参选的，当前所处的状态机状态是 SENTINEL_FAILOVER_STATE_SELECT_SLAVE。
-    代码如下：
-    while((de = dictNext(di)) != NULL) {
-        sentinelRedisInstance *slave = dictGetVal(de);
-        mstime_t info_validity_time;
-        &#47;&#47;被标记主观下线或者客观下线的直接跳过
-        if (slave-&gt;flags &amp; (SRI_S_DOWN|SRI_O_DOWN)) continue;
-        ...........
-        instance[instances++] = slave;
-    }
-    ......
-    if (instances) {
-        &#47;&#47;先按照优先级排序
-        &#47;&#47;如果优先级一样再按照 slave_repl_offset 来进行排序（选延迟最小的）
-        qsort(instance,instances,sizeof(sentinelRedisInstance*),
-            compareSlavesForPromotion);
-        selected = instance[0];
-    }
+代码如下：
+while((de = dictNext(di)) != NULL) {
+sentinelRedisInstance _slave = dictGetVal(de);
+mstime_t info_validity_time;
+&#47;&#47;被标记主观下线或者客观下线的直接跳过
+if (slave-&gt;flags &amp; (SRI_S_DOWN|SRI_O_DOWN)) continue;
+...........
+instance[instances++] = slave;
+}
+......
+if (instances) {
+&#47;&#47;先按照优先级排序
+&#47;&#47;如果优先级一样再按照 slave_repl_offset 来进行排序（选延迟最小的）
+qsort(instance,instances,sizeof(sentinelRedisInstance_),
+compareSlavesForPromotion);
+selected = instance[0];
+}
 </p>2021-09-29</li><br/><li><span>Jian</span> 👍（1） 💬（0）<p>硬是对了代码看了3遍才看懂：）</p>2022-03-25</li><br/><li><span>木</span> 👍（0） 💬（0）<p>这里有一个很奇怪的问题，选举主节点的时候怎么能够设置2倍的配置时间呢，如果在2倍的配置时间还没有完全主从切换，又会怎么样呢</p>2023-05-30</li><br/><li><span>e⃰v⃰a⃰n⃰</span> 👍（0） 💬（2）<p>我想问假如master宕机了，直接在其他的从节点中随机一个做为主节点不就行了吗？为啥还要选举？选举也是随机啊！</p>2022-05-20</li><br/><li><span>Benson_Geek</span> 👍（0） 💬（3）<p>master 记录的 Leader 的纪元（master-&gt;leader_epoch）
 求问这个到底是什么东西。。。。。。。。。。。。。。。。。。。。。。。。。救命</p>2021-12-25</li><br/>
 </ul>

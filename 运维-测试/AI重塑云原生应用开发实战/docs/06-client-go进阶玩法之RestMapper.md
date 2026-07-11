@@ -72,10 +72,10 @@ metadata:
   name: nginx-pod
 spec:
   containers:
-  - name: nginx-container
-    image: nginx
-    ports:
-    - containerPort: 80
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
 ```
 
 - **apiVersion：**是由 Group/Version 组合而成，由于 Pod 的 Group 为 Core（核心 API 组，Group 名为空），Version 为 v1，因此只写了 v1。
@@ -166,7 +166,7 @@ func main() {
 在上一小节中，我们使用过如下 curl 命令列出pod list。
 
 ```go
-curl -k -H "Authorization: Bearer xxxxxxxxxxxxxxxxxx" \                                                                                    
+curl -k -H "Authorization: Bearer xxxxxxxxxxxxxxxxxx" \
 >      https://<your k8s server ip>:<your k8s server port>/api/v1/namespaces/default/pods
 ```
 
@@ -327,7 +327,7 @@ func InitRestMapper(clientSet *kubernetes.Clientset) meta.RESTMapper {
 func mappingFor(resourceOrKindArg string, restMapper *meta.RESTMapper) (*meta.RESTMapping, error) {
     fullySpecifiedGVR, groupResource := schema.ParseResourceArg(resourceOrKindArg)
     gvk := schema.GroupVersionKind{}
-    
+
     if fullySpecifiedGVR != nil {
         gvk, _ = (*restMapper).KindFor(*fullySpecifiedGVR)
     }
@@ -394,79 +394,82 @@ for _, item := range resources.Items {
 package main
 
 import (
-	&quot;context&quot;
-	&quot;fmt&quot;
-	&quot;k8s.io&#47;apimachinery&#47;pkg&#47;api&#47;meta&quot;
-	metav1 &quot;k8s.io&#47;apimachinery&#47;pkg&#47;apis&#47;meta&#47;v1&quot;
-	&quot;k8s.io&#47;apimachinery&#47;pkg&#47;runtime&#47;schema&quot;
-	&quot;k8s.io&#47;client-go&#47;dynamic&quot;
-	&quot;k8s.io&#47;client-go&#47;kubernetes&quot;
-	&quot;k8s.io&#47;client-go&#47;restmapper&quot;
-	&quot;k8s.io&#47;client-go&#47;tools&#47;clientcmd&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+&quot;k8s.io&#47;apimachinery&#47;pkg&#47;api&#47;meta&quot;
+metav1 &quot;k8s.io&#47;apimachinery&#47;pkg&#47;apis&#47;meta&#47;v1&quot;
+&quot;k8s.io&#47;apimachinery&#47;pkg&#47;runtime&#47;schema&quot;
+&quot;k8s.io&#47;client-go&#47;dynamic&quot;
+&quot;k8s.io&#47;client-go&#47;kubernetes&quot;
+&quot;k8s.io&#47;client-go&#47;restmapper&quot;
+&quot;k8s.io&#47;client-go&#47;tools&#47;clientcmd&quot;
 )
 
 func InitRestMapper(clientSet *kubernetes.Clientset) meta.RESTMapper {
-	gr, err := restmapper.GetAPIGroupResources(clientSet.Discovery())
-	if err != nil {
-		panic(err)
-	}
+gr, err := restmapper.GetAPIGroupResources(clientSet.Discovery())
+if err != nil {
+panic(err)
+}
 
-	mapper := restmapper.NewDiscoveryRESTMapper(gr)
+    mapper := restmapper.NewDiscoveryRESTMapper(gr)
 
-	return mapper
+    return mapper
+
 }
 
 func mappingFor(resourceOrKindArg string, restMapper *meta.RESTMapper) (*meta.RESTMapping, error) {
-	fullySpecifiedGVR, groupResource := schema.ParseResourceArg(resourceOrKindArg)
-	gvk := schema.GroupVersionKind{}
+fullySpecifiedGVR, groupResource := schema.ParseResourceArg(resourceOrKindArg)
+gvk := schema.GroupVersionKind{}
 
-	if fullySpecifiedGVR != nil {
-		gvk, _ = (*restMapper).KindFor(*fullySpecifiedGVR)
-	}
-	if gvk.Empty() {
-		gvk, _ = (*restMapper).KindFor(groupResource.WithVersion(&quot;&quot;))
-	}
-	if !gvk.Empty() {
-		return (*restMapper).RESTMapping(gvk.GroupKind(), gvk.Version)
-	}
-	return nil, nil
+    if fullySpecifiedGVR != nil {
+    	gvk, _ = (*restMapper).KindFor(*fullySpecifiedGVR)
+    }
+    if gvk.Empty() {
+    	gvk, _ = (*restMapper).KindFor(groupResource.WithVersion(&quot;&quot;))
+    }
+    if !gvk.Empty() {
+    	return (*restMapper).RESTMapping(gvk.GroupKind(), gvk.Version)
+    }
+    return nil, nil
+
 }
 
 func main() {
 
-	config, err := clientcmd.BuildConfigFromFlags(&quot;&quot;, &quot;&#47;path&#47;to&#47;kubeconfig&quot;)
-	if err != nil {
-		panic(err)
-	}
+    config, err := clientcmd.BuildConfigFromFlags(&quot;&quot;, &quot;&#47;path&#47;to&#47;kubeconfig&quot;)
+    if err != nil {
+    	panic(err)
+    }
 
-	clientSet, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err)
-	}
+    clientSet, err := kubernetes.NewForConfig(config)
+    if err != nil {
+    	panic(err)
+    }
 
-	mapper := InitRestMapper(clientSet)
-	restMapping, _ := mappingFor(&quot;pod&quot;, &amp;mapper)
+    mapper := InitRestMapper(clientSet)
+    restMapping, _ := mappingFor(&quot;pod&quot;, &amp;mapper)
 
-	dynamicClient, err := dynamic.NewForConfig(config)
-	if err != nil {
-		panic(err)
-	}
+    dynamicClient, err := dynamic.NewForConfig(config)
+    if err != nil {
+    	panic(err)
+    }
 
-	var ri dynamic.ResourceInterface
+    var ri dynamic.ResourceInterface
 
-	if restMapping.Scope.Name() == &quot;namespace&quot; {
-		ri = dynamicClient.Resource(restMapping.Resource).Namespace(&quot;default&quot;)
-	} else {
-		ri = dynamicClient.Resource(restMapping.Resource)
-	}
+    if restMapping.Scope.Name() == &quot;namespace&quot; {
+    	ri = dynamicClient.Resource(restMapping.Resource).Namespace(&quot;default&quot;)
+    } else {
+    	ri = dynamicClient.Resource(restMapping.Resource)
+    }
 
-	resource, err := ri.List(context.TODO(), metav1.ListOptions{})
-	if err != nil {
-		panic(err)
-	}
-	for _, item := range resource.Items {
-		fmt.Printf(&quot;Resource Name: %s\n&quot;, item.GetName())
-	}
+    resource, err := ri.List(context.TODO(), metav1.ListOptions{})
+    if err != nil {
+    	panic(err)
+    }
+    for _, item := range resource.Items {
+    	fmt.Printf(&quot;Resource Name: %s\n&quot;, item.GetName())
+    }
+
 }
 </p>2025-02-20</li><br/>
 </ul>

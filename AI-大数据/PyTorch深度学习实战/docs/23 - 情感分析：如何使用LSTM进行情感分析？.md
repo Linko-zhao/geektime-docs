@@ -415,71 +415,79 @@ dir(data)
 
 # 读取IMDB数据集
 
-
 # 读取IMDB数据集
 
 TEXT = data.Field(lower=True, include_lengths=True, batch_first=True)
 LABEL = data.Field(sequential=False)
 
 # make splits for data 划分数据
+
 train, test = torchtext.datasets.IMDB.splits(TEXT, LABEL)
 
 # build the vocabulary
+
 from torchtext.vocab import GloVe
 TEXT.build_vocab(train, vectors=GloVe(name=&#39;6B&#39;, dim=300))
 LABEL.build_vocab(train)
 
 # make iterator for splits
+
 train_iter, test_iter = data.BucketIterator.splits(
-    (train, test), batch_size=3, device=0)</p>2021-12-31</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-12-12</li><br/><li><span>John(易筋)</span> 👍（0） 💬（0）<p>最后一块代码跑出错
+(train, test), batch_size=3, device=0)</p>2021-12-31</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-12-12</li><br/><li><span>John(易筋)</span> 👍（0） 💬（0）<p>最后一块代码跑出错
 版本 torchtext
-print(torchtext.__version__)  # 0.13.1
+print(torchtext.**version**) # 0.13.1
 出错的代码
 for epoch in range(n_epochs):
-    train_loss, train_acc = train(train_dataloader, model, criterion, optimizer, device)
+train_loss, train_acc = train(train_dataloader, model, criterion, optimizer, device)
 
 错误log
-training...:   0%|          | 0&#47;2969 [00:00&lt;?, ?it&#47;s]
+training...: 0%| | 0&#47;2969 [00:00&lt;?, ?it&#47;s]
 ---------------------------------------------------------------------------
-TypeError                                 Traceback (most recent call last)
+
+TypeError Traceback (most recent call last)
 &lt;ipython-input-23-3dd500bd7dd1&gt; in &lt;module&gt;
-      8 
-      9 for epoch in range(n_epochs):
----&gt; 10     train_loss, train_acc = train(train_dataloader, model, criterion, optimizer, device)
+8
+9 for epoch in range(n_epochs):
+---&gt; 10 train_loss, train_acc = train(train_dataloader, model, criterion, optimizer, device)
 
       7     epoch_losses = []
       8     epoch_accs = []
-----&gt; 9     for batch in tqdm.tqdm(dataloader, desc=&#39;training...&#39;, file=sys.stdout):
-     10         (label, ids, length) = batch
 
-~&#47;opt&#47;anaconda3&#47;lib&#47;python3.8&#47;site-packages&#47;tqdm&#47;std.py in __iter__(self)
-   1127 
-   1128         try:
--&gt; 1129             for obj in iterable:
+----&gt; 9 for batch in tqdm.tqdm(dataloader, desc=&#39;training...&#39;, file=sys.stdout):
+10 (label, ids, length) = batch
 
-~&#47;opt&#47;anaconda3&#47;lib&#47;python3.8&#47;site-packages&#47;torch&#47;utils&#47;data&#47;dataloader.py in __next__(self)
-    680                 self._reset()  # type: ignore[call-arg]
---&gt; 681             data = self._next_data()
-    682             self._num_yielded += 1
+~&#47;opt&#47;anaconda3&#47;lib&#47;python3.8&#47;site-packages&#47;tqdm&#47;std.py in **iter**(self)
+1127
+1128 try:
+-&gt; 1129 for obj in iterable:
+
+~&#47;opt&#47;anaconda3&#47;lib&#47;python3.8&#47;site-packages&#47;torch&#47;utils&#47;data&#47;dataloader.py in **next**(self)
+680 self._reset() # type: ignore[call-arg]
+--&gt; 681 data = self._next_data()
+682 self._num_yielded += 1
 
 ~&#47;opt&#47;anaconda3&#47;lib&#47;python3.8&#47;site-packages&#47;torch&#47;utils&#47;data&#47;dataloader.py in _next_data(self)
-    720         index = self._next_index()  # may raise StopIteration
---&gt; 721         data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
-    722         if self._pin_memory:
+720 index = self._next_index() # may raise StopIteration
+--&gt; 721 data = self._dataset_fetcher.fetch(index) # may raise StopIteration
+722 if self._pin_memory:
 ~&#47;opt&#47;anaconda3&#47;lib&#47;python3.8&#47;site-packages&#47;torch&#47;utils&#47;data&#47;_utils&#47;fetch.py in fetch(self, possibly_batched_index)
-     51             data = self.dataset[possibly_batched_index]
----&gt; 52         return self.collate_fn(data)
+51 data = self.dataset[possibly_batched_index]
+---&gt; 52 return self.collate_fn(data)
 
 &lt;ipython-input-12-6fc8a353bed8&gt; in collate_batch(batch)
-     10         length_list.append(len(processed_text))
----&gt; 11         text_list.append((processed_text + max_length)[:max_length])
+10 length_list.append(len(processed_text))
+---&gt; 11 text_list.append((processed_text + max_length)[:max_length])
 
 TypeError: can only concatenate list (not &quot;int&quot;) to list</p>2022-09-13</li><br/><li><span>John(易筋)</span> 👍（0） 💬（0）<p>torchtext.datasets.IMDB 改为如下可以正确运行
 
 # pip install torchtext
+
 # pip install torchdata
+
 import torchtext
+
 # 读取IMDB数据集
+
 train_iter = torchtext.datasets.IMDB(root=&#39;.&#47;data&#39;, split=&#39;train&#39;)
 train_iter = iter(train_iter)
 next(train_iter)</p>2022-09-10</li><br/><li><span>hallo128</span> 👍（0） 💬（0）<p>torchtext说明文档：https:&#47;&#47;pytorch.org&#47;text&#47;stable&#47;index.html</p>2022-06-30</li><br/>

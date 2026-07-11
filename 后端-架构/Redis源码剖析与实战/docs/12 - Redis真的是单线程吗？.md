@@ -100,7 +100,7 @@ setsid(); //创建新的session
 ```
 #include <stdio.h>
 #include <unistd.h>
- 
+
 int main(int argc, char *argv[]) {
 	printf("hello main\n");
     int rv = fork(); //fork函数的返回值
@@ -158,7 +158,7 @@ if (fork() != 0) exit(0); //fork成功执行或失败，则父进程退出
 void daemonize(void) {
     …
     setsid(); //为子进程创建新的session
-   
+
     //将子进程的标准输入、标准输出、标准错误输出重定向到/dev/null中
     if ((fd = open("/dev/null", O_RDWR, 0)) != -1) {
         dup2(fd, STDIN_FILENO);
@@ -202,7 +202,7 @@ bio.c文件针对要创建的线程，定义了pthread\_t类型的数组bio\_thr
 
 ```
 //保存线程描述符的数组
-static pthread_t bio_threads[BIO_NUM_OPS]; 
+static pthread_t bio_threads[BIO_NUM_OPS];
 //保存互斥锁的数组
 static pthread_mutex_t bio_mutex[BIO_NUM_OPS];
 //保存条件变量的两个数组
@@ -352,12 +352,12 @@ bioProcessBackgroundJobs函数的主要执行逻辑是一个while(1)的循环。
 ```
 while(1) {
         listNode *ln;
- 
+
         …
         //从类型为type的任务队列中获取第一个任务
         ln = listFirst(bio_jobs[type]);
         job = ln->value;
-        
+
         …
         //判断当前处理的后台任务类型是哪一种
         if (type == BIO_CLOSE_FILE) {
@@ -482,7 +482,7 @@ struct bio_job {
 
 最直接的方法就是，把参数换成数组类型，这样就可以传递任意数量参数了。因为这里 Redis 的后台任务都比较简单，最多 3 个参数就足够满足需求，所以 job 直接写死了 3 个参数变量，这样做的好处是维护起来简单直接。</p>2021-08-21</li><br/><li><span>曾轼麟</span> 👍（10） 💬（0）<p>感谢老师的文章，发现老师前面的问题都是为了这章节埋下伏笔的，一样首先回答老师的提问：有什么应对方法来传参么？
 答：
-    最好的方式就是使用指针数组，因为指针数组本身就是一个个指针，可以通过index的顺序标记参数的含义类型，通过index就能快速获取不同的参数对应的指针（这个方案在最新的Redis代码中也有体现）
+最好的方式就是使用指针数组，因为指针数组本身就是一个个指针，可以通过index的顺序标记参数的含义类型，通过index就能快速获取不同的参数对应的指针（这个方案在最新的Redis代码中也有体现）
 
 本篇文章确实让我赞叹，老师刚好通过本篇文章，联合前面几篇文章的问题，一气呵成的给出解答，那么我这边就借老师的气场补充一下我自己的理解和认识：
 
@@ -499,12 +499,12 @@ struct bio_job {
 
 回答下问题，其实这个问题Redis的作者在源码中已经注释了
 struct bio_job {
-    time_t time; &#47;* Time at which the job was created. *&#47;
-    &#47;* Job specific arguments pointers. If we need to pass more than three
-     * arguments we can just pass a pointer to a structure or alike. *&#47;
-    void *arg1, *arg2, *arg3;
+time_t time; &#47;* Time at which the job was created. _&#47;
+&#47;_ Job specific arguments pointers. If we need to pass more than three * arguments we can just pass a pointer to a structure or alike. *&#47;
+void *arg1, *arg2, *arg3;
 };
 void*代表任意类型的指针，因此当参数多于三个时，可以传递数组或者结构。</p>2021-08-21</li><br/><li><span>Milittle</span> 👍（4） 💬（0）<p>这节课我学到了什么：
+
 1. 第一、redis不是单线程的，而是一个主线程，处理IO，另外有三个线程分别处理关闭fd、异步AOF刷盘、延迟释放。
 2. 我们从bio文件中可以看到函数之间的配合。
 

@@ -304,7 +304,7 @@ public void right() {
 [10:40:20.742] [pool-3-thread-1] [INFO ] [t.c.o.demo3.WeakHashMapOOMController:40  ] - cache size:549551
 [10:40:22.862] [pool-3-thread-1] [INFO ] [t.c.o.demo3.WeakHashMapOOMController:40  ] - cache size:547937
 [10:40:22.865] [pool-3-thread-1] [INFO ] [t.c.o.demo3.WeakHashMapOOMController:40  ] - cache size:542134
-[10:40:23.779] [pool-3-thread-1] [INFO ] 
+[10:40:23.779] [pool-3-thread-1] [INFO ]
 //手动进行GC
 [t.c.o.demo3.WeakHashMapOOMController:40  ] - cache size:0
 ```
@@ -440,8 +440,10 @@ XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=. -XX:+PrintGCDateStamps -XX:+Pr
 软引用和弱引用，这两个，让我选，肯定是选软引用。因为弱引用，被回收的频率更高。缓存，如果经常被回收的话，就达不到最大利用率。
 
 但是这里又要说点额外的，单说缓存设计，还要涉及其他的因素。包括缓存大小，缓存的过期时间等。让我来说的话，我可能会考虑使用现有的缓存实现，或者是redis。自己实现一套缓存，成本略高。</p>2020-04-18</li><br/><li><span>一个汉子~</span> 👍（8） 💬（3）<p>之前还遇到一个，一个导出功能，拥有管理员权限的人几乎没有限制，造成了全表查，再加上框架禁止join，所以又把外键拉出来做了一次in查询，也是全表扫，大量的Bo对象和超长sql，直接把系统oom了</p>2020-04-18</li><br/><li><span>不能忍的地精</span> 👍（7） 💬（1）<p>我遇到一个OOM,是这样的
+
 1. 首先有一个线程池,线程数量是20个,但是线程队列容器的数量是Integer的最大值,所以拒绝策略几乎无效,大概没过3秒往线程池提交3个任务
 2. 任务里面有一个Restemplate,没有设置超时时间,超时时间为-1,并且里面维护的连接池是5个,小于线程池数量
 3. 出现5个连接都超时,任务卡住了,但是还是不断的往任务队列里面添加任务,最终导致OOM</p>2020-04-24</li><br/><li><span>ddosyang</span> 👍（2） 💬（1）<p>老师想问一下，在WeakHashMap的那个例子里，可不可以直接用String name当作Key，而不是用User做Key。这样是不是也可以解决问题？</p>2020-04-20</li><br/><li><span>Carisy</span> 👍（1） 💬（1）<p>老师请教一个问题，在使用CompletableFuture的时候出现了很奇怪的场景，就是buffers飙升出现oom，应用程序使用内存并不多，处理逻辑也相对简单就是调用接口通过http上传下载文件</p>2020-06-05</li><br/><li><span>旅途</span> 👍（1） 💬（2）<p>有点没懂 java.lang.IllegalArgumentException: Request header is too large 的意思不就是request header过大了么 为什么开发人员还设置的那么大？</p>2020-04-28</li><br/><li><span>pedro</span> 👍（1） 💬（3）<p>问题一，弱引用是在内存不足时被 gc 掉，而软引用是只要 gc 就回收掉，自然就不能用来做缓存，否则动不动就缓存失效，数据库怕是要被玩坏哦，因为适合做缓存的是弱引用。
-问题二，没用过 groovy，希望看到别人的解答。😄</p>2020-04-18</li><br/><li><span>Geek_3b1096</span> 👍（2） 💬（1）<p>周六第一件事跟上老师进度</p>2020-04-18</li><br/><li><span>自由港</span> 👍（2） 💬（0）<p>关于第二个向题限制了metadata的堆大小，发现就可自动回收了</p>2020-04-18</li><br/><li><span>Geek_d432e7</span> 👍（0） 💬（0）<p>专栏内容非常具有参考价值，希望能够多推送此类专栏。</p>2023-10-03</li><br/><li><span>子陌.</span> 👍（0） 💬（0）<p>享元模式</p>2023-09-30</li><br/><li><span>yang</span> 👍（0） 💬（0）<p>技术方案也够奇葩的------------怎么设计出来的-----~-~----</p>2020-04-20</li><br/>
+   问题二，没用过 groovy，希望看到别人的解答。😄</p>2020-04-18</li><br/><li><span>Geek_3b1096</span> 👍（2） 💬（1）<p>周六第一件事跟上老师进度</p>2020-04-18</li><br/><li><span>自由港</span> 👍（2） 💬（0）<p>关于第二个向题限制了metadata的堆大小，发现就可自动回收了</p>2020-04-18</li><br/><li><span>Geek_d432e7</span> 👍（0） 💬（0）<p>专栏内容非常具有参考价值，希望能够多推送此类专栏。</p>2023-10-03</li><br/><li><span>子陌.</span> 👍（0） 💬（0）<p>享元模式</p>2023-09-30</li><br/><li><span>yang</span> 👍（0） 💬（0）<p>技术方案也够奇葩的------------怎么设计出来的-----~~-~~----</p>2020-04-20</li><br/>
+
 </ul>

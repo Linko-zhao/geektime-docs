@@ -6,9 +6,9 @@
 
 ```
 static class Router implements ResourceRouter {
-    private Runtime runtime;        
+    private Runtime runtime;
     private List<Resource> rootResources;
-        
+
     public Router(Runtime runtime, List<Resource> rootResources) {
         this.runtime = runtime;
         this.rootResources = rootResources;

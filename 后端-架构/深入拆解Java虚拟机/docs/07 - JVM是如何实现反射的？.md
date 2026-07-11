@@ -81,7 +81,7 @@ java.lang.Exception: #0
 package jdk.internal.reflect;
 
 public class GeneratedMethodAccessor1 extends ... {
-  @Overrides    
+  @Overrides
   public Object invoke(Object obj, Object[] args) throws ... {
     Test.target((int) args[0]);
     return null;
@@ -450,7 +450,7 @@ public class Test {
 望解答，谢谢~</p>2018-08-06</li><br/><li><span>夜空</span> 👍（16） 💬（3）<p>当某个反射调用的调用次数在 15 之下时，采用本地实现；当达到 15 时，便开始动态生成字节码...
 ———可以认为第16次反射调用时的耗时是最长的吗？</p>2018-08-06</li><br/><li><span>搬砖匠</span> 👍（15） 💬（3）<p>请教一个问题，本地实现可以用java来替代c++的实现方式吗？这样就可以避过C++的额外开销？</p>2018-09-08</li><br/><li><span>星文友</span> 👍（14） 💬（3）<p>给大家讲个笑话：
 我负责的项目中有大量动态生成的类，这些类实例的调用原本都是通过反射去完成，后来我觉得反射效率低，就为每个动态类的每个方法在动态生成一个代理类，这个代理类就是进行类型强转然后直接调用。后来在压测环境进行测试，发现并无卵用，早点开到这篇文章我就不用做这么多无用功了。特么的JVM已经有这个功能了啊</p>2018-11-02</li><br/><li><span>Kisho</span> 👍（14） 💬（1）<p>郑老师，你好,
-       “动态实现无需经过Java到C++再到Java的切换”,这句话没太明白，能在解释下么？</p>2018-08-06</li><br/><li><span>Stephen</span> 👍（12） 💬（1）<p>老师，有三个知识点不太明白，分别是:内联、逃逸分析以及inflation机制</p>2018-11-03</li><br/><li><span>once</span> 👍（10） 💬（1）<p>请问老师 是不是本地方法的性能一般都不是很好呢</p>2018-09-07</li><br/><li><span>Scott</span> 👍（7） 💬（1）<p>有两个问题：
+“动态实现无需经过Java到C++再到Java的切换”,这句话没太明白，能在解释下么？</p>2018-08-06</li><br/><li><span>Stephen</span> 👍（12） 💬（1）<p>老师，有三个知识点不太明白，分别是:内联、逃逸分析以及inflation机制</p>2018-11-03</li><br/><li><span>once</span> 👍（10） 💬（1）<p>请问老师 是不是本地方法的性能一般都不是很好呢</p>2018-09-07</li><br/><li><span>Scott</span> 👍（7） 💬（1）<p>有两个问题：
 1.v3版本中，确定不逃逸的数组可以优化访问，这个是怎么做的？
 2.v5版本中，为啥逃逸分析会失效，明明都封闭在循环里的？</p>2018-08-15</li><br/><li><span>志远</span> 👍（7） 💬（1）<p>文章中“一亿次直接调用耗费的时间大约在 120ms。这和不调用的时间是一致的。”这句话是不是病句啊？不调用指的是什么？指的是直接调用吗？</p>2018-08-06</li><br/><li><span>钱</span> 👍（5） 💬（2）<p>老师请教个问题，如果手动修改某个Java字节码文件，如果JVM不重新加载此文件，有什么方式能让JVM识别并执行修改的内容呢？
 如果一定需要JVM加载后才能识别并执行，有什么好的手动触发的方法呢？</p>2018-08-06</li><br/><li><span>姬野用菜刀</span> 👍（3） 💬（1）<p>因此，我们应当避免在热点代码中使用返回 Method 数组的 getMethods 或者 getDeclaredMethods 方法，以减少不必要的堆空间消耗。
@@ -484,5 +484,6 @@ static &lt;E&gt; Set&lt;E&gt; of(E e1, E e2) {
         }
     }
 ```
+
 然而ImmutableCollections.SetN又是个变长数组，那么重载的1~10个参数方法是图个啥。。</p>2018-11-15</li><br/>
 </ul>

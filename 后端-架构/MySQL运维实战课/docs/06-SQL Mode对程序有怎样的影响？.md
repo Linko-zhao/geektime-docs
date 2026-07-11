@@ -10,8 +10,8 @@ SQL Mode是MySQL中比较特殊的一个概念，可以通过参数sql\_mode进�
 
 ```go
 mysql> create table tab2(
-    b int, 
-    c varchar(10), 
+    b int,
+    c varchar(10),
     d varchar(30)
 ) engine=innodb;
 
@@ -19,8 +19,8 @@ Query OK, 0 rows affected (10.16 sec)
 
 mysql> insert into tab2 values
     (10, 'AAA1', 'BBB1'),
-    (20, 'AAA4', 'BBB4'), 
-    (10, 'AAA3', 'BBB3'), 
+    (20, 'AAA4', 'BBB4'),
+    (10, 'AAA3', 'BBB3'),
     (20, 'AAA2', 'BBB2')
 
 Query OK, 4 rows affected (0.56 sec)
@@ -566,7 +566,7 @@ mysql> show create table t_engine\G
        Table: t_engine
 Create Table: CREATE TABLE `t_engine` (
   `a` int DEFAULT NULL
-) ENGINE=InnoDB 
+) ENGINE=InnoDB
 1 row in set (0.00 sec)
 ```
 

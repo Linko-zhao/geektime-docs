@@ -16,7 +16,7 @@
 #include <stdio.h>
 int main(){
     int i,j;
-    for(i=1;i<=9;i++){        
+    for(i=1;i<=9;i++){
         for(j=1;j<=i;j++){
             printf("%d*%d=%2d  ",i,j,i*j);
         }
@@ -162,7 +162,7 @@ MESI协议定义了4种基本状态：M、E、S、I，即修改（Modified）、
 
 ```
 mov eax, cr0
-;开启 CACHE    
+;开启 CACHE
 btr eax,29 ;CR0.NW=0
 btr eax,30	;CR0.CD=0
 mov cr0, eax

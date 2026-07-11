@@ -401,10 +401,7 @@ Promise通过回调函数延迟绑定、回调函数返回值穿透和错误“�
 3、Promise 出错后，是怎么通过“冒泡”传递给最后那个捕获
 promise内部有resolved_和rejected_变量保存成功和失败的回调，进入.then（resolved，rejected）时会判断rejected参数是否为函数，若是函数，错误时使用rejected处理错误；若不是，则错误时直接throw错误，一直传递到最后的捕获，若最后没有被捕获，则会报错。可通过监听unhandledrejection事件捕获未处理的promise错误
 
-
-
 </p>2019-09-17</li><br/><li><span>穿秋裤的男孩</span> 👍（14） 💬（2）<p>promise.then是订阅者，订阅promise状态的改变，并且负责回掉；promise.resolve和promise.reject为发布者，发布promise的状态改变的信息。</p>2020-04-17</li><br/><li><span>Rapheal</span> 👍（9） 💬（1）<p>Promise的改进版，测试过也无问题。之前使用闭包存放所有回调函数有些问题，所有的Promise对象都是共享，这样会造成全局数据结构有问题。当前是基于回调函数数组传递在Promise对象之间传递实现。
-
 
     function _Promise(executor) {
         this._resolve = [];
@@ -413,14 +410,14 @@ promise内部有resolved_和rejected_变量保存成功和失败的回调，进�
 
         &#47;*临时保存引用*&#47;
         let self = this;
-        
+
         this.then = function (resolve, reject) {
             resolve &amp;&amp; this._resolve.push(resolve);
             reject &amp;&amp; this._reject.push(reject);
             return this;
         }
 
-        
+
         this.resolve = function (data) {
             setTimeout(() =&gt; {
                 let callback = self._resolve.shift();
@@ -434,7 +431,7 @@ promise内部有resolved_和rejected_变量保存成功和失败的回调，进�
             }, 0)
         }
 
-        this.reject = function (error) {        
+        this.reject = function (error) {
             setTimeout(() =&gt; {
                 let callback;
                 self._reject &amp;&amp; (callback = self._reject.shift());
@@ -451,37 +448,35 @@ promise内部有resolved_和rejected_变量保存成功和失败的回调，进�
         executor(this.resolve, this.reject);
     }
 
-
 function executor(resolve, reject) {
-    let rand = Math.random();
-    console.log(1)
-    console.log(rand)
-    if (rand &gt; 0.5)
-        resolve(rand)
-    else
-        reject(rand)
+let rand = Math.random();
+console.log(1)
+console.log(rand)
+if (rand &gt; 0.5)
+resolve(rand)
+else
+reject(rand)
 }
 var p0 = new _Promise(executor);
 
 var p1 = p0.then((value) =&gt; {
-    console.log(&quot;succeed-1&quot;)
-    return new _Promise(executor)
+console.log(&quot;succeed-1&quot;)
+return new _Promise(executor)
 })
 
 var p3 = p1.then((value) =&gt; {
-    console.log(&quot;succeed-2&quot;)
-    return new _Promise(executor)
+console.log(&quot;succeed-2&quot;)
+return new _Promise(executor)
 })
 
 var p4 = p3.then((value) =&gt; {
-    console.log(&quot;succeed-3&quot;)
-    return new _Promise(executor)
+console.log(&quot;succeed-3&quot;)
+return new _Promise(executor)
 })
 
 p4.catch((error) =&gt; {
-    console.log(&quot;error&quot;)
+console.log(&quot;error&quot;)
 })
-
 
 console.log(2)
 </p>2019-10-05</li><br/><li><span>Angus</span> 👍（8） 💬（3）<p>看完这节之后我自己去实现了手写Promise，回顾了一下Promise，关于这方面的文章很多，我觉得老师大可不必在这里花大量篇幅去讲。专栏的名字是浏览器工作原理与实践，所以我希望老师能够更加着重这一方面的讲解。</p>2019-09-20</li><br/><li><span>乔小爷</span> 👍（6） 💬（2）<p>不是说要手写promise吗，，怎么在教程里面没有看到</p>2020-04-15</li><br/><li><span>Geek_be6d3f</span> 👍（5） 💬（1）<p>请问以下，在“异步编程的问题：代码逻辑不连续”这段中，代码下方的第一行，老师说“这短短的一段代码里面竟然出现了五次回调”，可是我怎么数，都只有三次回调啊，还有两次在哪里？</p>2020-03-11</li><br/>

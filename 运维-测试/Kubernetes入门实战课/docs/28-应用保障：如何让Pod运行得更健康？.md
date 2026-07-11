@@ -73,7 +73,7 @@ spec:
 
 ```yaml
   ...
-  
+
     resources:
       requests:
         cpu: 10
@@ -231,13 +231,13 @@ ReadinessProbe使用的是HTTP GET方式，访问容器的 `/ready` 路径，每
 为了验证另两个探针的工作情况，我们可以修改探针，比如把命令改成检查错误的文件、错误的端口号：
 
 ```yaml
-    startupProbe:
-      exec:
-        command: ["cat", "nginx.pid"]  #错误的文件
+startupProbe:
+  exec:
+    command: ["cat", "nginx.pid"] #错误的文件
 
-    livenessProbe:
-      tcpSocket:
-        port: 8080                     #错误的端口号
+livenessProbe:
+  tcpSocket:
+    port: 8080 #错误的端口号
 ```
 
 然后我们重新创建Pod对象，观察它的状态。
@@ -279,16 +279,18 @@ Liveness 和 Readiness 都是循环探测，Liveness 探测失败会重启，而
 两者都可以单独使用，这时差异不大。
 如果同时使用两者，Liveness 主要是确认应用运行着或者说活着，而 Readiness 是确认应用提供着服务或者说服务就绪着（可以接收流量）。
 
-2. 
+2.
+
 Shell 是从容器内部探测，TCP Socket 和 HTTP GET 都是在容器外部探测。 TCP Socket 基于端口的探测，端口打开即成功；HTTP GET 更丰富些，可以是端口 + 路径。
 </p>2022-09-25</li><br/><li><span>新时代农民工</span> 👍（25） 💬（1）<p>老师请问，Startup、Liveness、Readiness三种探针是按顺序执行还是并行呢？</p>2022-08-26</li><br/><li><span>邵涵</span> 👍（9） 💬（1）<p>如老师原文所示，在startupProbe或livenessProbe探测失败之后，pod的status初始都是running。不过，在容器重启几次之后，pod的status会变为CrashLoopBackOff
 
 如果startupProbe和livenessProbe探测成功，readinessProbe探测失败，pod的ready一直是0&#47;1，status一直是running，当然，也不会重启
-NAME            READY   STATUS    RESTARTS   AGE
-ngx-pod-probe   0&#47;1     Running   0          27m</p>2022-10-25</li><br/><li><span>拾掇拾掇</span> 👍（6） 💬（2）<p>Shell：不用知道端口；TCP Socket、HTTP GET这2个都得知道端口，用的时候还得显示调用端口吧</p>2022-09-12</li><br/><li><span>大毛</span> 👍（4） 💬（1）<p>思考题
+NAME READY STATUS RESTARTS AGE
+ngx-pod-probe 0&#47;1 Running 0 27m</p>2022-10-25</li><br/><li><span>拾掇拾掇</span> 👍（6） 💬（2）<p>Shell：不用知道端口；TCP Socket、HTTP GET这2个都得知道端口，用的时候还得显示调用端口吧</p>2022-09-12</li><br/><li><span>大毛</span> 👍（4） 💬（1）<p>思考题
+
 1.  liveness 和 readiness 探针分别代表程序正常运行和可以提供服务。要探索两者的区别就要看应用在这两种状态下的差异，即在程序运行和提供服务之间，差了些什么。程序正常运行，可能代表代码没有 bug，没有硬性的致命的问题，但是要让它达到可以提供服务的程度，还需要一些条件，比如：启动时可能需要缓存预热，这个阶段可能就是 liveness 成功但 readiness 失败。可能 pod 的负载过大，需要进行降级，这就需要将 readness 从成功改成失败。
-所以可能两种探针失败也有不同的含义：liveness 失败代表应用运行出现比较致命问题，需要重启来续命。readiness 失败代表程序不太健康，这种不健康是可以恢复的。
-2. 三种探测方式应用的使用情境不同吧，shell 是在操作系统层面上的探测，毕竟跑起来的业务代码不方便（可能也不应该？）关心 OS。TCP Socket 关心的是网络，关心的是不同进程间的基础通信？http Get 是在应用层面上的探测，感觉它应该和业务的关联比较紧密。
+    所以可能两种探针失败也有不同的含义：liveness 失败代表应用运行出现比较致命问题，需要重启来续命。readiness 失败代表程序不太健康，这种不健康是可以恢复的。
+2.  三种探测方式应用的使用情境不同吧，shell 是在操作系统层面上的探测，毕竟跑起来的业务代码不方便（可能也不应该？）关心 OS。TCP Socket 关心的是网络，关心的是不同进程间的基础通信？http Get 是在应用层面上的探测，感觉它应该和业务的关联比较紧密。
 
 忽然感觉 kubernetes 真厉害，三种探针和三种探测方式，基本上可以检测出各个层面的问题。</p>2023-06-26</li><br/><li><span>Lorry</span> 👍（3） 💬（2）<p>Liveness指的是进程是否存在，Readiness则是指是否能够正常提供服务，所以可以使用tcp&#39;协议检测Liveness，进程存在端口即存在，使用http检测服务，只有服务启动了参能够相应请求。
 
@@ -300,37 +302,39 @@ Q2：第27讲中，创建四个nginx实例后，不能访问nginx的欢迎页。
 service也创建了。 用虚拟机上浏览器来访问127.0.0.1，失败，
 执行“kubectl port-forward svc&#47;ngx-svc 8080:80 &amp;”以后，
 浏览器上访问127.0.0.1:8080，报错：
-E0826 14:32:28.734987   42769 portforward.go:391] error copying from local connection to remote stream: read tcp4 127.0.0.1:8080-&gt;127.0.0.1:59752: read: connection reset by peer
+E0826 14:32:28.734987 42769 portforward.go:391] error copying from local connection to remote stream: read tcp4 127.0.0.1:8080-&gt;127.0.0.1:59752: read: connection reset by peer
 
 Q3：nginx的配置文件中，竖线是什么意思？
-data: default.conf: |， 这里的竖线是什么意思？ 
+data: default.conf: |， 这里的竖线是什么意思？
 
 Q4：操作系统能够看到的CPU，是指逻辑核吗？还是时间片？</p>2022-08-26</li><br/><li><span>William</span> 👍（0） 💬（1）<p>Startup，启动探针，用来检查应用是否已经启动成功，适合那些有大量初始化工作要做，启动很慢的应用。Liveness，存活探针，用来检查应用是否正常运行，是否存在死锁、死循环。
 Readiness，就绪探针，用来检查应用是否可以接收流量，是否能够对外提供服务。
---- 
-startupProbe        探测失败-会重启:  
-	状态: ContainerCreating -&gt; 
-			Running状态--&gt; CrashLoopBackOff状态(重启过程中看到有在2个状态横跳, ContainerCreating不确定没看到)
-	NAME                       READY   STATUS             RESTARTS      AGE
-	ngx-pod-probe              0&#47;1     Running   		  1 (10s ago)   104s
-	ngx-pod-probe              0&#47;1     CrashLoopBackOff   5 (10s ago)   104s
+---
 
-livenessProbe探测失败-会重启: 
-	那么会持续默认5次重启(我试的默认是重启5次:RESTARTS=5), 这个过程中pod的状态会是变化Running , 重启次数完毕仍然未成功,那么状态会变成CrashLoopBackOff
-	状态:  ContainerCreating -&gt; Running --&gt; CrashLoopBackOff
-	READY:   1&#47;1 -&gt; 0&#47;1
-	NAME                       READY   STATUS    RESTARTS     AGE
-	ngx-pod-probe              1&#47;1     Running   2 (5s ago)   65s
-	ngx-pod-probe              0&#47;1     CrashLoopBackOff   5 (8s ago)   3m48s
+startupProbe 探测失败-会重启:  
+状态: ContainerCreating -&gt;
+Running状态--&gt; CrashLoopBackOff状态(重启过程中看到有在2个状态横跳, ContainerCreating不确定没看到)
+NAME READY STATUS RESTARTS AGE
+ngx-pod-probe 0&#47;1 Running 1 (10s ago) 104s
+ngx-pod-probe 0&#47;1 CrashLoopBackOff 5 (10s ago) 104s
 
-readinessProbe 探测失败 也会重启: 
-	状态: Running --&gt; CrashLoopBackOff 
-	READY:   0&#47;1
+livenessProbe探测失败-会重启:
+那么会持续默认5次重启(我试的默认是重启5次:RESTARTS=5), 这个过程中pod的状态会是变化Running , 重启次数完毕仍然未成功,那么状态会变成CrashLoopBackOff
+状态: ContainerCreating -&gt; Running --&gt; CrashLoopBackOff
+READY: 1&#47;1 -&gt; 0&#47;1
+NAME READY STATUS RESTARTS AGE
+ngx-pod-probe 1&#47;1 Running 2 (5s ago) 65s
+ngx-pod-probe 0&#47;1 CrashLoopBackOff 5 (8s ago) 3m48s
 
-	NAME                       READY   STATUS              RESTARTS   AGE
-	ngx-pod-probe              0&#47;1     ContainerCreating   0          2s
-	ngx-pod-probe              0&#47;1     Running   1 (4s ago)   10s
-	ngx-pod-probe              0&#47;1     CrashLoopBackOff   2 (6s ago)   20s
-	ngx-pod-probe              0&#47;1     Running   3 (19s ago)   33s
-	ngx-pod-probe              0&#47;1     CrashLoopBackOff   5 (38s ago)   2m12s</p>2024-01-12</li><br/><li><span>onepieceJT2018</span> 👍（0） 💬（1）<p>探针失败了有什么发 alert 的集成方案吗 webhook 到 slack 微信 钉钉 之类</p>2023-10-22</li><br/><li><span>WenjieXu</span> 👍（0） 💬（1）<p>老师，如果一个pod需要加入到service中，是否意味着必须要配置readinessProbe？还是默认不配置的话，k8s会认为是up的，放到对应service的ep对象里？</p>2023-04-22</li><br/><li><span>Geek_60e02d</span> 👍（0） 💬（2）<p>请教下Pod启动后，什么时候会加入service的负载均衡列表？是startup probe成功后吗？然后readyness probe失败后，会从service中移除，那么，是不是说，startup probe成功到readyness失败期间，流量会进入这个没有ready的Pod呢</p>2023-01-25</li><br/><li><span>liubiqianmoney</span> 👍（0） 💬（1）<p>Cgroup除了限制CPU和内存资源外，可以限制磁盘IOPS吗？</p>2022-12-30</li><br/><li><span>静心</span> 👍（0） 💬（1）<p>终于有人把三种probe给讲清楚了，很赞</p>2022-12-11</li><br/>
+readinessProbe 探测失败 也会重启:
+状态: Running --&gt; CrashLoopBackOff
+READY: 0&#47;1
+
+    NAME                       READY   STATUS              RESTARTS   AGE
+    ngx-pod-probe              0&#47;1     ContainerCreating   0          2s
+    ngx-pod-probe              0&#47;1     Running   1 (4s ago)   10s
+    ngx-pod-probe              0&#47;1     CrashLoopBackOff   2 (6s ago)   20s
+    ngx-pod-probe              0&#47;1     Running   3 (19s ago)   33s
+    ngx-pod-probe              0&#47;1     CrashLoopBackOff   5 (38s ago)   2m12s</p>2024-01-12</li><br/><li><span>onepieceJT2018</span> 👍（0） 💬（1）<p>探针失败了有什么发 alert 的集成方案吗 webhook 到 slack 微信 钉钉 之类</p>2023-10-22</li><br/><li><span>WenjieXu</span> 👍（0） 💬（1）<p>老师，如果一个pod需要加入到service中，是否意味着必须要配置readinessProbe？还是默认不配置的话，k8s会认为是up的，放到对应service的ep对象里？</p>2023-04-22</li><br/><li><span>Geek_60e02d</span> 👍（0） 💬（2）<p>请教下Pod启动后，什么时候会加入service的负载均衡列表？是startup probe成功后吗？然后readyness probe失败后，会从service中移除，那么，是不是说，startup probe成功到readyness失败期间，流量会进入这个没有ready的Pod呢</p>2023-01-25</li><br/><li><span>liubiqianmoney</span> 👍（0） 💬（1）<p>Cgroup除了限制CPU和内存资源外，可以限制磁盘IOPS吗？</p>2022-12-30</li><br/><li><span>静心</span> 👍（0） 💬（1）<p>终于有人把三种probe给讲清楚了，很赞</p>2022-12-11</li><br/>
+
 </ul>

@@ -114,7 +114,7 @@ public class DynamicRoutesLoader implements InitializingBean {
         String routes = configService.getConfigService().getConfig(
                 ROUTES_CONFIG, configProps.getGroup(), 10000);
         dynamicRoutesListener.receiveConfigInfo(routes);
-        
+
         // 注册监听器
         configService.getConfigService().addListener(ROUTES_CONFIG,
                 configProps.getGroup(),
@@ -129,7 +129,7 @@ public class DynamicRoutesLoader implements InitializingBean {
 ```plain
 spring:
   application:
-    name: coupon-gateway 
+    name: coupon-gateway
   cloud:
     nacos:
       config:
@@ -153,24 +153,29 @@ spring:
 创建好之后，你需要根据RoutesDefinition这个类的格式定义配置文件的内容。以coupon-customer-serv为例，我编写了下面的路由规则。
 
 ```json
-[{
+[
+  {
     "id": "customer-dynamic-router",
     "order": 0,
-    "predicates": [{
+    "predicates": [
+      {
         "args": {
-            "pattern": "/dynamic-routes/**"
+          "pattern": "/dynamic-routes/**"
         },
         "name": "Path"
-    }],
-    "filters": [{
+      }
+    ],
+    "filters": [
+      {
         "name": "StripPrefix",
         "args": {
-            "parts": 1
+          "parts": 1
         }
-    }  
+      }
     ],
     "uri": "lb://coupon-customer-serv"
-}]
+  }
+]
 ```
 
 在这段配置文件中，我指定当前路由的ID是customer-dynamic-router，并且优先级为0。除此之外，我还定义了一段Path谓词作为路径匹配规则，还通过StripPrefix过滤器将Path中第一个前置路径删除。

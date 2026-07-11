@@ -34,7 +34,7 @@ BIOS一开始会初始化CPU，接着检查并初始化内存，然后将自己�
 
 当设备初始化和检查步骤完成之后，**BIOS会在内存中建立中断表和中断服务程序**，这是启动Linux至关重要的工作，因为Linux会用到它们。
 
-具体是怎么操作的呢？BIOS会从内存地址（0x00000）开始用1KB的内存空间（0x00000~0x003FF）构建中断表，在紧接着中断表的位置，用256KB的内存空间构建BIOS数据区（0x00400~0x004FF），并在0x0e05b的地址加载了8KB大小的与中断表对应的中断服务程序。
+具体是怎么操作的呢？BIOS会从内存地址（0x00000）开始用1KB的内存空间（0x00000~~0x003FF）构建中断表，在紧接着中断表的位置，用256KB的内存空间构建BIOS数据区（0x00400~~0x004FF），并在0x0e05b的地址加载了8KB大小的与中断表对应的中断服务程序。
 
 中断表中有256个条目，每个条目占用4个字节，其中两个字节是CS寄存器的值，两个字节是IP寄存器的值。每个条目都指向一个具体的中断服务程序。
 
@@ -131,14 +131,14 @@ OBJCOPYFLAGS_vmlinux.bin := -O binary -R .note -R .comment -S$(obj)/vmlinux.bin:
 vmlinux-objs-y := $(obj)/vmlinux.lds $(obj)/kernel_info.o $(obj)/head_$(BITS).o \    $(obj)/misc.o $(obj)/string.o $(obj)/cmdline.o $(obj)/error.o \    $(obj)/piggy.o $(obj)/cpuflags.o
 vmlinux-objs-$(CONFIG_EARLY_PRINTK) += $(obj)/early_serial_console.o
 vmlinux-objs-$(CONFIG_RANDOMIZE_BASE) += $(obj)/kaslr.o
-ifdef CONFIG_X86_64    
-vmlinux-objs-y += $(obj)/ident_map_64.o    
-vmlinux-objs-y += $(obj)/idt_64.o $(obj)/idt_handlers_64.o    vmlinux-objs-y += $(obj)/mem_encrypt.o    
-vmlinux-objs-y += $(obj)/pgtable_64.o    
+ifdef CONFIG_X86_64
+vmlinux-objs-y += $(obj)/ident_map_64.o
+vmlinux-objs-y += $(obj)/idt_64.o $(obj)/idt_handlers_64.o    vmlinux-objs-y += $(obj)/mem_encrypt.o
+vmlinux-objs-y += $(obj)/pgtable_64.o
 vmlinux-objs-$(CONFIG_AMD_MEM_ENCRYPT) += $(obj)/sev-es.o
 endif
 #……
-$(obj)/vmlinux: $(vmlinux-objs-y) $(efi-obj-y) FORCE  
+$(obj)/vmlinux: $(vmlinux-objs-y) $(efi-obj-y) FORCE
 $(call if_changed,ld)
 ```
 
@@ -153,7 +153,7 @@ $(call if_changed,ld)
 ```
 #linux/arch/x86/boot/compressed/Makefile
 #……
-quiet_cmd_mkpiggy = MKPIGGY $@      
+quiet_cmd_mkpiggy = MKPIGGY $@
 cmd_mkpiggy = $(obj)/mkpiggy $< > $@
 
 targets += piggy.S
@@ -169,19 +169,19 @@ piggy.S的第一个依赖文件vmlinux.bin.$(suffix-y)中的suffix-y，它表示
 #……
 vmlinux.bin.all-y := $(obj)/vmlinux.bin
 vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += $(obj)/vmlinux.relocs
-$(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE    
+$(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,gzip)
-$(obj)/vmlinux.bin.bz2: $(vmlinux.bin.all-y) FORCE    
+$(obj)/vmlinux.bin.bz2: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,bzip2)
-$(obj)/vmlinux.bin.lzma: $(vmlinux.bin.all-y) FORCE    
+$(obj)/vmlinux.bin.lzma: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,lzma)
-$(obj)/vmlinux.bin.xz: $(vmlinux.bin.all-y) FORCE   
+$(obj)/vmlinux.bin.xz: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,xzkern)
-$(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE    
+$(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,lzo)
-$(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE    
+$(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,lz4)
-$(obj)/vmlinux.bin.zst: $(vmlinux.bin.all-y) FORCE    
+$(obj)/vmlinux.bin.zst: $(vmlinux.bin.all-y) FORCE
 $(call if_changed,zstd22)
 suffix-$(CONFIG_KERNEL_GZIP)    := gz
 suffix-$(CONFIG_KERNEL_BZIP2)   := bz2
@@ -198,7 +198,7 @@ suffix-$(CONFIG_KERNEL_ZSTD)    := zst
 #linux/arch/x86/boot/compressed/Makefile
 #……
 OBJCOPYFLAGS_vmlinux.bin :=  -R .comment -S
-$(obj)/vmlinux.bin: vmlinux FORCE 
+$(obj)/vmlinux.bin: vmlinux FORCE
 $(call if_changed,objcopy)
 ```
 
@@ -219,45 +219,45 @@ $(call if_changed,objcopy)
 让我们再次回到mkpiggy命令，其中mkpiggy是内核自带的一个工具程序，它把输出方式重定向到文件，从而产生piggy.S汇编文件，源码如下：
 
 ```
-int main(int argc, char *argv[]){ 
-    uint32_t olen;    
-    long ilen;    
-    FILE *f = NULL;    
+int main(int argc, char *argv[]){
+    uint32_t olen;
+    long ilen;
+    FILE *f = NULL;
     int retval = 1;
-    f = fopen(argv[1], "r");    
-    if (!f) {        
-        perror(argv[1]);        
-        goto bail;    
+    f = fopen(argv[1], "r");
+    if (!f) {
+        perror(argv[1]);
+        goto bail;
     }
     //……为节约篇幅略去部分代码
     printf(".section \".rodata..compressed\",\"a\",@progbits\n");
-    printf(".globl z_input_len\n");    
-    printf("z_input_len = %lu\n", ilen);    
-    printf(".globl z_output_len\n");    
+    printf(".globl z_input_len\n");
+    printf("z_input_len = %lu\n", ilen);
+    printf(".globl z_output_len\n");
     printf("z_output_len = %lu\n", (unsigned long)olen);
     printf(".globl input_data, input_data_end\n");
-    printf("input_data:\n");    
-    printf(".incbin \"%s\"\n", argv[1]);    
+    printf("input_data:\n");
+    printf(".incbin \"%s\"\n", argv[1]);
     printf("input_data_end:\n");
     printf(".section \".rodata\",\"a\",@progbits\n");
-    printf(".globl input_len\n");    
-    printf("input_len:\n\t.long %lu\n", ilen);    
-    printf(".globl output_len\n");    
+    printf(".globl input_len\n");
+    printf("input_len:\n\t.long %lu\n", ilen);
+    printf(".globl output_len\n");
     printf("output_len:\n\t.long %lu\n", (unsigned long)olen);
     retval = 0;
-bail:    
-    if (f)        
-        fclose(f);    
+bail:
+    if (f)
+        fclose(f);
     return retval;
 }
 //由上mkpiggy程序“写的”一个汇编程序piggy.S。
-.section ".rodata..compressed","a",@progbits 
+.section ".rodata..compressed","a",@progbits
 .globl z_input_len
- z_input_len = 1921557 
-.globl z_output_len 
-z_output_len = 3421472 
+ z_input_len = 1921557
+.globl z_output_len
+z_output_len = 3421472
 .globl input_data,input_data_end
-.incbin "arch/x86/boot/compressed/vmlinux.bin.gz" 
+.incbin "arch/x86/boot/compressed/vmlinux.bin.gz"
 input_data_end:
 .section ".rodata","a",@progbits
 .globl input_len
@@ -309,8 +309,8 @@ CPU加电时，会默认设置[CS:IP]为[0XF000:0XFFF0]，根据实模式下寻�
 3.2、BIOS对设备执行简单的初始化工作
 
 3.3、BIOS 会在内存中：
-建立中断表（0x00000~0x003FF）
-构建 BIOS 数据区（0x00400~0x004FF）
+建立中断表（0x00000~~0x003FF）
+构建 BIOS 数据区（0x00400~~0x004FF）
 加载了中断服务程序（0x0e05b~0x1005A）
 
 3.4、BIOS根据设备启动顺序，依次判断是否可以启动
@@ -374,38 +374,39 @@ boot阶段结束，开始进入startup阶段。</p>2021-06-10</li><br/><li><span
 看了这下生成的这个piggy.S 文件
 主要的就是这行代码
 .incbin &quot;arch&#47;x86&#47;boot&#47;compressed&#47;vmlinux.bin.gz&quot;
-通过C 代码的形式，可以传入不同的参数来设置不同的压缩包vmlinux.bin.xx  来生成piggy.S 。
+通过C 代码的形式，可以传入不同的参数来设置不同的压缩包vmlinux.bin.xx 来生成piggy.S 。
 </p>2021-06-09</li><br/><li><span>孤星可</span> 👍（5） 💬（1）<p>尝试实现了 lmoskrlimg 的逻辑（即 Cosmos.eki 的生成），有兴趣可以看看。
 
 https:&#47;&#47;github.com&#47;guxingke&#47;demo&#47;blob&#47;master&#47;bytes-demo&#47;src&#47;main&#47;java&#47;com&#47;gxk&#47;demo&#47;Main.java</p>2021-06-10</li><br/><li><span>Qfeng</span> 👍（4） 💬（1）<p>一、简单总结：
+
 1. CPU上电启动BIOS（ROM）
-CPU硬件被设计成在加电的瞬间，强制将 CS 寄存器的值设置为 0XF000，IP 寄存器的值设置为 0XFFF0。
-CS:IP 为 0XFFFF0 的这个物理地址上连接了主板上的一块小的 ROM 芯片，BIOS 程序就被固化在该 ROM 芯片里。
-总结：CPU上电后硬件自动将 CS:IP 指向地址 0XFFFF0，这里存放了BIOS程序的入口地址，达到启动 BIOS 的目的。
-（注：这个ROM芯片的访问机制和寻址方式和内存一样，只是它在断电时不会丢失数据，在常规下也不能往这里写入数据，它是一种只读内存。）
+   CPU硬件被设计成在加电的瞬间，强制将 CS 寄存器的值设置为 0XF000，IP 寄存器的值设置为 0XFFF0。
+   CS:IP 为 0XFFFF0 的这个物理地址上连接了主板上的一块小的 ROM 芯片，BIOS 程序就被固化在该 ROM 芯片里。
+   总结：CPU上电后硬件自动将 CS:IP 指向地址 0XFFFF0，这里存放了BIOS程序的入口地址，达到启动 BIOS 的目的。
+   （注：这个ROM芯片的访问机制和寻址方式和内存一样，只是它在断电时不会丢失数据，在常规下也不能往这里写入数据，它是一种只读内存。）
 
 2. ROM BIOS
-初始化CPU和内存，将自己拷贝到内存，执行环境跳转到内存（DDR）
+   初始化CPU和内存，将自己拷贝到内存，执行环境跳转到内存（DDR）
 
 3. DDR BIOS
-1）设备初始化
-2）在内存中建立中断服务程序表（0x00000~0x003FF，1KB，256个条目）, BIOS 数据区（0x00400~0x004FF）和中断服务程序（0x0E05B~1005B，8KB）
-3）搜索可引导的外部存储器，并启动其中的程序。（包括：硬盘，U盘，软驱，光驱和网络设备等）
-4）Linux从硬盘启动时，硬盘中名为MRB的第一个扇区包含的GRUB 启动程序（安装GRUB时自动写入）和分区表被 BIOS 装载到 0x7c00 地址开始的内存空间，
-至此BIOS使命结束，控制权交给GRUB。
+   1）设备初始化
+   2）在内存中建立中断服务程序表（0x00000~~0x003FF，1KB，256个条目）, BIOS 数据区（0x00400~~0x004FF）和中断服务程序（0x0E05B~1005B，8KB）
+   3）搜索可引导的外部存储器，并启动其中的程序。（包括：硬盘，U盘，软驱，光驱和网络设备等）
+   4）Linux从硬盘启动时，硬盘中名为MRB的第一个扇区包含的GRUB 启动程序（安装GRUB时自动写入）和分区表被 BIOS 装载到 0x7c00 地址开始的内存空间，
+   至此BIOS使命结束，控制权交给GRUB。
 
 4. GRUB 启动
-1）GRUB包含 boot.img和core.img两部分，硬盘MRB空间有限只包含boot.img，boot.img中包含core.img存放的硬盘扇区号
-2）core.img 文件是由 GRUB 安装程序根据安装时环境信息，用其它 GRUB 的模块文件动态生成，主要包含diskboot.img，kernel.img和其他功能模块。
-GRUB 的 core.img 文件一旦开始工作，就可以加载 Linux 系统的 vmlinuz 内核文件了。
+   1）GRUB包含 boot.img和core.img两部分，硬盘MRB空间有限只包含boot.img，boot.img中包含core.img存放的硬盘扇区号
+   2）core.img 文件是由 GRUB 安装程序根据安装时环境信息，用其它 GRUB 的模块文件动态生成，主要包含diskboot.img，kernel.img和其他功能模块。
+   GRUB 的 core.img 文件一旦开始工作，就可以加载 Linux 系统的 vmlinuz 内核文件了。
 
 5. Linux vmlinuz的生成
-1）由Linux 编译生成的 bzImage 文件复制而来，存放在 &#47;boot 目录下
-2）bzImage 由 arch&#47;x86&#47;boot&#47;Makefile 编译而来，依赖 setup.bin和vmlinux.bin两个。
-3）setup.bin 由 &#47;arch&#47;x86&#47;boot&#47; 目录下的文件编译生成
-4）arch&#47;x86&#47;boot&#47;compressed 目录 编译生成 vmlinux.bin过程总结：Linux 的 kbuild（内核编译）系统会递归进入到每个目录，由该目录下的 Makefile 决定要编译的文件。每个目录编译生成一个 built-in.o，所有的 built-in.o最终链接生成一个 vmlinux 文件最终压缩成 vmlinux.bin.gz，最终由mkpiggy 生成 vmlinux。
+   1）由Linux 编译生成的 bzImage 文件复制而来，存放在 &#47;boot 目录下
+   2）bzImage 由 arch&#47;x86&#47;boot&#47;Makefile 编译而来，依赖 setup.bin和vmlinux.bin两个。
+   3）setup.bin 由 &#47;arch&#47;x86&#47;boot&#47; 目录下的文件编译生成
+   4）arch&#47;x86&#47;boot&#47;compressed 目录 编译生成 vmlinux.bin过程总结：Linux 的 kbuild（内核编译）系统会递归进入到每个目录，由该目录下的 Makefile 决定要编译的文件。每个目录编译生成一个 built-in.o，所有的 built-in.o最终链接生成一个 vmlinux 文件最终压缩成 vmlinux.bin.gz，最终由mkpiggy 生成 vmlinux。
 
 二、思考题
 为什么要用 C 代码 mkpiggy 程序生成 piggy.S 文件，并包含 vmlinux.bin.gz 文件呢？
-==》通过main函数传入的可变参数可以根据需要灵活扩展piggy.S的内容？</p>2022-06-19</li><br/><li><span>pedro</span> 👍（3） 💬（1）<p>工具生成方式灵活，支持多种配置，且能满足各种场景下的需求~</p>2021-06-09</li><br/><li><span>springXu</span> 👍（2） 💬（4）<p>程序来生成汇编代码，这个是有多种配置让使用者根据自己的需求来生成。比如vmlinuz.bin压缩的方式的不同又或者是cpu的指令不同。  产生的汇编代码也不同。 另外Cosmos.eki的生成过程能有个说明不？ </p>2021-06-09</li><br/><li><span>blentle</span> 👍（1） 💬（1）<p>不管肚子多少遍启动流程，还是记不住各种地址，除了0×7c00，哈哈</p>2021-06-10</li><br/><li><span>Fan</span> 👍（1） 💬（1）<p>又学习了一遍启动流程。😂</p>2021-06-09</li><br/><li><span>搬铁少年ai</span> 👍（0） 💬（1）<p>请问老师，boot.img 是 512B 大小，MBR 也是 512，难道 boot.img 安装到 MBR 的时候会把 MBR 全部覆盖掉吗？</p>2021-10-26</li><br/><li><span>搬铁少年ai</span> 👍（0） 💬（2）<p>老师好，我看别的书里面将上电后先跳转到 reset vector(0xFFFFFFF0)，然后 reset vector 会跳转到 BIOS 的入口（0xFFFF0），您这里为什么没有这个恢复向量呢</p>2021-10-24</li><br/><li><span>老王</span> 👍（0） 💬（1）<p>需要多分析各个脚本的功能，才能把握住脉络</p>2021-06-09</li><br/><li><span>WGJ</span> 👍（0） 💬（1）<p>老师，这里面好像piggy.s依赖vmlinux目标，然后vmlinux 目标又依赖piggy.s，这种互相依赖是怎么解决的啊</p>2024-02-02</li><br/>
+==》通过main函数传入的可变参数可以根据需要灵活扩展piggy.S的内容？</p>2022-06-19</li><br/><li><span>pedro</span> 👍（3） 💬（1）<p>工具生成方式灵活，支持多种配置，且能满足各种场景下的需求~</p>2021-06-09</li><br/><li><span>springXu</span> 👍（2） 💬（4）<p>程序来生成汇编代码，这个是有多种配置让使用者根据自己的需求来生成。比如vmlinuz.bin压缩的方式的不同又或者是cpu的指令不同。 产生的汇编代码也不同。 另外Cosmos.eki的生成过程能有个说明不？ </p>2021-06-09</li><br/><li><span>blentle</span> 👍（1） 💬（1）<p>不管肚子多少遍启动流程，还是记不住各种地址，除了0×7c00，哈哈</p>2021-06-10</li><br/><li><span>Fan</span> 👍（1） 💬（1）<p>又学习了一遍启动流程。😂</p>2021-06-09</li><br/><li><span>搬铁少年ai</span> 👍（0） 💬（1）<p>请问老师，boot.img 是 512B 大小，MBR 也是 512，难道 boot.img 安装到 MBR 的时候会把 MBR 全部覆盖掉吗？</p>2021-10-26</li><br/><li><span>搬铁少年ai</span> 👍（0） 💬（2）<p>老师好，我看别的书里面将上电后先跳转到 reset vector(0xFFFFFFF0)，然后 reset vector 会跳转到 BIOS 的入口（0xFFFF0），您这里为什么没有这个恢复向量呢</p>2021-10-24</li><br/><li><span>老王</span> 👍（0） 💬（1）<p>需要多分析各个脚本的功能，才能把握住脉络</p>2021-06-09</li><br/><li><span>WGJ</span> 👍（0） 💬（1）<p>老师，这里面好像piggy.s依赖vmlinux目标，然后vmlinux 目标又依赖piggy.s，这种互相依赖是怎么解决的啊</p>2024-02-02</li><br/>
 </ul>

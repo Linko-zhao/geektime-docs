@@ -80,7 +80,7 @@ Task()
             el.innerHTML = '<div class="box rAF"></div>'
             document.body.append(el)
         }
-        setNewArea()   
+        setNewArea()
     </script>
 </body>
 </html>
@@ -197,7 +197,7 @@ DOM生成之后，ParserHTML过程继续计算样式表，也就是Reculate Styl
 <body>
     <script>
         let p = new Promise(function (resolve, reject) {
-            resolve("成功!"); 
+            resolve("成功!");
         });
 
 
@@ -207,7 +207,7 @@ DOM生成之后，ParserHTML过程继续计算样式表，也就是Reculate Styl
 
 
         let p1 = new Promise(function (resolve, reject) {
-            resolve("成功!"); 
+            resolve("成功!");
         });
 
 
@@ -264,7 +264,7 @@ DOM生成之后，ParserHTML过程继续计算样式表，也就是Reculate Styl
 老师，我有一点不明白：Evalute Scrip过程什么情况下会产生？
 script标签肯定会产生，但是代码1和代码2的分析报告里Evalute Scrip过程都非常多，不明白怎么产生的？</p>2020-03-12</li><br/><li><span>陈坚泓</span> 👍（1） 💬（0）<p>看到一个错别字
 
-走到了 Composite Layers 这步，主线程的任务就完成了，接下来主线程会将合成的任务完全教给合成线程来执行，下面是具体的过程    
+走到了 Composite Layers 这步，主线程的任务就完成了，接下来主线程会将合成的任务完全教给合成线程来执行，下面是具体的过程
 
 完成教给 应该是 完成交给
 

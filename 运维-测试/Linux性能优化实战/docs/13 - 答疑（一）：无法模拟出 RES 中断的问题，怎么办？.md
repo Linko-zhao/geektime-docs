@@ -140,8 +140,8 @@ Reading data from disk /dev/sdb with buffer size 67108864 and count 20
 比如，运行 man vmstat 命令，你可以在手册中发现下面这句话：
 
 ```
-The first report produced gives averages since the last reboot.  Additional reports give information on a sam‐ 
-pling period of length delay.  The process and memory reports are instantaneous in either case. 
+The first report produced gives averages since the last reboot.  Additional reports give information on a sam‐
+pling period of length delay.  The process and memory reports are instantaneous in either case.
 ```
 
 也就是说，第一行数据是系统启动以来的平均值，其他行才是你在运行 vmstat 命令时，设置的间隔时间的平均值。另外，进程和内存的报告内容都是即时数值。

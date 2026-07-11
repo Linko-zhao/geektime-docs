@@ -4,7 +4,7 @@
 
 从本篇文章开始，我们将一起探讨Go语言自带标准库中一些比较核心的代码包。这会涉及这些代码包的标准用法、使用禁忌、背后原理以及周边的知识。
 
-* * *
+---
 
 既然Go语言是以独特的并发编程模型傲视群雄的语言，那么我们就先来学习与并发编程关系最紧密的代码包。
 
@@ -246,6 +246,7 @@ func main() {
     rwMu.RUnlock()
     fmt.Println(&quot;start RUnLock&quot;)
     time.Sleep(time.Second * 1)
+
 }
 
 运行结果（等待时间较长的写操作先执行了）：
@@ -257,8 +258,8 @@ get RLock
 get RUnLock</p>2020-01-16</li><br/><li><span>大王叫我来巡山</span> 👍（3） 💬（2）<p>需要请教老师的是，主协程收到信号就被唤醒了，认为可以读了，但是被阻塞的写协程收到锁释放的消息会不会比主协程要早，然后继续获得写的机会，主协程会不会被阻塞？我认为是不会的，此处的锁只是保证了不同写协程互斥的写入，也就是写操作是原子的，但是并不保证读操作一定在写完后就读吧</p>2019-09-13</li><br/><li><span>芝士老爹</span> 👍（3） 💬（3）<p>如果一直有新的读锁请求，会不会导致写锁锁不了？
 还是说如果有了一个wlock锁请求了，现在因为有rlock未释放锁，wlock的协程被阻塞，后面再有新的rlock锁请求也会先被阻塞，等待wlock锁协程先恢复？</p>2019-08-04</li><br/><li><span>soooldier</span> 👍（2） 💬（1）<p>配套代码里puzzlers&#47;article26下并没有demo58.go，也没有demo59.go，懵圈中。。。</p>2019-05-31</li><br/><li><span>enjoylearning</span> 👍（1） 💬（1）<p>go本身是不是提供了对死锁的检查？</p>2023-05-05</li><br/><li><span>给力</span> 👍（1） 💬（1）<p>对于使用锁有个疑问：
 type Mutex struct {
-	state int32
-	sema  uint32
+state int32
+sema uint32
 }
 state表示锁的一个状态
 

@@ -232,7 +232,6 @@ CSV Data Set Config这个功能之前学过，但是只是别人告诉我怎么�
 看了评论为了验证Recycle on EOF和Stop thread on EOF这两个参数的关系，我去JMeter里实践了一下，我的CSV文件里有7条数据，线程数我设置的8。
 得出结论是：如果Recycle on EOF是Flase，Stop thread on EOF是Flase，由于线程数比文件数据多，JMeter会继续执行，但是由于没有数据，会报错，然后停止；如果Recycle on EOF是Flase，Stop thread on EOF是True，就直接停止。所以两个参数我认为需要结合起来看，虽然Recycle on EOF的优先级高一些，但也不是能起决定性作用的。
 
-
 然后回过头来再看一遍文章发现其实我练习的这两种情况老师都讲了并且举了例子。我刚学完的时候是清楚的（至少自己感觉是清楚的），但是看了评论我发现还是有点懵，然后决定自己试一试。练习过之后，是真的明白了。所以真的要动手去做呀。</p>2020-03-20</li><br/><li><span>zuozewei</span> 👍（7） 💬（3）<p>第一个问题：为什么参数化数据要符合生产环境的数据分布？
 
 在「01丨性能综述：性能测试的概念到底是什么」中已经讲过，性能模型中的业务模型是真实场景的抽象，即需要的数据通常都是从生产环境中的数据中统计来的，其关键就是「数据必须保证仿真」。
@@ -272,7 +271,6 @@ summary +    125 in 00:00:04 =   31.0&#47;s Avg:    28 Min:     0 Max:   869 Err
 summary +   3404 in 00:00:30 =  113.2&#47;s Avg:    31 Min:     0 Max:   361 Err:     0 (0.00%) Active: 6 Started: 6 Finished: 0
 summary +   4444 in 00:00:30 =  148.4&#47;s Avg:    57 Min:     0 Max:   623 Err:    10 (0.23%) Active: 11 Started: 11 Finished: 0
 
-
 这个登录接口的数据是怎么来的呢？我是指用什么策略执行的 ，没有很明白，看active分别是1 6 11这个是指不同的压力线程组情况下吧</p>2023-05-26</li><br/><li><span>galsangflower</span> 👍（1） 💬（1）<p>csv文件读变量会影响性能吗</p>2022-07-18</li><br/><li><span>🌻eleven</span> 👍（1） 💬（1）<p>一直没明白，选择“当前线程”是什么意思，怎么判断当前线程
 </p>2022-06-09</li><br/><li><span>章鱼</span> 👍（1） 💬（1）<p>问题一：数据必须保证仿真，否则性能压测将没有意义
 问题二：因为参数化数据要组合逻辑关系会直接影响参数化数据的分布情况，即数据是否均匀？数据是否稳定？是保否证测试时间足够长？满足测试的负载请求足够多和数据足够多样化，从而最大限度地减少或者掩盖缓存等其他因素的影响</p>2022-03-23</li><br/><li><span>敢不敢y-- 不敢</span> 👍（1） 💬（1）<p>我想知道这个数据是从哪里能看到的？？？？
@@ -285,33 +283,30 @@ summary +   4444 in 00:00:30 =  148.4&#47;s Avg:    57 Min:     0 Max:   623 Err
 
 2、实际操作了Jmeter里的CSV Data Set Config配置，
 第1种场景：（更加贴近实际需要，循环执行的时候仅使用csv的数据。当循环次数超出时，终止执行。）
-a)  Recyele on EOF 设置为 False(不再循环使用参数)
-b)  Stop thread on EOF 设置为True (在参数不足时停止线程)
-c)  Sharing mode设置为 All thead (所有线程)
-CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8 
-执行后，执行6次  成功后结束
-
+a) Recyele on EOF 设置为 False(不再循环使用参数)
+b) Stop thread on EOF 设置为True (在参数不足时停止线程)
+c) Sharing mode设置为 All thead (所有线程)
+CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8
+执行后，执行6次 成功后结束
 
 第2种场景 循环csv的文件（循环使用参数后，不会存在参数不足的情况了。没有意义）
-a)  Recyele on EOF 设置为 True(循环使用参数)
-b)  Stop thread on EOF 设置为True (参数不足时，停止线程)
-c)  Sharing mode设置为 All thead (所有线程)
-CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8 
+a) Recyele on EOF 设置为 True(循环使用参数)
+b) Stop thread on EOF 设置为True (参数不足时，停止线程)
+c) Sharing mode设置为 All thead (所有线程)
+CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8
 执行后，执行8次成功后结束
-
 
 第3种场景 循环csv的文件（循环使用参数后，不会存在参数不足的情况了。没有一直）
-a)  Recyele on EOF 设置为 True(循环使用参数)
-b)  Stop thread on EOF 设置为False (参数不足时，不停止线程)
-c)  Sharing mode设置为 All thead (所有线程)
-CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8 
+a) Recyele on EOF 设置为 True(循环使用参数)
+b) Stop thread on EOF 设置为False (参数不足时，不停止线程)
+c) Sharing mode设置为 All thead (所有线程)
+CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8
 执行后，执行8次成功后结束
 
-
 第4种场景 循环csv的文件（不符合场景，不循环使用参数，再循环次数设置的比较大的时候，肯定会存在参数不足的情况的）
-a)  Recyele on EOF 设置为 False(不循环使用参数)
-b)  Stop thread on EOF 设置为False (参数不足时，不停止线程)
-c)  Sharing mode设置为 All thead (所有线程)
-CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8 
+a) Recyele on EOF 设置为 False(不循环使用参数)
+b) Stop thread on EOF 设置为False (参数不足时，不停止线程)
+c) Sharing mode设置为 All thead (所有线程)
+CSV内的数据仅有6条，而线程数设置为1， 循环次数设置为8
 执行后，执行8次，前6次成功，后2次失败</p>2021-02-24</li><br/>
 </ul>

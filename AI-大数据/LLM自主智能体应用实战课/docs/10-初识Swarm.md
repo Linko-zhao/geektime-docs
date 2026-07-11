@@ -29,7 +29,7 @@ poetry source add --priority=primary mirrors https://mirror.sjtu.edu.cn/pypi/web
 然后安装一些常用的 Python 库：
 
 ```plain
-poetry add pysocks socksio 
+poetry add pysocks socksio
 ```
 
 Swarm 项目是 OpenAI 内部开发人员为开源社区贡献的，核心开发人员是 OpenAI 公司的员工 Ilan Bigio 等人，于2024年10月15日开源。官方文档不多，和[项目的源代码](https://github.com/openai/swarm)一起，也在 GitHub上，主要就是其 GitHub 项目根目录的 README.md。
@@ -325,9 +325,9 @@ Swarm 这样的轻量级开发框架，非常适合快速开发各种原型应�
 
 期待你的分享。如果今天的内容对你有所帮助，也期待你转发给你的同事或者朋友，大家一起学习，共同进步。我们下节课再见！
 <div><strong>精选留言（4）</strong></div><ul>
-<li><span>I. Z.</span> 👍（1） 💬（1）<p>请问新版v2 OpenAI assistant api 支持file search, 还有基于thread 的上下文管理， 这个在用swarm 的时候也可以用到吗</p>2025-02-01</li><br/><li><span>晓波</span> 👍（0） 💬（1）<p>### Swarm 工作流  
+<li><span>I. Z.</span> 👍（1） 💬（1）<p>请问新版v2 OpenAI assistant api 支持file search, 还有基于thread 的上下文管理， 这个在用swarm 的时候也可以用到吗</p>2025-02-01</li><br/><li><span>晓波</span> 👍（0） 💬（1）<p>### Swarm 工作流
 
-计算器智能体，评估数学表达式 
+计算器智能体，评估数学表达式
 
 ```python
 import os
@@ -363,27 +363,27 @@ print(response.messages[-1][&quot;content&quot;])
 
 ### 工作原理
 
-1. 用户输入：用户输入“2 + 3 * 6 的结果是多少？”，`client.run()` 启动对话。  
-2. 智能体处理：`client.run()` 发现 `evaluate_expression` 已注册，将 `message.tool_calls` 设为 `evaluate_expression`，并请求 LLM 分析。  
-3. 参数提取： LLM 返回 `response.messages[0]`，其中会提取执行 `message.tool_calls` 所需的参数内容：`{&quot;expression&quot;:&quot;2 + 3 * 6&quot;}`。  
-4. 本地计算： 智能体解析该响应，Swarm 在本地执行 `evaluate_expression`，计算得 `20`，返回 `response.messages[1]`：  
+1. 用户输入：用户输入“2 + 3 * 6 的结果是多少？”，`client.run()` 启动对话。
+2. 智能体处理：`client.run()` 发现 `evaluate_expression` 已注册，将 `message.tool_calls` 设为 `evaluate_expression`，并请求 LLM 分析。
+3. 参数提取： LLM 返回 `response.messages[0]`，其中会提取执行 `message.tool_calls` 所需的参数内容：`{&quot;expression&quot;:&quot;2 + 3 * 6&quot;}`。
+4. 本地计算： 智能体解析该响应，Swarm 在本地执行 `evaluate_expression`，计算得 `20`，返回 `response.messages[1]`：
    ```json
    {&#39;role&#39;: &#39;tool&#39;, &#39;tool_call_id&#39;: &#39;call_pa13ido0&#39;, &#39;tool_name&#39;: &#39;evaluate_expression&#39;, &#39;content&#39;: &#39;20&#39;}
    ```
-5. 生成回复： LLM 基于计算结果`response.messages[1]`生成最终回复 `response.messages[2]`：  
+5. 生成回复： LLM 基于计算结果`response.messages[1]`生成最终回复 `response.messages[2]`：
    ```json
    {&#39;content&#39;: &#39;表达式 \\(2 + 3 \\times 6\\) 的结果是 20。&#39;, &#39;role&#39;: &#39;assistant&#39;}
    ```
 
-### 验证与逻辑  
+### 验证与逻辑
 
 - Swarm 机制：参考官方文档，Swarm 会执行本地注册的函数，并将结果追加到对话历史中
-- 代码支持： `evaluate_expression` 通过 `eval()` 计算 `2 + 3 * 6 = 20`，证明计算由 Python 执行，而非 LLM 直接计算。  
+- 代码支持： `evaluate_expression` 通过 `eval()` 计算 `2 + 3 * 6 = 20`，证明计算由 Python 执行，而非 LLM 直接计算。
 
 ### 总结
 
-1. LLM 请求分析工具（`message.tool_calls`），并提取必要参数。  
-2. 本地 Python 函数基于提取的参数执行计算，得到结果。  
+1. LLM 请求分析工具（`message.tool_calls`），并提取必要参数。
+2. 本地 Python 函数基于提取的参数执行计算，得到结果。
 3. LLM 结合计算结果，生成最终回复提供给用户。</p>2025-02-21</li><br/><li><span>晓波</span> 👍（0） 💬（2）<p>建议采用下述方式安装swarm.git ，这样vscode 配置使用虚拟环境后，可以正常调整。方便源码阅读
 
 poetry run pip install git+https:&#47;&#47;github.com&#47;openai&#47;swarm.git </p>2025-02-21</li><br/><li><span>方梁</span> 👍（0） 💬（1）<p>安装包是是安装openai-swarm包吧，如何调用别的大模型？</p>2025-02-10</li><br/>

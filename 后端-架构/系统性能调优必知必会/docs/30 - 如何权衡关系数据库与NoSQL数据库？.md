@@ -64,7 +64,7 @@ class User(models.Model):
 
 class Machine(models.Model):
     location = models.CharField(max_length=100)
-    
+
 class Record(models.Model):
     time = models.DateTimeField()
     temporature = models.FloatField()

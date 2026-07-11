@@ -90,7 +90,7 @@ static int aeApiCreate(aeEventLoop *eventLoop) {
     state->events = zmalloc(sizeof(struct epoll_event)*eventLoop->setsize);
     ...
     //将epoll实例描述符保存在aeApiState结构体变量state中
-    state->epfd = epoll_create(1024); 
+    state->epfd = epoll_create(1024);
 ```
 
 紧接着，aeApiCreate函数把state变量赋值给eventLoop中的apidata。这样一来，eventLoop结构体中就有了epoll实例和epoll\_event数组的信息，这样就可以用来基于epoll创建和处理事件了。我一会儿还会给你具体介绍。
@@ -107,7 +107,7 @@ eventLoop->apidata = state;
 aeEventLoop *aeCreateEventLoop(int setsize) {
     aeEventLoop *eventLoop;
     int i;
-   
+
     //给eventLoop变量分配内存空间
 	if ((eventLoop = zmalloc(sizeof(*eventLoop))) == NULL) goto err;
 	//给IO事件、已触发事件分配内存空间
@@ -121,12 +121,12 @@ aeEventLoop *aeCreateEventLoop(int setsize) {
 	…
 	//调用aeApiCreate函数，去实际调用操作系统提供的IO多路复用函数
 	if (aeApiCreate(eventLoop) == -1) goto err;
-	 
+
     //将所有网络IO事件对应文件描述符的掩码设置为AE_NONE
     for (i = 0; i < setsize; i++)
         eventLoop->events[i].mask = AE_NONE;
     return eventLoop;
- 
+
     //初始化失败后的处理逻辑，
     err:
     …
@@ -227,7 +227,7 @@ struct epoll_event ee = {0}; //创建epoll_event类型变量
 if (mask & AE_READABLE) ee.events |= EPOLLIN;
 if (mask & AE_WRITABLE) ee.events |= EPOLLOUT;
 ee.data.fd = fd;  //将要监听的文件描述符赋值给ee
-…	
+…
 ```
 
 好了，到这里，aeApiAddEvent函数就准备好了epoll实例、操作类型、监听文件描述符以及epoll\_event类型变量，然后，它就会调用epoll\_ctl开始实际创建监听事件了，如下所示：
@@ -548,17 +548,17 @@ while(te) {
 
 &#47;&#47; ae.c
 #ifdef HAVE_EVPORT
-#include &quot;ae_evport.c&quot;  &#47;&#47; Solaris
+#include &quot;ae_evport.c&quot; &#47;&#47; Solaris
 #else
-    #ifdef HAVE_EPOLL
-    #include &quot;ae_epoll.c&quot;   &#47;&#47; Linux
-    #else
-        #ifdef HAVE_KQUEUE
-        #include &quot;ae_kqueue.c&quot;  &#47;&#47; MacOS
-        #else
-        #include &quot;ae_select.c&quot;  &#47;&#47; Windows
-        #endif
-    #endif
+#ifdef HAVE_EPOLL
+#include &quot;ae_epoll.c&quot; &#47;&#47; Linux
+#else
+#ifdef HAVE_KQUEUE
+#include &quot;ae_kqueue.c&quot; &#47;&#47; MacOS
+#else
+#include &quot;ae_select.c&quot; &#47;&#47; Windows
+#endif
+#endif
 #endif
 </p>2021-08-19</li><br/><li><span>Milittle</span> 👍（11） 💬（0）<p>总结一下ae处理框架：
 处理IO事件的一些感悟：
@@ -597,17 +597,16 @@ while(te) {
 
     所以从这里也能看出，如果我们想强行选择select这种方式进行IO多路复用，可以直接修改ae.c上面的这段宏定义
 
-
 最后顺便拓展一下本篇文章外的内容，本篇文章除了老师提到的事件驱动框架的核心方法外，老师还提到了几个方法，我个人觉得也比较重要可以深度阅读一下其在Redis项目中出现的位置和实现：
-    1、readQueryFromClient
-    2、beforeSleep
-    3、handleClientsWithPendingWrites
-    4、writeToClient
+1、readQueryFromClient
+2、beforeSleep
+3、handleClientsWithPendingWrites
+4、writeToClient
 
 原因：
-    1、readQueryFromClient主要是和querybuf打交道（对应读事件），里面涉及到RESP编解码可以深度阅读一下（个人发现Redis处理粘包拆包的方式很独特）。
-    2、beforeSleep和afterSleep是搭配的（在aeMain的大循环中每次都被调用），通过这两个钩子函数Redis实现了很多主干路的功能，和一些分治思想的功能。
-    3、handleClientsWithPendingWrites可以关注一下其调用方handleClientsWithPendingWritesUsingThreads函数，在这两个方法中都要调用writeToClient方法（对应写事件），而在他们中通过一种巧妙的方式实现了Redis6 IO多线程的方案（可以先预习），handleClientsWithPendingWrites是在只有一个线程或者禁用IO线程的时候使用的。
+1、readQueryFromClient主要是和querybuf打交道（对应读事件），里面涉及到RESP编解码可以深度阅读一下（个人发现Redis处理粘包拆包的方式很独特）。
+2、beforeSleep和afterSleep是搭配的（在aeMain的大循环中每次都被调用），通过这两个钩子函数Redis实现了很多主干路的功能，和一些分治思想的功能。
+3、handleClientsWithPendingWrites可以关注一下其调用方handleClientsWithPendingWritesUsingThreads函数，在这两个方法中都要调用writeToClient方法（对应写事件），而在他们中通过一种巧妙的方式实现了Redis6 IO多线程的方案（可以先预习），handleClientsWithPendingWrites是在只有一个线程或者禁用IO线程的时候使用的。
 </p>2021-08-20</li><br/><li><span>Darren</span> 👍（3） 💬（0）<p>通过不同的操作系统，include不同的头文件。
 在ae.c中
 &#47;* Include the best multiplexing layer supported by this system.
@@ -629,11 +628,11 @@ while(te) {
 在config.h中，根据操作系统，设置相关的值
 
 &#47;* Test for polling API *&#47;
-#ifdef __linux__
+#ifdef **linux**
 #define HAVE_EPOLL 1
 #endif
 
-#if (defined(__APPLE__) &amp;&amp; defined(MAC_OS_X_VERSION_10_6)) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined (__NetBSD__)
+#if (defined(**APPLE**) &amp;&amp; defined(MAC_OS_X_VERSION_10_6)) || defined(**FreeBSD**) || defined(**OpenBSD**) || defined (**NetBSD**)
 #define HAVE_KQUEUE 1
 #endif
 
@@ -644,9 +643,9 @@ while(te) {
 #endif
 #endif</p>2021-08-19</li><br/><li><span>桃僧</span> 👍（2） 💬（1）<p>感觉redis的定时器存储用个链表十分偷懒 当然也和目前只有1个serverCron有关, 按理来说应该弄1个最小堆或者红黑树之类的</p>2021-12-26</li><br/><li><span>王飞</span> 👍（0） 💬（0）<p>评论区都是大佬呀</p>2022-08-29</li><br/><li><span>Leon廖</span> 👍（0） 💬（0）<p>按照作者答复，AE_BARRIER好像并没有起作用。
 https:&#47;&#47;github.com&#47;redis&#47;redis&#47;issues&#47;7098#issuecomment-614435928
-</p>2022-04-20</li><br/><li><span>Mr.差不多</span> 👍（0） 💬（2）<p>您好，老师如果这时候在epoll_wait 发现可读事件发生（比如对于redis 有一个特别耗时的操作）那么这时候不是会阻塞住while循环吗？</p>2021-08-24</li><br/><li><span>徐志超-Klaus</span> 👍（0） 💬（0）<p>请问这个课程能开个微信讨论群吗？这样不仅能大大提高学习氛围和学习效率，还能提高宣传力度。不过还是先问问老师意见？</p>2021-08-20</li><br/><li><span>奕</span> 👍（0） 💬（1）<p>事件循环结构体中的  aeEventLoop 的 io 事件 aeFileEvent *events 中的 文件描述符 是怎么和外面传入的对应上的？ 
+</p>2022-04-20</li><br/><li><span>Mr.差不多</span> 👍（0） 💬（2）<p>您好，老师如果这时候在epoll_wait 发现可读事件发生（比如对于redis 有一个特别耗时的操作）那么这时候不是会阻塞住while循环吗？</p>2021-08-24</li><br/><li><span>徐志超-Klaus</span> 👍（0） 💬（0）<p>请问这个课程能开个微信讨论群吗？这样不仅能大大提高学习氛围和学习效率，还能提高宣传力度。不过还是先问问老师意见？</p>2021-08-20</li><br/><li><span>奕</span> 👍（0） 💬（1）<p>事件循环结构体中的  aeEventLoop 的 io 事件 aeFileEvent *events 中的 文件描述符 是怎么和外面传入的对应上的？
 
-我看 创建监听连接事件的时候 ，直接就把文件描述符传入进入了 server.ipfd[j] 这样怎么保证一定能找到对应的上？</p>2021-08-20</li><br/><li><span>徐志超-Klaus</span> 👍（0） 💬（3）<p>刚买课程我就来这里评论了，希望被作者翻牌。我在C语言这块迷路了，我自学看完了《C语言程序设计现代方法第2版》，然后我发现看别人的代码还是有很多不懂的，比如有些关键字书本里没提到，比如我还有些疑问C语言的并发编程怎么写，也不知道接下来该上哪里查资料，因为又要学其他东西，导致我又放弃了一个月的C语言。我现在该怎么办</p>2021-08-19</li><br/><li><span>Milittle</span> 👍（0） 💬（0）<p>由宏定义去确定的 ecport-&gt;epoll-&gt;kqueue-&gt;select 
+我看 创建监听连接事件的时候 ，直接就把文件描述符传入进入了 server.ipfd[j] 这样怎么保证一定能找到对应的上？</p>2021-08-20</li><br/><li><span>徐志超-Klaus</span> 👍（0） 💬（3）<p>刚买课程我就来这里评论了，希望被作者翻牌。我在C语言这块迷路了，我自学看完了《C语言程序设计现代方法第2版》，然后我发现看别人的代码还是有很多不懂的，比如有些关键字书本里没提到，比如我还有些疑问C语言的并发编程怎么写，也不知道接下来该上哪里查资料，因为又要学其他东西，导致我又放弃了一个月的C语言。我现在该怎么办</p>2021-08-19</li><br/><li><span>Milittle</span> 👍（0） 💬（0）<p>由宏定义去确定的 ecport-&gt;epoll-&gt;kqueue-&gt;select
 
 性能逐级递减。这个包含在ae.c头部包含c文件的</p>2021-08-19</li><br/>
 </ul>

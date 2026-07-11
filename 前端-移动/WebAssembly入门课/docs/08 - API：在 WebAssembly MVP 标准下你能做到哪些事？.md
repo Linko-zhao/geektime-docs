@@ -32,14 +32,14 @@
 
 映入眼帘的第一个问题就是，我们如何在 JavaScript 环境中表示刚刚说过的 “Compile 编译” 与 “Instantiate 实例化” 这两个阶段的“产物”？为此，Wasm 在 JavaScript API 标准中为我们提供了如下两个对象与之分别对应：
 
-- *WebAssembly.Module*
-- *WebAssembly.Instance*
+- _WebAssembly.Module_
+- _WebAssembly.Instance_
 
 不仅如此，上面这两个 JavaScript 对象本身也可以被作为类型构造函数使用，以用来直接构造对应类型的对象。也就是说，我们可以通过 “new” 的方式并传入相关参数，来构造这些类型的某个具体对象。比如，可以按照以下方式来生成一个 WebAssembly.Module 对象：
 
 ```
 // "..." 为有效的 Wasm 字节码数据；
-bufferSource = new Int8Array([...]);  
+bufferSource = new Int8Array([...]);
 let module = new WebAssembly.Module(bufferSource);
 ```
 
@@ -53,9 +53,9 @@ WebAssembly.Instance 构造函数的用法与 WebAssembly.Module 类似，只不
 
 Web 浏览器作为 Wasm 模块运行时的一个宿主环境，通过 JavaScript 的形式提供了可以被导入到 Wasm 模块中使用的数据类型，这些数据类型包括函数（Function）、全局数据（Global）、线性内存对象（Memory）以及 Table 对象（Table）。其中除“函数”类型外，其他数据类型分别对应着以下由 JavaScript 对象表示的包装类型：
 
-- *WebAssembly.Global*
-- *WebAssembly.Memory*
-- *WebAssembly.Table*
+- _WebAssembly.Global_
+- _WebAssembly.Memory_
+- _WebAssembly.Table_
 
 而对于函数类型，我们可以直接使用 JavaScript 语言中的“函数”来作为代替。
 
@@ -63,7 +63,7 @@ Web 浏览器作为 Wasm 模块运行时的一个宿主环境，通过 JavaScrip
 
 ```
 let memory = new WebAssembly.Memory({
-  initial:10, 
+  initial:10,
   maximum:100,
 });
 
@@ -79,9 +79,9 @@ let memory = new WebAssembly.Memory({
 
 除了上述我们介绍的几个比较重要的 JavaScript WebAssembly 对象之外，还有另外几个与 “Error” 有关的表示某种错误的 “错误对象”。这些错误对象用以表示在整个 Wasm 加载、编译、实例化及函数执行流程中，在其各个阶段中所发生的错误。这些错误对象分别是：
 
-- *WebAssembly.CompileError* 表示在 Wasm 模块编译阶段（Compile）发生的错误，比如模块的字节码编码格式错误、魔数不匹配
-- *WebAssembly.LinkError* 表示在 Wasm 模块实例化阶段（Instantiate）发生的错误，比如导入到 Wasm 模块实例 Import Section 的内容不正确
-- *WebAssembly.RuntimeError* 表示在 Wasm 模块运行时阶段（Call）发生的错误，比如常见的“除零异常”
+- _WebAssembly.CompileError_ 表示在 Wasm 模块编译阶段（Compile）发生的错误，比如模块的字节码编码格式错误、魔数不匹配
+- _WebAssembly.LinkError_ 表示在 Wasm 模块实例化阶段（Instantiate）发生的错误，比如导入到 Wasm 模块实例 Import Section 的内容不正确
+- _WebAssembly.RuntimeError_ 表示在 Wasm 模块运行时阶段（Call）发生的错误，比如常见的“除零异常”
 
 上面这些错误对象也都有对应的构造函数，可以用来构造对应的错误对象。（同样，如果有需要，你可以点击[这里](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly)进入 MDN 网站参考一下）
 
@@ -89,7 +89,7 @@ let memory = new WebAssembly.Memory({
 
 最后一个需要重点介绍的 JavaScript API 主要用来实例化一个 Wasm 模块对象。该方法的原型如下所示：
 
-- *WebAssembly.instantiate(bufferSource, importObject)*
+- _WebAssembly.instantiate(bufferSource, importObject)_
 
 这个方法接受一个包含有效 Wasm 模块二进制字节码的 ArrayBuffer 或 TypedArray 对象，然后返回一个将被解析为 WebAssembly.Module 的 Promise 对象。就像我上面讲的那样，这里返回的 WebAssembly.Module 对象，代表着一个被编译完成的 Wasm 静态模块对象。
 
@@ -109,7 +109,7 @@ let memory = new WebAssembly.Memory({
 
 上面讲到的 WebAssembly.instantiate 方法，主要用于从 Wasm 字节码中一次性进行 Wasm 模块的编译和实例化过程，而这通常是我们经常使用的一种形式。当然你也以将编译和实例化两个步骤分开来进行。比如单独对于编译阶段，你可以使用下面这个 JavaScript API：
 
-- *WebAssembly.compile(bufferSource)*
+- _WebAssembly.compile(bufferSource)_
 
 该方法接收一个含有有效 Wasm 字节码数据的 bufferSource，也就是 ArrayBuffer 或者 TypedArray 对象。返回的 Promise 对象在 Resolve 后，会返回一个编译好的静态 WebAssembly.Module 对象。
 
@@ -121,7 +121,7 @@ Wasm 的 JavaScript API 标准，主要定义了一些与 Wasm 相关的类型�
 
 不同于 JavaScript API 中的 WebAssembly.instantiate 方法，Web API 中定义的“流式接口”可以让我们提前开始对 Wasm 模块进行编译和实例化过程，你也可以称此方式为“流式编译”。比如下面这个 API 便对应着 Wasm 模块的“流式实例化”接口：
 
-- *WebAssembly.instantiateStreaming(source, importObject)*
+- _WebAssembly.instantiateStreaming(source, importObject)_
 
 为了能够支持“流式编译”，该方法的第一个参数，将不再需要已经从远程加载好的完整 Wasm 模块二进制数据（bufferSource）。取而代之的，是一个尚未 Resolve 的 Response 对象。
 
@@ -137,7 +137,7 @@ Response 对象（window.fetch 调用后的返回结果）是 Fetch API 的重�
 
 那么既然存在着模块的“流式实例化方法”，便也存在着“流式编译方法”。如下所示：
 
-- *WebAssembly.compileStreaming(source)*
+- _WebAssembly.compileStreaming(source)_
 
 该 API 的使用方式与 WebAssembly.instantiateStreaming 类似，第一个参数为 Fetch API 中的 Response 对象。API 调用后返回的 Promise 对象在 Resolve 之后，会返回一个编译好的静态 WebAssembly.Module 对象。
 

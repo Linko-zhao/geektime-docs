@@ -266,7 +266,7 @@ Gitlab作为开源的代码管理平台，其原生也提供了不少优秀的�
    不过，由于GitLab-ci和GitLab天生的集成特性，目前也有不少公司使用它作为持续集成工作流。你也可尝试使用这种方法，它的配置很简单，可以直接参考官方文档。而在专栏中我会以最流行的Jenkins Pipeline来讲解这部分功能。
 4. Integrations  
    Integrations包括两部分：
-   
+
    - GitLab service，是在GitLab内部实现的，与一些缺陷管理、团队协作等工具的集成服务。
    - Webhook，支持在GitLab触发代码push、Merge Request等事件时进行http消息推送。
 

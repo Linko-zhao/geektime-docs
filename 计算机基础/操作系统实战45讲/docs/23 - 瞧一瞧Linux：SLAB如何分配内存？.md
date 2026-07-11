@@ -30,10 +30,10 @@ SLAB头其实是一个数据结构，但是它不一定放在保存对象内存�
 struct array_cache {
     unsigned int avail;
     unsigned int limit;
-    void *entry[]; 
+    void *entry[];
 };
 struct kmem_cache {
-    //是每个CPU一个array_cache类型的变量，cpu_cache是用于管理空闲对象的 
+    //是每个CPU一个array_cache类型的变量，cpu_cache是用于管理空闲对象的
     struct array_cache __percpu *cpu_cache;
     unsigned int size; //cache大小
     slab_flags_t flags;//slab标志
@@ -187,7 +187,7 @@ static void cache_grow_end(struct kmem_cache *cachep, struct page *page)
         //把这个page结构加入到kmem_cache_node结构的空闲链表中
         list_add_tail(&page->slab_list, &n->slabs_free);
         n->free_slabs++;
-    } 
+    }
     spin_unlock(&n->list_lock);
 }
 ```
@@ -580,17 +580,17 @@ kfree-&gt;__cache_free-&gt;___cache_free-&gt;__free_one
   ○ PoolSubpage[] 中的元素是指向 8KB 大小的 Subpage 地址，同时又把 8KB 的 subpage 分割成大小相等的段，比如 32B，64B......
 
 分配大于 8 KB 的内存，直接走 PoolChunk 对应满二叉树，这样们更好的避免内存碎片，比如：
-  ○ 先分配 8KB：需要一个 Page ，满二叉树最下一层满足要求，故分配这层的第一个节点page0
-  ○ 在分配 16KB：需要两个Page ，满二叉树倒数第二层满足要求，因为这层的下一层的第一个节点page0已被分配，所以选这层第二个节点，就是相当分配 page2和page3
-  ○ 在分配 8KB：需要一个 Page ，满二叉树最下一层满足要求，page0 以占用，往后page1可用，直接分配
+○ 先分配 8KB：需要一个 Page ，满二叉树最下一层满足要求，故分配这层的第一个节点page0
+○ 在分配 16KB：需要两个Page ，满二叉树倒数第二层满足要求，因为这层的下一层的第一个节点page0已被分配，所以选这层第二个节点，就是相当分配 page2和page3
+○ 在分配 8KB：需要一个 Page ，满二叉树最下一层满足要求，page0 以占用，往后page1可用，直接分配
 经过这样分配，最终分配的是page0、page1、page2、page3 刚好这四个页是连续的。
 
 对于小于 8KB 的分配：比如32B：
-  ○ 定位到 PoolSubpage[] 中的元素，看有没有值，没有代表之前没有分配过，执行分配，有值代表之前分配过 32B 的空间
-  ○ 如果没有分配过，那么先取一个 8KB的page，将数组中对应的元素指向该page
-  ○ 在将 8KB 的page  按 32B 划分成相等的段，然后取划分好的第一个 32B 的段拿出使用，并把该段标记为占用
-  ○ 等下次在分配 32B 的时候，先定位到数组对应的元素，有值代表之前分配过 32B 的空间，那么该元素指向的 page 已经是被按 32B 划分好的相同的小段
-  ○ 那么就可以直接从划分好的小段中，依次遍历，取出没有使用的那个 32B 的段来分配
+○ 定位到 PoolSubpage[] 中的元素，看有没有值，没有代表之前没有分配过，执行分配，有值代表之前分配过 32B 的空间
+○ 如果没有分配过，那么先取一个 8KB的page，将数组中对应的元素指向该page
+○ 在将 8KB 的page 按 32B 划分成相等的段，然后取划分好的第一个 32B 的段拿出使用，并把该段标记为占用
+○ 等下次在分配 32B 的时候，先定位到数组对应的元素，有值代表之前分配过 32B 的空间，那么该元素指向的 page 已经是被按 32B 划分好的相同的小段
+○ 那么就可以直接从划分好的小段中，依次遍历，取出没有使用的那个 32B 的段来分配
 也就是说，第一次分配小于 8KB (比如32B)的内存的时候，已经在内存中分配好了若干相同的32B 的段了，后续可以直接取用第一次分配好的
 
 当然，其中还有很多细节，比如是否池化，内存释放之后，是直接归还，还是先缓存起来，下次在用，多线程申请的时候，怎么避免竞争等问题
@@ -601,13 +601,13 @@ kfree-&gt;__cache_free-&gt;___cache_free-&gt;__free_one
 不过这个值是怎么定的呢？</p>2021-06-30</li><br/><li><span>blentle</span> 👍（0） 💬（1）<p>最多192吧，
 
 &#47;&#47;计算出index
-    if (size &lt;= 192) {
-        if (!size)
-            return ZERO_SIZE_PTR;
-        index = size_index[size_index_elem(size)];
-    } else {
-        if (WARN_ON_ONCE(size &gt; KMALLOC_MAX_CACHE_SIZE))
-            return NULL;
-        index = fls(size - 1);
-    }</p>2021-06-30</li><br/>
+if (size &lt;= 192) {
+if (!size)
+return ZERO_SIZE_PTR;
+index = size_index[size_index_elem(size)];
+} else {
+if (WARN_ON_ONCE(size &gt; KMALLOC_MAX_CACHE_SIZE))
+return NULL;
+index = fls(size - 1);
+}</p>2021-06-30</li><br/>
 </ul>

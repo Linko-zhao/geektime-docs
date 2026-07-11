@@ -106,16 +106,16 @@ fn main() {
 
 ```rust
 ❯ RUST_LOG=debug cargo run --quiet
-2021-12-12T21:28:00.612897Z DEBUG reqwest::connect: starting new connection: <https://www.rust-lang.org/>    
+2021-12-12T21:28:00.612897Z DEBUG reqwest::connect: starting new connection: <https://www.rust-lang.org/>
 2021-12-12T21:28:00.613124Z DEBUG hyper::client::connect::dns: resolving host="www.rust-lang.org"
 2021-12-12T21:28:00.629392Z DEBUG hyper::client::connect::http: connecting to 13.224.7.43:443
 2021-12-12T21:28:00.641156Z DEBUG hyper::client::connect::http: connected to 13.224.7.43:443
-2021-12-12T21:28:00.641346Z DEBUG rustls::client::hs: No cached session for DnsName(DnsName(DnsName("www.rust-lang.org")))    
-2021-12-12T21:28:00.641683Z DEBUG rustls::client::hs: Not resuming any session    
-2021-12-12T21:28:00.656251Z DEBUG rustls::client::hs: Using ciphersuite Tls13(Tls13CipherSuite { suite: TLS13_AES_128_GCM_SHA256, bulk: Aes128Gcm })    
-2021-12-12T21:28:00.656754Z DEBUG rustls::client::tls13: Not resuming    
-2021-12-12T21:28:00.657046Z DEBUG rustls::client::tls13: TLS1.3 encrypted extensions: [ServerNameAck, Protocols([PayloadU8([104, 50])])]    
-2021-12-12T21:28:00.657151Z DEBUG rustls::client::hs: ALPN protocol is Some(b"h2")    
+2021-12-12T21:28:00.641346Z DEBUG rustls::client::hs: No cached session for DnsName(DnsName(DnsName("www.rust-lang.org")))
+2021-12-12T21:28:00.641683Z DEBUG rustls::client::hs: Not resuming any session
+2021-12-12T21:28:00.656251Z DEBUG rustls::client::hs: Using ciphersuite Tls13(Tls13CipherSuite { suite: TLS13_AES_128_GCM_SHA256, bulk: Aes128Gcm })
+2021-12-12T21:28:00.656754Z DEBUG rustls::client::tls13: Not resuming
+2021-12-12T21:28:00.657046Z DEBUG rustls::client::tls13: TLS1.3 encrypted extensions: [ServerNameAck, Protocols([PayloadU8([104, 50])])]
+2021-12-12T21:28:00.657151Z DEBUG rustls::client::hs: ALPN protocol is Some(b"h2")
 2021-12-12T21:28:00.658435Z DEBUG h2::client: binding client connection
 2021-12-12T21:28:00.658526Z DEBUG h2::client: client connection bound
 2021-12-12T21:28:00.658602Z DEBUG h2::codec::framed_write: send frame=Settings { flags: (0x0), enable_push: 0, initial_window_size: 2097152, max_frame_size: 16384 }
@@ -131,7 +131,7 @@ fn main() {
 2021-12-12T21:28:00.956921Z DEBUG Connection{peer=Client}: h2::codec::framed_read: received frame=Data { stream_id: StreamId(1) }
 2021-12-12T21:28:00.957015Z DEBUG Connection{peer=Client}: h2::codec::framed_read: received frame=Data { stream_id: StreamId(1) }
 2021-12-12T21:28:00.957079Z DEBUG Connection{peer=Client}: h2::codec::framed_read: received frame=Data { stream_id: StreamId(1) }
-2021-12-12T21:28:00.957316Z DEBUG reqwest::async_impl::client: response '200 OK' for <https://www.rust-lang.org/>    
+2021-12-12T21:28:00.957316Z DEBUG reqwest::async_impl::client: response '200 OK' for <https://www.rust-lang.org/>
 2021-12-12T21:28:01.018665Z DEBUG Connection{peer=Client}: h2::codec::framed_read: received frame=Data { stream_id: StreamId(1) }
 2021-12-12T21:28:01.018885Z DEBUG Connection{peer=Client}: h2::codec::framed_read: received frame=Data { stream_id: StreamId(1), flags: (0x1: END_STREAM) }
 2021-12-12T21:28:01.020158Z  INFO http2: Fetching url: <https://www.rust-lang.org/>
@@ -152,6 +152,7 @@ fn main() {
 感谢你选择我的 Rust 第一课。感谢你陪我们一路走到这里。接下来，就看你的了。
 
 > “Go where you must go, and hope!”— Gandalf
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>JK.Ryan</span> 👍（3） 💬（1）<p>期待有新的教程～可以讲讲一些软件架构方面的</p>2022-01-19</li><br/><li><span>罗杰</span> 👍（14） 💬（1）<p>这门课是我从头追到尾的，刚开始的时候，我还在追个电视剧，追完电视剧发现专栏更新了。然后看了文章之后感觉这可比剧精彩多了，然后我把电视剧给放弃了。每节课都能看出老师的用心，每节课都有新的收获。虽然说老师通过教授我们受益最大的还是老师，但是我还是要说一声谢谢，感谢老师这么用心的专栏，希望老师能在未来的时间里面给我们带来更多不一样的课程。</p>2021-12-22</li><br/><li><span>乌龙猹</span> 👍（8） 💬（1）<p>谢谢老师，感谢老师这段时间的辛苦付出。期待后续「 Elixir 编程第一课」</p>2021-12-22</li><br/><li><span>springXu</span> 👍（2） 💬（2）<p>期待老师的加餐篇</p>2021-12-22</li><br/><li><span>xiaobang</span> 👍（2） 💬（1）<p>学习这门课收获很大，这门课除了很好的接受rust的特性，还展示了真实世界中rust项目的开发方式。这是一般的rust书籍里面没有的</p>2021-12-22</li><br/><li><span>Colt</span> 👍（1） 💬（1）<p>意犹未尽,这门课不单单学rust,还能学习大佬的解题思路,有技术的大佬不少,但能把知识输出得那么淋漓尽致真不多,期待陈老师的下一课</p>2021-12-25</li><br/><li><span>Marshal SHI</span> 👍（1） 💬（1）<p>fantastic journey</p>2021-12-22</li><br/><li><span>Rayjun</span> 👍（1） 💬（1）<p>太棒了，期待老师后续的课程</p>2021-12-22</li><br/><li><span>无名氏</span> 👍（0） 💬（1）<p>感谢老师。文案和语音都是精品。</p>2021-12-24</li><br/><li><span>幻境之桥</span> 👍（0） 💬（1）<p>虽然还有很多没有完全看懂由于时间关系，但还是想看更多😁</p>2021-12-22</li><br/><li><span>刘永臣</span> 👍（0） 💬（1）<p>没赶上开头赶上了结尾，赞一个！！！</p>2021-12-22</li><br/><li><span>蓉城小隐</span> 👍（0） 💬（1）<p>前几个月认真跟着学习，虽然Rust没实际用到工作中，但受益匪浅；这门课帮助我加深了对kotlin&#47;java&#47;c++等语言的理解；老师的思路更是常常令我豁然开朗。后面因为工作太忙没跟上，一定会补上，并且我觉得这么课是需要多学几遍的，每一遍都会有收获。
 最后，感谢陈老师持续几个月辛苦的付出。</p>2021-12-22</li><br/><li><span>overheat</span> 👍（0） 💬（1）<p>结束了？期待加餐！</p>2021-12-22</li><br/><li><span>安迪</span> 👍（0） 💬（1）<p>非常享受老师授课的过程。

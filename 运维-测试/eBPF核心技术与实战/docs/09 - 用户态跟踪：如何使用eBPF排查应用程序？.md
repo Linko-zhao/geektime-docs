@@ -94,7 +94,7 @@ ls /usr/lib/debug/.build-id/7b/140b33fd79d0861f831bae38a0cdfdf639d8bc.debug
 readelf -Ws /usr/lib/debug/.build-id/7b/140b33fd79d0861f831bae38a0cdfdf639d8bc.debug
 ```
 
-参考 Bash 的[源代码](https://git.savannah.gnu.org/cgit/bash.git/tree/lib/readline/readline.c?h=bash-5.1#n352)，每条 Bash 命令在运行前，都会调用 `char`*`readline (const char`*`prompt)` 函数读取用户的输入，然后再去解析执行（Bash 自身是使用编译型语言 C 开发的，而 Bash 语言则是一种解释型语言）。
+参考 Bash 的[源代码](https://git.savannah.gnu.org/cgit/bash.git/tree/lib/readline/readline.c?h=bash-5.1#n352)，每条 Bash 命令在运行前，都会调用 `char`_`readline (const char`_`prompt)` 函数读取用户的输入，然后再去解析执行（Bash 自身是使用编译型语言 C 开发的，而 Bash 语言则是一种解释型语言）。
 
 注意，`readline` 函数的参数是命令行提示符（通过环境变量 `PS1`、`PS2` 等设置），而返回值才是用户的输入。因而，我们只需要跟踪 `readline` 函数的返回值，也就是使用 `uretprobe` 跟踪。
 
@@ -344,7 +344,7 @@ b = BPF(src_file="<ebpf-program>.c", usdt_contexts=[u])
 
 期待你在留言区和我讨论，也欢迎把这节课分享给你的同事、朋友。让我们一起在实战中演练，在交流中进步。
 <div><strong>精选留言（15）</strong></div><ul>
-<li><span>莫名</span> 👍（10） 💬（1）<p>1. 跟踪编译型语言应用程序以 Bash Shell 作为例子，觉得有些容易与解释型语言混淆。解释型语言的特征是解释程序自身为编译型程序，利用自身内置的函数进行语法分析和执行，Bash readline 函数的功能即是如此。以编译型语言 Golang helloworld 程序使用 uprobes 或者开源的 Nginx 使用 USDT 可能更恰当一些。 
+<li><span>莫名</span> 👍（10） 💬（1）<p>1. 跟踪编译型语言应用程序以 Bash Shell 作为例子，觉得有些容易与解释型语言混淆。解释型语言的特征是解释程序自身为编译型程序，利用自身内置的函数进行语法分析和执行，Bash readline 函数的功能即是如此。以编译型语言 Golang helloworld 程序使用 uprobes 或者开源的 Nginx 使用 USDT 可能更恰当一些。
 
 2. 思考题完整的 BCC 追踪程序：
 
@@ -353,26 +353,27 @@ b = BPF(src_file="<ebpf-program>.c", usdt_contexts=[u])
 #include &lt;uapi&#47;linux&#47;ptrace.h&gt;
 
 struct data_t {
-	char filename[128];
-	char funcname[64];
-	int lineno;
+char filename[128];
+char funcname[64];
+int lineno;
 };
 BPF_PERF_OUTPUT(events);
 
 int print_functions(struct pt_regs *ctx)
 {
-	uint64_t argptr;
-	struct data_t data = { };
+uint64_t argptr;
+struct data_t data = { };
 
-	bpf_usdt_readarg(1, ctx, &amp;argptr);
-	bpf_probe_read_user(&amp;data.filename, sizeof(data.filename), (void *)argptr);
-	bpf_usdt_readarg(2, ctx, &amp;argptr);
-	bpf_probe_read_user(&amp;data.funcname, sizeof(data.funcname), (void *)argptr);
-	bpf_usdt_readarg(3, ctx, &amp;data.lineno);
+    bpf_usdt_readarg(1, ctx, &amp;argptr);
+    bpf_probe_read_user(&amp;data.filename, sizeof(data.filename), (void *)argptr);
+    bpf_usdt_readarg(2, ctx, &amp;argptr);
+    bpf_probe_read_user(&amp;data.funcname, sizeof(data.funcname), (void *)argptr);
+    bpf_usdt_readarg(3, ctx, &amp;data.lineno);
 
-	events.perf_submit(ctx, &amp;data, sizeof(data));
+    events.perf_submit(ctx, &amp;data, sizeof(data));
 
-	return 0;
+    return 0;
+
 };
 
 ----------- python_functions.py -------------
@@ -383,45 +384,44 @@ import sys
 from bcc import BPF, USDT
 
 if len(sys.argv) &lt; 2:
-    print(&quot;Usage: %s &lt;tracee_pid&gt;&quot; % sys.argv[0])
-    sys.exit(1)
+print(&quot;Usage: %s &lt;tracee_pid&gt;&quot; % sys.argv[0])
+sys.exit(1)
 
 u = USDT(pid=int(sys.argv[1]))
 u.enable_probe(probe=&quot;function__entry&quot;, fn_name=&quot;print_functions&quot;)
 b = BPF(src_file=&quot;python_functions.c&quot;, usdt_contexts=[u])
 
-
 def print_event(cpu, data, size):
-    event = b[&quot;events&quot;].event(data)
-    printb(&quot;%-9s %-6d %s&quot; % (event.filename, event.lineno, event.funcname))
-
+event = b[&quot;events&quot;].event(data)
+printb(&quot;%-9s %-6d %s&quot; % (event.filename, event.lineno, event.funcname))
 
 print(&quot;%-9s %-6s %s&quot; % (&quot;FILENAME&quot;, &quot;LINENO&quot;, &quot;FUNCTION&quot;))
 
 b[&quot;events&quot;].open_perf_buffer(print_event)
 while True:
-    try:
-        b.perf_buffer_poll()
-    except KeyboardInterrupt:
-        exit()</p>2022-02-04</li><br/><li><span>ZR2021</span> 👍（4） 💬（2）<p>老师，跟踪用户态程序的时候还有512字节的限制吗</p>2022-02-04</li><br/><li><span>Geek3340</span> 👍（2） 💬（1）<p>sudo apt install bash-dbgsym 命令，执行后找不到dbgsym包的，可以参考这篇文章
+try:
+b.perf_buffer_poll()
+except KeyboardInterrupt:
+exit()</p>2022-02-04</li><br/><li><span>ZR2021</span> 👍（4） 💬（2）<p>老师，跟踪用户态程序的时候还有512字节的限制吗</p>2022-02-04</li><br/><li><span>Geek3340</span> 👍（2） 💬（1）<p>sudo apt install bash-dbgsym 命令，执行后找不到dbgsym包的，可以参考这篇文章
 https:&#47;&#47;cloud.tencent.com&#47;developer&#47;article&#47;1637887</p>2022-03-20</li><br/><li><span>Geek_59a6f9</span> 👍（1） 💬（1）<p>用户态进程跟踪是不是使用frida效果更好？</p>2022-02-04</li><br/><li><span>郑小凯</span> 👍（0） 💬（1）<p>老师，咨询下ibm jdk，使用bcc的话有办法么？</p>2022-12-21</li><br/><li><span>│．Sk</span> 👍（0） 💬（1）<p>老师您好，请教一下
 
-1. 执行了 strip 命令删除了  .symtab  的二进制文件，是否就“不能”用 .symtab 里的符号执行 bpftrace -e &#39;uretprobe:&#47;usr&#47;bin&#47;bash:符号  {...}&#39; ？
+1. 执行了 strip 命令删除了 .symtab 的二进制文件，是否就“不能”用 .symtab 里的符号执行 bpftrace -e &#39;uretprobe:&#47;usr&#47;bin&#47;bash:符号 {...}&#39; ？
 
 2. 如果 1. 中的理解是对的，那么上面的 &#47;usr&#47;bin&#47;bash 的 .symtab 实际已经被 strip 了，但是还能执行上面的 trace 是否是因为 BCC 会用 &#47;usr&#47;bin&#47;bash 的 build id 去 &#47;usr&#47;lib&#47;debug&#47;.build-id&#47; 关联相应的符号表，然后再用符号找到函数地址？
 
 谢谢老师！</p>2022-03-05</li><br/><li><span>王恒</span> 👍（0） 💬（3）<p>某线程CPU占用率过高，通过perf工具生成了该线程的火焰图。发现该线程的系统函数占比较高，但是又无法查到这些系统函数的调用堆栈。（火焰图中，ia32_sysenter_target函数占比约6%，sysexit_from_sys_call函数占比约9%。）
 
-特别想搞懂这些内核函数是什么时候被调用的，调用堆栈是怎么样的，为什么耗时这么久。所以特地来学习ebpf，希望边学边解决工作中的实际问题。</p>2022-03-05</li><br/><li><span>行所当行</span> 👍（0） 💬（0）<p>老师您好，bash历史执行命令可以用history来快捷查看，那么在审计操作系统用户行为和操作系统安全方面，ebpf还有什么典型的应用场景？</p>2024-10-09</li><br/><li><span>Geek_722e86</span> 👍（0） 💬（0）<p>老师， 
+特别想搞懂这些内核函数是什么时候被调用的，调用堆栈是怎么样的，为什么耗时这么久。所以特地来学习ebpf，希望边学边解决工作中的实际问题。</p>2022-03-05</li><br/><li><span>行所当行</span> 👍（0） 💬（0）<p>老师您好，bash历史执行命令可以用history来快捷查看，那么在审计操作系统用户行为和操作系统安全方面，ebpf还有什么典型的应用场景？</p>2024-10-09</li><br/><li><span>Geek_722e86</span> 👍（0） 💬（0）<p>老师，
 
 除了符号表之外，理论上你可以把 uprobe 插桩到二进制文件的任意地址。不过这要求你对应用程序 ELF 格式的地址空间非常熟悉，并且具体的地址会随着应用的迭代更新而发生变化。所以，在需要跟踪地址的场景中，一定要记得去 ELF 二进制文件动态获取地址信息。
 
------------
+---
+
 请问， 这个应该怎么操作呢？ 加入我OS上的bash就是没有符号信息。 我还是想挂载readline函数，怎么办呢？
 
 # 挂载uretprobeb.attach_uretprobe(name=&quot;&#47;usr&#47;bin&#47;bash&quot;, sym=&quot;readline&quot;, fn_name=&quot;bash_readline&quot;)
-这个参数具体是怎么写？
 
+这个参数具体是怎么写？
 
 sudo bpftrace -e &#39;uretprobe:&#47;usr&#47;bin&#47;bash:readline { printf(&quot;User %d executed \&quot;%s\&quot; command\n&quot;, uid, str(retval)); }&#39;
 这个参数怎么写？

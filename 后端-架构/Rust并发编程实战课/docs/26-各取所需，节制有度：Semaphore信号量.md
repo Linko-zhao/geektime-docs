@@ -246,13 +246,13 @@ async fn main() {
             let response = send_request(task_id).await;
             // 请求完成后，释放许可。
             drop(_permit);
-            
+
             // 返回请求的响应
             response
         });
         jhs.push(jh);
     }
-    
+
     // 等待所有任务完成
     let mut responses = Vec::new();
     for jh in jhs {
@@ -334,7 +334,7 @@ async fn main() {
 
     // 应该每秒释放三个许可
     loop  {
-        bucket.acquire().await;  
+        bucket.acquire().await;
         log::info!("acquired a token");
     }
 }

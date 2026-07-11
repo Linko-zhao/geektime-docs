@@ -71,9 +71,9 @@ VFS 定义了一组所有文件系统都支持的数据结构和标准接口。�
 就拿cat 命令来说，它首先调用 open() ，打开一个文件；然后调用 read() ，读取文件的内容；最后再调用 write() ，把文件内容输出到控制台的标准输出中：
 
 ```
-int open(const char *pathname, int flags, mode_t mode); 
-ssize_t read(int fd, void *buf, size_t count); 
-ssize_t write(int fd, const void *buf, size_t count); 
+int open(const char *pathname, int flags, mode_t mode);
+ssize_t read(int fd, void *buf, size_t count);
+ssize_t write(int fd, const void *buf, size_t count);
 ```
 
 文件读写方式的各种差异，导致 I/O的分类多种多样。最常见的有，缓冲与非缓冲I/O、直接与非直接I/O、阻塞与非阻塞I/O、同步与异步I/O等。 接下来，我们就详细看这四种分类。
@@ -127,17 +127,17 @@ ssize_t write(int fd, const void *buf, size_t count);
 对文件系统来说，最常见的一个问题就是空间不足。当然，你可能本身就知道，用 df 命令，就能查看文件系统的磁盘空间使用情况。比如：
 
 ```
-$ df /dev/sda1 
-Filesystem     1K-blocks    Used Available Use% Mounted on 
-/dev/sda1       30308240 3167020  27124836  11% / 
+$ df /dev/sda1
+Filesystem     1K-blocks    Used Available Use% Mounted on
+/dev/sda1       30308240 3167020  27124836  11% /
 ```
 
 你可以看到，我的根文件系统只使用了11%的空间。这里还要注意，总空间用1K-blocks的数量来表示，你可以给df加上-h选项，以获得更好的可读性：
 
 ```
-$ df -h /dev/sda1 
-Filesystem      Size  Used Avail Use% Mounted on 
-/dev/sda1        29G  3.1G   26G  11% / 
+$ df -h /dev/sda1
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1        29G  3.1G   26G  11% /
 ```
 
 不过有时候，明明你碰到了空间不足的问题，可是用df查看磁盘空间后，却发现剩余空间还有很多。这是怎么回事呢？
@@ -145,9 +145,9 @@ Filesystem      Size  Used Avail Use% Mounted on
 不知道你还记不记得，刚才我强调的一个细节。除了文件数据，索引节点也占用磁盘空间。你可以给df命令加上 -i 参数，查看索引节点的使用情况，如下所示：
 
 ```
-$ df -i /dev/sda1 
-Filesystem      Inodes  IUsed   IFree IUse% Mounted on 
-/dev/sda1      3870720 157460 3713260    5% / 
+$ df -i /dev/sda1
+Filesystem      Inodes  IUsed   IFree IUse% Mounted on
+/dev/sda1      3870720 157460 3713260    5% /
 ```
 
 索引节点的容量，（也就是Inode个数）是在格式化磁盘时设定好的，一般由格式化工具自动生成。当你发现索引节点空间不足，但磁盘空间充足时，很可能就是过多小文件导致的。
@@ -159,10 +159,10 @@ Filesystem      Inodes  IUsed   IFree IUse% Mounted on
 在前面Cache案例中，我已经介绍过，可以用 free 或 vmstat，来观察页缓存的大小。复习一下，free输出的Cache，是页缓存和可回收Slab缓存的和，你可以从 /proc/meminfo ，直接得到它们的大小：
 
 ```
-$ cat /proc/meminfo | grep -E "SReclaimable|Cached" 
-Cached:           748316 kB 
-SwapCached:            0 kB 
-SReclaimable:     179508 kB 
+$ cat /proc/meminfo | grep -E "SReclaimable|Cached"
+Cached:           748316 kB
+SwapCached:            0 kB
+SReclaimable:     179508 kB
 ```
 
 话说回来，文件系统中的目录项和索引节点缓存，又该如何观察呢？
@@ -172,16 +172,16 @@ SReclaimable:     179508 kB
 比如，运行下面的命令，你就可以得到，所有目录项和各种文件系统索引节点的缓存情况：
 
 ```
-$ cat /proc/slabinfo | grep -E '^#|dentry|inode' 
-# name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail> 
-xfs_inode              0      0    960   17    4 : tunables    0    0    0 : slabdata      0      0      0 
-... 
-ext4_inode_cache   32104  34590   1088   15    4 : tunables    0    0    0 : slabdata   2306   2306      0hugetlbfs_inode_cache     13     13    624   13    2 : tunables    0    0    0 : slabdata      1      1      0 
-sock_inode_cache    1190   1242    704   23    4 : tunables    0    0    0 : slabdata     54     54      0 
-shmem_inode_cache   1622   2139    712   23    4 : tunables    0    0    0 : slabdata     93     93      0 
-proc_inode_cache    3560   4080    680   12    2 : tunables    0    0    0 : slabdata    340    340      0 
-inode_cache        25172  25818    608   13    2 : tunables    0    0    0 : slabdata   1986   1986      0 
-dentry             76050 121296    192   21    1 : tunables    0    0    0 : slabdata   5776   5776      0 
+$ cat /proc/slabinfo | grep -E '^#|dentry|inode'
+# name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail>
+xfs_inode              0      0    960   17    4 : tunables    0    0    0 : slabdata      0      0      0
+...
+ext4_inode_cache   32104  34590   1088   15    4 : tunables    0    0    0 : slabdata   2306   2306      0hugetlbfs_inode_cache     13     13    624   13    2 : tunables    0    0    0 : slabdata      1      1      0
+sock_inode_cache    1190   1242    704   23    4 : tunables    0    0    0 : slabdata     54     54      0
+shmem_inode_cache   1622   2139    712   23    4 : tunables    0    0    0 : slabdata     93     93      0
+proc_inode_cache    3560   4080    680   12    2 : tunables    0    0    0 : slabdata    340    340      0
+inode_cache        25172  25818    608   13    2 : tunables    0    0    0 : slabdata   1986   1986      0
+dentry             76050 121296    192   21    1 : tunables    0    0    0 : slabdata   5776   5776      0
 ```
 
 这个界面中，dentry行表示目录项缓存，inode\_cache行，表示VFS索引节点缓存，其余的则是各种文件系统的索引节点缓存。
@@ -191,20 +191,20 @@ dentry             76050 121296    192   21    1 : tunables    0    0    0 : sla
 比如，下面就是我运行slabtop得到的结果：
 
 ```
-# 按下c按照缓存大小排序，按下a按照活跃对象数排序 
-$ slabtop 
-Active / Total Objects (% used)    : 277970 / 358914 (77.4%) 
-Active / Total Slabs (% used)      : 12414 / 12414 (100.0%) 
-Active / Total Caches (% used)     : 83 / 135 (61.5%) 
-Active / Total Size (% used)       : 57816.88K / 73307.70K (78.9%) 
-Minimum / Average / Maximum Object : 0.01K / 0.20K / 22.88K 
+# 按下c按照缓存大小排序，按下a按照活跃对象数排序
+$ slabtop
+Active / Total Objects (% used)    : 277970 / 358914 (77.4%)
+Active / Total Slabs (% used)      : 12414 / 12414 (100.0%)
+Active / Total Caches (% used)     : 83 / 135 (61.5%)
+Active / Total Size (% used)       : 57816.88K / 73307.70K (78.9%)
+Minimum / Average / Maximum Object : 0.01K / 0.20K / 22.88K
 
-  OBJS ACTIVE  USE OBJ SIZE  SLABS OBJ/SLAB CACHE SIZE NAME 
-69804  23094   0%    0.19K   3324       21     13296K dentry 
-16380  15854   0%    0.59K   1260       13     10080K inode_cache 
-58260  55397   0%    0.13K   1942       30      7768K kernfs_node_cache 
-   485    413   0%    5.69K     97        5      3104K task_struct 
-  1472   1397   0%    2.00K     92       16      2944K kmalloc-2048 
+  OBJS ACTIVE  USE OBJ SIZE  SLABS OBJ/SLAB CACHE SIZE NAME
+69804  23094   0%    0.19K   3324       21     13296K dentry
+16380  15854   0%    0.59K   1260       13     10080K inode_cache
+58260  55397   0%    0.13K   1942       30      7768K kernfs_node_cache
+   485    413   0%    5.69K     97        5      3104K task_struct
+  1472   1397   0%    2.00K     92       16      2944K kmalloc-2048
 ```
 
 从这个结果你可以看到，在我的系统中，目录项和索引节点占用了最多的Slab缓存。不过它们占用的内存其实并不大，加起来也只有23MB左右。
@@ -240,61 +240,58 @@ $ find / -name file-name
 --&gt; &#47;xfs_inode&#47; proc_inode_cache&#47;dentry&#47;inode_cache
 
 实验步骤：
+
 1. 清空缓存：echo 3 &gt; &#47;proc&#47;sys&#47;vm&#47;drop_caches ; sync
 2. 执行find ： find &#47; -name test
 3. 发现更新top 4 项是：
-  OBJS ACTIVE  USE OBJ SIZE  SLABS OBJ&#47;SLAB CACHE SIZE NAME
- 37400  37400 100%    0.94K   2200       17     35200K xfs_inode
- 36588  36113  98%    0.64K   3049       12     24392K proc_inode_cache
-104979 104979 100%    0.19K   4999       21     19996K dentry
- 18057  18057 100%    0.58K   1389       13     11112K inode_cache
+   OBJS ACTIVE USE OBJ SIZE SLABS OBJ&#47;SLAB CACHE SIZE NAME
+   37400 37400 100% 0.94K 2200 17 35200K xfs_inode
+   36588 36113 98% 0.64K 3049 12 24392K proc_inode_cache
+   104979 104979 100% 0.19K 4999 21 19996K dentry
+   18057 18057 100% 0.58K 1389 13 11112K inode_cache
 
 find &#47; -name 这个命令是全盘扫描（既包括内存文件系统又包含本地的xfs【我的环境没有mount 网络文件系统】），所以 inode cache &amp; dentry &amp; proc inode cache 会升高。
 
 另外，执行过了一次后再次执行find 就机会没有变化了，执行速度也快了很多，也就是下次的find大部分是依赖cache的结果。</p>2019-01-11</li><br/><li><span>小成</span> 👍（17） 💬（2）<p>请问老师，除了目录项以外还有哪些地方保存有文件名，下一节讲到目录项是一个内存缓存，那么不会保存文件名到磁盘上面？</p>2019-02-01</li><br/><li><span>伟忠</span> 👍（16） 💬（7）<p>机器上 df 查看占用了 200G，但 du 查看发现只有 90G，看网上的办法用 lsof | grep delete 查看，但没有找到，请问老师，这个可能是什么原因呢？</p>2019-01-12</li><br/><li><span>石维康</span> 👍（16） 💬（4）<p>阻塞 I&#47;O 和非阻塞 I&#47;O的概念和同步和异步 I&#47;O的区别是什么?</p>2019-01-11</li><br/><li><span>肘子哥</span> 👍（12） 💬（4）<p>有个疑惑，如果目录项存在内存中是不是意味着内存故障后，目录就无法访问了呢？</p>2019-02-23</li><br/><li><span>董文荣</span> 👍（8） 💬（2）<p>课后题：
 Q:$ find &#47; -name file-name
 这个命令，会不会导致系统的缓存升高呢？如果有影响，又会导致哪种类型的缓存升高呢？
-A:分析
-1)、&quot;&#47;&quot;代表文件系统的根目录，目录项已经缓存在cached。(通过下面的测试，怀疑应该只是部分目录项的内容缓存在cache中，待验证)
-2)、因为会匹配值“file-name“，会将索引节点读入缓存进行匹配。
+A:分析1)、&quot;&#47;&quot;代表文件系统的根目录，目录项已经缓存在cached。(通过下面的测试，怀疑应该只是部分目录项的内容缓存在cache中，待验证) 2)、因为会匹配值“file-name“，会将索引节点读入缓存进行匹配。
 因此会导致cached增长。以下是三组测试对比，给出了执行find命令前后，cached变化的对比。
 命令之前前后，slabtop的执行前后对比:
-Active &#47; Total Objects (% used)    : 184412 &#47; 240169 (76.8%)
- Active &#47; Total Size (% used)       : 42926.19K &#47; 59199.82K (72.5%)
+Active &#47; Total Objects (% used) : 184412 &#47; 240169 (76.8%)
+Active &#47; Total Size (% used) : 42926.19K &#47; 59199.82K (72.5%)
 
-  OBJS ACTIVE  USE OBJ SIZE  SLABS OBJ&#47;SLAB CACHE SIZE NAME                   
- 11088   2313  20%    0.57K    198	 56	 6336K radix_tree_node
- 10450   9515  91%    0.58K    190	 55	 6080K inode_cache
- 27510  12695  46%    0.19K    655	 42	 5240K dentry
-  4710   1003  21%    1.06K    157	 30	 5024K xfs_inode
+OBJS ACTIVE USE OBJ SIZE SLABS OBJ&#47;SLAB CACHE SIZE NAME  
+11088 2313 20% 0.57K 198 56 6336K radix_tree_node
+10450 9515 91% 0.58K 190 55 6080K inode_cache
+27510 12695 46% 0.19K 655 42 5240K dentry
+4710 1003 21% 1.06K 157 30 5024K xfs_inode
 
+Active &#47; Total Objects (% used) : 1795399 &#47; 1809652 (99.2%)
+Active &#47; Total Size (% used) : 1004316.02K &#47; 1007573.47K (99.7%)
 
- Active &#47; Total Objects (% used)    : 1795399 &#47; 1809652 (99.2%)
- Active &#47; Total Size (% used)       : 1004316.02K &#47; 1007573.47K (99.7%)
-
-  OBJS ACTIVE  USE OBJ SIZE  SLABS OBJ&#47;SLAB CACHE SIZE NAME                   
-708420 708420 100%    1.06K  23614	 30    755648K xfs_inode
-787878 787878 100%    0.19K  18759	 42    150072K dentry
+OBJS ACTIVE USE OBJ SIZE SLABS OBJ&#47;SLAB CACHE SIZE NAME  
+708420 708420 100% 1.06K 23614 30 755648K xfs_inode
+787878 787878 100% 0.19K 18759 42 150072K dentry
 
 free命令在find命令执行前后结果对比:
 [root@localhost ~]# free -m
-              total        used        free      shared  buff&#47;cache   available
-Mem:           1824         200        1534          15          89        1500
-Swap:          2047         196        1851
+total used free shared buff&#47;cache available
+Mem: 1824 200 1534 15 89 1500
+Swap: 2047 196 1851
 [root@localhost ~]# free -m
-              total        used        free      shared  buff&#47;cache   available
-Mem:           1824         480         105          15        1238        1161
-Swap:          2047         196        1851
+total used free shared buff&#47;cache available
+Mem: 1824 480 105 15 1238 1161
+Swap: 2047 196 1851
 
 vmstat在find命令执行前后对比：
-[root@localhost &#47;]# vmstat  2 
+[root@localhost &#47;]# vmstat 2
 procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu----
- r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
- 2  0 201208 1570636    136  92168    0    0     5     5   16   19 27  3 70  0  0
- 0  0 201208 1511788    136 149564    0    0  1702     0  491  599  2  6 90  1  0
- 0  0 201208 1509428    136 149716    0    0  1106     0  478  801  0  2 98  0  0
+r b swpd free buff cache si so bi bo in cs us sy id wa st
+2 0 201208 1570636 136 92168 0 0 5 5 16 19 27 3 70 0 0
+0 0 201208 1511788 136 149564 0 0 1702 0 491 599 2 6 90 1 0
+0 0 201208 1509428 136 149716 0 0 1106 0 478 801 0 2 98 0 0
 注:发表长度限制，省略部分测试显示
-
 
 </p>2019-01-21</li><br/><li><span>Mr.Strive.Z.H.L</span> 👍（6） 💬（1）<p>老师您好：
 关于目录项有一个疑惑：
@@ -304,19 +301,17 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu----
 那么是否在每次开机时，内核都会自动构建文件系统完整的目录项，然后进行缓存？？</p>2019-01-27</li><br/><li><span>成为祝福</span> 👍（6） 💬（1）<p>老师好，请问在slabtop中的inode_cache和ext4_inode_cache有什么区别呢？如果每个文件系统都有inode_cache，整个vfs的有效命名空间都映射到了对应的文件系统，vfs为什么还需要inode_cache呢？</p>2019-01-16</li><br/><li><span>DJH</span> 👍（6） 💬（1）<p>请教三个问题。
 
 1. 目录项是维护在内核中的一个内存数据结构，包括文件名。
-我的问题是：文件名不是也应该存储在磁盘上么？不可能仅仅存在于内存吧？
+   我的问题是：文件名不是也应该存储在磁盘上么？不可能仅仅存在于内存吧？
 
 2. 缓冲 I&#47;O，是指利用标准库缓存来减速文件的访问...
-我的问题时：减速文件访问的原因是什么？
+   我的问题时：减速文件访问的原因是什么？
 
-3. 阻塞&#47;非阻塞与同步&#47;非同步的区别是什么？</p>2019-01-11</li><br/><li><span>Geek_9815f1</span> 👍（2） 💬（3）<p>你要记住最重要的一点，在 Linux 中一切皆文件。不仅普通的文件和目录，就连块设备、套接字、管道等，也都要通过统一的文件系统来管理。    老师，上次听你 讲块设备和 文件系统的区别： 说块设备读写是绕过文件系统的。 现在是 块设备也通过统一的文件系统来管理。 这有矛盾吗？</p>2020-07-17</li><br/><li><span>sugar</span> 👍（2） 💬（1）<p>老师您好，想问 inode信息是存在文件内 还是单独存在另外的磁盘区域呢？换句话说，如果我把一个文件scp到另一台机器上，它的inode信息会跟过去吗？ 因为我发现 有时刚刚从linux上下载到mac本地的文件，stat命令查看创建时间（ext好像不记录这个 但mac的fs会有这个字段） 竟然早于当天。</p>2019-03-27</li><br/><li><span>shonm</span> 👍（2） 💬（4）<p>老师 您好 您说目录项是个缓存，那么关机后会存放在磁盘吗，否则下次开机的时候去哪里读取目录呢</p>2019-03-18</li><br/><li><span>hola</span> 👍（2） 💬（1）<p>“索引节点和文件一一对应，它跟文件内容一样，都会被持久化存储到磁盘”
-是一对一关系吗，那么看我的服务器
-$ df -i &#47;
-文件系统                                 Inode 已用(I) 可用(I) 已用(I)% 挂载点
-&#47;dev&#47;mapper&#47;VolGroup-lv_root 655360   98862  556498      16% &#47;
-意思是这个下面理论最多存放655360个文件  对吗
-
-
+3. 阻塞&#47;非阻塞与同步&#47;非同步的区别是什么？</p>2019-01-11</li><br/><li><span>Geek_9815f1</span> 👍（2） 💬（3）<p>你要记住最重要的一点，在 Linux 中一切皆文件。不仅普通的文件和目录，就连块设备、套接字、管道等，也都要通过统一的文件系统来管理。 老师，上次听你 讲块设备和 文件系统的区别： 说块设备读写是绕过文件系统的。 现在是 块设备也通过统一的文件系统来管理。 这有矛盾吗？</p>2020-07-17</li><br/><li><span>sugar</span> 👍（2） 💬（1）<p>老师您好，想问 inode信息是存在文件内 还是单独存在另外的磁盘区域呢？换句话说，如果我把一个文件scp到另一台机器上，它的inode信息会跟过去吗？ 因为我发现 有时刚刚从linux上下载到mac本地的文件，stat命令查看创建时间（ext好像不记录这个 但mac的fs会有这个字段） 竟然早于当天。</p>2019-03-27</li><br/><li><span>shonm</span> 👍（2） 💬（4）<p>老师 您好 您说目录项是个缓存，那么关机后会存放在磁盘吗，否则下次开机的时候去哪里读取目录呢</p>2019-03-18</li><br/><li><span>hola</span> 👍（2） 💬（1）<p>“索引节点和文件一一对应，它跟文件内容一样，都会被持久化存储到磁盘”
+   是一对一关系吗，那么看我的服务器
+   $ df -i &#47;
+   文件系统 Inode 已用(I) 可用(I) 已用(I)% 挂载点
+   &#47;dev&#47;mapper&#47;VolGroup-lv_root 655360 98862 556498 16% &#47;
+   意思是这个下面理论最多存放655360个文件 对吗
 
 </p>2019-02-23</li><br/><li><span>Geek_9815f1</span> 👍（1） 💬（1）<p>你要记住最重要的一点，在 Linux 中一切皆文件。不仅普通的文件和目录，就连块设备、套接字、管道等，也都要通过统一的文件系统来管理。   上一章不是说过 块设备绕过文件系统， 现在又说统一由文件系统管理 </p>2020-07-20</li><br/><li><span>jacky</span> 👍（1） 💬（2）<p>请问老师，我的Linux的Use%显示100%，我该如何排查呢？</p>2019-05-10</li><br/>
 </ul>

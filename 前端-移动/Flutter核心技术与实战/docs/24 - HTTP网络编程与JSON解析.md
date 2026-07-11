@@ -36,15 +36,15 @@ get() async {
   //创建网络调用示例，设置通用请求行为(超时时间)
   var httpClient = HttpClient();
   httpClient.idleTimeout = Duration(seconds: 5);
-  
+
   //构造URI，设置user-agent为"Custom-UA"
   var uri = Uri.parse("https://flutter.dev");
   var request = await httpClient.getUrl(uri);
   request.headers.add("user-agent", "Custom-UA");
-  
+
   //发起请求，等待响应
   var response = await request.close();
-  
+
   //收到响应，打印结果
   if (response.statusCode == HttpStatus.ok) {
     print(await response.transform(utf8.decoder).join());
@@ -80,7 +80,7 @@ httpGet() async {
 
   //构造URI
   var uri = Uri.parse("https://flutter.dev");
-  
+
   //设置user-agent为"Custom-UA"，随后立即发出请求
   http.Response response = await client.get(uri, headers : {"user-agent" : "Custom-UA"});
 
@@ -112,10 +112,10 @@ dependencies:
 void getRequest() async {
   //创建网络调用示例
   Dio dio = new Dio();
-  
+
   //设置URI及请求user-agent后发起请求
   var response = await dio.get("https://flutter.dev", options:Options(headers: {"user-agent" : "Custom-UA"}));
-  
+
  //打印请求结果
   if(response.statusCode == HttpStatus.ok) {
     print(response.data.toString());
@@ -147,7 +147,7 @@ dio.download("https://xxx.com/file1", "xx1.zip");
 
 //增加下载进度回调函数
 dio.download("https://xxx.com/file1", "xx2.zip", onReceiveProgress: (count, total) {
-	//do something      
+	//do something
 });
 ```
 
@@ -176,7 +176,7 @@ dio.interceptors.add(InterceptorsWrapper(
       //检查是否有token，没有则直接报错
       if(options.headers['token'] == null) {
         return dio.reject("Error:请先登录");
-      } 
+      }
       //检查缓存是否有数据
       if(options.uri == Uri.parse('http://xxx.com/file1')) {
         return dio.resolve("返回缓存数据");
@@ -237,7 +237,7 @@ class Student{
   String id;
   String name;
   int score;
-  //构造方法  
+  //构造方法
   Student({
     this.id,
     this.name,
@@ -415,39 +415,39 @@ dio.interceptors.add(InterceptorsWrapper(
   ));</p>2019-10-09</li><br/><li><span>江宁彭于晏</span> 👍（15） 💬（1）<p>分享一个json转dart类的工具，理解了原理后，实际项目中可以省不少时间https:&#47;&#47;javiercbk.github.io&#47;json_to_dart&#47;</p>2019-09-11</li><br/><li><span>和小胖</span> 👍（6） 💬（2）<p>第二道题解决方法：
 
 class Student {
-  String id;
-  String name;
-  int score;
-  List&lt;Teacher&gt; teachers;
+String id;
+String name;
+int score;
+List&lt;Teacher&gt; teachers;
 
-  Student({this.id, this.name, this.score, this.teachers});
+Student({this.id, this.name, this.score, this.teachers});
 
-  factory Student.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
-    return Student(
-        id: parsedJson[&#39;id&#39;],
-        name: parsedJson[&#39;name&#39;],
-        score: parsedJson[&#39;score&#39;],
-        teachers: getTeacher(parsedJson[&#39;teachers&#39;]));
-  }
+factory Student.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
+return Student(
+id: parsedJson[&#39;id&#39;],
+name: parsedJson[&#39;name&#39;],
+score: parsedJson[&#39;score&#39;],
+teachers: getTeacher(parsedJson[&#39;teachers&#39;]));
+}
 
-  static List&lt;Teacher&gt; getTeacher(dynamic list) {
-    List&lt;Teacher&gt; teachers = new List();
-    list.forEach((f) {
-      teachers.add(Teacher.fromJson(f));
-    });
-    return teachers;
-  }
+static List&lt;Teacher&gt; getTeacher(dynamic list) {
+List&lt;Teacher&gt; teachers = new List();
+list.forEach((f) {
+teachers.add(Teacher.fromJson(f));
+});
+return teachers;
+}
 }
 
 class Teacher {
-  String name;
-  int age;
+String name;
+int age;
 
-  Teacher({this.age, this.name});
+Teacher({this.age, this.name});
 
-  factory Teacher.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
-    return Teacher(name: parsedJson[&#39;name&#39;], age: parsedJson[&#39;age&#39;]);
-  }
+factory Teacher.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
+return Teacher(name: parsedJson[&#39;name&#39;], age: parsedJson[&#39;age&#39;]);
+}
 }</p>2019-10-09</li><br/><li><span>给我点阳光就灿烂</span> 👍（4） 💬（2）<p>如何进行socket通信</p>2019-08-22</li><br/><li><span>Geek_0793f1</span> 👍（2） 💬（2）<p>使用这种方式，我们需要先将 JSON 字符串传递给 JSON.decode 方法解析成一个 Map，然后把这个 Map 传给自定义的类，进行相关属性的赋值。
 
 前端一般把json字符串解析成map之后，就直接用这个map进行相关的属性赋值了，老师能解释一下，传给自定义类的做法的好处吗？</p>2019-09-02</li><br/><li><span>Geek_0d3a08</span> 👍（1） 💬（1）<p>重定向监听有吗？</p>2019-08-29</li><br/><li><span>江厚宏</span> 👍（1） 💬（1）<p>老师能不能介绍一下反序列化工具，比如json_serializable和 built_value，建议用哪一个，如果遇到泛型，该如何处理</p>2019-08-22</li><br/><li><span>Geek_4s70e3</span> 👍（0） 💬（1）<p>json_model 怎么生成纯数组的解析代码？</p>2019-11-07</li><br/><li><span>大神博士</span> 👍（0） 💬（2）<p>想问下 Flutter 中 JSONP 的请求怎么处理</p>2019-09-21</li><br/><li><span>米米呀👧</span> 👍（0） 💬（1）<p>import &#39;dart:convert&#39;;
@@ -455,70 +455,70 @@ class Teacher {
 import &#39;package:flutter&#47;material.dart&#39;;
 import &#39;package:http&#47;http.dart&#39; as http;
 [...]
-  loadData() async {
-    String dataURL = &quot;https:&#47;&#47;jsonplaceholder.typicode.com&#47;posts&quot;;
-    http.Response response = await http.get(dataURL);
-    setState(() {
-      widgets = JSON.decode(response.body);
-    });
-  }
+loadData() async {
+String dataURL = &quot;https:&#47;&#47;jsonplaceholder.typicode.com&#47;posts&quot;;
+http.Response response = await http.get(dataURL);
+setState(() {
+widgets = JSON.decode(response.body);
+});
+}
 }
 
 官网Demo里面是用的这个，跟HttpClient有什么区别？我该用哪个？</p>2019-09-10</li><br/><li><span>Geek_joestar</span> 👍（0） 💬（1）<p>static List&lt;Teacher&gt; fromJsonList(List&lt;dynamic&gt; listJson){
-    var list = List&lt;Teacher&gt;();
-    for(Map&lt;String, dynamic&gt; parsedJson in listJson) {
-      list.add(Teacher.fromJson(parsedJson));
-    }
-    return list;
-  }</p>2019-09-08</li><br/><li><span>C</span> 👍（0） 💬（1）<p>class Teacher {
-  String name;
-  int age;
+var list = List&lt;Teacher&gt;();
+for(Map&lt;String, dynamic&gt; parsedJson in listJson) {
+list.add(Teacher.fromJson(parsedJson));
+}
+return list;
+}</p>2019-09-08</li><br/><li><span>C</span> 👍（0） 💬（1）<p>class Teacher {
+String name;
+int age;
 
-  Teacher({this.name, this.age});
+Teacher({this.name, this.age});
 
-  factory Teacher.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
-    return Teacher(
-      name: parsedJson[&#39;name&#39;],
-      age: parsedJson[&#39;age&#39;],
-    );
-  }
+factory Teacher.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
+return Teacher(
+name: parsedJson[&#39;name&#39;],
+age: parsedJson[&#39;age&#39;],
+);
+}
 
-  static List&lt;Teacher&gt; parseTeachers(List&lt;dynamic&gt; mapList) {
-    List&lt;Teacher&gt; teachers = List&lt;Teacher&gt;();
-    for(Map&lt;String, dynamic&gt; map in mapList) {
-      teachers.add(Teacher.fromJson(map));
-    }
-    return teachers;
-  }
+static List&lt;Teacher&gt; parseTeachers(List&lt;dynamic&gt; mapList) {
+List&lt;Teacher&gt; teachers = List&lt;Teacher&gt;();
+for(Map&lt;String, dynamic&gt; map in mapList) {
+teachers.add(Teacher.fromJson(map));
+}
+return teachers;
+}
 }
 
 class Student {
-  String id;
-  String name;
-  int score;
-  List&lt;Teacher&gt; teachers;
+String id;
+String name;
+int score;
+List&lt;Teacher&gt; teachers;
 
-  Student({this.id, this.name, this.score, this.teachers});
+Student({this.id, this.name, this.score, this.teachers});
 
-  factory Student.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
-    return Student(
-      id: parsedJson[&#39;id&#39;],
-      name: parsedJson[&#39;name&#39;],
-      score: parsedJson[&#39;score&#39;],
-      teachers: Teacher.parseTeachers(parsedJson[&#39;teachers&#39;]),
-    );
-  }
+factory Student.fromJson(Map&lt;String, dynamic&gt; parsedJson) {
+return Student(
+id: parsedJson[&#39;id&#39;],
+name: parsedJson[&#39;name&#39;],
+score: parsedJson[&#39;score&#39;],
+teachers: Teacher.parseTeachers(parsedJson[&#39;teachers&#39;]),
+);
+}
 }</p>2019-09-06</li><br/><li><span>大和</span> 👍（0） 💬（1）<p>dio.interceptors.add(InterceptorsWrapper(
-        onRequest: (RequestOptions options) async {
-          if (options.headers[&quot;token&quot;] == null) {
-            try {
-              var token = await new Dio().get(&quot;https:&#47;&#47;xxx.com&#47;token&quot;);
-              options.headers[&quot;token&quot;] = token;
-            }catch(e) {
-              return dio.reject(&quot;Error: 请先登录...&quot;);
-            }
-          }
-          return options;
-        }
-    ));</p>2019-09-04</li><br/><li><span>宁缺</span> 👍（0） 💬（1）<p>请问老大，课后作业的答案啥时候给参考一下</p>2019-09-03</li><br/><li><span>秋</span> 👍（0） 💬（1）<p>使用Dio发送post请求，data数据是map，但是服务端接收不到，请问老师这是什么原因？</p>2019-09-02</li><br/>
+onRequest: (RequestOptions options) async {
+if (options.headers[&quot;token&quot;] == null) {
+try {
+var token = await new Dio().get(&quot;https:&#47;&#47;xxx.com&#47;token&quot;);
+options.headers[&quot;token&quot;] = token;
+}catch(e) {
+return dio.reject(&quot;Error: 请先登录...&quot;);
+}
+}
+return options;
+}
+));</p>2019-09-04</li><br/><li><span>宁缺</span> 👍（0） 💬（1）<p>请问老大，课后作业的答案啥时候给参考一下</p>2019-09-03</li><br/><li><span>秋</span> 👍（0） 💬（1）<p>使用Dio发送post请求，data数据是map，但是服务端接收不到，请问老师这是什么原因？</p>2019-09-02</li><br/>
 </ul>

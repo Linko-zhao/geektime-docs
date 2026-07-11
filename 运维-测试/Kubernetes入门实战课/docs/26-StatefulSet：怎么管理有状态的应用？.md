@@ -300,18 +300,19 @@ K8s提供的解决方案基本就是代表了微服务部署的最佳实践了�
 btw，越学习越能理解到 老师讲的“云原生”的概念了</p>2022-08-22</li><br/><li><span>摊牌</span> 👍（7） 💬（3）<p>老师，既然statefulSet对象管理的pod可以直接通过域名指定来访问，那可不可以 不给statefulSet对象创建service</p>2022-09-01</li><br/><li><span>Bachue Zhou</span> 👍（5） 💬（1）<p>我感觉 statefulset 起到的作用相比于普通的 systemd 差不多，特别是对于数据库这种真正有状态的服务而言，实例运行的节点通常是固定的，因为对硬件的要求要比普通的节点高很多，且在生产环境不可能用任何基于网络的文件系统来存储数据库文件。由于节点固定，所以 ip 也就固定，没必要非用域名来访问，而且现在有些服务本来也实现了服务发现，客户端连接集群的任意实例都可以获取完整集群节点的 ip 就可以直连，改用域名反而不太直接，statefulset 也不能让主从配置或是sharding配置变得更方便。</p>2022-11-18</li><br/><li><span>摊牌</span> 👍（5） 💬（1）<p>有了 StatefulSet 提供的固定名字和启动顺序，应用还需要怎么做才能实现主从等依赖关系呢？
 
 答：我理解是采用StatefulSet对象管理多个（2n+1）有状态pod的情形下，应该在有状态应用中基于pod的固定名字进行实例通信交互，比如redis集群中节点之间通过Gossip协议进行广播自身的状态信息，从而完成实例之间依赖关系，保证集群的可用性</p>2022-09-01</li><br/><li><span>陈斯佳</span> 👍（3） 💬（1）<p>老师 能讲解一下什么是operator吗？</p>2022-12-14</li><br/><li><span>dao</span> 👍（3） 💬（1）<p>作业：
+
 1. 这个应该具体应用具体设置吧。比如 Redis ，需要给 主、从 实例加载不同的 conf 。以我目前的 kube 知识我不知道如何给不同的副本使用不同的配置文件。我只能使用临时命令实现主从 kubectl exec -it redis-pv-sts-1 -- redis-cli replicaof redis-pv-sts-0.redis-svc 6379 。
 2. 若不使用“volumeClaimTemplates”内嵌定义 PVC，那么可能的后果就是，多个副本挂载同一个网络存储设备，这可能会导致数据丢失。</p>2022-09-16</li><br/><li><span>泽</span> 👍（2） 💬（4）<p>老师 求您个事 ，讲讲helm吧，迫切想学</p>2022-12-09</li><br/><li><span>rubys_</span> 👍（2） 💬（1）<p>在我的虚拟机上 ping redis-sts-1.redis-svc 失败，一种解决方案是，kubectl get pod -o wide -n kube-system 找到 coredns 的 pod，然后删除那两个 pod，比如 kubectl delete pod coredns-65c54cc984-qlkt9 -n kube-system。等待 k8s 重新创建 coredns 的 pod 就可以 ping 了</p>2022-10-25</li><br/><li><span>小宝</span> 👍（2） 💬（1）<p>“访问 StatefulSet 应该使用每个 Pod 的单独域名，形式是“Pod 名. 服务名”，不应该使用 Service 的负载均衡功能。”
-请教老师，通常会在StatefulSet上创建一个Headless Service吧，作为pod的负载均衡。</p>2022-08-23</li><br/><li><span>起司猫</span> 👍（0） 💬（1）<p>说说自己的总结和理解（都 2024 了，还有人在学这个课程吗哈哈哈）：
-1. StatefulSet 是被设计来用于管理有状态的应用的，而有状态的应用需要处理“启动顺序”、“依赖关系”、“网络标识”三个问题。
-2. StatefulSet 通过 把 pod 的名称、pod 所在的主机名、 pod 域名进行了有规律的命名，通过 “[sts名]-[顺序号]”的方式对上述几个名称进行命名，使得用户能够通过 名称 和 顺序号 确认副本的身份和进行特定的处理。
-3. StatefulSet 的场景下，不能通过 service 的域名去访问 pod，因为在有状态的一组应用中，访问的顺序、访问哪一个应用，应该是跟具体业务场景相关的，service 并不能帮你去做选择。
-4. StatefulSet 的 pod 不需要分配 clusterIP，正如第 3 点中说的，用户要根据自己的业务场景去判断要访问哪个pod副本， 而 IP 不具备身份特征，并且原来 service 那样给 pod 分配 [对象名&#47;IP-local] 这种域名，同样不具备身份特征。这时候 headless-service 必须重新给 pod 分配具有身份特征的域名。</p>2024-08-30</li><br/><li><span>sgcls</span> 👍（0） 💬（1）<p>1.容器启动脚本对环境变量（如 hostname）的不同取值，设定不同的启动参数，如 if hostname=redis-sts-0 时，添加 --master
-2.使用独立定义的 PVC(kind: PersistentVolumeClaim)，生成的 pvc 名称就不是固定的了，Pod 重建后使用的 pvc 可能不是之前的 pvc，就出现了状态不一致（PV）</p>2024-08-29</li><br/><li><span>王旧业</span> 👍（0） 💬（1）<p>有时候很难理解， 怎么这些API对象针对是否能够通过kubectl create创建yaml样本方面没有拉齐，做到一致多好哈</p>2024-07-27</li><br/><li><span>ray</span> 👍（0） 💬（1）<p>老师您好，
-请问老师会建议把rdbms, redis, queue这类需要维护状态的服务放入k8s一起管理吗？
-这类服务通常都需要放在特定规格的机器上，不像一般的pod比较能随意游移到不同节点。
-虽说k8s可以匹配stateful set到特定节点，但我们仍需考虑cluster、备援、故障恢复等情境，加入这些考量后，就不太清楚是否该将上述服务放入k8s。
-再麻烦老师解答～
+   请教老师，通常会在StatefulSet上创建一个Headless Service吧，作为pod的负载均衡。</p>2022-08-23</li><br/><li><span>起司猫</span> 👍（0） 💬（1）<p>说说自己的总结和理解（都 2024 了，还有人在学这个课程吗哈哈哈）：
+3. StatefulSet 是被设计来用于管理有状态的应用的，而有状态的应用需要处理“启动顺序”、“依赖关系”、“网络标识”三个问题。
+4. StatefulSet 通过 把 pod 的名称、pod 所在的主机名、 pod 域名进行了有规律的命名，通过 “[sts名]-[顺序号]”的方式对上述几个名称进行命名，使得用户能够通过 名称 和 顺序号 确认副本的身份和进行特定的处理。
+5. StatefulSet 的场景下，不能通过 service 的域名去访问 pod，因为在有状态的一组应用中，访问的顺序、访问哪一个应用，应该是跟具体业务场景相关的，service 并不能帮你去做选择。
+6. StatefulSet 的 pod 不需要分配 clusterIP，正如第 3 点中说的，用户要根据自己的业务场景去判断要访问哪个pod副本， 而 IP 不具备身份特征，并且原来 service 那样给 pod 分配 [对象名&#47;IP-local] 这种域名，同样不具备身份特征。这时候 headless-service 必须重新给 pod 分配具有身份特征的域名。</p>2024-08-30</li><br/><li><span>sgcls</span> 👍（0） 💬（1）<p>1.容器启动脚本对环境变量（如 hostname）的不同取值，设定不同的启动参数，如 if hostname=redis-sts-0 时，添加 --master
+   2.使用独立定义的 PVC(kind: PersistentVolumeClaim)，生成的 pvc 名称就不是固定的了，Pod 重建后使用的 pvc 可能不是之前的 pvc，就出现了状态不一致（PV）</p>2024-08-29</li><br/><li><span>王旧业</span> 👍（0） 💬（1）<p>有时候很难理解， 怎么这些API对象针对是否能够通过kubectl create创建yaml样本方面没有拉齐，做到一致多好哈</p>2024-07-27</li><br/><li><span>ray</span> 👍（0） 💬（1）<p>老师您好，
+   请问老师会建议把rdbms, redis, queue这类需要维护状态的服务放入k8s一起管理吗？
+   这类服务通常都需要放在特定规格的机器上，不像一般的pod比较能随意游移到不同节点。
+   虽说k8s可以匹配stateful set到特定节点，但我们仍需考虑cluster、备援、故障恢复等情境，加入这些考量后，就不太清楚是否该将上述服务放入k8s。
+   再麻烦老师解答～
 
 谢谢老师＾＾</p>2023-07-14</li><br/><li><span>泰一</span> 👍（0） 💬（1）<p>老师，deployment 的 pod 没有稳定的域名，是不是就不能用用 headless svc了？（但是我看我们服务deployment也使用了 headles svc）</p>2023-05-12</li><br/>
 </ul>

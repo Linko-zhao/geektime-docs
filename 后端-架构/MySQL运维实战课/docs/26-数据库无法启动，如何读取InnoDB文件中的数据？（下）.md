@@ -15,8 +15,8 @@ CREATE TABLE t_btree (
 
 
 insert into t_btree(id, a, padding)
-select concat('PK', rpad('', 93, '-'), 10000 + n), 
-    concat('KEY', rpad('', 92, '-'), 10000 + n), 
+select concat('PK', rpad('', 93, '-'), 10000 + n),
+    concat('KEY', rpad('', 92, '-'), 10000 + n),
     rpad('', 512, 'DATA')
 from numbers
 order by n;
@@ -57,7 +57,7 @@ mysql> select t2.name, t2.se_private_data
 mysql> use mysql;
 
 
-mysql> select t2.name, t4.ordinal_position as pos,  t4.hidden, t3.name, 
+mysql> select t2.name, t4.ordinal_position as pos,  t4.hidden, t3.name,
     t3.hidden, t3.column_type_utf8
 from tables t1, indexes t2, columns t3, index_column_usage t4
 where t1.id = t2.table_id

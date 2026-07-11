@@ -198,7 +198,7 @@ type Network struct {
  //  - labels
  //  - ... etc ...
  metav1.ObjectMeta `json:"metadata,omitempty"`
- 
+
  Spec networkspec `json:"spec"`
 }
 // networkspec is the spec for a Network resource
@@ -213,7 +213,7 @@ type networkspec struct {
 type NetworkList struct {
  metav1.TypeMeta `json:",inline"`
  metav1.ListMeta `json:"metadata"`
- 
+
  Items []Network `json:"items"`
 }
 ```
@@ -239,7 +239,7 @@ type NetworkList struct {
 type Network struct {
  metav1.TypeMeta   `json:",inline"`
  metav1.ObjectMeta `json:"metadata,omitempty"`
- 
+
  Spec   NetworkSpec   `json:"spec"`
  Status NetworkStatus `json:"status"`
 }
@@ -270,7 +270,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
   &Network{},
   &NetworkList{},
  )
- 
+
  // register the type in the scheme
  metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
  return nil
@@ -358,7 +358,7 @@ networks.samplecrd.k8s.io   2018-09-15T10:57:12Z
 **然后**，我们就可以创建一个Network对象了，这里用到的是example-network.yaml：
 
 ```
-$ kubectl apply -f example/example-network.yaml 
+$ kubectl apply -f example/example-network.yaml
 network.samplecrd.k8s.io/example-network created
 ```
 
@@ -423,10 +423,11 @@ Spec:
 </p>2018-10-17</li><br/><li><span>骨汤鸡蛋面</span> 👍（12） 💬（1）<p>自定义resource的Controller 单独运行，只是通过client-go 与api 交互？ 是否可以认为，k8s内建的Resource 对应的Controller，由Controller-manager 统一管理呢？</p>2019-01-05</li><br/><li><span>Pixar</span> 👍（11） 💬（1）<p>有一个问题张老师，一直不是特别清楚… 通过 crd 创建的自定义资源我还并没有定义他的结构，为什么就可以通过 kubectl get 拿到这个资源的详情呢？</p>2018-10-23</li><br/><li><span>mazhen</span> 👍（8） 💬（4）<p>register.go会将自定义Type注册到APIServer，那register.go本身是怎么交给APIServer，然后被APIServer调用注册过程的？
 
 $ kubectl apply -f crd&#47;network.yaml
-$ kubectl apply -f example&#47;example-network.yaml 
+$ kubectl apply -f example&#47;example-network.yaml
 
-执行完这两步，自定义的Newwork对象被创建出来，怎么感觉register.go并没有被用到</p>2018-10-18</li><br/><li><span>圣诞使者</span> 👍（4） 💬（1）<p>老师，我照着你的代码敲了一遍，这个pkg&#47;signals目录是自己创建的吗？我这个生成完代码也没有这个目录。</p>2018-10-22</li><br/><li><span>Joe Black</span> 👍（3） 💬（2）<p>这章会让运维人员心碎的...幸好俺会Go语言! 
+执行完这两步，自定义的Newwork对象被创建出来，怎么感觉register.go并没有被用到</p>2018-10-18</li><br/><li><span>圣诞使者</span> 👍（4） 💬（1）<p>老师，我照着你的代码敲了一遍，这个pkg&#47;signals目录是自己创建的吗？我这个生成完代码也没有这个目录。</p>2018-10-22</li><br/><li><span>Joe Black</span> 👍（3） 💬（2）<p>这章会让运维人员心碎的...幸好俺会Go语言!
 请教下这个生成的代码，还得合并到apiserver的代码树中吧？还是得重新编译apiserver吧？毕竟Go目前还没有动态加载机制。</p>2018-10-17</li><br/><li><span>mazhen</span> 👍（1） 💬（1）<p>怎么感觉register.go没有用到，它是什么时机把自定义Type注册到APIServer的？</p>2018-10-17</li><br/><li><span>mgxian</span> 👍（1） 💬（1）<p>请问老师 通过那个CustomResourceDefinition相关的ymal文件已经可以正常定义查看crd了 为什么还需要写相关的go代码呢？生成的clients又是给谁用的呢？</p>2018-10-17</li><br/><li><span>小伟</span> 👍（0） 💬（1）<p>老师好，作为一个运维，觉得你讲的内容好深，学得好吃力，不知能否分享一些实际生产环境的troubleshooting 的案例和思路？</p>2018-10-18</li><br/><li><span>虎虎❤️</span> 👍（58） 💬（0）<p>一般来说，扩展api server (或者说添加自定义 resource )有两种方式：
+
 1. 通过创建CRDs, 主API server可以处理 CRDs 的 REST 请求（CRUD）和持久性存储。简单，不需要其他的编程。更适用于声明式的API，和kubernetes高度集成统一。
 2. API Aggregation, 一个独立的API server。主API server委托此独立的API server处理自定义resource。 需要编程，但能够更加灵活的控制API的行为，更加灵活的自定义存储，以及与API不同版本之间的转换。一般更适用于命令模式，或者复用已经存在REST API代码，不直接支持kubectl 和 k8s UI, 不支持scope resource in a cluster&#47;namespace.
 

@@ -208,28 +208,28 @@ sudo apt-get install -f *.deb
 1. 安装Ubuntu 22.04
 
 2. 安装编译环境：
-$ sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev
+   $ sudo apt-get install autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev
 
 3. 直接安装riscv-gcc发行包：
-$ sudo apt install gcc-riscv64-linux-gnu gcc-riscv64-unknown-elf picolibc-riscv64-unknown-elf
+   $ sudo apt install gcc-riscv64-linux-gnu gcc-riscv64-unknown-elf picolibc-riscv64-unknown-elf
 
 4. 直接安装qemu发行包：
-$ sudo apt install qemu-user qemu-system-misc
+   $ sudo apt install qemu-user qemu-system-misc
 
 5. 编写hello.c
-#include&lt;stdio.h&gt;
-int main()
-{
-	printf(&quot;Hello, riscv!\n&quot;);
-	return 0;
-}
+   #include&lt;stdio.h&gt;
+   int main()
+   {
+   printf(&quot;Hello, riscv!\n&quot;);
+   return 0;
+   }
 
 6. 编译：
-$ riscv64-linux-gnu-gcc hello.c -o hello
+   $ riscv64-linux-gnu-gcc hello.c -o hello
 
 7. 运行：
-$ qemu-riscv64 hello
-qemu-riscv64: Could not open &#39;&#47;lib&#47;ld-linux-riscv64-lp64d.so.1&#39;: No such file or directory
+   $ qemu-riscv64 hello
+   qemu-riscv64: Could not open &#39;&#47;lib&#47;ld-linux-riscv64-lp64d.so.1&#39;: No such file or directory
 
 如果报错找不到&#47;lib&#47;ld-linux-riscv64-lp64d.so.1，是因为这个文件实际上在&#47;usr&#47;riscv64-linux-gnu&#47;lib下，加个参数运行：
 
@@ -237,7 +237,7 @@ $ qemu-riscv64 -L &#47;usr&#47;riscv64-linux-gnu hello
 Hello, riscv!
 
 最后，riscv64-unknown-elf-gcc编译还没搞定，正在找原因</p>2022-08-24</li><br/><li><span>光华路小霸王</span> 👍（1） 💬（1）<p>使用了 VS Code 的 Remote Development 远程调试，发现 F5 debug 回找不到编译器和 qemu，shell
-登录可以，一通谷歌是  .bashrc 与 .bash_profile 的问题，把环境变量加到 bash_profile 就可以了，vscode 是运行在 login shell 的，加载的是 bash_profile ，不会加载  .bashrc 
+登录可以，一通谷歌是 .bashrc 与 .bash_profile 的问题，把环境变量加到 bash_profile 就可以了，vscode 是运行在 login shell 的，加载的是 bash_profile ，不会加载 .bashrc
 refs: https:&#47;&#47;github.com&#47;microsoft&#47;vscode-remote-release&#47;issues&#47;854
 </p>2022-09-02</li><br/><li><span>Liu Zheng</span> 👍（1） 💬（1）<p>纠正一下。在环境变量设置好之前，即使在`&#47;opt&#47;riscv&#47;qemu&#47;bin`目录下，也不能直接跑`
 qemu-riscv32 -version &amp;&amp; qemu-riscv64 -version &amp;&amp; qemu-system-riscv32 -version &amp;&amp; qemu-system-riscv64 -version`. 而是需要`.&#47;qemu-riscv32 ...`.</p>2022-08-24</li><br/><li><span>TableBear</span> 👍（1） 💬（1）<p>source 的主要用途是执行文件并从文件加载变量及函数到执行环境。
@@ -284,9 +284,9 @@ root@zgye-ubuntu:~&#47;test#
 
 ubuntu22.04上跑通。</p>2022-09-06</li><br/><li><span>Liu Zheng</span> 👍（0） 💬（3）<p>想问一下，https:&#47;&#47;gitee.com&#47;lmos&#47;Geek-time-computer-foundation&#47;blob&#47;master&#47;lesson12~13&#47;main.c#L7-8 这里面func和sumdata分别都是什么呢？没有看到哪个地方有定义这两个东西，跑make或者vscode里面按F5也是会报错。</p>2022-08-25</li><br/><li><span>LooMou</span> 👍（0） 💬（0）<p>window 的 wsl
 Distributor ID: Ubuntu
-Description:    Ubuntu 20.04.6 LTS
-Release:        20.04
-Codename:       focal
+Description: Ubuntu 20.04.6 LTS
+Release: 20.04
+Codename: focal
 
 riscv-gnu-toolchain 我编译的是 2024.04.12-nightly，对应的 qemu 的版本是 8.2.1
 wget https:&#47;&#47;download.qemu.org&#47;qemu-&lt;version&gt;.tar.xz
@@ -299,19 +299,21 @@ Warning: Debuggee TargetArchitecture not detected, assuming x86_64.
 0x000100c2 in _start ()
 
 Breakpoint 1, main () at main.c:6
-6	    int i = 250;
+6 int i = 250;
 
 Breakpoint 2, main () at main.c:8
-8	    return 0; 
+8 return 0;
 终端输出：
- *  正在执行任务: make 
+
+- 正在执行任务: make
 
 CC -[M] 正在构建... add.S
 CC -[M] 正在构建... main.c
 CC -[M] 正在构建... main.elf
- *  终端将被任务重用，按任意键关闭。 
 
- *  正在执行任务: echo Starting RISCV-QEMU&amp;qemu-riscv32 -g 1234 .&#47;*.elf 
+- 终端将被任务重用，按任意键关闭。
+
+- 正在执行任务: echo Starting RISCV-QEMU&amp;qemu-riscv32 -g 1234 .&#47;*.elf
 
 Starting RISCV-QEMU
 hello world i is 250 3 250!</p>2024-12-03</li><br/><li><span>Pony</span> 👍（0） 💬（0）<p>&#47;opt&#47;riscv&#47;gcc&#47;lib&#47;gcc&#47;riscv64-unknown-elf&#47;10.2.0&#47;..&#47;..&#47;..&#47;..&#47;riscv64-unknown-elf&#47;bin&#47;ld: error: &#47;opt&#47;riscv&#47;gcc&#47;lib&#47;gcc&#47;riscv64-unknown-elf&#47;10.2.0&#47;rv32i&#47;ilp32&#47;crtbegin.o: Mis-matched ISA version for &#39;i&#39; extension. 2.0 vs 2.1

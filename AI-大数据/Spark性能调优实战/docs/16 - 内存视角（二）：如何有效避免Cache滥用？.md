@@ -120,19 +120,19 @@ df.write
 ```
 val filePath: String = _
 val df: DataFrame = spark.read.parquet(filePath)
- 
+
 //Cache方式一
 val cachedDF = df.cache
 //数据分析
 cachedDF.filter(col2 > 0).select(col1, col2)
 cachedDF.select(col1, col2).filter(col2 > 100)
- 
+
 //Cache方式二
 df.select(col1, col2).filter(col2 > 0).cache
 //数据分析
 df.filter(col2 > 0).select(col1, col2)
 df.select(col1, col2).filter(col2 > 100)
- 
+
 //Cache方式三
 val cachedDF = df.select(col1, col2).cache
 //数据分析
@@ -194,9 +194,7 @@ Analyzed Logical Plan是比较初级的逻辑计划，主要负责AST查询语�
 1.驱逐memoryentry的时候，图上两个打叉，我理解如果驱逐一个内存还是不够，就驱逐了两个？
 2.linkedhashmap是怎样区分不同RDD的block的，k是blockid，v是memoryentry。没看到所属RDD的属性
 3.自己设计cacheManager没啥更好想法，求磊哥提示下。。。我理解这个东西放在最前面比较合理，后面针对缓存的逻辑计划进一步应用或省略优化规则</p>2021-04-19</li><br/><li><span>静心</span> 👍（5） 💬（1）<p>老师，RDD调用 Cache 的时候，文中讲到我们要把待缓存数据赋值给一个变量，然后基于这个变量做后续的etl，能够防止cache miss问题，但是我看了一下rdd cache源码，返回值就是原来的RDD，只是更改了rdd的storageLevel为MEMORY_ONLY（rdd默认缓存级别），所以rdd 调用cache后赋值到一个新变量再做etl 与 不赋值而是基于原有RDD进行etl应该不会有cache miss问题吧，有点不太理解，望老师解疑，谢谢。</p>2021-05-06</li><br/><li><span>科学养牛</span> 👍（4） 💬（2）<p>老师，你的意思是调用.cache之后，需要马上接一个action算子吗？
-如果我不马上接action算子，只在最后调用一个action算子，比如saveAsTable，那在之前就算用了cachedRdd这个变量多次缓存也不起效果是吗？</p>2021-05-10</li><br/><li><span>西南偏北</span> 👍（2） 💬（1）<p>1. 第一题，在前面广播变量那一节的课后思考题已经回答过整个MemoryStore和DiskStore的缓存过程了哈哈
-2. 因为同一个RDD的Block大概率在接下来就会被用到，因为本身要缓存的就是同一个RDD的其他Block，如果不这样做的话，很可能要缓存的Block被缓存到内存了，却发现要用的Block却被驱逐出内存了
-3. 这是我自己的猜测不知道对不对哈哈：像第二种方式那样在数据集上做了一些处理之后进行cache，后续Cache Manager如果采用根据 Optimized Logical Plan 的方式来进行优化的话，那后面所有用到df这个Dataframe的地方，Spark都要解析对应的Optimized Logical Plan和我们之前cache的那个是否相同，这将会非常不可控。而且由于RDD&#47;Dataset&#47;Dataframe的不可变性，我们每次在对数据集进行处理之后，其实都应该养成将其赋值给一个新变量的习惯。</p>2021-05-05</li><br/><li><span>辰</span> 👍（2） 💬（1）<p>以及缓存的完全物化的物化是指什么意思呢</p>2021-04-21</li><br/><li><span>辰</span> 👍（2） 💬（1）<p>老师，文中的三种cache方式，我看都没有调用action算子（排除第二种不会cache的场景），是不是意味着都不会缓存落盘的操作</p>2021-04-21</li><br/><li><span>阳台</span> 👍（1） 💬（2）<p>请问一下老师，什么是同属一个Rdd数据？第一节里面的一个土豆是一个rdd数据，还是三个土豆在一起被称为一个rdd数据</p>2021-07-08</li><br/><li><span>Jay</span> 👍（1） 💬（4）<p>老师，如果用的是RDD，文中的“Cache方式二”是不是就没有问题了？ </p>2021-04-19</li><br/><li><span>tiankonghewo</span> 👍（0） 💬（1）<p>为什么cache要在action算子之后,再单独启动一个job缓存数据,这样不是重复计算了吗?已经计算一遍了,为什么不利用呢?</p>2021-11-22</li><br/><li><span>Hiway</span> 👍（0） 💬（1）<p>老师，您好。看到你之前的回答“是的，要先用Action算子来触发缓存的计算，让Spark真正把分布式数据集缓存到内存或是磁盘中去。”我对这句话有点疑惑，请问实际工作环境使用cache也是这样的吗？cache完后接一个count用于触发cache计算。然后再继续写业务逻辑吗？
+如果我不马上接action算子，只在最后调用一个action算子，比如saveAsTable，那在之前就算用了cachedRdd这个变量多次缓存也不起效果是吗？</p>2021-05-10</li><br/><li><span>西南偏北</span> 👍（2） 💬（1）<p>1. 第一题，在前面广播变量那一节的课后思考题已经回答过整个MemoryStore和DiskStore的缓存过程了哈哈2. 因为同一个RDD的Block大概率在接下来就会被用到，因为本身要缓存的就是同一个RDD的其他Block，如果不这样做的话，很可能要缓存的Block被缓存到内存了，却发现要用的Block却被驱逐出内存了3. 这是我自己的猜测不知道对不对哈哈：像第二种方式那样在数据集上做了一些处理之后进行cache，后续Cache Manager如果采用根据 Optimized Logical Plan 的方式来进行优化的话，那后面所有用到df这个Dataframe的地方，Spark都要解析对应的Optimized Logical Plan和我们之前cache的那个是否相同，这将会非常不可控。而且由于RDD&#47;Dataset&#47;Dataframe的不可变性，我们每次在对数据集进行处理之后，其实都应该养成将其赋值给一个新变量的习惯。</p>2021-05-05</li><br/><li><span>辰</span> 👍（2） 💬（1）<p>以及缓存的完全物化的物化是指什么意思呢</p>2021-04-21</li><br/><li><span>辰</span> 👍（2） 💬（1）<p>老师，文中的三种cache方式，我看都没有调用action算子（排除第二种不会cache的场景），是不是意味着都不会缓存落盘的操作</p>2021-04-21</li><br/><li><span>阳台</span> 👍（1） 💬（2）<p>请问一下老师，什么是同属一个Rdd数据？第一节里面的一个土豆是一个rdd数据，还是三个土豆在一起被称为一个rdd数据</p>2021-07-08</li><br/><li><span>Jay</span> 👍（1） 💬（4）<p>老师，如果用的是RDD，文中的“Cache方式二”是不是就没有问题了？ </p>2021-04-19</li><br/><li><span>tiankonghewo</span> 👍（0） 💬（1）<p>为什么cache要在action算子之后,再单独启动一个job缓存数据,这样不是重复计算了吗?已经计算一遍了,为什么不利用呢?</p>2021-11-22</li><br/><li><span>Hiway</span> 👍（0） 💬（1）<p>老师，您好。看到你之前的回答“是的，要先用Action算子来触发缓存的计算，让Spark真正把分布式数据集缓存到内存或是磁盘中去。”我对这句话有点疑惑，请问实际工作环境使用cache也是这样的吗？cache完后接一个count用于触发cache计算。然后再继续写业务逻辑吗？
 那不是除了cache的开销，还多了一个count计算的开销</p>2021-09-23</li><br/><li><span>wow_xiaodi</span> 👍（0） 💬（2）<p>老师，您好，有几个问题想问下：
 (1)广播变量默认是存储级别是？如果内存不足，是否是存到disk中？
 (2)对于memory only模式，采用lru淘汰缓存。那么如果是memory and disk模式，此时如果内存不足，是否先进行lru淘汰呢？

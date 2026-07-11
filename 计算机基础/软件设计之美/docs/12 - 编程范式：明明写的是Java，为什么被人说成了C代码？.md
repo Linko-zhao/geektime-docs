@@ -126,12 +126,13 @@ C是一门典型的结构化编程语言，而VFS的设计展现出来的却是�
 
 等专栏的这个模块结束的时候，再来回答“编程范式为什么重要”这个问题。</p>2020-06-24</li><br/><li><span>Demon.Lee</span> 👍（5） 💬（1）<p>而在每个类具体的接口设计上，采用函数式编程的风格
 ------
+
 老师，这句话具体如何理解，我脑子里出现的是java8里面的@FunctionalInterface，很多接口中的函数入参都是一个个@FunctionalInterface，比如：
 public interface Predicate&lt;T&gt; {
 default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; other) {
-        Objects.requireNonNull(other);
-        return (t) -&gt; test(t) &amp;&amp; other.test(t);
-    }
+Objects.requireNonNull(other);
+return (t) -&gt; test(t) &amp;&amp; other.test(t);
+}
 ...
 }</p>2020-06-22</li><br/><li><span>Jxin</span> 👍（4） 💬（1）<p>以函数式编程为例。
 1.我能理解不变性的价值，毕竟在应对并发场景时我也用cow的模式。但很难接受将cow贯彻到每个函数，本能的觉得浪费。

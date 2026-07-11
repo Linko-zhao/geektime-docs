@@ -65,7 +65,7 @@ Button 组件虽然降低了开发者选择成本，但是想在 UI 风格上让
 Pressable 组件的 API 设计得很是巧妙，扩展起来非常方便。Pressable 的样式 style 属性同时支持固定样式，和函数返回的“动态样式”：
 
 ```typescript
-type PressableStyle = ViewStyle | (({ pressed: boolean }) => ViewStyle)
+type PressableStyle = ViewStyle | (({ pressed: boolean }) => ViewStyle);
 ```
 
 其一，固定样式，也就是`type PressableStyle = ViewStyle` 的意思是，Pressable 组件的支持样式类型和 View 组件的支持样式类型是一样的，具体 `ViewStyle` 都包括那些“通用”样式和“私有”样式，我们在[《Style》](https://time.geekbang.org/column/article/501650)中已经学过了，相信你能很快回想起来。
@@ -97,7 +97,7 @@ const baseStyle = { width: 50, height: 50, backgroundColor: 'red'}
   onPress={handlePress}
   style={({ pressed }) => [ /* 动态样式 */
     baseStyle,
-    { opacity: pressed ? 0.5 : 1} 
+    { opacity: pressed ? 0.5 : 1}
   ]} >
   <Text>按钮</Text>
 </Pressable>
@@ -138,7 +138,7 @@ const baseStyle = { width: 50, height: 50, backgroundColor: 'red'}
 你可以在 Pressable 组件中，使用 onPressIn 来响应开始点按事件，使用 onPressOut 来响应结束点按事件。示例代码如下：
 
 ```plain
-<Pressable 
+<Pressable
   onPressIn={handlePressIn}
   onPressOut={handlePressOut}
   >
@@ -213,13 +213,13 @@ HitSlop 类型的定义如下：
 
 ```typescript
 type Rect = {
-    top?: number;
-    bottom?: number;
-    left?: number;
-    right?: number;
-}
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
 
-type HitSlop = Rect | number
+type HitSlop = Rect | number;
 ```
 
 HitSlop 接收两种类型的参数，一种是 number 类型，以原有盒模型中的 border 为边界，将可触发区域向外扩大一段距离。另一种是 Rect 类型，你可以更加精准地定义，要扩大的上下左右的距离。
@@ -235,7 +235,7 @@ HitSlop 接收两种类型的参数，一种是 number 类型，以原有盒模�
 这里我们就要引入一个新的概念：可保留区域 PressRect。点按事件可保留区域的偏移量（Press Retention Offset）默认是 0，也就是说默认情况下可见区域就是可保留区域。你可以通过设置 pressRetentionOffset 属性，来扩大可保留区域 PressRect。pressRetentionOffset 属性的类型如下：
 
 ```typescript
-type PressRetentionOffset  = Rect | number
+type PressRetentionOffset = Rect | number;
 ```
 
 你可以看到，pressRetentionOffset 和 HitSlop 一样，接收两种类型的参数，一种是 number 类型，另一种是 Rect 类型。Rect类型设置后，会以原有可触发区域为基准，将可保留区域向外扩大一段距离。

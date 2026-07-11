@@ -194,6 +194,7 @@ Erlang是实现Actor机制的典型代表。它被称为面向并发的编程语
 2. 微软[Orleans项目介绍](https://www.microsoft.com/en-us/research/wp-content/uploads/2010/11/pldi-11-submission-public.pdf)
 3. 介绍Erlang虚拟机原理的[在线电子书](https://blog.stenmans.org/theBeamBook)
 4. 介绍Erlang字节码的[文章](http://beam-wisdoms.clau.se/en/latest/indepth-beam-instructions.html)
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>顾仲贤</span> 👍（14） 💬（1）<p>小骄傲一下，本人在WhatsApp工作，目前所有的Infra还是用Erlang搭建的微服务，很稳定。当初被Facebook收购时，只有不到30个engineer(Infra就更少了)来maintain1.4B的月活，这就是Erlang的厉害之处吧。</p>2020-09-04</li><br/><li><span>gkkrjj</span> 👍（2） 💬（1）<p>这些技术之前都没接触过 是不是技术栈太浅了？</p>2020-11-13</li><br/><li><span>myrfy</span> 👍（2） 💬（1）<p>在仪器仪表领域很流行的labview虚拟仪器开发环境中，labview的运行时感觉就是一个actor模型，每个图标节点之间通过连线表示的通道传递数据</p>2020-09-02</li><br/><li><span>minghu6</span> 👍（0） 💬（0）<p>这个东西在函数式编程风格的语言里很常见</p>2021-06-20</li><br/><li><span>walnut</span> 👍（0） 💬（0）<p>actor的消息队列也需要锁保护吧?</p>2021-01-26</li><br/>
 </ul>

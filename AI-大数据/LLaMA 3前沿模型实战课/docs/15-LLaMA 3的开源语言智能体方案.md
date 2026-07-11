@@ -49,7 +49,7 @@ def run(self, reset=True, reflect_strategy: ReflexionStrategy = ReflexionStrateg
 `REFLECT_INSTRUCTION` 结构就是反思的提示模板，它要求智能体根据之前的任务失败情况进行自我诊断，并生成新的策略。这种机制使得智能体能够对失败的原因进行分析，并制定新的高层次决策，提升其未来的表现。
 
 ```python
-REFLECT_INSTRUCTION = """You are an advanced reasoning agent that can improve based on self reflection. You will be given a previous reasoning trial in which you were given access to a Docstore API environment and a question to answer. You were unsuccessful in answering the question either because you guessed the wrong answer with Finish[<answer>], or you used up your set number of reasoning steps. In a few sentences, Diagnose a possible reason for failure and devise a new, concise, high level plan that aims to mitigate the same failure. Use complete sentences.  
+REFLECT_INSTRUCTION = """You are an advanced reasoning agent that can improve based on self reflection. You will be given a previous reasoning trial in which you were given access to a Docstore API environment and a question to answer. You were unsuccessful in answering the question either because you guessed the wrong answer with Finish[<answer>], or you used up your set number of reasoning steps. In a few sentences, Diagnose a possible reason for failure and devise a new, concise, high level plan that aims to mitigate the same failure. Use complete sentences.
 Here are some examples:
 {examples}
 

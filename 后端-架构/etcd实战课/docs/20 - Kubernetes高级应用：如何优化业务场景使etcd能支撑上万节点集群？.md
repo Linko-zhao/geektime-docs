@@ -37,13 +37,13 @@
 Limit表示一次List请求最多查询的对象数量，一般为500。如果实际对象数量大于Limit，kube-apiserver则会更新ListMeta的Continue字段，client发起的下一个List请求带上这个字段就可获取下一批对象数量。直到kube-apiserver返回空的Continue值，就获取完成了整个对象结果集。
 
 ```
-// ListOptions is the query options to a standard REST 
+// ListOptions is the query options to a standard REST
 list call.
 type ListOptions struct {
    ...
-   Limit int64 `json:"limit,omitempty" 
+   Limit int64 `json:"limit,omitempty"
 protobuf:"varint,7,opt,name=limit"`
-   Continue string `json:"continue,omitempty" 
+   Continue string `json:"continue,omitempty"
 protobuf:"bytes,8,opt,name=continue"`
 }
 ```
@@ -296,7 +296,7 @@ Kubernetes社区在解决大集群的挑战的同时，etcd社区也在不断优
 node节点只要一重启，重启后该node上所有的docker容器都会重新创建，我的容器是有状态服务，里面存在数据。所以我不想他这么做，找了很多资料都没这方面的解决办法</p>2021-09-15</li><br/><li><span>13950387940</span> 👍（0） 💬（1）<p>老师你好，我想问一下您，我也是做云平台的。
 我想问一下k8s上创建的pod基于docker的，重启之后pod里的docker就会重建。查资料也没有什么解决办法，看日志是因为重启后pod ip的原因，不知道老师是否有遇到这样的问题，希望能指点一二</p>2021-08-26</li><br/><li><span>Simon</span> 👍（0） 💬（4）<p>思考题:
 
-应该是能保证的, 
+应该是能保证的,
 
 apiserver会把continueToken返回到client, client发现返回的结果中continueToken不为空时, 下次请求会带着continueToken请求apiserver
 

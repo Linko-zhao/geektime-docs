@@ -179,7 +179,7 @@ type Config struct {
 
 ```go
 // 解析 dsn
-func ParseDSN(dsn string) (cfg *Config, err error) 
+func ParseDSN(dsn string) (cfg *Config, err error)
 
 // 生成 dsn
 func (cfg *Config) FormatDSN() string
@@ -311,7 +311,7 @@ type Config struct {
    // gorm 的日志输出
    Logger logger.Interface
    ...
-   
+
    // db 的具体连接
    ConnPool ConnPool
    // db 驱动器
@@ -374,12 +374,12 @@ import (
 )
 
 func main() {
-	
+
 	dsn := "xxxx"
 	...
 	db, err = sql.Open("mysql", *dsn)
 	...
-    
+
     result, err := db.ExecContext(ctx, "INSERT INTO user (name) values ('jianfengye')")
     ...
 }

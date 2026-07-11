@@ -153,7 +153,7 @@ rule_files:
 
 ```yaml
 groups:
-- name: node_exporter
+  - name: node_exporter
   rules:
   - alert: HostDown
     expr: up{job="node_exporter"} == 0
@@ -217,34 +217,34 @@ WantedBy=multi-user.target
 
 ```yaml
 global:
-  smtp_from: 'username@163.com'
-  smtp_smarthost: 'smtp.163.com:465'
-  smtp_auth_username: 'username@163.com'
-  smtp_auth_password: '这里填写授权码'
+  smtp_from: "username@163.com"
+  smtp_smarthost: "smtp.163.com:465"
+  smtp_auth_username: "username@163.com"
+  smtp_auth_password: "这里填写授权码"
   smtp_require_tls: false
-  
+
 route:
-  group_by: ['alertname']
+  group_by: ["alertname"]
   group_wait: 30s
   group_interval: 1m
   repeat_interval: 1h
-  receiver: 'email'
+  receiver: "email"
 
 receivers:
-  - name: 'web.hook'
+  - name: "web.hook"
     webhook_configs:
-      - url: 'http://127.0.0.1:5001/'
+      - url: "http://127.0.0.1:5001/"
 
-  - name: 'email'
+  - name: "email"
     email_configs:
-    - to: 'ulricqin@163.com'
+    - to: "ulricqin@163.com"
 
 inhibit_rules:
   - source_match:
-      severity: 'critical'
+      severity: "critical"
     target_match:
-      severity: 'warning'
-    equal: ['alertname', 'dev', 'instance']
+      severity: "warning"
+    equal: ["alertname", "dev", "instance"]
 ```
 
 首先配置一个全局SMTP，然后修改 receivers。receivers 是个数组，默认例子里有个 web.hook，我又加了一个 email 的 receiver，然后配置 route.receiver 字段的值为 email。email\_configs中的 to 表示收件人，多个人用逗号分隔，比如 `to: 'user1@163.com, user2@163.com'`，最后收到的邮件内容大概是这样的，你可以看一下我给出的样例。
@@ -315,66 +315,50 @@ rule_files:
 version: &#39;3&#39;
 
 networks:
-  monitor:
-    driver: bridge
+monitor:
+driver: bridge
 
 services:
-  prometheus:
-    image: prom&#47;prometheus
-    container_name: prometheus
-    hostname: prometheus
-    restart: always
-    volumes:
-      - &#47;data&#47;prometheus&#47;data:&#47;prometheus
-      - &#47;data&#47;prometheus&#47;rules:&#47;etc&#47;prometheus&#47;rules
-      - &#47;data&#47;prometheus&#47;conf&#47;prometheus.yml:&#47;etc&#47;prometheus&#47;prometheus.yml
-    ports:
-      - &quot;9090:9090&quot;
-    networks:
-      - monitor
+prometheus:
+image: prom&#47;prometheus
+container_name: prometheus
+hostname: prometheus
+restart: always
+volumes: - &#47;data&#47;prometheus&#47;data:&#47;prometheus - &#47;data&#47;prometheus&#47;rules:&#47;etc&#47;prometheus&#47;rules - &#47;data&#47;prometheus&#47;conf&#47;prometheus.yml:&#47;etc&#47;prometheus&#47;prometheus.yml
+ports: - &quot;9090:9090&quot;
+networks: - monitor
 
-  alertmanager:
-    image: prom&#47;alertmanager
-    container_name: alertmanager
-    hostname: alertmanager
-    restart: always
-    volumes:
-      - &#47;data&#47;alertmanager&#47;config&#47;alertmanager.yml:&#47;etc&#47;alertmanager&#47;alertmanager.yml
-    depends_on:
-      - prometheus
-    ports:
-      - &quot;9093:9093&quot;
-    networks:
-      - monitor
+alertmanager:
+image: prom&#47;alertmanager
+container_name: alertmanager
+hostname: alertmanager
+restart: always
+volumes: - &#47;data&#47;alertmanager&#47;config&#47;alertmanager.yml:&#47;etc&#47;alertmanager&#47;alertmanager.yml
+depends_on: - prometheus
+ports: - &quot;9093:9093&quot;
+networks: - monitor
 
-  node-exporter:
-    image: quay.io&#47;prometheus&#47;node-exporter
-    container_name: node-exporter
-    hostname: node-exporter
-    restart: always
-    environment:
-      TZ: Asia&#47;Shanghai
-    volumes:
-    depends_on:
-      - prometheus
-    ports:
-      - &quot;9100:9100&quot;
-    networks:
-      - monitor
+node-exporter:
+image: quay.io&#47;prometheus&#47;node-exporter
+container_name: node-exporter
+hostname: node-exporter
+restart: always
+environment:
+TZ: Asia&#47;Shanghai
+volumes:
+depends_on: - prometheus
+ports: - &quot;9100:9100&quot;
+networks: - monitor
 
-  grafana:
-    image: grafana&#47;grafana
-    container_name: grafana
-    hostname: grafana
-    restart: always
-    volumes:
-      - &#47;data&#47;grafana&#47;data:&#47;var&#47;lib&#47;grafana
-    depends_on:
-      - prometheus
-    ports:
-      - &quot;3000:3000&quot;
-    networks:
-      - monitor</p>2023-01-16</li><br/><li><span>hshopeful</span> 👍（15） 💬（2）<p>关于 pull 和 push 模式，个人的一些理解，有错误或遗漏的，希望老师指正：
+grafana:
+image: grafana&#47;grafana
+container_name: grafana
+hostname: grafana
+restart: always
+volumes: - &#47;data&#47;grafana&#47;data:&#47;var&#47;lib&#47;grafana
+depends_on: - prometheus
+ports: - &quot;3000:3000&quot;
+networks: - monitor</p>2023-01-16</li><br/><li><span>hshopeful</span> 👍（15） 💬（2）<p>关于 pull 和 push 模式，个人的一些理解，有错误或遗漏的，希望老师指正：
 
 pull 模式的优点：
 1、pull 模式很容易判断监控对象的存活性，push 模式很难
@@ -394,7 +378,7 @@ push 模式的优点：
 2、目前社区是否有成熟的告警推送工具，比如企业微信机器人、钉钉机器人，这些需要自行编码实现？电话告警该如何实现呢？</p>2023-01-22</li><br/><li><span>April</span> 👍（2） 💬（2）<p>Prometheus没有提供很多管理上的API,又不想引入Service Discovery, 在targets变化后直接操作prometheus.conf有什么更为简单的方式吗？</p>2023-01-16</li><br/><li><span>那时刻</span> 👍（1） 💬（1）<p>请问老师，在k8s里部署prometheus，有哪些比较好的方式呢。</p>2023-01-17</li><br/><li><span>隆哥</span> 👍（1） 💬（2）<p>为啥不用docker形式来做实践呢，我觉得systemctl这种托管还是对主机入侵比较大。</p>2023-01-16</li><br/><li><span>Geek_df0d4d</span> 👍（0） 💬（1）<p>请问生产上有什么prometheus的高可用方案吗</p>2023-04-06</li><br/><li><span>孙宇翔</span> 👍（0） 💬（3）<p>老师您好，我想监控像摄像机这类设备的在线、离线，还有流量等数据，普罗米修斯是否合适，配置里面该怎么设置，完全没头绪。。。</p>2023-03-02</li><br/><li><span>Matthew</span> 👍（0） 💬（2）<p>老师，文章中提到的几个软件安装包，都需要从 github 上下载，但是下载速度太慢。能否提供下国内镜像源的地址呢？</p>2023-02-06</li><br/><li><span>Matthew</span> 👍（0） 💬（4）<p>github 下载太慢，有啥好办法吗？</p>2023-02-03</li><br/><li><span>leeeo</span> 👍（0） 💬（1）<p>源码编译prometheus可以去掉ui部分吗？</p>2023-02-03</li><br/><li><span>顶级心理学家</span> 👍（0） 💬（1）<p>秦老师，有个问题是关于exporter多实例的问题。
 我们环境是prometheus operator，例如 redis采用redis-exporter采集。这样就造成多个redis实例，实现成了多个exporter 来采集。redis exporter有案例支持一个exporter采集多个实例，但是没能实现。
 目前就是一个exporter 启动多个container，用不同端口采集多个redis实例，这样container会随着redis实例增多而庞大。
-想听听您的建议和想法。</p>2023-01-18</li><br/><li><span>俺木饭 三克油😂😂</span> 👍（0） 💬（1）<p>老师问下如何做prom 和各类exporter之间的认证？比如公司安全需求所有接口需要做鉴权</p>2023-01-17</li><br/><li><span>小飞同学</span> 👍（0） 💬（2）<p>咨询下grafana端口外网通过ip无法访问可能是什么原因呢？3000端口在安全组已经放开了，防火墙也方阿奎了，另外Prometheus9090端口是正常用的。http:&#47;&#47;ip:3000&#47;login   
+想听听您的建议和想法。</p>2023-01-18</li><br/><li><span>俺木饭 三克油😂😂</span> 👍（0） 💬（1）<p>老师问下如何做prom 和各类exporter之间的认证？比如公司安全需求所有接口需要做鉴权</p>2023-01-17</li><br/><li><span>小飞同学</span> 👍（0） 💬（2）<p>咨询下grafana端口外网通过ip无法访问可能是什么原因呢？3000端口在安全组已经放开了，防火墙也方阿奎了，另外Prometheus9090端口是正常用的。http:&#47;&#47;ip:3000&#47;login  
 Request URL: http:&#47;&#47;39.107.88.69:3000&#47;login
 Referrer Policy: strict-origin-when-cross-origin
 Provisional headers are shown

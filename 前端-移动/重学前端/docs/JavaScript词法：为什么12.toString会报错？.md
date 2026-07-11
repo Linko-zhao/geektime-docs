@@ -16,7 +16,7 @@
 - LineTerminator 换行符
 - Comment 注释
 - Token 词
-  
+
   - IdentifierName 标识符名称，典型案例是我们使用的变量名，注意这里关键字也包含在内了。
   - Punctuator 符号，我们使用的运算符和大括号等符号。
   - NumericLiteral 数字直接量，就是我们写的数字。
@@ -91,7 +91,7 @@ JavaScript词法的另一个特别设计是字符串模板，模板语法大概�
 JavaScript的注释分为单行注释和多行注释两种：
 
 ```JavaScript
-/* MultiLineCommentChars */ 
+/* MultiLineCommentChars */
 // SingleLineCommentChars
 ```
 
@@ -148,9 +148,9 @@ implements package protected interface private public
 十进制的Number可以带小数，小数点前后部分都可以省略，但是不能同时省略，我们看几个例子：
 
 ```javascript
-.01
-12.
-12.01
+0.01;
+12;
+12.01;
 ```
 
 这都是合法的数字直接量。这里就有一个问题，也是我们标题提出的问题，我们看一段代码：
@@ -162,23 +162,23 @@ implements package protected interface private public
 这时候`12.` 会被当作省略了小数点后面部分的数字，而单独看成一个整体，所以我们要想让点单独成为一个token，就要加入空格，这样写：
 
 ```javascript
-12 .toString()
+(12).toString();
 ```
 
 数字直接量还支持科学计数法，例如：
 
 ```javascript
-10.24E+2
-10.24e-2
-10.24e2
+10.24e2;
+10.24e-2;
+10.24e2;
 ```
 
 这里e后面的部分，只允许使用整数。当以`0x` `0b` 或者`0o` 开头时，表示特定进制的整数：
 
 ```javascript
-0xFA
-0o73
-0b10000
+0xfa;
+0o73;
+0b10000;
 ```
 
 上面这几种进制都不支持小数，也不支持科学计数法。
@@ -235,7 +235,7 @@ JavaScript中支持四种转义形式，还有一种虽然标准没有定义，�
 但是实际上，在JavaScript词法中，包含 `${ }` 的 Template，是被拆开分析的，如：
 
 ```javascript
-`a${b}c${d}e`
+`a${b}c${d}e`;
 ```
 
 它在JavaScript中被认为是：
@@ -262,11 +262,11 @@ d
 模板支持添加处理函数的写法，这时模板的各段会被拆开，传递给函数当参数：
 
 ```javascript
-function f(){
-    console.log(arguments);
+function f() {
+  console.log(arguments);
 }
 
-var a = "world"
+var a = "world";
 f`Hello ${a}!`; // [["Hello", "!"], world]
 ```
 
@@ -302,7 +302,7 @@ Invalid or unexpected token</p>2019-05-20</li><br/><li><span>Smallfly</span> �
 
 `${function(){console.log(1)}}`
 
- 输出：
+输出：
 
 &quot;function(){console.log(1)}&quot;
 </p>2019-10-17</li><br/><li><span>wingsico</span> 👍（3） 💬（0）<p>全文大概阐述了js中的词法分析中得到的不同类型的token，以及针对js语言特性的一些特殊token（需要根据语法分析来回传递标志来判断具体如何分词），也说了一些零宽空白符号等。但感觉实际使用时，这方面属于比较偏的方面了，但有助于我们去理解编译原理中的词法分析和一些特殊处理，以及对一些特殊场景的错误可以知其原因。</p>2020-04-13</li><br/><li><span>Geek_666</span> 👍（3） 💬（1）<p>文中的&lt;ZWNBSP&gt;(旧称&lt;BOM&gt;) 字符 BOM的全称应该是&quot;byte-order mark&quot;而不是 &quot;bit order mark”吧</p>2020-03-15</li><br/><li><span>商志远🤪</span> 👍（3） 💬（1）<p>【理论上，“ ${ } ”内部可以放任何 JavaScript 表达式代码，而这些代码是以“ } ” 结尾的，也就是说，这部分词法不允许出现“ } ”运算符。】

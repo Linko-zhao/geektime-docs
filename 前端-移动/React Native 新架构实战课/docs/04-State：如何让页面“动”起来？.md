@@ -115,7 +115,7 @@ export default function ProductTable() {
   // 在 else 分支中，使用任何 use 开头的钩子函数，都会报错
   const [products, setProducts] = useState([]);
   useEffect(() => {})
-  
+
   return <Text>购物车页面</Text>
 }
 ```
@@ -249,9 +249,9 @@ setCountArray(newCountArray)
 
 真的没问题么，复制到浏览器是true耶</p>2023-08-16</li><br/><li><span>kittyE</span> 👍（0） 💬（0）<p>声明一个3*3的二维数据或者9位的一维数组，循环数组渲染</p>2023-07-23</li><br/><li><span>简之语</span> 👍（0） 💬（0）<p>此次细看真的是行云流水一般通畅的文章，信息密度还不低，👍</p>2023-07-11</li><br/><li><span>陈彦祖</span> 👍（0） 💬（0）<p>井字棋只需要一个状态用于记录棋盘内容即可。需要可读性的好就是一个 3×3 的数组，也可以用一个一维数组来表示。一维数组在计算的时候麻烦一些。例如：
 let chessStatus: number[] = [1,null,0,null,null,null,null,null,null]
+
 1. 从左至右，从上到下分别对应数组索引 0~8
 2. 数组元素 1 表示 X 在这个位子落子，0 表示圈在这个位子落子；null 表示该位置没有落子
-
 
 </p>2023-04-27</li><br/><li><span>Geek_7831b0</span> 👍（0） 💬（0）<p>接口似乎失效了，有人能给个example json吗？</p>2022-10-20</li><br/><li><span>王昭策</span> 👍（0） 💬（0）<p>老师能不能讲一下作业啊？光布置不讲我也不知道自己想法对不对。
 </p>2022-10-17</li><br/>

@@ -757,9 +757,11 @@ https:&#47;&#47;go.dev&#47;doc&#47;fuzz&#47;</p>2022-08-05</li><br/><li><span>Ge
 也可以看看这个 https:&#47;&#47;github.com&#47;agiledragon&#47;gomonkey
 
 agiledragon&#47;gomonkey被bouk&#47;monkey的作者推荐过, 见https:&#47;&#47;esoteric.codes&#47;blog&#47;bouk-monkey-satirical-code-used-by-people-who-dont-get-the-joke</p>2022-08-06</li><br/><li><span>💎A</span> 👍（0） 💬（0）<p>越到后面人越少</p>2022-03-17</li><br/><li><span>zero</span> 👍（0） 💬（0）<p>收获满满</p>2021-12-16</li><br/><li><span>yandongxiao</span> 👍（0） 💬（0）<p>总结：
+
 1. 介绍了Example、Mock、Fake 测试规范，以及常见的框架。
 2. 重点介绍了 gomock package 的使用方法。包括运行 mockgen 的两种方式：source mode &amp; reflect mode；如何对输入和输出参数的约束。
 3. 对于复杂的 interface，你也可以采用自己实现fake测试。
 4. iam 提供了 make test 和 make cover 两个命令。</p>2021-12-04</li><br/><li><span>Daiver</span> 👍（0） 💬（0）<p>其实可以把自动生成mock和 test 放makefile中管理</p>2021-09-25</li><br/><li><span>随风而过</span> 👍（0） 💬（0）<p>一般开发中就做了单元测试和mock测试。而且还都是手写，CV复制，没想到还有大量工具来自动生成，包括很多测试框架，gei到了</p>2021-09-08</li><br/><li><span>Sch0ng</span> 👍（0） 💬（1）<p>介绍了示例测试、TestMain 测试、Mock 测试、Fake 测试，加上上一讲中的单元测试和性能测试，共6种测试类型。
-文中提供了每种测试的示例，可以作为测试方法大全，供后续需要的时候查看。</p>2021-08-19</li><br/>
+   文中提供了每种测试的示例，可以作为测试方法大全，供后续需要的时候查看。</p>2021-08-19</li><br/>
+
 </ul>

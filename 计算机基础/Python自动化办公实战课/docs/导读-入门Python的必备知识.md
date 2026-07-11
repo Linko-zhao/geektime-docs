@@ -33,7 +33,7 @@ python3 xxx.py
 
 ```
  python3 -V   # 执行的命令
- Python 3.9.1 # 返回的结果 
+ Python 3.9.1 # 返回的结果
 ```
 
 搭建Python的开发环境，是运行一切程序的基础。无论你现在手边电脑操作系统是哪一种，我都建议你马上行动，先按照刚刚讲解的步骤，正确地安装和设置Python开发环境。这样在之后的课程中，你就能马上跟着我的讲解进行操作了。
@@ -126,13 +126,13 @@ if x > 10:  # 注意结尾的冒号:
     print("if的判断结果为True")
     print("x的值大于10")
 else:
-    print("if的判断结果为False")         
+    print("if的判断结果为False")
     print("x的值小于10")
 print("程序执行结束")
 
 # 执行结果如下
 if的判断结果为True
-x的值大于10  
+x的值大于10
 程序执行结束
 ```
 
@@ -167,7 +167,7 @@ print(sum)  #条件为False循环结束,输出结果
 total = list(range(1,11))  # 定义一个1-10 的列表
 for i in total:
     print(i)
- 
+
 # 输出结果
 1
 2
@@ -205,7 +205,7 @@ import 后面指定要使用的库的名称，使用库的具体功能，通过�
 标准库的使用非常容易吧，那如何使用扩展库呢？由于扩展库都需要通过网络进行下载，因此我们还需要提前**在终端使用pip3命令进行下载和安装**。例如我希望Python可以支持Word文件格式, 我就需要在终端执行下面的代码。
 
 ```
-pip3 install python-docx 
+pip3 install python-docx
 ```
 
 下载和安装之后, 就可以像标准函数库一样使用import导入使用了。
@@ -236,16 +236,16 @@ pip3 install python-docx
 编程的学习过程，在我看来，就是一条缓慢的学习曲线，很长一段时间，成效看起来比较低，但是你学着学着，之前学的，慢慢就都理解了，然后就会了</p>2021-02-09</li><br/><li><span>王波</span> 👍（4） 💬（1）<p>这节课相当于整个课程的基石，需要反复琢磨、反复学习。</p>2021-03-16</li><br/><li><span>建明</span> 👍（4） 💬（1）<p>分支结构代码的最后一句，print(&quot;程序执行结束&quot;)，总是出错，我试了好多遍，最后发现可能是最后这段代码前面那个符号的问题，怎么把‘...’换成‘&gt;&gt;&gt;’呢？</p>2021-02-20</li><br/><li><span>建明</span> 👍（3） 💬（1）<p>x = 20if x &gt; 10: # 注意结尾的冒号: print(&quot;if的判断结果为True&quot;) print(&quot;x的值大于10&quot;)else: print(&quot;if的判断结果为False&quot;) print(&quot;x的值小于10&quot;)print(&quot;程序执行结束&quot;)
 以上这段代码在pycharm中运行可得到正确的结果，但是在Python中运行就会出错，如下：
 &gt;&gt;&gt; x = 20
-&gt;&gt;&gt; if x &gt; 10:  # 注意结尾的冒号:
-...     print(&quot;if的判断结果为True&quot;)
-...     print(&quot;x的值大于10&quot;)
+&gt;&gt;&gt; if x &gt; 10: # 注意结尾的冒号:
+... print(&quot;if的判断结果为True&quot;)
+... print(&quot;x的值大于10&quot;)
 ... else:
-...     print(&quot;if的判断结果为False&quot;)
-...     print(&quot;x的值小于10&quot;)
+... print(&quot;if的判断结果为False&quot;)
+... print(&quot;x的值小于10&quot;)
 ... print(&quot;程序执行结束&quot;)
-  File &quot;&lt;stdin&gt;&quot;, line 7
-    print(&quot;程序执行结束&quot;)
-    ^
+File &quot;&lt;stdin&gt;&quot;, line 7
+print(&quot;程序执行结束&quot;)
+^
 SyntaxError: invalid syntax
 </p>2021-03-11</li><br/><li><span>Geek_bc5d2d</span> 👍（3） 💬（3）<p>pip3 install python-docx
 提示SyntaxError: invalid syntax

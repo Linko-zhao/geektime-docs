@@ -50,9 +50,9 @@ A/B测试前的样本量计算是设计实验时不可或缺的一步。在第6�
 
 ```
 number_prop_test <-reactive({ceiling(power.prop.test(
-p1=input$avgRR_prop_test/100,	                        
+p1=input$avgRR_prop_test/100,
 p2=input$avgRR_prop_test/100*(1+input$lift_prop_test/100),
-sig.level=1-numsif_prop_test(), 
+sig.level=1-numsif_prop_test(),
 power=0.8)[[1]])
 	    })
 ```
@@ -117,16 +117,16 @@ numericInput("lift_prop_test", label = "最小可检测相对提升", value = 5,
 
 ```
 radioButtons("sif_prop_test", label = "置信水平",
-choices = list("80%","85%","90%","95%"), 
+choices = list("80%","85%","90%","95%"),
 selected = "95%",inline=T)
 ```
 
 那么这些用户输入的参数呢，最后都通过input这个函数，传递到server.R文件当中去进行样本量计算（L31-35）：
 
 ```
-number_prop_test <-reactive({ceiling(power.prop.test(p1=input$avgRR_prop_test/100,	
+number_prop_test <-reactive({ceiling(power.prop.test(p1=input$avgRR_prop_test/100,
 p2=input$avgRR_prop_test/100*(1+input$lift_prop_test/100),
-sig.level=1-numsif_prop_test(), 
+sig.level=1-numsif_prop_test(),
 power=0.8)[[1]])
 	    })
 ```
@@ -134,11 +134,11 @@ power=0.8)[[1]])
 当计算完成后，再把结果存在output函数中（L44-51）：
 
 ```
-output$resulttext1_prop_test <- renderText({ 
+output$resulttext1_prop_test <- renderText({
 	      "每组的样本量为 "
 	    })
-	    
-output$resultvalue1_prop_test<-renderText({   
+
+output$resultvalue1_prop_test<-renderText({
 	      tryIE(number_prop_test())
 	    })
 ```
@@ -164,10 +164,10 @@ tabPanel("结果",
 从均值类指标的样本量计算的逻辑上（参看第6节课）来看，我们需要函数：[power.t.test](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/power.t.test)。下面这段代码（L105-109）是在server.R文件中的具体实施：
 
 ```
-number_t_test <- 
-reactive({ceiling(power.t.test(delta=input$lift_t_test, 
+number_t_test <-
+reactive({ceiling(power.t.test(delta=input$lift_t_test,
 sd=input$sd_t_test,
-sig.level=1-numsif_t_test(), 
+sig.level=1-numsif_t_test(),
 power=0.8)[[1]])
 	    })
 ```

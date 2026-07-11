@@ -344,14 +344,19 @@ tcpdump -i eth0 -s 34
 老师对于问题2有个疑问，我最开始用的命令是&quot;tcpdump -i any -s 34&quot;，发现 -s 写成 34 抓不到网络层的目的地址字段，用 wireshark 分析发现帧头(不知道还叫不叫这个，wireshark 显示为 Linux cooked capture v1)占了 16 个字节，写成 36 就能把信息抓全了，但是写成&quot;tcpdump -i eth0 -s 34&quot; 就可以抓全</p>2022-01-17</li><br/><li><span>Realm</span> 👍（13） 💬（1）<p>补充一点基础知识，tcp的标志位在第13字节（具体可以看tcp header报文）
 
 当我们只想过滤仅有SYN标志的包时，第14个字节的二进制是00000010,十进制是2
-# tcpdump -i eth1 &#39;tcp[13] = 2&#39; 
+
+# tcpdump -i eth1 &#39;tcp[13] = 2&#39;
 
 匹配SYN+ACK包时(二进制是00010010或是十进制18)
+
 # tcpdump -i eth1 &#39;tcp[13] = 18&#39;
 
 匹配SYN或是SYN+ACK的数据时
-# tcpdump -i eth1 &#39;tcp[13] &amp; 2 = 2&#39;</p>2022-01-27</li><br/><li><span>yayiyaya</span> 👍（10） 💬（1）<p>1. 抓取 TCP SYN 包：  tcpdump  &#39;tcp[13] = 2&#39;  -w file.pcap
-2. tcpdump -s 34  -w file.pcap
+
+# tcpdump -i eth1 &#39;tcp[13] &amp; 2 = 2&#39;</p>2022-01-27</li><br/><li><span>yayiyaya</span> 👍（10） 💬（1）<p>1. 抓取 TCP SYN 包： tcpdump &#39;tcp[13] = 2&#39; -w file.pcap
+
+2. tcpdump -s 34 -w file.pcap
+
 </p>2022-01-14</li><br/><li><span>Dexter</span> 👍（5） 💬（1）<p> tcpdump -i any -n &#39;tcp[tcpflags]&amp;(tcp-rst) !=0&#39; 。 请问一下tcp[tcpflags]&amp;(tcp-rst)  这中间的&amp;表示的是按位与吗？</p>2022-02-05</li><br/><li><span>远方的风</span> 👍（3） 💬（6）<p>请教个问题，我们用java写了一个展示图片的http接口，通过nginx转发，但是偶现图片展示不了nginx发送0字节的情况，请问这种如何排查？</p>2022-01-14</li><br/><li><span>谦逊的禾苗</span> 👍（2） 💬（1）<p>太难了 我以为我有基础，发觉我这是0</p>2022-06-27</li><br/><li><span>Geek_4996c9</span> 👍（2） 💬（1）<p>tcp[tcpflags] 这个tcpflags是指啥 固定语法格式吗？
 </p>2022-04-10</li><br/><li><span>D⃰a⃰b⃰i⃰n⃰g⃰</span> 👍（2） 💬（5）<p>tcpdump这个软件百度下载吗，不会操作</p>2022-01-17</li><br/><li><span>includestdio.h</span> 👍（2） 💬（2）<p>问题已经有人回答了，那我就问个小问题吧哈哈，想问下老师文章里的libcap和bpf 关系图老师是用什么做的</p>2022-01-16</li><br/><li><span>Geek_601e15</span> 👍（1） 💬（1）<p>老师哪里有说明报文中哪个字段是0x.....  就代表syn，或者tls吗？</p>2023-08-05</li><br/><li><span>LEON</span> 👍（1） 💬（1）<p> 老师，请教下，wireshark 页面最下方，最左侧0x000这列是什么意思？
 还有最右面这列，为啥有的能显示HTTP报文内容，有的是乱码和点？

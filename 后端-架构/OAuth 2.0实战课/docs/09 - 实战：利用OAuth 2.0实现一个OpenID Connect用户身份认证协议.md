@@ -117,7 +117,7 @@ private Map<String,String> parseJwt(String jwt){
         map.put("iss",body.getIssuer());
         map.put("exp",String.valueOf(body.getExpiration().getTime()));
         map.put("iat",String.valueOf(body.getIssuedAt().getTime()));
-        
+
         return map;
     }
 ```
@@ -177,7 +177,7 @@ private Map<String,String> parseJwt(String jwt){
 
 欢迎你在留言区分享你的观点，也欢迎你把今天的内容分享给其他朋友，我们一起交流。
 <div><strong>精选留言（15）</strong></div><ul>
-<li><span>哈德韦</span> 👍（18） 💬（7）<p>还是没有搞懂 id_token 的用处是什么…… 
+<li><span>哈德韦</span> 👍（18） 💬（7）<p>还是没有搞懂 id_token 的用处是什么……
 
 1. 客户端需要解析 id_token 的话，需要和服务器端共享密钥，这怎么解决？会不会造成密钥泄漏？
 2. 如果只是解析出一些用户信息，发请求给服务器，服务器用 access_token 拿到用户信息，返回给客户端，不是也行吗？只要 access_token 没过期（即还在登录态），客户端就能拿到用户信息。

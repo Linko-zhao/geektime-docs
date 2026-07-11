@@ -51,7 +51,7 @@ Disassembly of section .text:
    d:   8b 45 f8                mov    eax,DWORD PTR [rbp-0x8]
   10:   01 d0                   add    eax,edx
   12:   5d                      pop    rbp
-  13:   c3                      ret    
+  13:   c3                      ret
 ```
 
 ```
@@ -76,8 +76,8 @@ Disassembly of section .text:
   39:   b8 00 00 00 00          mov    eax,0x0
   3e:   e8 00 00 00 00          call   43 <main+0x43>
   43:   b8 00 00 00 00          mov    eax,0x0
-  48:   c9                      leave  
-  49:   c3                      ret    
+  48:   c9                      leave
+  49:   c3                      ret
 ```
 
 既然代码已经被我们“编译”成了指令，我们不妨尝试运行一下 ./link\_example.o。
@@ -127,7 +127,7 @@ Disassembly of section .text:
  6bd:   8b 45 f8                mov    eax,DWORD PTR [rbp-0x8]
  6c0:   01 d0                   add    eax,edx
  6c2:   5d                      pop    rbp
- 6c3:   c3                      ret    
+ 6c3:   c3                      ret
 00000000000006c4 <main>:
  6c4:   55                      push   rbp
  6c5:   48 89 e5                mov    rbp,rsp
@@ -147,8 +147,8 @@ Disassembly of section .text:
  6fd:   b8 00 00 00 00          mov    eax,0x0
  702:   e8 59 fe ff ff          call   560 <printf@plt>
  707:   b8 00 00 00 00          mov    eax,0x0
- 70c:   c9                      leave  
- 70d:   c3                      ret    
+ 70c:   c9                      leave
+ 70d:   c3                      ret
  70e:   66 90                   xchg   ax,ax
 ...
 Disassembly of section .fini:

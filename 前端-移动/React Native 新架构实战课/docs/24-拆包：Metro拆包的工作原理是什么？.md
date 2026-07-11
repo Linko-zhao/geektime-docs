@@ -88,7 +88,7 @@ const Mcs = require('metro-code-split')
 // 拆包的配置
 const mcs = new Mcs({
   output: {
-    // 配置你的 CDN 的 BaseURL 
+    // 配置你的 CDN 的 BaseURL
     publicPath: 'https://static001.geekbang.org/resource/rn',
   },
   dll: {
@@ -177,7 +177,7 @@ $ yarn build:dllJson
   "require-node_modules/react-native/Libraries/Core/InitializeCore.js", // react-native 初始化模块
   "node_modules/@babel/runtime/helpers/createClass.js", // babel 的类模块
   "node_modules/react-native/index.js", // react-native 入口模块
-  "node_modules/metro-runtime/src/polyfills/require.js", // require 运行时模块 
+  "node_modules/metro-runtime/src/polyfills/require.js", // require 运行时模块
   "node_modules/react/index.js" // react 模块
 ]
 ```
@@ -326,18 +326,16 @@ https:&#47;&#47;juejin.cn&#47;post&#47;7067895964794617892?share_token=1a0d8603-
 D:\software\metro-code-split-master\Example&gt;yarn build:dll
 yarn run v1.22.21
 $ mcs-scripts build -t dll -od public&#47;dll
-                    Welcome to Metro!
-              Fast - Scalable - Integrated
-
+Welcome to Metro!
+Fast - Scalable - Integrated
 
 warning: failed to load the preRefPath correctly! are you setting the &quot;dll.referenceDir&quot; correctly?
 warning: failed to load the dllRefPath correctly! are you setting the &quot;dll.referenceDir&quot; correctly?
 info Writing bundle output to:, public\dll\_dll.ios.bundle
 info Done writing bundle output
 warn Assets destination folder is not set, skipping...
-                    Welcome to Metro!
-              Fast - Scalable - Integrated
-
+Welcome to Metro!
+Fast - Scalable - Integrated
 
 warning: failed to load the preRefPath correctly! are you setting the &quot;dll.referenceDir&quot; correctly?
 warning: failed to load the dllRefPath correctly! are you setting the &quot;dll.referenceDir&quot; correctly?

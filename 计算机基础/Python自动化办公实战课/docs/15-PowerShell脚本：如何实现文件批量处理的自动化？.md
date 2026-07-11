@@ -124,12 +124,12 @@ Cmdlet          Set-Item                        Set-Item [-Path] <String[]> ...
 我们了解了“Rename-Item”命令的功能后，再继续学习它的**参数格式和内容**。它的参数格式是： **“Rename-Item** 旧的文件名 **-NewName** 新的文件名**”**。我在代码中使用了这样一行命令对文件名称进行了修改：
 
 ```
-Rename-Item $_ -NewName ("new_"+$_.BaseName+"_new.txt") 
+Rename-Item $_ -NewName ("new_"+$_.BaseName+"_new.txt")
 ```
 
 在“Rename-Item”命令的参数中，你需要关注**“$\_”这个内置变量**。它的功能是**表示当前对象。**在我们的例子中，它表示foreach每次循环时，通过“｜”传入的文件名称。
 
-不过当你需要改名时，还有另外一种方法，那就是使用“$*.BaseName”来获得文件(不包含扩展名的)基本名称，以及通过“$*.extension”来获得扩展名。例如：“10.txt”文件的基本名称是“10”，扩展名是“.txt”。当我把“10.txt”赋值给“$*”之后，就可以使用“$*.BaseName”取得基本名称“10”，使用“$\_.extension”取得扩展名“.txt”。
+不过当你需要改名时，还有另外一种方法，那就是使用“$*.BaseName”来获得文件(不包含扩展名的)基本名称，以及通过“$_.extension”来获得扩展名。例如：“10.txt”文件的基本名称是“10”，扩展名是“.txt”。当我把“10.txt”赋值给“$*”之后，就可以使用“$_.BaseName”取得基本名称“10”，使用“$\_.extension”取得扩展名“.txt”。
 
 在“Rename-Item”命令的参数“("new\_"+$\_.BaseName+"\_new.txt")”，这部分代码中，除了提取了“10.txt”的基本名称“10”之外，我还利用“+”符号把"new"字符串和基本名称“10”连接，形成新的文件名“new\_10\_new.txt”字符串。也就是说，把将、新的字符串作为“Rename-Item”的参数，就实现了文件重命名。
 
@@ -222,5 +222,5 @@ dir | Where-Object{ ($_.extension -eq ".zip" ) -or ($_.extension -eq ".rar" ) }
 <div><strong>精选留言（4）</strong></div><ul>
 <li><span>小小明</span> 👍（1） 💬（1）<p>查到文档地址是：https:&#47;&#47;docs.microsoft.com&#47;zh-cn&#47;previous-versions&#47;powershell&#47;module&#47;microsoft.powershell.management&#47;remove-item?view=powershell-6
 
-直接Remove-Item  *.txt就可以删除当前目录下的文本文件</p>2021-06-22</li><br/><li><span>Soul of the Dragon</span> 👍（1） 💬（1）<p>思考题：Remove-Item * -Include *.txt -Recurse，亲测有效。</p>2021-03-16</li><br/><li><span>范</span> 👍（1） 💬（0）<p>powershell以前主要执行服务器端命令。内置很多命令，也可以调用各种命令。</p>2021-04-14</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-12</li><br/>
+直接Remove-Item *.txt就可以删除当前目录下的文本文件</p>2021-06-22</li><br/><li><span>Soul of the Dragon</span> 👍（1） 💬（1）<p>思考题：Remove-Item * -Include *.txt -Recurse，亲测有效。</p>2021-03-16</li><br/><li><span>范</span> 👍（1） 💬（0）<p>powershell以前主要执行服务器端命令。内置很多命令，也可以调用各种命令。</p>2021-04-14</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-12</li><br/>
 </ul>

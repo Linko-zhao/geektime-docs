@@ -166,7 +166,7 @@ tag实际返回一个闭包，你可以看一下它的定义。
 ```plain
 pub fn tag<T, Input, Error: ParseError<Input>>(
     tag: T
-) -> impl Fn(Input) -> IResult<Input, Input, Error> 
+) -> impl Fn(Input) -> IResult<Input, Input, Error>
 where
     Input: InputTake + Compare<T>,
     T: InputLength + Clone,
@@ -202,7 +202,7 @@ pub struct Coordinate {
 
 use nom::character::complete::i32;
 
-// 解析 "x, y" 这种格式 
+// 解析 "x, y" 这种格式
 fn parse_integer_pair(input: &str) -> IResult<&str, (i32, i32)> {
     separated_pair(
         i32,
@@ -403,38 +403,40 @@ use nom::{
 use std::{fs, io::Error};
 
 fn read_file(file_path: &amp;str) -&gt; Result&lt;String, Error&gt; {
-    fs::read_to_string(file_path)
+fs::read_to_string(file_path)
 }
 
 &#47;&#47; parse_csv =&gt; parser
 fn parse_csv(input: &amp;str) -&gt; IResult&lt;&amp;str, Vec&lt;Vec&lt;&amp;str&gt;&gt;&gt; {
-    println!(&quot;input csv file:&quot;);
-    println!(&quot;{}&quot;, input);
-    &#47;&#47; terminated =&gt; combinator
-    &#47;&#47; line_ending =&gt; parser
-    &#47;&#47; opt =&gt; combinator
-    separated_list0(terminated(line_ending, opt(line_ending)), parse_line)(input)
+println!(&quot;input csv file:&quot;);
+println!(&quot;{}&quot;, input);
+&#47;&#47; terminated =&gt; combinator
+&#47;&#47; line_ending =&gt; parser
+&#47;&#47; opt =&gt; combinator
+separated_list0(terminated(line_ending, opt(line_ending)), parse_line)(input)
 }
 
 &#47;&#47; parse_line =&gt; parser
 fn parse_line(input: &amp;str) -&gt; IResult&lt;&amp;str, Vec&lt;&amp;str&gt;&gt; {
-    &#47;&#47; separated_list0 =&gt; a combinator
-    &#47;&#47; accepts 2 parser
-    separated_list0(char(&#39;,&#39;), is_not(&quot;,\r\n&quot;))(input)
+&#47;&#47; separated_list0 =&gt; a combinator
+&#47;&#47; accepts 2 parser
+separated_list0(char(&#39;,&#39;), is_not(&quot;,\r\n&quot;))(input)
 }
 
 fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
-    let file_content = read_file(&quot;&#47;path&#47;to&#47;my&#47;file.csv&quot;)?;
-    match parse_csv(&amp;file_content) {
-        Ok((_, rows)) =&gt; {
-            for row in rows {
-                println!(&quot;{:?}&quot;, row);
-            }
-        }
-        Err(e) =&gt; println!(&quot;Failed to parse CSV: {:?}&quot;, e),
-    }
-    Ok(())
+let file_content = read_file(&quot;&#47;path&#47;to&#47;my&#47;file.csv&quot;)?;
+match parse_csv(&amp;file_content) {
+Ok((_, rows)) =&gt; {
+for row in rows {
+println!(&quot;{:?}&quot;, row);
 }
+}
+Err(e) =&gt; println!(&quot;Failed to parse CSV: {:?}&quot;, e),
+}
+Ok(())
+}
+
 ```
 </p>2024-01-05</li><br/><li><span>tianyu0901</span> 👍（0） 💬（2）<p>老师，推荐一个SQL解析器</p>2023-12-27</li><br/><li><span>Geek_f9c361</span> 👍（0） 💬（0）<p>解析一个坐标这个写的不够健壮，逗号前后应该可以有任意空白，这里没有处理</p>2024-08-30</li><br/>
 </ul>
+```

@@ -249,7 +249,7 @@ iterator erase(iterator position) {
 ```c++
 void pop_front() { erase(begin()) };
 void pop_back() {
-  iterator tmp = end(); 
+  iterator tmp = end();
   erase(--tmp);
 }
 

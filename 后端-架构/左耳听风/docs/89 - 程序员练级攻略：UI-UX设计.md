@@ -102,17 +102,18 @@ Material Design于2014年的Google I/O大会上发布（参看 [Google I/O 2014 
 除此之外，还有几个动画设计指南和相关文章供你参考和学习。
 
 - [6 Animation Guidelines for UX Design](https://blog.prototypr.io/6-animation-guidelines-for-ux-design-74c90eb5e47a)。这是Prototypr公司的一个指南，其中主要指出，动画效果不是为了炫配，而是能让你的UI/UX能活起来，自然，不消耗时间，并且是生动故事型的动画效果。其中还推荐了如下几篇很不错的文章。
-  
+
   - [Transitional Interfaces](https://medium.com/@pasql/transitional-interfaces-926eb80d64e3)
   - [UI Animation and UX: A Not-So-Secret Friendship](https://alistapart.com/article/ui-animation-and-ux-a-not-so-secret-friendship)
   - [Invisible animation](https://medium.com/@stevenfabre/invisible-animation-ffa27d0b77e5)
   - [Creating Usability with Motion: The UX in Motion Manifesto](https://medium.com/ux-in-motion/creating-usability-with-motion-the-ux-in-motion-manifesto-a87a4584ddc)
+
 - [Designing Interface Animation](http://alistapart.com/article/designing-interface-animation) ，这篇文章同样说明，任何一个小动画都是要讲一个微故事的，而且这些微故事会和你的品牌和产品理念相融合。动画会给人更深的印象，让人们更容易记住你。这篇文章主要是讲品牌动画。
 - [Animation principles in motion design](https://www.freepik.com/blog/animation-principles-in-motion-design/) ，这篇文章有点像设计模式，给了一些动画效果的套路和演示。
 - [Creating Usability with Motion: The UX in Motion Manifesto](https://medium.com/ux-in-motion/creating-usability-with-motion-the-ux-in-motion-manifesto-a87a4584ddc)
 - [Integrating Animation into a Design System](http://alistapart.com/article/integrating-animation-into-a-design-system)
 - Great UI/UX Animations是设计师丹尼尔（Daniel）收集的一些很不错的动画，可以给你一些灵感。
-  
+
   - [Great UI/UX Animations 第一组](https://fromupnorth.com/mixed-ui-ux-animations-4d7a22f9ab7)
   - [Great UI/UX Animations 第二组](https://fromupnorth.com/great-ui-ux-animations-3e9a0baa336f)
 
@@ -152,22 +153,26 @@ Material Design于2014年的Google I/O大会上发布（参看 [Google I/O 2014 
 
 - [开篇词](https://time.geekbang.org/column/article/8136)
 - 入门篇
-  
+
   - [零基础启蒙](https://time.geekbang.org/column/article/8216)
   - [正式入门](https://time.geekbang.org/column/article/8217)
+
 - 修养篇
-  
+
   - [程序员修养](https://time.geekbang.org/column/article/8700)
+
 - 专业基础篇
-  
+
   - [编程语言](https://time.geekbang.org/column/article/8701)
   - [理论学科](https://time.geekbang.org/column/article/8887)
   - [系统知识](https://time.geekbang.org/column/article/8888)
+
 - 软件设计篇
-  
+
   - [软件设计](https://time.geekbang.org/column/article/9369)
+
 - 高手成长篇
-  
+
   - [Linux系统、内存和网络（系统底层知识）](https://time.geekbang.org/column/article/9759)
   - [异步I/O模型和Lock-Free编程（系统底层知识）](https://time.geekbang.org/column/article/9851)
   - [Java底层知识](https://time.geekbang.org/column/article/10216)
@@ -182,6 +187,7 @@ Material Design于2014年的Google I/O大会上发布（参看 [Google I/O 2014 
   - [前端性能优化和框架（前端方向）](https://time.geekbang.org/column/article/12389)
   - [UI/UX设计（前端方向）](https://time.geekbang.org/column/article/12486)
   - [技术资源集散地](https://time.geekbang.org/column/article/12561)
+
 <div><strong>精选留言（14）</strong></div><ul>
 <li><span>manx00</span> 👍（33） 💬（4）<p>看了这么多的分享，突然想到一个问题，请问左耳朵耗子是怎样存档标记这些资料并在需要的时候信手拈来的？</p>2018-08-07</li><br/><li><span>屈超</span> 👍（9） 💬（0）<p>大佬，求安卓和IOS的学习路线( •̀∀•́ )</p>2018-08-07</li><br/><li><span>winterxxx</span> 👍（5） 💬（0）<p>哈喽耗子叔，今天在南京见到真人了哈哈</p>2018-08-08</li><br/><li><span>钱</span> 👍（3） 💬（0）<p>原理，思想，方法，基础，兴趣，英语，这是老师的学习利器！</p>2019-01-12</li><br/><li><span>靠人品去赢</span> 👍（1） 💬（0）<p>请问大家，有没有好的PS使用资料。</p>2018-12-26</li><br/><li><span>lyjustforfun</span> 👍（1） 💬（0）<p>好多😭</p>2018-10-08</li><br/><li><span>沫沫（美丽人生）</span> 👍（1） 💬（0）<p>陈老师，UED这块有什么好的资料可以推荐吗?我们这块做的是一款2B的软件。多谢啦。</p>2018-08-08</li><br/><li><span>ydp</span> 👍（1） 💬（0）<p>非常好，期待耗子老师在写一篇大数据相关的文章</p>2018-08-07</li><br/><li><span>小薛薛</span> 👍（1） 💬（0）<p>问个问题，学习很难直接光定向一门技术，可以2-3个切换进行学习吗？ 例如 php技术也需要懂些js 数据库</p>2018-08-07</li><br/><li><span>aoe</span> 👍（0） 💬（0）<p>这篇文章学会了，能让很多小姐姐眼前一亮</p>2021-09-09</li><br/><li><span>小菜鸟</span> 👍（0） 💬（0）<p>非常棒</p>2020-05-15</li><br/><li><span>lubiaook</span> 👍（0） 💬（0）<p>最讨厌项目经理拿用户体验说事  他自己认为的用户体验才是用户体验  赶紧推荐给他们</p>2020-04-27</li><br/><li><span>Geeker</span> 👍（0） 💬（0）<p>Ant Design？应该也是设计语言吧？</p>2019-03-21</li><br/><li><span>暴君</span> 👍（0） 💬（0）<p>感觉文章越来越广泛了，能不能回归一些技术性与专业性</p>2018-08-24</li><br/>
 </ul>

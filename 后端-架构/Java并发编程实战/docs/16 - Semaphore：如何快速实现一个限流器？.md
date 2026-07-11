@@ -32,7 +32,7 @@ class Semaphore{
   Semaphore(int c){
     this.count=c;
   }
-  // 
+  //
   void down(){
     this.count--;
     if(this.count<0){
@@ -63,9 +63,9 @@ class Semaphore{
 ```
 static int count;
 //初始化信号量
-static final Semaphore s 
+static final Semaphore s
     = new Semaphore(1);
-//用信号量保证互斥    
+//用信号量保证互斥
 static void addOne() {
   s.acquire();
   try {
@@ -117,9 +117,9 @@ class ObjPool<T, R> {
   }
 }
 // 创建对象池
-ObjPool<Long, String> pool = 
+ObjPool<Long, String> pool =
   new ObjPool<Long, String>(10, 2);
-// 通过对象池获取t，之后执行  
+// 通过对象池获取t，之后执行
 pool.exec(t -> {
     System.out.println(t);
     return t.toString();
@@ -146,7 +146,7 @@ pool.exec(t -> {
 
 对于chaos同学说return之前释放的问题，我觉得可以这么理解：return的是执行后的结果，而不是“执行”。所以顺序应该是这样的：1acquire；2apply；3finally release；4return2的结果</p>2019-04-04</li><br/><li><span>缪文</span> 👍（16） 💬（1）<p>这个限流器实际上限的是并发量，也就是同时允许多少个请求通过，如果限制每秒请求数，不是这个实现的吧</p>2019-04-06</li><br/><li><span>刘彦辉</span> 👍（10） 💬（3）<p>假如有3个线程，线程A、B、C，信号量计数器为1，线程A执行down的时候变为0，不阻塞；线程B执行down，变为-1，阻塞；线程C执行down变为-2，阻塞。当线程A执行完，调用up后，变为-1，此时唤醒一个线程，那么请问唤醒之后的操作呢？唤醒之后直接就执行了业务代码了？还是唤醒之后还需要去先执行down？按分析的话应该不能执行down了，如果执行down的话，计数器变为-2，还会阻塞，所以是不是这块儿的阻塞和唤醒也是用的wait和notify呢？唤醒之后，从阻塞的代码开始继续执行，这样就可以成功执行下去了。麻烦老师解答一下哈，谢谢。</p>2019-09-20</li><br/><li><span>crazypokerk</span> 👍（9） 💬（4）<p>老师，那个计数器中得s.acquire()是需要捕获异常的。
 static int count;
-    static final Semaphore s = new Semaphore(1);
+static final Semaphore s = new Semaphore(1);
 
     static void addOne() throws InterruptedException {
         s.acquire();
@@ -156,6 +156,7 @@ static int count;
             s.release();
         }
     }</p>2019-04-04</li><br/><li><span>ken</span> 👍（7） 💬（2）<p>
+
 public class Food {
 
     public String name;
@@ -174,9 +175,8 @@ public class Food {
     public long getWarmTime() {
         return warmTime;
     }
+
 }
-
-
 
 public class MicrowaveOven {
 
@@ -201,6 +201,7 @@ public class MicrowaveOven {
     public String getName() {
         return name;
     }
+
 }
 public class MicrowaveOvenPool {
 
@@ -237,10 +238,9 @@ import java.util.concurrent.Semaphore;
 import java.util.function.Function;
 
 public class ObjPool&lt;T,R&gt; {
-    private List&lt;T&gt; pool;
-    &#47;&#47;使用信号量实现限流器
-    private final Semaphore semaphore;
-
+private List&lt;T&gt; pool;
+&#47;&#47;使用信号量实现限流器
+private final Semaphore semaphore;
 
     ObjPool(T[] tArray){
         pool=new Vector&lt;T&gt;(){};
@@ -291,7 +291,6 @@ public class ObjPool&lt;T,R&gt; {
 
     }
 
-
 }
 </p>2019-07-07</li><br/><li><span>小和尚笨南北</span> 👍（5） 💬（6）<p>semaphore底层通过AQS实现，AQS内部通过一个volatile变量间接实现同步。
 根据happen-before原则的volatile规则和传递性规则。使用arraylist也不会发生线程安全问题。</p>2019-04-04</li><br/><li><span>木偶人King</span> 👍（4） 💬（1）<p>ObjPool(int size, T t){
@@ -303,12 +302,12 @@ public class ObjPool&lt;T,R&gt; {
   }
  &#47;&#47;--------------------------------
 
-老师这里pool.add(t)  一直循环添加的是同一个引用对象。没太明白。 为什么不是添加不同的t </p>2019-04-09</li><br/><li><span>QQ怪</span> 👍（3） 💬（2）<p>用初始化为1的Semaphore和管程来单单控制线程安全，哪个更有优势？为啥java不直接用信号量来实现互斥?</p>2019-04-05</li><br/><li><span>Presley</span> 👍（3） 💬（1）<p>进入临界区的N个线程不安全。add&#47;remove都是不安全的。拿remove举例, ArrayList remove()源码：
+老师这里pool.add(t) 一直循环添加的是同一个引用对象。没太明白。 为什么不是添加不同的t </p>2019-04-09</li><br/><li><span>QQ怪</span> 👍（3） 💬（2）<p>用初始化为1的Semaphore和管程来单单控制线程安全，哪个更有优势？为啥java不直接用信号量来实现互斥?</p>2019-04-05</li><br/><li><span>Presley</span> 👍（3） 💬（1）<p>进入临界区的N个线程不安全。add&#47;remove都是不安全的。拿remove举例, ArrayList remove()源码：
 public E remove(int index) {
-        rangeCheck(index);
+rangeCheck(index);
 
         modCount++;
-       
+
         &#47;&#47; 假设连个线程 t1,t2都执行到这一步，t1 让出cpu,t2执行
         E oldValue = elementData(index);
         &#47;&#47; 到这步,t1继续执行，这时t1,t2拿到的oldValue是一样的，两个线程能拿到同一个对象，明显线程不安全啊
@@ -321,5 +320,6 @@ public E remove(int index) {
 
         return oldValue;
     }
+
 </p>2019-04-04</li><br/>
 </ul>

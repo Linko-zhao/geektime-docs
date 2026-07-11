@@ -88,7 +88,7 @@ var senders = pc.getSenders(); //从RTCPeerConnection中获得所有的sender
 //遍历每个sender
 senders.forEach( sender => {
   if(sender && sender.track.kind === 'video'){ //找到视频的 sender
-      vsender = sender; 
+      vsender = sender;
   }
 });
 
@@ -101,7 +101,7 @@ if(!parameters.encodings){ //判断参数里是否有encoding域
 parameters.encodings[0].maxBitrate = bw * 1000;
 
 //将调整好的码率重新设置回sender中去，这样设置的码率就起效果了。
-vsender.setParameters(parameters) 
+vsender.setParameters(parameters)
        .then(()=>{
           console.log('Successed to set parameters!');
        }).catch(err => {
@@ -138,17 +138,17 @@ vsender.setParameters(parameters)
 降低传输控制码率，指的是不对源数据进行任何处理，而是强行降低发包速度，这可能会造成严重延迟，因此这个是webRTC自己控制的。
 
 而对于用户来说，我们只要知道通过maxBitrate来控制码率即可</p>2019-11-25</li><br/><li><span>Geek_91a5bd</span> 👍（2） 💬（1）<p>通过媒体描述字段进行控制，如a=rtpmap:103 ISAC&#47;16000，即是控制音频的采样率=16000</p>2020-11-28</li><br/><li><span>刘丹</span> 👍（1） 💬（1）<p>senders.forEach( sender =&gt; {
-  if(sender &amp;&amp; sender.track.kind === &#39;video&#39;){ &#47;&#47; 找到视频的 sender
-      vsender = sender; 
-  }
+if(sender &amp;&amp; sender.track.kind === &#39;video&#39;){ &#47;&#47; 找到视频的 sender
+vsender = sender;
+}
 });
 如果有多个sender符合 sender.track.kind === &#39;video&#39; ，那么只有最后一个sender被处理？</p>2019-08-13</li><br/><li><span>Geek_066e6b</span> 👍（0） 💬（1）<p>老师，通过getUserMedia设置的是采集的分辨率，还是编码后的分辨率呢？如果不是编码后分辨率，怎么设置呢？最后，还想咨询下，如果想同时支持上行多条不同分辨率的视频流，我们该怎么去控制呢？</p>2020-06-11</li><br/><li><span>Desmond</span> 👍（0） 💬（1）<p>如果涉及到无线传输的话，物理传输带宽变化很快，请问WebRTC有办法测量到当前的物理带宽吗？</p>2020-03-30</li><br/><li><span>Benjamin</span> 👍（0） 💬（1）<p>还是一直好奇 SDP 控制的问题，SDP 协商控制连接完成前就做好了。
 
 在音视频通信中，如何再次使用 SDP 控制呢？断开一次，重新相互投递 offer ？</p>2020-03-25</li><br/><li><span>李宁</span> 👍（0） 💬（1）<p>老师，请教两个问题：
 1、怎么得到当前物理链路质量的信息（丢包率、延迟、抖动）
-2、帧率和延迟有没有关系，如果没有关系，是否需要根据当前延迟状况动态调节帧率</p>2020-01-25</li><br/><li><span>蔡林</span> 👍（0） 💬（1）<p>一对一场景中，二者是通过点到点的方式连接的，中间没有经过服务器的中转对音视频流进行中转，流的质量完全依赖于发送端和接收端本地出口的网络质量，请问老师我的理解对吗？</p>2019-12-21</li><br/><li><span>天天</span> 👍（0） 💬（1）<p>码率和压缩码率是同一个概念吗？</p>2019-12-11</li><br/><li><span>天一</span> 👍（0） 💬（1）<p>老师，你好 ，代码中的 
-	key  : fs.readFileSync(&#39;.&#47;cert&#47;1557605_www.learningrtc.cn.key&#39;),
-	cert : fs.readFileSync(&#39;.&#47;cert&#47;1557605_www.learningrtc.cn.pem&#39;) 
+2、帧率和延迟有没有关系，如果没有关系，是否需要根据当前延迟状况动态调节帧率</p>2020-01-25</li><br/><li><span>蔡林</span> 👍（0） 💬（1）<p>一对一场景中，二者是通过点到点的方式连接的，中间没有经过服务器的中转对音视频流进行中转，流的质量完全依赖于发送端和接收端本地出口的网络质量，请问老师我的理解对吗？</p>2019-12-21</li><br/><li><span>天天</span> 👍（0） 💬（1）<p>码率和压缩码率是同一个概念吗？</p>2019-12-11</li><br/><li><span>天一</span> 👍（0） 💬（1）<p>老师，你好 ，代码中的
+key : fs.readFileSync(&#39;.&#47;cert&#47;1557605_www.learningrtc.cn.key&#39;),
+cert : fs.readFileSync(&#39;.&#47;cert&#47;1557605_www.learningrtc.cn.pem&#39;)
 这些 key 和 pem 哪里得到？</p>2019-11-06</li><br/><li><span>Derek</span> 👍（0） 💬（1）<p>传输信道的充分利用是由webrtc内部控制。但webrtc是否会反馈给应用层，来让应用层调整编码码率，以适应当前的信道状况？如果是，是否就是通过这个maxbitrate参数调节？</p>2019-09-15</li><br/><li><span>诸葛亮了</span> 👍（0） 💬（1）<p>怎么样设置能保证接收端的视频分辨率为720p呢？</p>2019-08-20</li><br/><li><span>tommy_zhang</span> 👍（0） 💬（1）<p>m=video 9 UDP&#47;TLS&#47;RTP&#47;SAVPF 96 97 98 99 100 101 127
 c=IN IP4 0.0.0.0
 b=AS:500

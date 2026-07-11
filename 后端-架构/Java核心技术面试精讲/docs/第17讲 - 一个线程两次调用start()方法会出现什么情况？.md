@@ -155,7 +155,7 @@ private void set(ThreadLocal<?> key, Object value) {
 //  扫描并清理发现的废弃条目，并检查容量是否超限
 	if (!cleanSomeSlots(i, sz) && sz >= threshold)
     	rehash();// 清理废弃条目，如果仍然超限，则扩容（加倍）
-}  
+}
 ```
 
 具体的清理逻辑是实现在cleanSomeSlots和expungeStaleEntry之中，如果你有兴趣可以自行阅读。

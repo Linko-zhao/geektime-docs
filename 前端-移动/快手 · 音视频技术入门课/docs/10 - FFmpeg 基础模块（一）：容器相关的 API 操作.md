@@ -7,7 +7,7 @@
 在具体讲解如何使用FFmpeg的API之前，为了方便你查看API对应的代码，首先我会介绍一下FFmpeg的代码结构目录，我建议你先从[FFmpeg的官方代码库](https://ffmpeg.org/download.html)下载一份代码。
 
 ```plain
-git clone git://source.ffmpeg.org/ffmpeg.git 
+git clone git://source.ffmpeg.org/ffmpeg.git
 ```
 
 从目录中可以看到，FFmpeg目录中包含了FFmpeg库代码目录、构建工程目录、自测子系统目录等，具体内容如下：
@@ -123,7 +123,7 @@ av_opt_set(out_ctx-&gt;priv_data, &quot;movflags&quot;, &quot;faststart&quot;, 0
 avformat_write_header(out_ctx, NULL);
 
 while (&#47;* 读取AVPacket *&#47;) {
-    av_interleaved_write_frame(out_ctx, &amp;packet);
+av_interleaved_write_frame(out_ctx, &amp;packet);
 }
 
 av_write_trailer(out_ctx);

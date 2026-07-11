@@ -57,7 +57,7 @@ Content-Type: application/json
 很明显，发送这样的请求（name 超长）是期待 Spring Validation 能拦截它的，我们的预期响应如下（省略部分响应字段）：
 
 ```
-HTTP/1.1 400 
+HTTP/1.1 400
 Content-Type: application/json
 
 {
@@ -122,9 +122,9 @@ private HandlerMethodArgumentResolver getArgumentResolver(MethodParameter parame
    if (result == null) {
       //轮询所有的HandlerMethodArgumentResolver
       for (HandlerMethodArgumentResolver resolver : this.argumentResolvers) {
-         //判断是否匹配当前HandlerMethodArgumentResolver 
+         //判断是否匹配当前HandlerMethodArgumentResolver
          if (resolver.supportsParameter(parameter)) {
-            result = resolver;            
+            result = resolver;
             this.argumentResolverCache.put(parameter, result);
             break;
          }
@@ -211,7 +211,7 @@ public @interface ValidCustomized {
 public class Student {
     @Size(max = 10)
     private String name;
-    private short age;   
+    private short age;
     private Phone phone;
 }
 @Data
@@ -398,34 +398,34 @@ public void deleteStudent(@PathVariable("id") @Range(min = 1,max = 10000) String
 </p>2021-05-19</li><br/><li><span>慎独明强</span> 👍（2） 💬（0）<p>今天讲的两个案例亲身经历过，特别是级联检验时，因为没有加注解导致未检验。面向百度开发去了，汗颜 没有去面向源码深入研究为什么需要加注解才能级联检验</p>2021-05-31</li><br/><li><span>路在哪</span> 👍（1） 💬（0）<p>思考题：负责解析Id的参数解析器是：PathVariableMethodArgumentResolver，然后校验参数的解析器是：ServletRequestMethodArgumentResolver，该解析器在DispatcherServlet#processDispatchResult方法中得到并校验参数</p>2022-12-14</li><br/><li><span>唐国强</span> 👍（1） 💬（0）<p>很多问题真的是没有仔细学习文档挖的坑，反而浪费了时间</p>2022-01-12</li><br/><li><span>Monday</span> 👍（1） 💬（1）<p>思考题：解析器为 org.springframework.web.servlet.mvc.method.annotation.PathVariableMethodArgumentResolver，触发debug了半天没找着。</p>2021-07-10</li><br/><li><span>X</span> 👍（0） 💬（0）<p>org.springframework.web.servlet.mvc.method.annotation.PathVariableMethodArgumentResolver
 
 cglib代理校验
-org.springframework.validation.beanvalidation.MethodValidationInterceptor</p>2023-07-18</li><br/><li><span>路在哪</span> 👍（0） 💬（0）<p>负责解析ID值的参数解析器是：PathVariableMethodArgumentResolver  负责校验ID的解析器是：ServletRequestMethodArgumentResolver</p>2022-12-14</li><br/><li><span>子夜枯灯</span> 👍（0） 💬（0）<p>打卡，完成本节课程</p>2022-02-07</li><br/><li><span>杨宇</span> 👍（0） 💬（0）<p>@Validated 支持分组 groups，使用起来更加灵活。</p>2021-12-28</li><br/><li><span>一记妙蛙直拳</span> 👍（0） 💬（2）<p>老师：案例一的问题修正并没有解决问题，虽然进入了校验判断，但是遍历Validator时getValidators()集合为空，校验操作并未执行
+org.springframework.validation.beanvalidation.MethodValidationInterceptor</p>2023-07-18</li><br/><li><span>路在哪</span> 👍（0） 💬（0）<p>负责解析ID值的参数解析器是：PathVariableMethodArgumentResolver 负责校验ID的解析器是：ServletRequestMethodArgumentResolver</p>2022-12-14</li><br/><li><span>子夜枯灯</span> 👍（0） 💬（0）<p>打卡，完成本节课程</p>2022-02-07</li><br/><li><span>杨宇</span> 👍（0） 💬（0）<p>@Validated 支持分组 groups，使用起来更加灵活。</p>2021-12-28</li><br/><li><span>一记妙蛙直拳</span> 👍（0） 💬（2）<p>老师：案例一的问题修正并没有解决问题，虽然进入了校验判断，但是遍历Validator时getValidators()集合为空，校验操作并未执行
 protected void validateIfApplicable(WebDataBinder binder, MethodParameter parameter) {
-   Annotation[] annotations = parameter.getParameterAnnotations();
-   for (Annotation ann : annotations) {
-      Validated validatedAnn = AnnotationUtils.getAnnotation(ann, Validated.class);
-      &#47;&#47;判断是否需要校验
-      if (validatedAnn != null || ann.annotationType().getSimpleName().startsWith(&quot;Valid&quot;)) {
-         Object hints = (validatedAnn != null ? validatedAnn.value() : AnnotationUtils.getValue(ann));
-         Object[] validationHints = (hints instanceof Object[] ? (Object[]) hints : new Object[] {hints});
-         &#47;&#47;执行校验
-         binder.validate(validationHints);
-         break;
-      }
-   }
+Annotation[] annotations = parameter.getParameterAnnotations();
+for (Annotation ann : annotations) {
+Validated validatedAnn = AnnotationUtils.getAnnotation(ann, Validated.class);
+&#47;&#47;判断是否需要校验
+if (validatedAnn != null || ann.annotationType().getSimpleName().startsWith(&quot;Valid&quot;)) {
+Object hints = (validatedAnn != null ? validatedAnn.value() : AnnotationUtils.getValue(ann));
+Object[] validationHints = (hints instanceof Object[] ? (Object[]) hints : new Object[] {hints});
+&#47;&#47;执行校验
+binder.validate(validationHints);
+break;
+}
+}
 }
 
 public void validate(Object... validationHints) {
-		Object target = getTarget();
-		Assert.state(target != null, &quot;No target to validate&quot;);
-		BindingResult bindingResult = getBindingResult();
-		&#47;&#47; Call each validator with the same binding result
-		for (Validator validator : getValidators()) {
-			if (!ObjectUtils.isEmpty(validationHints) &amp;&amp; validator instanceof SmartValidator) {
-				((SmartValidator) validator).validate(target, bindingResult, validationHints);
-			}
-			else if (validator != null) {
-				validator.validate(target, bindingResult);
-			}
-		}
+Object target = getTarget();
+Assert.state(target != null, &quot;No target to validate&quot;);
+BindingResult bindingResult = getBindingResult();
+&#47;&#47; Call each validator with the same binding result
+for (Validator validator : getValidators()) {
+if (!ObjectUtils.isEmpty(validationHints) &amp;&amp; validator instanceof SmartValidator) {
+((SmartValidator) validator).validate(target, bindingResult, validationHints);
+}
+else if (validator != null) {
+validator.validate(target, bindingResult);
+}
+}
 }</p>2021-05-19</li><br/>
 </ul>

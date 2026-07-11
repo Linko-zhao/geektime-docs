@@ -176,9 +176,9 @@ new Vue({el:&#39;#app2&#39;})
 ```</p>2021-12-21</li><br/><li><span>球球</span> 👍（3） 💬（3）<p>vue2升级成vue3 对应用到的element ui 也要升级是吗</p>2021-10-25</li><br/><li><span>Shane灬7</span> 👍（1） 💬（1）<p>先给大圣老师点赞，发现一个问题，“是否使用 Vue 3”那张图中的“是否要长期维护”的“是”和“否”的位置是不是反了？</p>2022-02-24</li><br/><li><span>徐三宝</span> 👍（1） 💬（1）<p>老师您好，
 我们在Vue2升级Vue3时遇到了一些问题，请指点～
 1，Vue2项目中，我们会把一些数据绑定到Vue上，比如Vue.$reqList存放了请求中的异步请求，然后在axios.js的拦截器中去监听和处理，但是在Vue3中变更成了app.config.globalProperties.$reqList，但是却无法在普通的js文件中（比如axios.js）中拿到这个值。
-</p>2021-11-09</li><br/><li><span>hyangteng</span> 👍（1） 💬（1）<p>请问下：vue2使用composition-api，涉及到vuex的如何处理 
+</p>2021-11-09</li><br/><li><span>hyangteng</span> 👍（1） 💬（1）<p>请问下：vue2使用composition-api，涉及到vuex的如何处理
 
 例如：
 如何获取vuex中的状态
- 如何提交mutation和action</p>2021-11-04</li><br/><li><span>起風了</span> 👍（1） 💬（2）<p>老师好,手头上有个项目,是基于vue2的ant design pro vue来迭代的,还使用了一些其他例如表格组件库等,都是vue2的. 如果要升级vue3的话,使用@vue&#47;compat的同时,其他的那些插件或组件库也要升级vue3版本对应的?如果其他插件或组件库没有vue3版本的是不是升级就比较困难或者不可行了?</p>2021-10-26</li><br/><li><span>Geek_614299</span> 👍（0） 💬（1）<p>升级！绝不惯着ie(11)</p>2021-11-01</li><br/>
+如何提交mutation和action</p>2021-11-04</li><br/><li><span>起風了</span> 👍（1） 💬（2）<p>老师好,手头上有个项目,是基于vue2的ant design pro vue来迭代的,还使用了一些其他例如表格组件库等,都是vue2的. 如果要升级vue3的话,使用@vue&#47;compat的同时,其他的那些插件或组件库也要升级vue3版本对应的?如果其他插件或组件库没有vue3版本的是不是升级就比较困难或者不可行了?</p>2021-10-26</li><br/><li><span>Geek_614299</span> 👍（0） 💬（1）<p>升级！绝不惯着ie(11)</p>2021-11-01</li><br/>
 </ul>

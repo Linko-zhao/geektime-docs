@@ -42,7 +42,7 @@ import time
 def download_one(url):
     resp = requests.get(url)
     print('Read {} from {}'.format(len(resp.content), url))
-    
+
 def download_all(sites):
     for site in sites:
         download_one(site)
@@ -69,7 +69,7 @@ def main():
     download_all(sites)
     end_time = time.perf_counter()
     print('Download {} sites in {} seconds'.format(len(sites), end_time - start_time))
-    
+
 if __name__ == '__main__':
     main()
 
@@ -182,7 +182,7 @@ Download 15 sites in 0.19936635800002023 seconds
 ```
 with futures.ThreadPoolExecutor(workers) as executor
 =>
-with futures.ProcessPoolExecutor() as executor: 
+with futures.ProcessPoolExecutor() as executor:
 ```
 
 在需要修改的这部分代码中，函数ProcessPoolExecutor()表示创建进程池，使用多个进程并行的执行程序。不过，这里我们通常省略参数workers，因为系统会自动返回CPU的数量作为可以调用的进程数。
@@ -218,7 +218,7 @@ def download_all(sites):
         for site in sites:
             future = executor.submit(download_one, site)
             to_do.append(future)
-            
+
         for future in concurrent.futures.as_completed(to_do):
             future.result()
 def main():
@@ -315,12 +315,12 @@ Python实现多线程&#47;多进程，大家常常会用到标准库中的thread
 但从Python3.2开始，标准库为我们提供了concurrent.futures模块，它提供了ThreadPoolExecutor和ProcessPoolExecutor两个类，实现了对threading和multiprocessing的进一步抽象，使得开发者只需编写少量代码即可让程序实现并行计算。</p>2019-06-26</li><br/><li><span>SCAR</span> 👍（30） 💬（0）<p>future之与中文理解起来其实挺微妙，不过这与生活中大家熟知的期物在底层逻辑上是一致的，future英文词义中就有期货的意思，都是封存一个东西，平常你该干嘛就干嘛，可以不用去理会，在未来的某个时候去看结果就行，只是python中那个物是对象而已。而关键词是延迟，异步。
 思考题：添加异常处理
 def download_all(sites):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        to_do = {}
-        for site in sites:
-            future = executor.submit(download_one, site)    
-            to_do[future]=site
-            
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+to_do = {}
+for site in sites:
+future = executor.submit(download_one, site)  
+to_do[future]=site
+
         for future in concurrent.futures.as_completed(to_do):
             try：
                 res=future.result()
@@ -333,11 +333,13 @@ def download_all(sites):
             if  e_msg:
                 site=to_do[future]
                 Print(‘Error is {} from {}’.format(e_msg,site))
+
 </p>2019-06-26</li><br/><li><span>大王叫我来巡山</span> 👍（14） 💬（8）<p>老师，我感觉您对并发和并行的理解是有问题的，并发是针对最初的单核CPU的，并行是针对现代的多核CPU，并且所有的调度行为都是基于线程的，一个进程中至少有一个线程，资源的分配是基与进程的，并不是只有多进程模型才可以同时在多个核心上运行的。</p>2019-11-19</li><br/><li><span>Fergus</span> 👍（7） 💬（3）<p>需要加异常的应该就只有一个地方：requests.get()发送网页请求的时候。其它地方不涉及IO。也不涉及数据类型变化，不用做数据类型判断。
 由于不能访问wiki，所以网页改了成了国内的。
 -- ps: 和0.2s比起来太慢了。
 
-# -*- encoding -*-
+# -_- encoding -_-
+
 &#39;&#39;&#39;
 py 3.6
 sulime
@@ -350,56 +352,70 @@ import time
 now = lambda: time.perf_counter()
 
 def download_one(url):
-    try:
-        req = requests.get(url)
-        req.raise_for_status()
-        print(&#39;Read {} from {}&#39;.format(len(req.content), url))
-    except:
-        print(&#39;404&#39;)
+try:
+req = requests.get(url)
+req.raise_for_status()
+print(&#39;Read {} from {}&#39;.format(len(req.content), url))
+except:
+print(&#39;404&#39;)
 
 def download_all(sites):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        executor.map(download_one, sites)
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+executor.map(download_one, sites)
 
 def main():
-    sites = [
-            &#39;https:&#47;&#47;www.baidu.com&#47;&#39;,
-            &#39;https:&#47;&#47;pypi.org&#47;&#39;,
-            &#39;https:&#47;&#47;www.sina.com.cn&#47;&#39;,
-            &#39;https:&#47;&#47;www.163.com&#47;&#39;,
-            &#39;https:&#47;&#47;news.qq.com&#47;&#39;,
-            &#39;http:&#47;&#47;www.ifeng.com&#47;&#39;,
-            &#39;http:&#47;&#47;www.ce.cn&#47;&#39;,
-            &#39;https:&#47;&#47;news.baidu.com&#47;&#39;,
-            &#39;http:&#47;&#47;www.people.com.cn&#47;&#39;,
-            &#39;http:&#47;&#47;www.ce.cn&#47;&#39;,
-            &#39;https:&#47;&#47;news.163.com&#47;&#39;,
-            &#39;http:&#47;&#47;news.sohu.com&#47;&#39;
-            ]
-    start = now()
-    download_all(sites)
-    print(&#39;Download {} sites in {} s&#39;.format(len(sites), now() - start))
+sites = [
+&#39;https:&#47;&#47;www.baidu.com&#47;&#39;,
+&#39;https:&#47;&#47;pypi.org&#47;&#39;,
+&#39;https:&#47;&#47;www.sina.com.cn&#47;&#39;,
+&#39;https:&#47;&#47;www.163.com&#47;&#39;,
+&#39;https:&#47;&#47;news.qq.com&#47;&#39;,
+&#39;http:&#47;&#47;www.ifeng.com&#47;&#39;,
+&#39;http:&#47;&#47;www.ce.cn&#47;&#39;,
+&#39;https:&#47;&#47;news.baidu.com&#47;&#39;,
+&#39;http:&#47;&#47;www.people.com.cn&#47;&#39;,
+&#39;http:&#47;&#47;www.ce.cn&#47;&#39;,
+&#39;https:&#47;&#47;news.163.com&#47;&#39;,
+&#39;http:&#47;&#47;news.sohu.com&#47;&#39;
+]
+start = now()
+download_all(sites)
+print(&#39;Download {} sites in {} s&#39;.format(len(sites), now() - start))
 
-if __name__ == &#39;__main__&#39;:
-    main()
+if **name** == &#39;**main**&#39;:
+main()
 
 # Read 2443 from https:&#47;&#47;www.baidu.com&#47;
-# Read 6216 from https:&#47;&#47;news.qq.com&#47;
-# Read 699004 from https:&#47;&#47;www.163.com&#47;
-# Read 250164 from http:&#47;&#47;www.ifeng.com&#47;
-# Read 579572 from https:&#47;&#47;www.sina.com.cn&#47;
-# Read 107530 from http:&#47;&#47;www.ce.cn&#47;
-# Read 165901 from http:&#47;&#47;www.people.com.cn&#47;
-# Read 107530 from http:&#47;&#47;www.ce.cn&#47;
-# Read 210816 from https:&#47;&#47;news.163.com&#47;
-# Read 74060 from https:&#47;&#47;news.baidu.com&#47;
-# Read 174553 from http:&#47;&#47;news.sohu.com&#47;
-# Read 19492 from https:&#47;&#47;pypi.org&#47;
-# Download 12 sites in 2.8500169346527673 s
-# [Finished in 3.6s]</p>2019-06-30</li><br/><li><span>somenzz</span> 👍（4） 💬（1）<p>from multiprocessing.dummy import Pool as ThreadPool
-with ThreadPool(processes=100) as executor:
-    executor.map(func, iterable)
 
-请问老师，Futures 和这种方式哪一种好呢？ 我在实际的网终请求中发现 Futures 请求成功的次数更少。 都是 100 个线程，处理 3000 个相同的请求。 
+# Read 6216 from https:&#47;&#47;news.qq.com&#47;
+
+# Read 699004 from https:&#47;&#47;www.163.com&#47;
+
+# Read 250164 from http:&#47;&#47;www.ifeng.com&#47;
+
+# Read 579572 from https:&#47;&#47;www.sina.com.cn&#47;
+
+# Read 107530 from http:&#47;&#47;www.ce.cn&#47;
+
+# Read 165901 from http:&#47;&#47;www.people.com.cn&#47;
+
+# Read 107530 from http:&#47;&#47;www.ce.cn&#47;
+
+# Read 210816 from https:&#47;&#47;news.163.com&#47;
+
+# Read 74060 from https:&#47;&#47;news.baidu.com&#47;
+
+# Read 174553 from http:&#47;&#47;news.sohu.com&#47;
+
+# Read 19492 from https:&#47;&#47;pypi.org&#47;
+
+# Download 12 sites in 2.8500169346527673 s
+
+# [Finished in 3.6s]</p>2019-06-30</li><br/><li><span>somenzz</span> 👍（4） 💬（1）<p>from multiprocessing.dummy import Pool as ThreadPool
+
+with ThreadPool(processes=100) as executor:
+executor.map(func, iterable)
+
+请问老师，Futures 和这种方式哪一种好呢？ 我在实际的网终请求中发现 Futures 请求成功的次数更少。 都是 100 个线程，处理 3000 个相同的请求。
 </p>2019-07-19</li><br/>
 </ul>

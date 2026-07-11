@@ -151,14 +151,14 @@ public class TraceTagAspectj {
 ```
 @Aspect
 public class TryCatchAspect {
-    
+
     @Pointcut("execution(* com.sample.systrace.MainActivity.onResume())") // <- 指定类与方法
     public void methodTryCatch() {
     }
 
     @Around("methodTryCatch()")
     public void aroundTryJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
-       
+
          // try catch
          try {
              joinPoint.proceed(); // <- 调用原方法
@@ -281,7 +281,7 @@ public class IMEIMethodAdapter extends AdviceAdapter {
             Log.e("asmcode", "get imei className:%s, method:%s, name:%s", className, methodName, name);
         }
     }
-}  
+}
 ```
 
 Build后输出如下：
@@ -294,6 +294,7 @@ Build后输出如下：
 
 - [练习Sample跑起来 | ASM插桩强化练](http://time.geekbang.org/column/article/83148)
 - [ASM文档](http://asm.ow2.io/asm4-guide.pdf)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>小小代码</span> 👍（1） 💬（1）<p>试了下Redex去除Dex文件Debuginfo行号信息的功能，发现行号由正确的com.sample.redex.MainActivity.onCreate(MainActivity.java:20)变为不正确的com.sample.redex.MainActivity.onCreate(Unknown Source:13)，并没有像支付宝所说的变成-1</p>2019-04-13</li><br/>
 </ul>

@@ -117,7 +117,7 @@ networks:
 如下所示，我们输入 docker-compose up，程序启动后可能会打印冗长的启动日志，等待几秒钟之后，服务就启动好了。根据我们的配置，将首先启动MySQL服务，接着启动Worker服务。
 
 ```plain
-» docker-compose up 
+» docker-compose up
 [+] Running 2/0
  ⠿ Container crawler-mysql-1           Created                                                                                                                                 0.0s
  ⠿ Container crawler-crawler-worker-1  Created                                                                                                                                 0.0s
@@ -131,7 +131,7 @@ Attaching to crawler-crawler-worker-1, crawler-mysql-1
 如下所示，docker images 指令可以查看到我们最新构建好的Worker镜像。
 
 ```plain
-» docker images  
+» docker images
 REPOSITORY                  TAG      IMAGE ID       CREATED         SIZE
 crawler-crawler-worker      latest   1fec0f6fc04e   23 hours ago    41.3MB
 ```
@@ -139,7 +139,7 @@ crawler-crawler-worker      latest   1fec0f6fc04e   23 hours ago    41.3MB
 docker ps 可以查看当前正在运行的容器，可以看到Worker与MySQL都已经正常启动了。
 
 ```plain
-» docker ps  
+» docker ps
 CONTAINER ID   IMAGE                    COMMAND                  CREATED          STATUS                   PORTS                               NAMES
 a43f4ed671fc   crawler-crawler-worker   "./crawler worker"       2 minutes ago    Up 2 minutes             0.0.0.0:8080->8080/tcp              crawler-crawler-worker-1
 2bd879656049   mysql:5.7                "docker-entrypoint.s…"   38 minutes ago   Up 2 minutes (healthy)   33060/tcp, 0.0.0.0:3326->3306/tcp   crawler-mysql-1
@@ -176,7 +176,7 @@ crawler-worker-1    "./crawler worker"       worker              running        
 » docker-compose top                                                                                           jackson@jacksondeMacBook-Pro
 crawler-mysql-1
 UID   PID     PPID    C    STIME   TTY   TIME       CMD
-999   71494   71468   0    14:58   ?     00:00:00   mysqld   
+999   71494   71468   0    14:58   ?     00:00:00   mysqld
 
 crawler-worker-1
 UID    PID     PPID    C    STIME   TTY   TIME       CMD
@@ -200,7 +200,7 @@ root   71773   71746   0    14:58   ?     00:00:00   ./crawler worker
 ```plain
 » docker-compose ps                                                                                            jackson@jacksondeMacBook-Pro
 NAME                COMMAND                  SERVICE             STATUS              PORTS
-crawler-mysql-1     "docker-entrypoint.s…"   mysql               exited (0)          
+crawler-mysql-1     "docker-entrypoint.s…"   mysql               exited (0)
 crawler-worker-1    "./crawler worker"       worker              exited (0)
 ```
 

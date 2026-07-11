@@ -180,36 +180,36 @@ PAK：在Seesion Ticket的基础上，应用数据和Session Ticket一起发送�
 
 2、暂无</p>2020-01-14</li><br/><li><span>饭粒</span> 👍（2） 💬（2）<p>1.抓包看了下 442 ，复用会话时 Client Hello session_ticket 确实有数据，Sessioin Id 好像也还会复用。
 Transport Layer Security
-    TLSv1.2 Record Layer: Handshake Protocol: Client Hello
-        Content Type: Handshake (22)
-        Version: TLS 1.0 (0x0301)
-        Length: 512
-        Handshake Protocol: Client Hello
-            ...
-            Random: 9474888cafdce89fd32eac247a8b464f842efbac706d8930…
-            Session ID Length: 32
-            Session ID: a4a0caef10dee7a6f44aa522a35f6c799101d5eced01eb32…   # Session ID
-            ...
-            Extension: session_ticket (len=192)     # session_ticket
-                Type: session_ticket (35)
-                Length: 192
-                Data (192 bytes)
-            ...
+TLSv1.2 Record Layer: Handshake Protocol: Client Hello
+Content Type: Handshake (22)
+Version: TLS 1.0 (0x0301)
+Length: 512
+Handshake Protocol: Client Hello
+...
+Random: 9474888cafdce89fd32eac247a8b464f842efbac706d8930…
+Session ID Length: 32
+Session ID: a4a0caef10dee7a6f44aa522a35f6c799101d5eced01eb32… # Session ID
+...
+Extension: session_ticket (len=192) # session_ticket
+Type: session_ticket (35)
+Length: 192
+Data (192 bytes)
+...
 
 Transport Layer Security
-    TLSv1.2 Record Layer: Handshake Protocol: Server Hello
-        Content Type: Handshake (22)
-        Version: TLS 1.2 (0x0303)
-        Length: 100
-        Handshake Protocol: Server Hello
-            ...
-            Random: e82519e9e8bfcbd40e1da7a202bd50ff993d5ef0cbc33378…
-            Session ID Length: 32
-            Session ID: a4a0caef10dee7a6f44aa522a35f6c799101d5eced01eb32…   # Session ID
-            Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
-            ...
-    TLSv1.2 Record Layer: Change Cipher Spec Protocol: Change Cipher Spec
-    TLSv1.2 Record Layer: Handshake Protocol: Finished   
+TLSv1.2 Record Layer: Handshake Protocol: Server Hello
+Content Type: Handshake (22)
+Version: TLS 1.2 (0x0303)
+Length: 100
+Handshake Protocol: Server Hello
+...
+Random: e82519e9e8bfcbd40e1da7a202bd50ff993d5ef0cbc33378…
+Session ID Length: 32
+Session ID: a4a0caef10dee7a6f44aa522a35f6c799101d5eced01eb32… # Session ID
+Cipher Suite: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (0xc030)
+...
+TLSv1.2 Record Layer: Change Cipher Spec Protocol: Change Cipher Spec
+TLSv1.2 Record Layer: Handshake Protocol: Finished
 
 2.有个疑问：会话复用技术，保存会话数据的一端使用对端传过来的 Sessin Id 查询到之前的 master secret，但它如何安全的把这个 master secret 传递给对端（对端应该只有 Sessin Id 吧）？
 
@@ -231,7 +231,9 @@ Transport Layer Security
 2：你觉得哪些优化手段是你在实际工作中能用到的？应该怎样去用？
 软件优化这个估计最常用，也能用到，一些安全漏洞或性能优化常这么玩。</p>2020-04-04</li><br/><li><span>书生依旧</span> 👍（1） 💬（1）<p>PSK 在发送 Ticket 的同时会带上应用数据，免去了 1.2 里面的服务器确认步骤。
 这句话有点不太理解，请问老师：
+
 1. 看图上 pre_shared_key 是在 Hello 中发送的，Session Ticket 也是在 Hello 中发送的吗？
 2. 带上应用数据是什么数据?
-3. 1.2 里面的服务器验证指的是哪个步骤？</p>2019-10-16</li><br/><li><span>Snooker</span> 👍（0） 💬（1）<p>关于证书优化“OCSP Stapling”（OCSP 装订），有个小点，赘述一下：针对服务器返回的OCSP 响应，客户端是会进行相关验证的，大概是验证 ocsp响应数据是否被篡改、响应数据内的一些状态码等</p>2024-05-08</li><br/><li><span>Mingyan</span> 👍（0） 💬（2）<p>老师请问一下，ssl connections什么条件下才会复用的？我遇到从一台机子循环发送A然后B两个请求，A和B是不同域名下的资源。第一个请求是A第二个请求是B第三个请求再发A并不会复用ssl connections而是新开。</p>2023-06-26</li><br/><li><span>Geek_11246e</span> 👍（0） 💬（1）<p>请问异步通信可以讲下吗</p>2023-02-28</li><br/><li><span>泥鳅儿</span> 👍（0） 💬（2）<p>老师，如果安装的ssl证书过期了，之后进行的http数据传输还是加密的吗</p>2022-10-09</li><br/><li><span>cake</span> 👍（0） 💬（1）<p>老师请问下    非对称加密解密处理“Pre-Master” 这计划的意思就是生成 “Pre-Master” 的意思么</p>2021-11-27</li><br/>
+3. 1.2 里面的服务器验证指的是哪个步骤？</p>2019-10-16</li><br/><li><span>Snooker</span> 👍（0） 💬（1）<p>关于证书优化“OCSP Stapling”（OCSP 装订），有个小点，赘述一下：针对服务器返回的OCSP 响应，客户端是会进行相关验证的，大概是验证 ocsp响应数据是否被篡改、响应数据内的一些状态码等</p>2024-05-08</li><br/><li><span>Mingyan</span> 👍（0） 💬（2）<p>老师请问一下，ssl connections什么条件下才会复用的？我遇到从一台机子循环发送A然后B两个请求，A和B是不同域名下的资源。第一个请求是A第二个请求是B第三个请求再发A并不会复用ssl connections而是新开。</p>2023-06-26</li><br/><li><span>Geek_11246e</span> 👍（0） 💬（1）<p>请问异步通信可以讲下吗</p>2023-02-28</li><br/><li><span>泥鳅儿</span> 👍（0） 💬（2）<p>老师，如果安装的ssl证书过期了，之后进行的http数据传输还是加密的吗</p>2022-10-09</li><br/><li><span>cake</span> 👍（0） 💬（1）<p>老师请问下 非对称加密解密处理“Pre-Master” 这计划的意思就是生成 “Pre-Master” 的意思么</p>2021-11-27</li><br/>
+
 </ul>

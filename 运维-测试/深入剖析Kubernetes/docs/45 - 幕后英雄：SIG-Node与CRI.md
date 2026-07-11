@@ -94,6 +94,7 @@ As of Kubernetes 1.24, Dockershim is no longer included in Kubernetes. ”</p>20
 kube-apiserver和kubelet是k8s中最核心的两个组建。其中kubelet是属于SIG-Node的范畴。
 
 kubelet的工作核心是一个叫做SyncLoop的控制循环。驱动这个控制循环运行的事件包括四种:
+
 1. Pod更新事件
 2. Pod生命周期变化
 3. kubelet本身设置的执行周期

@@ -253,7 +253,7 @@ gcc version 12.1.0 ()
 9. 收工。
 </p>2022-08-22</li><br/><li><span>光华路小霸王</span> 👍（5） 💬（3）<p>编译中会卡在 
 Cloning into &#39;&#47;home&#47;qing&#47;RISCV_TOOLS&#47;riscv-gnu-toolchain&#47;gcc&#39;...
-还是会去下载仓库，应该是我们下载的文件夹名称不是默认的，查看 README.md 文件，在最后说明了如何指定子模块的路径，在配置环节添加配置之后，戴尔笔记本双核  i5-4200U CPU @ 1.60GHz 编译，编译完成四十多分钟，系统使用  Debian 4.19.181-1 
+还是会去下载仓库，应该是我们下载的文件夹名称不是默认的，查看 README.md 文件，在最后说明了如何指定子模块的路径，在配置环节添加配置之后，戴尔笔记本双核  i5-4200U CPU @ 1.60GHz 编译，编译完成四十多分钟，系统使用  Debian 4.19.181-1
 
 ..&#47;configure --prefix=&#47;opt&#47;riscv&#47;gcc \
 --enable-multilib \
@@ -296,10 +296,10 @@ Using built-in specs.
 COLLECT_GCC=.&#47;riscv64-minicpu-elf-gcc
 COLLECT_LTO_WRAPPER=&#47;opt&#47;riscv&#47;gcc&#47;libexec&#47;gcc&#47;riscv64-minicpu-elf&#47;10.2.0&#47;lto-wrapper
 Target: riscv64-minicpu-elf
-Configured with: &#47;home&#47;sean&#47;risc-v&#47;RISCV_TOOLS&#47;riscv-gnu-toolchain&#47;riscv-gcc&#47;configure --target=riscv64-minicpu-elf --prefix=&#47;opt&#47;riscv&#47;gcc --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion=gca312387ab1 --with-system-zlib --enable-tls --with-newlib --with-sysroot=&#47;opt&#47;riscv&#47;gcc&#47;riscv64-minicpu-elf --with-native-system-header-dir=&#47;include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=&#47;home&#47;sean&#47;risc-v&#47;RISCV_TOOLS&#47;riscv-gnu-toolchain&#47;riscv-gcc --enable-multilib --with-abi=lp64d --with-arch=rv64imafdc --with-tune=rocket --with-isa-spec=2.2 &#39;CFLAGS_FOR_TARGET=-Os   -mcmodel=medlow&#39; &#39;CXXFLAGS_FOR_TARGET=-Os   -mcmodel=medlow&#39;
+Configured with: &#47;home&#47;sean&#47;risc-v&#47;RISCV_TOOLS&#47;riscv-gnu-toolchain&#47;riscv-gcc&#47;configure --target=riscv64-minicpu-elf --prefix=&#47;opt&#47;riscv&#47;gcc --disable-shared --disable-threads --enable-languages=c,c++ --with-pkgversion=gca312387ab1 --with-system-zlib --enable-tls --with-newlib --with-sysroot=&#47;opt&#47;riscv&#47;gcc&#47;riscv64-minicpu-elf --with-native-system-header-dir=&#47;include --disable-libmudflap --disable-libssp --disable-libquadmath --disable-libgomp --disable-nls --disable-tm-clone-registry --src=&#47;home&#47;sean&#47;risc-v&#47;RISCV_TOOLS&#47;riscv-gnu-toolchain&#47;riscv-gcc --enable-multilib --with-abi=lp64d --with-arch=rv64imafdc --with-tune=rocket --with-isa-spec=2.2 &#39;CFLAGS_FOR_TARGET=-Os -mcmodel=medlow&#39; &#39;CXXFLAGS_FOR_TARGET=-Os -mcmodel=medlow&#39;
 Thread model: single
 Supported LTO compression algorithms: zlib
-gcc version 10.2.0 (gca312387ab1) 
+gcc version 10.2.0 (gca312387ab1)
 </p>2022-08-31</li><br/><li><span>Abcd</span> 👍（0） 💬（1）<p>以前玩ARM的时候我记得有crosstool_ng?</p>2022-08-22</li><br/><li><span>bubble</span> 👍（0） 💬（1）<p>开始构建工作环境了呗</p>2022-08-22</li><br/><li><span>LooMou</span> 👍（0） 💬（0）<p>window的wsl
 Distributor ID: Ubuntu
 Description:    Ubuntu 20.04.6 LTS
@@ -307,7 +307,7 @@ Release:        20.04
 Codename:       focal
 
 我直接 clone github，也可以用 gitee
-git clone https:&#47;&#47;github.com&#47;riscv&#47;riscv-gnu-toolchain 
+git clone https:&#47;&#47;github.com&#47;riscv&#47;riscv-gnu-toolchain
 我切换到了 2024.04.12-nightly
 git checkout f133b29
 不用 clone 其他仓库了，直接按步骤继续，编译成功</p>2024-12-03</li><br/><li><span>Hideinsecret</span> 👍（0） 💬（0）<p>riscv-binutils-2.35 启动提示链接失败，升级至2.38重新编译后解决问题</p>2023-07-28</li><br/><li><span>。。。</span> 👍（0） 💬（0）<p>make[2]: Leaving directory &#39;&#47;home&#47;len&#47;RISCV_TOOLS&#47;riscv-gnu-toolchain&#47;build&#47;build-gdb-newlib&#39;

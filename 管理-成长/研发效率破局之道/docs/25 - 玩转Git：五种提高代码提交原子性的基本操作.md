@@ -141,7 +141,7 @@ index 63b6300..7b82693 100644
 
 -app.listen(3000)
 +// Start the server
-+app.listen(port) 
++app.listen(port)
 ```
 
 通过git diff命令，我们可以看到，endpoint相关的改动仍留在工作区：
@@ -252,7 +252,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 
 ## 改动在工作区
-> git diff 
+> git diff
 diff --git a/index.js b/index.js
 index 63b6300..986fcd8 100644
 --- a/index.js
@@ -463,8 +463,8 @@ index 63b6300..7b82693 100644
 -app.listen(3000)
 +// Start the server
 +app.listen(port)
- 
- 
+
+
 ## 用VIM对文件进行修改，在注释部分添加"at a predefined port"
 > vim index.js
 
@@ -484,8 +484,8 @@ index 7b82693..eb53f5f 100644
  app.listen(port)
 22:40:10 (master|REBASE-i) jasonge@Juns-MacBook-Pro-2.local:~/jksj-repo/git-atomic-demo
 > git add index.js
- 
- 
+
+
 ## 对修改添加到提交A中去
 > git commit --amend
 [detached HEAD f544b12] Change magic port number to variable
@@ -588,9 +588,9 @@ git push -f 后，轻则已拉取代码回本地的人需要手动修复下环�
 </p>2019-10-23</li><br/><li><span>雷霹雳的爸爸</span> 👍（5） 💬（2）<p>思考题留言区有同学已经答得很帅了，想了下就是做不到答得更好，只对第二个问题大概做一下补充，其实这个本体本质上还是git rebase和远端库共享的潜在冲突的问题，所以从这一点上讲，远端是fork的私库，任何共享都是基于TBD的CI基础上完成就非常重要了，对发布出去的东西，还是得注意品质，后悔药在git世界里不是没有，只是可能会让大家都很痛苦，发出去的东西就当泼出去的水，一路向前，不要回头
 
 其实进来这里就是纯赞的，我本来以为我经常PR之前用git rebase -i仔细梳理就算是会了git了，但是看第一个场景git add -p我就直接跪了，也许以前见过，但是真没印象，一点也没有，我甚至没想过还可以这么干，虽然我不太认同这么部分的管理更新吧，要做这种部分提交，我觉得很大程度上是设计上没太想好，自己本地库这里还在debug的感觉；但是git的强大真的可见一斑</p>2020-01-16</li><br/><li><span>Jxin</span> 👍（2） 💬（3）<p>1.很棒，历史提交操作这块以前没概念，一直都是手动来，导致增加很多提交，学习了，练习下应用到工作去。
-2.现在工作主要用idea，用git的拉推提交回滚啥的简单操作都是直接在idea上。涉及到拆分提交这类操作就要切命令行敲git  指令。感觉操作不连贯。老师工作中是纯命令的吗？这些操作跟idea是否有对应？如果有应该怎么做？
+2.现在工作主要用idea，用git的拉推提交回滚啥的简单操作都是直接在idea上。涉及到拆分提交这类操作就要切命令行敲git 指令。感觉操作不连贯。老师工作中是纯命令的吗？这些操作跟idea是否有对应？如果有应该怎么做？
 3.git-history，小工具，但看历史变更更直观，推荐使用。</p>2019-10-21</li><br/><li><span>许童童</span> 👍（0） 💬（1）<p>思考题
-可以通过强制push: git push -f 覆盖掉在远程的分支，不过这样做确实很危险。</p>2019-10-22</li><br/><li><span>二狗</span> 👍（0） 💬（1）<p>没用过 没看懂(╥╯^╰╥)  看来还得拿栗子实践一下</p>2019-10-21</li><br/><li><span>一打七</span> 👍（0） 💬（0）<p>老师操作四说交换AB后，重新有选择地放到 origin&#47;master 上面。但结果是放到master，并不是origin&#47;master，是不是表述的不够严谨？</p>2023-10-31</li><br/><li><span>BBQ</span> 👍（0） 💬（0）<p>老师，不知道是不是我的理解有问题
+可以通过强制push: git push -f 覆盖掉在远程的分支，不过这样做确实很危险。</p>2019-10-22</li><br/><li><span>二狗</span> 👍（0） 💬（1）<p>没用过 没看懂(╥╯^╰╥) 看来还得拿栗子实践一下</p>2019-10-21</li><br/><li><span>一打七</span> 👍（0） 💬（0）<p>老师操作四说交换AB后，重新有选择地放到 origin&#47;master 上面。但结果是放到master，并不是origin&#47;master，是不是表述的不够严谨？</p>2023-10-31</li><br/><li><span>BBQ</span> 👍（0） 💬（0）<p>老师，不知道是不是我的理解有问题
 &gt;同时，在没有接–hard 或者–soft 参数时，git reset 会把目标提交的内容同时复制到暂存区，但不会复制到工作区。
 我看了您的控制台输出 ，我自己也试了一下，reset 之后，之前Commit 的修改会全部复制到工作区，不是复制到暂存区，reset 之后暂存区并没有内容。
 

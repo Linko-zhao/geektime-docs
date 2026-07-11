@@ -35,7 +35,7 @@ Google 2018 年的论文名篇Attention is all you need，提出了Transformer�
 图中的“具体任务”，其实也可以更换为“具体领域”。那么总结来说：
 
 - **预训练**：在大规模无标注文本数据上进行模型的训练，目标是让模型学习自然语言的基础表达、上下文信息和语义知识，为后续任务提供一个通用的、丰富的语言表示基础。
-- **微调**：在预训练模型的基础上，可以根据特定的下游任务对模型进行微调。现在你经常会听到各行各业的人说：*我们的优势就是领域知识嘛！我们比不过国内外大模型，我们可以拿开源模型做垂直领域嘛！做垂类模型！*—— 啥叫垂类？指的其实就是根据领域数据微调开源模型这件事儿。
+- **微调**：在预训练模型的基础上，可以根据特定的下游任务对模型进行微调。现在你经常会听到各行各业的人说：_我们的优势就是领域知识嘛！我们比不过国内外大模型，我们可以拿开源模型做垂直领域嘛！做垂类模型！_—— 啥叫垂类？指的其实就是根据领域数据微调开源模型这件事儿。
 
 这种预训练+微调的大模型应用模式优势明显。首先，预训练模型能够将大量的通用语言知识迁移到各种下游任务上，作为应用人员，我们不需要自己寻找语料库，从头开始训练大模型，这减少了训练时间和数据需求；其次，微调过程可以快速地根据特定任务进行优化，简化了模型部署的难度；最后，预训练+微调的架构具有很强的可扩展性，可以方便地应用于各种自然语言处理任务，大大提高了NLP技术在实际应用中的可用性和普及程度，给我们带来了巨大的便利。
 
@@ -85,8 +85,8 @@ tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf")
 # 加载预训练的模型
 # 使用 device_map 参数将模型自动加载到可用的硬件设备上，例如GPU
 model = AutoModelForCausalLM.from_pretrained(
-          "meta-llama/Llama-2-7b-chat-hf", 
-          device_map = 'auto')  
+          "meta-llama/Llama-2-7b-chat-hf",
+          device_map = 'auto')
 
 # 定义一个提示，希望模型基于此提示生成故事
 prompt = "请给我讲个玫瑰的爱情故事?"
@@ -146,7 +146,7 @@ llm = HuggingFaceHub(
 template = """Question: {question}
               Answer: """
 
-# 创建Prompt          
+# 创建Prompt
 prompt = PromptTemplate(template=template, input_variables=["question"])
 
 # 调用LLM Chain --- 我们以后会详细讲LLM Chain
@@ -201,7 +201,7 @@ pipeline = transformers.pipeline(
 
 # 创建HuggingFacePipeline实例
 from langchain import HuggingFacePipeline
-llm = HuggingFacePipeline(pipeline = pipeline, 
+llm = HuggingFacePipeline(pipeline = pipeline,
                           model_kwargs = {'temperature':0})
 
 # 定义输入模板，该模板用于生成花束的描述
@@ -213,7 +213,7 @@ template = """
 
 # 使用模板创建提示
 from langchain import PromptTemplate,  LLMChain
-prompt = PromptTemplate(template=template, 
+prompt = PromptTemplate(template=template,
                      input_variables=["flower_details"])
 
 # 创建LLMChain实例
@@ -324,9 +324,9 @@ print(result)
 
 翻译成中文，他的回答是这样的。
 
-*当客户抱怨他们为女朋友买的花在两天内就枯萎了，我会以礼貌和专业的方式这样解释：*
+_当客户抱怨他们为女朋友买的花在两天内就枯萎了，我会以礼貌和专业的方式这样解释：_
 
-*“感谢您把这个问题告诉我们。对于给您带来的任何不便，我深感抱歉。有可能这些花没有被正确地存储或照料，这可能影响了它们的生命期。我们始终以提供高质量的产品为荣，但有时可能会出现意外的问题。请您知道，我们非常重视您的满意度并随时为您提供帮助。您希望我为您提供替换或退款吗？”*
+_“感谢您把这个问题告诉我们。对于给您带来的任何不便，我深感抱歉。有可能这些花没有被正确地存储或照料，这可能影响了它们的生命期。我们始终以提供高质量的产品为荣，但有时可能会出现意外的问题。请您知道，我们非常重视您的满意度并随时为您提供帮助。您希望我为您提供替换或退款吗？”_
 
 看上去，除了中文能力不大灵光之外，Llama2的英文表现真的非常完美，和GPT3.5差距不是很大，要知道：
 
@@ -367,6 +367,7 @@ print(result)
 3. PyTorch 官方[教程](https://pytorch.org/tutorials/)、[文档](https://pytorch.org/docs/stable/index.html)
 4. [AutoGPTQ](https://github.com/PanQiWei/AutoGPTQ) 基于GPTQ算法的大模型量化工具包
 5. [Llama CPP](https://github.com/ggerganov/llama.cpp) 支持 [GGML](https://github.com/ggerganov/ggml)，目标是在MacBook（或类似的非GPU的普通家用硬件环境）上使用4位整数量化运行Llama模型
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>nick</span> 👍（5） 💬（1）<p>老师，有个疑问，原来使用像百度AI、腾讯AI做垂直领域的多轮对话，往往需要维护语料意图啥的，那有了大模型后，这些工作还需要做么，如果要那怎么做？跟传统维护语料意图有什么区别。谢谢</p>2023-09-21</li><br/><li><span>javanb</span> 👍（3） 💬（1）<p>老师，最近我就在微调垂直行业大模型，但是效果不理想，我这边采用了Lora的训练方式，行业数据和通用数据大约是1:1。行业数据量大约10G。但是出来的结果，通用能力降低了，并且行业能力也并没有那么理想。 所以有几个疑问不知老师能否传授一下SFT的经验、1：我们通常行业数据配比是多少？ 2：哪种训练方式更合适？lora还是freeze  3：哪种类型的数据更合适？目前是大量的公司内部的数据，还需要哪些数据？</p>2024-03-26</li><br/><li><span>陈东</span> 👍（3） 💬（1）<p>GITHUB上的类似WeChat chat类项目https:&#47;&#47;github.com&#47;zhayujie&#47;chatgpt-on-wechat，如何结合LangChain和huggingFace结合修改？找不到方向？老师可以加餐讲一讲吗？谢谢。</p>2023-09-29</li><br/><li><span>远游</span> 👍（2） 💬（1）<p>老师，macos安装pip install llama-cpp-python报错：
                                       ^
@@ -380,10 +381,10 @@ print(result)
       *** CMake build failed
       [end of output]
 
-  note: This error originates from a subprocess, and is likely not a problem with pip.
-  ERROR: Failed building wheel for llama-cpp-python
+note: This error originates from a subprocess, and is likely not a problem with pip.
+ERROR: Failed building wheel for llama-cpp-python
 Failed to build llama-cpp-python
-ERROR: Could not build wheels for llama-cpp-python, which is required to install pyproject.toml-based projects</p>2023-10-26</li><br/><li><span>Geek_cb5e16</span> 👍（1） 💬（1）<p>老师  要使用HuggingFace 和 Pipeline HuggingFaceHUB 有什么区别 还是不太明白</p>2023-11-28</li><br/><li><span>Monin</span> 👍（1） 💬（1）<p>老师 垂类模型   当有了相应领域数据后  一般用什么进行微调开源模型？ Loar？ finetune吗</p>2023-10-30</li><br/><li><span>Monin</span> 👍（1） 💬（2）<p>老师  用LangChain调用自定义语言模型时，在初始化具体模型时如何确定相对应的具体类名。比如目前性能最好的XwinLM模型，在HuggingFace上下载合适的模型后  如何找到对应的初始化类？</p>2023-10-11</li><br/><li><span>balance</span> 👍（1） 💬（1）<p>老师好! 本地电脑运行 Llama-2-7b-chat-hf 模型案例代码，需要什么硬件配置？我运行情况是，输出Loading checkpoint shards: 100%|██████████| 2&#47;2 [00:04&lt;00:00,  2.40s&#47;it] 后一直不动</p>2023-10-10</li><br/><li><span>无限可能</span> 👍（1） 💬（5）<p>MabBook M2上面的DEMO都运行不了，提示`AssertionError: Torch not compiled with CUDA enabled`，不知道是不是使用的方式不正确。</p>2023-09-19</li><br/><li><span>Alan</span> 👍（0） 💬（2）<p>黄佳老师好，有没有可能弄一个可运行的镜像环境。每次运行实例程序都有各种环境问题，包括python库的版本兼容等。</p>2024-01-03</li><br/><li><span>Charlie</span> 👍（0） 💬（3）<p>llama-cpp-python v0.2.22 加载 llama-2-7b-chat.ggmlv3.q4_K_S.bin 时报错，错误信息如下：
+ERROR: Could not build wheels for llama-cpp-python, which is required to install pyproject.toml-based projects</p>2023-10-26</li><br/><li><span>Geek_cb5e16</span> 👍（1） 💬（1）<p>老师 要使用HuggingFace 和 Pipeline HuggingFaceHUB 有什么区别 还是不太明白</p>2023-11-28</li><br/><li><span>Monin</span> 👍（1） 💬（1）<p>老师 垂类模型 当有了相应领域数据后 一般用什么进行微调开源模型？ Loar？ finetune吗</p>2023-10-30</li><br/><li><span>Monin</span> 👍（1） 💬（2）<p>老师 用LangChain调用自定义语言模型时，在初始化具体模型时如何确定相对应的具体类名。比如目前性能最好的XwinLM模型，在HuggingFace上下载合适的模型后 如何找到对应的初始化类？</p>2023-10-11</li><br/><li><span>balance</span> 👍（1） 💬（1）<p>老师好! 本地电脑运行 Llama-2-7b-chat-hf 模型案例代码，需要什么硬件配置？我运行情况是，输出Loading checkpoint shards: 100%|██████████| 2&#47;2 [00:04&lt;00:00, 2.40s&#47;it] 后一直不动</p>2023-10-10</li><br/><li><span>无限可能</span> 👍（1） 💬（5）<p>MabBook M2上面的DEMO都运行不了，提示`AssertionError: Torch not compiled with CUDA enabled`，不知道是不是使用的方式不正确。</p>2023-09-19</li><br/><li><span>Alan</span> 👍（0） 💬（2）<p>黄佳老师好，有没有可能弄一个可运行的镜像环境。每次运行实例程序都有各种环境问题，包括python库的版本兼容等。</p>2024-01-03</li><br/><li><span>Charlie</span> 👍（0） 💬（3）<p>llama-cpp-python v0.2.22 加载 llama-2-7b-chat.ggmlv3.q4_K_S.bin 时报错，错误信息如下：
 gguf_init_from_file: invalid magic characters &#39;tjgg&#39;
 error loading model: llama_model_loader: failed to load model from &#47;Users&#47;xxx&#47;PycharmProjects&#47;hello_langchain&#47;OfflineModel&#47;llama-2-7b-chat.ggmlv3.q4_K_S.bin
 

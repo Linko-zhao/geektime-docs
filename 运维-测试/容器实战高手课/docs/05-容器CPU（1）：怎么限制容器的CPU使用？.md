@@ -116,7 +116,7 @@ spec:
 # mkdir group3 group4
 # cd group3
 # ls cpu.*
-cpu.cfs_period_us  cpu.cfs_quota_us  cpu.rt_period_us  cpu.rt_runtime_us  cpu.shares  cpu.stat 
+cpu.cfs_period_us  cpu.cfs_quota_us  cpu.rt_period_us  cpu.rt_runtime_us  cpu.shares  cpu.stat
 ```
 
 考虑到在云平台里呢，大部分程序都不是实时调度的进程，而是普通调度（SCHED\_NORMAL）类型进程，那什么是普通调度类型呢？
@@ -147,7 +147,7 @@ cpu.cfs_period_us  cpu.cfs_quota_us  cpu.rt_period_us  cpu.rt_runtime_us  cpu.sh
 
 ```
 ./threads-cpu/threads-cpu 2 &
-echo $! > /sys/fs/cgroup/cpu/group2/group3/cgroup.procs 
+echo $! > /sys/fs/cgroup/cpu/group2/group3/cgroup.procs
 ```
 
 在我们没有修改cpu.cfs\_quota\_us前，用top命令可以看到threads-cpu这个进程的CPU 使用是199%，近似2个CPU。
@@ -177,7 +177,7 @@ group3：
 ./threads-cpu/threads-cpu 2 &  # 启动一个消耗2个CPU的程序
 echo $! > /sys/fs/cgroup/cpu/group2/group3/cgroup.procs #把程序的pid加入到控制组
 echo 150000 > /sys/fs/cgroup/cpu/group2/group3/cpu.cfs_quota_us #限制CPU为1.5CPU
-echo 1024 > /sys/fs/cgroup/cpu/group2/group3/cpu.shares 
+echo 1024 > /sys/fs/cgroup/cpu/group2/group3/cpu.shares
 
 ```
 
@@ -260,7 +260,6 @@ echo 3072 > /sys/fs/cgroup/cpu/group2/group3/cpu.shares # shares 比例 group4: 
 是不是写错了，
 第一个例子的程序停止？</p>2020-11-29</li><br/><li><span>max</span> 👍（0） 💬（1）<p>老师，容器中的应用如何获取有效网卡</p>2020-11-25</li><br/><li><span>Geek2014</span> 👍（0） 💬（4）<p>有一点不理解，想请教下老师：
 而&quot;Request CPU&quot;就是无论其他容器申请多少 CPU 资源，即使运行时整个节点的 CPU 都被占满的情况下，我的这个容器还是可以保证获得需要的 CPU 数目，
-
 
 假设系统只有2个group并列，group1和group2，系统总共2CPU
 group1 ：request 2 cpu，limit 3 cpu

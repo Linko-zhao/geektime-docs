@@ -76,10 +76,10 @@ Chat.connect = (function(host) {
 public class ChatEndpoint {
 
     private static final String GUEST_PREFIX = "Guest";
-    
+
     //记录当前有多少个用户加入到了聊天室，它是static全局变量。为了多线程安全使用原子变量AtomicInteger
     private static final AtomicInteger connectionIds = new AtomicInteger(0);
-    
+
     //每个用户用一个CharAnnotation实例来维护，请你注意它是一个全局的static变量，所以用到了线程安全的CopyOnWriteArraySet
     private static final Set<ChatEndpoint> connections =
             new CopyOnWriteArraySet<>();
@@ -156,7 +156,7 @@ Tomcat的WebSocket加载是通过SCI机制完成的。SCI全称ServletContainerI
 ```
 @HandlesTypes({ServerEndpoint.class, ServerApplicationConfig.class, Endpoint.class})
 public class WsSci implements ServletContainerInitializer {
-  
+
   public void onStartup(Set<Class<?>> clazzes, ServletContext ctx) throws ServletException {
   ...
   }

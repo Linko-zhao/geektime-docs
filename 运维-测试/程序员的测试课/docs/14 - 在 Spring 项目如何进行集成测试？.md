@@ -106,7 +106,7 @@ public class ExampleRepositoryTests {
 class EmployeeDAOIntegrationTest {
   @Autowired
   private DataSource dataSource;
-  
+
   ...
 }
 ```
@@ -144,7 +144,7 @@ public class TodoItemResourceTest {
 public class TodoItemResourceTest {
   @MockBean
   private TodoItemService service;
-  
+
   @Test
   public void should_add_item() throws Exception {
     when(service.addTodoItem(TodoParameter.of("foo"))).thenReturn(new TodoItem("foo"));

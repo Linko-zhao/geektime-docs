@@ -250,7 +250,7 @@ DOM API中还提供了NodeIterator 和 TreeWalker 来遍历树。比起直接用
 
 最后，我给你留了一个题目，请你用DOM API来实现遍历整个DOM树，把所有的元素的tagName打印出来。
 
-* * *
+---
 
 ### 补充阅读：命名空间
 
@@ -259,11 +259,12 @@ DOM API中还提供了NodeIterator 和 TreeWalker 来遍历树。比起直接用
 在HTML场景中，需要考虑命名空间的场景不多。最主要的场景是SVG。创建元素和属性相关的API都有带命名空间的版本：
 
 - document
-  
+
   - createElementNS
   - createAttributeNS
+
 - Element
-  
+
   - getAttributeNS
   - setAttributeNS
   - getAttributeNodeNS
@@ -301,40 +302,41 @@ deepLogTagNames(document.body)
 
 &#47;&#47; 广度优先
 function breadLogTagNames(root){
-  const queue = [root]
-  while(queue.length) {
-    const currentNode = queue.shift()
-    const {childNodes, tagName} = currentNode
-    tagName &amp;&amp; console.log(currentNode.tagName)
-    &#47;&#47; 过滤没有 tagName 的节点
-    Array.prototype.filter.call(childNodes, item=&gt;item.tagName)
-    .forEach(itemNode=&gt;{
-      queue.push(itemNode)
-    }) 
-  }
+const queue = [root]
+while(queue.length) {
+const currentNode = queue.shift()
+const {childNodes, tagName} = currentNode
+tagName &amp;&amp; console.log(currentNode.tagName)
+&#47;&#47; 过滤没有 tagName 的节点
+Array.prototype.filter.call(childNodes, item=&gt;item.tagName)
+.forEach(itemNode=&gt;{
+queue.push(itemNode)
+})
+}
 }
 breadLogTagNames(document.body)</p>2019-03-10</li><br/><li><span>阿成</span> 👍（14） 💬（2）<p>第一段代码中的 DocumentFragment 应该改为 DocumentType...
 
 &#47;**
- * @param {Element} el
- * @param {(Element) =&gt; void} action
-function walk (el, action) {
+
+- @param {Element} el
+- @param {(Element) =&gt; void} action
+  function walk (el, action) {
   if (el) {
-    action(el)
-    walk(el.firstElementChild, action)
-    walk(el.nextElementSibling, action)
+  action(el)
+  walk(el.firstElementChild, action)
+  walk(el.nextElementSibling, action)
   }
-}
+  }
 
 walk(document.documentElement, el =&gt; console.log(el.nodeName))
 
 &#47;&#47; 如果想要去重...
 const set = new Set()
 walk(document.documentElement, el =&gt; {
-  set.add(el.nodeName)
+set.add(el.nodeName)
 })
 for (let n of set)
-  console.log(n)
+console.log(n)
 </p>2019-03-09</li><br/><li><span>天亮了</span> 👍（11） 💬（3）<p>这样可以把tagName全打印出来...
 document.getElementsByTagName(&#39;*&#39;);
 </p>2019-05-06</li><br/><li><span>拾迹</span> 👍（3） 💬（0）<p>document.querySelectorAll(&#39;*&#39;)，这样有点过分了</p>2019-06-17</li><br/><li><span>kino</span> 👍（3） 💬（1）<p>insertBefore(newNode,null)和appendChild的区别是啥</p>2019-03-12</li><br/><li><span>我叫张小咩²⁰¹⁹</span> 👍（3） 💬（0）<p>var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, null, false)
@@ -345,18 +347,18 @@ while(node = walker.nextNode())
 
 const result = []
 function getAllTagName(parent) {
-	const childs = Array.from(parent.children)
-	result.push(...childs.map(el =&gt; el.tagName))
-	for (var i = 0; i &lt; childs.length; i++) {
-		if (childs[i].children.length) getAllTagName(childs[i])
-	}
+const childs = Array.from(parent.children)
+result.push(...childs.map(el =&gt; el.tagName))
+for (var i = 0; i &lt; childs.length; i++) {
+if (childs[i].children.length) getAllTagName(childs[i])
+}
 
-	if (i == 0) return
+    if (i == 0) return
+
 }
 getAllTagName(document)
 
 console.log(result)
-
 
 </p>2019-03-10</li><br/><li><span>小二子大人</span> 👍（1） 💬（0）<p>const root = document.getElementsByTagName(&#39;html&#39;)[0];
     &#47;&#47; 深度优先遍历
@@ -390,59 +392,60 @@ console.log(result)
         }
     }
     breadLogTagName(root)</p>2019-05-08</li><br/><li><span>笨鸟</span> 👍（1） 💬（0）<p>function loop(node){
-	if(!node){
-		return
-	}
-	if(node.nodeType === document.ELEMENT_NODE)
-	console.log(node.nodeName);
-	if(node.childNodes){
-		node.childNodes.forEach(child =&gt; {
-			loop(child)
-		})
-	}
+    if(!node){
+    	return
+    }
+    if(node.nodeType === document.ELEMENT_NODE)
+    console.log(node.nodeName);
+    if(node.childNodes){
+    	node.childNodes.forEach(child =&gt; {
+    		loop(child)
+    	})
+    }
+
 }
 loop(document)</p>2019-03-26</li><br/><li><span>Link</span> 👍（1） 💬（0）<p>第一段代码中的 DocumentFragment 应该改为 DocumentType</p>2019-03-11</li><br/><li><span>「前端天地」公众号</span> 👍（0） 💬（0）<p>document好像没有createDocumentType方法</p>2021-09-30</li><br/><li><span>杜森垚</span> 👍（0） 💬（0）<p>document.body.attributes.class = &quot;a&quot; 少了.value 应该为 document.body.attributes.class.value = &quot;a&quot;</p>2020-11-22</li><br/><li><span>不曾相识</span> 👍（0） 💬（0）<p>
-    &lt;main&gt;
-        &lt;!-- &lt;header&gt;
-            &lt;h1&gt;遍历所有dom打印tagName&lt;&#47;h1&gt;
-            &lt;nav&gt;
-                &lt;ul&gt;
-                    &lt;li&gt;遍历&lt;&#47;li&gt;
-                    &lt;li&gt;递归&lt;&#47;li&gt;
-                    &lt;li&gt;深度&lt;&#47;li&gt;
-                    &lt;li&gt;广度&lt;&#47;li&gt;
-                &lt;&#47;ul&gt;
-            &lt;&#47;nav&gt;
-        &lt;&#47;header&gt; 第一次的dom已经验证完成 --&gt;
-        &lt;header&gt;
-            &lt;!-- 加入更多的子元素p验证 --&gt;
-            &lt;h1&gt;遍历所有dom打印tagName&lt;&#47;h1&gt;
-            &lt;nav&gt;
-                &lt;ul&gt;
-                    &lt;li&gt;
-                        &lt;p&gt;遍历&lt;&#47;p&gt;
-                    &lt;&#47;li&gt;
-                    &lt;li&gt;
-                        &lt;p&gt;
-                            递归
-                        &lt;&#47;p&gt;
-                    &lt;&#47;li&gt;
-                    &lt;li&gt;
-                        &lt;p&gt;深度&lt;&#47;p&gt;
-                    &lt;&#47;li&gt;
-                    &lt;li&gt;
-                        &lt;p&gt;广度&lt;&#47;p&gt;
-                    &lt;&#47;li&gt;
-                &lt;&#47;ul&gt;
-            &lt;&#47;nav&gt;
-        &lt;&#47;header&gt;
-    &lt;&#47;main&gt;
-    &lt;footer&gt;
-        &lt;b&gt;以上都是测试结果，研究中&lt;&#47;b&gt;
-    &lt;&#47;footer&gt;
-    &lt;script&gt;
-        &#47;&#47; 获取根元素 html  开始逐渐有限使用tagName选择器 动态的。
-        var html = document.getElementsByTagName(&#39;html&#39;)[0];
+&lt;main&gt;
+&lt;!-- &lt;header&gt;
+&lt;h1&gt;遍历所有dom打印tagName&lt;&#47;h1&gt;
+&lt;nav&gt;
+&lt;ul&gt;
+&lt;li&gt;遍历&lt;&#47;li&gt;
+&lt;li&gt;递归&lt;&#47;li&gt;
+&lt;li&gt;深度&lt;&#47;li&gt;
+&lt;li&gt;广度&lt;&#47;li&gt;
+&lt;&#47;ul&gt;
+&lt;&#47;nav&gt;
+&lt;&#47;header&gt; 第一次的dom已经验证完成 --&gt;
+&lt;header&gt;
+&lt;!-- 加入更多的子元素p验证 --&gt;
+&lt;h1&gt;遍历所有dom打印tagName&lt;&#47;h1&gt;
+&lt;nav&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;遍历&lt;&#47;p&gt;
+&lt;&#47;li&gt;
+&lt;li&gt;
+&lt;p&gt;
+递归
+&lt;&#47;p&gt;
+&lt;&#47;li&gt;
+&lt;li&gt;
+&lt;p&gt;深度&lt;&#47;p&gt;
+&lt;&#47;li&gt;
+&lt;li&gt;
+&lt;p&gt;广度&lt;&#47;p&gt;
+&lt;&#47;li&gt;
+&lt;&#47;ul&gt;
+&lt;&#47;nav&gt;
+&lt;&#47;header&gt;
+&lt;&#47;main&gt;
+&lt;footer&gt;
+&lt;b&gt;以上都是测试结果，研究中&lt;&#47;b&gt;
+&lt;&#47;footer&gt;
+&lt;script&gt;
+&#47;&#47; 获取根元素 html 开始逐渐有限使用tagName选择器 动态的。
+var html = document.getElementsByTagName(&#39;html&#39;)[0];
 
         &#47;&#47; 2、 暂时不要把功能柔和在一起，分解最小的功能 比如，查看单个节点的，打印tagName并返回一个包含其子节点集合
         function getChildrenNodes(node) {
@@ -450,7 +453,7 @@ loop(document)</p>2019-03-26</li><br/><li><span>Link</span> 👍（1） 💬（0
             if (node.children.length) {
                 var children = node.children;
                 &#47;&#47; let flag = false;
-                let childrenList = []; &#47;&#47;子节点的后代 
+                let childrenList = []; &#47;&#47;子节点的后代
                 for (let child of children) {
                     getChildrenNodes(child)
                     childrenList.push(child)
@@ -472,6 +475,7 @@ loop(document)</p>2019-03-26</li><br/><li><span>Link</span> 👍（1） 💬（0
         &#47;&#47; 现在在li当中加入p元素，看结果有没有加入打印  看了，大佬们的答案随便填入的p，我也不懂啥事广度优先，深度优先
         console.log(getChildrenNodes(html));
     &lt;&#47;script&gt;
+
 </p>2020-10-10</li><br/><li><span>Peter</span> 👍（0） 💬（0）<p>var allTags = {};
 [].forEach.call(document.body.getElementsByTagName(&#39;*&#39;), (e) =&gt; { 
   allTags[e.tagName] = (allTags[e.tagName] || 0) + 1 

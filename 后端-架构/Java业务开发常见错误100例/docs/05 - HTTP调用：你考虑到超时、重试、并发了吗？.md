@@ -43,7 +43,7 @@ public class ClientReadTimeoutController {
                 .returnContent()
                 .asString();
     }
-    
+
     @GetMapping("client")
     public String client() throws IOException {
         log.info("client1 called");
@@ -464,11 +464,11 @@ public PoolingHttpClientConnectionManager(
     final HttpClientConnectionOperator httpClientConnectionOperator,
     final HttpConnectionFactory<HttpRoute, ManagedHttpClientConnection> connFactory,
     final long timeToLive, final TimeUnit timeUnit) {
-    ...    
+    ...
     this.pool = new CPool(new InternalConnectionFactory(
             this.configData, connFactory), 2, 20, timeToLive, timeUnit);
    ...
-} 
+}
 
 public CPool(
         final ConnFactory<HttpRoute, ManagedHttpClientConnection> connFactory,
@@ -522,34 +522,36 @@ httpClient2 = HttpClients.custom().setMaxConnPerRoute(10).setMaxConnTotal(20).bu
 <li><span>徐典阳✔️</span> 👍（24） 💬（2）<p>朱老师，请问Feign声明式HTTP接口调用可以针对某服务单个接口配置读取超时参数吗？我们这边一个微服务有n个接口，有一些接口处理耗时长有一些处理耗时短，但调用方又不期望针对同一个微服务声明多个Feign client。我简单翻了源码没有找到。</p>2020-04-17</li><br/><li><span>Monday</span> 👍（11） 💬（1）<p>我们来分析一下源码。打开 RibbonClientConfiguration 类后，会看到 DefaultClientConfigImpl 被创建出来之后，ReadTimeout 和 ConnectTimeout 被设置为 1s：
 
 &#47;**
- * Ribbon client default connect timeout.
- *&#47;
-public static final int DEFAULT_CONNECT_TIMEOUT = 1000;
+
+- Ribbon client default connect timeout.
+  *&#47;
+  public static final int DEFAULT_CONNECT_TIMEOUT = 1000;
 
 &#47;**
- * Ribbon client default read timeout.
- *&#47;
-public static final int DEFAULT_READ_TIMEOUT = 1000;
+
+- Ribbon client default read timeout.
+  *&#47;
+  public static final int DEFAULT_READ_TIMEOUT = 1000;
 
 @Bean
 @ConditionalOnMissingBean
 public IClientConfig ribbonClientConfig() {
-   DefaultClientConfigImpl config = new DefaultClientConfigImpl();   &#47;&#47;此行打断点
-   config.loadProperties(this.name);
-   config.set(CommonClientConfigKey.ConnectTimeout, DEFAULT_CONNECT_TIMEOUT);
-   config.set(CommonClientConfigKey.ReadTimeout, DEFAULT_READ_TIMEOUT);
-   config.set(CommonClientConfigKey.GZipPayload, DEFAULT_GZIP_PAYLOAD);
-   return config;
+DefaultClientConfigImpl config = new DefaultClientConfigImpl(); &#47;&#47;此行打断点
+config.loadProperties(this.name);
+config.set(CommonClientConfigKey.ConnectTimeout, DEFAULT_CONNECT_TIMEOUT);
+config.set(CommonClientConfigKey.ReadTimeout, DEFAULT_READ_TIMEOUT);
+config.set(CommonClientConfigKey.GZipPayload, DEFAULT_GZIP_PAYLOAD);
+return config;
 }
 
 被死扣的毛病折腾着，以上这段描述和代码中，有两个疑问，烦老师解惑，谢谢。
 1、使用默认配置，我在标注行打了断点，debug启动时未进断点。是不是表明默认值不是在此段代码设置的？
 2、找到了feign配置的原始类FeignClientProperties，但是没找到ribbon的。</p>2020-03-20</li><br/><li><span>蚂蚁内推+v</span> 👍（24） 💬（1）<p>老师，我这边工作过程中遇到服务端 499 这块要怎么从链接超时和读取超时设置去分析呢？</p>2020-03-19</li><br/><li><span>Darren</span> 👍（60） 💬（2）<p>试着回答下问题：
 1、为什么很少见到写入超时，客户端发送数据到服务端，首先接力连接（TCP），然后写入TCP缓冲区，TCP缓冲区根据时间窗口，发送数据到服务端，因此写入操作可以任务是自己本地的操作，本地操作是不需要什么超时时间的，如果真的有什么异常，那也是连接（TCP）不上，或者超时的问题，连接超时和读取超时就能覆盖这种场景。
-2、proxy_next_upstream：语法: proxy_next_upstream 
-      [error|timeout|invalid_header|http_500|http_503|http_404|off]
-      默认值: proxy_next_upstream error timeout
-      即 error timeout会自动重试
+2、proxy_next_upstream：语法: proxy_next_upstream
+[error|timeout|invalid_header|http_500|http_503|http_404|off]
+默认值: proxy_next_upstream error timeout
+即 error timeout会自动重试
 可以修改默认值，在去掉error和timeout，这样在发生错误和超时时，不会重试
 proxy_next_upstream_tries 这个参数决定重试的次数，0表示关闭该参数
 Limits the number of possible tries for passing a request to the next server. The 0 value turns off this limitation.</p>2020-03-19</li><br/><li><span>👽</span> 👍（33） 💬（1）<p>这已经不单单是一个坑了，而是N一个场景下，多种多样的坑。
@@ -567,17 +569,16 @@ HTTP请求，说到底，还是网络调用。某个老师曾说过，网络，�
 一直没有成功解决这个问题，想问下老师可以从哪方面入手，谢谢老师</p>2020-03-26</li><br/><li><span>Monday</span> 👍（5） 💬（1）<p>花了两个晚上终于还是把这节啃了下来，准备运行环境，重现所有问题，翻看相关源码。
 终于等到你，还好我没放弃。
 个人感悟，这些坑对以后快速排查问题，肯定有帮助。就算以后淡忘了这节的内容，但至少还会有些许记忆的，哪个专栏，哪个老师，哪篇文章。感谢老师！</p>2020-03-20</li><br/><li><span>终结者999号</span> 👍（4） 💬（1）<p>老师，对于Http Client和Ok Http相比，是不是OkHttp支持得更好，而且HTTP2相比于HTTP1.1的新特性是不是也使得我们不用过去的一些配置了啊</p>2020-03-19</li><br/><li><span>Monday</span> 👍（3） 💬（3）<p>public class ClientReadTimeoutController {
-    private String getResponse(String url, int connectTimeout, int readTimeout) throws IOException {
-        return Request.Get(&quot;http:&#47;&#47;localhost:45678&#47;clientreadtimeout&quot; + url)
-                .connectTimeout(connectTimeout)
-                .socketTimeout(readTimeout)
-                .execute()
-                .returnContent()
-                .asString();
-    }
+private String getResponse(String url, int connectTimeout, int readTimeout) throws IOException {
+return Request.Get(&quot;http:&#47;&#47;localhost:45678&#47;clientreadtimeout&quot; + url)
+.connectTimeout(connectTimeout)
+.socketTimeout(readTimeout)
+.execute()
+.returnContent()
+.asString();
+}
 ....
 }
-
 
 这第一段代码中Request这个类，是引用哪个包下的？找得好辛苦，老师第5节的代码也没上传到git</p>2020-03-19</li><br/><li><span>Monday</span> 👍（3） 💬（1）<p>好文章，好“坑”。</p>2020-03-19</li><br/><li><span>看不到de颜色</span> 👍（2） 💬（1）<p>处理超时一定要搞清楚超时的阶段。到底是建连超时还是等待响应超时(读取超时)。针对不同的问题针对解决。对于写超时这个相当于写本地TCP缓冲区，速度应该很快，很少会出现socket无法写入导致的写超时问题。
 很久没用用过HttpClient了。回忆了一下，以前确实没有搞清楚总并发(maxTotal)和单域名并发(defaultMaxPerRoute)的区别。通过这篇文章总算搞明白了，收货颇丰。</p>2020-03-29</li><br/><li><span>一个想偷懒的程序坑</span> 👍（2） 💬（1）<p>虽然没处理过这块儿的东西，但看完了解了许多知识，赞！</p>2020-03-20</li><br/><li><span>Alpha</span> 👍（2） 💬（3）<p>非常同意选择Get还是Post应该依据API的行为。

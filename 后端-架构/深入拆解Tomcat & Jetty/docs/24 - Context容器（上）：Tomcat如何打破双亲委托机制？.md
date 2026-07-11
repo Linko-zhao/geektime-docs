@@ -13,12 +13,12 @@ public abstract class ClassLoader {
 
     //每个类加载器都有个父加载器
     private final ClassLoader parent;
-    
+
     public Class<?> loadClass(String name) {
-  
+
         //查找一下这个类是不是已经加载过了
         Class<?> c = findLoadedClass(name);
-        
+
         //如果没有加载过
         if( c == null ){
           //先委托给父加载器去加载，注意这是个递归调用
@@ -33,18 +33,18 @@ public abstract class ClassLoader {
         if (c == null) {
             c = findClass(name);
         }
-        
+
         return c；
     }
-    
+
     protected Class<?> findClass(String name){
        //1. 根据传入的类名name，到在特定目录下去寻找类文件，把.class文件读入内存
           ...
-          
+
        //2. 调用defineClass将字节数组转成Class对象
        return defineClass(buf, off, len)；
     }
-    
+
     // 将字节码数组解析成一个Class对象，用native方法实现
     protected final Class<?> defineClass(byte[] b, int off, int len){
        ...
@@ -83,15 +83,15 @@ Tomcat的自定义类加载器WebAppClassLoader打破了双亲委托机制，它
 ```
 public Class<?> findClass(String name) throws ClassNotFoundException {
     ...
-    
+
     Class<?> clazz = null;
     try {
-            //1. 先在Web应用目录下查找类 
+            //1. 先在Web应用目录下查找类
             clazz = findClassInternal(name);
     }  catch (RuntimeException e) {
            throw e;
        }
-    
+
     if (clazz == null) {
     try {
             //2. 如果在本地目录没有找到，交给父加载器去查找
@@ -99,7 +99,7 @@ public Class<?> findClass(String name) throws ClassNotFoundException {
     }  catch (RuntimeException e) {
            throw e;
        }
-    
+
     //3. 如果父类也没找到，抛出ClassNotFoundException
     if (clazz == null) {
         throw new ClassNotFoundException(name);
@@ -123,7 +123,7 @@ public Class<?> findClass(String name) throws ClassNotFoundException {
 public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 
     synchronized (getClassLoadingLock(name)) {
- 
+
         Class<?> clazz = null;
 
         //1. 先在本地cache查找该类是否已经加载过
@@ -179,7 +179,7 @@ public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundExce
                 // Ignore
             }
        }
-    
+
     //6. 上述过程都加载失败，抛出异常
     throw new ClassNotFoundException(name);
 }
@@ -214,12 +214,11 @@ loadClass方法稍微复杂一点，主要有六个步骤：
 2、原文【从上面的过程我们可以看到，Tomcat 的类加载器打破了双亲委托机制，没有一上来就直接委托给父加载器，而是先在本地目录下加载，为了避免本地目录下的类覆盖 JRE 的核心类，先尝试用 JVM 扩展类加载器 ExtClassLoader 去加载。那为什么不先用系统类加载器 AppClassLoader 去加载？很显然，如果是这样的话，那就变成双亲委托机制了，这就是 Tomcat 类加载器的巧妙之处。】
 问题：后面的回答，感觉像是为了打破而打破似的。
 
-3、听&#47;看本节多次，最后还是没体悟到Tomcat打破双亲委托模式的好处。。。</p>2019-07-08</li><br/><li><span>吖蒲</span> 👍（18） 💬（4）<p>老师，我看源码了还是有点不懂，第三步骤tomcat的类加载器先用extclassloader加载类，ext让父加载器bootstrap去加载，防止优先加载应用中同名的类，那我用appclassloader，最终也能达到bootstrap加载器去加载类的效果，那为什么不直接调用appclassloader加载？？</p>2019-08-08</li><br/><li><span>nightmare</span> 👍（16） 💬（2）<p>我明白了，比如可以把多个项目共享的jar包放到${CATALINA_HOME}&#47;shared目录下，让sharedclassloader来加载，并且是所有context的web应用共享的，而都有的放在web路径下，先让扩展类加载器加载，避免覆盖jre中的类，再让自定义的web加载器来加载独有的类，最后加载让应用加载器加载扩展类加载器和自定义加载器加载不到的类，谢谢李老师</p>2019-07-04</li><br/><li><span>强哥</span> 👍（13） 💬（1）<p>每篇文章最后的总结，若能概括出这么做的意图及优点，这样对读者来说收益更大。</p>2019-07-04</li><br/><li><span>Li Shunduo</span> 👍（11） 💬（1）<p>在其他地方看到过可以通过配置&lt;Loader delegate=&quot;true&quot;&#47;&gt;让tomcat遵循双亲委派，老师在答疑篇可以展开讲讲吗？</p>2019-07-10</li><br/><li><span>Mr.差不多</span> 👍（11） 💬（3）<p>双亲委派规则是 当父加载器找不到此文件时才交给子加载器去加载。那么我觉得Tomcat重写loadClass方法其实也是这个逻辑。假设现在有一个类是需要在WebAppClassLoader加载的，那么它会先查询是否在AppClassLoader加载过，如果没有那么查看是否在ExtClassLoader加载过，那么这一系列步骤不就是为了保证没有在父加载器找不到此文件吗？这不还是双亲委派的模型吗？麻烦老师给解答下</p>2019-07-05</li><br/><li><span>飞翔</span> 👍（9） 💬（1）<p>老师 您说 
+3、听&#47;看本节多次，最后还是没体悟到Tomcat打破双亲委托模式的好处。。。</p>2019-07-08</li><br/><li><span>吖蒲</span> 👍（18） 💬（4）<p>老师，我看源码了还是有点不懂，第三步骤tomcat的类加载器先用extclassloader加载类，ext让父加载器bootstrap去加载，防止优先加载应用中同名的类，那我用appclassloader，最终也能达到bootstrap加载器去加载类的效果，那为什么不直接调用appclassloader加载？？</p>2019-08-08</li><br/><li><span>nightmare</span> 👍（16） 💬（2）<p>我明白了，比如可以把多个项目共享的jar包放到${CATALINA_HOME}&#47;shared目录下，让sharedclassloader来加载，并且是所有context的web应用共享的，而都有的放在web路径下，先让扩展类加载器加载，避免覆盖jre中的类，再让自定义的web加载器来加载独有的类，最后加载让应用加载器加载扩展类加载器和自定义加载器加载不到的类，谢谢李老师</p>2019-07-04</li><br/><li><span>强哥</span> 👍（13） 💬（1）<p>每篇文章最后的总结，若能概括出这么做的意图及优点，这样对读者来说收益更大。</p>2019-07-04</li><br/><li><span>Li Shunduo</span> 👍（11） 💬（1）<p>在其他地方看到过可以通过配置&lt;Loader delegate=&quot;true&quot;&#47;&gt;让tomcat遵循双亲委派，老师在答疑篇可以展开讲讲吗？</p>2019-07-10</li><br/><li><span>Mr.差不多</span> 👍（11） 💬（3）<p>双亲委派规则是 当父加载器找不到此文件时才交给子加载器去加载。那么我觉得Tomcat重写loadClass方法其实也是这个逻辑。假设现在有一个类是需要在WebAppClassLoader加载的，那么它会先查询是否在AppClassLoader加载过，如果没有那么查看是否在ExtClassLoader加载过，那么这一系列步骤不就是为了保证没有在父加载器找不到此文件吗？这不还是双亲委派的模型吗？麻烦老师给解答下</p>2019-07-05</li><br/><li><span>飞翔</span> 👍（9） 💬（1）<p>老师 您说
 java 的类加载器，就是把字节码格式.class 文件加载到JVM的方法区，并在JVM的堆区建立一个java.lang.Class 对象实例
 
 那loadclass方法负责把字节码格式.class 文件加载到JVM的方法区
 和defineclass负责在JVM的堆区建立一个java.lang.Class 对象实例 这样理解对嘛
-
 
 </p>2019-07-23</li><br/><li><span>Liam</span> 👍（9） 💬（3）<p>老师能讲下什么是上下文加载器吗，什么情况下会用到它？这个和双亲委派有关吗</p>2019-07-04</li><br/><li><span>WL</span> 👍（8） 💬（1）<p>想问一下老师tomcat为什么采用&quot;首先自己尝试去加载某个类，如果找不到再代理给父类加载&quot;, 这种方式呢, 我不是很理解.  还有在Tomcat的类加载器的loadClass()方法, 会先调用ExtClassLoader加载类, 然后才调用findClass(name), 这是不是与上面的&quot;首先自己尝试去加载某个类，如果找不到再代理给父类加载&quot;这句话矛盾呢?</p>2019-07-04</li><br/><li><span>Mq</span> 👍（7） 💬（3）<p>李老师，为什么要打破双亲委托</p>2019-07-04</li><br/><li><span>火凤凰</span> 👍（6） 💬（3）<p>老师，这边我有个疑问。tomcat 中的findClass方法里面首先是现在本地去查找要加载的类，找不到然后让父加载器去查找。然后在loadClass中，第四步调用findClass要加载的类的时候找不到，然后去调用第五步通过Class.forName()去加载尼？这一步是不是多余的？明明findClass方法应该包含了AppClassLoader需要查找的类吧？还望老师或者一起学习的大佬们解惑一下？</p>2019-08-29</li><br/><li><span>QQ怪</span> 👍（6） 💬（6）<p>双亲委派模型其实不是叫单亲委派更好?</p>2019-07-05</li><br/><li><span>新世界</span> 👍（6） 💬（1）<p>由于沿用双亲委派重写findClass即可，找不到最后到固定目录下查找，不需要重写loadClass，还有一点不明白，tomcat为什么要打破双亲委派定义自己的classloader，不定义不行吗？</p>2019-07-04</li><br/>
 </ul>

@@ -64,7 +64,7 @@
    
 到此为止，CTO空降的上下篇就要划上句号了，文章结尾把电影“至暗时刻”中丘吉尔的名言送给诸位：Success is not final, failure is not fatal, it is the courage to continue that counts。恰逢技术盛世，唯自信与勇气不可辜负，加油吧，少年们。
 
-***作者简介***
+_**作者简介**_
 
 钟忻，易建科技技术副总裁兼云服务事业群总经理，[TGO鲲鹏会](http://tgo.geekbang.org)北京分会会员。2003年清华大学自动化硕士毕业。曾在Turbolinux、IBM、Intel等多家IT公司担任资深软件工程师。13年底到16年初担任乐视云平台高级总监，主导了乐视IaaS、PaaS平台从无到有的全过程。目前负责易建科技上千人研发团队的技术体系的搭建，以及整个海航集团的IDC和基础云平台的产品研发、运营和市场开拓。
 <div><strong>精选留言（4）</strong></div><ul>

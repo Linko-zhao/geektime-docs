@@ -238,13 +238,13 @@ CockroachDB替换存储引擎的另一个原因是，RocksDB的代码量日益�
 
 ## 学习资料
 
-Fay Chang et al.: [*Bigtable: A Distributed Storage System for Structured Data*](https://www2.cs.duke.edu/courses/cps399.28/current/papers/osdi06-ChangDeanEtAl-bigtable.pdf)
+Fay Chang et al.: [_Bigtable: A Distributed Storage System for Structured Data_](https://www2.cs.duke.edu/courses/cps399.28/current/papers/osdi06-ChangDeanEtAl-bigtable.pdf)
 
-Lanyue Lu et al.: [*WiscKey: Separating Keys from Values in SSD-conscious Storage*](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
+Lanyue Lu et al.: [_WiscKey: Separating Keys from Values in SSD-conscious Storage_](https://www.usenix.org/system/files/conference/fast16/fast16-papers-lu.pdf)
 
-Manos Athanassoulis et al: [*Designing Access Methods: The RUM Conjecture*](https://stratos.seas.harvard.edu/files/stratos/files/rum.pdf)
+Manos Athanassoulis et al: [_Designing Access Methods: The RUM Conjecture_](https://stratos.seas.harvard.edu/files/stratos/files/rum.pdf)
 
-Patrick O’Neil et al.: [*The Log-Structured Merge-Tree (LSM-Tree)*](https://dsf.berkeley.edu/cs286/papers/lsm-acta1996.pdf)
+Patrick O’Neil et al.: [_The Log-Structured Merge-Tree (LSM-Tree)_](https://dsf.berkeley.edu/cs286/papers/lsm-acta1996.pdf)
 <div><strong>精选留言（13）</strong></div><ul>
 <li><span>扩散性百万咸面包</span> 👍（12） 💬（1）<p>思考题：
 使用Bloom Filter的改造版，现在不用来判断某个key是否不存在，而判断某个key的前缀是否不存在。比如说我要查300-000 到 300-999的区间，那么他们拥有共同前缀300，我只要判断这个前缀是不是在当前SSTable里即可。</p>2020-09-28</li><br/><li><span>Jxin</span> 👍（3） 💬（2）<p>课后题：

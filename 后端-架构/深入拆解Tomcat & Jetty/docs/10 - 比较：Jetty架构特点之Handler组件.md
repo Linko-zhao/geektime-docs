@@ -16,7 +16,7 @@ public interface Handler extends LifeCycle, Destroyable
     //处理请求的方法
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException;
-    
+
     //每个Handler都关联一个Server组件，被Server管理
     public void setServer(Server server);
     public Server getServer();

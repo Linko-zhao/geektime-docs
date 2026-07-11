@@ -605,10 +605,9 @@ val (left, operator, right) = exp</p>2022-01-04</li><br/><li><span>王玉朋</sp
         return result.reverse().toString()
     }
 
-
- @Test
-    fun testCalculateMinus1() {
-        val calculatorV = CalculatorV3()
+@Test
+fun testCalculateMinus1() {
+val calculatorV = CalculatorV3()
 
         val result = calculatorV.calculate(&quot;90-1&quot;)
         assertEquals(&quot;89&quot;, result)
@@ -629,6 +628,7 @@ val (left, operator, right) = exp</p>2022-01-04</li><br/><li><span>王玉朋</sp
         val result = calculatorV.calculate(&quot;233333333333333333333-1&quot;)
         assertEquals(&quot;233333333333333333332&quot;, result)
     }</p>2022-01-30</li><br/><li><span>JL</span> 👍（2） 💬（1）<p>您好，想问一个关于单元测试的问题：
+
 我在工作中assertEquals 和 assertThat().equals() 两种都遇到过 但是有人说 第二种更好一点。 想听听您的意见和建议。
 
 之前网上搜了一下 也没有看到过说哪个好哪个坏</p>2022-01-05</li><br/><li><span>droidYu</span> 👍（1） 💬（2）<p>老师，V1版本的代码输入 3 + 4 会报错：No enum constant Operation.+；需要输入3 ADD 4才能正常运行，是您标的①处的代码的问题Operation.valueOf()方法抛错，为什么要故意写错，是有什么设计要讲解吗？</p>2022-03-20</li><br/><li><span>爱学习的小羊</span> 👍（1） 💬（1）<p>private fun minus(left: String, right: String): String {
@@ -680,16 +680,16 @@ val (left, operator, right) = exp</p>2022-01-04</li><br/><li><span>王玉朋</sp
         }
         return result.append(resultMean).reverse().toString()
     }
+
 大佬这样写可吗</p>2022-02-23</li><br/><li><span>故事与酒</span> 👍（0） 💬（1）<p>大数加和乘
 
 fun minusString(left:String,right:String):String{
-    val result = StringBuilder()
-    var _left = left
-    var _right = right
-    var borrowNum = 0 &#47;&#47;是否向前借位
-    var leftIndex = left.length -1
-    var rightIndex = right.length - 1
-
+val result = StringBuilder()
+var _left = left
+var _right = right
+var borrowNum = 0 &#47;&#47;是否向前借位
+var leftIndex = left.length -1
+var rightIndex = right.length - 1
 
     &#47;&#47;判断是否是小-大
     val isRightBig = left.length&lt;right.length || left.length == right.length &amp;&amp; left[0] &lt; right[0]
@@ -733,9 +733,10 @@ fun minusString(left:String,right:String):String{
         }
         return result.reverse().toString()
     }</p>2022-01-17</li><br/><li><span>郑峰</span> 👍（0） 💬（1）<p>  private fun addString(left: String, right: String) = left.toBigDecimal().add(right.toBigDecimal()).toString()
-  private fun minusString(left: String, right: String) = left.toBigDecimal().subtract(right.toBigDecimal()).toString()
-  private fun multiString(left: String, right: String) = left.toBigDecimal().multiply(right.toBigDecimal()).toString()
-  private fun divString(left: String, right: String) = left.toBigDecimal().divideToIntegralValue(right.toBigDecimal()).toString()
+
+private fun minusString(left: String, right: String) = left.toBigDecimal().subtract(right.toBigDecimal()).toString()
+private fun multiString(left: String, right: String) = left.toBigDecimal().multiply(right.toBigDecimal()).toString()
+private fun divString(left: String, right: String) = left.toBigDecimal().divideToIntegralValue(right.toBigDecimal()).toString()
 </p>2022-01-16</li><br/><li><span>爱学习的小羊</span> 👍（0） 💬（2）<p>大佬以后出书的话  可以送我一本吗</p>2022-01-11</li><br/><li><span>Marten</span> 👍（0） 💬（3）<p>大数的减法
 fun minusString(left: String, right: String): String {
         val result = StringBuilder()
@@ -784,4 +785,5 @@ fun minusString(left: String, right: String): String {
         }
         return result.reverse().toString()
     }</p>2022-01-05</li><br/>
+
 </ul>

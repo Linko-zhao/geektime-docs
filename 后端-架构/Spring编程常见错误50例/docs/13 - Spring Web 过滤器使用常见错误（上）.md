@@ -49,7 +49,7 @@ public class Application {
 @Controller
 @Slf4j
 public class StudentController {
-   
+
     @PostMapping("/regStudent/{name}")
     @ResponseBody
     public String saveUser(String name) throws Exception {
@@ -134,7 +134,7 @@ class ServletComponentRegisteringPostProcessor implements BeanFactoryPostProcess
          }
       }
    }
-   
+
   private void scanPackage(ClassPathScanningCandidateComponentProvider componentProvider, String packageToScan) {
      // 扫描注解
      for (BeanDefinition candidate : componentProvider.findCandidateComponents(packageToScan)) {
@@ -201,7 +201,7 @@ public class StudentController {
     @Autowired
     @Qualifier("com.spring.puzzle.filter.TimeCostFilter")
     ​FilterRegistrationBean timeCostFilter;
- 
+
 }
 ```
 
@@ -287,19 +287,19 @@ Filter 处理中时发生异常
 public final void invoke(Request request, Response response)
     throws IOException, ServletException {
     // 省略非关键代码
-    // 创建filterChain 
+    // 创建filterChain
     ApplicationFilterChain filterChain =
         ApplicationFilterFactory.createFilterChain(request, wrapper, servlet);
-// 省略非关键代码 
+// 省略非关键代码
 try {
     if ((servlet != null) && (filterChain != null)) {
         // Swallow output if needed
         if (context.getSwallowOutput()) {
-             // 省略非关键代码 
+             // 省略非关键代码
              //执行filterChain
              filterChain.doFilter(request.getRequest(),
                             response.getResponse());
-             // 省略非关键代码 
+             // 省略非关键代码
          }
 // 省略非关键代码
 }
@@ -318,7 +318,7 @@ public static ApplicationFilterChain createFilterChain(ServletRequest request,
     ApplicationFilterChain filterChain = null;
     if (request instanceof Request) {
         // 省略非关键代码
-        // 创建Chain 
+        // 创建Chain
         filterChain = new ApplicationFilterChain();
         // 省略非关键代码
     }
@@ -396,13 +396,13 @@ private void internalDoFilter(ServletRequest request,
             // 执行filter
             filter.doFilter(request, response, this);
             // 省略非关键代码
-        } 
+        }
         // 省略非关键代码
         return;
     }
         // 执行真正实际业务
         servlet.service(request, response);
-    } 
+    }
     // 省略非关键代码
 }
 ```

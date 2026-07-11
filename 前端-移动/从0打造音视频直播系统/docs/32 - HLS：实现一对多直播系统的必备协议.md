@@ -65,7 +65,7 @@ ffmpeg -i test.mp4 -c copy -start_number 0 -hls_time 10 -hls_list_size 0 -hls_se
 test000.ts               //分片文件
 #EXTINF:9.929578,        //第二个分片实际时长
 test001.ts               //第二个分片文件
-... 
+...
 ```
 
 这里截取了分片列表文件开头部分的内容，可以看出文件内容要么是以`#`字母开头，要么就是没有`#`字母。关于文件格式规范，[RFC8216 草案](https://tools.ietf.org/html/draft-pantos-hls-rfc8216bis-04#section-4)第四节有详细的说明，你可以到那里查看详细的内容。

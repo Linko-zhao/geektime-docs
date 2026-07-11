@@ -114,7 +114,7 @@ type mheap struct {
     //页面分配的数据结构
     pages     pageAlloc
     //所有的mspan结构指针
-    allspans []*mspan 
+    allspans []*mspan
     ……略
     //heapArena结构指针数组
     arenas [1 << arenaL1Bits]*[1 << arenaL2Bits]*heapArena
@@ -162,12 +162,12 @@ mcentral数据结构里到底有什么重要的内容呢？我们结合代码来
 
 ```plain
 type mcentral struct {
-    //跨度类 
+    //跨度类
 	spanclass spanClass
     //具有空闲对象的mspan列表
-	partial [2]spanSet 
+	partial [2]spanSet
     //具有非空闲对象的mspan列表
-	full    [2]spanSet 
+	full    [2]spanSet
 }
 type spanSet struct {
 	spineLock mutex
@@ -210,8 +210,8 @@ mspan数据结构是Go运行时内存管理的基本单元，mspan中的起始�
 ```plain
 type mspan struct {
     // mspan双向链表
-    next *mspan    
-    prev *mspan     
+    next *mspan
+    prev *mspan
     // 该mspan页的开始地址
     startAddr uintptr
     // 该mspan包含的页数
@@ -229,13 +229,13 @@ type mspan struct {
     //gcmarkBits标记mspan中的对象哪些是被标记了的，哪些是未被标记的
 	gcmarkBits *gcBits
     // 已经分配的object的数量
-    allocCount  uint16 
+    allocCount  uint16
     // 跨度类
-	spanclass             spanClass     
+	spanclass             spanClass
     // mspan状态
-    state                 mSpanStateBox 
+    state                 mSpanStateBox
 	// 决定分配的对象是否需要初始化为0
-    needzero              uint8    
+    needzero              uint8
     // object的大小
     elemsize    uintptr
     // mspan结束地址
@@ -365,7 +365,7 @@ type mcache struct {
     // 拥有当前mcache的P执行的tiny分配数;
 	tinyAllocs uintptr
     // mspan指针数组，数组中指针指向不同大小对象的mspan
-	alloc [numSpanClasses]*mspan 
+	alloc [numSpanClasses]*mspan
     // 略
 }
 ```

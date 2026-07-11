@@ -208,31 +208,31 @@
    如果平台的某些页面需要加载时间，可以使用 Icon 作为加载动画的一部分，增强用户的等待体验。
 
 10. 错误页面的导航：
-   在“404”或其他错误页面上，Icon 可以作为一个明确的导航元素，帮助用户快速返回首页或其他关键页面。</p>2023-08-27</li><br/><li><span>浩荡如空气</span> 👍（0） 💬（1）<p>为什么不用最新的vue3</p>2023-08-20</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（1）<p>对于思考题，可以把这部分抽象成一个公共组件，以达到复用的效果！
+    在“404”或其他错误页面上，Icon 可以作为一个明确的导航元素，帮助用户快速返回首页或其他关键页面。</p>2023-08-27</li><br/><li><span>浩荡如空气</span> 👍（0） 💬（1）<p>为什么不用最新的vue3</p>2023-08-20</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（1）<p>对于思考题，可以把这部分抽象成一个公共组件，以达到复用的效果！
 
-1. 环境的安装，vue2.0和vue3.0有什么区别呢
-vue2.0
-npm install vue-cli
-vue3.0
-npm install @vue&#47;cli
+11. 环境的安装，vue2.0和vue3.0有什么区别呢
+    vue2.0
+    npm install vue-cli
+    vue3.0
+    npm install @vue&#47;cli
 
 区别在于多了@，@可以指定具体的版本
 
 2. macos系统使用npm安装的时候会出现没有权限报错
-直接使用sudo就可以
+   直接使用sudo就可以
 
 3. 在npm install也会报错
-实测mac前面加sudo即可，如果是m系列处理器需要npm install --ignore-scripts
+   实测mac前面加sudo即可，如果是m系列处理器需要npm install --ignore-scripts
+
 </p>2023-06-17</li><br/><li><span>ZENG</span> 👍（0） 💬（2）<p>1. 思考题
 可以创建一个公共组件的文件夹，专门放置要多处复用的组件，哪里需要就直接引入
 
 2. 安装时候出现的一些坑的总结
 
-直接用 npm install -g @vue&#47;cli  好像目前是安装的是 Vue CLI 4.x 的版本
+直接用 npm install -g @vue&#47;cli 好像目前是安装的是 Vue CLI 4.x 的版本
 根据文档如果想拉取2.x版本的，需要再安装一个桥接：
 npm install -g @vue&#47;cli-init
 再执行 vue init webpack my-project
-
 
 环境变量配置后出现 npm ERR 报错
 可以&quot; 进入 C 盘 - 用户 - 删除 .npmrc 文件 &quot;</p>2023-06-04</li><br/><li><span>Archer</span> 👍（0） 💬（1）<p>如果使用flask前后端不分离的话，可以用父子模板的方法，构建一个父模板里面是公共显示部分比如导航栏之类的，然后在子模板继承父模板再做独立的页面开发。不知道VUE是不是类似的方法。</p>2023-05-14</li><br/><li><span>Geek_840593</span> 👍（0） 💬（1）<p> 还有一个问题： 我没有http:&#47;&#47;localhost:8080&#47;#&#47; ，我访问本地url只显示http:&#47;&#47;localhost:8080</p>2023-05-12</li><br/><li><span>Geek_840593</span> 👍（0） 💬（1）<p>请问我们这次的项目用的是Vue CLI 3.x版本还是Vue CLI 2.x版本呀？ 就前面安装脚手架来看，2.x和3.x就不一样，比如vue init 命令已经被移除了，取而代之的是 vue create 命令，在 Vue CLI 3.x 版本中，dev 脚本已经被替换成了 serve 脚本，安装过程好痛苦</p>2023-05-12</li><br/><li><span>贾维斯Echo</span> 👍（0） 💬（1）<p>有几种不同的方式可以实现在每个页面上显示平台 icon 并让其链接回首页：
@@ -250,7 +250,7 @@ Step1: 执行命令：npm install --global vue-cli，成功
 Step2：执行：vue –V，成功，（刚开始有错误，搜索后解决）
 Step3: 执行：vue init webpack my-project2，成功（vue init webpack my-project2）
 Step4：执行：npm install, 失败
-npm WARN saveError ENOENT: no such file or directory, 
+npm WARN saveError ENOENT: no such file or directory,
 open &#39;E:\Javaweb\study\videolive\front\study2\package.json&#39;
 npm notice created a lockfile as package-lock.json. You should commit this file.
 npm WARN enoent ENOENT: no such file or directory, open &#39;E:\Javaweb\study\videolive\front\study2\package.json&#39;

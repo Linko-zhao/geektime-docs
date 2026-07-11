@@ -75,11 +75,11 @@ this.request.getCoyoteRequest().action(ActionCode.ASYNC_START, this);
 
 ```
 public void service(org.apache.coyote.Request req, org.apache.coyote.Response res) {
-    
+
    //调用容器的service方法处理请求
     connector.getService().getContainer().getPipeline().
            getFirst().invoke(request, response);
-   
+
    //如果是异步Servlet请求，仅仅设置一个标志，
    //否则说明是同步Servlet请求，就将响应数据刷到浏览器
     if (request.isAsync()) {
@@ -88,7 +88,7 @@ public void service(org.apache.coyote.Request req, org.apache.coyote.Response re
         request.finishRequest();
         response.finishResponse();
     }
-   
+
    //如果不是异步Servlet请求，就销毁Request对象和Response对象
     if (!async) {
         request.recycle();
@@ -121,10 +121,10 @@ private final Map<S,Processor> connections = new ConcurrentHashMap<>();
 public void complete() {
     //检查状态合法性，我们先忽略这句
     check();
-    
+
     //调用Request对象的action方法，其实就是通知连接器，这个异步请求处理完了
 request.getCoyoteRequest().action(ActionCode.ASYNC_COMPLETE, null);
-    
+
 }
 ```
 
@@ -156,11 +156,11 @@ protected void processSocketEvent(SocketEvent event, boolean dispatch) {
 ```
 public boolean processSocket(SocketWrapperBase<S> socketWrapper,
         SocketEvent event, boolean dispatch) {
-        
+
       if (socketWrapper == null) {
           return false;
       }
-      
+
       SocketProcessorBase<S> sc = processorCache.pop();
       if (sc == null) {
           sc = createSocketProcessor(socketWrapper, event);

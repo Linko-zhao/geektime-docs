@@ -610,7 +610,7 @@ public class WebappClassLoader extends URLClassLoader {
             }
         } catch (ClassNotFoundException e) {
         }
-        
+
         boolean delegateLoad = delegate;
         //到了这里，系统类加载器加载不成功，则判断是否为双亲委托模式，如果是，
         //则用parent来加载器来加载
@@ -801,7 +801,7 @@ public StandardContext getContext(String name){
 	        Loader loader = new WebappLoader(name,this.loader.getClassLoader());
 	        context.setLoader(loader);
 	        loader.start();
-			
+
 			this.contextMap.put(name, context);
 		}
 		return context;

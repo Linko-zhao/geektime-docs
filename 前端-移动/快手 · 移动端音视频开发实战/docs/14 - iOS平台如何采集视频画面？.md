@@ -410,7 +410,7 @@ ELImage框架还可以扩展出许多其他的节点，组成复杂的场景，�
 
 感谢老师的解答，辛苦了</p>2022-12-19</li><br/><li><span>一个正直的小龙猫</span> 👍（0） 💬（2）<p>请教老师一个问题：
 这个是摄像头采集视频画面，如果是webrtc直播视频流呢？
-想录制视频，采集直播流的视频和音频，用什么技术方案实现是最佳的？replaykit2还是ffmepg，他俩对比优缺点是什么？ 
+想录制视频，采集直播流的视频和音频，用什么技术方案实现是最佳的？replaykit2还是ffmepg，他俩对比优缺点是什么？
 </p>2022-08-24</li><br/><li><span>Neil43</span> 👍（0） 💬（1）<p>老师你好，我在使用AVFoundation框架的AVAssetWriterinput ，追加SampleBuffer报错，关键代码：
 AVAsset WriterInput *videoInput = [AVAsset WriterInput
 asset WriterInput WithMediaType:AVMediaTypeVideo
@@ -428,7 +428,6 @@ NSUnderlyingError = Error Domain=NSOSStatusErrorDomain Code=-12780
 &quot;(null)”}
 
 请问老师知道大概是什么原因吗？如果appendSampleBuffer方法报错，再调用finishWritingWithCompletionHandler方法，能正常生成视频吗？谢谢。
-
 
 </p>2022-08-24</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师一个问题：
 Q1：AI唱歌，有能够使用的软件吗？（开源、付费的都可以）。 AI唱歌，是指用一个人的声音把一首歌完整的唱出来。比如有特朗普的一段音频（比如30s声音片段），然后软件根据这个声音片段，就可以把《好汉歌》唱出来。效果就是听众认为是特朗普唱的《好汉歌》。</p>2022-08-24</li><br/><li><span>月半木子🎊</span> 👍（0） 💬（0）<p>请问老师，这个实现如何自测是否满足需求呢，自测需要关注哪些测试点呢</p>2023-06-13</li><br/>

@@ -22,7 +22,7 @@ ENGLISH_REACT_COMPLETION_PROMPT_TEMPLATES = """Respond to the human as helpfully
 You have access to the following tools:
 
 {{tools}}
-""" 
+"""
 ```
 
 这里我只是截取了模板中的几行，你理解我要表达的意思即可，完整模板可以去上节课查看。在这个模板中，{{instruction}} 和 {{tools}} 作为占位符，让我们明确知道在模板中的哪个部分需要插入特定的信息。那么，使用 Go 语言能否实现类似的效果呢？答案是肯定的。
@@ -317,7 +317,7 @@ properties:
 instruction: 你是一个精通多国语言的翻译专家，可以翻译任何文本。
 apis:
 - apiProvider:
-    apiKey: 
+    apiKey:
       name: DeepL-Auth-Key
       value: xxxxxxxxxxxxxxxxxxx
       in: header

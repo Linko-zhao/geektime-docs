@@ -38,7 +38,7 @@ DECLARE date_start DATETIME DEFAULT ('2017-01-01 00:00:00');
 DECLARE date_temp DATETIME;
 SET date_temp = date_start;
 SET autocommit=0;
- 
+
 REPEAT
 SET i=i+1;
 SET date_temp = date_add(date_temp, interval RAND()*60 second);
@@ -50,7 +50,7 @@ IF score = 112 THEN
            SET score = score + score2;
 END IF;
 -- 插入新玩家
-INSERT INTO user_score(user_id, score, create_time) VALUES((START+i), score, date_temp); 
+INSERT INTO user_score(user_id, score, create_time) VALUES((START+i), score, date_temp);
 UNTIL i = max_num
 END REPEAT;
 COMMIT;
@@ -92,7 +92,7 @@ MySQL不像Oracle一样自带rownum统计行编号的功能，所以这里我们
 
 ```
 SELECT user_id, score,
-    IFNULL((SELECT COUNT(*) FROM user_score WHERE score > t.score), 0) + 1 AS user_rank  
+    IFNULL((SELECT COUNT(*) FROM user_score WHERE score > t.score), 0) + 1 AS user_rank
 FROM user_score t
 ORDER BY user_rank ASC
 ```
@@ -148,19 +148,19 @@ redis-cli --eval lua_file key1 key2 , arg1 arg2 arg3
 
 ```
 --设置时间种子
-math.randomseed(ARGV[1]) 
+math.randomseed(ARGV[1])
 -- 设置初始的生成时间
-local create_time = 1567769563 - 3600*24*365*2.0 
+local create_time = 1567769563 - 3600*24*365*2.0
 local num = ARGV[2]
 local user_id = ARGV[3]
 for i=1, num do
   --生成1到60之间的随机数
-  local interval = math.random(1, 60) 
+  local interval = math.random(1, 60)
   --产生1到112之间的随机数
-  local temp = math.random(1, 112) 
+  local temp = math.random(1, 112)
   if (temp == 112) then
         --产生0到100之间的随机数
-        temp = temp + math.random(0, 100) 
+        temp = temp + math.random(0, 100)
   end
   create_time = create_time + interval
   temp = temp + create_time / 10000000000
@@ -310,19 +310,19 @@ CREATE TABLE `t_dt_ip` (
   KEY `ip_range_int` (`start_int`,`end_int`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-explain  update t_tmp_ip t, t_dt_ip i  
+explain update t_tmp_ip t, t_dt_ip i  
 set t.ip_id = i.id
 where INET_ATON(t.ip_address) between i.start_int and i.end_int;
-| id | select_type | table | partitions | type | possible_keys                       | key  | key_len | ref  | rows   | filtered | Extra                                          |
-|  1 | UPDATE      | t     | NULL       | ALL  | NULL                                | NULL | NULL    | NULL |   1000 |   100.00 | NULL                                           |
-|  1 | SIMPLE      | i     | NULL       | ALL  | ip_range_int      | NULL | NULL    | NULL | 541942 |    11.11 | Range checked for each record (index map: 0xC) |
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
+| 1 | UPDATE | t | NULL | ALL | NULL | NULL | NULL | NULL | 1000 | 100.00 | NULL |
+| 1 | SIMPLE | i | NULL | ALL | ip_range_int | NULL | NULL | NULL | 541942 | 11.11 | Range checked for each record (index map: 0xC) |
 
 甚至加上单个字段索引也没有用？？
 alter table `t_dt_ip` add index indx_t_dt_ip_start_int (start_int);
 mysql&gt; explain select * from t_dt_ip i join t_tmp_ip t on 1= 1 where t.ip_address &gt;= i.start_int limit 1;
-| id | select_type | table | partitions | type | possible_keys                       | key  | key_len | ref  | rows   | filtered | Extra                                          |
-|  1 | SIMPLE      | t     | NULL       | ALL  | NULL                                | NULL | NULL    | NULL |  73126 |   100.00 | NULL                                           |
-|  1 | SIMPLE      | i     | NULL       | ALL  | ip_range_int,indx_t_dt_ip_start_int | NULL | NULL    | NULL | 541942 |    33.33 | Range checked for each record (index map: 0xC) |
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
+| 1 | SIMPLE | t | NULL | ALL | NULL | NULL | NULL | NULL | 73126 | 100.00 | NULL |
+| 1 | SIMPLE | i | NULL | ALL | ip_range_int,indx_t_dt_ip_start_int | NULL | NULL | NULL | 541942 | 33.33 | Range checked for each record (index map: 0xC) |
 </p>2019-09-14</li><br/><li><span>白菜炒五花肉</span> 👍（0） 💬（0）<p>ERR Error running script (call to f_84b63a152215a96efa70b8935ae3d2b0e5ab93d1): @user_script:3: user_script:3: bad argument #1 to &#39;randomseed&#39; (number expected, got nil) 老师，使用redis创建10w名玩家数据，执行lua脚本，报这个错误是啥问题</p>2022-08-25</li><br/><li><span>完美坚持</span> 👍（0） 💬（2）<p>为什么
 查询某个玩家的排名
 对玩家的分数和排名进行更新

@@ -45,8 +45,8 @@ start_of_setup:
 
 	movw	%ss, %dx
 	cmpw	%ax, %dx	# ds 是否等于 ss
-	movw	%sp, %dx     
-	je	2f		
+	movw	%sp, %dx
+	je	2f
 	# 如果ss为空则建立新栈
 	movw	$_end, %dx
 	testb	$CAN_USE_HEAP, loadflags
@@ -54,13 +54,13 @@ start_of_setup:
 	movw	heap_end_ptr, %dx
 1:	addw	$STACK_SIZE, %dx
 	jnc	2f
-	xorw	%dx, %dx	
+	xorw	%dx, %dx
 2:
 	andw	$~3, %dx
 	jnz	3f
-	movw	$0xfffc, %dx	
+	movw	$0xfffc, %dx
 3:	movw	%ax, %ss
-	movzwl	%dx, %esp	
+	movzwl	%dx, %esp
 	sti			# 栈已经初始化好，开中断
 	pushw	%ds
 	pushw	$6f
@@ -74,7 +74,7 @@ start_of_setup:
 	subw	%di, %cx
 	shrw	$2, %cx
 	rep; stosl          #清空setup程序的bss段
-	calll	main  #调用C语言main函数 
+	calll	main  #调用C语言main函数
 ```
 
 ### setup\_header结构
@@ -82,23 +82,23 @@ start_of_setup:
 下面我们重点研究一下setup\_header结构，这对我们后面的流程很关键。它定义在linux/arch/x86/include/uapi/asm/bootparam.h文件中，如下所示。
 
 ```
-struct setup_header {    
+struct setup_header {
 __u8    setup_sects;        //setup大小
-__u16   root_flags;         //根标志   
+__u16   root_flags;         //根标志
 __u32   syssize;            //系统文件大小
 __u16   ram_size;           //内存大小
-__u16   vid_mode;    
+__u16   vid_mode;
 __u16   root_dev;           //根设备号
 __u16   boot_flag;          //引导标志
 //……
-__u32   realmode_swtch;     //切换回实模式的函数地址     
-__u16   start_sys_seg;    
-__u16   kernel_version;     //内核版本    
+__u32   realmode_swtch;     //切换回实模式的函数地址
+__u16   start_sys_seg;
+__u16   kernel_version;     //内核版本
 __u8    type_of_loader;     //引导器类型 我们这里是GRUB
-__u8    loadflags;          //加载内核的标志 
+__u8    loadflags;          //加载内核的标志
 __u16   setup_move_size;    //移动setup的大小
-__u32   code32_start;       //将要跳转到32位模式下的地址 
-__u32   ramdisk_image;      //初始化内存盘映像地址，里面有内核驱动模块 
+__u32   code32_start;       //将要跳转到32位模式下的地址
+__u32   ramdisk_image;      //初始化内存盘映像地址，里面有内核驱动模块
 __u32   ramdisk_size;       //初始化内存盘映像大小
 //……
 } __attribute__((packed));
@@ -118,39 +118,39 @@ GRUB将vmlinuz的setup.bin部分读到内存地址0x90000处，然后跳转到0x
 //定义boot_params变量
 struct boot_params boot_params __attribute__((aligned(16)));
 char *HEAP = _end;
-char *heap_end = _end; 
+char *heap_end = _end;
 //……
 void main(void){
-    //把先前setup_header结构复制到boot_params结构中的hdr变量中，在linux/arch/x86/include/uapi/asm/bootparam.h文件中你会发现boot_params结构中的hdr的类型正是setup_header结构  
+    //把先前setup_header结构复制到boot_params结构中的hdr变量中，在linux/arch/x86/include/uapi/asm/bootparam.h文件中你会发现boot_params结构中的hdr的类型正是setup_header结构
     copy_boot_params();
-    //初始化早期引导所用的console    
-    console_init();    
-    //初始化堆 
+    //初始化早期引导所用的console
+    console_init();
+    //初始化堆
     init_heap();
-    //检查CPU是否支持运行Linux    
-    if (validate_cpu()) {        
-        puts("Unable to boot - please use a kernel appropriate "             "for your CPU.\n");        
-        die();    
+    //检查CPU是否支持运行Linux
+    if (validate_cpu()) {
+        puts("Unable to boot - please use a kernel appropriate "             "for your CPU.\n");
+        die();
     }
     //告诉BIOS我们打算在什么CPU模式下运行它
     set_bios_mode();
-    //查看物理内存空间布局    
+    //查看物理内存空间布局
     detect_memory();
     //初始化键盘
     keyboard_init();
-    //查询Intel的(IST)信息。    
+    //查询Intel的(IST)信息。
     query_ist();
     /*查询APM BIOS电源管理信息。*/
-    #if defined(CONFIG_APM) || defined(CONFIG_APM_MODULE)   
+    #if defined(CONFIG_APM) || defined(CONFIG_APM_MODULE)
     query_apm_bios();
     #endif
     //查询EDD BIOS扩展数据区域的信息
-    #if defined(CONFIG_EDD) || defined(CONFIG_EDD_MODULE) 
+    #if defined(CONFIG_EDD) || defined(CONFIG_EDD_MODULE)
     query_edd();
     #endif
-    //设置显卡的图形模式    
+    //设置显卡的图形模式
     set_video();
-    //进入CPU保护模式，不会返回了       
+    //进入CPU保护模式，不会返回了
     go_to_protected_mode();
 }
 ```
@@ -161,20 +161,20 @@ void main(void){
 
 ```
 //linux/arch/x86/boot/pm.c
-void go_to_protected_mode(void){    
+void go_to_protected_mode(void){
     //安装切换实模式的函数
     realmode_switch_hook();
     //开启a20地址线，是为了能访问1MB以上的内存空间
-    if (enable_a20()) {        
+    if (enable_a20()) {
         puts("A20 gate not responding, unable to boot...\n");
-        die();    
+        die();
     }
-    //重置协处理器，早期x86上的浮点运算单元是以协处理器的方式存在的    
+    //重置协处理器，早期x86上的浮点运算单元是以协处理器的方式存在的
     reset_coprocessor();
-    //屏蔽8259所示的中断源   
+    //屏蔽8259所示的中断源
     mask_all_interrupts();
-    //安装中断描述符表和全局描述符表，    
-    setup_idt();    
+    //安装中断描述符表和全局描述符表，
+    setup_idt();
     setup_gdt();
     //保护模式下长跳转到boot_params.hdr.code32_start
     protected_mode_jump(boot_params.hdr.code32_start,                (u32)&boot_params + (ds() << 4));
@@ -235,7 +235,7 @@ SYM_FUNC_START(startup_32)
     pushl	$__KERNEL_CS
 	pushl	%eax
     #开启分页和保护模式
-	movl	$(X86_CR0_PG | X86_CR0_PE), %eax 
+	movl	$(X86_CR0_PG | X86_CR0_PE), %eax
 	movl	%eax, %cr0
     #弹出刚刚栈中压入的内核代码段描述符和startup_64的地址到CS和RIP中，实现跳转，真正进入长模式。
 	lret
@@ -292,21 +292,21 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
 	shrq	$3, %rcx
 	rep	stosq
     #……省略无关代码
-	pushq	%rsi			
-	movq	%rsi, %rdi		
+	pushq	%rsi
+	movq	%rsi, %rdi
 	leaq	boot_heap(%rip), %rsi
-    #准备参数：被解压数据的开始地址 	
+    #准备参数：被解压数据的开始地址
 	leaq	input_data(%rip), %rdx
-    #准备参数：被解压数据的长度 	
+    #准备参数：被解压数据的长度
 	movl	input_len(%rip), %ecx
-    #准备参数：解压数据后的开始地址 		
+    #准备参数：解压数据后的开始地址
 	movq	%rbp, %r8
     #准备参数：解压数据后的长度
 	movl	output_len(%rip), %r9d
     #调用解压函数解压vmlinux.bin.gz，返回入口地址
     call	extract_kernel
 	popq	%rsi
-    #跳转到内核入口地址 
+    #跳转到内核入口地址
 	jmp	*%rax
 SYM_FUNC_END(.Lrelocated)
 ```
@@ -328,17 +328,17 @@ asmlinkage __visible void *extract_kernel(
                                 unsigned long input_len,
                                 unsigned char *output,
                                 unsigned long output_len
-                                ){    
+                                ){
     const unsigned long kernel_total_size = VO__end - VO__text;
-    unsigned long virt_addr = LOAD_PHYSICAL_ADDR;    
+    unsigned long virt_addr = LOAD_PHYSICAL_ADDR;
     unsigned long needed_size;
     //省略了无关性代码
-    debug_putstr("\nDecompressing Linux... ");    
+    debug_putstr("\nDecompressing Linux... ");
     //调用具体的解压缩算法解压
     __decompress(input_data, input_len, NULL, NULL, output, output_len,            NULL, error);
     //解压出的vmlinux是elf格式，所以要解析出里面的指令数据段和常规数据段
-    //返回vmlinux的入口点即Linux内核程序的开始地址  
-    parse_elf(output); 
+    //返回vmlinux的入口点即Linux内核程序的开始地址
+    parse_elf(output);
     handle_relocations(output, output_len, virt_addr);    debug_putstr("done.\nBooting the kernel.\n");
     return output;
 }
@@ -357,7 +357,7 @@ asmlinkage __visible void *extract_kernel(
 这个startup\_64函数定义在linux/arch/x86/kernel/head\_64.S文件中，它是内核的入口函数，如下所示。
 
 ```
-#linux/arch/x86/kernel/head_64.S	
+#linux/arch/x86/kernel/head_64.S
     .code64
 SYM_CODE_START_NOALIGN(startup_64)
 	#切换栈
@@ -392,14 +392,14 @@ SYM_CODE_START(secondary_startup_64)
 #endif
     #省略了大量无关性代码
 .Ljump_to_C_code:
-	pushq	$.Lafter_lret	
+	pushq	$.Lafter_lret
 	xorl	%ebp, %ebp
-    #获取x86_64_start_kernel函数地址赋给rax	
+    #获取x86_64_start_kernel函数地址赋给rax
 	movq	initial_code(%rip), %rax
-	pushq	$__KERNEL_CS	
+	pushq	$__KERNEL_CS
     #将x86_64_start_kernel函数地址压入栈中
 	pushq	%rax
-    #弹出__KERNEL_CS	和x86_64_start_kernel函数地址到CS：RIP完成调用	
+    #弹出__KERNEL_CS	和x86_64_start_kernel函数地址到CS：RIP完成调用
     lretq
 .Lafter_lret:
 SYM_CODE_END(secondary_startup_64)
@@ -416,7 +416,7 @@ SYM_DATA(initial_code,	.quad x86_64_start_kernel)
 但是，只要我们跟着代码的执行流程，就会发现**在secondary\_startup\_64函数的最后，调用的x86\_64\_start\_kernel函数是用C语言写的，那么它一定就是Linux内核的第一个C函数。**它在linux/arch/x86/kernel/head64.c文件中被定义，这个文件名你甚至都能猜出来，如下所示。
 
 ```
-asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data){    
+asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data){
     //重新设置早期页表
     reset_early_page_tables();
     //清理BSS段
@@ -431,7 +431,7 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data){
     init_top_pgt[511] = early_top_pgt[511];
     x86_64_start_reservations(real_mode_data);
 }
-void __init x86_64_start_reservations(char *real_mode_data){  
+void __init x86_64_start_reservations(char *real_mode_data){
    //略过无关的代码
     start_kernel();
 }
@@ -450,8 +450,8 @@ start\_kernel函数之所以有名，这是因为在互联网上，在各大Linu
 其实，start\_kernel函数中调用了大量Linux内核功能的初始化函数，它定义在/linux/init/main.c文件中。
 
 ```
-void start_kernel(void){    
-    char *command_line;    
+void start_kernel(void){
+    char *command_line;
     char *after_dashes;
     //CPU组早期初始化
     cgroup_init_early();
@@ -459,12 +459,12 @@ void start_kernel(void){
     local_irq_disable();
     //ARCH层初始化
     setup_arch(&command_line);
-    //日志初始化      
-    setup_log_buf(0);    
+    //日志初始化
+    setup_log_buf(0);
     sort_main_extable();
-    //陷阱门初始化    
+    //陷阱门初始化
     trap_init();
-    //内存初始化    
+    //内存初始化
     mm_init();
     ftrace_init();
     //调度器初始化
@@ -474,35 +474,35 @@ void start_kernel(void){
     //RCU锁初始化
     rcu_init();
     //IRQ 中断请求初始化
-    early_irq_init();    
-    init_IRQ();    
-    tick_init();    
+    early_irq_init();
+    init_IRQ();
+    tick_init();
     rcu_init_nohz();
-    //定时器初始化 
-    init_timers();    
+    //定时器初始化
+    init_timers();
     hrtimers_init();
-    //软中断初始化    
-    softirq_init();    
+    //软中断初始化
+    softirq_init();
     timekeeping_init();
     mem_encrypt_init();
     //每个cpu页面集初始化
-    setup_per_cpu_pageset();    
-    //fork初始化建立进程的 
-    fork_init();    
-    proc_caches_init();    
+    setup_per_cpu_pageset();
+    //fork初始化建立进程的
+    fork_init();
+    proc_caches_init();
     uts_ns_init();
-    //内核缓冲区初始化    
-    buffer_init();    
-    key_init();    
+    //内核缓冲区初始化
+    buffer_init();
+    key_init();
     //安全相关的初始化
-    security_init();  
-    //VFS数据结构内存池初始化  
+    security_init();
+    //VFS数据结构内存池初始化
     vfs_caches_init();
-    //页缓存初始化    
+    //页缓存初始化
     pagecache_init();
-    //进程信号初始化    
-    signals_init();    
-    //运行第一个进程 
+    //进程信号初始化
+    signals_init();
+    //运行第一个进程
     arch_call_rest_init();
 }
 ```
@@ -514,7 +514,7 @@ start\_kernel函数我如果不做精简，会有200多行，全部都是初始�
 一旦start\_kernel函数执行完成，Linux内核就具备了向应用程序提供一系列功能服务的能力。这里对我们而言，我们只关注一个arch\_call\_rest\_init函数。下面我们就来研究它。 如下所示。
 
 ```
-void __init __weak arch_call_rest_init(void){    
+void __init __weak arch_call_rest_init(void){
     rest_init();
 }
 ```
@@ -527,8 +527,8 @@ rest\_init函数的重要功能就是建立了两个Linux内核线程，我们�
 noinline void __ref rest_init(void){    struct task_struct *tsk;
     int pid;
     //建立kernel_init线程
-    pid = kernel_thread(kernel_init, NULL, CLONE_FS);   
-    //建立khreadd线程 
+    pid = kernel_thread(kernel_init, NULL, CLONE_FS);
+    //建立khreadd线程
     pid = kernel_thread(kthreadd, NULL, CLONE_FS | CLONE_FILES);
 }
 ```
@@ -542,21 +542,21 @@ Linux内核线程可以执行一个内核函数， 只不过这个函数有独�
 经历了“长途跋涉”，我们也终于走到了这里**。Linux内核的第一个用户态进程是在kernel\_init线程建立的，而kernel\_init线程执行的就是kernel\_init函数。**那kernel\_init函数到底做了什么呢？
 
 ```
-static int __ref kernel_init(void *unused){   
+static int __ref kernel_init(void *unused){
      int ret;
-     if (ramdisk_execute_command) {       
-         ret = run_init_process(ramdisk_execute_command);        
-         if (!ret)            
-             return 0;        
-         pr_err("Failed to execute %s (error %d)\n",ramdisk_execute_command, ret);    
+     if (ramdisk_execute_command) {
+         ret = run_init_process(ramdisk_execute_command);
+         if (!ret)
+             return 0;
+         pr_err("Failed to execute %s (error %d)\n",ramdisk_execute_command, ret);
      }
-     if (execute_command) {        
-         ret = run_init_process(execute_command);        
-         if (!ret)            
-         return 0;        
-         panic("Requested init %s failed (error %d).",              execute_command, ret);    
+     if (execute_command) {
+         ret = run_init_process(execute_command);
+         if (!ret)
+         return 0;
+         panic("Requested init %s failed (error %d).",              execute_command, ret);
      }
-    if (!try_to_run_init_process("/sbin/init") ||                    !try_to_run_init_process("/etc/init") ||        !try_to_run_init_process("/bin/init") ||        !try_to_run_init_process("/bin/sh"))        
+    if (!try_to_run_init_process("/sbin/init") ||                    !try_to_run_init_process("/etc/init") ||        !try_to_run_init_process("/bin/init") ||        !try_to_run_init_process("/bin/sh"))
     return 0;
 panic("No working init found.  Try passing init= option to kernel. "          "See Linux Documentation/admin-guide/init.rst for guidance.");
 }
@@ -636,7 +636,7 @@ Header.S文件中从start_of_setup开始，其实就是这个setup_header的结�
 7.2、启用1M以上内存
 7.3、设置中断描述符表IDT
 7.4、设置全局描述符表GDT
-7.4、protected_mode_jump，跳转到boot_params.hdr.code32_start【保护模式下，长跳转，地址为 0x100000】 
+7.4、protected_mode_jump，跳转到boot_params.hdr.code32_start【保护模式下，长跳转，地址为 0x100000】
 
 8、恰好是vmlinux.bin在内存中的位置，通过这一跳转，正式进入vmlinux.bin
 

@@ -43,7 +43,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/f9/56/f963dbbce06612654bfe85df7ee6ed56.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 
@@ -73,7 +73,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/2b/e1/2baa128d1e0ea8bdc5aaed2a33f4ace1.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 
@@ -105,7 +105,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/7b/2d/7bf4018d2d50502fdd96e3146a76cf2d.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 

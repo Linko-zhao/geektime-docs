@@ -135,100 +135,100 @@ fmt.Printf("The unread bytes of the buffer: %v\n", buffer1.Bytes()) // 未读内
 对stringtoslicebyte做了debug，没想到cap为8是这么来的
 
 func stringtoslicebyte(buf *tmpBuf, s string) []byte {
-	var b []byte
-	if buf != nil &amp;&amp; len(s) &lt;= len(buf) {
-		*buf = tmpBuf{}
-		b = buf[:len(s)]
-	} else {
-		b = rawbyteslice(len(s))&#47;&#47; bytes.Buffer 初始化 buf 为空，需要调用 rawbyteslice 初始化 slice
-	}
-	copy(b, s)
-	return b
+var b []byte
+if buf != nil &amp;&amp; len(s) &lt;= len(buf) {
+*buf = tmpBuf{}
+b = buf[:len(s)]
+} else {
+b = rawbyteslice(len(s))&#47;&#47; bytes.Buffer 初始化 buf 为空，需要调用 rawbyteslice 初始化 slice
 }
-
+copy(b, s)
+return b
+}
 
 func rawbyteslice(size int) (b []byte) {
-	cap := roundupsize(uintptr(size))&#47;&#47; roundupsize 计算容量，重点关注这里
-	p := mallocgc(cap, nil, false)&#47;&#47; 分配内存
-	if cap != uintptr(size) {
-		memclrNoHeapPointers(add(p, uintptr(size)), cap-uintptr(size))
-	}
-
-	*(*slice)(unsafe.Pointer(&amp;b)) = slice{p, size, int(cap)}
-	return
+cap := roundupsize(uintptr(size))&#47;&#47; roundupsize 计算容量，重点关注这里
+p := mallocgc(cap, nil, false)&#47;&#47; 分配内存
+if cap != uintptr(size) {
+memclrNoHeapPointers(add(p, uintptr(size)), cap-uintptr(size))
 }
 
+    *(*slice)(unsafe.Pointer(&amp;b)) = slice{p, size, int(cap)}
+    return
+
+}
 
 &#47;&#47; Returns size of the memory block that mallocgc will allocate if you ask for the size.
 func roundupsize(size uintptr) uintptr {
-	if size &lt; _MaxSmallSize {
-		if size &lt;= smallSizeMax-8 {		&#47;&#47; 以大佬例子为例：contents := &quot;ab&quot; buffer1 := bytes.NewBufferString(contents)，size长度为2，肯定小于smallSizeMax-8
-			return uintptr(class_to_size[size_to_class8[divRoundUp(size, smallSizeDiv)]]) &#47;&#47; divRoundUp 函数算出来 为1， size_to_class8[1]=1;class_to_size[1]=8返回的uintptr为8，这里做了一个约定类似于查表
-		} else {
-			return uintptr(class_to_size[size_to_class128[divRoundUp(size-smallSizeMax, largeSizeDiv)]])
-		}
-	}
-	if size+_PageSize &lt; size {
-		return size
-	}
-	return alignUp(size, _PageSize)
+if size &lt; _MaxSmallSize {
+if size &lt;= smallSizeMax-8 { &#47;&#47; 以大佬例子为例：contents := &quot;ab&quot; buffer1 := bytes.NewBufferString(contents)，size长度为2，肯定小于smallSizeMax-8
+return uintptr(class_to_size[size_to_class8[divRoundUp(size, smallSizeDiv)]]) &#47;&#47; divRoundUp 函数算出来 为1， size_to_class8[1]=1;class_to_size[1]=8返回的uintptr为8，这里做了一个约定类似于查表
+} else {
+return uintptr(class_to_size[size_to_class128[divRoundUp(size-smallSizeMax, largeSizeDiv)]])
 }
-
+}
+if size+_PageSize &lt; size {
+return size
+}
+return alignUp(size, _PageSize)
+}
 
 &#47;&#47; 这里算出来是1
 func divRoundUp(n, a uintptr) uintptr {
-	&#47;&#47; a is generally a power of two. This will get inlined and
-	&#47;&#47; the compiler will optimize the division.
-	return (n + a - 1) &#47; a  &#47;&#47; (8+2-1)&#47; 8=1
-}</p>2023-12-20</li><br/><li><span>costaLong</span> 👍（0） 💬（1）<p>	contents := &quot;ab&quot;
-	buffer1 := bytes.NewBufferString(contents)
-	fmt.Printf(&quot;The capacity of new buffer with content %q: %d\n&quot;, contents, buffer1.Cap()) &#47;&#47; 内容容器的容量：8
+&#47;&#47; a is generally a power of two. This will get inlined and
+&#47;&#47; the compiler will optimize the division.
+return (n + a - 1) &#47; a &#47;&#47; (8+2-1)&#47; 8=1
+}</p>2023-12-20</li><br/><li><span>costaLong</span> 👍（0） 💬（1）<p> contents := &quot;ab&quot;
+buffer1 := bytes.NewBufferString(contents)
+fmt.Printf(&quot;The capacity of new buffer with content %q: %d\n&quot;, contents, buffer1.Cap()) &#47;&#47; 内容容器的容量：8
 单独执行这段代码输出的结果是：The capacity of new buffer with content &quot;ab&quot;: 32
- 请问是原因呢</p>2022-02-17</li><br/><li><span>rename</span> 👍（0） 💬（2）<p>如果当前内容容器的容量的一半，仍然大于或等于其现有长度再加上所需的字节数的和，即：cap(b.buf)&#47;2 &gt;= len(b.buf)+need
+请问是原因呢</p>2022-02-17</li><br/><li><span>rename</span> 👍（0） 💬（2）<p>如果当前内容容器的容量的一半，仍然大于或等于其现有长度再加上所需的字节数的和，即：cap(b.buf)&#47;2 &gt;= len(b.buf)+need
 这边len(b.buf)用b.Len()似乎更准确？才是获取未读部分的实际长度</p>2019-07-14</li><br/><li><span>嘎嘎</span> 👍（0） 💬（1）<p>源码里给了推荐的构建方法
 &#47;&#47; To build strings more efficiently, see the strings.Builder type.
 func (b *Buffer) String() string {
-	if b == nil {
-		&#47;&#47; Special case, useful in debugging.
-		return &quot;&lt;nil&gt;&quot;
-	}
-	return string(b.buf[b.off:])
+if b == nil {
+&#47;&#47; Special case, useful in debugging.
+return &quot;&lt;nil&gt;&quot;
+}
+return string(b.buf[b.off:])
 }</p>2019-03-15</li><br/><li><span>失了智的沫雨</span> 👍（34） 💬（3）<p>如果只看strings.Builder 和bytes.Buffer的String方法的话，strings.Builder 更高效一些。
 我们可以直接查看两个String方法的源代码，其中strings.Builder String方法中
-*(*string)(unsafe.Pointer(&amp;b.buf))  是直接取得buf的地址然后转换成string返回。
-而bytes.Buffer的String方法是   string(b.buf[b.off:])
- 对buf 进行切片操作,我认为这比直接取址要花费更多的时间。
+*(*string)(unsafe.Pointer(&amp;b.buf)) 是直接取得buf的地址然后转换成string返回。
+而bytes.Buffer的String方法是 string(b.buf[b.off:])
+对buf 进行切片操作,我认为这比直接取址要花费更多的时间。
 测试函数:
 func BenchmarkStrings(b *testing.B) {
-	str := strings.Builder{}&#47;bytes.Buffer{}
-	str.WriteString(&quot;test&quot;)
-	for i := 0; i &lt; b.N; i++ {
-		str.String()
-	}
+str := strings.Builder{}&#47;bytes.Buffer{}
+str.WriteString(&quot;test&quot;)
+for i := 0; i &lt; b.N; i++ {
+str.String()
+}
 }
 结果为
-BenchmarkStrings-8   	2000000000	         0.66 ns&#47;op
-BenchmarkBuffer-8    	300000000	         5.64 ns&#47;op
+BenchmarkStrings-8 2000000000 0.66 ns&#47;op
+BenchmarkBuffer-8 300000000 5.64 ns&#47;op
 所以strings.Builder的String方法更高效</p>2018-11-11</li><br/><li><span>🐻</span> 👍（7） 💬（0）<p>https:&#47;&#47;github.com&#47;golang&#47;go&#47;blob&#47;master&#47;src&#47;strings&#47;builder_test.go#L319-L366
 
 发现最后的问题，Go 的标准库中，已经给出了相关的测试代码了。</p>2019-04-26</li><br/><li><span>1thinc0</span> 👍（5） 💬（0）<p>bytes.Buffer 值的 String() 方法在转换时采用了指针 *(*string)(unsafe.Pointer(&amp;b.buf))，更节省时间和内存</p>2018-11-16</li><br/><li><span>Geek_51aa7f</span> 👍（3） 💬（0）<p>在Byte()或者Next()结果返回的字节切片处理后才可以返回给外部函数
 unreadBytes = unreadBytes[:len(unreadBytes):len(unreadBytes)]</p>2020-06-07</li><br/><li><span>骏Jero</span> 👍（3） 💬（0）<p>读了老师的两篇文章，strings.Builder更多是拼接数据和以及拼接完成后的读取使用上应该更适合。而buffer更为动态接受和读取数据时，更为高效。</p>2018-11-09</li><br/><li><span>cygnus</span> 👍（2） 💬（1）<p>```
 func (b *Buffer) grow(n int) int {
-        ......
-	&#47;&#47; Restore b.off and len(b.buf).
-	b.off = 0
-	b.buf = b.buf[:m+n]
-	return m
+......
+&#47;&#47; Restore b.off and len(b.buf).
+b.off = 0
+b.buf = b.buf[:m+n]
+return m
 
 func (b *Buffer) Grow(n int) {
-	if n &lt; 0 {
-		panic(&quot;bytes.Buffer.Grow: negative count&quot;)
-	}
-	m := b.grow(n)
-	b.buf = b.buf[:m]
+if n &lt; 0 {
+panic(&quot;bytes.Buffer.Grow: negative count&quot;)
 }
+m := b.grow(n)
+b.buf = b.buf[:m]
+}
+
 ```
 请问下老师，bytes.Buffer里grow函数返回前做过一次切片b.buf = b.buf[:m+n]，返回后在Grow函数又做了一次切片b.buf = b.buf[:m]，这样做的目的是什么呢？感觉有点冗余</p>2018-11-13</li><br/><li><span>Aeins</span> 👍（0） 💬（0）<p>“你可能会有疑惑，我只在这个Buffer值中放入了一个长度为2的字符串值，但为什么该值的容量却变为了8”
 
 目前，字符串长度小于 32 的直接分配在缓冲区上，Cap 是 32，大于 32 的，再重新分配内存</p>2022-06-10</li><br/>
 </ul>
+```

@@ -124,9 +124,9 @@ Rust 的原子操作目前遵循与 C++20 原子操作相同的规则，特别�
 另外，内存模型中还有一个可能导致未定义行为的情况是**混合大小访问**：Rust 继承了 C++ 的一个限制——非同步的冲突原子访问不能部分重叠。也就是说，任何两次非同步的原子访问，要么完全不重叠，要么访问完全相同的内存（包括访问的大小），或者它们都是读操作。
 
 > “混合大小访问”是指在同一内存区域进行多次原子操作时，访问的大小不一致的情况。举个例子：
-> 
+>
 > “假设有一个 AtomicU64 类型的变量，它占用 64 位内存。
-> 
+>
 > 如果你分别对该变量执行 32 位和 64 位的原子操作，这就是一个“混合大小访问”，因为你在同一内存位置做了不同大小（32 位 vs 64 位）的原子操作。
 
 每个原子访问都有一个 **Ordering**，它定义了操作和 happens-before 顺序的关系。这个顺序和 C++20 中的原子顺序是一致的。如果想更深入地了解，可以查阅《nomicon》。
@@ -168,13 +168,13 @@ use std::thread;
 fn main() {
     // 创建一个可以在线程间共享的原子计数器
     let counter = Arc::new(AtomicUsize::new(0));
-    
+
     // 创建多个线程，每个线程都增加计数器
     let mut handles = vec![];
-    
+
     for _ in 0..10 {
         let counter_clone = Arc::clone(&counter);
-        
+
         let handle = thread::spawn(move || {
             // 使用 Relaxed 内存序增加计数器100次
             for _ in 0..100 {
@@ -183,15 +183,15 @@ fn main() {
                 counter_clone.fetch_add(1, Ordering::Relaxed);
             }
         });
-        
+
         handles.push(handle);
     }
-    
+
     // 等待所有线程完成
     for handle in handles {
         handle.join().unwrap();
     }
-    
+
     // 读取最终值，同样使用 Relaxed 内存序
     println!("最终计数: {}", counter.load(Ordering::Relaxed));
 }
@@ -216,39 +216,39 @@ fn main() {
     // 创建一个共享的原子标志和数据
     let flag = Arc::new(AtomicBool::new(false));
     let mut data = 0;
-    
+
     // 克隆标志用于生产者线程
     let flag_clone = Arc::clone(&flag);
-    
+
     // 启动生产者线程
     let producer = thread::spawn(move || {
         // 模拟一些数据准备工作
         println!("生产者：正在准备数据...");
         thread::sleep(Duration::from_millis(50));
-        
+
         // 在标志设置前修改数据
         data = 42;
-        
+
         // 使用 Release 序保证这之前的所有写入都对设置标志的线程可见
         println!("生产者：数据已准备好，设置标志...");
         flag_clone.store(true, Ordering::Release);
     });
-    
+
     // 启动消费者线程
     let consumer = thread::spawn(move || {
         // 不断检查标志是否被设置
         println!("消费者：等待数据准备就绪...");
-        
+
         // 自旋等待标志变为 true
         while !flag.load(Ordering::Acquire) {
             // 使用 Acquire 保证标志加载后的所有读取都能看到标志设置前的写入
             thread::yield_now(); // 让出CPU时间
         }
-        
+
         // 一旦标志被设置，保证能看到生产者设置标志之前对数据的修改
         println!("消费者：标志被设置，数据 = {}", data);
     });
-    
+
     // 等待两个线程完成
     producer.join().unwrap();
     consumer.join().unwrap();
@@ -279,14 +279,14 @@ fn main() {
     // 创建一个原子计数器作为信号量（表示可用资源数量）
     let semaphore = Arc::new(AtomicUsize::new(3)); // 初始有3个资源可用
     let mut handles = vec![];
-    
+
     // 创建5个工作线程，它们都需要获取资源
     for id in 1..=5 {
         let sem = Arc::clone(&semaphore);
-        
+
         let handle = thread::spawn(move || {
             println!("线程 {} 尝试获取资源", id);
-            
+
             // 尝试获取资源（减少信号量）
             let mut acquired = false;
             while !acquired {
@@ -296,7 +296,7 @@ fn main() {
                     // compare_exchange_weak尝试原子地将值从current更新为current-1
                     // 使用AcqRel: 成功时同时具有Acquire和Release语义
                     match sem.compare_exchange_weak(
-                        current, 
+                        current,
                         current - 1,
                         Ordering::AcqRel,  // 成功时使用AcqRel
                         Ordering::Acquire  // 失败时使用Acquire
@@ -316,19 +316,19 @@ fn main() {
                     thread::sleep(Duration::from_millis(10));
                 }
             }
-            
+
             // 模拟使用资源
             println!("线程 {} 正在使用资源...", id);
             thread::sleep(Duration::from_millis(50));
-            
+
             // 释放资源（增加信号量）
             sem.fetch_add(1, Ordering::Release);
             println!("线程 {} 释放资源", id);
         });
-        
+
         handles.push(handle);
     }
-    
+
     // 等待所有线程完成
     for handle in handles {
         handle.join().unwrap();
@@ -352,22 +352,22 @@ fn main() {
     // 创建两个原子布尔标志
     let x = Arc::new(AtomicBool::new(false));
     let y = Arc::new(AtomicBool::new(false));
-    
+
     // 用于存储观察结果的变量
     let mut saw_x_not_y = false;
     let mut saw_y_not_x = false;
-    
+
     // 克隆用于线程的引用
     let x_clone1 = Arc::clone(&x);
     let y_clone1 = Arc::clone(&y);
     let x_clone2 = Arc::clone(&x);
     let y_clone2 = Arc::clone(&y);
-    
+
     // 启动第一个线程
     let thread1 = thread::spawn(move || {
         // 设置x为true
         x_clone1.store(true, Ordering::SeqCst);
-        
+
         // 检查y是否为true
         // 使用SeqCst保证全局一致的操作顺序
         if !y_clone1.load(Ordering::SeqCst) {
@@ -377,12 +377,12 @@ fn main() {
             println!("线程1看到: x=true, y=true");
         }
     });
-    
+
     // 启动第二个线程
     let thread2 = thread::spawn(move || {
         // 设置y为true
         y_clone2.store(true, Ordering::SeqCst);
-        
+
         // 检查x是否为true
         // 使用SeqCst保证全局一致的操作顺序
         if !x_clone2.load(Ordering::SeqCst) {
@@ -392,17 +392,17 @@ fn main() {
             println!("线程2看到: x=true, y=true");
         }
     });
-    
+
     // 等待线程完成
     thread1.join().unwrap();
     thread2.join().unwrap();
-    
+
     // 重要的SeqCst保证：不可能两个线程都看到对方的标志为false
     // 也就是说，saw_x_not_y和saw_y_not_x不可能同时为true
     println!("\n结果分析:");
     println!("线程1看到x=true但y=false: {}", saw_x_not_y);
     println!("线程2看到y=true但x=false: {}", saw_y_not_x);
-    
+
     if saw_x_not_y && saw_y_not_x {
         println!("错误! 这在使用SeqCst时不应该发生");
     } else {

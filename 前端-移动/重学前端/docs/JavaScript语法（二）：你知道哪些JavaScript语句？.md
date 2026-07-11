@@ -195,7 +195,7 @@ for(let e of [1, 2, 3, 4, 5])
 我们可以给任何一个对象添加iterator，使它可以用于for of语句，看下示例：
 
 ```JavaScript
-let o = {  
+let o = {
     [Symbol.iterator]:() => ({
         _value: 0,
         next(){
@@ -244,7 +244,7 @@ async function* foo(){
         await sleep(1000);
         yield i++;
     }
-        
+
 }
 for await(let e of foo())
     console.log(e);
@@ -403,7 +403,7 @@ let和const声明虽然看上去是执行到了才会生效，但是实际上，
 const a = 2;
 if(true){
     console.log(a); //抛错
-    const a = 1;   
+    const a = 1;
 }
 ```
 
@@ -478,7 +478,7 @@ function* foo(){
 
 async function foo(){
     await sleep(3000);
-    
+
 }
 
 async function* foo(){
@@ -531,13 +531,13 @@ function foo(a = 1, ...other) {
 13: &quot;Map&quot;
 14: &quot;Set&quot;</p>2019-04-04</li><br/><li><span>Chuck</span> 👍（49） 💬（1）<p>Object.getOwnPropertyNames(window).filter(prop =&gt; {
 	return window[prop] &amp;&amp; window[prop].prototype &amp;&amp; window[prop].prototype[Symbol.iterator]
-}) 
+})
 
 Array,String,Uint8Array,Int8Array,Uint16Array,Int16Array,Uint32Array,Int32Array,Float32Array,Float64Array,Uint8ClampedArray,BigUint64Array,BigInt64Array,Map,Set,SourceBufferList,RTCStatsReport,Plugin,PluginArray,MimeTypeArray,MIDIOutputMap,MIDIInputMap,AudioParamMap,URLSearchParams,TouchList,TextTrackList,TextTrackCueList,StyleSheetList,StylePropertyMapReadOnly,StylePropertyMap,SVGTransformList,SVGStringList,SVGPointList,SVGNumberList,SVGLengthList,RadioNodeList,NodeList,NamedNodeMap,MediaList,Headers,HTMLSelectElement,HTMLOptionsCollection,HTMLFormElement,HTMLFormControlsCollection,HTMLCollection,HTMLAllCollection,FormData,FileList,DataTransferItemList,DOMTokenList,DOMStringList,DOMRectList,CSSUnparsedValue,CSSTransformValue,CSSStyleDeclaration,CSSRuleList,CSSNumericArray,webkitSpeechGrammarList,KeyboardLayoutMap,MediaKeyStatusMap</p>2019-06-10</li><br/><li><span>timik</span> 👍（14） 💬（4）<p>老师，我记得有的书上或者是资料上说超过五次的if else 就最好用 switch case来替换。这样效率更好。您这里为什么说不用这个呢？</p>2019-05-07</li><br/><li><span>阿成</span> 👍（9） 💬（0）<p>大概就这些？
 Array, Map, Set, String, Float32Array, Float64Array, Int8Array, Int16Array, Int32Array, Uint8Array, Uint16Array, Uint32Array, Uint8ClampedArray</p>2019-04-02</li><br/><li><span>break</span> 👍（7） 💬（0）<p>感觉这文章应该从后往前看😆</p>2019-06-14</li><br/><li><span>许童童</span> 👍（4） 💬（0）<p>Some built-in types have a default iteration behavior, while other types (such as Object) do not. The built-in types with a @@iterator method are:
-Array.prototype[@@iterator]()
-TypedArray.prototype[@@iterator]()
-String.prototype[@@iterator]()
-Map.prototype[@@iterator]()
-Set.prototype[@@iterator]()</p>2019-04-02</li><br/><li><span>翰弟</span> 👍（3） 💬（0）<p>Array、Map、Set、String、TypedArray、函数的arguments、NodeList对象</p>2019-04-04</li><br/><li><span>固执的鱼wu</span> 👍（2） 💬（6）<p>let 和 const 声明虽然看上去是执行到了才会生效，但是实际上，它们还是会被预处理，为什么在const a=1之前console.log(a)是报错，而不是吧报undefinded呢</p>2020-01-08</li><br/><li><span>2020</span> 👍（1） 💬（0）<p>据我能查到的资料，String, Array, TypedArray, Map and Set 是所有内置可迭代对象。</p>2020-08-22</li><br/><li><span>培根熏肉</span> 👍（1） 💬（2）<p>Switch那么好看难道我要写一堆if else？？不明白原文说没有用switch的意义在哪里</p>2019-11-21</li><br/>
+Array.prototype[@@iterator](<>)
+TypedArray.prototype[@@iterator](<>)
+String.prototype[@@iterator](<>)
+Map.prototype[@@iterator](<>)
+Set.prototype[@@iterator](<>)</p>2019-04-02</li><br/><li><span>翰弟</span> 👍（3） 💬（0）<p>Array、Map、Set、String、TypedArray、函数的arguments、NodeList对象</p>2019-04-04</li><br/><li><span>固执的鱼wu</span> 👍（2） 💬（6）<p>let 和 const 声明虽然看上去是执行到了才会生效，但是实际上，它们还是会被预处理，为什么在const a=1之前console.log(a)是报错，而不是吧报undefinded呢</p>2020-01-08</li><br/><li><span>2020</span> 👍（1） 💬（0）<p>据我能查到的资料，String, Array, TypedArray, Map and Set 是所有内置可迭代对象。</p>2020-08-22</li><br/><li><span>培根熏肉</span> 👍（1） 💬（2）<p>Switch那么好看难道我要写一堆if else？？不明白原文说没有用switch的意义在哪里</p>2019-11-21</li><br/>
 </ul>

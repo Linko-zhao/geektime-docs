@@ -12,15 +12,15 @@ import jakarta.inject.Provider;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
- 
+
 import static java.util.Arrays.stream;
 public class Context {
     private Map<Class<?>, Provider<?>> providers = new HashMap<>();
-    
+
     public <Type> void bind(Class<Type> type, Type instance) {
         providers.put(type, (Provider<Type>) () -> instance);
     }
-    
+
     public <Type, Implementation extends Type>
     void bind(Class<Type> type, Class<Implementation> implementation) {
         Constructor<?>[] injectConstructors = stream(implementation.getConstructors()).filter(c -> c.isAnnotationPresent(Inject.class))
@@ -41,7 +41,7 @@ public class Context {
             }
         });
     }
-    
+
     private <Type> Constructor<Type> getInjectConstructor(Class<Type> implementation) {
         return (Constructor<Type>) stream(implementation.getConstructors())
                 .filter(c -> c.isAnnotationPresent(Inject.class)).findFirst().orElseGet(() -> {
@@ -52,7 +52,7 @@ public class Context {
                     }
                 });
     }
-    
+
     public <Type> Type get(Class<Type> type) {
         return (Type) providers.get(type).get();
     }
@@ -63,11 +63,12 @@ public class Context {
 
 - 无需构造的组件——组件实例
 - 如果注册的组件不可实例化，则抛出异常
-  
+
   - 抽象类
   - 接口
+
 - 构造函数注入
-  
+
   - 无依赖的组件应该通过默认构造函数生成组件实例
   - 有依赖的组件，通过Inject标注的构造函数生成组件实例
   - 如果所依赖的组件也存在依赖，那么需要对所依赖的组件也完成依赖注入
@@ -75,39 +76,45 @@ public class Context {
   - 如果组件没有Inject标注的构造函数，也没有默认构造函数（新增任务）
   - 如果组件需要的依赖不存在，则抛出异常
   - 如果组件间存在循环依赖，则抛出异常
+
 - 字段注入
-  
+
   - 通过Inject标注将字段声明为依赖组件
   - 如果组件需要的依赖不存在，则抛出异常
   - 如果字段为final则抛出异常
   - 如果组件间存在循环依赖，则抛出异常
+
 - 方法注入
-  
+
   - 通过Inject标注的方法，其参数为依赖组件
   - 通过Inject标注的无参数方法，会被调用
   - 按照子类中的规则，覆盖父类中的Inject方法
   - 如果组件需要的依赖不存在，则抛出异常
   - 如果方法定义类型参数，则抛出异常
   - 如果组件间存在循环依赖，则抛出异常
+
 - 对Provider类型的依赖
-  
+
   - 注入构造函数中可以声明对于Provider的依赖
   - 注入字段中可以声明对于Provider的依赖
   - 注入方法中可声明对于Provider的依赖
+
 - 自定义Qualifier的依赖
-  
+
   - 注册组件时，可额外指定Qualifier
   - 注册组件时，可从类对象上提取Qualifier
   - 寻找依赖时，需同时满足类型与自定义Qualifier标注
   - 支持默认Qualifier——Named
+
 - Singleton生命周期
-  
+
   - 注册组件时，可额外指定是否为Singleton
   - 注册组件时，可从类对象上提取Singleton标注
   - 对于包含Singleton标注的组件，在容器范围内提供唯一实例
   - 容器组件默认不是Single生命周期
+
 - 自定义Scope标注
-  
+
   - 可向容器注册自定义Scope标注的回调
 
 ## 视频演示
@@ -136,7 +143,7 @@ Kent Beck 作为极限编程（Exetreme Programming）的创始人，将勇气�
 代码不太会写，只能先想一下。
 
 本课的代码链接：https:&#47;&#47;github.com&#47;escray&#47;TDDCourse&#47;tree&#47;ch15</p>2022-04-28</li><br/><li><span>汗香</span> 👍（3） 💬（0）<p>获取一个依赖前，先从已有依赖获取，
-    若获取结果不为空则获取成功，
-    若获取结果为空，先将被获取依赖类型放入一个待创建集合中，并判断当前组件本身是否在集合中，若在，说明有循环依赖
+若获取结果不为空则获取成功，
+若获取结果为空，先将被获取依赖类型放入一个待创建集合中，并判断当前组件本身是否在集合中，若在，说明有循环依赖
 </p>2022-04-25</li><br/><li><span>努力努力再努力</span> 👍（1） 💬（0）<p>哭了，上一个留言发现有问题，自己实现的时候才发现单纯一个 set 集合记录正在创建的bean还不行，得利用 TLS（https:&#47;&#47;time.geekbang.org&#47;column&#47;article&#47;93745） 模式做线程隔离，否则多线程的测试用例下，就会出现明明没有循环依赖而报错的问题。</p>2022-09-23</li><br/><li><span>努力努力再努力</span> 👍（1） 💬（0）<p>循环依赖，可以加一个 bean 在创建中的标识，当 bean 被创建完之后，就把标识去掉，这样如果创建过程中发现这个 bean 正在创建中，就可以认为是发生循环依赖了</p>2022-09-23</li><br/><li><span>蝴蝶</span> 👍（0） 💬（0）<p>@Inject注解的构造方法如果没有参数，那肯定是有问题的，这次看明白了。</p>2022-08-13</li><br/><li><span>davix</span> 👍（0） 💬（0）<p>get() 重構受啟發！雖然看過《重構》了解其中的方法，但平時如果get()設計變化我通常還是直接改。這回直觀感受引入get_()的好處。</p>2022-05-25</li><br/>
 </ul>

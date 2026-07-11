@@ -33,19 +33,19 @@ def get_24_points_expression_func(last_cards_posted: str) -> str:
       last_cards_posted: an array of 4 integers between 1 to 13.
     """
 
-    point_list = json.loads(last_cards_posted)  
+    point_list = json.loads(last_cards_posted)
     if len(point_list) == 0:
         return "expression not found"
 
     expressions = get_cached_expressions(point_list)
-    
+
     result = "expression not found"
     if len(expressions) > 0:
         random_idx = random.randint(0, len(expressions)-1)
         expression = f"'{expressions[random_idx]}'".replace("'", "")
         print(f"The resolved 24 points expression is '{expression}'")
         return expression
-    
+
     return "expression not found"
 
 def check_24_points_expression_func(expression: str, last_cards_posted: str) -> str:
@@ -105,15 +105,15 @@ instruction_template_dict = {
 user_prompt_template_dict = {
     "GameDealer": """generate an array""",
     "MathProdigy": """
-        What's the 24 points expression of {last_cards_posted} ? 
-        If the result is 'expression not found', just return 'expression not found'. 
+        What's the 24 points expression of {last_cards_posted} ?
+        If the result is 'expression not found', just return 'expression not found'.
         If the result is an arithmetic expression, just return the expression itself and do not add anything else.
         """,
     "GameJudger": """
-        Cards posted is '{last_cards_posted}', what's the check result of {expression} ? Just return the check result itself such as 'Correct' or 'Wrong', and do not add anything else such as 'The check result is ...'. 
+        Cards posted is '{last_cards_posted}', what's the check result of {expression} ? Just return the check result itself such as 'Correct' or 'Wrong', and do not add anything else such as 'The check result is ...'.
     """,
     "GamePlayer": """
-        What's the human reply of {last_cards_posted} ? Just return the human reply itself and do not add anything else, such as 'The human reply ...'. 
+        What's the human reply of {last_cards_posted} ? Just return the human reply itself and do not add anything else, such as 'The human reply ...'.
     """,
 }
 
@@ -127,7 +127,7 @@ def get_instruction(context_variables):
     if agent_name == "GameDealer":
         last_cards_posted = context_variables["old_arrays"]
         instruction = instruction_template.format(old_arrays=last_cards_posted)
-   
+
     return instruction
 
 def get_user_prompt(context_variables):
@@ -203,7 +203,7 @@ def deal_cards(old_arrays: List[int]) -> str:
 
     print(f"used old_arrays is :{old_arrays}")
     context_var_dict = {
-        "agent_name":"GameDealer", 
+        "agent_name":"GameDealer",
         "old_arrays": f"{old_arrays}"
     }
     response = client.run(
@@ -220,7 +220,7 @@ def machine_give_expression(last_cards_posted: str) -> str:
     global client, agent_gauss
 
     context_var_dict = {
-        "agent_name":"MathProdigy", 
+        "agent_name":"MathProdigy",
         "last_cards_posted": f"{last_cards_posted}"
     }
     response = client.run(
@@ -237,7 +237,7 @@ def check_expression(expression: str, last_cards_posted: str) -> str:
     global client, agent_peter
 
     context_var_dict = {
-        "agent_name":"GameJudger", 
+        "agent_name":"GameJudger",
         "expression": f"{expression}",
         "last_cards_posted": f"{last_cards_posted}"
     }
@@ -255,7 +255,7 @@ def get_human_reply(last_cards_posted: str) -> str:
     global client, agent_david
 
     context_var_dict = {
-        "agent_name":"GamePlayer", 
+        "agent_name":"GamePlayer",
         "last_cards_posted": f"{last_cards_posted}"
     }
     response = client.run(
@@ -277,7 +277,7 @@ def get_human_reply(last_cards_posted: str) -> str:
 
 ```plain
 def main_func():
-    
+
     old_arrays = []
     last_cards_posted = deal_cards(old_arrays)
 
@@ -295,12 +295,12 @@ def main_func():
             break
         else:
             expression = human_reply
-        
+
         if expression != "expression not found":
             check_result = check_expression(expression, last_cards_posted)
         else:
             check_result = "Correct"
-                        
+
         if check_result == "Correct":
             old_arrays.append(json.loads(last_cards_posted))
             last_cards_posted = deal_cards(old_arrays)
@@ -357,19 +357,19 @@ def get_24_points_expression_func(last_cards_posted: str) -> str:
       last_cards_posted: an array of 4 integers between 1 to 13.
     """
 
-    point_list = json.loads(last_cards_posted)  
+    point_list = json.loads(last_cards_posted)
     if len(point_list) == 0:
         return "expression not found"
 
     expressions = get_cached_expressions(point_list)
-    
+
     if len(expressions) > 0:
         random_idx = random.randint(0, len(expressions)-1)
         expression = f"'{expressions[random_idx]}'".replace("'", "")
         print(f"The resolved 24 points expression is '{expression}'")
 
         context_var_dict = {
-            "agent_name":"GameJudger", 
+            "agent_name":"GameJudger",
             "expression": f"{expression}",
             "last_cards_posted": f"{last_cards_posted}"
         }
@@ -406,7 +406,7 @@ def get_human_reply_func(last_cards_posted: str) -> str:
 
     if human_reply == "help":
         context_var_dict = {
-            "agent_name":"MathProdigy", 
+            "agent_name":"MathProdigy",
             "last_cards_posted": f"{last_cards_posted}"
         }
         user_prompt = get_user_prompt(context_var_dict)
@@ -418,7 +418,7 @@ def get_human_reply_func(last_cards_posted: str) -> str:
 
     elif human_reply != "deal" and human_reply != "exit":
         context_var_dict = {
-            "agent_name":"GameJudger", 
+            "agent_name":"GameJudger",
             "expression": f"{human_reply}",
             "last_cards_posted": f"{last_cards_posted}"
         }
@@ -473,9 +473,9 @@ client.run() 的实现位于 Swarm 的 “/swarm/core.py” 文件 (~/work/swarm
 ```plain
 def run_game_one_turn(last_cards_posted: str) -> str:
     global client, agent_david
-    
+
     context_var_dict = {
-        "agent_name":"GamePlayer", 
+        "agent_name":"GamePlayer",
         "last_cards_posted": f"{last_cards_posted}"
     }
     response = client.run(
@@ -500,7 +500,7 @@ def main_func():
     while True:
         result = run_game_one_turn(last_cards_posted)
         print(f"In this turn, cards posted is '{last_cards_posted}', result is '{result}'.")
-        
+
         if result == "expression not found" or result == "Correct" or result == "deal":
             old_arrays.append(json.loads(last_cards_posted))
             last_cards_posted = deal_cards(old_arrays)
@@ -545,9 +545,10 @@ agent_david = Agent(
     model=&quot;qwen2.5&quot;,
     functions=[get_human_reply_func],
 )
-``` 
+```
 
 运行agent 这里，这里有 user_prompt.
+
 ```python
     response = client.run(
         agent=agent_david,
@@ -560,6 +561,7 @@ agent_david = Agent(
     print(human_reply)
     return human_reply
 ```
-是 client.run() 运行后，是先运行的 get_human_reply_func 吗？ 然后再去获取 user_prompt?  为什么response 会有好几个呢（数学表达式也捕获了，deal 也错误捕获了）？</p>2025-02-17</li><br/><li><span>YX</span> 👍（0） 💬（2）<p>在使用GamePlayer的时候，发现不知道什么原因，当输入算术表达式的时候，模型最后会返回deal，我稍微把提示词改了下：
+
+是 client.run() 运行后，是先运行的 get_human_reply_func 吗？ 然后再去获取 user_prompt? 为什么response 会有好几个呢（数学表达式也捕获了，deal 也错误捕获了）？</p>2025-02-17</li><br/><li><span>YX</span> 👍（0） 💬（2）<p>在使用GamePlayer的时候，发现不知道什么原因，当输入算术表达式的时候，模型最后会返回deal，我稍微把提示词改了下：
 What&#39;s the human reply of {last_cards_posted}? Just return the human reply itself and do not add anything else, such as &#39;The human reply ...&#39;. If the input is an arithmetic expression, return it as is.</p>2025-02-01</li><br/>
 </ul>

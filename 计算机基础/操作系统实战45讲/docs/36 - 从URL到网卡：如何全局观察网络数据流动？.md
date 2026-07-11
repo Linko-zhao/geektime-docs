@@ -81,7 +81,7 @@ URI = 方案:[//授权]路径[?查询][#片段ID]
 ```
 struct hostent
 {
-    char    *h_name;// 主机的别名.www.cosmos.com就是google他自己的别名  
+    char    *h_name;// 主机的别名.www.cosmos.com就是google他自己的别名
     char    **h_aliases;// 主机ip地址的类型，到底是ipv4(AF_INET)，还是pv6(AF_INET6)
     int     h_addrtype;// 主机ip地址的长度
     int     h_length;// 主机ip地址的长度

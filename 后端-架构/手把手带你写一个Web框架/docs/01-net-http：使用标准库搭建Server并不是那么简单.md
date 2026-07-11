@@ -147,7 +147,7 @@ type Client struct{ ... }
 type Cookie struct{ ... }
 type ProtocolError struct{ ... }
 type PushOptions struct{ ... }
-type Request struct{ ... } 
+type Request struct{ ... }
 type Response struct{ ... }
 type ServeMux struct{ ... }
 type Server struct{ ... }
@@ -285,7 +285,7 @@ type Server struct {
     // 请求监听地址
 	Addr string
     // 请求核心处理函数
-	Handler Handler 
+	Handler Handler
 	...
 }
 ```
@@ -397,20 +397,21 @@ func (c *conn) serve(ctx context.Context) {
 		}
 	}()
 
-	...
+    ...
 
-	for {
-		w, err := c.readRequest(ctx)
-		if c.r.remain != c.server.initialReadLimitSize() {
-			&#47;&#47; If we read any bytes off the wire, we&#39;re active.
-			c.setState(c.rwc, StateActive)
-		}
-		if err != nil {
-			const errorHeaders = &quot;\r\nContent-Type: text&#47;plain; charset=utf-8\r\nConnection: close\r\n\r\n&quot;
+    for {
+    	w, err := c.readRequest(ctx)
+    	if c.r.remain != c.server.initialReadLimitSize() {
+    		&#47;&#47; If we read any bytes off the wire, we&#39;re active.
+    		c.setState(c.rwc, StateActive)
+    	}
+    	if err != nil {
+    		const errorHeaders = &quot;\r\nContent-Type: text&#47;plain; charset=utf-8\r\nConnection: close\r\n\r\n&quot;
 
 ...
-		}
+}
 ...
+
 ```</p>2021-09-16</li><br/><li><span>Middleware</span> 👍（9） 💬（3）<p>目录有点不清晰，从零开始，那么是不是应该给出建立合适的文件目录结构，命名。我们也能跟着上手敲一遍。比如这个 framework .目录是如何命名。希望老师真的能手把手</p>2021-09-14</li><br/><li><span>Groot</span> 👍（4） 💬（3）<p>一篇文章值回票价，感觉后续的文章都是在做慈善 😂
 
 受益匪浅，感谢分享 👍</p>2021-09-18</li><br/><li><span>ghostwritten</span> 👍（3） 💬（1）<p>打卡第二天：
@@ -484,7 +485,7 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
     4.1. 请求存在，则使用ServeHTTP
 
     4.2. 请求不存在，则返回404</p>2021-10-20</li><br/><li><span>宙斯</span> 👍（0） 💬（1）<p>FileServer调用如下过程：
-1 handler = DefaultServeMux 
+1 handler = DefaultServeMux
 2 调用handler.ServeHTTP
  2.1  调用h := mux.Handler(r) ，其中 h是http.HandlerFunc类型，是http.StripPrefix的返回函数。
  2.2 调用h.ServeHTTP(w, r)，执行http.HandlerFunc的ServeHTTP。
@@ -494,3 +495,4 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
         *framework.Core does not implement http.Handler (missing ServeHTTP method)
 老师帮忙看下，demo 启动报这个错，什么原因那</p>2021-09-24</li><br/>
 </ul>
+```

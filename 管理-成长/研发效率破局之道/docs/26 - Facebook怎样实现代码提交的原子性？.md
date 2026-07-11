@@ -326,7 +326,7 @@ pick 68d813f [DO NOT PUSH] Add documentation for getRandom endpoint
 
 ```
 pick 7d43442 Add getRandom endpoint  ## 这个是B1''
-pick 0825c0b readme                  ## 这个是A1   
+pick 0825c0b readme                  ## 这个是A1
 pick 68d813f [DO NOT PUSH] Add documentation for getRandom endpoint
 
 # Rebase 7b6ea30..68d813f onto 7b6ea30 (3 commands)
@@ -675,7 +675,7 @@ Unmerged paths:
 
 	both modified:   README.md
 
-no changes added to commit (use "git add" and/or "git commit -a")  
+no changes added to commit (use "git add" and/or "git commit -a")
 
 
 ## 用git diff 和git diff --cached查看更多细节

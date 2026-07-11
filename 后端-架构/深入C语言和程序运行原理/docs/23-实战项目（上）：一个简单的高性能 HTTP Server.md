@@ -38,8 +38,8 @@ FibServ 在运行时可以接收形式为 “**/?num={pos}**” 的 GET 请求�
 
 ```bash
 int socket(
-  int domain, 
-  int type, 
+  int domain,
+  int type,
   int protocol);
 ```
 
@@ -49,8 +49,8 @@ int socket(
 
 ```bash
 int bind(
-  int sockfd, 
-  const struct sockaddr *addr, 
+  int sockfd,
+  const struct sockaddr *addr,
   socklen_t addrlen);
 ```
 
@@ -68,8 +68,8 @@ int listen(int sockfd, int backlog);
 
 ```bash
 int accept(
-  int sockfd, 
-  struct sockaddr *restrict addr, 
+  int sockfd,
+  struct sockaddr *restrict addr,
   socklen_t *restrict addrlen);
 ```
 

@@ -101,7 +101,7 @@ public class ExampleMapper extends Mapper<CustomKey, CustomValue, CustomKey, Int
 > 通过两层目录结构，我们如果按照国家或者日期过滤数据进行分析的时候，读取的文件数量就可以大大减少。
 
 ```java
-FROM (SELECT a.status, b.school, b.gender 
+FROM (SELECT a.status, b.school, b.gender
       FROM status_updates a JOIN profiles b
            ON (a.userid = b.userid and
                a.ds='2009-03-20')
@@ -155,8 +155,8 @@ Hive的核心“驱动器”也不复杂，它其实并不需要提供任何分�
 这个过程，每个Join都是一个MapReduce的任务，但是当优化器看到两个Join的key是相同的，就可以通过一个MapReduce，在Map端同时读入三个表，然后通过user\_id进行Shuffle，并在Reduce里进行对应的数据提取处理。这样，我们就可以“优化”到只有一个MapReduce就能完成整个过程。
 
 ```java
-SELECT A.user_id, MAX(B.user_interests_score), SUM(C.user_payments) 
-FROM A 
+SELECT A.user_id, MAX(B.user_interests_score), SUM(C.user_payments)
+FROM A
 LEFT JOIN B on A.user_id = B.user_id
 LEFT JOIN C on A.user_id = C.user_id
 GROUP BY A.user_id

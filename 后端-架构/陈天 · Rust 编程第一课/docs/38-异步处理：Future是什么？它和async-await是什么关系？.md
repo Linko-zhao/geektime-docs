@@ -626,12 +626,13 @@ fn task_async() -> impl Future<Output = usize> {
 tokio::spawn要求T是Send, 也就是可以cross thread boundary
 
 ```
-pub fn spawn&lt;T&gt;(task: T) -&gt; JoinHandle&lt;T::Output&gt; 
+pub fn spawn&lt;T&gt;(task: T) -&gt; JoinHandle&lt;T::Output&gt;
 where
     T: Future + Send + &#39;static,
-    T::Output: Send + &#39;static, 
+    T::Output: Send + &#39;static,
 
 ```
+
 参见: https:&#47;&#47;docs.rs&#47;tokio&#47;0.2.18&#47;tokio&#47;fn.spawn.html
 
 对executor了解很少...但从文中的提示 (task stealing, 从其他thread偷task), executor应该有个thread pool可以在不同的thread里面poll future...

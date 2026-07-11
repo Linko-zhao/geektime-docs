@@ -23,7 +23,7 @@
 ```python
 messages=[
   {"role": "user", "content": f"""
-  请以布尔值格式返回答案：老婆饼和老婆是不是同一类东西？  
+  请以布尔值格式返回答案：老婆饼和老婆是不是同一类东西？
   """},
   ]
 ```
@@ -48,7 +48,7 @@ messages=[
 messages=[
   {"role": "user", "content": f"""
   请以整数格式返回正确选项：老婆饼是什么类型？
-  
+
 1. 点心
 2. 水果
 3. 菜肴
@@ -71,7 +71,7 @@ messages=[
 ```python
 messages=[
   {"role": "user", "content": f"""
-  请以浮点数格式返回按米计算的答案：姚明有多高？  
+  请以浮点数格式返回按米计算的答案：姚明有多高？
   """},
   ]
 ```
@@ -95,7 +95,7 @@ def greet_many(*names):
 ```python
 messages=[
   {"role": "user", "content": f"""
-  请以数组的格式返回答案：请列出唐宋八大家的姓名  
+  请以数组的格式返回答案：请列出唐宋八大家的姓名
   """},
   ]
 ```
@@ -120,12 +120,12 @@ messages=[
 messages=[
   {"role": "user", "content": f"""
   请以json的格式返回答案：我们需要查询A公司到账款项。
-  
+
   json格式为：
   {
     'name':'A公司',
     'type':'到账款项',
-  }  
+  }
   """},
   ]
 ```
@@ -136,7 +136,7 @@ messages=[
 {
   'name':'A公司',
   'type':'到账款项',
- }  
+ }
 ```
 
 经过这样的处理，结果就可以被程序正常处理了么？你可以暂停思考一下，这样解决是否足够完美。
@@ -153,7 +153,7 @@ messages=[
 messages=[
   {"role": "user", "content": f"""
   请以json的格式返回答案：我们需要查询A公司到账款项。
-  
+
   json格式为：
   {
     'name':'A公司',
@@ -173,7 +173,7 @@ messages=[
 {
   'name':'A公司',
   'type':1,
- }  
+ }
 ```
 
 然而这种方法对大模型的能力要求很高。如果我们因为价格原因只能用低版本的大模型（一分价钱一分货嘛），这样的处理可能无法满足要求。那只能换一种要求低一点的方法了，就是分步处理。
@@ -188,7 +188,7 @@ messages=[
 messages=[
   {"role": "user", "content": f"""
   请以整数格式返回正确选项：到账款项
-  
+
   1. 到账款项
   2. 剩余款项
   """},
@@ -198,7 +198,7 @@ messages=[
 如果大模型运行正常，应该会返回如下类似结果。
 
 ```python
-1  
+1
 ```
 
 然后我们用这个结果替换掉第一步结果中的type。于是我们就得到了最终结果。
@@ -207,7 +207,7 @@ messages=[
 {
   'name':'A公司',
   'type':1,
- } 
+ }
 ```
 
 ## 一劳永逸、通用的方法
@@ -254,7 +254,7 @@ messages=[
 messages=[
   {"role": "user", "content": f"""
   请根据用户的输入返回json格式结果：
-  
+
   示例1：
   用户：客户北京极客邦有限公司的款项到账了多少？
   系统：
@@ -299,8 +299,9 @@ messages=[
 我们面对复杂问题的时候，prompt可能会写很长（尤其是增加了例子的情况），那么到线上应用的时候，也是保留完整的prompt嘛，这样把例子放到prompt里是否会增加不必要的成本</p>2024-09-12</li><br/><li><span>Luo</span> 👍（0） 💬（1）<p>我一般在提示词里使用下面的描述：
 &quot;&quot;&quot;
 输出的格式要求如下：
-The output should be a markdown code snippet formatted in the following schema, including the leading and trailing &quot;```json&quot; and &quot;```&quot;:
-```json
+The output should be a markdown code snippet formatted in the following schema, including the leading and trailing &quot;`json&quot; and &quot;`&quot;:
+
+````json
 {
     &quot;content&quot;: &quot;设计的阅读题内容&quot;, &#47;&#47;使用汉语,控制在250个汉字左右
     &quot;theme&quot;: &quot;&quot;,
@@ -426,3 +427,4 @@ The output should be a markdown code snippet formatted in the following schema, 
 }
 &quot;&quot;&quot;</p>2024-10-15</li><br/><li><span>Geek_fbf3a3</span> 👍（0） 💬（0）<p>学习到了，比如：LLM的工具调用(tool-calling&#47;functiom-calling)功能，以为数据结构化是个很简单的问题，没想到还有那么多的门道</p>2024-11-05</li><br/>
 </ul>
+````

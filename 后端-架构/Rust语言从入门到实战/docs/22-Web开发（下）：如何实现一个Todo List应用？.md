@@ -580,6 +580,7 @@ Axum是一个相当强大灵活的框架，里面还有很多东西（比如：�
 因为我们由于使用 ORM 这种东西，因此纯靠手动拼 sql 字符串</p>2023-12-13</li><br/><li><span>伯阳</span> 👍（0） 💬（1）<p>确实挺方便，天生支持MySQL么</p>2023-12-13</li><br/><li><span>山茶花</span> 👍（0） 💬（0）<p>bb8好像没有mysql驱动，r2d2的mysql驱动不太会用，网上找了个sqlx来用
 
 db初始化:
+
 ```
 use sqlx::{MySql, Pool};
 use sqlx::mysql::MySqlPoolOptions;
@@ -589,7 +590,8 @@ let pool = MySqlPoolOptions::new().connect(&amp;url).await.unwrap();
 ```
 
 用法:
-```
+
+````
 async fn todo_list(pagination: Option&lt;Query&lt;Pagination&gt;&gt;,
                    State(pool): State&lt;ConnectionPool&gt;,
 ) -&gt; Result&lt;Json&lt;Vec&lt;Todo&gt;&gt;, (StatusCode, String)&gt; {
@@ -604,8 +606,9 @@ async fn todo_list(pagination: Option&lt;Query&lt;Pagination&gt;&gt;,
         .fetch_all(&amp;mut conn)
         .await
         .map_err(internal_error)?;
-    
+
     Ok(Json(todos))
 }
 ```</p>2024-06-01</li><br/>
 </ul>
+````

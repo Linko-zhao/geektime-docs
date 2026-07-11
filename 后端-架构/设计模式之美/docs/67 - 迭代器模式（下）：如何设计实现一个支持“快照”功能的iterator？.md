@@ -48,17 +48,17 @@ System.out.println();
 ```
 public ArrayList<E> implements List<E> {
   // TODO: 成员变量、私有函数等随便你定义
-  
+
   @Override
   public void add(E obj) {
     //TODO: 由你来完善
   }
-  
+
   @Override
   public void remove(E obj) {
     // TODO: 由你来完善
   }
-  
+
   @Override
   public Iterator<E> iterator() {
     return new SnapshotArrayIterator(this);
@@ -67,12 +67,12 @@ public ArrayList<E> implements List<E> {
 
 public class SnapshotArrayIterator<E> implements Iterator<E> {
   // TODO: 成员变量、私有函数等随便你定义
-  
+
   @Override
   public boolean hasNext() {
     // TODO: 由你来完善
   }
-  
+
   @Override
   public E next() {//返回当前元素，并且游标后移一位
     // TODO: 由你来完善
@@ -281,38 +281,40 @@ public class SnapshotArrayIterator<E> implements Iterator<E> {
 
 问题1. 重复删除同一个元素时，actualSize 应该保持不变。
 以下是修改后的代码：
-@Override 
-public void remove(E obj) 
+@Override
+public void remove(E obj)
 {
- for (int i = 0; i &lt; totalSize; ++i) {
- if (elements[i].equals(obj) &amp;&amp; delTimestamps[i] == Long.MAX_VALUE) { &#47;&#47; 防止重复删除
- delTimestamps[i] = System.currentTimeMillis(); 
- actualSize--; }
- } 
+for (int i = 0; i &lt; totalSize; ++i) {
+if (elements[i].equals(obj) &amp;&amp; delTimestamps[i] == Long.MAX_VALUE) { &#47;&#47; 防止重复删除
+delTimestamps[i] = System.currentTimeMillis();
+actualSize--; }
+}
 }
 
 问题2： 遍历完一个元素后需要让 cursorInAll 自增，否则 cursorInAll 一直指向第一个待遍历的元素。同时hasNext() 恒为true， 也需要修改。
 以下是修改后的代码：
 
-@Override 
-public E next() { 
- E currentItem = arrayList.get(cursorInAll); 
- cursorInAll++； &#47;&#47;自增，否则 cursorInAll 一直不变
- justNext(); 
- return currentItem; 
+@Override
+public E next() {
+E currentItem = arrayList.get(cursorInAll);
+cursorInAll++； &#47;&#47;自增，否则 cursorInAll 一直不变
+justNext();
+return currentItem;
 }
 
-@Override 
-public boolean hasNext() { 
-      return this.leftCount &gt;= 0; &#47;&#47; 注意是&gt;=, 而非&gt; （ 修改后 leftCount &gt;= 0 恒成立， 总是返回 true）
-      改为：
-      return cursorInAll &lt; arrayList.totalSize()；
+@Override
+public boolean hasNext() {
+return this.leftCount &gt;= 0; &#47;&#47; 注意是&gt;=, 而非&gt; （ 修改后 leftCount &gt;= 0 恒成立， 总是返回 true）
+改为：
+return cursorInAll &lt; arrayList.totalSize()；
 } </p>2020-04-07</li><br/><li><span>辣么大</span> 👍（15） 💬（3）<p>课后思考题：类似数组动态扩容和缩容，删除元素时可以比较被删除元素的总数，在被删除元素总数 &lt; 总数的 1&#47;2 时， 进行resize数组，清空被删除的元素，回收空间。</p>2020-04-06</li><br/><li><span>辉哥</span> 👍（7） 💬（5）<p>课堂讨论：可以创建一个object类型的常量，删除数组元素时，可以将被删除数组元素的引用指向该常量。Android中的SparseArray就是采用此方式实现的</p>2020-04-07</li><br/><li><span>马以</span> 👍（7） 💬（2）<p>记录一个迭代变量，每迭代一次，计数加一，迭代完一次减一，当为0的时候就可以删除标记为delete的元素了</p>2020-04-06</li><br/><li><span>子豪sirius</span> 👍（5） 💬（0）<p>第二个问题，我想可不可用个数组记录当前有多少个迭代器。每调用一次iterrator方法，迭代器加一；有元素删除时，记录这个时间点的迭代器的数量；当迭代器访问到该元素时，减一，减到0，说明不再有删除该元素时间点之前生成的迭代器来访问了，就可以实际删除该元素。</p>2020-04-06</li><br/><li><span>xk_</span> 👍（3） 💬（2）<p>课后题：
 我们可以在集合类中记录每一个迭代器创建时间列表iteratorCreateTimeList。
 
 在迭代器创建的时候，删除iteratorCreateTimeList[0]之前的被标记删除的元素。
 
 在迭代器中需要写一个销毁的方法，删掉iteratorCreateTimeList中对应的创建时间，删除iteratorCreateTimeList[0]之前的被标记删除的元素。</p>2020-05-01</li><br/><li><span>webmin</span> 👍（3） 💬（2）<p>可以参考GC的算法，弄一个减化版的优化方法：
+
 1. 被删除的元素是否还有可能被已经创建的iterator所访问，即被删除的元素还被引用着；（iterator使用完需要有调用关闭动作）
 2. 被删除的元素达到一定量时，按照删除时间清理掉效早删除的元素，清理掉的最晚的被删除元素的删除时间放置在清理标识字段，iterator迭代时检查清理标识字段，如果iterator创建时间早于清理标识字段中的时间丢出异常；</p>2020-04-06</li><br/><li><span>eason2017</span> 👍（3） 💬（0）<p>定时清理里面的数据，做一次同步。期间可能会加锁来保证数据的有效性。</p>2020-04-06</li><br/><li><span>tt</span> 👍（2） 💬（0）<p>想起来MySQL中的多版本控制，用于实现事物间不同的隔离级别</p>2020-04-07</li><br/>
+
 </ul>

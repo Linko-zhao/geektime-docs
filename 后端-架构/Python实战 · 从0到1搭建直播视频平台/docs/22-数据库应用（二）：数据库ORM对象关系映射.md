@@ -122,7 +122,7 @@ class BaseModels:
     # 记录你的更新时间
     update_time = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     # 记录存活状态
-    status = db.Column(db.SmallInteger, default=1)  
+    status = db.Column(db.SmallInteger, default=1)
     def add(self, obj):
         db.session.add(obj)
         return session_commit()

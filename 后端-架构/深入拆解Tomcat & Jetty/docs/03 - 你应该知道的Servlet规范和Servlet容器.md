@@ -23,13 +23,13 @@ Servlet接口定义了下面五个方法：
 ```
 public interface Servlet {
     void init(ServletConfig config) throws ServletException;
-    
+
     ServletConfig getServletConfig();
-    
+
     void service(ServletRequest req, ServletResponse res）throws ServletException, IOException;
-    
+
     String getServletInfo();
-    
+
     void destroy();
 }
 ```
@@ -120,7 +120,7 @@ Tomcat&#47;Jetty启动，对于每个WebApp，依次进行初始化工作：
 4.3、SpringMVC容器可以通过ServletContext获取Spring容器，并将Spring容器设置为自己的根容器。而子容器可以访问父容器，从而在Controller里可以访问Service对象，但是在Service里不可以访问Controller对象。
 4.2、初始化完毕后，DispatcherServlet开始处理MVC中的请求映射关系。
 
-有一个很坑问题，Servlet默认是单例模式的，Spring的Bean默认是单例模式的，那Spring MVC是如何处理并发请求的呢？</p>2019-05-19</li><br/><li><span>而立斋</span> 👍（40） 💬（3）<p>spring容器中还包含许多的子容器，其中springmvc容器就是其中常用的一个，文中的DispatcherServlet就是springmvc容器中的servlet接口，也是springmvc容器的核心类。spring容器主要用于整个Web应用程序需要共享的一些组件，比如DAO、数据库的ConnectionFactory等,springmvc的容器主要用于和该Servlet相关的一些组件,比如Controller、ViewResovler等。至此就清楚了spring容器内部的关系，那servlet容器跟spring容器又有什么关系呢？有人说spring容器是servlet容器的子容器，但是这个servlet容器到底是tomcat实现的容器呢，还是jetty实现的容器呢？所以我觉得spring容器与servlet容器他们之间并没有直接的血缘关系，可以说spring容器依赖了servlet容器，spring容器的实现遵循了Servlet 规范。不知道这么理解是可以，还请老师给予指导？</p>2019-05-16</li><br/><li><span>Geek_ebda96</span> 👍（32） 💬（2）<p>老师，spring容器指的是spring本身的ioc容器吧，是用来管理所有的bean，servlet本身会把sping的容器设置到上下文中，而spring mvc的容器dispatch servlet相当于是一个具体的servlet的实现，然后会创建一个全局的上下文application context spring的ioc容器会注入到这个上下文中，后面通过上下文getbean，其实是先找到上下文中的ioc容器，然后再从这个容器拿到具体的bean，这是不是对的？</p>2019-05-17</li><br/><li><span>jaryoung</span> 👍（31） 💬（3）<p>没有Spring boot以前，他们的关系为tomcat抱着Spring的关系，有了Spring boot之后他们关系刚好反过来。</p>2019-08-14</li><br/><li><span>xxxxL</span> 👍（27） 💬（1）<p>请问service方法为什么把request和response都当作输入参数，而不是输入参数只有request，response放到返回值里呢？</p>2019-05-31</li><br/><li><span>菜鸡小王子</span> 👍（17） 💬（1）<p>老师问一下  tomcat分为http服务器+sevlet服务器  这个http服务器怎么理解呢</p>2019-05-30</li><br/><li><span>inrtyx</span> 👍（16） 💬（1）<p>老题，问下。springmvc如何实现url到方法的映射</p>2019-05-23</li><br/><li><span>蓝士钦</span> 👍（14） 💬（2）<p>课后思考：
+有一个很坑问题，Servlet默认是单例模式的，Spring的Bean默认是单例模式的，那Spring MVC是如何处理并发请求的呢？</p>2019-05-19</li><br/><li><span>而立斋</span> 👍（40） 💬（3）<p>spring容器中还包含许多的子容器，其中springmvc容器就是其中常用的一个，文中的DispatcherServlet就是springmvc容器中的servlet接口，也是springmvc容器的核心类。spring容器主要用于整个Web应用程序需要共享的一些组件，比如DAO、数据库的ConnectionFactory等,springmvc的容器主要用于和该Servlet相关的一些组件,比如Controller、ViewResovler等。至此就清楚了spring容器内部的关系，那servlet容器跟spring容器又有什么关系呢？有人说spring容器是servlet容器的子容器，但是这个servlet容器到底是tomcat实现的容器呢，还是jetty实现的容器呢？所以我觉得spring容器与servlet容器他们之间并没有直接的血缘关系，可以说spring容器依赖了servlet容器，spring容器的实现遵循了Servlet 规范。不知道这么理解是可以，还请老师给予指导？</p>2019-05-16</li><br/><li><span>Geek_ebda96</span> 👍（32） 💬（2）<p>老师，spring容器指的是spring本身的ioc容器吧，是用来管理所有的bean，servlet本身会把sping的容器设置到上下文中，而spring mvc的容器dispatch servlet相当于是一个具体的servlet的实现，然后会创建一个全局的上下文application context spring的ioc容器会注入到这个上下文中，后面通过上下文getbean，其实是先找到上下文中的ioc容器，然后再从这个容器拿到具体的bean，这是不是对的？</p>2019-05-17</li><br/><li><span>jaryoung</span> 👍（31） 💬（3）<p>没有Spring boot以前，他们的关系为tomcat抱着Spring的关系，有了Spring boot之后他们关系刚好反过来。</p>2019-08-14</li><br/><li><span>xxxxL</span> 👍（27） 💬（1）<p>请问service方法为什么把request和response都当作输入参数，而不是输入参数只有request，response放到返回值里呢？</p>2019-05-31</li><br/><li><span>菜鸡小王子</span> 👍（17） 💬（1）<p>老师问一下 tomcat分为http服务器+sevlet服务器 这个http服务器怎么理解呢</p>2019-05-30</li><br/><li><span>inrtyx</span> 👍（16） 💬（1）<p>老题，问下。springmvc如何实现url到方法的映射</p>2019-05-23</li><br/><li><span>蓝士钦</span> 👍（14） 💬（2）<p>课后思考：
 Servlet容器与Spring容器的关系：
 1.Servlet容器管理Servlet对象
 2.Spring容器管理Spring 的Bean对象（Service和Dao）

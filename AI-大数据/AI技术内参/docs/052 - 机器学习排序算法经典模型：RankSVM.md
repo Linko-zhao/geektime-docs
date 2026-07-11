@@ -54,12 +54,12 @@
 
 **参考文献**
 
-1. Herbrich, R.; Graepel, T. &amp; Obermayer, K. Support vector learning for ordinal regression. *The Ninth International Conference on Artificial Neural Networks* (ICANN 99), 1, 97-102 vol.1, 1999.
-2. Herbrich, R.; Graepel, T. &amp; Obermayer, K. Smola; Bartlett; Schoelkopf &amp; Schuurmans (Eds.). Large margin rank boundaries for ordinal regression. *Advances in Large Margin Classifiers*, MIT Press, Cambridge, MA, 2000.
-3. Tsochantaridis, I.; Hofmann, T.; Joachims, T. &amp; Altun, Y. Support Vector Machine Learning for Interdependent and Structured Output Spaces. *Proceedings of the Twenty-first International Conference on Machine Learning*, ACM, 2004.
-4. Joachims, T. A Support Vector Method for Multivariate Performance Measures. *Proceedings of the 22Nd International Conference on Machine Learning*, ACM, 377-384, 2005.
-5. Tsochantaridis, I.; Joachims, T.; Hofmann, T. &amp; Altun, Y. Large Margin Methods for Structured and Interdependent Output Variables. *The Journal of Machine Learning Research*, 6, 1453-1484, 2005.
-6. Joachims, T. Training Linear SVMs in Linear Time. *Proceedings of the 12th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining*, ACM, 217-226, 2006.
+1. Herbrich, R.; Graepel, T. &amp; Obermayer, K. Support vector learning for ordinal regression. _The Ninth International Conference on Artificial Neural Networks_ (ICANN 99), 1, 97-102 vol.1, 1999.
+2. Herbrich, R.; Graepel, T. &amp; Obermayer, K. Smola; Bartlett; Schoelkopf &amp; Schuurmans (Eds.). Large margin rank boundaries for ordinal regression. _Advances in Large Margin Classifiers_, MIT Press, Cambridge, MA, 2000.
+3. Tsochantaridis, I.; Hofmann, T.; Joachims, T. &amp; Altun, Y. Support Vector Machine Learning for Interdependent and Structured Output Spaces. _Proceedings of the Twenty-first International Conference on Machine Learning_, ACM, 2004.
+4. Joachims, T. A Support Vector Method for Multivariate Performance Measures. _Proceedings of the 22Nd International Conference on Machine Learning_, ACM, 377-384, 2005.
+5. Tsochantaridis, I.; Joachims, T.; Hofmann, T. &amp; Altun, Y. Large Margin Methods for Structured and Interdependent Output Variables. _The Journal of Machine Learning Research_, 6, 1453-1484, 2005.
+6. Joachims, T. Training Linear SVMs in Linear Time. _Proceedings of the 12th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining_, ACM, 217-226, 2006.
 
 **论文链接**
 
@@ -68,6 +68,7 @@
 - [A Support Vector Method for Multivariate Performance Measures](https://www.cs.cornell.edu/people/tj/publications/joachims_05a.pdf)
 - [Large Margin Methods for Structured and Interdependent Output Variables](http://www.jmlr.org/papers/volume6/tsochantaridis05a/tsochantaridis05a.pdf)
 - [Training Linear SVMs in Linear Time](https://www.cs.cornell.edu/people/tj/publications/joachims_06a.pdf)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>tt</span> 👍（0） 💬（0）<p>对数几率分类器更好应用，因为它直接给出了一个实数结果可以作为分数</p>2019-07-29</li><br/>
 </ul>

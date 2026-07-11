@@ -65,7 +65,7 @@ struct sharedObjectsStruct {
 ```
 void propagateExpire(redisDb *db, robj *key, int lazy) {
     robj *argv[2];
- 
+
     argv[0] = lazy ? shared.unlink : shared.del;  //如果server启用了lazyfree-lazy-evict，那么argv[0]的值为unlink对象，否则为del对象
     argv[1] = key; //被淘汰的key对象
     ...
@@ -172,7 +172,7 @@ for (table = 0; table <= 1; table++) {
 
 ```
 //dictGenericDelete函数原型，参数是待查找的哈希表，待查找的key，以及同步/异步删除标记
-static dictEntry *dictGenericDelete(dict *d, const void *key, int nofree) 
+static dictEntry *dictGenericDelete(dict *d, const void *key, int nofree)
 
 //同步删除函数，传给dictGenericDelete函数的nofree值为0
 int dictDelete(dict *ht, const void *key) {

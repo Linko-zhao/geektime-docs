@@ -95,7 +95,7 @@ class 商户 {
 class 奸商 extends 商户 {
   @Override
   public double 折后价格(double 原价, 客户 某客户) {
-    if (某客户.isVIP()) {                         // invokeinterface      
+    if (某客户.isVIP()) {                         // invokeinterface
       return 原价 * 价格歧视();                    // invokestatic
     } else {
       return super.折后价格(原价, 某客户);          // invokespecial
@@ -229,10 +229,10 @@ class VIPOnlyMerchant extends Merchant<VIP> {
 NaiveMerchant类中actionPrice方法返回值类型为Double
 
 NaiveMerchant类生成的字节码中有两个参数类型相同返回值类型不同的actionPrice方法
- Method actionPrice:(DLCustomer;)Ljava&#47;lang&#47;Double;
- Method actionPrice:(DLCustomer;)Ljava&#47;lang&#47;Number; &#47;&#47; 桥接到返回值为double的方法 flags: ACC_PUBLIC, ACC_BRIDGE, ACC_SYNTHETIC
+Method actionPrice:(DLCustomer;)Ljava&#47;lang&#47;Double;
+Method actionPrice:(DLCustomer;)Ljava&#47;lang&#47;Number; &#47;&#47; 桥接到返回值为double的方法 flags: ACC_PUBLIC, ACC_BRIDGE, ACC_SYNTHETIC
 
- 方法返回值不同为何也要产生桥接方法呢？ 为了保证重写语义？
+方法返回值不同为何也要产生桥接方法呢？ 为了保证重写语义？
 
 不知为何javac在编译
 
@@ -245,7 +245,6 @@ Number number = naiveMerchant.actionPrice(1d, null) &#47;&#47; 特意要求Numbe
 java version &quot;1.8.0_172&quot;
 Java(TM) SE Runtime Environment (build 1.8.0_172-b11)
 GraalVM 1.0.0-rc5 (build 25.71-b01-internal-jvmci-0.46, mixed mode)
-
 
 </p>2018-08-11</li><br/><li><span>vimfun</span> 👍（6） 💬（1）<p>老师，public final 或 public static final 的方法，是不是在 虚拟机中解析为静态绑定的</p>2018-07-27</li><br/><li><span>杨春鹏</span> 👍（4） 💬（3）<p>老师，关于方法调用的字节码指令中的invokespecial:调用实现接口的默认方法。
 我测试了一下，发现子类中调用实现接口的默认方法还是使用的invokeinrerface。

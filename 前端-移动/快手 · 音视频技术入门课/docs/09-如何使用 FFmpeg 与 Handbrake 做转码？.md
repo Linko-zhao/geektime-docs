@@ -298,7 +298,7 @@ Q1：需要安装libx264吗？
 文中有这样一句“使用命令行 ffmpeg -h encoder=libx264 查看”。
 执行命令： ffmpeg -h encoder=libx264
 输出：Codec &#39;libx264&#39; is not recognized by FFmpeg.
-提示没有libx264。 
+提示没有libx264。
 
 用这个命令：ffmpeg -encoders | grep H.264
 输出：V..... h264_v4l2m2m

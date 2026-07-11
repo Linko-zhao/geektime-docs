@@ -188,7 +188,7 @@ atest Launcher3Tests
 但如果我们只想运行模块内的单个类，可以使用Module:Class的方法，命令如下。
 
 ```plain
-atest Launcher3Tests：IntSetTest 
+atest Launcher3Tests：IntSetTest
 ```
 
 更多关于Android系统开发的内容，如果你感兴趣可以参考官网的 [Android开源项目](https://developer.android.com/)，这个网站类似于应用开发的[官方网站](https://developer.android.com/)。

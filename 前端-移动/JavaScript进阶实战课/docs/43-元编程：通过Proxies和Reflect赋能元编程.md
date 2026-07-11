@@ -48,18 +48,18 @@
 
 ```javascript
 function html(str, ...val) {
-    var escaped = val.map(v => String(v)
-                                  .replace("&", "&amp;")
-                                  .replace("'", "&#39;"));
-    var result = str[0];
-    for(var i = 0; i < escaped.length; i++) {
-        result += escaped[i] + str[i+1];
-    }
-    return result;
+  var escaped = val.map((v) =>
+    String(v).replace("&", "&amp;").replace("'", "&#39;"),
+  );
+  var result = str[0];
+  for (var i = 0; i < escaped.length; i++) {
+    result += escaped[i] + str[i + 1];
+  }
+  return result;
 }
 
 var operator = "&";
-html`<b>x ${operator} y</b>`             // => "<b>x &amp; y</b>"
+html`<b>x ${operator} y</b>`; // => "<b>x &amp; y</b>"
 ```
 
 下面，我们再来看看 Reflect 对象。Reflect 并不是一个类，和 Math 对象类似，它的属性只是定义了一组相关的函数。ES6 中添加的这些函数都在一个命名空间中，它们模仿核心语言的行为，并且复制了各种预先存在于对象函数的特性。

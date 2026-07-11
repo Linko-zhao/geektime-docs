@@ -130,7 +130,7 @@ asyncdisplaykit_async_transaction_operation_completion_block_t completionBlock =
       layer.contents = (id)image.CGImage;
     }
     [self didDisplayAsyncLayer:self.asyncLayer];
-    
+
     if (rasterizesSubtree) {
       ASDisplayNodePerformBlockOnEverySubnode(self, NO, ^(ASDisplayNode * _Nonnull node) {
         [node didDisplayAsyncLayer:node.asyncLayer];
@@ -148,10 +148,10 @@ asyncdisplaykit_async_transaction_operation_completion_block_t completionBlock =
 if (asynchronously) {
   // 向上找到属性 asyncdisplaykit_parentTransactionContainer 为 YES 的 CALayer
   CALayer *containerLayer = layer.asyncdisplaykit_parentTransactionContainer ? : layer;
-  
+
   // 获取 containerLayer 的 ASAsyncTransaction
   _ASAsyncTransaction *transaction = containerLayer.asyncdisplaykit_asyncTransaction;
-  
+
   // 将 displayBlock 添加到 ASAsyncTransaction 的调度队列里
   [transaction addOperationWithBlock:displayBlock priority:self.drawingPriority queue:[_ASDisplayLayer displayQueue] completion:completionBlock];
 } else {

@@ -232,7 +232,7 @@ map_chart.render('covid19_map.html')
 <li><span>somenzz</span> 👍（1） 💬（1）<p>思考题：定时任务，先删除文件，然后执行下上述脚本，控制浏览器强制刷新。</p>2021-07-20</li><br/><li><span>任</span> 👍（1） 💬（1）<p>如何生成图片放在PPT中或者纯粹是PPT</p>2021-04-14</li><br/><li><span>Ed_Lee™</span> 👍（0） 💬（1）<p>之前在工作中，用plotly做过类似的动态分析图（数据格式是dataframe），当时觉得图例类型也覆盖的很全；听说echarts很强大，但自己一直也没用过
 
 因此想请教下，plotly和echarts之间对比，它们会有很不一样的适用场景吗？</p>2022-02-04</li><br/><li><span>天国之影</span> 👍（0） 💬（1）<p>如果使用Jupyter Notebook运行，可以使用map_chart.render_notebook()进行展示
-代码示例：https:&#47;&#47;relph1119.github.io&#47;TechBooks-ReadingNote&#47;#&#47;python_office_automation&#47;section05</p>2021-12-11</li><br/><li><span>谢韬 Fragos</span> 👍（1） 💬（0）<p>为了让加载的这些json数据容易阅读， 我写了下面的代码让数据结构匹配缩进。运行后就很容找到areaTree 和children 。 
+代码示例：https:&#47;&#47;relph1119.github.io&#47;TechBooks-ReadingNote&#47;#&#47;python_office_automation&#47;section05</p>2021-12-11</li><br/><li><span>谢韬 Fragos</span> 👍（1） 💬（0）<p>为了让加载的这些json数据容易阅读， 我写了下面的代码让数据结构匹配缩进。运行后就很容找到areaTree 和children 。
 
 import requests
 import json
@@ -247,5 +247,5 @@ print(type(alldata))
 
 readable_file = &#39;readable_eq_data.json&#39;
 with open(readable_file,&#39;w&#39;,encoding=&#39;utf8&#39;) as f:
-    json.dump(alldata,f,indent=4,ensure_ascii= False)</p>2022-03-30</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-22</li><br/>
+json.dump(alldata,f,indent=4,ensure_ascii= False)</p>2022-03-30</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-22</li><br/>
 </ul>

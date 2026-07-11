@@ -258,7 +258,7 @@ type RepositoryRelease struct {
    ...
    // release版本的zip下载地址
    ZipballURL  *string         `json:"zipball_url,omitempty"`
-   
+
    ...
 }
 ```
@@ -340,11 +340,11 @@ func Unzip(src string, dest string) ([]string, error) {
       if err != nil {
          return filenames, err
       }
-      
+
       // 复制内容
       _, err = io.Copy(outFile, rc)
 
-      
+
       outFile.Close()
       rc.Close()
 

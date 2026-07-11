@@ -167,7 +167,7 @@ Reduce函数的逻辑也非常简单，就是把list里面的所有Value计个�
 事实上，SQL是一种申明式的语言，MapReduce是我们的实现过程，后面我们在讲解Hive论文时候，你就会发现，Hive的HQL就是通过一个个MapReduce程序来实现的。而前面的整个MapReduce的过程，其实用一段Bash代码也可以实现。
 
 ```plain
-cat $input | 
+cat $input |
    awk '{print $1}' |
    sort |
    uniq -c > $output
@@ -232,6 +232,7 @@ Map和Reduce这两个函数虽然非常简单，但是对于输入输出的格�
 如果数据量少的话，bash也可以，`cat $input | awk &#39;{print $1&quot; &quot;$2}&#39; | sort | uniq -c | awk &#39;{print $1}&#39; | sort | uniq -c `</p>2021-10-03</li><br/><li><span>webmin</span> 👍（6） 💬（0）<p>看到MapReduce我就会不自主的映射为递归，Map是递的过程，一路向下进行切分，Reduce是归触底向上一路进行收集。
 思考题：
 第二个问题与网上流传的在单机上2GB内存排序10GB大小文件的题目类似，需要通过分桶缩小每次处理的大小，按Count数划分区间，每个区间一个文件，然后再对每一个区间进行排序，最后把文件按区间顺序连在一起。这种处理过程好似快排算法，用快排来划分区间每次把数据落地进文件。</p>2021-10-03</li><br/><li><span>Helios</span> 👍（2） 💬（2）<p>请问老师，如果所有map出来数据依然很大，在清洗的过程中的排序是磁盘操作么，是map输出到gfs然后清洗进程从gfs拷贝到磁盘么？如果数据过于大，是不是清洗也需要多台机器呢，他们之间如何沟通呢</p>2021-10-27</li><br/><li><span>陈迪</span> 👍（2） 💬（0）<p>尝试回答下思考题：
+
 1. 按域名统计：partition函数嵌一个获取domain的方法，论文中有描述
 2. 统计结果排序：看上去写两个MapReduce Job比较清楚。第一个就是统计数量，第二个专门做排序。主要是利用shuffle之后，reduce任务会对本机的全局&lt;key, lists&gt;按key排序。</p>2021-10-06</li><br/><li><span>qinsi</span> 👍（2） 💬（2）<p>想到个有些复杂的方法：
 
@@ -239,12 +240,12 @@ Map和Reduce这两个函数虽然非常简单，但是对于输入输出的格�
 
 第二轮：map的时候只取key中的URL部分，输出&lt;URL, visitsByUser&gt;，reduce时对value计数得到访问人数，把value相加得到访问频次，输出&lt;URL, [visits, totalVisits]&gt;
 
-第三轮：map的时候把访问人数visits作为key，输出&lt;visits, [URL, totalVisits]&gt;。如果shuffle是按照key的大小shuffle的话，reduce原样输出应该就是排好序的结果了。 </p>2021-10-02</li><br/><li><span>Geek_980ded</span> 👍（0） 💬（0）<p>MapReduce过程可以理解成一群人统计选票的过程，假设有候选人A和候选人B，首先从选票箱里拿出所有的选票，分给所有初统人员，每个初统人员拿其中一摞，只要统计这一小部分中A的选票数是多少，B的选票数多少，然后把这个结果交给汇总人员。两个汇总人员分别负责合计A和B的选票。</p>2023-06-18</li><br/><li><span>Pluto</span> 👍（0） 💬（0）<p>第二个问题： 
-第一轮： map的输出是 &lt;url + user, &#39;&#39;&gt;, reduce去重得到 &lt;url + user, &#39;&#39;&gt; 
+第三轮：map的时候把访问人数visits作为key，输出&lt;visits, [URL, totalVisits]&gt;。如果shuffle是按照key的大小shuffle的话，reduce原样输出应该就是排好序的结果了。 </p>2021-10-02</li><br/><li><span>Geek_980ded</span> 👍（0） 💬（0）<p>MapReduce过程可以理解成一群人统计选票的过程，假设有候选人A和候选人B，首先从选票箱里拿出所有的选票，分给所有初统人员，每个初统人员拿其中一摞，只要统计这一小部分中A的选票数是多少，B的选票数多少，然后把这个结果交给汇总人员。两个汇总人员分别负责合计A和B的选票。</p>2023-06-18</li><br/><li><span>Pluto</span> 👍（0） 💬（0）<p>第二个问题：
+第一轮： map的输出是 &lt;url + user, &#39;&#39;&gt;, reduce去重得到 &lt;url + user, &#39;&#39;&gt;
 
 第二轮： map不做处理， 输出 &lt;url, user&gt;， reduced得到 &lt;url, sum&gt; （sum 就是把 的value 相加即可）
 
-第三轮:   map输入 &lt;url, sum&gt;， 输出 &lt;sum, url&gt;,（数目应该是大大降低了，边界是所有url都被访问一次）,key 如果是排序的，用单一的Reduce即可</p>2022-08-23</li><br/><li><span>Chloe</span> 👍（0） 💬（0）<p>对课后思考题，我的第一感觉是要把问题划分为小的模块，然后逐个解决。正好翻出了Design Pattern的书，看看5.10节，再回来讲感想。</p>2022-06-04</li><br/><li><span>核桃</span> 👍（0） 💬（0）<p>现在很多人说hadoop已经快凉了～</p>2021-11-19</li><br/><li><span>Monroe  He</span> 👍（0） 💬（0）<p>问题2是否可以通过两个mapreduce实现：
-mapreduce1: map函数  key(URL+userID): value(&#39;1&#39;)  -&gt; reduce函数去重之后的 key(URL+userID): value(&#39;1&#39;)
+第三轮: map输入 &lt;url, sum&gt;， 输出 &lt;sum, url&gt;,（数目应该是大大降低了，边界是所有url都被访问一次）,key 如果是排序的，用单一的Reduce即可</p>2022-08-23</li><br/><li><span>Chloe</span> 👍（0） 💬（0）<p>对课后思考题，我的第一感觉是要把问题划分为小的模块，然后逐个解决。正好翻出了Design Pattern的书，看看5.10节，再回来讲感想。</p>2022-06-04</li><br/><li><span>核桃</span> 👍（0） 💬（0）<p>现在很多人说hadoop已经快凉了～</p>2021-11-19</li><br/><li><span>Monroe He</span> 👍（0） 💬（0）<p>问题2是否可以通过两个mapreduce实现：
+mapreduce1: map函数 key(URL+userID): value(&#39;1&#39;) -&gt; reduce函数去重之后的 key(URL+userID): value(&#39;1&#39;)
 mapreduce2: map直接使用mapreduce1的输出， reduce 函数计数 key(URL):value(sum())</p>2021-10-05</li><br/><li><span>leslie</span> 👍（0） 💬（0）<p>老师确实把mapreduce拆解的非常合理，这种合理不是简单的应用层的去拆；纵观数据系统这么多年真正合理的都是简单方便；SQL的特点就是简练-这是为何至今四十余年依然未曾衰老。</p>2021-10-02</li><br/>
 </ul>

@@ -65,7 +65,7 @@ for i, j, k := 0, 1, 2; (i < 20) && (j < 10) && (k < 30); i, j, k = i+1, j+1, k+
 ```plain
 for i := 0; i < 10; {
     i++
-}  
+}
 ```
 
 我们也可以省略循环前置语句。比如下面例子中，我们就没有使用前置语句声明循环变量，而是直接使用了已声明的变量i充当循环变量的作用：
@@ -74,7 +74,7 @@ for i := 0; i < 10; {
 i := 0
 for ; i < 10; i++{
     println(i)
-}  
+}
 ```
 
 当然，循环前置与后置语句也可以都省略掉，比如下面代码：
@@ -84,7 +84,7 @@ i := 0
 for ; i < 10; {
     println(i)
     i++
-}  
+}
 ```
 
 细心的你可能已经发现了，**虽然我们对前置语句或后置语句进行了省略，但经典for循环形式中的分号依然被保留着，你要注意这一点，这是Go语法的要求。**
@@ -96,7 +96,7 @@ i := 0
 for i < 10 {
     println(i)
     i++
-}  
+}
 ```
 
 这种形式也是我们在日常Go编码中经常使用的for循环语句的**第二种形式**，**也就是除了循环体之外，我们仅保留循环判断条件表达式。**
@@ -106,7 +106,7 @@ for i < 10 {
 没错。**当for循环语句的循环判断条件表达式的求值结果始终为true时，我们就可以将它省略掉了：**
 
 ```plain
-for { 
+for {
    // 循环体代码
 }
 ```
@@ -160,7 +160,7 @@ for range语句也有几个常见“变种”，我们继续以上面对切片�
 
 ```plain
 for i := range sl {
-	// ... 
+	// ...
 }
 ```
 
@@ -168,7 +168,7 @@ for i := range sl {
 
 ```plain
 for _, v := range sl {
-	// ... 
+	// ...
 }
 ```
 
@@ -176,7 +176,7 @@ for _, v := range sl {
 
 ```plain
 for _, _ = range sl {
-	// ... 
+	// ...
 }
 ```
 
@@ -184,7 +184,7 @@ for _, _ = range sl {
 
 ```plain
 for range sl {
-	// ... 
+	// ...
 }
 ```
 
@@ -250,7 +250,7 @@ channel是Go语言提供的并发设计的原语，它用于多个Goroutine之�
 ```plain
 var c = make(chan int)
 for v := range c {
-   // ... 
+   // ...
 }
 ```
 
@@ -409,8 +409,8 @@ for语句的常见“坑”点通常和for range这个“语法糖”有关。�
 
 ```plain
 func main() {
-    var m = []int{1, 2, 3, 4, 5}  
-             
+    var m = []int{1, 2, 3, 4, 5}
+
     for i, v := range m {
         go func() {
             time.Sleep(time.Second * 3)
@@ -452,8 +452,8 @@ func main() {
 
 ```
 func main() {
-    var m = []int{1, 2, 3, 4, 5}  
-             
+    var m = []int{1, 2, 3, 4, 5}
+
     {
 	    i, v := 0, 0
         for i, v = range m {
@@ -706,156 +706,158 @@ func main() {
 	var r [5]int
 	fmt.Println(&quot;original a =&quot;, a)
 
-	for i, v := range &amp;a {  &#47;&#47;a 改为&amp;a
-		if i == 0 {
-			a[1] = 12
-			a[2] = 13
-		}
-		r[i] = v
-	}
-	fmt.Println(&quot;after for range loop, r =&quot;, r)
-	fmt.Println(&quot;after for range loop, a =&quot;, a)
+    for i, v := range &amp;a {  &#47;&#47;a 改为&amp;a
+    	if i == 0 {
+    		a[1] = 12
+    		a[2] = 13
+    	}
+    	r[i] = v
+    }
+    fmt.Println(&quot;after for range loop, r =&quot;, r)
+    fmt.Println(&quot;after for range loop, a =&quot;, a)
+
 }</p>2021-11-24</li><br/><li><span>lesserror</span> 👍（17） 💬（5）<p>Tony Bai老师，你在评论中说：“如果luckey创建与第一个被遍历的元素之前了，那么后续就不会遍历它了。别忘了，key存储在哪里是根据hash值来定的”。
 
-这个我还是似懂非懂，能举例说明一下么？ 非常感谢。</p>2021-12-01</li><br/><li><span>罗杰</span> 👍（8） 💬（3）<p>map 中的坑比想象的要多，使用的时候一定要细心。老师基本上把能遇到的坑都指出来了。惭愧的是 continue 和 break 的 label 从来没用过。</p>2021-11-24</li><br/><li><span>crabxyj</span> 👍（7） 💬（2）<p>问题三：java 中是不允许在遍历中修改当前集合的，和fastfail有关，直接会抛出异常，而go允许，但遍历结果不可控</p>2022-02-16</li><br/><li><span>奕</span> 👍（4） 💬（4）<p>对于 map 遍历的那个例子，新增一个 map key  m[&quot;lucy&quot;] = 24 ， 这里的结果counter 不应该一直是 4吗？ 给 map 添加的元素为什么有的时候可以访问到 有的时候访问不到？</p>2021-11-25</li><br/><li><span>酥宝话不多</span> 👍（3） 💬（1）<p>传数组地址，&amp;a</p>2021-11-24</li><br/><li><span>白小白</span> 👍（2） 💬（1）<p>老师，请教一下：最后一个例子的结果出现的原因正是因为map 中元素的随机性，如何能保证只输出一种结果？</p>2022-08-08</li><br/><li><span>William Ning</span> 👍（2） 💬（2）<p>老师同学好，
+这个我还是似懂非懂，能举例说明一下么？ 非常感谢。</p>2021-12-01</li><br/><li><span>罗杰</span> 👍（8） 💬（3）<p>map 中的坑比想象的要多，使用的时候一定要细心。老师基本上把能遇到的坑都指出来了。惭愧的是 continue 和 break 的 label 从来没用过。</p>2021-11-24</li><br/><li><span>crabxyj</span> 👍（7） 💬（2）<p>问题三：java 中是不允许在遍历中修改当前集合的，和fastfail有关，直接会抛出异常，而go允许，但遍历结果不可控</p>2022-02-16</li><br/><li><span>奕</span> 👍（4） 💬（4）<p>对于 map 遍历的那个例子，新增一个 map key m[&quot;lucy&quot;] = 24 ， 这里的结果counter 不应该一直是 4吗？ 给 map 添加的元素为什么有的时候可以访问到 有的时候访问不到？</p>2021-11-25</li><br/><li><span>酥宝话不多</span> 👍（3） 💬（1）<p>传数组地址，&amp;a</p>2021-11-24</li><br/><li><span>白小白</span> 👍（2） 💬（1）<p>老师，请教一下：最后一个例子的结果出现的原因正是因为map 中元素的随机性，如何能保证只输出一种结果？</p>2022-08-08</li><br/><li><span>William Ning</span> 👍（2） 💬（2）<p>老师同学好，
 关于评论列表中第一条 中的 第二个问题，就是map新元素的插入，位置是随机的，不定的，所以，可能插入到原来第一个元素的前面，也可能在后面，如果在前面，就被跳过了，便没有输出。
 从个人代码执行，输出结果便可知，m[&quot;lucy&quot;] = 24 插入的位置，确实会出现在任意的位置，因为输出的位置，从0-3都有～
 
-但是关于上面的回答中的“，别忘了，key存储在哪里是根据hash值来定的”  如果是这样，m[&quot;lucy&quot;] = 24，lucy应该是一个确定的值，不论经过次重复的hash，hash值应该都是一样的，也就是说，插入的位置，应该都是确定的，那么输出结果应该只有上面结果的中的一种可能，我的理解出了什么偏差吗？
+但是关于上面的回答中的“，别忘了，key存储在哪里是根据hash值来定的” 如果是这样，m[&quot;lucy&quot;] = 24，lucy应该是一个确定的值，不论经过次重复的hash，hash值应该都是一样的，也就是说，插入的位置，应该都是确定的，那么输出结果应该只有上面结果的中的一种可能，我的理解出了什么偏差吗？
 谢谢老师，同学～
 
 下面是输出结果，供参考
-➜  golearning go run .
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
-counter is  3
-➜  golearning go run .
-tony 21
-tom 22
-jim 23
-lucy 24
-counter is  4
-➜  golearning go run .
+counter is 3
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
-tom 22
-jim 23
-lucy 24
-tony 21
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tom 22
 jim 23
 lucy 24
 tony 21
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tony 21
 tom 22
 jim 23
 lucy 24
-counter is  4
-➜  golearning go run .
-tony 21
-tom 22
-jim 23
-lucy 24
-counter is  4
-➜  golearning go run .
-tony 21
-tom 22
-jim 23
-lucy 24
-counter is  4
-➜  golearning go run .
-tony 21
-tom 22
-jim 23
-lucy 24
-counter is  4
-➜  golearning go run .
-tony 21
-tom 22
-jim 23
-lucy 24
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tom 22
 jim 23
 lucy 24
 tony 21
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
+tony 21
+tom 22
+jim 23
+lucy 24
+counter is 4
+➜ golearning go run .
+tony 21
+tom 22
+jim 23
+lucy 24
+counter is 4
+➜ golearning go run .
+tony 21
+tom 22
+jim 23
+lucy 24
+counter is 4
+➜ golearning go run .
+tony 21
+tom 22
+jim 23
+lucy 24
+counter is 4
+➜ golearning go run .
+tony 21
+tom 22
+jim 23
+lucy 24
+counter is 4
+➜ golearning go run .
+tom 22
+jim 23
+lucy 24
+tony 21
+counter is 4
+➜ golearning go run .
 jim 23
 lucy 24
 tony 21
 tom 22
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 tom 22
 jim 23
 lucy 24
 tony 21
-counter is  4
-➜  golearning go run .
+counter is 4
+➜ golearning go run .
 jim 23
 lucy 24
 tony 21
 tom 22
-counter is  4
+counter is 4
 </p>2022-03-17</li><br/><li><span>pyhhou</span> 👍（2） 💬（1）<p>关于思考题，除了换成切片或者指针外，我们可以将 for range 替换为传统的 for ;; 循环就可以解决问题。
 
 这里有一个衍生的问题，还烦请老师解答，如果说 for range 会对遍历的结构产生副本，那么我们用 for range 去遍历大型的数组的话是不是会有性能或者资源浪费等问题？所以说在平时，我们还是尽量用传统的三段式 for 循环而不是 for range？这样即使是不太了解 go 的人来看代码也不会有困惑</p>2022-03-10</li><br/><li><span>0mfg</span> 👍（2） 💬（2）<p>白老师，您好
 请问课程中提到的“我们可以为闭包函数增加参数，并且在创建 Goroutine 时将参数与 i、v 的当时值进行绑定”，这个绑定具体如何理解，或者是怎么实现的呢？希望老师百忙中可以抽空解答，谢谢</p>2021-12-14</li><br/><li><span>大年糕</span> 👍（1） 💬（1）<p>请问老师 下面的代码我这么理解对不对?
 func main() {
-	var a = [5]int{1, 2, 3, 4, 5}
-	var r [5]int
-	fmt.Println(&quot;original a =&quot;, a)
+var a = [5]int{1, 2, 3, 4, 5}
+var r [5]int
+fmt.Println(&quot;original a =&quot;, a)
 
-	for i, v := range &amp;a {  &#47;&#47;a 改为&amp;a
-		if i == 0 {
-			a[i] = 12
-		
-		}
-		r[i] = v
-	}
-	fmt.Println(&quot;after for range loop, r =&quot;, r)
-	fmt.Println(&quot;after for range loop, a =&quot;, a)
+    for i, v := range &amp;a {  &#47;&#47;a 改为&amp;a
+    	if i == 0 {
+    		a[i] = 12
+
+    	}
+    	r[i] = v
+    }
+    fmt.Println(&quot;after for range loop, r =&quot;, r)
+    fmt.Println(&quot;after for range loop, a =&quot;, a)
+
 }
 
 输出结果:
@@ -864,6 +866,7 @@ after for range loop, r = [1 2 3 4 5]
 after for range loop, a = [12 2 3 4 5]
 
 我的理解,当i等于0时,虽然if语句中把a[0]修改为了12, 但是v值并不是指针类型,还是当前获取的值1, 所以后面的代码r[i] = v 还是原来数组中a[0]的值.</p>2023-05-26</li><br/><li><span>无咎</span> 👍（1） 💬（1）<p>其实说明range使用的是副本，直接代码打印地址即可。
+
 ```
 package main
 
@@ -891,19 +894,20 @@ func main() {
 	fmt.Println(&quot;after for range loop, a = &quot;, a)
 }
 ```
+
 original a = [1 2 3 4 5]
-0xc000100000 :  1
-0xc000100008 :  2
-0xc000100010 :  3
-0xc000100018 :  4
-0xc000100020 :  5
-0xc000100000 :  1
-0xc000100008 :  12
-0xc000100010 :  13
-0xc000100018 :  4
-0xc000100020 :  5
-after for range loop, r =  [1 2 3 4 5]
-after for range loop, a =  [1 12 13 4 5]
+0xc000100000 : 1
+0xc000100008 : 2
+0xc000100010 : 3
+0xc000100018 : 4
+0xc000100020 : 5
+0xc000100000 : 1
+0xc000100008 : 12
+0xc000100010 : 13
+0xc000100018 : 4
+0xc000100020 : 5
+after for range loop, r = [1 2 3 4 5]
+after for range loop, a = [1 12 13 4 5]
 
 Program exited.</p>2023-02-08</li><br/><li><span>子杨</span> 👍（1） 💬（1）<p>终于阳康，新年第一天，学习起来。祝老师新年快乐，2023 心想事成。
 

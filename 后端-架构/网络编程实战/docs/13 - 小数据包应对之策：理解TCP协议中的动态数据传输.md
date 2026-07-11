@@ -78,8 +78,8 @@ TCP之所以复杂，就是因为TCP需要考虑的因素较多。像以上这�
 幸运的是，我们可以通过对套接字的修改来关闭Nagle算法。
 
 ```
-int on = 1; 
-setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (void *)&on, sizeof(on)); 
+int on = 1;
+setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (void *)&on, sizeof(on));
 ```
 
 值得注意的是，除非我们对此有十足的把握，否则不要轻易改变默认的TCP Nagle算法。因为在现代操作系统中，针对Nagle算法和延时ACK的优化已经非常成熟了，有可能在禁用Nagle算法之后，性能问题反而更加严重。

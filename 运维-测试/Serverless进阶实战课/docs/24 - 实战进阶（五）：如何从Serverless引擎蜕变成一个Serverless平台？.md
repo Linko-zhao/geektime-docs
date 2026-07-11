@@ -162,7 +162,7 @@
 	        action: replace
 	        regex: (.*)
 	        target_label: service
-	        replacement: $1    
+	        replacement: $1
 ```
 
 其中scrape\_interval 和 scrape\_timeout 分别表示抓取间隔和抓取数据的超时时间，而最重要的是第9行到第11行，定义了Prometheus是如何抓取Activator数据的。
@@ -172,7 +172,7 @@ source\_labels表示数据的原始标签，regex表示与source\_labels标签�
 在这里，我们需要将configmap创建在knative-monitoring 这个命名空间下，如果没有的话，需要你提前创建：
 
 ```powershell
-kubectl create ns knative-monitoring  
+kubectl create ns knative-monitoring
 kubectl apply -f 100-scrape-config.yaml
 ```
 
@@ -250,7 +250,7 @@ $ kubectl -nknative-monitoring port-forward svc/grafana 30802
 
 ```powershell
 # 创建命名空间
-kubectl create ns cert-manager 
+kubectl create ns cert-manager
 # 部署证书管理器
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
 ```
@@ -373,7 +373,7 @@ spec:
         endpoint: "otel-collector.observability.svc.cluster.local:4317"
         tls:
           insecure: true
-.....          
+.....
     service:
       pipelines:
         traces:

@@ -38,7 +38,7 @@ let callback = function(){
 }
 function doWork(cb) {
     console.log('start do work')
-    setTimeout(cb,1000)   
+    setTimeout(cb,1000)
     console.log('end do work')
 }
 doWork(callback)
@@ -87,7 +87,7 @@ XMLHttpRequest工作流程图
     let xhr = new XMLHttpRequest()
 
     /**
-     * 2:注册相关事件回调处理函数 
+     * 2:注册相关事件回调处理函数
      */
     xhr.onreadystatechange = function () {
         switch(xhr.readyState){
@@ -100,7 +100,7 @@ XMLHttpRequest工作流程图
           case 2://HEADERS_RECEIVED
             console.log("HEADERS_RECEIVED")
             break;
-          case 3://LOADING  
+          case 3://LOADING
             console.log("LOADING")
             break;
           case 4://DONE
@@ -201,7 +201,7 @@ function handler() {
         case 2://HEADERS_RECEIVED
         console.log("HEADERS_RECEIVED")
         break;
-        case 3://LOADING  
+        case 3://LOADING
         console.log("LOADING")
         break;
         case 4://DONE
@@ -212,9 +212,9 @@ function handler() {
         break;
     }
 }
-   
+
 function callOtherDomain() {
-  if(xhr) {    
+  if(xhr) {
     xhr.open('GET', url, true)
     xhr.onreadystatechange = handler
     xhr.send();
@@ -274,9 +274,9 @@ HTTPS混合内容警告
 3. 学完之后自己上手试试
 
 4. 拉个你身边最蠢的小伙伴把这件事给他说明白</p>2019-09-12</li><br/><li><span>Geek_d972f2</span> 👍（49） 💬（2）<p>建立tcp连接是在xhr open还是send?</p>2019-09-13</li><br/><li><span>yihang</span> 👍（38） 💬（3）<p>请教老师，我看到 es6中可以通过一个 fetch api来请求，它的实现是用了 xmlHttpRequest么？如果不是，原理上有什么不同？</p>2019-09-12</li><br/><li><span>imperial</span> 👍（17） 💬（1）<p>老师，异步函数的调用不应该有三种方式吗，可以放到队列尾，微任务中，也可以放入延迟队列中，为什么不放入延迟队列中呢</p>2019-10-24</li><br/><li><span>Hurry</span> 👍（10） 💬（2）<p>IPC是什么</p>2019-09-14</li><br/><li><span>oc7</span> 👍（7） 💬（1）<p> 异步回调的第二种方式 把异步函数添加到微任务队列中 具体是哪些WebAPI呢? Promise.then?</p>2019-09-12</li><br/><li><span>bobi</span> 👍（5） 💬（1）<p>老师，什么时候专门讲微任务？</p>2019-09-12</li><br/><li><span>mfist</span> 👍（5） 💬（1）<p>作为一名前端开发工程师，要如何高效地学习前端web安全理论呢？
-作为web工程师可以稍微把自己领域知识向后端扩展一些，这样理解web问题、网络传输问题会
-更加得心应手。比如说前端浏览器因为跨域block，后端到底有没有处理请求；XSS 漏洞 以及CSRF
-漏洞如果能前后端一起模拟一下，会更容易理解的。
+   作为web工程师可以稍微把自己领域知识向后端扩展一些，这样理解web问题、网络传输问题会
+   更加得心应手。比如说前端浏览器因为跨域block，后端到底有没有处理请求；XSS 漏洞 以及CSRF
+   漏洞如果能前后端一起模拟一下，会更容易理解的。
 
 今日总结
 xmlhttprequest是为了解决网页局部数据刷新产生的技术。通过同步回调和异步回调以及系统调用栈来引出了
@@ -287,5 +287,5 @@ xmlhttprequest运行机制。一个xhr主要包含下面四个步骤：1. 创建
 2.就是网络进程IPC给渲染进程时，渲染进程收到消息。这里的”消息“具体包含哪些内容啊？
 谢谢。</p>2019-09-17</li><br/><li><span>蹦哒</span> 👍（3） 💬（1）<p>老师请问是否可以这样理解：
 异步的本质，就是通过把方法（函数）添加到消息队列尾部，通过循环系统在下一次循环中去执行；
-同步的本质，就是在当前方法中执行另外一个方法，执行完之后接着执行原来的方法</p>2020-07-16</li><br/><li><span>l1shu</span> 👍（3） 💬（3）<p>为什么有些文章说渲染进程中有一个定时器线程用来计时的 到时间后会把回调函数塞到消息队列  而没有提到延迟队列这个说法  求老师解答</p>2019-10-22</li><br/><li><span>Yefei</span> 👍（2） 💬（0）<p>前几章都很赞，这一章看来三篇了，对于前端开发同学来说，整体有点hello world的感觉，难道是另一个人准备的么 :(</p>2023-02-01</li><br/><li><span>AICC</span> 👍（2） 💬（1）<p>老师什么时候出一个web安全的专栏啊，好想系统性的学学</p>2019-09-23</li><br/>
+同步的本质，就是在当前方法中执行另外一个方法，执行完之后接着执行原来的方法</p>2020-07-16</li><br/><li><span>l1shu</span> 👍（3） 💬（3）<p>为什么有些文章说渲染进程中有一个定时器线程用来计时的 到时间后会把回调函数塞到消息队列 而没有提到延迟队列这个说法 求老师解答</p>2019-10-22</li><br/><li><span>Yefei</span> 👍（2） 💬（0）<p>前几章都很赞，这一章看来三篇了，对于前端开发同学来说，整体有点hello world的感觉，难道是另一个人准备的么 :(</p>2023-02-01</li><br/><li><span>AICC</span> 👍（2） 💬（1）<p>老师什么时候出一个web安全的专栏啊，好想系统性的学学</p>2019-09-23</li><br/>
 </ul>

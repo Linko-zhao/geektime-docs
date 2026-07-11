@@ -183,18 +183,18 @@ context.restore(); // 恢复状态
   "name":"中国",
   "children":
   [
-    { 
-      "name":"浙江" , 
+    {
+      "name":"浙江" ,
         "children":
         [
             {"name":"杭州" },
             {"name":"宁波" },
             {"name":"温州" },
             {"name":"绍兴" }
-        ] 
+        ]
       },
-    { 
-      "name":"广西" , 
+    {
+      "name":"广西" ,
       "children":
       [
         {"name":"桂林"},
@@ -338,7 +338,7 @@ draw(context, root);
 
 欢迎在留言区和我讨论，分享你的答案和思考，也欢迎你把这节课分享给你的朋友，我们下节课见！
 
-* * *
+---
 
 ## 源码
 
@@ -360,100 +360,102 @@ function draw(ctx, node, {fillStyle = &#39;rgba(0, 0, 0, 0.2)&#39;, textColor = 
 - 根据当前落子周围八个方向4个单位距离的棋盘中是否赢了
 
 遇到的问题：
+
 - 光标是用1个单位线宽绘制出来的，我用同样一个单位线宽去覆盖，发现覆盖不全，还会残留线段，最后只能加大线宽去覆盖，请问老师这个是什么问题？
 
 五子棋在线预览：https:&#47;&#47;codesandbox.io&#47;s&#47;chess-demo-d2qgt</p>2020-06-26</li><br/><li><span>Geek_3469f6</span> 👍（10） 💬（2）<p>老师现在讲的还可以完全听懂，学习了之后立刻实践了以下。并且，学练结合，把以前的想法实现了下。这次没有偷懒。画了个五子棋盘+棋子，输赢判定逻辑还没写。
 https:&#47;&#47;codepen.io&#47;maslke&#47;pen&#47;MWKoKKp</p>2020-06-25</li><br/><li><span>随遇而安</span> 👍（9） 💬（4）<p>我尝试了用canvas绘制不规则多边形，如果想要添加鼠标交互事件，获取到鼠标的坐标之后，可以利用凸包算法判断点是否在不规则多边形内。</p>2020-06-24</li><br/><li><span>春饼sama</span> 👍（3） 💬（1）<p>老师，获取json的都挂了</p>2021-07-05</li><br/><li><span>筑梦师刘渊</span> 👍（3） 💬（6）<p>作业2:
 
-1. 先封装一个清除圆形方法：           
- CanvasRenderingContext2D.prototype.clearCircle = function (x, y,r) {
-                context.save();
-                context.fillStyle = &quot;rgba(255,255,255,255)&quot;;
-                context.beginPath();
-                context.arc(x, y, r, 0, TAU);
-                context.fill();
-                context.restore();
-            };
+1. 先封装一个清除圆形方法：  
+   CanvasRenderingContext2D.prototype.clearCircle = function (x, y,r) {
+   context.save();
+   context.fillStyle = &quot;rgba(255,255,255,255)&quot;;
+   context.beginPath();
+   context.arc(x, y, r, 0, TAU);
+   context.fill();
+   context.restore();
+   };
 2. 检测鼠标是否在圆内(在圆内就先清除圆再绘制名称和新颜色):
-            &#47;&#47; 鼠标检测移动到小圆就变色
-            function isInCircle(ctx, mx, my, node) {
-                const children = node.children;
-                if (children) {
-                    for (let i = 0; i &lt; children.length; i++) {
-                        isInCircle(ctx, mx, my, children[i]);
-                    }
-                } else {
-                    const { x, y, r } = node;
-                    if ((my - y) * (my - y) + (mx - x) * (mx - x) &lt; r * r) {
-                        console.log(x, y);
-                        ctx.clearCircle(x, y, r);
-                        ctx.fillStyle = &quot;rgba(255,0,0,0.2)&quot;;
-                        ctx.beginPath();
-                        ctx.arc(x, y, r, 0, TAU);
-                        ctx.fill();
-                        const name = node.data.name;
-                        ctx.fillStyle = &quot;white&quot;;
-                        ctx.font = &quot;1.5rem Arial&quot;;
-                        ctx.textAlign = &quot;center&quot;;
-                        ctx.fillText(name, x, y);
-                    }
-                }
-            }
+   &#47;&#47; 鼠标检测移动到小圆就变色
+   function isInCircle(ctx, mx, my, node) {
+   const children = node.children;
+   if (children) {
+   for (let i = 0; i &lt; children.length; i++) {
+   isInCircle(ctx, mx, my, children[i]);
+   }
+   } else {
+   const { x, y, r } = node;
+   if ((my - y) * (my - y) + (mx - x) * (mx - x) &lt; r * r) {
+   console.log(x, y);
+   ctx.clearCircle(x, y, r);
+   ctx.fillStyle = &quot;rgba(255,0,0,0.2)&quot;;
+   ctx.beginPath();
+   ctx.arc(x, y, r, 0, TAU);
+   ctx.fill();
+   const name = node.data.name;
+   ctx.fillStyle = &quot;white&quot;;
+   ctx.font = &quot;1.5rem Arial&quot;;
+   ctx.textAlign = &quot;center&quot;;
+   ctx.fillText(name, x, y);
+   }
+   }
+   }
 3. 监听鼠标mousemove事件(变换页面鼠标位置与canvas内坐标的关系)：
-                canvas.addEventListener(&quot;mousemove&quot;, (e) =&gt; {
-                    const x = e.clientX * 2;
-                    const y = e.clientY * 2;
-                    isInCircle(context, x, y, root);
-                });</p>2020-06-26</li><br/><li><span>gltjk</span> 👍（3） 💬（2）<p>提交一下第二个作业。之前纠结了一下怎么在鼠标移出城市时恢复小圆的颜色，最后决定专门做一个新的 canvas 叠在上面。另外鼠标移动的事件是不是要做个节流比较好？我试了一下感觉又不够流畅，就去掉了…… https:&#47;&#47;codepen.io&#47;gltjk&#47;pen&#47;GRomzQE</p>2020-06-24</li><br/><li><span>1830</span> 👍（2） 💬（1）<p>老师，JSON数据不能用了可以解决一下不，或者把数据结构要求贴一下我们模拟一下</p>2021-07-07</li><br/><li><span>sheeeeep</span> 👍（2） 💬（2）<p>交作业：https:&#47;&#47;output.jsbin.com&#47;rirahom，思路基本和大家一致。
-看完评论有两个主要的优化方法：
-1. 减少重绘次数：判断是否在「圆」内 或 判断结果和上次不同，才进行重绘
-2. 缩小重绘区域：进行局部清除和局部重绘</p>2020-07-08</li><br/><li><span>River</span> 👍（2） 💬（2）<p>ifInCircle(pos, node) {
-        if (pos[0] &lt; node.x + node.r &amp;&amp; pos[1] &lt; node.y + node.r) {
-          let result = Math.pow((node.x - pos[0]), 2) + Math.pow((node.y - pos[1]), 2) &lt; Math.pow(node.r, 2)
-          if (result) {
-            if (node.children) {
-              for (let childNode of node.children) {
-                let has = this.ifInCircle(pos, childNode)
-                if (has) {
-                  break
-                }
-              }
-            } else {
-              if (!node.colorful) {
-                if (this.chooseNode &amp;&amp; node !== this.chooseNode) {
-                  this.chooseNode.colorful = false
-                  this.clearAll()
-                  this.draw(this.context, this.root)
-                }
-                this.draw(this.context, node, {fillStyle: &#39;rgba(90, 35, 35, 0.2)&#39;})
-                this.chooseNode = node
-                node.colorful = true
-                return true
-              }
-            }
-          }
-        }
-      },
-好歹是实现了。。。不卡</p>2020-07-01</li><br/><li><span>浩明啦</span> 👍（2） 💬（1）<p>老师，鼠标移动圆发生变化的前提是需要遍历整个数据结构，当找到对应变化的点之后再重绘，但是这样我还是需要渲染多次，对于这个优化应该怎么写呢，实在没什么头绪了</p>2020-06-29</li><br/><li><span>特异型大光头</span> 👍（1） 💬（2）<p>初学前端,请问下 draw() 方法这个参数是什么意思{fillStyle = &#39;rgba(0, 0, 0, 0.2)&#39;, textColor = &#39;white&#39;} = {}</p>2020-06-25</li><br/><li><span>王子晨</span> 👍（1） 💬（1）<p>老师我看你本节课案例，里面的城市名字字体单位是rem，canvas对rem和view这些单位，支持的程度是怎样的？如果都支持，那俩个单位在使用时更倾向于使用哪种？</p>2020-06-25</li><br/><li><span>Alex🦁</span> 👍（1） 💬（1）<p>2的交作业 感觉 有点卡顿。。。    
-         function caculate(dx, dy, node) {
-            let children = node.children;
-            const { x, y, r } = node;
-            if ((dx - x) * (dx - x) + (dy - y) * (dy - y) &lt; r * r) {
-                node.color = 1;
-                node.parent?node.parent.color = 0:&#39;&#39;;
-            } else {
-                node.color = 0;
-            }
-            if (children) {
-                for (let i = 0; i &lt; children.length; i++) {
-                    caculate(dx, dy, children[i]);
-                }
-            }
-        }
-        dom.onmousemove = (e) =&gt; {
-            let x = e.pageX, y = e.pageY;
-            caculate(x, y, root);
-            context.clearRect(0,0,800,800)
-            draw(context, root);
-        }</p>2020-06-24</li><br/>
+   canvas.addEventListener(&quot;mousemove&quot;, (e) =&gt; {
+   const x = e.clientX * 2;
+   const y = e.clientY * 2;
+   isInCircle(context, x, y, root);
+   });</p>2020-06-26</li><br/><li><span>gltjk</span> 👍（3） 💬（2）<p>提交一下第二个作业。之前纠结了一下怎么在鼠标移出城市时恢复小圆的颜色，最后决定专门做一个新的 canvas 叠在上面。另外鼠标移动的事件是不是要做个节流比较好？我试了一下感觉又不够流畅，就去掉了…… https:&#47;&#47;codepen.io&#47;gltjk&#47;pen&#47;GRomzQE</p>2020-06-24</li><br/><li><span>1830</span> 👍（2） 💬（1）<p>老师，JSON数据不能用了可以解决一下不，或者把数据结构要求贴一下我们模拟一下</p>2021-07-07</li><br/><li><span>sheeeeep</span> 👍（2） 💬（2）<p>交作业：https:&#47;&#47;output.jsbin.com&#47;rirahom，思路基本和大家一致。
+   看完评论有两个主要的优化方法：
+4. 减少重绘次数：判断是否在「圆」内 或 判断结果和上次不同，才进行重绘
+5. 缩小重绘区域：进行局部清除和局部重绘</p>2020-07-08</li><br/><li><span>River</span> 👍（2） 💬（2）<p>ifInCircle(pos, node) {
+   if (pos[0] &lt; node.x + node.r &amp;&amp; pos[1] &lt; node.y + node.r) {
+   let result = Math.pow((node.x - pos[0]), 2) + Math.pow((node.y - pos[1]), 2) &lt; Math.pow(node.r, 2)
+   if (result) {
+   if (node.children) {
+   for (let childNode of node.children) {
+   let has = this.ifInCircle(pos, childNode)
+   if (has) {
+   break
+   }
+   }
+   } else {
+   if (!node.colorful) {
+   if (this.chooseNode &amp;&amp; node !== this.chooseNode) {
+   this.chooseNode.colorful = false
+   this.clearAll()
+   this.draw(this.context, this.root)
+   }
+   this.draw(this.context, node, {fillStyle: &#39;rgba(90, 35, 35, 0.2)&#39;})
+   this.chooseNode = node
+   node.colorful = true
+   return true
+   }
+   }
+   }
+   }
+   },
+   好歹是实现了。。。不卡</p>2020-07-01</li><br/><li><span>浩明啦</span> 👍（2） 💬（1）<p>老师，鼠标移动圆发生变化的前提是需要遍历整个数据结构，当找到对应变化的点之后再重绘，但是这样我还是需要渲染多次，对于这个优化应该怎么写呢，实在没什么头绪了</p>2020-06-29</li><br/><li><span>特异型大光头</span> 👍（1） 💬（2）<p>初学前端,请问下 draw() 方法这个参数是什么意思{fillStyle = &#39;rgba(0, 0, 0, 0.2)&#39;, textColor = &#39;white&#39;} = {}</p>2020-06-25</li><br/><li><span>王子晨</span> 👍（1） 💬（1）<p>老师我看你本节课案例，里面的城市名字字体单位是rem，canvas对rem和view这些单位，支持的程度是怎样的？如果都支持，那俩个单位在使用时更倾向于使用哪种？</p>2020-06-25</li><br/><li><span>Alex🦁</span> 👍（1） 💬（1）<p>2的交作业 感觉 有点卡顿。。。  
+   function caculate(dx, dy, node) {
+   let children = node.children;
+   const { x, y, r } = node;
+   if ((dx - x) * (dx - x) + (dy - y) * (dy - y) &lt; r * r) {
+   node.color = 1;
+   node.parent?node.parent.color = 0:&#39;&#39;;
+   } else {
+   node.color = 0;
+   }
+   if (children) {
+   for (let i = 0; i &lt; children.length; i++) {
+   caculate(dx, dy, children[i]);
+   }
+   }
+   }
+   dom.onmousemove = (e) =&gt; {
+   let x = e.pageX, y = e.pageY;
+   caculate(x, y, root);
+   context.clearRect(0,0,800,800)
+   draw(context, root);
+   }</p>2020-06-24</li><br/>
+
 </ul>

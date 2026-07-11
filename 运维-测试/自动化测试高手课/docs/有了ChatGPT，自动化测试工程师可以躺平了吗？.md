@@ -74,36 +74,36 @@ ChatGPT学习知识的过程，不需要人来给知识打标签，告诉它这�
 > 请求：  
 > GET /books  
 > 响应：  
-> \[ { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }, { “id”: 2, “title”: “图书标题”, “author”: “作者”, “price”: 12.99, “category”: “分类” }, … ]  
->   
+> \[ { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }, { “id”: 2, “title”: “图书标题”, “author”: “作者”, “price”: 12.99, “category”: “分类” }, … ]
+>
 > 2.获取特定书籍  
 > 请求：  
 > GET /books/{id}  
 > 响应：  
-> { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }  
->   
+> { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }
+>
 > 3.创建书籍  
 > 请求：  
 > POST /books  
 > 请求体：  
 > { “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }  
 > 响应：  
-> 201 Created Location: /books/{id}  
->   
+> 201 Created Location: /books/{id}
+>
 > 4.更新书籍  
 > 请求：  
 > PUT /books/{id}  
 > 请求体：  
 > { “title”: “新的图书标题”, “author”: “新的作者”, “price”: 12.99, “category”: “新的分类” }  
 > 响应：  
-> 204 No Content  
->   
+> 204 No Content
+>
 > 5.删除书籍  
 > 请求：  
 > DELETE /books/{id}  
 > 响应：  
-> 204 No Content  
->   
+> 204 No Content
+>
 > 6.归类书籍  
 > 请求：  
 > PUT /books/{id}/category  
@@ -130,38 +130,38 @@ ChatGPT学习知识的过程，不需要人来给知识打标签，告诉它这�
 > 请求：  
 > GET /books  
 > 预期响应：  
-> HTTP/1.1 200 OK Content-Type: application/json \[ { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }, { “id”: 2, “title”: “图书标题”, “author”: “作者”, “price”: 12.99, “category”: “分类” }, … ]  
->   
+> HTTP/1.1 200 OK Content-Type: application/json \[ { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }, { “id”: 2, “title”: “图书标题”, “author”: “作者”, “price”: 12.99, “category”: “分类” }, … ]
+>
 > 2. 获取特定书籍  
-> 请求：  
-> GET /books/1  
-> 预期响应：  
-> HTTP/1.1 200 OK Content-Type: application/json { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }  
->   
+>    请求：  
+>    GET /books/1  
+>    预期响应：  
+>    HTTP/1.1 200 OK Content-Type: application/json { “id”: 1, “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }
+>
 > 3. 创建书籍  
-> 请求：  
-> POST /books Content-Type: application/json { “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }  
-> 预期响应：  
-> HTTP/1.1 201 Created Location: /books/1  
->   
+>    请求：  
+>    POST /books Content-Type: application/json { “title”: “图书标题”, “author”: “作者”, “price”: 9.99, “category”: “分类” }  
+>    预期响应：  
+>    HTTP/1.1 201 Created Location: /books/1
+>
 > 4.更新书籍  
 > 请求：  
 > PUT /books/1 Content-Type: application/json { “title”: “新的图书标题”, “author”: “新的作者”, “price”: 12.99, “category”: “新的分类” }  
 > 预期响应：  
-> HTTP/1.1 204 No Content  
->   
+> HTTP/1.1 204 No Content
+>
 > 5. 删除书籍  
-> 请求：  
-> DELETE /books/1  
-> 预期响应：  
-> HTTP/1.1 204 No Content  
->   
+>    请求：  
+>    DELETE /books/1  
+>    预期响应：  
+>    HTTP/1.1 204 No Content
+>
 > 6. 归类书籍  
-> 请求：  
-> PUT /books/1/category Content-Type: application/json { “category”: “新的分类” }  
-> 预期响应：  
-> HTTP/1.1 204 No Content  
-> 以上测试案例涵盖了常见的 CRUD 操作和归类操作，可以用来验证接口的功能和正确性。你可以根据实际情况扩展和调整这些测试案例，确保覆盖各种场景和边界条件。
+>    请求：  
+>    PUT /books/1/category Content-Type: application/json { “category”: “新的分类” }  
+>    预期响应：  
+>    HTTP/1.1 204 No Content  
+>    以上测试案例涵盖了常见的 CRUD 操作和归类操作，可以用来验证接口的功能和正确性。你可以根据实际情况扩展和调整这些测试案例，确保覆盖各种场景和边界条件。
 
 这回的测试案例结果就让人不太满意了。为什么呢?
 

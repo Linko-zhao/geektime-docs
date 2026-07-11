@@ -14,13 +14,14 @@
 
 1. 在一幅扑克牌中，去掉大小王一共 52 张牌。GameJudger 在这 52 张牌中随机抽取 4 张，发给 GamePlayer。
 2. GamePlayer 拿到这 4 张牌之后，他有 4 种选择：
-   
+
    1. 如果他非常自信，可以不求助任何人，自行给出满足要求的表达式。
    2. 如果发现自己给出表达式很困难，可以求助 MathProdigy，由 MathProdigy 给出满足要求的表达式。
    3. 放弃这一轮游戏，请求重新发牌。
    4. 请求退出游戏，则应用直接退出。
+
 3. GameJudger 收到步骤 2 GamePlayer 的选择之后，根据不同情况做出选择：
-   
+
    1. 若收到的是一个表达式，对表达式进行检查。若发现表达式正确，则跳到步骤 1，重新发牌，进入下一轮游戏。若发现表达式错误，给出错误的信号，跳到步骤 2，要求 GamePlayer 重新给出表达式。
    2. 若收到的是重新发牌的请求，则跳到步骤 1，重新发牌，进入下一轮游戏。
 
@@ -132,9 +133,10 @@ UserRequirement、RequireDealCardsAgain 触发的后续 Action 都是 DealCards�
 
 - 通过从记忆中获取最后一条消息的 cause\_by 属性来判断最近执行的 Action 是哪一个。UserRequirement 代表 MetaGPT 应用刚刚启动时的第一个 Action，消息的 content 属性内容是在命令行输入的 idea 参数。其他 Action 用各自 Action 子类的类名来表示。
 - todo 代表了当前要执行的后续 Action。获得 todo 有两种方式。
-  
+
   - 一种方式是通过 self.rc.todo 获得，我们在上节课的例子 build\_customized\_multi\_agents.py 中已经看到。这样获得的 todo 就是在 Role 子类的初始化函数中通过 set\_actions() 函数设置的第一个 Action。
   - 另一种方式是直接创建一个 Action 子类的实例作为 todo，这样后续执行的 Action 就是这个 Action 子类。
+
 - 使用 self.rc.env.publish\_message() 函数发布一个新的消息，消息的 cause\_by 通常设置为最近执行的 Action 子类的类名。对于上述 CallMathProdigy、WrongExpression、RequireDealCardsAgain、ExitGame 这一类 Action，不需要执行什么业务逻辑，只需要发一条消息即可。例如：
 
 ```plain
@@ -299,7 +301,7 @@ poetry run python play_24_points_game_v2.py
 
 - 设计方面：做角色建模和工作流设计。
 - 编程方面：根据之前的设计，自顶向下、逐步求精。
-  
+
   - 首先实现应用的框架代码 (创建各个 Action 子类、各个 Role 子类的初始化函数)，然后编写每个 Action 子类的 run() 函数，并在 Role 子类的 \_act() 函数中实现设计的工作流。
   - 为了开展对照，我实现了应用的两个版本。第一个版本所有 Action 子类的 run() 函数均未调用 LLM。第二个版本中 DealCards、CheckExpression 的 run() 函数调用了 LLM。从中我们也可以理解，并非所有的 Action 子类都需要调用 LLM，还是需要根据具体情况来具体分析。有些 Action 甚至都可以没有自己的业务逻辑，仅仅作为系统中的一个事件来使用。
 
@@ -333,54 +335,56 @@ poetry run python play_24_points_game_v2.py
 class CheckExpression(Action):
     PROMPT_TEMPLATE: str = &quot;&quot;&quot;
     你是一个精确的计算器。请按以下格式回答：
-    
+
     步骤：
     1. 计算 {expression} = [你的计算过程]
     2. 计算 |结果 - 24| = [差值计算]
     3. 判断差值是否 &lt; 0.1
-    
+
     答案：[只返回True或False]
     &quot;&quot;&quot;
 ```
 
 关键点：
+
 - 强制LLM展示计算步骤
 - 在最后单独返回True&#47;False
 - 计算过程和结果分离
 
 这样设计可以：
+
 1. 确保LLM进行完整计算
 2. 保持最终输出简洁
 3. 便于调试和验证</p>2025-02-01</li><br/><li><span>Geek_30bdf2</span> 👍（0） 💬（1）<p>在v2版本输入后中出现了
-Traceback (most recent call last):
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;utils&#47;common.py&quot;, line 664, in wrapper
-    return await func(self, *args, **kwargs)
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 551, in run
-    rsp = await self.react()
-AttributeError: &#39;NoneType&#39; object has no attribute &#39;group&#39;
+   Traceback (most recent call last):
+   File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;utils&#47;common.py&quot;, line 664, in wrapper
+   return await func(self, *args, **kwargs)
+   File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 551, in run
+   rsp = await self.react()
+   AttributeError: &#39;NoneType&#39; object has no attribute &#39;group&#39;
 
 During handling of the above exception, another exception occurred:
 
 Traceback (most recent call last):
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;utils&#47;common.py&quot;, line 650, in wrapper
-    result = await func(self, *args, **kwargs)
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;team.py&quot;, line 134, in run
-    await self.env.run()
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;utils&#47;common.py&quot;, line 650, in wrapper
+result = await func(self, *args, **kwargs)
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;team.py&quot;, line 134, in run
+await self.env.run()
 Exception: Traceback (most recent call last):
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;utils&#47;common.py&quot;, line 664, in wrapper
-    return await func(self, *args, **kwargs)
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 551, in run
-    rsp = await self.react()
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 520, in react
-    rsp = await self._react()
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 475, in _react
-    rsp = await self._act()
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;learn_metagpt&#47;autonomous_agent&#47;lesson_04&#47;game_judger_v2.py&quot;, line 92, in _act
-    check_result = await todo.run(msg.content)
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;learn_metagpt&#47;autonomous_agent&#47;lesson_04&#47;game_judger_v2.py&quot;, line 69, in run
-    check_result = extract_result(rsp)
-  File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;learn_metagpt&#47;autonomous_agent&#47;lesson_04&#47;game_judger_v2.py&quot;, line 32, in extract_result
-    result = eval(search_obj.group(1))
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;utils&#47;common.py&quot;, line 664, in wrapper
+return await func(self, *args, **kwargs)
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 551, in run
+rsp = await self.react()
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 520, in react
+rsp = await self._react()
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;MetaGPT&#47;metagpt&#47;roles&#47;role.py&quot;, line 475, in _react
+rsp = await self._act()
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;learn_metagpt&#47;autonomous_agent&#47;lesson_04&#47;game_judger_v2.py&quot;, line 92, in _act
+check_result = await todo.run(msg.content)
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;learn_metagpt&#47;autonomous_agent&#47;lesson_04&#47;game_judger_v2.py&quot;, line 69, in run
+check_result = extract_result(rsp)
+File &quot;&#47;root&#47;autodl-tmp&#47;work&#47;learn_metagpt&#47;autonomous_agent&#47;lesson_04&#47;game_judger_v2.py&quot;, line 32, in extract_result
+result = eval(search_obj.group(1))
 AttributeError: &#39;NoneType&#39; object has no attribute &#39;group&#39;
 的情况，请问是什么原因呢</p>2025-01-30</li><br/>
 </ul>

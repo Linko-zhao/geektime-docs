@@ -79,7 +79,7 @@ type Locker interface {
         "fmt"
         "sync"
     )
-    
+
     func main() {
         var count = 0
         // 使用WaitGroup等待10个goroutine完成
@@ -192,7 +192,7 @@ package main
         var mu sync.Mutex
         // 计数器的值
         var count = 0
-        
+
         // 辅助变量，用来确认所有的goroutine都完成
         var wg sync.WaitGroup
         wg.Add(10)
@@ -338,6 +338,7 @@ func (c *Counter) Count() uint64 {
 所以结论是 race detector 并不能在编译阶段发现并发问题？那么前边那句是不是就没必要提了，不然容易让大家误会。</p>2020-10-18</li><br/><li><span>pedro</span> 👍（21） 💬（4）<p>大家都已经解答了，就不重复了。这里给一些不熟悉 go 需要的同学补充一下，go 语言查看汇编代码命令:
 go tool compile -S file.go
 对于文中 counter 的例子可以过度优化一下，那就是获取计数的 Count 函数其实可以通过读写锁，也就是 RWMutex 来优化一下。</p>2020-10-13</li><br/><li><span>骁勇善战</span> 👍（14） 💬（2）<p>老师，为什么读也要加锁呢？</p>2021-06-13</li><br/><li><span>ZY</span> 👍（7） 💬（1）<p>有两种情况
+
 1. 如果当前有协程进入自旋模式，当前协程会成功获取到锁
 2. 如果没有协程进入自选模式，释放锁的协程会释放的信号量会成功唤醒等待队列中的协程，该卸程会成功获取到锁，并且把等待计数器减1.
 

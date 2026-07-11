@@ -132,7 +132,7 @@ npm install -D vite
 
 ```javascript
   "scripts": {
-    "start": "vite dev --open", 
+    "start": "vite dev --open",
     "build": "vite build",
 ```
 
@@ -167,11 +167,11 @@ npm install -D @vitejs/plugin-react
 加入一个配置文件 `vite.config.js` ：
 
 ```javascript
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react()]
+  plugins: [react()],
 });
 ```
 
@@ -182,19 +182,18 @@ export default defineConfig({
 把 `oh-my-kanban` 的src/index.js文件拷过来，改名为src/index.jsx，暂时注释掉一部分内容：
 
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 // import './index.css';
 // import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     {/* <App /> */}
     <div>Yeah My Kanban</div>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
-
 ```
 
 回到Vite的入口文件 `index.html` ，在 `<body>` 封闭标签最后加入一行特殊的 `<script>` 标签：
@@ -226,9 +225,9 @@ npm install -D @emotion/babel-plugin
 export default defineConfig({
   plugins: [
     react({
-      jsxImportSource: '@emotion/react',
+      jsxImportSource: "@emotion/react",
       babel: {
-        plugins: ['@emotion/babel-plugin'],
+        plugins: ["@emotion/babel-plugin"],
       },
     }),
   ],
@@ -264,16 +263,16 @@ src
 把 `yeah-my-kanban/src/index.jsx` 的注释代码还原，注意 `App` 的导入路径变了：
 
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './components/App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./components/App";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 ```
 
@@ -505,9 +504,10 @@ npm install -D lint-staged
 <div><strong>精选留言（6）</strong></div><ul>
 <li><span>Geek_82fd2f</span> 👍（1） 💬（1）<p>在添加ESLint的时候，如果选择Yes也就是使用TS， Does your project use TypeScript? · No &#47; Yes，规则里就不会出现Airbnb代码风格了，请问是不是Airbnb还不支持</p>2022-11-17</li><br/><li><span>huangshan</span> 👍（1） 💬（2）<p>可以补充一下关于turbopack相关的工程化吗？</p>2022-10-29</li><br/><li><span>船长</span> 👍（1） 💬（1）<p>记得想要 Eslint 生效要启动 vscode 中的 eslint 插件。。</p>2022-09-30</li><br/><li><span>DullSword</span> 👍（1） 💬（1）<p>增加NPM 命令lint出错的小伙伴可以试试：
 
-```
+````
 &quot;lint&quot;: &quot;eslint \&quot;.&#47;src&#47;**&#47;*.{js,jsx}\&quot;&quot;,
 ```</p>2022-09-28</li><br/><li><span>船长</span> 👍（1） 💬（3）<p>3-13 痛点：
 没有报错提醒
 没有智能提示，比如在引入 useEffect，浏览器直接报错，原因是没有在顶部 import，这时候还需要手写去引入</p>2022-09-27</li><br/><li><span>百里</span> 👍（0） 💬（0）<p>最近独立负责一个项目，这个课程像及时雨一样，助我成长</p>2023-01-24</li><br/>
 </ul>
+````

@@ -155,7 +155,7 @@ test('useCounter', () => {
       </>
     );
   };
-  
+
   // 渲染这个测试组件
   render(<WrapperComponent />);
 
@@ -198,7 +198,7 @@ test('useCounter', () => {
   };
   // 渲染测试组件
   render(<WrapperComponent />);
-  
+
   // 调用 hook 的 increment 方法
   act(() => {
     hookResult.increment();
@@ -286,7 +286,6 @@ import InputNumber from &quot;src&#47;components&#47;InputNumber&quot;;
 ```
 
 绝对路径 src 我配置了，在 App.js 能够使用的。
-
 
 想问 xxx.test.js 是不是不能使用绝对路径，只能相对路径引用，如果相对路径引用，这好麻烦。</p>2021-08-26</li><br/>
 </ul>

@@ -115,11 +115,11 @@ fun compareVersion(version1: String, version2: String): Int {
   val v1 = version1.split(&quot;.&quot;).map { it.toInt() }
   val v2 = version2.split(&quot;.&quot;).map { it.toInt() }
 
-  for (i in 0 until maxOf(v1.size, v2.size)) {
-    val diff = (v1.getOrElse(i) { 0 } - v2.getOrElse(i) { 0 })
-    if (diff != 0) return if (diff &gt; 0) 1 else -1
-  }
-  return 0;
+for (i in 0 until maxOf(v1.size, v2.size)) {
+val diff = (v1.getOrElse(i) { 0 } - v2.getOrElse(i) { 0 })
+if (diff != 0) return if (diff &gt; 0) 1 else -1
+}
+return 0;
 }
 
 ```</p>2022-01-30</li><br/><li><span>白乾涛</span> 👍（2） 💬（2）<p>我知道为啥找不到 maxBy 了，估计是因为这个方法在 1.6 版本中隐藏了
@@ -157,7 +157,7 @@ fun mostCommonWord1(paragraph: String, banned: Array&lt;String&gt;) =
             .run {
                 (0 until max(first.size, second.size))
                     .fold(0) { acc, i -&gt;
-                        if (acc != 0) acc 
+                        if (acc != 0) acc
                         else first.getOrElse(i) { 0 } - second.getOrElse(i) { 0 }
                     }
             }.let {
@@ -262,3 +262,4 @@ fun compareVersion(version1: String, version2: String): Int {
         return 0
     }</p>2022-01-28</li><br/>
 </ul>
+```

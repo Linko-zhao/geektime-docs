@@ -360,7 +360,7 @@ scores[:,:,1] = 1 - scores[:,:,0]
 
 欢迎你在留言区记录你的疑问或者收获，也推荐你把这节课分享给你的朋友。
 <div><strong>精选留言（15）</strong></div><ul>
-<li><span>IUniverse</span> 👍（22） 💬（1）<p>import numpy as np 
+<li><span>IUniverse</span> 👍（22） 💬（1）<p>import numpy as np
 
 scores=np.random.rand(256,256,2)
 scores[:,:,0]=1-scores[:,:,1]
@@ -368,24 +368,21 @@ mask=np.argmax(scores,axis=2)
 print(mask)</p>2021-10-15</li><br/><li><span>Yuhan</span> 👍（12） 💬（2）<p>方法一：
 result = np.argmax(scores, axis=2)
 方法二：
-result = (scores[:, :, 0] &lt; scores[:, :, 1]).astype(&#39;int&#39;)</p>2021-10-15</li><br/><li><span>王骥</span> 👍（5） 💬（5）<p>    im_pillow_c1_3ch = im_pillow.copy()
-    im_pillow_c2_3ch = im_pillow.copy()
-    im_pillow_c3_3ch = im_pillow.copy()
-    # 只留 r 通道
-    im_pillow_c1_3ch[:, :, 1:] = 0
-    im_pillow_c1_3ch[:, :, 2:] = 0
-    # 只留 g 通道 
-    im_pillow_c2_3ch[:, :, 0:] = 0
-    im_pillow_c2_3ch[:, :, 2:] = 0
-    # 只留 b 通道 
-    im_pillow_c3_3ch[:, :, 0:] = 0
-    im_pillow_c3_3ch[:, :, 1:] = 0
+result = (scores[:, :, 0] &lt; scores[:, :, 1]).astype(&#39;int&#39;)</p>2021-10-15</li><br/><li><span>王骥</span> 👍（5） 💬（5）<p> im_pillow_c1_3ch = im_pillow.copy()
+im_pillow_c2_3ch = im_pillow.copy()
+im_pillow_c3_3ch = im_pillow.copy() # 只留 r 通道
+im_pillow_c1_3ch[:, :, 1:] = 0
+im_pillow_c1_3ch[:, :, 2:] = 0 # 只留 g 通道
+im_pillow_c2_3ch[:, :, 0:] = 0
+im_pillow_c2_3ch[:, :, 2:] = 0 # 只留 b 通道
+im_pillow_c3_3ch[:, :, 0:] = 0
+im_pillow_c3_3ch[:, :, 1:] = 0
 
 老师，尝试用深拷贝来实现RGB通道过滤。R 显示没有问题，不过在显示 GB 通道的时候，获得的图片背景是黑色的。是我哪里理解出了问题吗？还是代码有问题？</p>2021-10-24</li><br/><li><span>cab</span> 👍（2） 💬（1）<p>OpenCV提取RGB通道很方便:
 b, g, r = cv2.split(image)</p>2021-10-17</li><br/><li><span>nico</span> 👍（1） 💬（1）<p>请问下为什么这样合并下来都是红色底图的，第二种方式是可以的
 im_pillow_c1_3ch = np.concatenate((im_pillow_c1, zeros), axis=2)
 im_pillow_c2_3ch = np.concatenate((im_pillow_c2, zeros), axis=2)
-im_pillow_c3_3ch = np.concatenate((im_pillow_c3, zeros), axis=2)</p>2022-06-27</li><br/><li><span>clee</span> 👍（1） 💬（2）<p>你好，为什么我执行 im_pillow_c1 = im_pillow_c1[:, :, np.newaxis] 后打印im_pillow_c1的shape变量，输出是  (116, 318, 1, 1, 1)， 而不是 (116, 318, 1,) 呢
+im_pillow_c3_3ch = np.concatenate((im_pillow_c3, zeros), axis=2)</p>2022-06-27</li><br/><li><span>clee</span> 👍（1） 💬（2）<p>你好，为什么我执行 im_pillow_c1 = im_pillow_c1[:, :, np.newaxis] 后打印im_pillow_c1的shape变量，输出是 (116, 318, 1, 1, 1)， 而不是 (116, 318, 1,) 呢
 
 </p>2021-10-25</li><br/><li><span>平常心</span> 👍（1） 💬（3）<p>老师，您好！想请教一下，下边这个问题：
 
@@ -406,14 +403,15 @@ for x, y in zip(a.flat, b.flat):
 		mask_flat.append(0)
 	else:
 		mask_flat.append(1)
-   
+
 mask_m1 = np.asarray(mask_flat).reshape(256, 256)
 
 ## method2
+
 mask_m2 = np.argmax(scores, axis=2)
 
 if (mask_m1 == mask_m2).all():
-    print(True)
+print(True)
 </p>2023-11-03</li><br/><li><span>Difer</span> 👍（0） 💬（1）<p>我发现使用&quot;列表&quot;的形式进行取值，就可以直接获得shape为三维的数组，不知道方老师认可这样的操作吗？
 im_pillow_c0 = im_pillow[:, :, [0]]   ### 注意 im_pillow[:, :, [0]] 与 原文的im_pillow[:, :, 0] 是不一样的
 im_pillow_c1 = im_pillow[:, :, [1]]

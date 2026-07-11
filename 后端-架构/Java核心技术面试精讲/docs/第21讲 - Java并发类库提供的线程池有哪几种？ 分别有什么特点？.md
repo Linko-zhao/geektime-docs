@@ -108,7 +108,7 @@ public ThreadPoolExecutor(int corePoolSize,
 
 ```
 private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
-// 真正决定了工作线程数的理论上限 
+// 真正决定了工作线程数的理论上限
 private static final int COUNT_BITS = Integer.SIZE - 3;
 private static final int COUNT_MASK = (1 << COUNT_BITS) - 1;
 // 线程池状态，存储在数字的高位
@@ -214,7 +214,9 @@ public void test03() throws InterruptedException {
     executorService.execute(task);
 
     TimeUnit.SECONDS.sleep(3);
+
 }
+
 ```</p>2019-01-15</li><br/><li><span>王磊</span> 👍（6） 💬（1）<p>core和max应该都是1。验证的方法是自己写一个Threadlocal, 里面有相应创建线程的日志，然后把它传入创建线程池。</p>2018-06-25</li><br/><li><span>GK java</span> 👍（5） 💬（1）<p>线程池到底需不需要关闭</p>2019-01-26</li><br/><li><span>欣</span> 👍（5） 💬（2）<p>杨老师，我照着文章翻看源码，下面那块是不是不太对？
 ----------------
 Executors 目前提供了 5 种不同的线程池创建配置：
@@ -236,3 +238,4 @@ BlockQueue取出任务队列时是有阻塞，有超时使用poll取值，无超
 4.任务数大于核心线程数，队列已满，工作线程已达最大线程数，拒绝任务，抛出异常（而不是阻塞任务，等待进入队列）
 </p>2019-05-22</li><br/>
 </ul>
+```

@@ -27,8 +27,9 @@ SGML还规定了一些特殊的节点类型，在我们之前的DOM课程中已�
 HTML中，用于描述一个元素的标签分为开始标签、结束标签和自闭合标签。开始标签和自闭合标签中，又可以有属性。
 
 - 开始标签：`<tagname>`
-  
+
   - 带属性的开始标签： `<tagname attributename="attributevalue">`
+
 - 结束标签：`</tagname>`
 - 自闭合标签：`<tagname />`
 
@@ -81,19 +82,19 @@ ProcessingInstruction 包含两个部分，紧挨着第一个问号后，空格�
 如果你是一个上个时代走过来的前端，一定还记得HTML4.01有三种DTD。分别是严格模式、过渡模式和frameset模式。
 
 ```html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 ```
 
 严格模式的DTD规定了HTML4.01中需要的标签。
 
 ```html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 ```
 
 过渡模式的DTD除了html4.01，还包含了一些被贬斥的标签，这些标签已经不再推荐使用了，但是过渡模式中仍保留了它们。
 
 ```html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 ```
 
 frameset结构的网页如今已经很少见到了，它使用frameset标签把几个网页组合到一起。
@@ -103,22 +104,19 @@ frameset结构的网页如今已经很少见到了，它使用frameset标签把�
 版本一
 
 ```html
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 ```
 
 版本二
 
 ```html
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
-http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" " http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 ```
 
 版本三
 
 ```html
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 ```
 
 其实你看看就知道，这些复杂的DTD写法并没有什么实际作用（浏览器根本不会用SGML引擎解析它们），因此，到了HTML5，干脆放弃了SGML子集这项坚持，规定了一个简单的，大家都能记住的DTD：
@@ -168,5 +166,5 @@ DTD在HTML4.01和之前都非常的复杂，到了HTML5，抛弃了SGML兼容，
 在Character mnemonic entities段落中可以看到3种实体分类，指向3个相对链接，整理出来就是：
 https:&#47;&#47;www.w3.org&#47;TR&#47;xhtml1&#47;DTD&#47;xhtml-lat1.ent ， https:&#47;&#47;www.w3.org&#47;TR&#47;xhtml1&#47;DTD&#47;xhtml-symbol.ent ， https:&#47;&#47;www.w3.org&#47;TR&#47;xhtml1&#47;DTD&#47;xhtml-special.ent ，用文本编辑器打开发现里面就是声明的文本和对应的Unicode码点</p>2020-09-01</li><br/><li><span>程序员讲道理</span> 👍（1） 💬（1）<p>所以什么是DTD</p>2022-04-03</li><br/><li><span>天天</span> 👍（1） 💬（0）<p>https:&#47;&#47;m.baidu.com&#47;sf_edu_wenku&#47;view&#47;8fce2c4819e8b8f67c1cb9e9
 文本实体以及code 码</p>2019-04-25</li><br/><li><span>你好，阳光</span> 👍（0） 💬（0）<p>部分可参考链接https:&#47;&#47;www.w3school.com.cn&#47;tags&#47;html_ref_entities.html，剩下的可以自己按照&amp;#(1-255)打出来</p>2020-12-25</li><br/><li><span>郭郭</span> 👍（0） 💬（0）<p>非常完美地弥补了之前学习html的知识盲区❤</p>2020-03-25</li><br/><li><span>奕</span> 👍（0） 💬（0）<p>为什么 w3school 这个文本实体文档 http:&#47;&#47;www.w3school.com.cn&#47;tags&#47;html_ref_symbols.html
-找不到  &amp;nbsp;  &amp;lt; 这些符号呢？</p>2019-05-23</li><br/><li><span>是零壹呀</span> 👍（0） 💬（0）<p>为什么我爬下来，只有253个？有一样的么</p>2019-05-06</li><br/><li><span>wuxiii</span> 👍（0） 💬（1）<p>如果低版本的浏览器是用h5的DTD，浏览器是否可以正常解析？</p>2019-05-05</li><br/>
+找不到 &amp;nbsp; &amp;lt; 这些符号呢？</p>2019-05-23</li><br/><li><span>是零壹呀</span> 👍（0） 💬（0）<p>为什么我爬下来，只有253个？有一样的么</p>2019-05-06</li><br/><li><span>wuxiii</span> 👍（0） 💬（1）<p>如果低版本的浏览器是用h5的DTD，浏览器是否可以正常解析？</p>2019-05-05</li><br/>
 </ul>

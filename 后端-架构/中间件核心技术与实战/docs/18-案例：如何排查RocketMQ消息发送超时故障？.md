@@ -158,7 +158,7 @@ maxWaitTimeMillsInQueue=1000
 如果客户端版本是 4.3.0 及以上版本，因为设置的消息发送超时时间是所有重试的总的超时时间，所以不能直接设置 RocketMQ 的发送 API 的超时时间，而是需要对RocketMQ API 进行包装，例如示例代码如下：
 
 ```plain
- public static SendResult send(DefaultMQProducer producer, Message msg, int 
+ public static SendResult send(DefaultMQProducer producer, Message msg, int
                                 retryCount) {
       Throwable e = null;
       for(int i =0; i < retryCount; i ++ ) {

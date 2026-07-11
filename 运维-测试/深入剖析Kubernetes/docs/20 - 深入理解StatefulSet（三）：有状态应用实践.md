@@ -311,7 +311,7 @@ spec:
         - |
           set -ex
           cd /var/lib/mysql
-          
+
           # 从备份信息文件里读取MASTER_LOG_FILEM和MASTER_LOG_POS这两个字段的值，用来拼装集群初始化SQL
           if [[ -f xtrabackup_slave_info ]]; then
             # 如果xtrabackup_slave_info文件存在，说明这个备份数据来自于另一个Slave节点。这种情况下，XtraBackup工具在备份的时候，就已经在这个文件里自动生成了"CHANGE MASTER TO" SQL语句。所以，我们只需要把这个文件重命名为change_master_to.sql.in，后面直接使用即可
@@ -326,13 +326,13 @@ spec:
             echo "CHANGE MASTER TO MASTER_LOG_FILE='${BASH_REMATCH[1]}',\
                   MASTER_LOG_POS=${BASH_REMATCH[2]}" > change_master_to.sql.in
           fi
-          
+
           # 如果change_master_to.sql.in，就意味着需要做集群初始化工作
           if [[ -f change_master_to.sql.in ]]; then
             # 但一定要先等MySQL容器启动之后才能进行下一步连接MySQL的操作
             echo "Waiting for mysqld to be ready (accepting connections)"
             until mysql -h 127.0.0.1 -e "SELECT 1"; do sleep 1; done
-            
+
             echo "Initializing replication from clone position"
             # 将文件change_master_to.sql.in改个名字，防止这个Container重启的时候，因为又找到了change_master_to.sql.in，从而重复执行一遍这个初始化流程
             mv change_master_to.sql.in change_master_to.sql.orig
@@ -346,7 +346,7 @@ spec:
           START SLAVE;
           EOF
           fi
-          
+
           # 使用ncat监听3307端口。它的作用是，在收到传输请求的时候，直接执行"xtrabackup --backup"命令，备份MySQL的数据并发送给请求者
           exec ncat --listen --keep-open --send-only --max-conns=1 3307 -c \
             "xtrabackup --backup --slave-info --stream=xbstream --host=127.0.0.1 --user=root"
@@ -556,5 +556,5 @@ pod "mysql-client" deleted
 
 storageClassName: rook-ceph-block
 
-我开始一直遇到&quot;pod has unbound immediate PersistentVolumeClaims&quot; 错误，增加了这个属性就好了。</p>2018-10-08</li><br/><li><span>xfan</span> 👍（7） 💬（1）<p>感觉实现起来很复杂，不优美</p>2018-12-26</li><br/><li><span>eden</span> 👍（5） 💬（1）<p>老师，请问mysql persistent volume需要扩容怎么做？通过kubectl scale不能修改volume大小。</p>2018-12-11</li><br/><li><span>侯操宇</span> 👍（5） 💬（3）<p>如果master和slave用两个StatefulSet的话，怎么来保证master和slave的启动顺序呢？</p>2018-10-11</li><br/><li><span>Caesar</span> 👍（5） 💬（2）<p>前面看大神说在搞kata-container，我有一个疑问，kata-container其实也是虚拟机加容器的方式，那它和docker加虚拟机的优势相比在哪呢</p>2018-10-08</li><br/><li><span>彰玉</span> 👍（3） 💬（1）<p>集群建好了  数据也插入成功了  集群也正常后  主从节点的任何节点重启 是重新按yamL启动 还是直接挂数据盘启幼</p>2019-06-03</li><br/><li><span>强者之风</span> 👍（3） 💬（3）<p>看不出来用MySQL-read  service</p>2019-04-13</li><br/><li><span>Joe Black</span> 👍（3） 💬（3）<p>其实给slave节点增加一个新的标签，创建读Service的时候选择这个标签的容器就行了吧？</p>2018-10-15</li><br/>
+我开始一直遇到&quot;pod has unbound immediate PersistentVolumeClaims&quot; 错误，增加了这个属性就好了。</p>2018-10-08</li><br/><li><span>xfan</span> 👍（7） 💬（1）<p>感觉实现起来很复杂，不优美</p>2018-12-26</li><br/><li><span>eden</span> 👍（5） 💬（1）<p>老师，请问mysql persistent volume需要扩容怎么做？通过kubectl scale不能修改volume大小。</p>2018-12-11</li><br/><li><span>侯操宇</span> 👍（5） 💬（3）<p>如果master和slave用两个StatefulSet的话，怎么来保证master和slave的启动顺序呢？</p>2018-10-11</li><br/><li><span>Caesar</span> 👍（5） 💬（2）<p>前面看大神说在搞kata-container，我有一个疑问，kata-container其实也是虚拟机加容器的方式，那它和docker加虚拟机的优势相比在哪呢</p>2018-10-08</li><br/><li><span>彰玉</span> 👍（3） 💬（1）<p>集群建好了 数据也插入成功了 集群也正常后 主从节点的任何节点重启 是重新按yamL启动 还是直接挂数据盘启幼</p>2019-06-03</li><br/><li><span>强者之风</span> 👍（3） 💬（3）<p>看不出来用MySQL-read service</p>2019-04-13</li><br/><li><span>Joe Black</span> 👍（3） 💬（3）<p>其实给slave节点增加一个新的标签，创建读Service的时候选择这个标签的容器就行了吧？</p>2018-10-15</li><br/>
 </ul>

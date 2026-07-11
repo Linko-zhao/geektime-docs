@@ -111,11 +111,11 @@ explain_system_message = {
     "content": "你是一位世界级的Python开发者,对意料之外的bug和边缘情况有着敏锐的洞察力。你总是非常仔细和准确地解释代码。你用markdown格式的项目列表来组织解释。",
 }
 explain_user_message = {
-    "role": "user", 
+    "role": "user",
     "content": f"""请解释下面这个Python函数。仔细审查函数的每个元素在精确地做什么,作者的意图可能是什么。用markdown格式的项目列表组织你的解释。
 
 ```python
-{example_function} 
+{example_function}
 ```""",
 }
 explain_messages = [explain_system_message, explain_user_message]
@@ -124,7 +124,7 @@ display_messages(explain_messages)
 explanation_response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=explain_messages,
-    temperature=0.4, 
+    temperature=0.4,
 )
 explanation = explanation_response.choices[0].message.content
 explain_assistant_message = {"role": "assistant", "content": explanation}
@@ -190,10 +190,10 @@ display_messages([explain_assistant_message])
 ```plain
 # 第2步:生成编写单元测试的计划
 plan_user_message = {
-    "role": "user", 
+    "role": "user",
     "content": f"""一个好的单元测试套件应该致力于:
                     - 测试函数在各种可能的输入下的行为
-                    - 测试作者可能没有预料到的边缘情况 
+                    - 测试作者可能没有预料到的边缘情况
                     - 利用 `pytest` 的特性使测试更容易编写和维护
                     - 易于阅读和理解,代码干净,名称描述清晰
                     - 具有确定性,测试总是以相同的方式通过或失败
@@ -207,7 +207,7 @@ plan_messages = [
     plan_user_message,
 ]
 display_messages([plan_user_message])
-    
+   
 plan_response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=plan_messages,
@@ -291,7 +291,7 @@ execute_user_message = {
                     # 要测试的函数
                     {example_function}
 
-                    # 单元测试 
+                    # 单元测试
                     # 下面,每个测试用例都用一个元组表示,传递给 @pytest.mark.parametrize 装饰器
                     {{在此插入单元测试代码}}
                     ```""",
@@ -300,12 +300,12 @@ execute_messages = [
     execute_system_message,
     explain_user_message,
     explain_assistant_message,
-    plan_user_message, 
+    plan_user_message,
     plan_assistant_message,
     execute_user_message
 ]
 display_messages(execute_messages)
-    
+   
 execute_response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=execute_messages,
@@ -431,11 +431,11 @@ def test_caesar_cipher(message, offset, expected):
 code = execution.split("```python")[1].split("```")[0].strip()
 try:
     ast.parse(code)
-    print(f"\n生成代码有效\n") 
+    print(f"\n生成代码有效\n")
 except SyntaxError as e:
-    print(f"\n生成代码有语法错误: {e}\n") 
+    print(f"\n生成代码有语法错误: {e}\n")
     raise ValueError("生成的测试代码无效")
-    
+   
 # 打印生成的单元测试代码
 print("生成并执行了代码：\n",code)
 ````

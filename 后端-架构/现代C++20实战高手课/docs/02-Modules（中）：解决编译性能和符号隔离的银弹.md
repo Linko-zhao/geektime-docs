@@ -380,7 +380,7 @@ void helloworldB() {
 export module helloworld:A;
 
 export void helloworldA();
- 
+
 import <iostream>;
 
 void helloworldA() {

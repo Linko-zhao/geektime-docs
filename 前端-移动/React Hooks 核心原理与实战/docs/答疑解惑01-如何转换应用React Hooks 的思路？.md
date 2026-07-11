@@ -35,7 +35,7 @@
 import { bindActionCreators } from 'redux'
 import { useDispatch } from 'react-redux'
 import { useMemo } from 'react'
- 
+
 export function useActions(actions, deps) {
 const dispatch = useDispatch()
 return useMemo(
@@ -97,7 +97,7 @@ function useCounter(n) {
   const decrement = useCallback(() => setCount(count - n), [count]);
   // 重置计数器
   const reset = useCallback(() => setCount(0), []);
-  
+
   // 将业务逻辑的操作 export 出去供调用者使用
   return { count, increment, decrement, reset };
 }
@@ -113,8 +113,8 @@ function useCounter(n) {
 
 ```
 const incrementAction = {
-  type: 'counter/incremented', 
-  n: 5, // 实现每次加5 
+  type: 'counter/incremented',
+  n: 5, // 实现每次加5
 };
 
 function counterReducer(state = initialState, action) {

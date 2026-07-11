@@ -367,69 +367,68 @@ func f() {
 </p>2022-12-05</li><br/><li><span>强庚</span> 👍（0） 💬（1）<p>atomic.Load系列的原子操作具体作用是什么呢？比如if atomic.LoadInt32(&amp;a) == 1 如果直接写成if a== 1这样有什么问题吗</p>2022-10-13</li><br/><li><span>小袁</span> 👍（0） 💬（2）<p>atomic.Value是怎样实现的呢？这里为啥可以支持任意的数据？用Pointer类型不香么？</p>2021-04-23</li><br/><li><span>Fan</span> 👍（0） 💬（1）<p>老师，执行这条命令，报错是什么意思，怎样解决？
 $ GOARCH=amd64 go tool objdump -gnu main.o
 
-
 flag provided but not defined: -gnu
 usage: go tool objdump [-S] [-s symregexp] binary [start end]
 
-  -S    print go code alongside assembly
-  -s string
-        only dump symbols matching this regexp</p>2020-12-24</li><br/><li><span>SuperDai</span> 👍（0） 💬（2）<p>老师，无锁队列对消费者数量和生产者数量是不是有要求？是不是要求消费者数量为1还是生产者数量为1？</p>2020-11-12</li><br/><li><span>SuperDai</span> 👍（0） 💬（1）<p>老师，无锁队列对消费者数量和生产者数量是不是有要求？是不是要求消费者数量为1还是生产者数量为1？</p>2020-11-12</li><br/><li><span>蜉蝣</span> 👍（3） 💬（1）<p>这个 lock-free queue 是能看懂，但要自己写出来就感觉有点难了。就譬如 tail == load(&amp;q.tail) 和 head == load(&amp;q.head) 的检查，我就想不到还要再做一次检查。前面章节看源码的时候也有这种感觉，能看懂，但自己写肯定想不到哪里要多检查一次。</p>2020-11-14</li><br/><li><span>JYZ1024</span> 👍（2） 💬（2）<p>删除了一部分逻辑，但是看起来没有问题  麻烦各位帮忙看下
+-S print go code alongside assembly
+-s string
+only dump symbols matching this regexp</p>2020-12-24</li><br/><li><span>SuperDai</span> 👍（0） 💬（2）<p>老师，无锁队列对消费者数量和生产者数量是不是有要求？是不是要求消费者数量为1还是生产者数量为1？</p>2020-11-12</li><br/><li><span>SuperDai</span> 👍（0） 💬（1）<p>老师，无锁队列对消费者数量和生产者数量是不是有要求？是不是要求消费者数量为1还是生产者数量为1？</p>2020-11-12</li><br/><li><span>蜉蝣</span> 👍（3） 💬（1）<p>这个 lock-free queue 是能看懂，但要自己写出来就感觉有点难了。就譬如 tail == load(&amp;q.tail) 和 head == load(&amp;q.head) 的检查，我就想不到还要再做一次检查。前面章节看源码的时候也有这种感觉，能看懂，但自己写肯定想不到哪里要多检查一次。</p>2020-11-14</li><br/><li><span>JYZ1024</span> 👍（2） 💬（2）<p>删除了一部分逻辑，但是看起来没有问题 麻烦各位帮忙看下
 type LockFreeList struct {
-	head unsafe.Pointer &#47;&#47; 无意义非数据指针
-	tail unsafe.Pointer &#47;&#47; 尾部元素
+head unsafe.Pointer &#47;&#47; 无意义非数据指针
+tail unsafe.Pointer &#47;&#47; 尾部元素
 }
 
 type elem struct {
-	value interface{}
-	next  unsafe.Pointer
+value interface{}
+next unsafe.Pointer
 }
 
 var emptyNode = unsafe.Pointer(&amp;elem{})
 
 func NewLockFreeList() *LockFreeList {
-	return &amp;LockFreeList{
-		head: emptyNode,
-		tail: emptyNode,
-	}
+return &amp;LockFreeList{
+head: emptyNode,
+tail: emptyNode,
+}
 }
 
 &#47;&#47; 入队
 func (q *LockFreeList) Enqueue(v interface{}) {
-	node := &amp;elem{value: v}
-	&#47;&#47; load 队尾指针
-	for {
-		tail := q.loadElem(&amp;q.tail)
-		next := q.loadElem(&amp;tail.next)   &#47;&#47; 这一步执行完以后，可能tail已经被改变
-		if tail == q.loadElem(&amp;q.tail) { &#47;&#47; 确保load tail 和 next 是&quot;原子操作&quot;，不是就直接返回
-			if next == nil {
-				if atomic.CompareAndSwapPointer(&amp;tail.next, unsafe.Pointer(next), unsafe.Pointer(node)) {
-					atomic.CompareAndSwapPointer(&amp;q.tail, unsafe.Pointer(tail), unsafe.Pointer(node))
-					return
-				}
-			}
-		}
-	}
+node := &amp;elem{value: v}
+&#47;&#47; load 队尾指针
+for {
+tail := q.loadElem(&amp;q.tail)
+next := q.loadElem(&amp;tail.next) &#47;&#47; 这一步执行完以后，可能tail已经被改变
+if tail == q.loadElem(&amp;q.tail) { &#47;&#47; 确保load tail 和 next 是&quot;原子操作&quot;，不是就直接返回
+if next == nil {
+if atomic.CompareAndSwapPointer(&amp;tail.next, unsafe.Pointer(next), unsafe.Pointer(node)) {
+atomic.CompareAndSwapPointer(&amp;q.tail, unsafe.Pointer(tail), unsafe.Pointer(node))
+return
+}
+}
+}
+}
 }
 
 func (q *LockFreeList) Dequeue() interface{} {
-	for {
-		head := q.loadElem(&amp;q.head)
-		tail := q.loadElem(&amp;q.tail)
-		if head == tail {
-			return nil
-		}
-		node := q.loadElem(&amp;head.next) &#47;&#47; 队头节点
-		nodeNext := q.loadElem(&amp;node.next)
-		if node == q.loadElem(&amp;head.next) {
-			if atomic.CompareAndSwapPointer(&amp;head.next, unsafe.Pointer(node), unsafe.Pointer(nodeNext)) {
-				return node.value
-			}
-		}
-	}
+for {
+head := q.loadElem(&amp;q.head)
+tail := q.loadElem(&amp;q.tail)
+if head == tail {
+return nil
+}
+node := q.loadElem(&amp;head.next) &#47;&#47; 队头节点
+nodeNext := q.loadElem(&amp;node.next)
+if node == q.loadElem(&amp;head.next) {
+if atomic.CompareAndSwapPointer(&amp;head.next, unsafe.Pointer(node), unsafe.Pointer(nodeNext)) {
+return node.value
+}
+}
+}
 }
 
 func (q *LockFreeList) loadElem(p *unsafe.Pointer) *elem {
-	return (*elem)(atomic.LoadPointer(p))
+return (*elem)(atomic.LoadPointer(p))
 }</p>2020-11-18</li><br/><li><span>党</span> 👍（0） 💬（0）<p>这个版本的有点低了 能不能与时俱进 更新一波</p>2023-04-10</li><br/><li><span>Geek8956</span> 👍（0） 💬（0）<p>对于修改内存中的值，swap和store是不是一样？或者说，swap和store的区别，就是swap可以额外获取原值？</p>2021-11-09</li><br/><li><span>Tatum 苏天斌</span> 👍（0） 💬（0）<p>无锁队列实现里面33行：cas(&amp;q.tail, tail, next)
 这是为了当前routine入队更快（可能另一个入队操作刚走完28行）而优化的么？</p>2021-08-19</li><br/>
 </ul>

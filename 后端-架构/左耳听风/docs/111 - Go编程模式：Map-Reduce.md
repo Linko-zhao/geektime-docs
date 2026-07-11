@@ -225,7 +225,7 @@ fmt.Printf("Total Salary: %d\n", total_pay)
 younger_pay := EmployeeSumIf(list, func(e *Employee) int {
     if e.Age < 30 {
         return e.Salary
-    } 
+    }
     return 0
 })
 ```
@@ -319,7 +319,7 @@ func TransformInPlace(slice, function interface{}) interface{} {
 }
 
 func transform(slice, function interface{}, inPlace bool) interface{} {
- 
+
   //check the `slice` type is Slice
   sliceInType := reflect.ValueOf(slice)
   if sliceInType.Kind() != reflect.Slice {

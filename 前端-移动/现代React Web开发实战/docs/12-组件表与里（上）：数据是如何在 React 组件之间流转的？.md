@@ -105,8 +105,14 @@ class MyLegacyClassComponent extends React.Component {
 
 ```javascript
 const ParentComponent = () => (
-  <MyComponent prop1="文本" prop2={123} booleanProp={false}
-    onClick={(evt) => {console.log('clicked')}} />
+  <MyComponent
+    prop1="文本"
+    prop2={123}
+    booleanProp={false}
+    onClick={(evt) => {
+      console.log("clicked");
+    }}
+  />
 );
 ```
 
@@ -135,17 +141,19 @@ const ParentComponent = () => (
 
 ```javascript
 function MyComponent() {
-  const [state1, setState1] = useState('文本');
+  const [state1, setState1] = useState("文本");
   const [state2, setState2] = useState(123);
   const handleClick = () => {
-    setState1('更新文本');
+    setState1("更新文本");
     setState2(456);
   };
   return (
     <ul>
       <li>{state1}</li>
       <li>{state2}</li>
-      <li><button onClick={handleClick}>更新state</button></li>
+      <li>
+        <button onClick={handleClick}>更新state</button>
+      </li>
     </ul>
   );
 }
@@ -156,19 +164,21 @@ function MyComponent() {
 ```javascript
 class MyLegacyClassComponent extends React.Component {
   constructor() {
-    this.state = { state1: '文本', state2: 123 };
+    this.state = { state1: "文本", state2: 123 };
   }
-  
+
   handleClick = () => {
-    this.setState({ state1: '更新文本', state2: 456 })
-  }
+    this.setState({ state1: "更新文本", state2: 456 });
+  };
 
   render() {
     return (
       <ul>
         <li>{this.state.state1}</li>
         <li>{this.state.state2}</li>
-        <li><button onClick={this.handleClick}>更新state</button></li>
+        <li>
+          <button onClick={this.handleClick}>更新state</button>
+        </li>
       </ul>
     );
   }
@@ -183,17 +193,19 @@ class MyLegacyClassComponent extends React.Component {
 
 ```javascript
 function MyComponent() {
-  const [obj, setObj] = useState({ a: '文本', b: true });
+  const [obj, setObj] = useState({ a: "文本", b: true });
   const [arr, setArr] = useState([1, 2, 3]);
   const handleClick = () => {
-    setObj({...obj, a: '更新文本'}); // ...对象展开语法
+    setObj({ ...obj, a: "更新文本" }); // ...对象展开语法
     setArr([...arr, 4, 5, 6]); // ...数组展开语法
   };
   return (
     <ul>
       <li>{obj.a}</li>
-      <li>{arr.join(',')}</li>
-      <li><button onClick={handleClick}>更新state</button></li>
+      <li>{arr.join(",")}</li>
+      <li>
+        <button onClick={handleClick}>更新state</button>
+      </li>
     </ul>
   );
 }
@@ -218,22 +230,24 @@ function MyComponent() {
 1. 调用 `React.createContext` 方法创建 `Context` 对象，如 `MyContext` ：
 
 ```javascript
-const MyContext = React.createContext('没路用的初始值');
+const MyContext = React.createContext("没路用的初始值");
 ```
 
 2. 在组件JSX中使用 `<MyContext.Provider>` 组件，定义 `value` 值，并将子组件声明在前者的闭合标签里：
 
 ```javascript
 function MyComponent() {
-  const [state1, setState1] = useState('文本');
+  const [state1, setState1] = useState("文本");
   const handleClick = () => {
-    setState1('更新文本');
+    setState1("更新文本");
   };
   return (
     <MyContext.Provider value={state1}>
       <ul>
         <MyChildComponent />
-        <li><button onClick={handleClick}>更新state</button></li>
+        <li>
+          <button onClick={handleClick}>更新state</button>
+        </li>
       </ul>
     </MyContext.Provider>
   );
@@ -244,16 +258,12 @@ function MyComponent() {
 
 ```javascript
 function MyChildComponent() {
-  return (
-    <MyGrandchildComponent />
-  );
+  return <MyGrandchildComponent />;
 }
 
 function MyGrandchildComponent() {
   const value = useContext(MyContext);
-  return (
-    <li>{value}</li>
-  );
+  return <li>{value}</li>;
 }
 ```
 
@@ -264,7 +274,7 @@ Context.Provider的value值也可以传一个对象进去，但要注意写法�
 ```javascript
 // 不要这样写
 function MyComponent() {
-  const [state1, setState1] = useState('文本');
+  const [state1, setState1] = useState("文本");
   // ...
   return (
     <MyContext.Provider value={{ key1: state1 }}>
@@ -275,7 +285,7 @@ function MyComponent() {
 
 // 可以利用state
 function MyComponent() {
-  const [obj, setObj] = useState({ key1: '文本' })
+  const [obj, setObj] = useState({ key1: "文本" });
   // ...
   return (
     <MyContext.Provider value={obj}>
@@ -286,7 +296,7 @@ function MyComponent() {
 
 // 也可以利用useMemo
 function MyComponent() {
-  const [state1, setState1] = useState('文本');
+  const [state1, setState1] = useState("文本");
   const obj = useMemo(() => ({ key1: state1 }), [state1]);
   // ...
   return (
@@ -364,8 +374,8 @@ function MyComponent() {
 稍微修正一下代码缩进，`src/KanbanBoard.js` 目前的代码如下：
 
 ```javascript
-import React from 'react';
-import { css } from '@emotion/react';
+import React from "react";
+import { css } from "@emotion/react";
 
 const kanbanBoardStyles = css`
   flex: 10;
@@ -376,9 +386,7 @@ const kanbanBoardStyles = css`
 `;
 
 export default function KanbanBoard({ children }) {
-  return (
-    <main css={kanbanBoardStyles}>{children}</main>
-  );
+  return <main css={kanbanBoardStyles}>{children}</main>;
 }
 ```
 
@@ -404,8 +412,8 @@ export default function KanbanBoard({ children }) {
 
 ```javascript
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
-import { css } from '@emotion/react';
+import React, { useEffect, useState } from "react";
+import { css } from "@emotion/react";
 
 export const kanbanCardStyles = css`
   margin-bottom: 1rem;
@@ -421,19 +429,18 @@ const DAY = 24 * HOUR;
 const UPDATE_INTERVAL = MINUTE;
 
 export default function KanbanCard({ title, status, onDragStart }) {
-  const [displayTime, setDisplayTime] = useState(status);
-  useEffect(() => {
-    const updateDisplayTime = () => {/*...省略*/};
-    const intervalId = setInterval(updateDisplayTime, UPDATE_INTERVAL);
-    // ...省略
-  }, [status]);
-  // ...省略
-
-  return (
-    <li css={kanbanCardStyles} draggable onDragStart={handleDragStart}>
-      {/*...省略*/}
-    </li>
-  );
+  const [displayTime, setDisplayTime] = useState(status);
+  useEffect(() => {
+    const updateDisplayTime = () => {
+      /*...省略*/
+    };
+    const intervalId = setInterval(updateDisplayTime, UPDATE_INTERVAL); // ...省略
+  }, [status]); // ...省略
+  return (
+    <li css={kanbanCardStyles} draggable onDragStart={handleDragStart}>
+            {/*...省略*/}   {" "}
+    </li>
+  );
 }
 ```
 

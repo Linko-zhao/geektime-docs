@@ -232,7 +232,7 @@ def analyze_image(img_url):
         temperature=0,
         messages=[
             {
-                "role": "system", 
+                "role": "system",
                 "content": system_prompt
             },
             {
@@ -282,7 +282,7 @@ combined_content = []
 text_pages = text.split('\f')[1:]
 description_indexes = []
 
-for i in range(len(text_pages)): 
+for i in range(len(text_pages)):
     slide_content = text_pages[i] + '\n'
     # 尝试找到匹配的幻灯片描述
     slide_title = text_pages[i].split('\n')[0]
@@ -292,7 +292,7 @@ for i in range(len(text_pages)):
             slide_content += pages_description[j].replace(description_title, '')
             # 记录已添加的描述的索引
             description_indexes.append(j)
-    # 将幻灯片内容和匹配的幻灯片描述添加到组合内容中 
+    # 将幻灯片内容和匹配的幻灯片描述添加到组合内容中
     combined_content.append(slide_content)
 
 # 添加未使用的幻灯片描述
@@ -373,15 +373,15 @@ def get_similarity(row):
 # 定义系统提示,用于指导GPT-4回复输入查询
 system_prompt = '''
     你将获得一个输入提示和一些作为上下文的内容,可以用来回复提示。
-    
+   
     你需要做两件事:
-    
+   
     1. 首先,你要在内部评估提供的内容是否与回答输入提示相关。
-    
+   
     2a. 如果内容相关,直接使用这些内容进行回答。如果内容相关,使用内容中的元素来回复输入提示。
-    
-    2b. 如果内容不相关,使用你自己的知识回答,如果你的知识不足以回答,就说你不知道如何回应。 
-    
+   
+    2b. 如果内容不相关,使用你自己的知识回答,如果你的知识不足以回答,就说你不知道如何回应。
+   
     保持回答简洁,具体回复输入提示,不要提及上下文内容中提供的额外信息。
 '''
 ```
@@ -396,19 +396,19 @@ model="gpt-4-turbo-preview"  
 def generate_output(input_prompt, similar_content, threshold=0.5):
     """生成基于相似内容的输出"""
     content = similar_content.iloc[0]['content']
-    
+   
     # 如果相似度高于阈值,添加更多匹配的内容
     if len(similar_content) > 1:
         for i, row in similar_content.iterrows():
             similarity_score = get_similarity(row)
             if similarity_score > threshold:
                 content += f"\n\n{row['content']}"
-    
+   
     prompt = f"输入提示:\n{input_prompt}\n-------\n内容:\n{content}"
 
     completion = client.chat.completions.create(
         model=model,
-        temperature=0.5, 
+        temperature=0.5,
         messages=[
             {
                 "role": "system",
@@ -431,7 +431,7 @@ def generate_output(input_prompt, similar_content, threshold=0.5):
 ```plain
 # 定义与内容相关的示例用户查询
 example_inputs = [
-    '语言模型的本质是什么?', 
+    '语言模型的本质是什么?',
     'NLP技术的目标是什么?',
     '语言模型经历了怎样的发展历程?',
     '请介绍一下GPT图解一书作者?',

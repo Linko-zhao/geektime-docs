@@ -94,7 +94,7 @@ ENTRYPOINT ["npm","run","dev"]
 当 Dockerfile 文件编写好后，我们在当前目录下执行下面这个命令，就能构建出一个名称为 myvue 、标签为 v1 的应用镜像。
 
 ```plain
-docker build -t myvue:v1 . 
+docker build -t myvue:v1 .
 ```
 
 这个镜像打包构建完成后就存放在你的本地。然后我们使用这个镜像去运行容器，就可以通过容器访问该 VUE 前端项目了。如果需要其他人也能获取这个镜像，就可以推送到远程的镜像仓库。
@@ -104,7 +104,7 @@ docker build -t myvue:v1 .
 打包构建完成的镜像需要在容器中运行，运行容器镜像有三个步骤：首先，使用 “docker pull” 命令从镜像仓库拉取镜像保存到本地；然后，使用 “docker images” 命令查看本地镜像列表，找到要运行的镜像名称；最后，选择相应的镜像并使用 “docker run” 命令运行容器，命令为：
 
 ```bash
-docker run [-d] --name=<容器名称>  <镜像名称> 
+docker run [-d] --name=<容器名称>  <镜像名称>
 ```
 
 其中，-d 表示在后台运行；-name 表示指定一个将要启动的容器的名称；最后是需要运行的镜像名称，镜像名称是在执行构建镜像命令的时候指定的一个名称。
@@ -122,11 +122,11 @@ docker run [-d] --name=<容器名称>  <镜像名称>
 ```bash
 [root@localhost ~]# docker search nginx
 NAME                                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
-nginx                                             Official build of Nginx.                        17244     [OK]       
-linuxserver/nginx                                 An Nginx container, brought to you by LinuxS…   173                  
+nginx                                             Official build of Nginx.                        17244     [OK]
+linuxserver/nginx                                 An Nginx container, brought to you by LinuxS…   173
 bitnami/nginx                                     Bitnami nginx Docker Image                      139                  [OK]
-ubuntu/nginx                                      Nginx, a high-performance reverse proxy & we…   56                   
-bitnami/nginx-ingress-controller                  Bitnami Docker Image for NGINX Ingress Contr…   19                   [OK]    
+ubuntu/nginx                                      Nginx, a high-performance reverse proxy & we…   56
+bitnami/nginx-ingress-controller                  Bitnami Docker Image for NGINX Ingress Contr…   19                   [OK]
 ...
 ```
 
@@ -188,7 +188,7 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        
 在容器创建成功之后，我们可能还需要对容器或者镜像进行一些停止、删除、查看、进入容器等管理操作，我这里列出了 Docker 的常用命令，你也不需要现在都记下来，我习惯把命令做成这种清单小卡片，用到的时候可以随时查找。
 
 ```bash
-查看容器详细信息：docker inspect <容器ID> | more 
+查看容器详细信息：docker inspect <容器ID> | more
 停止容器：docker stop <容器ID>
 删除容器：docker rm <容器ID>
 删除镜像：docker rmi <镜像名称>

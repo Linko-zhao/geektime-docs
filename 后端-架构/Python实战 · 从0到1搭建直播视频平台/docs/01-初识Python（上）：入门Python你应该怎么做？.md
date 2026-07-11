@@ -345,7 +345,7 @@ x = 3
 y = 4
 z = 5
 #等同于
-x, y, z = 3, 4, 5 
+x, y, z = 3, 4, 5
 ```
 
 我们再来看下赋值运算符。
@@ -384,14 +384,14 @@ print(g) #3
 示例如下，你也可以试着自己做做练习。
 
 ```python
-print(3>5) 
+print(3>5)
 >>> False
 a=3
 b=3
 print(a == b)
 >>> True
 c=2
-print(a >= c) 
+print(a >= c)
 >>> True
 ```
 
@@ -416,16 +416,16 @@ a = 20
 b = 10
 c = 15
 d = 5
- 
+
 e = (a + b) * c / d       #( 30 * 15 ) / 5
 print "(a + b) * c / d 运算结果为：",  e
- 
+
 e = ((a + b) * c) / d     # (30 * 15 ) / 5
 print "((a + b) * c) / d 运算结果为：",  e
- 
+
 e = (a + b) * (c / d);    # (30) * (15/5)
 print "(a + b) * (c / d) 运算结果为：",  e
- 
+
 e = a + (b * c) / d;      #  20 + (150/5)
 print "a + (b * c) / d 运算结果为：",  e
 >>>
@@ -452,7 +452,7 @@ if 会唱歌:
     练习唱歌
 elif 会跳舞:
     练习跳舞
-else 
+else
     在座位上写作业
 ```
 
@@ -504,9 +504,9 @@ elif(xiaoming.get("hukou")=="BeiJing" and xiaoming.get("score")>=480):
 elif(xiaoming.get("score")>=480):
     print("小明可以上本科")
 elif(xiaoming.get("score")>=200):
-    print("职业技术学院欢迎您！")     
+    print("职业技术学院欢迎您！")
 elif(not xiaoming.get("shenfen")=="校长的儿子"):
-    print("挖掘机技术哪家强，中国山东找蓝翔！")        
+    print("挖掘机技术哪家强，中国山东找蓝翔！")
 ```
 
 我们一起梳理一下这个例子。首先我们知道了小明的信息：“hukou”:“Beijing”、“score”:400、“type”:“特长生”、“shenfen”:“校长的儿子”。
@@ -521,12 +521,12 @@ elif(not xiaoming.get("shenfen")=="校长的儿子"):
 a = 1
 b = 22
 list = [10, 12, 22, 41, 1 ];
- 
+
 if ( a in list ):
    print "列表list中有a"
 else:
    print "列表list中不包含a"
- 
+
 if ( b not in list ):
    print "b不在列表list里面"
 else:
@@ -545,17 +545,17 @@ else:
 ```python
 data1 = '2'
 data2 = '2'
- 
+
 if ( data1 is data2 ):
    print("data1和data2包含相同的元素")
 else:
    print("data1和data2不包含相同的元素")
- 
+
 if ( data1 is not data2 ):
    print("data1和data2不包含相同的元素")
 else:
    print("data1和data2包含相同的元素")
- 
+
 >>>
 //data1和data2包含相同的元素
 //data1和data2包含相同的元素
@@ -583,7 +583,7 @@ for l in list:
         print("退出循环")
         break;
 
-#求数组中的奇数和                
+#求数组中的奇数和
 sum = 0
 for l in list:
     if l%2 == 0:
@@ -639,22 +639,22 @@ wangwu...
 ```python
 def avg(chinese, math,english):
     return chinese + math + english / 3
-    
+
 print(avg(72, 83, 81))
 ```
 
 ```python
 #!/usr/bin/Python3
- 
+
 def max(a, b):
     if a > b:
         return a
     else:
         return b
- 
+
 a = 4
 b = 5
-print(max(a, b))                                       
+print(max(a, b))
 ```
 
 如果某个参数不传，可以使用我们设定好的默认值。比如下面的例子，在参数不传递的情况下我们默认年龄是35。
@@ -663,7 +663,7 @@ print(max(a, b))
 def printinfo( name, age = 35 ):
    print ("名字: ", name)
    print ("年龄: ", age)
-   
+
 printinfo("peter")
 ```
 
@@ -711,7 +711,7 @@ print(round(3.51))   #4
 print(pow(5,2,3))  # 如果给了第三个参数，表示最后取余:1，整个计算过程是5**2%3取余
 print(sum([1,2,3,4,5,6,7,8,9,10]))  # 求和：55
 print(min(3,2,5,19,6,3))  #求最小值：2
-print(max(3,5,12,8,5,11))  #求最大值：12                
+print(max(3,5,12,8,5,11))  #求最大值：12
 ```
 
 #### 进制相关函数
@@ -981,10 +981,8 @@ Python对于初学者来说还是很友好的，基础语法上手很快~</p>202
 print(s.split(&quot;,&quot;, 1))                       # 输出：[&#39;Python&#39;, &#39;Web,Web,Course&#39;]
 print(s.replace(&quot;Web&quot;, &quot;dev&quot;, 1))   # 输出：Python,dev,Web,Course
 
-
 split 指定某个字符进行分割，返回一个列表，还可以指定分割几次
 replace 是返回一个新的字符串，用指定的字符替换，也可以指定替换几次
-
 
 splite</p>2023-05-23</li><br/><li><span>墨色</span> 👍（0） 💬（1）<p>数学相关的函数divmod不是divmode</p>2023-05-04</li><br/><li><span>nuan</span> 👍（0） 💬（1）<p>MYLONG = 40
 MyLat = 105

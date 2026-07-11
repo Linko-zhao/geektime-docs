@@ -258,29 +258,29 @@ func (r *RequestsTool) parseHTML(htmlContent string) string {
 首先，我准备了一个 YAML 文件，用于在 K8s 上创建一个 pod 和 一个 service。下面是对应的 YAML 内容。
 
 ```yaml
-kind: Pod                                                                                                                                                                
-apiVersion: v1                                                                                                                                                           
-metadata:                                                                                                                                                                
-  name: foo-app                                                                                                                                                          
-  labels:                                                                                                                                                                
-    app: foo-app                                                                                                                                                         
-spec:                                                                                                                                                                    
-  containers:                                                                                                                                                            
-  - name: foo-app                                                                                                                                                        
-    image: higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/http-echo:0.2.4-alpine                                                                                   
-    args:                                                                                                                                                                
-    - "-text=foo"                                                                                                                                                        
----                                                                                                                                                                      
-kind: Service                                                                                                                                                            
-apiVersion: v1                                                                                                                                                           
-metadata:                                                                                                                                                                
-  name: foo-service                                                                                                                                                      
-spec:                                                                                                                                                                    
-  selector:                                                                                                                                                              
-    app: foo                                                                                                                                                             
-  ports:                                                                                                                                                                 
-  # Default port used by the image                                                                                                                                       
-  - port: 5678 
+kind: Pod
+apiVersion: v1
+metadata:
+  name: foo-app
+  labels:
+    app: foo-app
+spec:
+  containers:
+    - name: foo-app
+      image: higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/http-echo:0.2.4-alpine
+      args:
+        - "-text=foo"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  selector:
+    app: foo
+  ports:
+    # Default port used by the image
+    - port: 5678
 ```
 
 注意看 pod 的标签，我设置的是 app: foo-app，而 service 的 selector，我故意写成了 app: foo，这样的话，service 无法通过标签选择器匹配到上面的 pod，也就不会起作用。接下来，我们试一下，Agent 能否借助 kubetool 帮我们解决这个问题。用户 prompt 如下：

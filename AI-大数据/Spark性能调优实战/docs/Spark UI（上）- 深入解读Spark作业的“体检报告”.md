@@ -199,6 +199,7 @@ Stages页面，更多地是一种预览，要想查看每一个Stage的详情，
 
 老师，是这样吗？可以发一下你的spark-submit命令嘛?</p>2021-10-26</li><br/><li><span>onepieceJT2018</span> 👍（6） 💬（1）<p>不知道为什么 hive on spark的话 ui里面storage 这个面板是空白</p>2021-10-24</li><br/><li><span>Reiser</span> 👍（5） 💬（1）<p>周末回看之前的文章，看到这篇加餐有点感动。太走心了，磊哥！</p>2021-10-31</li><br/><li><span>LR.яг ®</span> 👍（2） 💬（2）<p>有一个别的组同事，每次启动spark都会把资源申请完，他的部分启动命令如下： --executor-memory 6G --num-executors 2000 --executor-cores 4。导致我每次都要去kill掉他的application。
 请问老师，有没有什么方法可以限制启动时不允许申请这么多资源？</p>2022-01-21</li><br/><li><span>Unknown element</span> 👍（1） 💬（4）<p>老师我的executors页面为什么rdd blocks都是0？</p>2021-11-23</li><br/><li><span>保护</span> 👍（1） 💬（1）<p>Job Id 为 7存在的原因 是因为保存了文件嘛</p>2021-11-22</li><br/><li><span>Geek_18fe90</span> 👍（1） 💬（1）<p>解决了我的一块心病</p>2021-11-15</li><br/><li><span>jerry guo</span> 👍（1） 💬（1）<p>spark sql job的Storage页面怎么是空白的呢？是只有运行的时候才有数据吗</p>2021-10-31</li><br/><li><span>Geek_01fccd</span> 👍（1） 💬（2）<p>多个job公用一个executer，是按照executer纬度，计算的完成的task数吗？</p>2021-10-20</li><br/><li><span>Sean</span> 👍（0） 💬（1）<p>抢个沙发先🤯🤯🤯</p>2021-10-19</li><br/><li><span>苏文进</span> 👍（1） 💬（0）<p>老师好，我用代码算了一下storageMemory和SparkUI上的对不上，我的spark版本是3.0.0：
+
 ```
 def calculateStorageMemory(
       executorMemory: Long = Runtime.getRuntime.maxMemory
@@ -216,6 +217,7 @@ def calculateStorageMemory(
   calculateStorageMemory()
   calculateStorageMemory(1*1024*1024*1024) &#47;&#47; spark.executor.memory默认: 1g
 ```
+
 打印结果：
 actual storageMemory is 1002 MB
 actual storageMemory is 217 MB

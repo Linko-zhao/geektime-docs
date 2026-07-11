@@ -108,7 +108,7 @@ I/O虚拟化是基于Intel的VT-d指令集来实现的，这是一种基于North
 首先，我们来看一下虚拟机初始化的入口部分，代码如下所示。
 
 ```
-virt/kvm/kvm_main.c: 
+virt/kvm/kvm_main.c:
 static int kvm_dev_ioctl_create_vm(void)
 {
 	int fd;
@@ -156,7 +156,7 @@ static struct kvm *kvm_create_vm(void)
 		rcu_assign_pointer(kvm->buses[i],
 	kzalloc(sizeof(struct kvm_io_bus), GFP_KERNEL));
 	}
-	kvm_init_mmu_notifier(kvm); 
+	kvm_init_mmu_notifier(kvm);
 
     /*把kvm链表加入总链表*/
 	list_add(&kvm->vm_list, &vm_list);
@@ -189,7 +189,7 @@ static int kvm_vm_ioctl_create_vcpu(struct kvm *kvm, u32 id)
 		r = -EINVAL;
 		goto vcpu_destroy;
 	}
-    kvm->created_vcpus++;    
+    kvm->created_vcpus++;
 	mutex_unlock(&kvm->lock);
 
     /*生成kvm-vcpu控制文件*/
@@ -236,7 +236,7 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
         int r;
         struct kvm *kvm = vcpu->kvm;
         for (;;) {
-		/*vcpu进入guest模式*/ 
+		/*vcpu进入guest模式*/
                 if (kvm_vcpu_running(vcpu)) {
                    r = vcpu_enter_guest(vcpu);
                 } else {
@@ -248,7 +248,7 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
                 if (kvm_cpu_has_pending_timer(vcpu))
                         kvm_inject_pending_timer_irqs(vcpu);
 
-		/*检查是否有用户空间的中断注入*/ 
+		/*检查是否有用户空间的中断注入*/
                 if (dm_request_for_irq_injection(vcpu) &&
                         kvm_vcpu_ready_for_interrupt_injection(vcpu)) {
                         r = 0;
@@ -367,15 +367,15 @@ kvm_vm_ioctl-&gt;kvm_vm_ioctl_create_vcpu
 -&gt;kvm_vcpu_mtrr_init(vcpu);
 -&gt;vcpu_load(vcpu);
 -&gt;kvm_vcpu_reset(vcpu, false);
--&gt;kvm_init_mmu(vcpu, false);  &#47;&#47;包括init_kvm_tdp_mmu和init_kvm_softmmu两种虚拟化方式
+-&gt;kvm_init_mmu(vcpu, false); &#47;&#47;包括init_kvm_tdp_mmu和init_kvm_softmmu两种虚拟化方式
 
 6、启动虚拟机，还是文件操作
 static struct file_operations kvm_vcpu_fops = {
-    .release        = kvm_vcpu_release,
-    .unlocked_ioctl = kvm_vcpu_ioctl,
-    .mmap           = kvm_vcpu_mmap,
-    .llseek     = noop_llseek,
-    KVM_COMPAT(kvm_vcpu_compat_ioctl),
+.release = kvm_vcpu_release,
+.unlocked_ioctl = kvm_vcpu_ioctl,
+.mmap = kvm_vcpu_mmap,
+.llseek = noop_llseek,
+KVM_COMPAT(kvm_vcpu_compat_ioctl),
 };
 
 7、在调用ioctl时KVM_RUN
@@ -383,8 +383,8 @@ SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
 -&gt;vfs_ioctl，会用到vfs_ioctl.unlocked_ioctl也就是kvm_vcpu_ioctl
 
 kvm_vcpu_ioctl-&gt;
-case KVM_RUN: 
-  kvm_arch_vcpu_ioctl_run
+case KVM_RUN:
+kvm_arch_vcpu_ioctl_run
 
 其中，kvm_arch_vcpu_ioctl_run-&gt;vcpu_run-&gt;vcpu_enter_guest
 
@@ -401,15 +401,15 @@ module_init(svm_init)-&gt;kvm_init
 
 2、从数据结构角度，又可以看到了设备皆为文件的思想
 static struct miscdevice kvm_dev = {
-    KVM_MINOR,
-    &quot;kvm&quot;,
-    &amp;kvm_chardev_ops,
+KVM_MINOR,
+&quot;kvm&quot;,
+&amp;kvm_chardev_ops,
 };
 
 static struct file_operations kvm_chardev_ops = {
-    .unlocked_ioctl = kvm_dev_ioctl,
-    .llseek     = noop_llseek,
-    KVM_COMPAT(kvm_dev_ioctl),
+.unlocked_ioctl = kvm_dev_ioctl,
+.llseek = noop_llseek,
+KVM_COMPAT(kvm_dev_ioctl),
 };
 
 通过misc_register，实现了操作的绑定。
@@ -422,7 +422,7 @@ SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
 -&gt;vfs_ioctl，会用到vfs_ioctl.unlocked_ioctl也就是kvm_dev_ioctl
 
 -&gt;case KVM_CREATE_VM:
--&gt;        r = kvm_dev_ioctl_create_vm(arg);
+-&gt; r = kvm_dev_ioctl_create_vm(arg);
 -&gt;file = anon_inode_getfile(&quot;kvm-vm&quot;, &amp;kvm_vm_fops, kvm, O_RDWR);
 
 其中，kvm_dev_ioctl_create_vm
@@ -434,10 +434,10 @@ SYSCALL_DEFINE3(ioctl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
 
 4、生成虚拟CPU套路很相似，仍是文件操作
 static struct file_operations kvm_vm_fops = {
-    .release        = kvm_vm_release,
-    .unlocked_ioctl = kvm_vm_ioctl,
-    .llseek     = noop_llseek,
-    KVM_COMPAT(kvm_vm_compat_ioctl),
+.release = kvm_vm_release,
+.unlocked_ioctl = kvm_vm_ioctl,
+.llseek = noop_llseek,
+KVM_COMPAT(kvm_vm_compat_ioctl),
 };
 创建虚拟机时，anon_inode_getfile(&quot;kvm-vm&quot;, &amp;kvm_vm_fops, kvm, O_RDWR)，实际上就把文件和kvm_vm_fops绑定了起来。</p>2021-08-24</li><br/><li><span>吴建平</span> 👍（0） 💬（1）<p>文中用到的kvm的源码，是linux的么，哪个版本的，或者去哪里可以下载到对应源码
 </p>2022-08-29</li><br/><li><span>西门吹牛</span> 👍（0） 💬（1）<p>老师，JVM 属于软虚拟还是硬虚拟？</p>2022-07-08</li><br/><li><span>ifelse</span> 👍（0） 💬（1）<p>秀啊</p>2022-02-27</li><br/><li><span>云师兄</span> 👍（0） 💬（1）<p>软硬结合才是虚拟化的关键啊！</p>2021-09-08</li><br/><li><span>springXu</span> 👍（0） 💬（1）<p>这课的例子和内容相当精彩，还是意犹未尽呀。由于虚拟化知识欠缺了，想问还有后续不？</p>2021-08-16</li><br/><li><span>李亮亮</span> 👍（0） 💬（0）<p>哥，你太强了。什么都懂。</p>2024-08-29</li><br/>

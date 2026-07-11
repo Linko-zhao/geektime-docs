@@ -615,17 +615,17 @@ func(c *gin.Context) interface{} {
 **第五步**：接下来，会调用`Authorizator`方法，`Authorizator`是一个callback函数，成功时必须返回真，失败时必须返回假。`Authorizator`也是在创建GinJWTMiddleware时指定的，例如：
 
 ```
-func authorizator() func(data interface{}, c *gin.Context) bool {    
-    return func(data interface{}, c *gin.Context) bool {    
-        if v, ok := data.(string); ok {    
-            log.L(c).Infof("user `%s` is authenticated.", v)         
-                                                                     
-            return true                            
-        }                                                        
-                                                                 
-        return false                     
-    }    
-}    
+func authorizator() func(data interface{}, c *gin.Context) bool {
+    return func(data interface{}, c *gin.Context) bool {
+        if v, ok := data.(string); ok {
+            log.L(c).Infof("user `%s` is authenticated.", v)
+
+            return true
+        }
+
+        return false
+    }
+}
 ```
 
 `authorizator`函数返回了一个匿名函数，匿名函数在认证成功后，会打印一条认证成功日志。
@@ -698,25 +698,25 @@ func (a AutoStrategy) AuthFunc() gin.HandlerFunc {
 <li><span>helloworld</span> 👍（8） 💬（1）<p>本文的意思是说正常的生产环境下，iam-apiserver和iam-authz-server的api的认证功能其实都应该放到网关来实现的，本文之所以由iam项目亲自来实现就是为了方便讲解认证的具体实现方法，我理解的对不对？</p>2021-07-26</li><br/><li><span>Geek_f23c82</span> 👍（3） 💬（1）<p>麻烦问下authserver什么时候派发的jwt token？</p>2022-05-29</li><br/><li><span>党</span> 👍（3） 💬（1）<p>jwt需要后端解析并从缓存中拿用户对应秘钥在进行运算进行鉴权，这些流程是不是有点复杂和多余啊，登录时候直接随机生成一个token（uuid hash）传给前端并保存到缓存中，缓存中token直接对应用户的session，每次前端传过来token 根据是否能用token获取缓存中的session来鉴权 这样岂不是实现简单 也安全啊  </p>2021-11-11</li><br/><li><span>冷峰</span> 👍（3） 💬（11）<p>为什么每个用户都要有一个SecretKey， 所有的用户用同一个SecretKey不行吗？</p>2021-08-17</li><br/><li><span>🌀🐑hfy🐣</span> 👍（2） 💬（2）<p>请问老师为什么bearer认证里面还要basic认证？
 </p>2022-09-26</li><br/><li><span>season</span> 👍（1） 💬（1）<p>第四步，设置HTTP Header username: colin 。
 
-应该是 第四步，给gin.Context中添加 username: colin 。  ？
+应该是 第四步，给gin.Context中添加 username: colin 。 ？
 </p>2022-10-13</li><br/><li><span>season</span> 👍（1） 💬（1）<p>ParseWithClaims怎么理解？
 func (p *Parser) ParseWithClaims(tokenString string, claims Claims, keyFunc Keyfunc) (*Token, error) {}
 
 使用Claims来解析，并返回 token？</p>2022-10-13</li><br/><li><span>season</span> 👍（1） 💬（1）<p>技巧2:使用抽象工厂模式
 auth.go文件中，通过newBasicAuth、newJWTAuth、newAutoAuth创建认证策略时，返回的 都是接口。通过返回接口，可以在不公开内部实现的情况下，让调用者使用你提供的各种认证 功能。
 
-
 1. 不公开内部实现的情况下，是指不公开哪个函数的内部实现？
 2. 让调用者使用你提供的各种认证功能，指的是哪些方法？</p>2022-10-13</li><br/><li><span>党</span> 👍（1） 💬（4）<p>jwt貌似不可以实现实时踢人吧 一个账号登录了 在登录一次 让上次的token失效 这个jwt不可以吧</p>2021-11-29</li><br/><li><span>yandongxiao</span> 👍（1） 💬（1）<p>总结：
-IAM系统采用 Basic + bearer 两种认证方式。Basic 认证要求输入用户名和密码，返回 JWT Token；虽然客户端在访问 iam-apiserver 或者 iam-auth-server 时，在 bearer 认证中携带该 Token，服务端对该请求进行认证。
-1. 服务端basic认证实现逻辑：通过 gin middleware 实现了签发 JWT 的功能。jwt.New 对象在实例化时，传递多个回调函数，比如 Authentiactor, LoginResponse 等。
-2. 服务端bearer认证实现逻辑：在 gin 中以 middleware 的方式存在，借助 jwt package 完成认证。认证完成后，会在 Context 中保存Username，方便后面的handler使用</p>2021-11-27</li><br/><li><span>types</span> 👍（1） 💬（2）<p>根据文中所说
- 秘钥对是给iam-authz-server使用的
- 每个用户维护一个密钥
-请问:
-1. iam-authz-server jwt认证中的jwt token谁谁生成的？是客户端还是iam-auth-server
-2. 如果是客户端生成的jwt token，说明客户端是需要有secret秘钥对的信息的，请问这样设计有什么优势？
-跟通过用户名密码登陆后，由服务端生成jwt token这种方式相比较有什么优势
+   IAM系统采用 Basic + bearer 两种认证方式。Basic 认证要求输入用户名和密码，返回 JWT Token；虽然客户端在访问 iam-apiserver 或者 iam-auth-server 时，在 bearer 认证中携带该 Token，服务端对该请求进行认证。
+3. 服务端basic认证实现逻辑：通过 gin middleware 实现了签发 JWT 的功能。jwt.New 对象在实例化时，传递多个回调函数，比如 Authentiactor, LoginResponse 等。
+4. 服务端bearer认证实现逻辑：在 gin 中以 middleware 的方式存在，借助 jwt package 完成认证。认证完成后，会在 Context 中保存Username，方便后面的handler使用</p>2021-11-27</li><br/><li><span>types</span> 👍（1） 💬（2）<p>根据文中所说
+   秘钥对是给iam-authz-server使用的
+   每个用户维护一个密钥
+   请问:
+5. iam-authz-server jwt认证中的jwt token谁谁生成的？是客户端还是iam-auth-server
+6. 如果是客户端生成的jwt token，说明客户端是需要有secret秘钥对的信息的，请问这样设计有什么优势？
+   跟通过用户名密码登陆后，由服务端生成jwt token这种方式相比较有什么优势
+
 </p>2021-09-05</li><br/><li><span>姚力晓</span> 👍（0） 💬（6）<p>如果 Redis down 掉，或者出现网络抖动，老师说会在新一期的特别放送里专门介绍下， 这个内容没看到？</p>2021-10-28</li><br/><li><span>Sch0ng</span> 👍（5） 💬（0）<p>服务端实现Basic和Bearer认证的详细方案。
 配合源码和架构图理解。</p>2021-08-14</li><br/><li><span>指尖”^^的童话</span> 👍（1） 💬（1）<p>项目有点大，如果是一步步实现的就更好了</p>2021-10-04</li><br/><li><span>shy</span> 👍（0） 💬（0）<p>Basic认证通用户名和密码进行认证，并使用配置文件中的JWT密钥来签发token，那么为什么iam-authz-server需要根据token的header得到密钥ID和密钥来进行token的认证呢，在什么情况下会根据用户使用不同的密钥来生成Token呢？</p>2023-09-06</li><br/>
 </ul>

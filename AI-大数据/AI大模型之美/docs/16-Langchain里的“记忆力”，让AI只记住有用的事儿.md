@@ -58,13 +58,13 @@ Human: {human_input}
 Chatbot:"""
 
 prompt = PromptTemplate(
-    input_variables=["chat_history", "human_input"], 
+    input_variables=["chat_history", "human_input"],
     template=template
 )
 memory = ConversationBufferWindowMemory(memory_key="chat_history", k=3)
 llm_chain = LLMChain(
-    llm=OpenAI(), 
-    prompt=prompt, 
+    llm=OpenAI(),
+    prompt=prompt,
     memory=memory,
     verbose=True
 )
@@ -146,7 +146,7 @@ prompt = PromptTemplate(
     input_variables=["history", "input"], template=prompt_template
 )
 conversation_with_summary = ConversationChain(
-    llm=llm, 
+    llm=llm,
     memory=memory,
     prompt=prompt,
     verbose=True
@@ -280,7 +280,7 @@ CHEF_PROMPT = PromptTemplate(
 )
 
 conversation_with_summary = ConversationChain(
-    llm=OpenAI(model_name="text-davinci-003", stop="\n\n", max_tokens=2048, temperature=0.5), 
+    llm=OpenAI(model_name="text-davinci-003", stop="\n\n", max_tokens=2048, temperature=0.5),
     prompt=CHEF_PROMPT,
     memory=memory,
     verbose=True
@@ -350,7 +350,7 @@ Prompt after formatting:
 你是一个中国厨师，用中文回答做菜的问题。你的回答需要满足以下要求:
 1. 你的回答必须是中文。
 2. 对于做菜步骤的回答尽量详细一些。
-System: 
+System:
 Human询问AI是谁，AI回答自己是一个中国厨师，并问Human是否有关于做菜的问题。Human问AI如何做出鱼香肉丝，AI回答准备材料有猪肉、木耳、胡萝卜、葱姜蒜、花椒、八角、辣椒、料酒、糖、盐、醋、麻油、香油，做法步骤是将猪肉切成薄片，用料酒、盐、糖、醋、麻油抓匀，木耳
 Human: 那蚝油牛肉呢？
 AI:
@@ -375,11 +375,11 @@ Pinecone 在自己网站上给出了一个数据对比，不同类型的Memory�
 ```plain
 memory = ConversationSummaryBufferMemory(llm=OpenAI(), prompt=SUMMARY_PROMPT, max_token_limit=40)
 memory.save_context(
-    {"input": "你好"}, 
+    {"input": "你好"},
     {"ouput": "你好，我是客服李四，有什么我可以帮助您的么"}
     )
 memory.save_context(
-    {"input": "我叫张三，在你们这里下了一张订单，订单号是 2023ABCD，我的邮箱地址是 customer@abc.com，但是这个订单十几天了还没有收到货"}, 
+    {"input": "我叫张三，在你们这里下了一张订单，订单号是 2023ABCD，我的邮箱地址是 customer@abc.com，但是这个订单十几天了还没有收到货"},
     {"ouput": "好的，您稍等，我先为您查询一下您的订单"}
     )
 memory.load_memory_variables({})
@@ -404,7 +404,7 @@ from langchain.memory.prompt import ENTITY_MEMORY_CONVERSATION_TEMPLATE
 
 entityMemory = ConversationEntityMemory(llm=llm)
 conversation = ConversationChain(
-    llm=llm, 
+    llm=llm,
     verbose=True,
     prompt=ENTITY_MEMORY_CONVERSATION_TEMPLATE,
     memory=entityMemory
@@ -511,7 +511,7 @@ from langchain.memory import ConversationKGMemory # 知识图谱记忆
 llm = OpenAI(temperature=0)
 memory=ConversationKGMemory(llm=llm)
 template = &quot;&quot;&quot;The following is a conversation between a human and an AI.
-The AI provides lots of specific details from its context. 
+The AI provides lots of specific details from its context.
 AI uses all the information contained in &quot;Related Information&quot;, &quot;Current Conversation&quot; and &quot;Context&quot;
 If the AI does not know the answer to a question, it truthfully says it does not know，and does not hallucinate.
 answer in 20 word.
@@ -549,8 +549,8 @@ Q4
 &quot;Your name is John Smith.&quot;
 (AI 彻底错了)
 
-结果有点意外，是算法有错还是参数设置有待改进? 
-共指消解(coreference&#47;entity resolution)在知识图谱记忆中是最基本的方法，整合同一实体的不同称谓。</p>2023-04-13</li><br/><li><span>Evan</span> 👍（0） 💬（2）<p>from langchain.memory import ConversationSummaryMemory. 
+结果有点意外，是算法有错还是参数设置有待改进?
+共指消解(coreference&#47;entity resolution)在知识图谱记忆中是最基本的方法，整合同一实体的不同称谓。</p>2023-04-13</li><br/><li><span>Evan</span> 👍（0） 💬（2）<p>from langchain.memory import ConversationSummaryMemory.
 引入这个的时候报错</p>2023-04-13</li><br/><li><span>陈斌</span> 👍（1） 💬（0）<p>这一章节讲了如何利用外部的存储去实现上下文及关键信息的缓存，老师里面提到的一些点都是在应用 gpt 实现过程中对成本和开销需要考虑的问题，非常有实用性。
 尤其是关键信息，主要是对场景下问题回答的约束，比如在一个电商网站的客服机器人，问它怎么做饭的，是可以拒绝回答的。这里的模型是否需要重新训练，还是可以利用 gpt 判断问题与场景的相关性，再利用提示语让 gpt 给出一个委婉回答。</p>2023-11-13</li><br/><li><span>Penguin Shi</span> 👍（1） 💬（0）<p>原文：Langchain 里面还提供了一个 KnowledgeGraphMemory，你能不能去试着用一下，看看它能在什么样的场景下帮你解决问题？
 更新：Conversation Knowledge Graph Memory，https:&#47;&#47;python.langchain.com&#47;docs&#47;modules&#47;memory&#47;types&#47;kg</p>2023-08-12</li><br/><li><span>杨逸林</span> 👍（0） 💬（0）<p>可不可以这样，让一些总结类的活丢给本地 RTX 4090 可以部署的 BlueLM，然后把这一轮的对话和总结的内容丢给 ChatGPT，这样是不是更省 Token。简单的活给本地的部署的完成，复杂的丢给 ChatGPT4。就是不知道能不能做到。</p>2024-01-05</li><br/><li><span>l_j_dota_1111</span> 👍（0） 💬（0）<p>你好，请问如果既要求有总结，也要求有实体提取，又要求记住上下文，是用哪个chain呢？还有就是还想通过矢量数据库查询出信息就行参考文档，怎么和这些chain结合呢</p>2023-12-21</li><br/><li><span>Aurore</span> 👍（0） 💬（0）<p>在最后llm_chain.predict(human_input=&quot;你是谁？&quot;)并没有输入chat_history来替换对应的占位符，不会出错吗</p>2023-11-01</li><br/><li><span>Aurore</span> 👍（0） 💬（0）<p>请教一下。滑窗memory中，llm_chain.predict(human_input=&quot;你是谁？&quot;)。没有输入chat_history没有问题吗？</p>2023-11-01</li><br/>

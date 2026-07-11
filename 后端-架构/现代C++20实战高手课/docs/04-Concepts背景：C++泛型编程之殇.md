@@ -354,7 +354,7 @@ fillContainer&lt;10, std::deque&lt;int32_t&gt;, int32_t&gt;
 
 Q2：不定模板参数的递归怎么终止？
 不定模板参数定义如下：
-double sum(T value, Targs... Fargs) {    
+double sum(T value, Targs... Fargs) {  
 return static_cast&lt;double&gt;(value) + sum(Fargs...);}
 这个定义，似乎是递归，但怎么终止递归？看起来是无穷递归。</p>2023-01-23</li><br/><li><span>Geek_a343c9</span> 👍（0） 💬（1）<p>老师，Python应该是强类型语言吧？</p>2023-05-03</li><br/><li><span>Geek_QiDian</span> 👍（0） 💬（1）<p>请问老师，Concepts 能将以上四个问题都解决了吗？</p>2023-01-24</li><br/>
 </ul>

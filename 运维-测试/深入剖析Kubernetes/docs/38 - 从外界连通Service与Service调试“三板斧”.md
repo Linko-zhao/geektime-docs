@@ -256,9 +256,10 @@ spec:
       protocol: TCP
 
 则svc信息如下，（注意下面无targetPort信息，只是ClustorPort与NodePort，注意后者为Nodeport）
-ingress-nginx   ingress-nginx                 NodePort    10.105.192.34    &lt;none&gt;        8080:30080&#47;TCP,8443:30443&#47;TCP   28m
+ingress-nginx ingress-nginx NodePort 10.105.192.34 &lt;none&gt; 8080:30080&#47;TCP,8443:30443&#47;TCP 28m
 
 则可访问的组合为
+
 1. clusterIP + port: 10.105.192.34:8080
 2. 内网IP&#47;公网ip + nodePort: 172.31.14.16:30080。（172.31.14.16我的aws局域网ip.）
 
@@ -272,7 +273,8 @@ ingress-nginx   ingress-nginx                 NodePort    10.105.192.34    &lt;n
 因为k8s只是在集群中的每个节点上创建了一个 externalIPs 与kube-ipvs0网卡的绑定关系.
 若流量都无法路由到任意的一个k8s节点,那自然无法将流量转给具体的service.
 
---------------------------------
+---
+
 最近在这个externalIPs上面踩了一个坑.
 在阿里云上提交了工单.第二天,应该是换了第3个售后工程师,才解决的.
 给你们分享一下,哈哈!
@@ -290,6 +292,7 @@ C: 192.168.1.3
 
 就是因为我的某一个service服务就配置了 externalIPs, 配置的IP就是 192.168.1.1(A)
 --------------------------------
+
 那个售后工程师发现在节点B和C上有这么一条记录
 $ ip addr
 inet 192.168.1.1&#47;32 brd 192.168.1.1 scope global kube-ipvs0
@@ -300,7 +303,8 @@ inet 192.168.1.1&#47;32 brd 192.168.1.1 scope global kube-ipvs0
 我立马就意识到,我的service绑定了节点的IP.可能是这个导致的.
 后来把externalIPs移除掉节点的IP后,该规则就不见了,节点B和节点C也可以正常访问节点A了.
 
---------------------------------
+---
+
 这个 externalIPs 其实可以填多个,且不要求本机就有对应的IP.
 比如你可以填集群中根本就不存在的IP 172.17.0.1,
 那么在k8s所有节点上,你都可以通过netstat -ant | grep 172.17.0.1 查看到,有监听该IP的端口.
@@ -314,20 +318,20 @@ https:&#47;&#47;kubernetes.io&#47;zh&#47;docs&#47;tutorials&#47;services&#47;sou
 apiVersion: v1
 kind: Service
 metadata:
-  name: hostnames
-  labels:
-    app: hostnames
+name: hostnames
+labels:
+app: hostnames
 spec:
-  type: NodePort
-  selector:
-    app: hostnames
-  ports:
-  - nodePort: 30225
-    port: 80
-    targetPort: 9376
-    protocol: TCP
-    name: http
+type: NodePort
+selector:
+app: hostnames
+ports:
 
+- nodePort: 30225
+  port: 80
+  targetPort: 9376
+  protocol: TCP
+  name: http
 
 通过curl &lt;任意Node&gt;:30225可以访问。
 vagrant@kubeadm1:~&#47;37ServiceDns$ curl 192.168.0.24:30225
@@ -335,22 +339,23 @@ hostnames-84985c9fdd-sgwpp
 
 另外感觉我这边的输出关于kube-proxy:
 vagrant@kubeadm1:~&#47;37ServiceDns$ kubectl logs -n kube-system kube-proxy-pscvh
-W1122 10:13:18.794590       1 server_others.go:295] Flag proxy-mode=&quot;&quot; unknown, assuming iptables proxy
-I1122 10:13:18.817014       1 server_others.go:148] Using iptables Proxier.
-I1122 10:13:18.817394       1 server_others.go:178] Tearing down inactive rules.
-E1122 10:13:18.874465       1 proxier.go:532] Error removing iptables rules in ipvs proxier: error deleting chain &quot;KUBE-MARK-MASQ&quot;: exit status 1: iptables: Too many links.
-I1122 10:13:18.894045       1 server.go:447] Version: v1.12.2
+W1122 10:13:18.794590 1 server_others.go:295] Flag proxy-mode=&quot;&quot; unknown, assuming iptables proxy
+I1122 10:13:18.817014 1 server_others.go:148] Using iptables Proxier.
+I1122 10:13:18.817394 1 server_others.go:178] Tearing down inactive rules.
+E1122 10:13:18.874465 1 proxier.go:532] Error removing iptables rules in ipvs proxier: error deleting chain &quot;KUBE-MARK-MASQ&quot;: exit status 1: iptables: Too many links.
+I1122 10:13:18.894045 1 server.go:447] Version: v1.12.2
 
 后面信息都是正常的。不知道上面这些信息可以ignore吗？</p>2018-11-22</li><br/><li><span>LEON</span> 👍（2） 💬（1）<p>而如果你的 Service 没办法通过 ClusterIP 访问到的时候，你首先应该检查的是这个 Service 是否有 Endpoints：———请问老师service ip与cluster ip有什么区别？为什么这块不直接是service ip?</p>2018-11-19</li><br/><li><span>yuling朱</span> 👍（1） 💬（0）<p>&quot;在 NodePort 方式下，Kubernetes 会在 IP 包离开宿主机发往目的 Pod 时，对这个 IP 包做一次 SNAT 操作&quot;,有个疑问，这里表述是不是有点不准确，在ClusterIP下就不会做SNAT了吗？
 只要转发到其他节点就会做SNAT。</p>2022-09-14</li><br/><li><span>陈斯佳</span> 👍（1） 💬（0）<p>第三十八课:从外界连通你好Service与Service调试“三板斧”
 Service的类型分为ClusterIP,NodePort, ExternalIP,ExternalName.
 
 当Service没办法通过DNS访问到的时候，可以先检查Master节点的Service DNS是否可以访问到:
+
 # 在一个Pod里执行
+
 $ nslookup kubernetes.default
 
 如果有问题，就去看kube-dns日志，否则，就要看Service本身定义是否有问题
-
 
 如果Service没办法通过ClusterIP访问，应该先检查这个Service是否有Endpoint:
 $ kubectl get endpoints hostnames

@@ -357,8 +357,8 @@ where
 ```rust
 pub trait AsyncRead {
     fn poll_read(
-        self: Pin<&mut Self>, 
-        cx: &mut Context<'_>, 
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
         buf: &mut ReadBuf<'_>
     ) -> Poll<Result<()>>;
 }
@@ -838,28 +838,32 @@ INFO cargo_tarpaulin::report: Coverage Results:
 
 为了保证之前的test依然有效，可以自己定义一个IoError替换原文中KvError中的std::io::Error，手动实现impl From&lt;std::io::Error&gt; for KvError。</p>2022-08-19</li><br/><li><span>进击的Lancelot</span> 👍（3） 💬（0）<p>思考题 1: 如果要压缩方式需要同时支持 gzip、lz4、zstd 这三种，则需要 2bit 的标记位，00 表示不压缩、01 表示 gzip、10 表示 lz4、11 表示 zstd，同样也是提取出一个 compressor 的 trait 并针对不同的压缩算法实现相应的 compress 和 decompress 方法，具体可以参考我的代码仓库：https:&#47;&#47;github.com&#47;Phoenix500526&#47;simple_kv&#47;blob&#47;main&#47;src&#47;network&#47;compress 下的文件
 
-思考题 2: 我采用了 shellfish 实现了 simple-kv-cli，代码可以参考：https:&#47;&#47;github.com&#47;Phoenix500526&#47;simple_kv&#47;blob&#47;main&#47;src&#47;kvc-cli.rs</p>2022-10-13</li><br/><li><span>乌龙猹</span> 👍（3） 💬（0）<p>内容夯实 思路清晰  结构完整  循序渐进 每周都期待着老师更新课程内容 </p>2021-11-22</li><br/><li><span>L-Castle</span> 👍（0） 💬（0）<p>要如何实现TCP的长连接和心跳检测？而不用每次都客户端发起连接请求</p>2024-10-05</li><br/><li><span>sonald</span> 👍（0） 💬（0）<p>```
+思考题 2: 我采用了 shellfish 实现了 simple-kv-cli，代码可以参考：https:&#47;&#47;github.com&#47;Phoenix500526&#47;simple_kv&#47;blob&#47;main&#47;src&#47;kvc-cli.rs</p>2022-10-13</li><br/><li><span>乌龙猹</span> 👍（3） 💬（0）<p>内容夯实 思路清晰 结构完整 循序渐进 每周都期待着老师更新课程内容 </p>2021-11-22</li><br/><li><span>L-Castle</span> 👍（0） 💬（0）<p>要如何实现TCP的长连接和心跳检测？而不用每次都客户端发起连接请求</p>2024-10-05</li><br/><li><span>sonald</span> 👍（0） 💬（0）<p>```
 &#47;&#47;&#47; 从 stream 中读取一个完整的 frame
 pub async fn read_frame&lt;S&gt;(stream: &amp;mut S, buf: &amp;mut BytesMut) -&gt; Result&lt;(), KvError&gt;
 where
-    S: AsyncRead + Unpin + Send,
+S: AsyncRead + Unpin + Send,
 {
-    let header = stream.read_u32().await? as usize;
-    let (len, _compressed) = decode_header(header);
-    &#47;&#47; 如果没有这么大的内存，就分配至少一个 frame 的内存，保证它可用
-    buf.reserve(LEN_LEN + len);
-    buf.put_u32(header as _);
-    &#47;&#47; advance_mut 是 unsafe 的原因是，从当前位置 pos 到 pos + len，
-    &#47;&#47; 这段内存目前没有初始化。我们就是为了 reserve 这段内存，然后从 stream
-    &#47;&#47; 里读取，读取完，它就是初始化的。所以，我们这么用是安全的
-    unsafe { buf.advance_mut(len) };
-    stream.read_exact(&amp;mut buf[LEN_LEN..]).await?;
-    Ok(())
+let header = stream.read_u32().await? as usize;
+let (len, _compressed) = decode_header(header);
+&#47;&#47; 如果没有这么大的内存，就分配至少一个 frame 的内存，保证它可用
+buf.reserve(LEN_LEN + len);
+buf.put_u32(header as _);
+&#47;&#47; advance_mut 是 unsafe 的原因是，从当前位置 pos 到 pos + len，
+&#47;&#47; 这段内存目前没有初始化。我们就是为了 reserve 这段内存，然后从 stream
+&#47;&#47; 里读取，读取完，它就是初始化的。所以，我们这么用是安全的
+unsafe { buf.advance_mut(len) };
+stream.read_exact(&amp;mut buf[LEN_LEN..]).await?;
+Ok(())
 }
+
 ```
 这里最后面的read_exact参数是有问题的吧，假设连续两次调用read_frame而没有消费buf的话，应该改成下面这样？
 ```
-  let start = len - size;
-  stream.read_exact(&amp;mut buf[start..]).await?;
+
+let start = len - size;
+stream.read_exact(&amp;mut buf[start..]).await?;
+
 ```</p>2023-01-17</li><br/>
 </ul>
+```

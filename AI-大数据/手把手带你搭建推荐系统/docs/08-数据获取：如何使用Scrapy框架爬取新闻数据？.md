@@ -8,12 +8,12 @@
 
 ```
 import scrapy
- 
+
 class SinaSpiderSpider(scrapy.Spider):
     name = 'sina_spider'
     allowed_domains = ['sina.com.cn']
     start_urls = ['http://sina.com.cn/']
- 
+
     def parse(self, response):
         pass
 ```
@@ -86,31 +86,31 @@ pip install selenium
 import scrapy
 from scrapy.http import Request
 from selenium import webdriver
- 
- 
+
+
 class SinaSpiderSpider(scrapy.Spider):
     name = 'sina_spider'
- 
- 
+
+
     def __init__(self):
         self.start_urls = ['https://news.sina.com.cn/china/']
         self.option = webdriver.ChromeOptions()
         self.option.add_argument('no=sandbox')
         self.option.add_argument('--blink-setting=imagesEnable=false')
- 
+
     def start_requests(self):
         for url in self.start_urls:
             yield Request(url=url, callback=self.parse)
- 
+
     def parse(self, response):
         driver = webdriver.Chrome(chrome_options=self.option)
         driver.set_page_load_timeout(30)
         driver.get(response.url)
- 
+
         title = driver.find_elements_by_xpath("//h2[@class='undefined']/a[@target='_blank']")
         time = driver.find_elements_by_xpath("//h2[@class='undefined']/../div[@class='feed-card-a "
                                              "feed-card-clearfix']/div[@class='feed-card-time']")
- 
+
         for i in range(len(title)):
             print(title[i].text)
             print(time[i].text)
@@ -184,7 +184,7 @@ def parse(self, response):
 	today = datetime.datetime.now()
             eachtime = time[i].text
             eachtime = eachtime.replace('今天', str(today.month) + '月' + str(today.day) + '日')
- 
+
             if '分钟前' in eachtime:
                 minute = int(eachtime.split('分钟前')[0])
                 t = datetime.datetime.now() - datetime.timedelta(minutes=minute)
@@ -195,7 +195,7 @@ def parse(self, response):
                 t1 = re.split('[年月日:]', eachtime)
                 t2 = datetime.datetime(year=int(t1[0]), month=int(t1[1]), day=int(t1[2]), hour=int(t1[3]),
                                        minute=int(t1[4]))
- 
+
             print(t2)
 ```
 
@@ -230,10 +230,10 @@ href = title[i].get_attribute('href')
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
- 
+
 import scrapy
- 
- 
+
+
 class SinaItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
@@ -348,7 +348,7 @@ def parse(self, response):
 	driver = webdriver.Chrome(chrome_options=self.option)
 	driver.set_page_load_timeout(30)
 	driver.get(response.url)
- 
+
 	for i in range(5):
 		while not driver.find_element_by_xpath("//div[@class='feed-card-page']").text:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -358,13 +358,13 @@ def parse(self, response):
 		for i in range(len(title)):
 			print(title[i].text)
 			print(time[i].text)
- 
+
 			today = datetime.datetime.now()
 			eachtime = time[i].text
 			eachtime = eachtime.replace('今天', str(today.month) + '月' + str(today.day) + '日')
- 
+
 			href = title[i].get_attribute('href')
- 
+
 			if '分钟前' in eachtime:
 				minute = int(eachtime.split('分钟前')[0])
 				t = datetime.datetime.now() - datetime.timedelta(minutes=minute)
@@ -375,16 +375,16 @@ def parse(self, response):
 				t1 = re.split('[年月日:]', eachtime)
 				t2 = datetime.datetime(year=int(t1[0]), month=int(t1[1]), day=int(t1[2]), hour=int(t1[3]),
 									   minute=int(t1[4]))
- 
+
 			print(t2)
- 
+
 			item = SinaItem()
 			item['type'] = 'news'
 			item['title'] = title[i].text
 			item['times'] = t2
- 
+
 			yield Request(url=response.urljoin(href), meta={'name': item}, callback=self.parse_namedetail)
- 
+
 		try:
 			driver.find_element_by_xpath("//div[@class='feed-card-page']/span[@class='pagebox_next']/a").click()
 		except:
@@ -478,18 +478,14 @@ class WebDriver(ChromiumDriver):
             self.service,
             self.keep_alive,
         )</p>2023-06-15</li><br/><li><span>风轻扬</span> 👍（0） 💬（0）<p>mac系统，爬取过程中，可能会报错：无法打开chromedriver，因为无法验证开发者。
+
 如果是brew安装的chromedriver，可以执行：xattr -d com.apple.quarantine &#47;opt&#47;homebrew&#47;bin&#47;chromedriver进行可信授权。
 如果不是brew安装的，需要自己找到chromedriver的安装路径，然后执行xattr -d com.apple.quarantine 你的chromedriver的路径</p>2024-08-22</li><br/><li><span>悟尘</span> 👍（0） 💬（1）<p> # 尝试点击下一页
-            try:
-                # next_page_link = WebDriverWait(driver, 30).until(
-                #     EC.element_to_be_clickable(
-                #         (By.XPATH, &quot;&#47;&#47;div[@class=&#39;feed-card-page&#39;]&#47;span[@class=&#39;pagebox_next&#39;]&#47;a&quot;))
-                # )
-                # next_page_link.click()
-                driver.find_elements(By.XPATH, &quot;&#47;&#47;div[@class=&#39;feed-card-page&#39;]&#47;span[@class=&#39;pagebox_next&#39;]&#47;a&quot;)[0].click()
-            except Exception as e:
-                print(f&quot;Error clicking next page link: {e}&quot;)
-                break
+try: # next_page_link = WebDriverWait(driver, 30).until( # EC.element_to_be_clickable( # (By.XPATH, &quot;&#47;&#47;div[@class=&#39;feed-card-page&#39;]&#47;span[@class=&#39;pagebox_next&#39;]&#47;a&quot;)) # ) # next_page_link.click()
+driver.find_elements(By.XPATH, &quot;&#47;&#47;div[@class=&#39;feed-card-page&#39;]&#47;span[@class=&#39;pagebox_next&#39;]&#47;a&quot;)[0].click()
+except Exception as e:
+print(f&quot;Error clicking next page link: {e}&quot;)
+break
 
 打出的异常是：Error clicking next page link: Message: stale element reference: stale element not found
 

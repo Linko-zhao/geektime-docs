@@ -28,8 +28,8 @@ key\_len列显示执行计划使用到的索引列的总长度。根据key\_len�
 
 ```plain
  create table t_k(
-     a varchar(20), 
-     b char(20), 
+     a varchar(20),
+     b char(20),
      key idx_a(a,b)
 ) engine=innodb charset=utf8mb4;
 
@@ -175,7 +175,7 @@ mysql> set optimizer_switch='materialization=off';
 Query OK, 0 rows affected (0.01 sec)
 
 
-mysql> explain select * from tab ta 
+mysql> explain select * from tab ta
   where a=1 and c in (select a from tab tb);
 
 
@@ -272,7 +272,7 @@ mysql> explain select * from tab t1, tab t2 where t1.a = 1 and t1.c=t2.c;
 表关联时，使用了BKA优化。和MRR类似，BKA也是为了减少查询的随机IO的数量。
 
 ```plain
-mysql> explain select /*+ BKA(tb) */ * 
+mysql> explain select /*+ BKA(tb) */ *
   from tab ta, tab tb where ta.a = tb.a;
 
 
@@ -289,8 +289,8 @@ mysql> explain select /*+ BKA(tb) */ *
 查询使用了MRR（Multi-Range Read），MRR主要是为了减少回表查询数据时随机IO的数量。下面这个例子中使用了BKA提示，强制优化器使用MRR。
 
 ```plain
-mysql> explain select /*+ BKA(tab) */ * 
-  from tab 
+mysql> explain select /*+ BKA(tab) */ *
+  from tab
   where a=1 and b in (1,2,3);
 
 
@@ -304,8 +304,8 @@ mysql> explain select /*+ BKA(tab) */ *
 - Using sort\_union(…), Using union(…), Using intersect(…)
 
 ```plain
-mysql> explain select * 
-  from t_merge 
+mysql> explain select *
+  from t_merge
   where b=2 and c=2 and d=1;
 +----+-------------+---------+-------------+---------------+---------------+---------+------+------+----------+---------------------------------------------+
 | id | select_type | table   | type        | possible_keys | key           | key_len | ref  | rows | filtered | Extra                                       |
@@ -316,8 +316,8 @@ mysql> explain select *
 
 
 
-mysql> explain select * 
-  from t_merge 
+mysql> explain select *
+  from t_merge
   where (b=2 and d=1) or (c=2 and d=1);
 +----+-------------+---------+-------------+---------------+---------------+---------+------+------+----------+-----------------------------------------+
 | id | select_type | table   | type        | possible_keys | key           | key_len | ref  | rows | filtered | Extra                                   |
@@ -328,8 +328,8 @@ mysql> explain select *
 
 
 
-mysql> explain select * 
-  from t_merge 
+mysql> explain select *
+  from t_merge
   where (b=2 and d between 1 and 2) or (d=1 and c=2);
 +----+-------------+---------+-------------+---------------+---------------+---------+------+------+----------+----------------------------------------------+
 | id | select_type | table   | type        | possible_keys | key           | key_len | ref  | rows | filtered | Extra                                        |
@@ -418,24 +418,24 @@ ORDER BY
     t1.id;
 这么写会生成临时表，被驱动表t1被扫描三次</p>2024-09-27</li><br/><li><span>123</span> 👍（1） 💬（1）<p>老师，文中说到“const 表示查询最多返回 1 行记录。对主键或唯一索引的所有字段都使用常量等值匹配时，type 为 const。优化器会将 type 为 const 的查询单元直接替换为常量表。”这个常量表具体指什么，是如何产生的？该主键索引的查询到的值不也是需要通过B+树层级扫描链接获取到吗？</p>2024-09-27</li><br/><li><span>叶明</span> 👍（0） 💬（1）<p>思考题
 将子查询改为联表查询，先聚合后 join,避免对表中每行记录都进行聚合计算
-  
+
 select
-  t1.id,
-  t1.a,
-  t2.avg_b
+t1.id,
+t1.a,
+t2.avg_b
 from
-  tab t1
-  inner join (
-    select
-      a,
-      avg(b) avg_b
-    from
-      tab
-    group by
-      a
-  ) t2 on t1.a = t2.a
+tab t1
+inner join (
+select
+a,
+avg(b) avg_b
+from
+tab
+group by
+a
+) t2 on t1.a = t2.a
 order by
-  id;
+id;
 
 10000 rows in set (0.04 sec)</p>2024-09-27</li><br/>
 </ul>

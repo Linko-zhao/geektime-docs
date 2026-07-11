@@ -37,7 +37,7 @@
 ```verilog
     wire is_bxx = (instr[6:0] == `OPCODE_BRANCH);   //条件挑转指令的操作码
     wire is_jal = (instr[6:0] == `OPCODE_JAL) ;     //无条件跳转指令的操作码
-    
+
     //B型指令的立即数拼接
     wire [31:0] bimm  = {{20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0};
     //J型指令的立即数拼接
@@ -81,9 +81,9 @@ module hazard (
   wire branch_do = ((alu_result_0 & ~id_ex_imm_31) | (~alu_result_0 & id_ex_imm_31));
   wire ex_mem_taken = id_ex_jump[0] | (id_ex_branch & branch_do);
 
-  wire id_ex_memAccess = id_ex_memRead | id_ex_memWrite; 
+  wire id_ex_memAccess = id_ex_memRead | id_ex_memWrite;
 
-  wire ex_mem_need_stall = ex_mem_memWrite & (ex_mem_maskMode == 2'h0 | ex_mem_maskMode == 2'h1); 
+  wire ex_mem_need_stall = ex_mem_memWrite & (ex_mem_maskMode == 2'h0 | ex_mem_maskMode == 2'h1);
 
   always @(*) begin
     if(id_ex_memAccess && ex_mem_need_stall) begin
@@ -95,9 +95,9 @@ module hazard (
       ID_EX_flush  <= 0;
       EX_MEM_flush <= 1;
     end
-    else if(ex_mem_taken) begin 
+    else if(ex_mem_taken) begin
       pcFromTaken  <= 1;
-      pcStall      <= 0; 
+      pcStall      <= 0;
       IF_ID_flush  <= 1;
       ID_EX_flush  <= 1;
       EX_MEM_flush <= 0;
@@ -109,12 +109,12 @@ module hazard (
       ID_EX_flush <= 1;
     end
     else begin
-      pcFromTaken    <= 0;  
-      pcStall        <= 0; 
+      pcFromTaken    <= 0;
+      pcStall        <= 0;
       IF_ID_stall    <= 0;
       ID_EX_stall    <= 0;
       ID_EX_flush    <= 0;
-      EX_MEM_flush   <= 0;  
+      EX_MEM_flush   <= 0;
       IF_ID_flush    <= 0;
     end
   end
@@ -132,9 +132,9 @@ id\_ex\_memAccess是存储器的选通信号，当对存储器的“读”或者
   wire branch_do = ((alu_result_0 & ~id_ex_imm_31) | (~alu_result_0 & id_ex_imm_31));
   wire ex_mem_taken = id_ex_jump[0] | (id_ex_branch & branch_do);
 
-  wire id_ex_memAccess = id_ex_memRead | id_ex_memWrite; 
+  wire id_ex_memAccess = id_ex_memRead | id_ex_memWrite;
 
-  wire ex_mem_need_stall = ex_mem_memWrite & (ex_mem_maskMode == 2'h0 | ex_mem_maskMode == 2'h1); 
+  wire ex_mem_need_stall = ex_mem_memWrite & (ex_mem_maskMode == 2'h0 | ex_mem_maskMode == 2'h1);
 ```
 
 pcFromTaken是分支指令执行之后，判断和分支预测方向是否一致的信号。pcStall是控制程序计数器停止的信号，如果程序计数器停止，那么流水线将不会读取新的指令。IF\_ID\_stall是流水线中从取指到译码的阶段的停止信号。ID\_EX\_stall是流水线从译码到执行阶段的停止信号。
@@ -172,12 +172,12 @@ pcFromTaken是分支指令执行之后，判断和分支预测方向是否一致
 
 ```verilog
  // 分支预测失败，需要冲刷流水线，更新pc值
-    else if(EX_MEM_taken) begin 
-      pcFromTaken  <= 1; 
-      pcStall      <= 0; 
+    else if(EX_MEM_taken) begin
+      pcFromTaken  <= 1;
+      pcStall      <= 0;
       IF_ID_flush  <= 1;
       ID_EX_flush  <= 1;
-      EX_MEM_flush <= 0; 
+      EX_MEM_flush <= 0;
     end
 ```
 
@@ -206,30 +206,30 @@ module mem_wb_ctrl(
   input   reset,
   input   in_wb_ctrl_toReg,
   input   in_wb_ctrl_regWrite,
-  
+
   output  data_wb_ctrl_toReg,
   output  data_wb_ctrl_regWrite
 );
 
-  reg  reg_wb_ctrl_toReg; 
-  reg  reg_wb_ctrl_regWrite; 
+  reg  reg_wb_ctrl_toReg;
+  reg  reg_wb_ctrl_regWrite;
 
-  assign data_wb_ctrl_toReg = reg_wb_ctrl_toReg; 
-  assign data_wb_ctrl_regWrite = reg_wb_ctrl_regWrite; 
+  assign data_wb_ctrl_toReg = reg_wb_ctrl_toReg;
+  assign data_wb_ctrl_regWrite = reg_wb_ctrl_regWrite;
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_wb_ctrl_toReg <= 1'h0; 
-    end else begin 
-      reg_wb_ctrl_toReg <= in_wb_ctrl_toReg; 
+    if (reset) begin
+      reg_wb_ctrl_toReg <= 1'h0;
+    end else begin
+      reg_wb_ctrl_toReg <= in_wb_ctrl_toReg;
     end
   end
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_wb_ctrl_regWrite <= 1'h0; 
-    end else begin 
-      reg_wb_ctrl_regWrite <= in_wb_ctrl_regWrite; 
+    if (reset) begin
+      reg_wb_ctrl_regWrite <= 1'h0;
+    end else begin
+      reg_wb_ctrl_regWrite <= in_wb_ctrl_regWrite;
     end
   end
 
@@ -261,48 +261,48 @@ module mem_wb(
   output [31:0] data_pc
 );
 
-  reg [4:0]  reg_regWAddr; 
-  reg [31:0] reg_result; 
-  reg [31:0] reg_readData; 
-  reg [31:0] reg_pc; 
+  reg [4:0]  reg_regWAddr;
+  reg [31:0] reg_result;
+  reg [31:0] reg_readData;
+  reg [31:0] reg_pc;
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_regWAddr <= 5'h0; 
-    end else  begin 
-      reg_regWAddr <= in_regWAddr; 
-    end
-  end
-
-  always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_result <= 32'h0; 
-    end else begin 
-      reg_result <= in_result; 
+    if (reset) begin
+      reg_regWAddr <= 5'h0;
+    end else  begin
+      reg_regWAddr <= in_regWAddr;
     end
   end
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_readData <= 32'h0; 
-    end else begin 
-      reg_readData <= in_readData; 
+    if (reset) begin
+      reg_result <= 32'h0;
+    end else begin
+      reg_result <= in_result;
     end
   end
 
-  always @(posedge clk or posedge reset) begin    
-    if (reset) begin 
-      reg_pc <= 32'h0; 
-    end else  begin 
-      reg_pc <= in_pc; 
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      reg_readData <= 32'h0;
+    end else begin
+      reg_readData <= in_readData;
     end
   end
 
-  assign data_regWAddr = reg_regWAddr; 
-  assign data_result = reg_result; 
-  assign data_readData = reg_readData; 
-  assign data_pc = reg_pc; 
-  
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      reg_pc <= 32'h0;
+    end else  begin
+      reg_pc <= in_pc;
+    end
+  end
+
+  assign data_regWAddr = reg_regWAddr;
+  assign data_result = reg_result;
+  assign data_readData = reg_readData;
+  assign data_pc = reg_pc;
+
 endmodule
 ```
 

@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(title: Text(Widget.title)),
       body: Text('You have pushed the button this many times:$_counter')),
-      floatingActionButton: FloatingActionButton(onPressed: _incrementCounter) 
+      floatingActionButton: FloatingActionButton(onPressed: _incrementCounter)
     );
   }
 ```
@@ -164,8 +164,6 @@ setState(() {
 首先，代码简洁，直观，容易阅读；
 其次，类似模板类代码，减少重复冗余代码编写；
 再就是现代语言的“语法糖”。</p>2019-07-09</li><br/><li><span>信仰年轻</span> 👍（10） 💬（1）<p>没看出内联，，kotlin和C++的内联都有关键字inline，，这里哪里体现内联了啊？？、</p>2019-11-22</li><br/><li><span>大土豆</span> 👍（6） 💬（5）<p>我想问下，现在国内有没有比较成熟的纯flutter开发的App。</p>2019-07-09</li><br/><li><span>奔跑的徐胖子</span> 👍（4） 💬（3）<p>老师，我有个疑问，既然flutter是从上至下的有自己的UI渲染的闭环，那么您说的，最终程序运行是以原生的方式进行的又是什么意思呢，flutter也是调用的原生功能进行功能实现吗</p>2019-10-29</li><br/><li><span>啵一个草莓</span> 👍（4） 💬（1）<p>请教一个问题：我iOS真机运行一直报错，模拟器能成功，自己的个人apple ID（不是开发者） ，手机也是这个ID，不是可以在真机上运行么？</p>2019-08-09</li><br/><li><span>方海栋</span> 👍（4） 💬（1）<p>什么叫以内联的方式</p>2019-08-04</li><br/><li><span>神经蛙</span> 👍（4） 💬（3）<p>关于“在_MyHomePageState类中，直接在build函数里内联的方式完成Scaffold页面元素的构建”，我有一个问题：
-前文提到“setState方法会通知Flutter更新界面，Flutter收到通知后，会执行Widget的build方法，重新构建”，那么如果在_MyHomePageState类的build函数里内联整个Scaffold页面元素构建，是否就意味着setState后整个Scaffold及其子节点都会重新构建？如果Scaffold的子节点很多，是不是就会带来性能损耗？</p>2019-07-22</li><br/><li><span>熊爸爸</span> 👍（4） 💬（1）<p>1. 老师在回复中多次提到的“共享状态”指的是什么，是 context 相关的能力吗？
-2. 希望老师能顺带讲讲代码和功能的封装等最佳实战（包括继承、Mixin）；
-3. 3个月的时间感觉有点长，要是能加快更新进度就好了。不过还是要说：老师辛苦了！
+前文提到“setState方法会通知Flutter更新界面，Flutter收到通知后，会执行Widget的build方法，重新构建”，那么如果在_MyHomePageState类的build函数里内联整个Scaffold页面元素构建，是否就意味着setState后整个Scaffold及其子节点都会重新构建？如果Scaffold的子节点很多，是不是就会带来性能损耗？</p>2019-07-22</li><br/><li><span>熊爸爸</span> 👍（4） 💬（1）<p>1. 老师在回复中多次提到的“共享状态”指的是什么，是 context 相关的能力吗？2. 希望老师能顺带讲讲代码和功能的封装等最佳实战（包括继承、Mixin）；3. 3个月的时间感觉有点长，要是能加快更新进度就好了。不过还是要说：老师辛苦了！
 </p>2019-07-10</li><br/><li><span>Miracle_</span> 👍（2） 💬（1）<p>老师请问下目前Flutter对各种不同屏幕尺寸适配有好的方案吗？</p>2019-07-10</li><br/><li><span>Simon</span> 👍（2） 💬（1）<p>我认为好处是，状态只在当前的Widget中能使用并修改，不会受到Widget外的影响。如果放到组件外来管理，状态那就相当于一个全局状态，其它的Widget也可以修改这个状态。不知道说的对不对，还望老师指正</p>2019-07-09</li><br/><li><span>晨鹤</span> 👍（1） 💬（3）<p>现在 Android 原生主推 MVVC 架构，也实现了数据驱动 UI，很爽。</p>2019-08-01</li><br/><li><span>ls</span> 👍（1） 💬（2）<p>当一个复杂的页面，用这种代码形式来构建ui，维护起来感觉会很吃力。</p>2019-07-15</li><br/><li><span>G</span> 👍（1） 💬（1）<p>老师，为什么要多一个createstate来创建State类呢，像react里面一样直接引用类不行吗？</p>2019-07-10</li><br/>
 </ul>

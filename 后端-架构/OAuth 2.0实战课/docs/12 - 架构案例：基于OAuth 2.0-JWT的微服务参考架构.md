@@ -139,15 +139,15 @@ BFF服务可以用Node.js开发，也可以用Java/Spring等框架开发。
 
 ![](https://static001.geekbang.org/resource/image/44/93/443dab973274d8d13c76b2ef4cd1d393.jpg?wh=1920%2A980)
 
-01. 用户访问电商App，点击登录。
-02. App生成PKCE相关的code verifier + challenge。
-03. App以内嵌方式启动手机浏览器，访问IDP的统一认证页(GET /authorize)，请求带上PKCE的code challenge相关参数。
-04. IDP返回统一认证页。
-05. 用户认证和授权。
-06. IDP通过Login Service对用户进行认证。
-07. IDP返回授权码到App浏览器。
-08. App截取浏览器带回的授权码，将授权码+PKCE code verifer，通过网关转发到IDP的令牌获取端点（POST /oauth2/token, grant\_type=authorization-code）。
-09. IDP校验PKCE和授权码，校验通过则返回有效访问令牌。
+1.  用户访问电商App，点击登录。
+2.  App生成PKCE相关的code verifier + challenge。
+3.  App以内嵌方式启动手机浏览器，访问IDP的统一认证页(GET /authorize)，请求带上PKCE的code challenge相关参数。
+4.  IDP返回统一认证页。
+5.  用户认证和授权。
+6.  IDP通过Login Service对用户进行认证。
+7.  IDP返回授权码到App浏览器。
+8.  App截取浏览器带回的授权码，将授权码+PKCE code verifer，通过网关转发到IDP的令牌获取端点（POST /oauth2/token, grant\_type=authorization-code）。
+9.  IDP校验PKCE和授权码，校验通过则返回有效访问令牌。
 10. App获取令牌，本地存储，登录成功。
 
 之后，App如果需要和后台交互，可直接通过网关调用后台微服务，请求HTTP header中带上OAuth 2.0访问令牌即可。后续的服务调用流程，和“第一方应用+资源拥有者凭据模式”类似。
@@ -160,15 +160,15 @@ BFF服务可以用Node.js开发，也可以用Java/Spring等框架开发。
 
 ![](https://static001.geekbang.org/resource/image/02/57/02affbdf32f005af65454f3acc4cd957.jpg?wh=1856%2A986)
 
-01. 用户访问这个第三方Web应用，点击登录链接。
-02. Web应用后台向ACME公司的IDP服务发送申请授权码请求（GET /authorize）。
-03. 用户被重定向到ACME公司的IDP统一登录页面。
-04. 用户进行认证和授权。
-05. IDP通过Login Service对用户进行认证。
-06. 认证和授权通过，IDP返回授权码。
-07. Web应用获得授权码，再向IDP服务的令牌获取端点发起请求（POST /oauth2/token, grant\_type=authorization-code）。
-08. IDP校验授权码，校验通过则返回有效OAuth 2.0令牌（根据需要也可以返回刷新令牌）。
-09. Web应用创建用户Session，将OAuth 2.0令牌保存在Session中，然后返回登录成功到用户端。
+1.  用户访问这个第三方Web应用，点击登录链接。
+2.  Web应用后台向ACME公司的IDP服务发送申请授权码请求（GET /authorize）。
+3.  用户被重定向到ACME公司的IDP统一登录页面。
+4.  用户进行认证和授权。
+5.  IDP通过Login Service对用户进行认证。
+6.  认证和授权通过，IDP返回授权码。
+7.  Web应用获得授权码，再向IDP服务的令牌获取端点发起请求（POST /oauth2/token, grant\_type=authorization-code）。
+8.  IDP校验授权码，校验通过则返回有效OAuth 2.0令牌（根据需要也可以返回刷新令牌）。
+9.  Web应用创建用户Session，将OAuth 2.0令牌保存在Session中，然后返回登录成功到用户端。
 10. 用户浏览器中记录Session Cookie，登录成功。
 
 之后，第三方Web应用如果需要和ACME电商平台交互，可直接通过网关调用微服务，请求HTTP header中带上OAuth 2.0访问令牌即可。后续的服务调用流程，和前面的“第一方应用+资源拥有者凭据模式”类似。
@@ -224,8 +224,8 @@ BFF服务可以用Node.js开发，也可以用Java/Spring等框架开发。
 
 我目前遇到困难，我们期望不管是web侧还是app侧，统一使用token进行认证，并且登录使用手机号+验证码的方式，现在如果访问受限资源，默认会跳到login页面，不是返回json数据，请老师指点</p>2020-08-22</li><br/><li><span>kylexy_0817</span> 👍（8） 💬（2）<p>其实全程使用JWT，也没啥问题，只是如果想其较为安全，就要把公钥放在客户端，让其加密后再传输（或者获取到令牌后就直接加密存放在cookies或localstorage），但JWT的内容较多，即使加密后的内容也会较长，公网环境传输效率不高。而访问令牌，就是为了解决公网传输效率问题。不知有没理解对。</p>2020-08-02</li><br/><li><span>永旭</span> 👍（3） 💬（1）<p>老师你好, 查了下BFF相关文章
 有些架构图里把BFF放在API 网关层左边, 挨着web层.也有放在API 网关层里边的
-能分析分析这两种的有什么优势和劣势 , 区别吗 ?</p>2020-11-18</li><br/><li><span>永旭</span> 👍（3） 💬（1）<p>老师, 以前我接触的架构图里有DMG层, 会部署前端. 
-现在课程中 微服务架构图里已经没有了 DMG层了. 
+能分析分析这两种的有什么优势和劣势 , 区别吗 ?</p>2020-11-18</li><br/><li><span>永旭</span> 👍（3） 💬（1）<p>老师, 以前我接触的架构图里有DMG层, 会部署前端.
+现在课程中 微服务架构图里已经没有了 DMG层了.
 要是有的话能部署什么呢 ?</p>2020-11-06</li><br/><li><span>inrtyx</span> 👍（3） 💬（3）<p>第六点是关于 Web Session，这个不太明白。token信息肯定要放浏览器啊！不然岂不是每次请求都要登录？</p>2020-07-25</li><br/><li><span>往事随风，顺其自然</span> 👍（3） 💬（2）<p>全程采用JWt，用户信息容易暴露，对于安全级别高，最好不使用，对于oauth在安全级别更高，但是实现用户信息更复杂，混合之后，权衡了安全性和易用性，个人理解</p>2020-07-25</li><br/><li><span>Geek_7c4953</span> 👍（2） 💬（1）<p>有一个问题没有理解，APP用password模式登陆和APP上的浏览器打开统一认证页用用户名密码登录，这两者之间在安全层面上有什么区别？</p>2020-11-27</li><br/><li><span>Giggle</span> 👍（2） 💬（1）<p>请问老师，若只是一个移动端app，想让其实现Oauth协议，提供对其他app的授权登录，这种app的后台Oauth协议的实现是不是不适合使用SpringSecurityOauth这个框架，因为我看框架源码里面授权码模式或者简易模式都是基于浏览器重定向机制实现返回授权码code或者token，用户未授权情况下还会返回相应的授权页面，我是不是可以理解SpringSecurityOauth其实是解决网站和网站的第三方授权的场景，假如我是一个移动端的后台，就不适合使用这个框架。</p>2020-10-15</li><br/><li><span>Tim Zhang</span> 👍（2） 💬（2）<p>网关获得 JWT 令牌，校验 Scope 是否有权限调用 API，如果有就转发到后台 API 进行调用。
 
 校验是如何校验的？ 并且scope 和 authority有啥区别么</p>2020-07-27</li><br/><li><span>在路上</span> 👍（2） 💬（1）<p>全程采用JWT令牌模式，包含很多用户信息，权限信息，有泄露风险；jwt信息如果被修改，有权限越界的风险。采用OAuth令牌模式用户信息安全无问题，在领域层每次都要通过令牌查询用户级权限信息，加大的领域服务的开销，影响性能。</p>2020-07-26</li><br/><li><span>LYF_Mr</span> 👍（1） 💬（1）<p>王老师，我想问下，如果各个domain 服务之间有依赖，该如何处理？例如 A domain 进行添加数据时，其中某字段需要从 B domain 中，获取该值，那么该业务逻辑，是不是得封装在BFF层，而不应该在domain服务中实现？</p>2021-01-08</li><br/><li><span>长脖子树</span> 👍（1） 💬（1）<p>有个问题, 场景 1：第一方 Web 应用 + 资源拥有者凭据模式 这张图里https:&#47;&#47;static001.geekbang.org&#47;resource&#47;image&#47;b6&#47;bd&#47;b658befe1da937fa3685b55522487dbd.jpg

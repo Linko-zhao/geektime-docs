@@ -206,7 +206,7 @@ Flex布局中有一种特殊的情况，那就是flex容器没有被指定主轴
       &lt;div class=&quot;childbox2Attr&quot;&gt;&lt;&#47;div&gt;
     &lt;&#47;div&gt;
     &lt;script&gt;
-        
+
             const childbox1Attr = {
                 width: &#39;100&#39;
             };
@@ -228,9 +228,10 @@ Flex布局中有一种特殊的情况，那就是flex容器没有被指定主轴
                     childbox2Ele.style.left = child1ComputedStyle[&quot;width&quot;]
                 }
             }
-        
+
         &lt;&#47;script&gt;
-  &lt;&#47;body&gt;
+
+&lt;&#47;body&gt;
 &lt;&#47;html&gt;
 </p>2019-04-14</li><br/><li><span>坎坷的程序媛</span> 👍（2） 💬（0）<p>align-items默认值为stretch，所以平时没设置也自动等高了</p>2020-12-22</li><br/><li><span>困到清醒</span> 👍（2） 💬（1）<p>老师也太棒了，每次垂直居中都奔溃，各种查百度，给我一种错觉，css靠经验靠运气，有时候都不知道为什么就成功了，然后下次又重新查。这一波从设计的讲解，豁然开朗，再也不会是无头苍蝇了。</p>2020-01-16</li><br/><li><span>Geek_59f56b</span> 👍（0） 💬（0）<p>老师，把 Flex 延伸的方向称为“主轴”，flex延伸的方向是什么了？</p>2022-02-24</li><br/><li><span>Jenny</span> 👍（0） 💬（0）<p> 超文本 应该怎么理解？</p>2022-01-11</li><br/>
 </ul>

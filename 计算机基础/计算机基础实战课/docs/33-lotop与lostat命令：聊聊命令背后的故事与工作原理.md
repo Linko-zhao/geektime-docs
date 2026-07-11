@@ -116,7 +116,7 @@ iotop [选项]
 
 ```plain
 //下载
-wget http://guichaz.free.fr/iotop/files/iotop-0.4.4.tar.gz  
+wget http://guichaz.free.fr/iotop/files/iotop-0.4.4.tar.gz
 //解压
 tar zxf iotop-0.4.4.tar.gz
 ```

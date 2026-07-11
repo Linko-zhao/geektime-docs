@@ -53,7 +53,7 @@
 pub async fn start_http_server(state: HttpServerState, stop_sx: broadcast::Sender<bool>) {
     # 读取配置
     let config = placement_center_conf();
-    
+
     # 组装监听地址和端口
     let ip: SocketAddr = match format!("0.0.0.0:{}", config.http_port).parse() {
         Ok(data) => data,
@@ -216,7 +216,7 @@ service KvService {
   rpc set(SetRequest) returns(common.CommonReply){}
   rpc delete(DeleteRequest) returns(common.CommonReply){}
   rpc get(GetRequest) returns(GetReply){}
-  rpc exists(ExistsRequest) returns(ExistsReply){} 
+  rpc exists(ExistsRequest) returns(ExistsReply){}
 }
 
 
@@ -497,20 +497,20 @@ pub async fn start_server(stop_sx: broadcast::Sender<bool>) {
 
 ```plain
 pub async fn start_server(stop_sx: broadcast::Sender<bool>) {
-    
+
     // 将 grpc server 运行在一个独立的 tokio task 中。
     let raw_stop_sx = stop_sx.clone();
     tokio::spawn(async move {
         start_grpc_server(raw_stop_sx).await;
     });
-  
+
     // 将 http server 运行在一个独立的 tokio task 中。
     let raw_stop_sx = stop_sx.clone();
     tokio::spawn(async move {
         let state = HttpServerState::new();
         start_http_server(state, raw_stop_sx).await;
     });
-     
+
     // 等待进程信号
     awaiting_stop(stop_sx.clone()).await;
 }

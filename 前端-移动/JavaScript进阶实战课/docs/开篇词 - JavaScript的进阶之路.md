@@ -146,6 +146,7 @@ JavaScript的前身Mocha，是布兰登·艾克（Brendan Eich）在1995年用10
 
 - [Cynefin framework](https://en.wikipedia.org/wiki/Cynefin_framework)
 - [Import on Interaction](https://www.patterns.dev/posts/import-on-interaction/)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>清秋</span> 👍（5） 💬（1）<p>JavaScript 的道法术器势：函数式和面向对象的编程模式为“道”，掌握 JavaScript 的底层逻辑和所用到的数据结构与算法为“法”，设计模式为“术”，效率工具为“器”，接受变化即未来的大“势”。</p>2022-09-26</li><br/><li><span>ProMaxPlus</span> 👍（4） 💬（4）<p>老师，我在 JavaScript 上完全就是零基础(不过之前在学校听过 C 语言的课程)，假如想跟上您这门课的进度，请问有什么入门的书籍，或者网络资源可以推荐吗？谢谢！</p>2022-09-19</li><br/><li><span>苏果果</span> 👍（3） 💬（1）<p>太贴心了老师！入门级选手前来报道！</p>2022-09-19</li><br/><li><span>Geek_003168</span> 👍（2） 💬（1）<p>之前就在其他平台听过石川老师的课，现在居然能赶上热乎的在更新的，激动！</p>2022-09-19</li><br/><li><span>Yum.X</span> 👍（0） 💬（1）<p>老师好，文中思维大厦的图中，对法、术的描述和下文文字描述不一致，图里是不是排反了？</p>2022-10-10</li><br/><li><span>Kian</span> 👍（0） 💬（1）<p>那个建筑图还总结的挺到位的。
 学习就是一鼓作气的做完当前要做的事情，忌讳还没到头就分心。

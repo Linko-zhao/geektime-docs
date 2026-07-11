@@ -127,7 +127,7 @@ public abstract class LifecycleBase implements Lifecycle {
 
     //事件监听器集合
     private final List<LifecycleListener> lifecycleListeners = new CopyOnWriteArrayList<>();
-    
+
     ...
 }
 ```

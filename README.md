@@ -36,3 +36,11 @@ docker run -d --restart always --name geektime-docs -p 8091:8091 geektime-docs
 - 文章首个一级标题用作页面标题；没有一级标题时使用文件名。
 - 文章目录展示二级、三级标题；代码块会使用 Astro 内置 Shiki 高亮。
 - Markdown 文档均由 [my-geektime](https://github.com/zkep/my-geektime) 生成。
+
+## 格式化 Markdown
+
+格式化全部已跟踪的 Markdown 文档；脚本会保留文首水平分隔线，避免被误识别为 Astro frontmatter：
+
+```shell
+npm run format:markdown
+```

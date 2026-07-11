@@ -192,12 +192,12 @@ pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
     "stabilityai/stable-diffusion-xl-base-1.0", controlnet=controlnet, torch_dtype=torch.float16
 )
 pipe.enable_model_cpu_offload()
-    
+
 # 可以更换为你想使用的prompt
 prompt = "Darth vader dancing in a desert, high quality"
 negative_prompt = "low quality, bad quality"
 images = pipe(
-    prompt, 
+    prompt,
     negative_prompt=negative_prompt,
     num_inference_steps=25,
     num_images_per_prompt=2,
@@ -424,7 +424,7 @@ prompt = "a handsome cartoon boy, yellow hair, red eyes, red clothes"
 generator = torch.manual_seed(1025)
 negative_prompt = "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, Normal quality, jpeg artifacts, signature, watermark, username, blurry"
 
-controlnet_conditioning_scale = 0.6 
+controlnet_conditioning_scale = 0.6
 
 images = pipe(
     [prompt]*4, num_inference_steps=50, negative_prompt=[negative_prompt]*4, image=image, controlnet_conditioning_scale=controlnet_conditioning_scale,generator = generator
@@ -463,16 +463,18 @@ images = pipe(
 <li><span>Toni</span> 👍（4） 💬（1）<p>包括ControlNet 在内的AI绘画工具越来越多，但AI绘画结果需要人工抽取结果的痛点依在。
 
 现在AI 绘画的流程如下:
+
 1. 先有个想画的想法，
 2. 根据这个想法编出个prompt 输给AI 绘画工具，
 3. AI绘画工具生成多张图片比如说4张供人参考，
 4. 人们再依据上面步骤1中的想象，从出的4张图里面选出合意的，如不甚满意，就继续上面的步骤2改变prompt，然后再执行步骤3，让AI重新绘图，这过程可能会进行好几轮，比较费时。
 
-那么问题来了，有没有什么方法让上面的过程自动化? 
+那么问题来了，有没有什么方法让上面的过程自动化?
 
 计算机的优势就是不知疲惫，虽然有时也宕机罢工，但总体来说比人能干。如果能将上面成图+判断的过程先交给计算机进行5轮，然后再由人类对出图给出评估，效率会提高很多，图的质量也会更高。
 
 解决上面痛点的思考之一是设计一个质量控制层 QualityControlNet，这个可训练的质量控制层应包含下面的一些功能:
+
 1. 有对图像质量评估的量化指标，可选艺术，技术，美学等几个方面做为评估参量，指标可调可变，
 2. 有对正反prompt修正反馈的能力，
 3. 要修正的图像+新的更改要求可以自动返回低维隐藏层，并启动重绘过程，

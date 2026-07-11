@@ -241,7 +241,7 @@ void testBitWidth() {
         wbitset<value>().to_string(),
         wbitset<floorValue>().to_string()
     ) << std::endl;
-    
+   
 }
  
 // 测试coutl_zero, countl_one, countr_zero, countr_one, popcount
@@ -327,10 +327,11 @@ constexpr size_t MyBitWidth(uint64_t value){
     for (; valueCeil &gt;&gt; i; ++i);
 
     return i - 1;
+
 }
 
 constexpr auto MyBitFloor(uint64_t value) {
-    return std::bit_ceil(value) &gt;&gt; 1;
+return std::bit_ceil(value) &gt;&gt; 1;
 }</p>2024-01-20</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师几个问题：
 Q1：浮点数位操作的转换是隐式转换吗？
 C++20之前的浮点数位操作，需要先转换为整数，这个转换是隐式转换吗？还是需要写代码实现？（好久不用C++，有点忘记了）

@@ -69,7 +69,7 @@ CSV存储上面数据的格式
     "search_term": "Thrift论文",
     "rank": 2,
     "landing_url": "https://zh.wikipedia.org/zh-hans/Thrift",
-    "click_timestamp": 1632373689    
+    "click_timestamp": 1632373689
   }
 ]
 ```
@@ -229,7 +229,7 @@ TCompactProtocol的实现其实很简单，如果你想深入了解细节，可�
 namespace cpp Sample
 	namespace java Sample
 	namespace perl Sample
-	
+
 	//This struct is not used in the sample. Shown here for illustrative purposes only.
 	//
 	struct SampleStruct
@@ -237,21 +237,21 @@ namespace cpp Sample
 	  1: i32 key
 	  2: string value
 	}
-	
-	
+
+
 	//A service contains the RPC(s).
 	//
 	service SampleService
 	{
 	  string HelloThere(1:string HelloString),
 	  void ServerDoSomething(),
-	
+
 	  //Client calls this to tell server which port to connect back on.
 	  void ClientSideListenPort(1:i16 Port),
 	  //Named pipe version
 	  void ClientSidePipeName(1:string name),
 	}
-	
+
 	//Sample RPC on the 'client' side that the master server can call.
 	service SampleCallback
 	{
@@ -362,7 +362,6 @@ if (field.id &gt; lastFieldId_ &amp;&amp; field.id - lastFieldId_ &lt;= 15) {
   writeI16(field.id);
 }
 ```
-
 
 直接把IDL写入协议的Header，协议的接收者可以根据Header的信息得知如何解析协议，但是如果每次传输的数据量不大，额外传输的IDL就会成为严重的网络负担。Apache Avro很好的解决了这个问题，在Apache Avro Specification的Protocol Declaration&#47;Protocol Wire Format&#47;Schema Resolution&#47;Parsing Canonical Form for Schemas四个章节中详细地描述了整个过程。
 

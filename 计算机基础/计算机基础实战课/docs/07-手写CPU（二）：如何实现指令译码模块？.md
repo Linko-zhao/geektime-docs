@@ -51,15 +51,15 @@ localparam DEC_INVALID = 21'b0;
 reg [20:0] dec_array;
 
 //---------- decode rs1、rs2 -----------------
-assign rs1_addr = instr[19:15]; 
+assign rs1_addr = instr[19:15];
 assign rs2_addr = instr[24:20];
 
 //---------- decode rd -----------------------
-assign rd_addr = instr[11:7]; 
+assign rd_addr = instr[11:7];
 
 //---------- decode funct3、funct7 -----------
-assign funct7 = instr[31:25]; 
-assign funct3 = instr[14:12]; 
+assign funct7 = instr[31:25];
+assign funct3 = instr[14:12];
 
 // ----------------------------- decode signals ---------------------------------
 
@@ -79,15 +79,15 @@ assign  {branch, jump, mem_read, mem_write, reg_write, to_reg, result_sel, alu_s
 
 always @(*) begin
   case(instr[6:0])
-    `OPCODE_LUI    :   dec_array <= DEC_LUI;   
-    `OPCODE_AUIPC  :   dec_array <= DEC_AUIPC; 
-    `OPCODE_JAL    :   dec_array <= DEC_JAL; 
-    `OPCODE_JALR   :   dec_array <= DEC_JALR;   
-    `OPCODE_BRANCH :   dec_array <= DEC_BRANCH; 
-    `OPCODE_LOAD   :   dec_array <= DEC_LOAD;   
-    `OPCODE_STORE  :   dec_array <= DEC_STORE;  
-    `OPCODE_ALUI   :   dec_array <= DEC_ALUI;  
-    `OPCODE_ALUR   :   dec_array <= DEC_ALUR;  
+    `OPCODE_LUI    :   dec_array <= DEC_LUI;
+    `OPCODE_AUIPC  :   dec_array <= DEC_AUIPC;
+    `OPCODE_JAL    :   dec_array <= DEC_JAL;
+    `OPCODE_JALR   :   dec_array <= DEC_JALR;
+    `OPCODE_BRANCH :   dec_array <= DEC_BRANCH;
+    `OPCODE_LOAD   :   dec_array <= DEC_LOAD;
+    `OPCODE_STORE  :   dec_array <= DEC_STORE;
+    `OPCODE_ALUI   :   dec_array <= DEC_ALUI;
+    `OPCODE_ALUR   :   dec_array <= DEC_ALUR;
     default        :  begin
                  dec_array <= DEC_INVALID;
     end
@@ -100,7 +100,7 @@ wire [31:0] Iimm = {{21{instr[31]}}, instr[30:20]};
 wire [31:0] Simm = {{21{instr[31]}}, instr[30:25], instr[11:7]};
 wire [31:0] Bimm = {{20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0};
 wire [31:0] Uimm = {instr[31:12], 12'b0};
-wire [31:0] Jimm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0};   
+wire [31:0] Jimm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0};
 
 assign imm = {32{types[5]}} & Iimm
            | {32{types[4]}} & Simm
@@ -123,15 +123,15 @@ endmodule
 
 ```verilog
 //---------- decode rs1、rs2 -----------------
-assign rs1_addr = instr[19:15]; 
+assign rs1_addr = instr[19:15];
 assign rs2_addr = instr[24:20];
 
 //---------- decode rd -----------------------
-assign rd_addr = instr[11:7]; 
+assign rd_addr = instr[11:7];
 
 //---------- decode funct3、funct7 -----------
-assign funct7 = instr[31:25]; 
-assign funct3 = instr[14:12]; 
+assign funct7 = instr[31:25];
+assign funct3 = instr[14:12];
 ```
 
 在所有的指令格式中，还有一段最为特殊的信息码。这段信息码是每条指令都有的，且位置和位宽保持不变。没错，它就是指令的操作码opcode。
@@ -167,15 +167,15 @@ assign  {branch, jump, mem_read, mem_write, reg_write, to_reg, result_sel, alu_s
 
 always @(*) begin
   case(instr[6:0])
-    `OPCODE_LUI    :   dec_array <= DEC_LUI;   
-    `OPCODE_AUIPC  :   dec_array <= DEC_AUIPC; 
-    `OPCODE_JAL    :   dec_array <= DEC_JAL; 
-    `OPCODE_JALR   :   dec_array <= DEC_JALR;   
-    `OPCODE_BRANCH :   dec_array <= DEC_BRANCH; 
-    `OPCODE_LOAD   :   dec_array <= DEC_LOAD;   
-    `OPCODE_STORE  :   dec_array <= DEC_STORE;  
-    `OPCODE_ALUI   :   dec_array <= DEC_ALUI;  
-    `OPCODE_ALUR   :   dec_array <= DEC_ALUR;  
+    `OPCODE_LUI    :   dec_array <= DEC_LUI;
+    `OPCODE_AUIPC  :   dec_array <= DEC_AUIPC;
+    `OPCODE_JAL    :   dec_array <= DEC_JAL;
+    `OPCODE_JALR   :   dec_array <= DEC_JALR;
+    `OPCODE_BRANCH :   dec_array <= DEC_BRANCH;
+    `OPCODE_LOAD   :   dec_array <= DEC_LOAD;
+    `OPCODE_STORE  :   dec_array <= DEC_STORE;
+    `OPCODE_ALUI   :   dec_array <= DEC_ALUI;
+    `OPCODE_ALUR   :   dec_array <= DEC_ALUR;
     default        :  begin
                  dec_array <= DEC_INVALID;
     end
@@ -198,7 +198,7 @@ wire [31:0] Iimm = {{21{instr[31]}}, instr[30:20]};
 wire [31:0] Simm = {{21{instr[31]}}, instr[30:25], instr[11:7]};
 wire [31:0] Bimm = {{20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1'b0};
 wire [31:0] Uimm = {instr[31:12], 12'b0};
-wire [31:0] Jimm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0};   
+wire [31:0] Jimm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1'b0};
 
 assign imm = {32{types[5]}} & Iimm
            | {32{types[4]}} & Simm
@@ -249,30 +249,30 @@ module id_ex_ctrl(
   output       out_noflush
 );
 
-  reg  reg_ex_ctrl_itype; 
-  reg [1:0] reg_ex_ctrl_alu_ctrlop; 
-  reg [1:0] reg_ex_ctrl_result_sel; 
-  reg  reg_ex_ctrl_alu_src; 
-  reg  reg_ex_ctrl_pc_add; 
-  reg  reg_ex_ctrl_branch; 
-  reg [1:0] reg_ex_ctrl_jump; 
-  reg  reg_mem_ctrl_mem_read; 
-  reg  reg_mem_ctrl_mem_write; 
-  reg [1:0] reg_mem_ctrl_mask_mode; 
-  reg  reg_mem_ctrl_sext; 
-  reg  reg_wb_ctrl_to_reg; 
-  reg  reg_wb_ctrl_reg_write; 
-  reg  reg_noflush; 
+  reg  reg_ex_ctrl_itype;
+  reg [1:0] reg_ex_ctrl_alu_ctrlop;
+  reg [1:0] reg_ex_ctrl_result_sel;
+  reg  reg_ex_ctrl_alu_src;
+  reg  reg_ex_ctrl_pc_add;
+  reg  reg_ex_ctrl_branch;
+  reg [1:0] reg_ex_ctrl_jump;
+  reg  reg_mem_ctrl_mem_read;
+  reg  reg_mem_ctrl_mem_write;
+  reg [1:0] reg_mem_ctrl_mask_mode;
+  reg  reg_mem_ctrl_sext;
+  reg  reg_wb_ctrl_to_reg;
+  reg  reg_wb_ctrl_reg_write;
+  reg  reg_noflush;
 
   ………………    //由于这里的代码较长，结构相似，这里省略了一部分
-  
+
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_noflush <= 1'h0; 
-    end else if (flush) begin 
-      reg_noflush <= 1'h0; 
-    end else if (valid) begin 
-      reg_noflush <= in_noflush; 
+    if (reset) begin
+      reg_noflush <= 1'h0;
+    end else if (flush) begin
+      reg_noflush <= 1'h0;
+    end else if (valid) begin
+      reg_noflush <= in_noflush;
     end
   end
 endmodule
@@ -315,25 +315,25 @@ module id_ex(
   output [4:0]  out_rs1_addr,
   output [4:0]  out_rs2_addr
 );
-  reg [4:0] reg_rd_addr; 
-  reg [6:0] reg_funct7; 
-  reg [2:0] reg_funct3; 
-  reg [31:0] reg_imm; 
-  reg [31:0] reg_rs2_data; 
-  reg [31:0] reg_rs1_data; 
-  reg [31:0] reg_pc; 
-  reg [4:0] reg_rs1_addr; 
-  reg [4:0] reg_rs2_addr; 
+  reg [4:0] reg_rd_addr;
+  reg [6:0] reg_funct7;
+  reg [2:0] reg_funct3;
+  reg [31:0] reg_imm;
+  reg [31:0] reg_rs2_data;
+  reg [31:0] reg_rs1_data;
+  reg [31:0] reg_pc;
+  reg [4:0] reg_rs1_addr;
+  reg [4:0] reg_rs2_addr;
 
   …………  //由于代码较长，结构相似，这里省略了一部分，完整代码你可以从Gitee上获取
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_rs2_addr <= 5'h0; 
-    end else if (flush) begin 
-      reg_rs2_addr <= 5'h0; 
-    end else if (valid) begin 
-      reg_rs2_addr <= in_rs2_addr; 
+    if (reset) begin
+      reg_rs2_addr <= 5'h0;
+    end else if (flush) begin
+      reg_rs2_addr <= 5'h0;
+    end else if (valid) begin
+      reg_rs2_addr <= in_rs2_addr;
     end
   end
 
@@ -344,12 +344,12 @@ endmodule
 
 ```verilog
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_rd_addr <= 5'h0; 
-    end else if (flush) begin 
-      reg_rd_addr <= 5'h0; 
-    end else if (valid) begin 
-      reg_rd_addr <= in_rd_addr; 
+    if (reset) begin
+      reg_rd_addr <= 5'h0;
+    end else if (flush) begin
+      reg_rd_addr <= 5'h0;
+    end else if (valid) begin
+      reg_rd_addr <= in_rd_addr;
     end
   end
 ```
@@ -382,7 +382,7 @@ S型是和内存交流，俺的理解是可以为指令，也可以部分为数�
 wire [31:0] Simm = {{21{instr[31]}}, instr[30:25], instr[11:7]};
 wire [31:0] Bimm = {{20{instr[31]}}, instr[7], instr[30:25], instr[11:8], 1&#39;b0};
 wire [31:0] Uimm = {instr[31:12], 12&#39;b0};
-wire [31:0] Jimm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1&#39;b0};  
+wire [31:0] Jimm = {{12{instr[31]}}, instr[19:12], instr[20], instr[30:21], 1&#39;b0};
 
 老师，这个立即数的截取一直没看懂，{21{instr[31]}}的含义是什么呢</p>2022-08-16</li><br/><li><span>你要有个信念</span> 👍（0） 💬（2）<p>请问为什么要把立即数扩成32位的呢？</p>2022-08-14</li><br/><li><span>伊宝峰</span> 👍（0） 💬（1）<p>立即数不连续是为了让不同指令源和目的寄存器位置固定，方便寄存器地址的译码。</p>2022-08-13</li><br/><li><span>A君</span> 👍（0） 💬（0）<p>提取立即数的那段代码为什么是所有类型的立即数的集合？为什么不像前面那样根据opcode走不通分支来赋值?</p>2023-11-27</li><br/>
 </ul>

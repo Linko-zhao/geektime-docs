@@ -111,7 +111,7 @@ NGINX 还把许多操作系统独有的功能，分别定义在不同的头文�
 ```c++
 typedef struct ngx_pool_s ngx_pool;  // ngx_palloc.h
 
-struct ngx_pool_s {   
+struct ngx_pool_s {  
   ngx_pool_data_t    d;  // 描述本内存池节点的信息；
   size_t             max;  // 可分配的最大块；
   ngx_pool           *current;  // 当前使用的内存池节点；
@@ -220,6 +220,7 @@ nginx/src
 3. GitHub 上的 NGINX 源码实际上只是一个同步镜像，而真正的源码位置在[这里](https://hg.nginx.org)，是用一个比较“另类”的版本控制软件 Mercurial 管理的。
 4. NGINX 公司在2019年被 F5 networks 公司收购，之后就正式进入了中国市场，陆续推出了中文官网 [nginx.org.cn](https://www.nginx.org.cn) 和 [nginx-cn.net](https://www.nginx-cn.net)，分别面向社区用户和商业用户。网站里有很多技术干货，而且都翻译成了中文，值得一读。
 5. 如果觉得直接看源码有困难，那么可以参考 GitHub 上的一些源码注释项目，比如我的：[https://github.com/chronolaw/annotated\_nginx](https://github.com/chronolaw/annotated_nginx)。另外，我还有一本书《NGINX 完全开发指南》，里面有对 NGINX 数据结构、运行机制的详细解说，还配有图例，结合着源码注释，相信可以帮助你更好地学习。
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>=</span> 👍（5） 💬（1）<p>感谢罗老师分享的C语言进阶学习方向。
 老师提到的Nginx跨系统平台的C语言实现让我联想起之前在专栏中看过的C语言标准IO，它也屏蔽了低级IO以及具体的操作系统内核提供的系统调用函数。

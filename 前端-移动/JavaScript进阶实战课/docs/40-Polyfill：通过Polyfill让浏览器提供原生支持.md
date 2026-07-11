@@ -57,7 +57,7 @@ array.forEach(function(currentValue, index, arr), thisValue)
 var oldArray = ["纽约", "东京", "巴黎"];
 var newArray = [];
 
-oldArray.forEach( function(item, index) {
+oldArray.forEach(function (item, index) {
   newArray.push(index + "." + item);
 }, oldArray);
 
@@ -79,22 +79,22 @@ Array.prototype.forEach !== undefined;
 这里有一点需要注意的是，因为我们现在的浏览器是支持 forEach 功能的，所以这么做其实就等于覆盖了原生支持的 forEach 功能。所以首先，我们需要判断用户传入的是不是一个函数参数。这里，我们可以使用 JavaScript 内置的 typeof 方法来实现对参数类型的检查。如果返回的结果不是函数类型的话，程序应该返回一条报错。**这其实就是一种类型检查。**
 
 ```javascript
-Array.prototype.forEach = function(callback, thisValue){
-  if (typeof(callback) !== "function") {
+Array.prototype.forEach = function (callback, thisValue) {
+  if (typeof callback !== "function") {
     throw new TypeError(callback + "不是一个函数");
   }
   var arrayLength = this.length;
-  for (var i=0; i < arrayLength; i++) {
+  for (var i = 0; i < arrayLength; i++) {
     callback.call(thisValue, this[i], i, this);
   }
-}
+};
 
 var oldArray = ["纽约", "东京", "巴黎"];
 var newArray = [];
 
-oldArray.forEach( function(item, index) {
+oldArray.forEach(function (item, index) {
   newArray.push(index + "." + item);
-}, oldArray); 
+}, oldArray);
 
 newArray; // ['0.纽约', '1.东京', '2.巴黎']
 ```

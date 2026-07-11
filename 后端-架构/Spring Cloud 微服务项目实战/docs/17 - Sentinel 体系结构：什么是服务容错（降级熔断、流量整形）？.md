@@ -113,6 +113,6 @@ A 预热模型是在线上使用的吗？还是上线之前测试用的？
 B 对于窗口内的某一个阈值，请求失败后怎么处理？
 
 Q3：Sentinel创建的entry对象是对请求的封装吗？ 还是对要访问的资源的封装？
-Q4：为什么叫Slot吗？slot本意是“时隙”，感觉用这个名字不合适？</p>2022-01-19</li><br/><li><span>子夜</span> 👍（0） 💬（2）<p>有个疑问 限流和熔断降级都是入口处拦截的，假如有两台服务器a，b。a调用b 在b处做限流或熔断降级，无论b的资源是否被占用，a的计算资源都被占用了不是嘛</p>2022-06-30</li><br/><li><span>排骨</span> 👍（3） 💬（0）<p>Sentinel里面有个DefaultSlotChainBuilderTest单元测试类，可以大概看清楚全流程</p>2023-02-27</li><br/><li><span>罗逸</span> 👍（0） 💬（0）<p>改了git配置，拉下来了，sorry</p>2022-02-18</li><br/><li><span>罗逸</span> 👍（0） 💬（0）<p>服务容错拉不下来 warning: Clone succeeded, but checkout failed. 
+Q4：为什么叫Slot吗？slot本意是“时隙”，感觉用这个名字不合适？</p>2022-01-19</li><br/><li><span>子夜</span> 👍（0） 💬（2）<p>有个疑问 限流和熔断降级都是入口处拦截的，假如有两台服务器a，b。a调用b 在b处做限流或熔断降级，无论b的资源是否被占用，a的计算资源都被占用了不是嘛</p>2022-06-30</li><br/><li><span>排骨</span> 👍（3） 💬（0）<p>Sentinel里面有个DefaultSlotChainBuilderTest单元测试类，可以大概看清楚全流程</p>2023-02-27</li><br/><li><span>罗逸</span> 👍（0） 💬（0）<p>改了git配置，拉下来了，sorry</p>2022-02-18</li><br/><li><span>罗逸</span> 👍（0） 💬（0）<p>服务容错拉不下来 warning: Clone succeeded, but checkout failed.
 sentinel-annotation-quarkus-adapter-deployment 说这个名称过长</p>2022-02-18</li><br/><li><span>海布里王力宏</span> 👍（0） 💬（0）<p>能简单介绍一下slot的底层原理实现吗？如何做到即保护了资源又不影响可用性。</p>2022-01-30</li><br/>
 </ul>

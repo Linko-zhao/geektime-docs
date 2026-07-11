@@ -61,33 +61,37 @@ React是业界很常用的JavaScript开发框架，看看它是怎么实现下�
 
 ```javascript
 class FlavorForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  handleChange(event) {    this.setState({value: event.target.value});  }
-  handleSubmit(event) {
-    alert('Your order is: ' + this.state.value);
-    event.preventDefault();
-  }
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
+  handleSubmit(event) {
+    alert("Your order is: " + this.state.value);
+    event.preventDefault();
+  }
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Pick your favorite flavor:
-          <select value={this.state.value} onChange={this.handleChange}>            
-            <option value="no1">宫保鸡丁</option>
-            <option value="no2">佛跳墙</option>
-            <option value="no3">珍珠翡翠白玉汤</option>
-          </select>
-        </label>
-        <input type="submit" value="下订单" />
-      </form>
-    );
-  }
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+               {" "}
+        <label>
+                    Pick your favorite flavor:          {" "}
+          <select value={this.state.value} onChange={this.handleChange}>
+                       <option value="no1">宫保鸡丁</option>           {" "}
+            <option value="no2">佛跳墙</option>           {" "}
+            <option value="no3">珍珠翡翠白玉汤</option>         {" "}
+          </select>
+                 {" "}
+        </label>
+                <input type="submit" value="下订单" />     {" "}
+      </form>
+    );
+  }
 }
 ```
 
@@ -104,18 +108,18 @@ class FlavorForm extends React.Component {
 下面是使用Vue Test Utils来执行单元测试的例子，在订单页面，点击一个check Order按钮，验证页面上是否会显示“order validated”的消息。
 
 ```javascript
-import { shallowMount } from '@vue/test-utils'
-	import OrderToggle from '@/components/OrderToggle.vue'
-	import Order from '@/components/Order.vue'
-	describe('OrderToggle.vue', () => {
-	  it('toggles msg passed to Order when Place Order button is clicked', () => {
-	    const wrapper = shallowMount(OrderToggle)
-	    const button = wrapper.find('#check-order')
-	    button.trigger('click')
-	    const OrderComponent = wrapper.find(Order)
-	    expect(OrderComponent.props()).toEqual({msg: 'order validated'})  
-	  })
-	})
+import { shallowMount } from "@vue/test-utils";
+import OrderToggle from "@/components/OrderToggle.vue";
+import Order from "@/components/Order.vue";
+describe("OrderToggle.vue", () => {
+  it("toggles msg passed to Order when Place Order button is clicked", () => {
+    const wrapper = shallowMount(OrderToggle);
+    const button = wrapper.find("#check-order");
+    button.trigger("click");
+    const OrderComponent = wrapper.find(Order);
+    expect(OrderComponent.props()).toEqual({ msg: "order validated" });
+  });
+});
 ```
 
 你可以看到，JavaScript单元测试能测试数据逻辑，也能测试页面事件，模拟人的行为，发送一个个点击、输入事件。那么你可能还想问，前端JavaScript的单元测试做完，是不是就不需要额外的UI测试了呢？

@@ -49,9 +49,9 @@ Network页面在我们开发前后端交互接口的时候，可以让我们看�
 参考我们提到的国外程序员的做法，我们在src/main.js里加入下面这段代码 ，这样就可以在日志信息中直接复制报错内容中的链接，去Stack Overflow中寻找答案。
 
 ```javascript
-window.onerror = function(e){
-    console.log(['https://stackoverflow.com/search?q=[js]+'+e])
-}
+window.onerror = function (e) {
+  console.log(["https://stackoverflow.com/search?q=[js]+" + e]);
+};
 ```
 
 其实Console页面的用法非常多，当我们在代码里使用cosole.log打印信息时，console页面里就会显示log传递的参数，这也是程序员用得最多的调试方法。
@@ -63,7 +63,7 @@ window.onerror = function(e){
 你也可以上手体验一下，打开极客时间的官网，再打开调试窗口，在Console页面输入下面的代码，你就可以看到答案。这其实是一个比较考验应试者前端基础的一道题，你可以自己试一试。
 
 ```javascript
-new Set([...document.querySelectorAll('*')].map(n=>n.nodeName)).size
+new Set([...document.querySelectorAll("*")].map((n) => n.nodeName)).size;
 ```
 
 ## Vue Devtools
@@ -107,21 +107,21 @@ new Set([...document.querySelectorAll('*')].map(n=>n.nodeName)).size
 还是通过小例子直观感受一下。我们打开src/components目录下的todo.vue文件，下面是清单应用的代码，我们在addTodo函数内的第一行写上debugger。然后到前端的清单应用的页面中，我们输入任意一条信息，点击回车，你就会发现页面暂停了，并且调试窗口跳转到了source页面。
 
 ```javascript
-  function addTodo() {
-    debugger
-    if(!title.value){
-      showModal.value = true
-      setTimeout(()=>{
-        showModal.value = false
-      },1500)
-      return 
-    }
-    todos.value.push({
-      title: title.value,
-      done: false,
-    });
-    title.value = "";
-}    
+function addTodo() {
+  debugger;
+  if (!title.value) {
+    showModal.value = true;
+    setTimeout(() => {
+      showModal.value = false;
+    }, 1500);
+    return;
+  }
+  todos.value.push({
+    title: title.value,
+    done: false,
+  });
+  title.value = "";
+}
 ```
 
 上面的代码在调试窗口中的效果如下图所示，点击图中用红框圈出的按钮，你就可以在debugger暂停的地方，逐行执行代码。并且鼠标放在任意变量上，都可以看到这个变量在代码执行的结果。对于复杂代码逻辑的调试来说，使用断点调试，可以让整个代码执行过程清晰可见。**debugger也是高级程序员必备的断点调试法，你一定要掌握**。
@@ -188,38 +188,38 @@ Vue的Devtools操作比较简单，进阶的知识并不算多。在讲Console�
 更是少数人知道 vue-devtools 可以直接打开页面对应的组件源文件，不需要问同事，定位半天。
 我之前也写过文章分析这个功能原理。《据说 99% 的人不知道 vue-devtools 还能直接打开对应组件文件？本文原理揭秘》https:&#47;&#47;juejin.cn&#47;post&#47;6959348263547830280</p>2021-11-12</li><br/><li><span>Kobe的篮球</span> 👍（12） 💬（1）<p>vue3项目通过vite打包后，如何支持dev-tools啊</p>2021-12-13</li><br/><li><span>Beauty~fish🐬</span> 👍（1） 💬（1）<p>贺老面试题。。。还有其他的题吗，在哪里可以学习呢</p>2021-11-30</li><br/><li><span>轻飘飘过</span> 👍（1） 💬（1）<p>看大家的写法都挺优秀的，大圣老师说的不用sort 和并列打印数据的问题，个人思考用桶排序求解🤔，代码如下，互相学习。
 function main() {
-  let tags = Array.from(document.querySelectorAll(&#39;*&#39;));
-  let tMap = {}, max = min = 1;
-  tags.forEach(tag =&gt; {
-    let v = tag.tagName;
-    if (!tMap[v]) tMap[v] = 0;
-    tMap[v]++;
-    max = Math.max(tMap[v], max);
-    min = Math.min(tMap[v], min);
-  });
+let tags = Array.from(document.querySelectorAll(&#39;*&#39;));
+let tMap = {}, max = min = 1;
+tags.forEach(tag =&gt; {
+let v = tag.tagName;
+if (!tMap[v]) tMap[v] = 0;
+tMap[v]++;
+max = Math.max(tMap[v], max);
+min = Math.min(tMap[v], min);
+});
 
-  let bucket = new Array(max - min + 1);
-  Object.keys(tMap).forEach(v =&gt; {
-    if (!bucket[tMap[v] - min]) bucket[tMap[v] - min] = [];
-    bucket[tMap[v] - min].push(v);
-  });
+let bucket = new Array(max - min + 1);
+Object.keys(tMap).forEach(v =&gt; {
+if (!bucket[tMap[v] - min]) bucket[tMap[v] - min] = [];
+bucket[tMap[v] - min].push(v);
+});
 
-  let res = [], count = 3, i = bucket.length - 1;
-  while (count &gt; 0 &amp;&amp; i &gt;= 0) {
-    if (bucket[i]) {
-      count--;
-      res.push(bucket[i]);
-    }
-    i--;
-  }
-  return res;
+let res = [], count = 3, i = bucket.length - 1;
+while (count &gt; 0 &amp;&amp; i &gt;= 0) {
+if (bucket[i]) {
+count--;
+res.push(bucket[i]);
+}
+i--;
+}
+return res;
 };</p>2021-11-17</li><br/><li><span>飞翔国度</span> 👍（1） 💬（2）<p>发现公司的vue项目都屏蔽了vuetools...在生产上开着是不是有点不安全？</p>2021-11-16</li><br/><li><span>乐叶</span> 👍（0） 💬（1）<p>let tag = [...document.querySelectorAll(&#39;*&#39;)].map(node =&gt; node.nodeName)
 let many3 = {}
 for (let i=0;i&lt;tag.length;i++) {
-  if (!many3[tag[i]]) {
-    many3[tag[i]] = 0
-  }
-  many3[tag[i]]++
+if (!many3[tag[i]]) {
+many3[tag[i]] = 0
+}
+many3[tag[i]]++
 }
 return Object.keys(many3).map(itemKey =&gt; ({label: itemKey, value: many3[itemKey]})).sort((item1, item2) =&gt; item2.value-item1.value)</p>2021-11-12</li><br/><li><span>ch3cknull</span> 👍（15） 💬（0）<p>vue-devtools有两个，其中一个是不支持vue3的
 
@@ -227,8 +227,8 @@ return Object.keys(many3).map(itemKey =&gt; ({label: itemKey, value: many3[itemK
 
 http:&#47;&#47;chrome.google.com&#47;webstore&#47;detail&#47;ljjemllljcmogpfapbkkighbhhppjdbg</p>2021-11-12</li><br/><li><span>花果山大圣</span> 👍（11） 💬（0）<p>参考答案之一， 其实这一题还可以扩展很多，比如不让你用sort，比如如果三四五名词的次数一样，怎么把这些并列的也打出来等等
 let ret = Object.entries([...document.querySelectorAll(&#39;*&#39;)].map(node =&gt; node.nodeName).reduce((ret,n)=&gt;{
-    ret[n] = ret[n]?ret[n]+1:1
-    return ret 
+ret[n] = ret[n]?ret[n]+1:1
+return ret
 },{})).sort((a,b)=&gt;b[1]-a[1]).slice(0,3)
 console.table(ret)
 </p>2021-11-12</li><br/><li><span>ll</span> 👍（5） 💬（0）<p>devTool 是很牛的“谁用谁知道”，通过这节，如果没用过的小伙伴赶紧尝试下；

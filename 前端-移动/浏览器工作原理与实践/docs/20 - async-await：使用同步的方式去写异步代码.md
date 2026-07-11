@@ -360,55 +360,56 @@ console.log(3);
 =================================
 
 async function foo() {
-    console.log(&#39;foo&#39;)
+console.log(&#39;foo&#39;)
 }
 async function bar() {
-    console.log(&#39;bar start&#39;)
-    await foo()
-    console.log(&#39;bar end&#39;)
+console.log(&#39;bar start&#39;)
+await foo()
+console.log(&#39;bar end&#39;)
 }
 console.log(&#39;script start&#39;)
 setTimeout(function () {
-    console.log(&#39;setTimeout&#39;)
+console.log(&#39;setTimeout&#39;)
 }, 0)
 bar();
 new Promise(function (resolve) {
-    console.log(&#39;promise executor&#39;)
-    resolve();
+console.log(&#39;promise executor&#39;)
+resolve();
 }).then(function () {
-    console.log(&#39;promise then&#39;)
+console.log(&#39;promise then&#39;)
 })
 console.log(&#39;script end&#39;)
 相当于:
 function* foo() {
-  console.log(&#39;foo&#39;);
+console.log(&#39;foo&#39;);
 }
 
 function* bar() {
-  console.log(&#39;bar start&#39;);
-  yield new Promise(resolve =&gt; {
-    resolve(foo().next());
-  });
-  console.log(&#39;bar end&#39;);
+console.log(&#39;bar start&#39;);
+yield new Promise(resolve =&gt; {
+resolve(foo().next());
+});
+console.log(&#39;bar end&#39;);
 }
 console.log(&#39;script start&#39;);
 
 setTimeout(() =&gt; {
-  console.log(&#39;setTimeout&#39;);
+console.log(&#39;setTimeout&#39;);
 }, 0);
 
 const genBar = bar();
 genBar.next().value.then(v =&gt; {
-  genBar.next(v);
+genBar.next(v);
 });
 
 new Promise(resolve =&gt; {
-  console.log(&#39;promise executor&#39;);
-  resolve();
+console.log(&#39;promise executor&#39;);
+resolve();
 }).then(() =&gt; {
-  console.log(&#39;promise then&#39;);
+console.log(&#39;promise then&#39;);
 });
 console.log(&#39;script end&#39;);</p>2022-02-20</li><br/><li><span>路漫漫</span> 👍（1） 💬（0）<p>好文，看了许久和配合es6的文档才看明白的，收获极大</p>2022-02-06</li><br/><li><span>AIGC Weekly 周报</span> 👍（1） 💬（0）<p>具体步骤如下，并不严谨，欢迎指教：
+
 1. 输出 “script start”。
 2. 执行 setTimeout，将其加入到定时消息队列(宏任务)。
 3. 执行 bar()，以协程的角度，创建一个 bar 协程，首先输出 “bar start”，执行到 await 后，调用 foo (创建一个foo协程)，输出 “ foo”，并新建一个Promise实例传递给父协程，父协程将其添加到当前宏任务的微任务队列(微任务队列元素+1)。
@@ -416,4 +417,5 @@ console.log(&#39;script end&#39;);</p>2022-02-20</li><br/><li><span>路漫漫</s
 5. 输出 “script end”。
 6. 当前宏任务执行完毕，开始检查微任务队列，按照添加的先后顺序，首先输出 “bar end”，再次输出 “promise then”。
 7. 消息队列中的任务在下一次事件循环中执行，输出 “ setTimeout”。</p>2021-04-04</li><br/>
+
 </ul>

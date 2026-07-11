@@ -9,7 +9,7 @@
 Vim 的作者 Bram 这么告诫人们不要走到两个极端上去 \[Moolenaar 2007]：
 
 > 你需要马上把文本准备好。所以没有时间读文档或学习新命令。——**你会一直使用原始的命令。**
-> 
+>
 > 你想学编辑器提供的所有功能，并在任何时候都能使用最高效的命令。——**你会浪费很多时间学习很多你永远不会用到的东西。**
 
 前者的问题很明显，如果你不学习，那你只能使用初级的功能，所以效率一定很低。后者的问题可能不那么明显了：实际上，除了多花时间之外，你很难培养出良好的习惯，形成“肌肉记忆”。而这，恰恰是高效工作的关键之一——不需要想，就知道怎么做，从而可以把头脑和精力投入到更重要的问题上。
@@ -67,7 +67,7 @@ Allen, Leo. 2016. [“Why Vim is so much better than Atom”](https://blog.maker
 
 Arthur, Barry. 2014. [“Learning the tool of Vim”](http://of-vim-and-vigor.blogspot.com/2014/08/learning-tool-of-vim.html).
 
-Bringhurst, Robert. 2012. *The Elements of Typographic Style*, 4th ed. Hartley &amp; Marks Publishers.
+Bringhurst, Robert. 2012. _The Elements of Typographic Style_, 4th ed. Hartley &amp; Marks Publishers.
 
 Irwin, Conrad. 2013. [“Bracketed paste mode”](https://cirw.in/blog/bracketed-paste).
 
@@ -83,17 +83,17 @@ Moolenaar, Bram. 2007. [“7 habits for effective text editing 2.0”](https://m
 
 Moolenaar, Bram. 2018. [“Vim: Recent developments”](https://www.moolenaar.net/Vim_Krakow_2018.pdf).
 
-Neil, Drew. 2015. *Practical Vim*, 2nd ed. O’Reilly. 中文版：杨源、车文隆译《Vim 实用技巧》，人民邮电出版社，2014（第一版），2016（第二版）。
+Neil, Drew. 2015. _Practical Vim_, 2nd ed. O’Reilly. 中文版：杨源、车文隆译《Vim 实用技巧》，人民邮电出版社，2014（第一版），2016（第二版）。
 
-Neil, Drew. 2018. *Modern Vim: Craft your development Environment with Vim 8 and Neovim*. Pragmatic Bookshelf. 中文版：死月译《精通 Vim：用 Vim 8 和 Neovim 实现高效开发》，电子工业出版社，2020。
+Neil, Drew. 2018. _Modern Vim: Craft your development Environment with Vim 8 and Neovim_. Pragmatic Bookshelf. 中文版：死月译《精通 Vim：用 Vim 8 和 Neovim 实现高效开发》，电子工业出版社，2020。
 
 Ornbo, George. 2019. [“Vim: you don’t need NERDtree or (maybe) netrw”](https://shapeshed.com/vim-netrw/).
 
-Osipov, Ruslan. 2018. *Mastering Vim*. Packt. 中文版：王文涛译《Vim 8 文本处理实战》，人民邮电出版社，2020。
+Osipov, Ruslan. 2018. _Mastering Vim_. Packt. 中文版：王文涛译《Vim 8 文本处理实战》，人民邮电出版社，2020。
 
-Robbins, Arnold, Elbert Hannah, and Linda Lamb. 2008. *Learning the vi and Vim Editors*, 7th ed. O’Reilly.
+Robbins, Arnold, Elbert Hannah, and Linda Lamb. 2008. _Learning the vi and Vim Editors_, 7th ed. O’Reilly.
 
-Salus, Peter H. 1994. *A Quarter Century of UNIX*. Addison-Wesley.
+Salus, Peter H. 1994. _A Quarter Century of UNIX_. Addison-Wesley.
 
 Schneider, Peter A. 2018. [Answer to “How do I disable the weird characters from ‘bracketed paste mode’ on the Mac OS X default terminal?”](https://stackoverflow.com/a/50654284/816999).
 

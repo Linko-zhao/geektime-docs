@@ -189,7 +189,7 @@ docker run -d --rm \
 ```plain
 services:
   ...
-  
+
   wordpress:
     image: wordpress:5
     container_name: wordpress
@@ -231,7 +231,7 @@ server {
 ```plain
 services:
   ...
-  
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -298,6 +298,7 @@ docker-compose -f wp-compose.yml exec -it nginx sh
                               (default: docker-compose.yml)
 
 2. </p>2022-08-18</li><br/><li><span>peter</span> 👍（2） 💬（1）<p>请教老师几个问题：
+
 Q1：docker-compose只能用在单机环境，不能用在集群吗？
 Q2：文中创建的第一个docker是干什么用的？
 文中用了这个命令“docker run -d -p 5000:5000 registry”，请问创建这个有什么用？
@@ -310,14 +311,14 @@ Get &quot;http:&#47;&#47;127.0.0.1:5000&#47;v2&#47;&quot;: dial tcp 127.0.0.1:50
 突然感觉Q2中创建的应用就是本地registry，对吗？</p>2022-08-16</li><br/><li><span>Max</span> 👍（1） 💬（2）<p>docker-compose转写成k8s yaml有什么建议吗？
 尝试使用了kompose convert工具，发现还是有很多配置无法覆盖到，比如env的引入方式就不一样。</p>2023-03-08</li><br/><li><span>Demon.Lee</span> 👍（1） 💬（1）<p>原来 docker-compose 从 v1.27 版本开始将 version 字段给“干掉”了，再也不用理会 version: &quot;3&quot;，version: &quot;3.9&quot;，version: &quot;2&quot; 了 😂 。
 
-为啥我之前没觉得这玩意有点反人类呢？嗯，缺少批判性思维。</p>2022-12-01</li><br/><li><span>YueShi</span> 👍（1） 💬（1）<p>apt install docker-compose 
+为啥我之前没觉得这玩意有点反人类呢？嗯，缺少批判性思维。</p>2022-12-01</li><br/><li><span>YueShi</span> 👍（1） 💬（1）<p>apt install docker-compose
 为docker-compose version 1.29.2, build unknown
-不是最新版的</p>2022-08-15</li><br/><li><span>Sports</span> 👍（1） 💬（2）<p>如果安装成docker compose plugin的形式，即没有中间的横线，harbor安装会有问题，因为检测不到docke-compose😂</p>2022-08-15</li><br/><li><span>党</span> 👍（0） 💬（1）<p>我说怎么安装docker-compose教程差异那么大 有的要下载python 有的直接下来个可执行文件 </p>2024-03-10</li><br/><li><span>William</span> 👍（0） 💬（1）<p>mac笔记本... 好久前安装的, Docker Desktop 直接内部带了docker compose , 适用命令,  没有中划线-
+不是最新版的</p>2022-08-15</li><br/><li><span>Sports</span> 👍（1） 💬（2）<p>如果安装成docker compose plugin的形式，即没有中间的横线，harbor安装会有问题，因为检测不到docke-compose😂</p>2022-08-15</li><br/><li><span>党</span> 👍（0） 💬（1）<p>我说怎么安装docker-compose教程差异那么大 有的要下载python 有的直接下来个可执行文件 </p>2024-03-10</li><br/><li><span>William</span> 👍（0） 💬（1）<p>mac笔记本... 好久前安装的, Docker Desktop 直接内部带了docker compose , 适用命令, 没有中划线-
 
 --停止
 docker compose -f docker-compose-wp.yml down
 --启动
-docker compose -f docker-compose-wp.yml up -d 
+docker compose -f docker-compose-wp.yml up -d
 
 -- 进入到容器内
 docker compose -f docker-compose-wp.yml exec nginx sh</p>2024-01-09</li><br/><li><span>黄涵宇看起来很好吃</span> 👍（0） 💬（1）<p>docker-compose -f docker-compose.yml exec -it 无法生效

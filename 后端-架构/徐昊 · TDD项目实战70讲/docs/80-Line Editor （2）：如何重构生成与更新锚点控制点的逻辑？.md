@@ -46,13 +46,15 @@ export class LineEditor extends Konva.Group {
 任务列表为：
 
 - 在线段编辑（Line Editor）上设置锚点（Anchor）
-  
+
   - 将线（Line）数据，生成锚点
   - 在Line Editor重绘时，按照数据更新锚点位置
+
 - 在锚点与锚点之间设置控制点
-  
+
   - 通过线段数据，在两个锚点之间生成控制点（Control）
   - 在Line Editor重绘时，按照数据更新控制点位置
+
 - 拖动锚点时，改变线段中的位置
 - 拖动控制点时，在线段上增加锚点
 - 双击锚点时，删除锚点

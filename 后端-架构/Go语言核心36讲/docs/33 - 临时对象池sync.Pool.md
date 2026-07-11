@@ -174,33 +174,33 @@ import (
 )
 
 type cache struct {
-	value int
+value int
 }
 func TestShareAndPrivate(t *testing.T) {
-	p := sync.Pool{}
-	&#47;&#47; 在主协程写入10
-	p.Put(cache{value: 10})
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		for i := 0; i &lt; 10; i++ {
-			p.Put(cache{value: i})
-		}
-		wg.Done()
-	}()
-	wg.Wait()
-	wg.Add(1)
-	go func() {
-		for true {
-			v := p.Get()
-			if v == nil {
-				break
-			}
-			t.Log(v)
-		}
-		wg.Done()
-	}()
-	wg.Wait()
+p := sync.Pool{}
+&#47;&#47; 在主协程写入10
+p.Put(cache{value: 10})
+var wg sync.WaitGroup
+wg.Add(1)
+go func() {
+for i := 0; i &lt; 10; i++ {
+p.Put(cache{value: i})
+}
+wg.Done()
+}()
+wg.Wait()
+wg.Add(1)
+go func() {
+for true {
+v := p.Get()
+if v == nil {
+break
+}
+t.Log(v)
+}
+wg.Done()
+}()
+wg.Wait()
 }
 这段代码没有体现出来私有和共享的区别</p>2020-09-03</li><br/><li><span>越努力丨越幸运</span> 👍（3） 💬（1）<p>老师，当一个goroutine在访问某个临时对象池中一个本地池的shared字段时被锁住，此时另外一个goroutine访问临时对象池时，是会跳过这个本地池，去访问其他的本地池，还是说会被阻塞住？
 </p>2020-04-19</li><br/><li><span>鲲鹏飞九万里</span> 👍（2） 💬（1）<p>郝老师您好，你在article70.go 的示例中使用sync.Pool 的作用是啥呢，看不出来。你看：
@@ -209,35 +209,36 @@ func main() {
 	&#47;&#47; defer buf.Free()
 	buf := &amp;myBuffer{delimiter: delimiter}
 
-在main函数中，我用`buf := &amp;myBuffer{delimiter: delimiter}`这行代码代替上面两行代码后，执行的效果是一样的。 article70.go 的示例，为啥要使用 sync.Pool 呢，麻烦老师进一步讲解下</p>2023-02-19</li><br/><li><span>小袁</span> 👍（2） 💬（1）<p>为啥本地池列表长度不是跟M一致，而是跟P一致？</p>2021-02-13</li><br/><li><span>闫飞</span> 👍（2） 💬（1）<p>这里存放的临时对象是否是无状态，无唯一标识符的纯值对象? 对象的类型是否都是一样，还是说必须要用户自己做好具体类型的判定?</p>2019-07-17</li><br/><li><span>苏安</span> 👍（2） 💬（1）<p>老师，不知道还有几讲，最初的课程大纲有相关的拾遗章节，不知道后续的安排还有没？</p>2018-10-26</li><br/><li><span>传说中的成大大</span> 👍（1） 💬（1）<p>之前学习 go routine的时候 初次了解到这个p以为就是用来调度goroutine的  但是今天又讨论到这个p 这个P还关联到了临时对象池，这个临时对象池也涉及到被运行时系统所清理 所以我产生了以为 这个p时候就是运行时系统呢？</p>2020-04-16</li><br/><li><span>疯琴</span> 👍（1） 💬（1）<p>请问老师，demo70 的 37 行 return 后面没跟东西，是相当于 return nil 么？</p>2020-01-02</li><br/><li><span>林嘉裕</span> 👍（0） 💬（1）<p>数组可以通过put(arr[:0])清空，如果是map呢？只能通过遍历？</p>2021-12-21</li><br/><li><span>jxs1211</span> 👍（0） 💬（1）<p>由于fmt包中的代码在真正使用这些临时对象之前，总是会先对其进行重置，
+在main函数中，我用`buf := &amp;myBuffer{delimiter: delimiter}`这行代码代替上面两行代码后，执行的效果是一样的。 article70.go 的示例，为啥要使用 sync.Pool 呢，麻烦老师进一步讲解下</p>2023-02-19</li><br/><li><span>小袁</span> 👍（2） 💬（1）<p>为啥本地池列表长度不是跟M一致，而是跟P一致？</p>2021-02-13</li><br/><li><span>闫飞</span> 👍（2） 💬（1）<p>这里存放的临时对象是否是无状态，无唯一标识符的纯值对象? 对象的类型是否都是一样，还是说必须要用户自己做好具体类型的判定?</p>2019-07-17</li><br/><li><span>苏安</span> 👍（2） 💬（1）<p>老师，不知道还有几讲，最初的课程大纲有相关的拾遗章节，不知道后续的安排还有没？</p>2018-10-26</li><br/><li><span>传说中的成大大</span> 👍（1） 💬（1）<p>之前学习 go routine的时候 初次了解到这个p以为就是用来调度goroutine的 但是今天又讨论到这个p 这个P还关联到了临时对象池，这个临时对象池也涉及到被运行时系统所清理 所以我产生了以为 这个p时候就是运行时系统呢？</p>2020-04-16</li><br/><li><span>疯琴</span> 👍（1） 💬（1）<p>请问老师，demo70 的 37 行 return 后面没跟东西，是相当于 return nil 么？</p>2020-01-02</li><br/><li><span>林嘉裕</span> 👍（0） 💬（1）<p>数组可以通过put(arr[:0])清空，如果是map呢？只能通过遍历？</p>2021-12-21</li><br/><li><span>jxs1211</span> 👍（0） 💬（1）<p>由于fmt包中的代码在真正使用这些临时对象之前，总是会先对其进行重置，
 func newPrinter() *pp {
-	p := ppFree.Get().(*pp)
-	p.panicking = false
-	p.erroring = false
-	p.wrapErrs = false
-	p.fmt.init(&amp;p.buf)
-	return p
+p := ppFree.Get().(*pp)
+p.panicking = false
+p.erroring = false
+p.wrapErrs = false
+p.fmt.init(&amp;p.buf)
+return p
 }
 思考：这段重置的代码为什么不能放到使用完成后，一并p.free
 func (p *pp) free() {
-	&#47;&#47; Proper usage of a sync.Pool requires each entry to have approximately
-	&#47;&#47; the same memory cost. To obtain this property when the stored type
-	&#47;&#47; contains a variably-sized buffer, we add a hard limit on the maximum buffer
-	&#47;&#47; to place back in the pool.
-	&#47;&#47;
-	&#47;&#47; See https:&#47;&#47;golang.org&#47;issue&#47;23199
-	if cap(p.buf) &gt; 64&lt;&lt;10 {
-		return
-	}
+&#47;&#47; Proper usage of a sync.Pool requires each entry to have approximately
+&#47;&#47; the same memory cost. To obtain this property when the stored type
+&#47;&#47; contains a variably-sized buffer, we add a hard limit on the maximum buffer
+&#47;&#47; to place back in the pool.
+&#47;&#47;
+&#47;&#47; See https:&#47;&#47;golang.org&#47;issue&#47;23199
+if cap(p.buf) &gt; 64&lt;&lt;10 {
+return
+}
 
-	p.buf = p.buf[:0]
-	p.arg = nil
-	p.value = reflect.Value{}
-	p.wrappedErr = nil
-	ppFree.Put(p)
+    p.buf = p.buf[:0]
+    p.arg = nil
+    p.value = reflect.Value{}
+    p.wrappedErr = nil
+    ppFree.Put(p)
+
 }</p>2021-10-30</li><br/><li><span>Harlan</span> 👍（0） 💬（1）<p>我理解pool使用场景是 做一个结构体原型池，一般用在结构体创建成本较高的场景，如db 连接 ，http连接等</p>2021-09-16</li><br/><li><span>lesserror</span> 👍（0） 💬（1）<p>以下问题，盼老师看到了，帮忙解答一下：
 
-1：  文中说：“sync.Pool类型只有两个方法——Put和Get”。 我的golang版本是：go1.16.4，不止这两个方法了，还有：getSlow、pin、pinSlow，不过他们都是包级私有的方法。
+1： 文中说：“sync.Pool类型只有两个方法——Put和Get”。 我的golang版本是：go1.16.4，不止这两个方法了，还有：getSlow、pin、pinSlow，不过他们都是包级私有的方法。
 
 2： 像： allPools 这个 变量的 上面的 注释最后 写的 “STW.” 代表什么意思呀？
 

@@ -90,7 +90,7 @@ while(selector.select()>0){   //不断循环选择可操作的通道。
 				        content+=charset.decode(bff);
 				        }
             System.out.println(content);
-			      sk.interestOps(SelectionKey.OP_READ);					
+			      sk.interestOps(SelectionKey.OP_READ);
 		    }
 	  }
 }
@@ -132,7 +132,7 @@ while(selector.select()>0){   //不断循环选择可操作的通道。
 Document doc = new Document("name", "Geek")
                .append("info", new Document("age", 203).append("sex", "male"));
 
-collection.insertOne(doc, new SingleResultCallback<Void>() { 
+collection.insertOne(doc, new SingleResultCallback<Void>() {
     @Override
     public void onResult(final Void result, final Throwable t) {
         System.out.println("Inserted success");

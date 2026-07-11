@@ -163,7 +163,7 @@ addReplyLongLong(c,clientSubscriptionsCount(c)); //给订阅者返回成功订�
 我在[第22讲](https://time.geekbang.org/column/article/420759)中给你介绍过sentinelEvent函数，你可以再回顾下。这个函数的原型如下所示：
 
 ```plain
-void sentinelEvent(int level, char *type, sentinelRedisInstance *ri, const char *fmt, ...) 
+void sentinelEvent(int level, char *type, sentinelRedisInstance *ri, const char *fmt, ...)
 ```
 
 实际上，这个函数最终是通过调用刚才我提到的pubsubPublishMessage函数，来实现向某一个频道发布消息的。那么，当我们要发布一条消息时，需要确定两个方面的内容：**一个是要发布的频道，另一个是要发布的消息**。
@@ -293,8 +293,8 @@ retval = redisAsyncCommand(ri->link->cc,
 
 总结：
 本篇文章，老师重点介绍了Pub&#47;Sub在主从切换中的作用，以及Pub&#47;Sub是如何初始化的，在redis中，实现发布的函数是 pubsubPublishMessage，而订阅的主要函数是 pubsubSubscribeChannel。
-	
-在哨兵模式下是通过 sentinelEvent 的方式进行发布的，其调用流程是 sentinelEvent -&gt; pubsubPublishMessage，而哨兵实例的 publish 命令被替换，是通过 sentinelProcessHelloMessage -&gt; sentinelProcessHelloMessage 向其它实例发送 hello 频道的消息，用于同步哨兵实例的基本信息，比如 IP、端口号、quorum 阈值等。</p>2021-09-30</li><br/><li><span>Kaito</span> 👍（6） 💬（1）<p>1、哨兵是通过 master 的 PubSub 发现其它哨兵的：每个哨兵向 master 的 PubSub（__sentinel__:hello 频道）发布消息，同时也会订阅这个频道，这样每个哨兵就能拿到其它哨兵的 IP、端口等信息
+
+在哨兵模式下是通过 sentinelEvent 的方式进行发布的，其调用流程是 sentinelEvent -&gt; pubsubPublishMessage，而哨兵实例的 publish 命令被替换，是通过 sentinelProcessHelloMessage -&gt; sentinelProcessHelloMessage 向其它实例发送 hello 频道的消息，用于同步哨兵实例的基本信息，比如 IP、端口号、quorum 阈值等。</p>2021-09-30</li><br/><li><span>Kaito</span> 👍（6） 💬（1）<p>1、哨兵是通过 master 的 PubSub 发现其它哨兵的：每个哨兵向 master 的 PubSub（**sentinel**:hello 频道）发布消息，同时也会订阅这个频道，这样每个哨兵就能拿到其它哨兵的 IP、端口等信息
 
 2、每个哨兵有了其它哨兵的信息后，在判定 Redis 实例状态时，就可以互相通信、交换信息，共同判定实例是否真的故障
 
@@ -311,7 +311,7 @@ retval = redisAsyncCommand(ri->link->cc,
 在 server.c 的 main 函数中可以看到，哨兵模式启动后，会调用 initSentinel 函数。
 
 void initSentinel(void) {
-    ...
+...
 
     &#47;&#47; 只添加 sentinelcmds 下的命令
     for (j = 0; j &lt; sizeof(sentinelcmds)&#47;sizeof(sentinelcmds[0]); j++) {
@@ -322,17 +322,18 @@ void initSentinel(void) {
         serverAssert(retval == DICT_OK);
     }
     ...
+
 }
 
 可以看到只把 sentinelcmds 命令表添加到了 server.commands 中。sentinelcmds 如下：
 
 struct redisCommand sentinelcmds[] = {
-    ...
-    {&quot;subscribe&quot;,subscribeCommand,-2,&quot;&quot;,0,NULL,0,0,0,0,0},
-    {&quot;publish&quot;,sentinelPublishCommand,3,&quot;&quot;,0,NULL,0,0,0,0,0},
-    {&quot;info&quot;,sentinelInfoCommand,-1,&quot;&quot;,0,NULL,0,0,0,0,0},
-    ...
+...
+{&quot;subscribe&quot;,subscribeCommand,-2,&quot;&quot;,0,NULL,0,0,0,0,0},
+{&quot;publish&quot;,sentinelPublishCommand,3,&quot;&quot;,0,NULL,0,0,0,0,0},
+{&quot;info&quot;,sentinelInfoCommand,-1,&quot;&quot;,0,NULL,0,0,0,0,0},
+...
 };
 
-可以看到哨兵的 PUBLISH 命令是由 sentinelPublishCommand 单独实现的，并非普通实例的 publishCommand。</p>2021-10-09</li><br/><li><span>fkc_zyk</span> 👍（1） 💬（0）<p>    addReplyBulk(c,channel);            addReplyBulk(c,message);这两个方法读取的全局数据是什么，分别有什么作用，感觉这两个都是读取订阅列表的客户端实现消息的发送</p>2023-05-19</li><br/>
+可以看到哨兵的 PUBLISH 命令是由 sentinelPublishCommand 单独实现的，并非普通实例的 publishCommand。</p>2021-10-09</li><br/><li><span>fkc_zyk</span> 👍（1） 💬（0）<p> addReplyBulk(c,channel); addReplyBulk(c,message);这两个方法读取的全局数据是什么，分别有什么作用，感觉这两个都是读取订阅列表的客户端实现消息的发送</p>2023-05-19</li><br/>
 </ul>

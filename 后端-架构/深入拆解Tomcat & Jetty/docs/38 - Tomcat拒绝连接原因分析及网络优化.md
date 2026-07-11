@@ -117,7 +117,6 @@ maxConnections的默认值与连接器类型有关：NIO的默认值是10000，A
 
      服务方过多time_wait会导致”Too Many Open Files”异常。
 
-
 </p>2019-08-08</li><br/><li><span>QQ怪</span> 👍（3） 💬（0）<p>保留timewait是为了是高效复用tcp连接，避免重复创建连接造成资源浪费，但过多的也会造成服务端文件打开数过多造成资源浪费</p>2019-08-08</li><br/><li><span>脱缰的野马__</span> 👍（2） 💬（0）<p>首先有几点需要明确：
 1.连接关闭的发起方是请求端，四次挥手中的TIME_WAIT状态存在于请求端（发起方）；
 2.请求端每次进行HTTP请求的时候，会使用一个临时的端口号，而机器的端口号是有限的，接收端是固定监听某个端口的；
@@ -133,7 +132,6 @@ java.net.SocketException: Socket is closed
 
 和
 java.net.SocketException: Broken pipe
-
 
 如何分析解决呢？谢谢老师</p>2022-06-23</li><br/><li><span>孙志强</span> 👍（0） 💬（0）<p>建立的tcp连接数超过maxConnection,服务就不是很健康了吧？我有一次出现一个情况是websocket占用了大量的tcp连接，导致http请求非常慢</p>2020-04-01</li><br/><li><span>我知道了嗯</span> 👍（0） 💬（0）<p>老师，目前我们线上环境在高峰会出现一种报错（与一个远程主机断开连接），然后用户页面就无法支付，没有响应。这是什么原因，我用工具发现线程都是阻塞状态，是不是因为gc了？</p>2020-01-13</li><br/><li><span>Liam</span> 👍（0） 💬（0）<p>time_waited过多会占用大量内存资源mbufs, 导致其他活跃连接无资源可用，拖慢了其他连接</p>2019-08-13</li><br/>
 </ul>

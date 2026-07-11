@@ -166,8 +166,8 @@ module.exports = {endpoint, accessKeyId, accessKeySecret, instancename, tableNam
 这个说法有些夸张了吧？老师有生产上的实践案例吗？</p>2020-05-03</li><br/><li><span>liubin</span> 👍（0） 💬（1）<p>确实，有点扯了，每个应用副本一个db，谁来负责业务数据同步，不是kafka能解决的吧。而且事物也没法搞。这工作量比单db要大100倍</p>2022-05-16</li><br/><li><span>Wisdom</span> 👍（0） 💬（1）<p>一个微服务，n个实例，一个实例对应一个数据库，这种方案，有点太浪费，而且数据的一致性方面还可能会有问题，不赞同这样，京乐、淘宝也没有这样搞，感觉这里有点误导</p>2022-02-14</li><br/><li><span>youngwang1228</span> 👍（0） 💬（1）<p>我记得是微服务说的是： 每个服务有自己单独的数据库。
 假如一个服务有5个实例，每个实例独享一个数据库的话，会不会有点奢侈。
 例如，一个数据库的数据量是10G，那5个库就要50G，存储成本直线上升。
-而且，新加实例的话，复制一个10G数据量的库实例，时间不短吧。</p>2020-09-14</li><br/><li><span>PP-CIPDS-GRC</span> 👍（0） 💬（1）<p>BaaS 化只能基于 HTTP（RESTful）进行吗？可不可以基于 TCP，比如走 RPC 的方式？</p>2020-09-06</li><br/><li><span>方勇(gopher)</span> 👍（0） 💬（1）<p>请问Rocketmq  10个9是怎么得出来的，是mttf  还是mttr  是一年周期么</p>2020-07-22</li><br/><li><span>Geek_a5c054</span> 👍（0） 💬（3）<p>TypeError: Cannot read property &#39;0&#39; of undefined
-    at Response.&lt;anonymous&gt; (&#47;home&#47;zyq&#47;Downloads&#47;todolist-backend-lesson08&#47;index.js:182:44)
+而且，新加实例的话，复制一个10G数据量的库实例，时间不短吧。</p>2020-09-14</li><br/><li><span>PP-CIPDS-GRC</span> 👍（0） 💬（1）<p>BaaS 化只能基于 HTTP（RESTful）进行吗？可不可以基于 TCP，比如走 RPC 的方式？</p>2020-09-06</li><br/><li><span>方勇(gopher)</span> 👍（0） 💬（1）<p>请问Rocketmq 10个9是怎么得出来的，是mttf 还是mttr 是一年周期么</p>2020-07-22</li><br/><li><span>Geek_a5c054</span> 👍（0） 💬（3）<p>TypeError: Cannot read property &#39;0&#39; of undefined
+at Response.&lt;anonymous&gt; (&#47;home&#47;zyq&#47;Downloads&#47;todolist-backend-lesson08&#47;index.js:182:44)
 这个是为什么呀</p>2020-07-06</li><br/><li><span>神仙朱</span> 👍（0） 💬（1）<p>疑问：通过额外进程让数据库与副本直接通过消息队列进行同步
 
 为什么要让数据库产生一个副本，然后进行同步。这样不是两份相同的数据了吗，这样跟数据库瓶颈有什么关系，因为这样好像没有分担数据库的压力？只是copy 了一份？原数据库的数据多了，有了瓶颈，另一个副本因为数据一样，不也会产生瓶颈的吗</p>2020-07-05</li><br/><li><span>吴科🍀</span> 👍（0） 💬（1）<p>老师，关于用mq实现数据库同步的问题，如果要求数据强一直都业务场景很难实现啊，比如秒杀，通过mq同步不及时，用户会查到不同的库存，造成多卖的情况呢</p>2020-04-28</li><br/><li><span>我来也</span> 👍（0） 💬（1）<p>感觉现在的学习门槛越来越高了.😁
@@ -178,7 +178,8 @@ module.exports = {endpoint, accessKeyId, accessKeySecret, instancename, tableNam
 3.需要会配置访问秘钥及授权.
 4.还要会配置函数计算的日志,还需要会看.
 
------------------
+---
+
 有个疑问咨询下老师:
 如何用一套代码中的不同入口文件部署多个函数计算服务?
 

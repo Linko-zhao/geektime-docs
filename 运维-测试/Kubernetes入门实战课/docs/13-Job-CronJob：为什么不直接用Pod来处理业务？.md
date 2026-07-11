@@ -195,7 +195,7 @@ metadata:
   name: echo-cj
 
 spec:
-  schedule: '*/1 * * * *'
+  schedule: "*/1 * * * *"
   jobTemplate:
     spec:
       template:
@@ -264,39 +264,40 @@ CronJob使用定时规则控制Job，Job使用并发数量控制Pod，Pod再定�
 Kubernetes中组合对象，类似于面向对象编程中的继承，即不破坏父对象的功能，又扩展了自己领域场景中的功能，在API层面也简单了，只需要处理自己扩展的功能即可，比在一个对象上做加法进入逻辑判断要优雅很多。
 
 2. Job 和 CronJob 的具体应用场景有哪些？能够解决什么样的问题？
-Job与CronJob分别对应一次性调用的任务与周期性定时任务；前者任务只运行一次，比如用在手工触发的场景如数据库备份、恢复与还原，数据同步，安全检查，巡检等；后者用于定时任务，非手工触发，由CronJobController每隔10s遍历需要执行的CronJob，同样也使用在如数据库备份、恢复与还原、数据同步、安全检查、定期巡检以及所有周期性的运维任务。
-Job与CronJob解决了任务的管理，如执行超时、失败尝试、执行数量与并行数量、任务结果记录等等，方便对任务执行的监控与管理；另外，Pod解决了批处理任务关联打包统一调度，容器解决了任务运行时环境。</p>2022-07-20</li><br/><li><span>Geek_b9dad2</span> 👍（18） 💬（1）<p>课外小贴士里第4条和第6条感觉是有冲突的，这个怎么理解呢？</p>2022-07-20</li><br/><li><span>花花大脸猫</span> 👍（15） 💬（1）<p>不得不服这个设计，为后续扩展带来了无限的可能，而且又不影响现有的pod体系功能！原来面向对象的思想还能在YAML中这么用。</p>2022-07-29</li><br/><li><span>三溪</span> 👍（7） 💬（5）<p>我想补充一下关于job配置的一个细节，大家可能复制黏贴罗老师的配置所以不会发现这个问题。
-job.spec.containers.template.spec.containers.image是不能指定镜像版本号的，只能指定镜像：完整的镜像:版本号只能由pod定义，否则会从互联网拉取镜像，如果能联网当然没事，离线环境会直接报错无法拉取镜像，虽然你本地确实存在该版本的镜像且imagePullPolicy设置为Never或IfNotPresent。
-比如我是离线环境，job里image配置为：- image: busybox:1.35.0，那么就会报错无法拉取镜像。</p>2022-07-28</li><br/><li><span>Geek_7ba156</span> 👍（5） 💬（1）<p>666，超爱这种讲课方式。老师你一定要多出课啊，笔芯~</p>2023-02-08</li><br/><li><span>Sports</span> 👍（5） 💬（2）<p>终于知道老师昵称的由来了</p>2022-07-20</li><br/><li><span>aoe</span> 👍（4） 💬（1）<p>原来一直奇怪为什么有那么多spec、template不停的嵌套？今天终于明白了：不同层级自己描述自己的，相互不影响，不合陌生人说话</p>2022-08-10</li><br/><li><span>密码123456</span> 👍（4） 💬（3）<p>Command 用双引号里写命令，不能有空格。</p>2022-07-20</li><br/><li><span>Demon.Lee</span> 👍（2） 💬（2）<p>最近在把业务服务迁移到 Kubernetes 上部署，其中就有一个定时服务，包含 30 个定时 job。我想着直接搬到 Kubernetes 的 CronJob 上来，这样开发团队就少维护一个第三方的开源框架了（用于定时任务调度）。
+   Job与CronJob分别对应一次性调用的任务与周期性定时任务；前者任务只运行一次，比如用在手工触发的场景如数据库备份、恢复与还原，数据同步，安全检查，巡检等；后者用于定时任务，非手工触发，由CronJobController每隔10s遍历需要执行的CronJob，同样也使用在如数据库备份、恢复与还原、数据同步、安全检查、定期巡检以及所有周期性的运维任务。
+   Job与CronJob解决了任务的管理，如执行超时、失败尝试、执行数量与并行数量、任务结果记录等等，方便对任务执行的监控与管理；另外，Pod解决了批处理任务关联打包统一调度，容器解决了任务运行时环境。</p>2022-07-20</li><br/><li><span>Geek_b9dad2</span> 👍（18） 💬（1）<p>课外小贴士里第4条和第6条感觉是有冲突的，这个怎么理解呢？</p>2022-07-20</li><br/><li><span>花花大脸猫</span> 👍（15） 💬（1）<p>不得不服这个设计，为后续扩展带来了无限的可能，而且又不影响现有的pod体系功能！原来面向对象的思想还能在YAML中这么用。</p>2022-07-29</li><br/><li><span>三溪</span> 👍（7） 💬（5）<p>我想补充一下关于job配置的一个细节，大家可能复制黏贴罗老师的配置所以不会发现这个问题。
+   job.spec.containers.template.spec.containers.image是不能指定镜像版本号的，只能指定镜像：完整的镜像:版本号只能由pod定义，否则会从互联网拉取镜像，如果能联网当然没事，离线环境会直接报错无法拉取镜像，虽然你本地确实存在该版本的镜像且imagePullPolicy设置为Never或IfNotPresent。
+   比如我是离线环境，job里image配置为：- image: busybox:1.35.0，那么就会报错无法拉取镜像。</p>2022-07-28</li><br/><li><span>Geek_7ba156</span> 👍（5） 💬（1）<p>666，超爱这种讲课方式。老师你一定要多出课啊，笔芯~</p>2023-02-08</li><br/><li><span>Sports</span> 👍（5） 💬（2）<p>终于知道老师昵称的由来了</p>2022-07-20</li><br/><li><span>aoe</span> 👍（4） 💬（1）<p>原来一直奇怪为什么有那么多spec、template不停的嵌套？今天终于明白了：不同层级自己描述自己的，相互不影响，不合陌生人说话</p>2022-08-10</li><br/><li><span>密码123456</span> 👍（4） 💬（3）<p>Command 用双引号里写命令，不能有空格。</p>2022-07-20</li><br/><li><span>Demon.Lee</span> 👍（2） 💬（2）<p>最近在把业务服务迁移到 Kubernetes 上部署，其中就有一个定时服务，包含 30 个定时 job。我想着直接搬到 Kubernetes 的 CronJob 上来，这样开发团队就少维护一个第三方的开源框架了（用于定时任务调度）。
 
 但我发现一个问题，导致迁移不了，就是触发频率：kubernetes cronjob 只支持到分钟，不能到秒级调度，即最高是每分钟运行一次任务；但他们的定时任务，有些是每 10 秒运行一次，15 秒一次，或 30 秒一次。
 
 这种分钟内的调度，搞不定，感觉非常遗憾。
 
 我在想，标准的 cron 只支持到分钟级别，那么分钟级别以内的定时调度呢？可能就是常驻进程了。</p>2022-12-29</li><br/><li><span>西门吹牛</span> 👍（2） 💬（1）<p>组合的方式能少写很多代码，Java 很多中间件都这么搞，组合优于继承，基于接口而非实现编程，自由组合</p>2022-07-25</li><br/><li><span>pyhhou</span> 👍（2） 💬（4）<p>思考题：
+
 1. 大的组件有小的组件拼接而成，这样做的其中一个好处就是低耦合，每个组件都是独立的个体，去操作一个组件时不需要理会其他组件的具体内部细节，直接拼接在一起即可。这么做也非常易于维护，比如 Job 中想要更换 Pod 也不需要更改 Job 本身的一些属性
 
 2. Job 主要用在一些 one-off 的场景，就是需要去处理一些临时的一次性的情况，比如 service 的 setup，文件的构建等等。而 Cronjob 主要用途是去完成一些需要定期更新的任务，比如 一些 daily 的 pipeline，定时的检查，检验系统安全等等
 
-
 有个问题请教老师，在 sleep-job 的那个例子中，不太理解为什么有时候在 Job 完成后，其中的一个 Pod 会被 Terminate 掉，然后最后只剩 3 个 Pod？用课程中的 YAML 文件试了几次，这种情况有时会发生有时不会，不知道是不是跟 YAML 中 Job 设置的字段有关？
 
 :~&#47;k8s-testing$ kubectl get pod
-NAME              READY   STATUS        RESTARTS   AGE
-echo-job-qqq9k    0&#47;1     Completed     0          7m23s
-ngx               1&#47;1     Running       0          11d
-sleep-job-9ktxs   0&#47;1     Completed     0          17s
-sleep-job-sndgm   0&#47;1     Completed     0          17s
-sleep-job-tpbw7   1&#47;1     Terminating   0          9s
-sleep-job-v8x8s   0&#47;1     Completed     0          12s</p>2022-07-23</li><br/><li><span>蓝色天空</span> 👍（1） 💬（1）<p>只启动2个job问题是超时了
+NAME READY STATUS RESTARTS AGE
+echo-job-qqq9k 0&#47;1 Completed 0 7m23s
+ngx 1&#47;1 Running 0 11d
+sleep-job-9ktxs 0&#47;1 Completed 0 17s
+sleep-job-sndgm 0&#47;1 Completed 0 17s
+sleep-job-tpbw7 1&#47;1 Terminating 0 9s
+sleep-job-v8x8s 0&#47;1 Completed 0 12s</p>2022-07-23</li><br/><li><span>蓝色天空</span> 👍（1） 💬（1）<p>只启动2个job问题是超时了
 修改activeDeadlineSeconds 设置即可</p>2022-12-02</li><br/><li><span>岁月长</span> 👍（1） 💬（2）<p>运行sleed-job 的时候发现无法达到预期的 4个，有时候是2，有时候是3；修改了 backoffLimit :10 之后才达到预期。
 想问下老师，为什么运行会出现这种情况呢？运行也没有超过设置的超时的时间</p>2022-09-08</li><br/><li><span>武安君</span> 👍（1） 💬（1）<p>层层套娃！小接口大组合，既能解耦，又能灵活组合在不破坏细粒度逻辑下实现更多的功能！</p>2022-08-18</li><br/><li><span>lesserror</span> 👍（1） 💬（1）<p>老师，有几个小问题：
 
 1. 我用的是 zsh 如果 使用 kubectl create job echo-job --image=busybox $out
-   会报这个错误：error: Invalid dry-run value (client -o yaml). Must be &quot;none&quot;, &quot;server&quot;, or &quot;client&quot;. 
+   会报这个错误：error: Invalid dry-run value (client -o yaml). Must be &quot;none&quot;, &quot;server&quot;, or &quot;client&quot;.
    必须要这样使用才行：kubectl create job echo-job --image=busybox --dry-run=client -o yaml ，这是什么原因呢？
 
 2. 文中说：“不直接和 apiserver 打交道”。怎么听你的语音是apiversion呢？
 
 3. 我们在job.yml文化中定义的Pod的name是echo-job，然后为什么还要加一个随机字符串呢？ 这里的名字是我们自定义的吧，和job自动管理好像关系不大吧？</p>2022-07-30</li><br/>
+
 </ul>

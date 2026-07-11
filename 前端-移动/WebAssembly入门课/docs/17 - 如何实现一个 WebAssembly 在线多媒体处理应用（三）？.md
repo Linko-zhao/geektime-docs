@@ -27,7 +27,7 @@ extern "C" {
   EMSCRIPTEN_KEEPALIVE auto* cppGetDataPtr() { return data; }
   // 滤镜函数；
   EMSCRIPTEN_KEEPALIVE void cppConvFilter(
-    int width, 
+    int width,
     int height,
     int divisor) {
     const int half = std::floor(KH / 2);
@@ -42,7 +42,7 @@ extern "C" {
             g += data[cpx + 1] * kernel[cy][cx];
             b += data[cpx + 2] * kernel[cy][cx];
           }
-        }                 
+        }
         data[px + 0] = ((r / divisor) > 255) ? 255 : ((r / divisor) < 0) ? 0 : r / divisor;
         data[px + 1] = ((g / divisor) > 255) ? 255 : ((g / divisor) < 0) ? 0 : g / divisor;
         data[px + 2] = ((b / divisor) > 255) ? 255 : ((b / divisor) < 0) ? 0 : b / divisor;
@@ -87,10 +87,10 @@ emcc dip.cc -s WASM=1 -O3 --no-entry -o dip.wasm
 ```
 let bytes = await (await fetch('./dip.wasm')).arrayBuffer();
 let { instance, module } = await WebAssembly.instantiate(bytes);
-let { 
-  cppConvFilter, 
-  cppGetkernelPtr, 
-  cppGetDataPtr, 
+let {
+  cppConvFilter,
+  cppGetkernelPtr,
+  cppGetDataPtr,
   memory } = instance.exports;
 ```
 
@@ -224,15 +224,16 @@ const records = []
 let lastDrawTime = 0
 
 function draw() {
-    if (lastDrawTime !== 0) {
-        const duration = Date.now() - lastDrawTime
-        records.push(duration)
-    }
-    lastDrawTime = Date.now()
+if (lastDrawTime !== 0) {
+const duration = Date.now() - lastDrawTime
+records.push(duration)
+}
+lastDrawTime = Date.now()
 
     &#47;&#47;...
 
     setTimeout(draw, 0)
+
 }
 这样算出来的帧率，在不开启渲染的情况下为170FPS左右，js渲染为80FPS左右，wasm渲染为95FPS左右，好像性能提升并不是很明显。
 

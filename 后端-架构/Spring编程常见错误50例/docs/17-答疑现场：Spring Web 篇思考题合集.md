@@ -71,14 +71,14 @@ public String hi2(@RequestParam("name") String[] name){
                   <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
-                 </exclusion> 
+                 </exclusion>
             </exclusions>
         </dependency>
         <!-- 使用 Jetty -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
-        </dependency> 
+        </dependency>
 ```
 
 经过上面的修改后，我们再次运行测试程序，我们会发现 Content-Type 确实可以设置成我们想要的样子，具体如下：
@@ -125,7 +125,7 @@ public void setContentType(String contentType)
 MediaType selectedMediaType = null;
 MediaType contentType = outputMessage.getHeaders().getContentType();
 boolean isContentTypePreset = contentType != null && contentType.isConcrete();
-if (isContentTypePreset) {    
+if (isContentTypePreset) {
     selectedMediaType = contentType;
 } else {
 //根据请求 Accept 头和注解指定的返回类型（RequestMapping#produces）协商用何种 MediaType.
@@ -275,13 +275,13 @@ private void internalDoFilter(ServletRequest request,
             // 执行filter
             filter.doFilter(request, response, this);
             // 省略非关键代码
-        } 
+        }
         // 省略非关键代码
         return;
     }
         // 执行真正实际业务
         servlet.service(request, response);
-    } 
+    }
     // 省略非关键代码
 }
 ```
@@ -385,7 +385,7 @@ private String generateLoginPageHtml(HttpServletRequest request, boolean loginEr
       boolean logoutSuccess) {
    String errorMsg = "Invalid credentials";
    //省略部分非关键代码
- 
+
    StringBuilder sb = new StringBuilder();
    sb.append("<!DOCTYPE html>\n"
          + "<html lang=\"en\">\n"

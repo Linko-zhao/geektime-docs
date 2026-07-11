@@ -103,42 +103,43 @@ Hash表的物理存储其实是一个数组，如果我们能够根据Key计算�
 
 方法2：计算两个链表的长度，谁长谁先“往前走”，待长链表未查看长度等于短链表是，两两元素比较，遍历完未出现相同时，则没有合并
 
-方法3：直接比较两个链表的最后一个元素，相等即合并</p>2019-11-20</li><br/><li><span>Geek_9c3134</span> 👍（57） 💬（7）<p>老师 你这问题我问了别人  发现只回答到了数组下标  没有人讲到内存  还说我的问题太简单了</p>2019-11-28</li><br/><li><span>breezeQian</span> 👍（13） 💬（3）<p>步骤一：将长度短的链表的元素构造成哈希表，key是指针，value是节点值。
+方法3：直接比较两个链表的最后一个元素，相等即合并</p>2019-11-20</li><br/><li><span>Geek_9c3134</span> 👍（57） 💬（7）<p>老师 你这问题我问了别人 发现只回答到了数组下标 没有人讲到内存 还说我的问题太简单了</p>2019-11-28</li><br/><li><span>breezeQian</span> 👍（13） 💬（3）<p>步骤一：将长度短的链表的元素构造成哈希表，key是指针，value是节点值。
 步骤二：遍历较长链表找出合并的节点</p>2019-11-20</li><br/><li><span>晶晶</span> 👍（8） 💬（2）<p>是我听过的课程里面觉得最让我思路清晰的课程~所以先打卡沙发一下☺</p>2019-11-20</li><br/><li><span>Geek_ac779f</span> 👍（7） 💬（2）<p>老师，为什么有些数据结构的内存空间不要求是连续的？都是连续的内存空间不好吗。既然连续和不连续的内存空间都可以实现这些数据结构，使用不连续的内存空间实现有什么好处呢，利用率更高吗。为什么利用率更高呢，不都是以字节为基本单位吗</p>2019-11-27</li><br/><li><span>Better me</span> 👍（2） 💬（2）<p>老师，文中这段话“想在 b 和 c 之间插入一个元素 x，只需要将 b 指向 c 的指针修改为指向 x，然后将 x 的指针指向 c 就可以了”感觉反过来说更合理一些，如果按以上顺序代码实现会出现指针丢失内存泄漏的情况吧。</p>2019-11-30</li><br/><li><span>郭刚</span> 👍（2） 💬（2）<p>类似Oracle中的hash join的算法</p>2019-11-20</li><br/><li><span>恺撒之剑</span> 👍（1） 💬（1）<p>课程中的数组示意图，长度为10的整数数组，地址从1000开始，下标为9的数组对应的起始地址应该为1036，而不是1039</p>2019-11-26</li><br/><li><span>远心</span> 👍（1） 💬（2）<p>实现了同时遍历两个单向链表的方法，欢迎拍砖：https:&#47;&#47;github.com&#47;Huan-Rong&#47;geektime-backend-technology-basics&#47;blob&#47;master&#47;sources&#47;2-the-time-complexity-of-hash-table&#47;src&#47;main&#47;java&#47;site&#47;blbc&#47;MergeDetect.java</p>2019-11-20</li><br/><li><span>幸福来敲门</span> 👍（1） 💬（3）<p>由于每个整型数据占据 4 个字节的内存空间，因此整个数组的内存空间地址是 0x1000～0x1039，根据这个，我们就可以轻易算出数组中每个数据的内存下标地址。利用这个特性，我们只要知道了数组下标，也就是数据在数组中的位置，比如下标 2，就可以计算得到这个数据在内存中的位置 0x1008。
 
-请问这个内存16进制地址是怎么得出来的？ 0x1000～0x1039 
+请问这个内存16进制地址是怎么得出来的？ 0x1000～0x1039
 
 </p>2019-11-20</li><br/><li><span>丁丁历险记</span> 👍（1） 💬（2）<p>基于单向链表的特性，  为链一的地址建立hash  然后便利链表2  存在就返回，指到null 了就没有合并。
 
 下面写伪码实现 手机上输入的，就不整理了
-p1  = &amp;p1_head
-while  p1
+p1 = &amp;p1_head
+while p1
 hsets[p1] =*p1
-p1 = *p1 箭头 
+p1 = *p1 箭头
 next
 
 p2 = &amp;p2_head
 while(p2)
-if  isset hsets  p2   return   
-p2  = *p2 箭头next
+if isset hsets p2 return  
+p2 = *p2 箭头next
 </p>2019-11-20</li><br/><li><span>杨光</span> 👍（0） 💬（1）<p>刚刚做过这题，C语言实现
 
 &#47;**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     struct ListNode *next;
- * };
- *&#47;
-struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
-    if(headA == NULL || headB == NULL) return NULL;
-    struct ListNode *pA = headA, *pB = headB;
-    while(pA != pB) {
-        pA = pA == NULL ? headB : pA-&gt;next;
-        pB = pB == NULL ? headA : pB-&gt;next;
-    }
-    return pA;
-}</p>2020-01-28</li><br/><li><span>Bug? Feature!</span> 👍（19） 💬（0）<p>思路特别清晰，但是都是点到为止呀，感觉差点啥，哈哈，可能后面的文章会具体介绍，更加详细。</p>2019-11-20</li><br/><li><span>　扬帆丶启航　</span> 👍（18） 💬（4）<p>计算两个链表的长度，用长的链表减去短的链表，计算出差值，长的链表先向后移动差值的个数，然后两个链表再同时移动，判断一下个节点的地址是否相同。</p>2019-11-20</li><br/><li><span>乘坐Tornado的线程魔法师</span> 👍（8） 💬（1）<p>思考题：第一步：分别遍历针对两个链表A、B（先不考虑长度差）。第二步：如果A链表先走到了末尾那么把A链表的指针指向B链表的第一个节点，继续遍历B链表；B链表的原始指针继续做遍历不变，走到末尾后，将B链表的指针指向A链表的第一个节点，继续遍历A链表。第三步：两个链表继续做遍历，如果分别指向的节点数值（地址）相同，那么这两个链表就是合并链表，这个节点就为合并的第一个节点。
+
+- Definition for singly-linked list.
+- struct ListNode {
+-     int val;
+-     struct ListNode *next;
+- };
+  *&#47;
+  struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
+  if(headA == NULL || headB == NULL) return NULL;
+  struct ListNode *pA = headA, *pB = headB;
+  while(pA != pB) {
+  pA = pA == NULL ? headB : pA-&gt;next;
+  pB = pB == NULL ? headA : pB-&gt;next;
+  }
+  return pA;
+  }</p>2020-01-28</li><br/><li><span>Bug? Feature!</span> 👍（19） 💬（0）<p>思路特别清晰，但是都是点到为止呀，感觉差点啥，哈哈，可能后面的文章会具体介绍，更加详细。</p>2019-11-20</li><br/><li><span>　扬帆丶启航　</span> 👍（18） 💬（4）<p>计算两个链表的长度，用长的链表减去短的链表，计算出差值，长的链表先向后移动差值的个数，然后两个链表再同时移动，判断一下个节点的地址是否相同。</p>2019-11-20</li><br/><li><span>乘坐Tornado的线程魔法师</span> 👍（8） 💬（1）<p>思考题：第一步：分别遍历针对两个链表A、B（先不考虑长度差）。第二步：如果A链表先走到了末尾那么把A链表的指针指向B链表的第一个节点，继续遍历B链表；B链表的原始指针继续做遍历不变，走到末尾后，将B链表的指针指向A链表的第一个节点，继续遍历A链表。第三步：两个链表继续做遍历，如果分别指向的节点数值（地址）相同，那么这两个链表就是合并链表，这个节点就为合并的第一个节点。
 
 思想：通过指针的变换指向，很好滴解决的长度差的问题。消除两个链表的长度差带来的影响，</p>2019-11-20</li><br/>
 </ul>

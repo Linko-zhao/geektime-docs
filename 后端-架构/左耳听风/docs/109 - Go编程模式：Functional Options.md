@@ -78,7 +78,7 @@ func NewServer(addr string, port int, conf *Config) (*Server, error) {
 }
 
 //Using the default configuratrion
-srv1, _ := NewServer("localhost", 9000, nil) 
+srv1, _ := NewServer("localhost", 9000, nil)
 
 conf := ServerConfig{Protocol:"tcp", Timeout: 60*time.Duration}
 srv2, _ := NewServer("locahost", 9000, &conf)
@@ -114,7 +114,7 @@ func (sb *ServerBuilder) Create(addr string, port int) *ServerBuilder {
 }
 
 func (sb *ServerBuilder) WithProtocol(protocol string) *ServerBuilder {
-  sb.Server.Protocol = protocol 
+  sb.Server.Protocol = protocol
   return sb
 }
 
@@ -239,7 +239,7 @@ s3, _ := NewServer("0.0.0.0", 8080, Timeout(300*time.Second), MaxConns(1000))
 <li><span>汪辉</span> 👍（9） 💬（0）<p>之前看到mq的初始化可选配置的时候有用到Functional Options这个模式，没想到在这里找到源头了。</p>2021-01-19</li><br/><li><span>Geek_a754be</span> 👍（7） 💬（1）<p>之前在公司自研的微服务框架里面看到大规模使用，原来有个学名叫Functional Options</p>2021-02-09</li><br/><li><span>萧</span> 👍（3） 💬（0）<p>太强了，受益匪浅</p>2021-02-18</li><br/><li><span>后青春期的Keats</span> 👍（0） 💬（0）<p>雅，太雅了
 必要参数放在入参列表，非必要参数以函数式编程可变参的形式传入。</p>2024-08-29</li><br/><li><span>紫陌桑田</span> 👍（0） 💬（0）<p>各种初始化对象时用的特别多，相比于 builder 模式，省了不少代码，而且更为优雅</p>2024-07-11</li><br/><li><span>Geek_sevn</span> 👍（0） 💬（0）<p>如沐春风</p>2023-07-30</li><br/><li><span>辰星</span> 👍（0） 💬（0）<p>太强了</p>2022-12-04</li><br/><li><span>拉欧</span> 👍（0） 💬（0）<p>option 意味选项，本身就有函数的意思</p>2022-04-14</li><br/><li><span>Geek_Huahui</span> 👍（0） 💬（0）<p>真的牛逼</p>2022-03-14</li><br/><li><span>今年也没有猫</span> 👍（0） 💬（0）<p>简单理解  就是一种闭包的组织形式。</p>2022-02-04</li><br/><li><span>方勇(gopher)</span> 👍（0） 💬（0）<p>确实很多中间件的传参都这么设计，有时候可能要考虑，函数放在client端，还是server端</p>2021-12-17</li><br/><li><span>青阳</span> 👍（0） 💬（0）<p>和函数科里化是一回事吗</p>2021-11-12</li><br/><li><span>图个啥呢</span> 👍（0） 💬（0）<p>厉害了！</p>2021-06-25</li><br/><li><span>👻 小二</span> 👍（0） 💬（0）<p>这种接口也很友好， 就是苦了作者
 
-```go
+````go
 package main
 
 import (
@@ -308,3 +308,4 @@ func main() {
 
 ```</p>2021-06-10</li><br/><li><span>轻飘飘过</span> 👍（0） 💬（0）<p>对比js的...解构和函数式编程的compose?</p>2021-05-20</li><br/>
 </ul>
+````

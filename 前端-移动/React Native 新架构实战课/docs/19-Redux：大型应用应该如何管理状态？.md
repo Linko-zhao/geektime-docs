@@ -14,7 +14,7 @@
 
 至于以前被大家吐槽最多的，Redux 模板代码多的问题，现在也可以使用 Redux Toolkit 来解决一部分了。Redux 官方是这么说的：
 
-> We want *all* Redux users to write their Redux code with Redux Toolkit, because it simplifies your code *and* eliminates many common Redux mistakes and bugs!  
+> We want _all_ Redux users to write their Redux code with Redux Toolkit, because it simplifies your code _and_ eliminates many common Redux mistakes and bugs!  
 > 我们希望所有的 Redux 开发者都能用 Redux Toolkit 来写代码，因为它能简化代码，减少 BUG 和消除常见的对 Redux 的误解。
 
 所以，今天这节课，我们就一起探究 Redux/Redux Toolkit 到底何时用、怎么用。
@@ -93,14 +93,17 @@ Redux 的全局状态可以只有一个，也可以有多个，状态的值既�
 
 ```json
 {
-  todos: [{
-    text: 'Eat food',
-    completed: true
-  }, {
-    text: 'Exercise',
-    completed: false
-  }],
-  visibilityFilter: 'SHOW_COMPLETED'
+  "todos": [
+    {
+      "text": "Eat food",
+      "completed": true
+    },
+    {
+      "text": "Exercise",
+      "completed": false
+    }
+  ],
+  "visibilityFilter": "SHOW_COMPLETED"
 }
 ```
 
@@ -212,7 +215,7 @@ Redux Toolkit 的本质是提供了一些**工具函数**，简化纯手写 Redu
 
 - configureStore：管理所有全局状态的函数，它的返回值是一个 Store 对象；
 - createSlice：管理分片全局状态的函数，其返回值是一个分片对象，该对象上最重要的两个属性是：
-  
+
   - actions：创建分片 action 的函数集合；
   - reducer：已经创建好的分片 reducer。
 
@@ -326,10 +329,10 @@ const counterSlice = createSlice({
   },
 });
 
-console.log(counterSlice.actions.increment(1)) 
+console.log(counterSlice.actions.increment(1))
 // {"payload": 1, "type": "counter/increment"}
 
-console.log(counterSlice.reducer) 
+console.log(counterSlice.reducer)
 /*
 function reducer(state, action) {
   if (!_reducer) _reducer = buildReducer();

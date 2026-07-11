@@ -67,12 +67,12 @@ pub fn key_name_snapshot() -> String {
 
 ```plain
   pub fn append(&mut self, entrys: &Vec<Entry>) -> RaftResult<()> {
-        
+
         // 如果 Entry 为空，则不保存
         if entrys.len() == 0 {
             return Ok(());
         }
-      
+
         // 判断 Entry 列表中的 index 是否符合规范
         let entry_first_index = entrys[0].index;
 
@@ -111,7 +111,7 @@ pub fn key_name_snapshot() -> String {
             // 更新 last index
             self.save_last_index(entry.index).unwrap();
         }
-        
+
         // 持久化存储未 commit 的 index
         self.save_uncommit_index();
         return Ok(());
@@ -168,12 +168,12 @@ pub fn save_conf_state(&self, cs: ConfState) -> Result<(), String> {
         // 获取所有的 Entry，整理成一份数据
         let all_data = self.rocksdb_engine_handler.read_all();
         sns.set_data(serialize(&all_data).unwrap());
-         
+
         // 将快照数据再持久化保存的一个固定的快照 Key 中。
         self.save_snapshot_data(sns);
         self.snapshot_metadata = meta.clone();
     }
-    
+
     // 读取 HardState 和ConfState，构建快照的元数据
     pub fn create_snapshot_metadata(&self) -> SnapshotMetadata {
         let hard_state = self.hard_state();
@@ -321,11 +321,11 @@ match send_raft_message(self.client_poll.clone(), vec![addr.clone()], request).a
         &self,
         request: Request<SendRaftMessageRequest>,
     ) -> Result<Response<SendRaftMessageReply>, Status> {
-       
+
         // 将 SendRaftMessageRequest 中的 message 字段 decode 为 Message 结构体
        let message = raftPreludeMessage::decode(request.into_inner().message.as_ref())
             .map_err(|e| Status::invalid_argument(e.to_string()))?;
-        
+
         // 将Message 传递给 Raft 状态机去执行 Raft 协议算法的逻辑
         // 这部分在第十章会细讲，可以暂时忽略
         match self

@@ -27,13 +27,17 @@ React里内建了一套名为**合成事件**（SyntheticEvent）的事件系统
 
 ```javascript
 const Component = () => {
-  const handleClick = () => {/* ...省略 */};
-  const handleKeyDown = evt => {/* ...省略 */};
+  const handleClick = () => {
+    /* ...省略 */
+  };
+  const handleKeyDown = (evt) => {
+    /* ...省略 */
+  };
   return (
     <>
       {/* 这次是JSX了 */}
       <button onClick={handleClick}>按钮</button>
-      <input type="text" onKeyDown={evt => handleKeyDown(evt)} />
+      <input type="text" onKeyDown={(evt) => handleKeyDown(evt)} />
     </>
   );
 };
@@ -60,35 +64,40 @@ const Component = () => {
 2. 在JS中赋值给DOM元素的事件处理属性：
 
 ```javascript
-document.getElementById('btn').onclick = handleClick;
+document.getElementById("btn").onclick = handleClick;
 ```
 
 3. 在JS中调用DOM元素的 `addEventListener` 方法（需要在合适时机调用 `removeEventListener` 以防内存泄漏）：
 
 ```javascript
-document.getElementById('btn').addEventListener('click', handleClick);
+document.getElementById("btn").addEventListener("click", handleClick);
 ```
 
 而合成事件不能通过 `addEventListener` 方法监听，它的JSX写法等同于JS写法：
 
 ```javascript
-const Button = () => (<button onClick={handleClick}>按钮</button>);
+const Button = () => <button onClick={handleClick}>按钮</button>;
 // 编译为
-const Button = () => React.createElement('button', {
-  onClick: handleClick
-}, '按钮');
+const Button = () =>
+  React.createElement(
+    "button",
+    {
+      onClick: handleClick,
+    },
+    "按钮",
+  );
 ```
 
 有时我们需要以捕获方式监听事件，在原生事件中以`addEventListener` 方法加入第三个参数：
 
 ```javascript
-div.addEventListener('click', handleClick, true);
+div.addEventListener("click", handleClick, true);
 ```
 
 而在React合成事件中，则需要用在事件属性后面加一个 `Capture` 后缀：
 
 ```javascript
-() => (<div onClickCapture={handleClick}>...</div>);
+() => <div onClickCapture={handleClick}>...</div>;
 ```
 
 ### 特定事件的行为不同
@@ -112,7 +121,7 @@ React合成事件规范化了一些在各个浏览器间行为不一致，甚至
 对于下面这个原生DOM事件，它的当前目标（ `event.currentTarget` ）是很明确的，就是ID为 `btn` 的按钮：
 
 ```javascript
-document.getElementById('btn').addEventListener('click', handleClick);
+document.getElementById("btn").addEventListener("click", handleClick);
 ```
 
 但合成事件就不一样了！
@@ -122,10 +131,10 @@ document.getElementById('btn').addEventListener('click', handleClick);
 看一下这几个值：
 
 ```javascript
-evt.currentTarget
-evt.target
-evt.nativeEvent.currentTarget
-evt.nativeEvent.target
+evt.currentTarget;
+evt.target;
+evt.nativeEvent.currentTarget;
+evt.nativeEvent.target;
 ```
 
 可以看到，不出意外地，两种事件的 `target` 都是按钮元素本身，合成事件的 `currentTarget` 也是按钮元素，这是符合W3c规范的；但原生事件的 `currentTarget` 不再是按钮，而是React应用的根容器DOM元素 `<div id="root"></div>` ：
@@ -142,20 +151,22 @@ evt.nativeEvent.target
 
 ```javascript
 const KanbanNewCard = ({ onSubmit }) => {
-  const [title, setTitle] = useState('');
-  const handleChange = (evt) => {
-    setTitle(evt.target.value);
-  };
+  const [title, setTitle] = useState("");
+  const handleChange = (evt) => {
+    setTitle(evt.target.value);
+  };
   // ...省略
 
-  return (
-    <li>
-      <h3>添加新卡片</h3>
-      <div>
-        <input type="text" value={title} onChange={handleChange} />
-      </div>
-    </li>
-  );
+  return (
+    <li>
+            <h3>添加新卡片</h3>     {" "}
+      <div>
+                <input type="text" value={title} onChange={handleChange} />   
+         {" "}
+      </div>
+         {" "}
+    </li>
+  );
 };
 ```
 
@@ -169,25 +180,32 @@ const KanbanNewCard = ({ onSubmit }) => {
 
 ```javascript
 const KanbanNewCard = ({ onSubmit }) => {
-  const [title, setTitle] = useState('');
-  const handleChange = (evt) => {
-    setTitle(evt.target.value);
-  };
-  const handleKeyDown = (evt) => {
-    if (evt.key === 'Enter') {
-      onSubmit(title);
-    }
-  };
+  const [title, setTitle] = useState("");
+  const handleChange = (evt) => {
+    setTitle(evt.target.value);
+  };
+  const handleKeyDown = (evt) => {
+    if (evt.key === "Enter") {
+      onSubmit(title);
+    }
+  };
 
-  return (
-    <li>
-      <h3>添加新卡片</h3>
-      <div>
-        <input type="text" value={title}
-          onChange={handleChange} onKeyDown={handleKeyDown} />
-      </div>
-    </li>
-  );
+  return (
+    <li>
+            <h3>添加新卡片</h3>     {" "}
+      <div>
+               {" "}
+        <input
+          type="text"
+          value={title}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        />
+             {" "}
+      </div>
+         {" "}
+    </li>
+  );
 };
 ```
 
@@ -218,7 +236,7 @@ const Form = () => {
 如果你对第3节课末尾提出的需求还有印象，这个坑我们终于要填了。
 
 > 在三个看板列间，还有进一步的交互。
-> 
+>
 > 1. 对于任意看板列里的任意卡片，可以用鼠标拖拽到其他的看板列；
 > 2. 在释放拖拽时，被拖拽的卡片插入到目标看板列，并从原看板列中移除。
 
@@ -240,28 +258,27 @@ const Form = () => {
 
 ```javascript
 const KanbanColumn = ({ children, bgColor, title }) => {
-  return (
-    <section
-      onDragOver={(evt) => {
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'move';
-      }}
-      onDragLeave={(evt) => {
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'none';
-      }}
-      onDrop={(evt) => {
-        evt.preventDefault();
-      }}
-      onDragEnd={(evt) => {
-        evt.preventDefault();
-      }}
-      css={css`...省略`}
-    >
-      <h2>{title}</h2>
-      <ul>{children}</ul>
-    </section>
-  );
+  return (
+    <section
+      onDragOver={(evt) => {
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = "move";
+      }}
+      onDragLeave={(evt) => {
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = "none";
+      }}
+      onDrop={(evt) => {
+        evt.preventDefault();
+      }}
+      onDragEnd={(evt) => {
+        evt.preventDefault();
+      }}
+      css={css`...省略`}
+    >
+            <h2>{title}</h2>      <ul>{children}</ul>   {" "}
+    </section>
+  );
 };
 ```
 
@@ -328,7 +345,7 @@ const KanbanColumn = ({ children, bgColor, title }) => {
  const KanbanColumn = ({
    children,
    bgColor,
-   title, 
+   title,
    setIsDragSource = () => {},
    setIsDragTarget = () => {},
 +  onDrop
@@ -436,9 +453,9 @@ function App() {
 
 ```javascript
 useEffect(() => {
-  window.addEventListener('resize', handleResize);
+  window.addEventListener("resize", handleResize);
   return function cleanup() {
-    window.removeEventListener('resize', handleResize);
+    window.removeEventListener("resize", handleResize);
   };
 }, []);
 ```

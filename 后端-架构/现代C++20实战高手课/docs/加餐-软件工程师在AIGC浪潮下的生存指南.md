@@ -229,8 +229,8 @@ struct Future {
 
 > No, it’s not working.  
 > Future&lt;std::string&gt; doesn’t have constructor of std::future&lt;std::string&gt;.  
-> Future isn’t std::future  
->   
+> Future isn’t std::future
+>
 > Please give me the new complete code
 
 ChatGPT很快给出了后面的回复。
@@ -336,7 +336,7 @@ int main() {
 错误    C2664    “_Ret std::_Func_class<_Ret,const std::string &>::operator ()(const std::string &) const”: 无法将参数 1 从“T”转换为“const std::string &”    cg-cr-demo    main.cpp    58    
 错误    C2664    “_Ret std::_Func_class<_Ret,const std::string &>::operator ()(const std::string &) const”: 无法将参数 1 从“T”转换为“const std::string &”    cg-cr-demo    main.cpp    70    
 错误    C2665    “std::vector<Future<void>,std::allocator<Future<void>>>::push_back”: 没有重载函数可以转换所有参数类型    cg-cr-demo    main.cpp    62    
-错误    C2440    “return”: 无法从“std::future<_Ty>”转换为“Future<std::string>”    cg-cr-demo    main.cpp    38    
+错误    C2440    “return”: 无法从“std::future<_Ty>”转换为“Future<std::string>”    cg-cr-demo    main.cpp    38   
 ```
 
 可以发现，ChatGPT生成的这段代码最大的问题就是围绕Coroutine和Promise的类型定义引发的各种参数和返回值的类型转换问题，更不用说代码自身的逻辑，根本就无法解决我们提出的问题。
@@ -361,7 +361,7 @@ int main() {
 
 ![](https://static001.geekbang.org/resource/image/85/7d/851a0a10643958886c9210ce47fab87d.jpg?wh=3721x2080)
 
-从上面的 *“ChatGPT with GPT-4与C++”* 一节就可以看出，如何准确地表达意图是一门学问，提示词（prompt）往往特别重要。总的来说，现阶段自然语言编程不能代替高级编程语言，因为后面这几个问题还无法解决。
+从上面的 _“ChatGPT with GPT-4与C++”_ 一节就可以看出，如何准确地表达意图是一门学问，提示词（prompt）往往特别重要。总的来说，现阶段自然语言编程不能代替高级编程语言，因为后面这几个问题还无法解决。
 
 第一，工程师如何精准地表达自己的“意图”，避免GPT错误理解意图，生成错误的结果。
 

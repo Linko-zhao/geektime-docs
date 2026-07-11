@@ -70,7 +70,7 @@ curl_easy_cleanup(curl);             // 清理句柄相关的资源
 ```
 // 回调函数的原型
 size_t write_callback(char* , size_t , size_t , void* );
- 
+
 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,        // 设置回调函数
   (decltype(&write_callback))      // decltype获取函数指针类型，显式转换
   [](char *ptr, size_t size, size_t nmemb, void *userdata)// lambda
@@ -102,7 +102,7 @@ make && make install
 ```
 #include <cpr/cpr.h>                            // 包含头文件
 
-auto res = cpr::Get(                           // GET请求    
+auto res = cpr::Get(                           // GET请求
            cpr::Url{"http://openresty.org"}   // 传递URL
 );
 ```

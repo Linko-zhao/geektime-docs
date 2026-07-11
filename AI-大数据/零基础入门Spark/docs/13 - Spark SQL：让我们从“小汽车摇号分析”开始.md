@@ -268,19 +268,20 @@ from pyspark.sql.functions import first, collect_list, mean, count, max
 import matplotlib.pyplot as plt
 
 def plot(res):
-    x = [x[&quot;multiplier&quot;] for x in res]
-    y = [y[&quot;cnt&quot;] for y in res]
-    plt.figure(figsize=(8, 5), dpi=100)
-    plt.xlabel(&#39;倍率&#39;)
-    plt.ylabel(&#39;人数&#39;)
-    plt.rcParams[&#39;font.sans-serif&#39;]=[&#39;SimHei&#39;] 
-    plt.rcParams[&#39;axes.unicode_minus&#39;]=False
-    plt.bar(x, y, width=0.5)
-    plt.xticks(x)
-    plt.show()
+x = [x[&quot;multiplier&quot;] for x in res]
+y = [y[&quot;cnt&quot;] for y in res]
+plt.figure(figsize=(8, 5), dpi=100)
+plt.xlabel(&#39;倍率&#39;)
+plt.ylabel(&#39;人数&#39;)
+plt.rcParams[&#39;font.sans-serif&#39;]=[&#39;SimHei&#39;]
+plt.rcParams[&#39;axes.unicode_minus&#39;]=False
+plt.bar(x, y, width=0.5)
+plt.xticks(x)
+plt.show()
 
 # py文件就在项目的根目录下
-rootPath = os.path.split(os.path.realpath(__file__))[0]
+
+rootPath = os.path.split(os.path.realpath(**file**))[0]
 
 conf = SparkConf()
 conf.set(&#39;spark.executor.memory&#39;, &#39;4g&#39;)
@@ -289,50 +290,70 @@ conf.set(&quot;spark.executor.cores&quot;, &#39;4&#39;)
 conf.set(&#39;spark.cores.max&#39;, 16)
 conf.set(&#39;spark.local.dir&#39;, rootPath)
 spark = SparkSession(SparkContext(conf=conf))
+
 # 申请者数据
+
 # Windows环境
+
 # 注意点1：增加 option(&quot;basePath&quot;, rootPath) 选项
-# 注意点2：路径 hdfs_path_apply 需要追加 &#47;*&#47;*.parquet
+
+# 注意点2：路径 hdfs_path_apply 需要追加 &#47;_&#47;_.parquet
+
 hdfs_path_apply = rootPath + &quot;&#47;apply&quot;
 applyNumbersDF = spark.read.option(&quot;basePath&quot;, rootPath).parquet(
-    hdfs_path_apply + &quot;&#47;*&#47;*.parquet&quot;
+hdfs_path_apply + &quot;&#47;_&#47;_.parquet&quot;
 )
+
 # 中签者数据
+
 hdfs_path_lucky = rootPath + &quot;&#47;lucky&quot;
 luckyDogsDF = spark.read.option(&quot;basePath&quot;, rootPath).parquet(
-    hdfs_path_lucky + &quot;&#47;*&#47;*.parquet&quot;
+hdfs_path_lucky + &quot;&#47;_&#47;_.parquet&quot;
 )
+
 # 过滤2016年以后的中签数据，且仅抽取中签号码carNum字段
+
 filteredLuckyDogs = (
-    luckyDogsDF
-    .filter(luckyDogsDF[&quot;batchNum&quot;] &gt;= &quot;201601&quot;)
-    .select(&quot;carNum&quot;)
+luckyDogsDF
+.filter(luckyDogsDF[&quot;batchNum&quot;] &gt;= &quot;201601&quot;)
+.select(&quot;carNum&quot;)
 )
+
 # 摇号数据与中签数据做内关联，Join Key为中签号码carNum
+
 jointDF = applyNumbersDF.join(filteredLuckyDogs, &quot;carNum&quot;, &quot;inner&quot;)
+
 # 以batchNum、carNum做分组，统计倍率系数
+
 multipliers = (
-    jointDF
-    .groupBy([&quot;batchNum&quot;, &quot;carNum&quot;])
-    .agg(count(&quot;batchNum&quot;).alias(&quot;multiplier&quot;))
+jointDF
+.groupBy([&quot;batchNum&quot;, &quot;carNum&quot;])
+.agg(count(&quot;batchNum&quot;).alias(&quot;multiplier&quot;))
 )
+
 # 以carNum做分组，保留最大的倍率系数
+
 uniqueMultipliers = (
-    multipliers
-    .groupBy(&quot;carNum&quot;)
-    .agg(max(&quot;multiplier&quot;).alias(&quot;multiplier&quot;))
+multipliers
+.groupBy(&quot;carNum&quot;)
+.agg(max(&quot;multiplier&quot;).alias(&quot;multiplier&quot;))
 )
+
 # 以multiplier倍率做分组，统计人数
+
 result = (
-    uniqueMultipliers
-    .groupBy(&quot;multiplier&quot;)
-    .agg(count(&quot;carNum&quot;).alias(&quot;cnt&quot;))
-    .orderBy(&quot;multiplier&quot;)
+uniqueMultipliers
+.groupBy(&quot;multiplier&quot;)
+.agg(count(&quot;carNum&quot;).alias(&quot;cnt&quot;))
+.orderBy(&quot;multiplier&quot;)
 )
 result.show(40)
 res = result.collect()
+
 # 画图
+
 plot(res)
+
 ```</p>2021-10-26</li><br/><li><span>东围居士</span> 👍（2） 💬（2）<p>补一个完整的 spark 代码（windows环境）：
 
 package spark.basic
@@ -390,10 +411,10 @@ from pyspark.sql.session import SparkSession
 sc_conf = SparkConf() # spark参数配置
 # sc_conf.setMaster()
 # sc_conf.setAppName(&#39;my-app&#39;)
-sc_conf.set(&#39;spark.executor.memory&#39;, &#39;2g&#39;) 
-sc_conf.set(&#39;spark.driver.memory&#39;, &#39;4g&#39;) 
-sc_conf.set(&quot;spark.executor.cores&quot;, &#39;2&#39;) 
-sc_conf.set(&#39;spark.cores.max&#39;, 20)    
+sc_conf.set(&#39;spark.executor.memory&#39;, &#39;2g&#39;)
+sc_conf.set(&#39;spark.driver.memory&#39;, &#39;4g&#39;)
+sc_conf.set(&quot;spark.executor.cores&quot;, &#39;2&#39;)
+sc_conf.set(&#39;spark.cores.max&#39;, 20)
 sc = SparkContext(conf=sc_conf)
 
 # 加载数据，转换成dataframe
@@ -452,3 +473,4 @@ res7: Array[org.apache.spark.sql.Row] = Array([1,8967], [2,19174], [3,26952], [4
 对于汽车摇号的倍率制度，如果为了优先让倍率高的人摇到号，可以把每一期的资格分多次抽取。就是说，先构建一个所有人都在里面的样本，抽部分人；再将倍率高于某个阈值的人都取出来，构建一个新的样本，再抽取部分人。（具体划分成几个样本可以按倍率的人数分布来划分）当然这样又会对新来的人不公平，所以大家还是挤地铁吧~~</p>2021-10-08</li><br/><li><span>Spoon</span> 👍（2） 💬（0）<p>Java实现
 https:&#47;&#47;github.com&#47;Spoon94&#47;spark-practice&#47;blob&#47;master&#47;src&#47;main&#47;java&#47;com&#47;spoon&#47;spark&#47;sql&#47;CarNumAnalyseJob.java</p>2022-04-05</li><br/><li><span>未来已来</span> 👍（1） 💬（0）<p>大概看了下评论，发现一次摇号一个号码会出现多次，是为了增加n次参与的人被摇到的概率。相当于在一个封闭的箱子里摇球，一个号码的球多放了几个，摇箱子后个数多的号码被抽到的概率更高（n&#47;N，N为箱子内球的总数）</p>2023-02-10</li><br/><li><span>翡翠小南瓜</span> 👍（1） 💬（2）<p>不懂北京的摇号规则，也没写清楚，所以是一个批次号里面，一个申请号可以有多次？？？？</p>2022-04-12</li><br/><li><span>Each</span> 👍（0） 💬（0）<p>老師您好, 無法下載 dataset, 可以提供海外載點嗎? 謝謝.</p>2024-10-15</li><br/><li><span>风一样</span> 👍（0） 💬（1）<p>上面的结论感觉不太正确，偏离了每个每个倍率下的基数，倍率越高中签概率肯定越大啊，对个人而言，如果我们每次参与抽签的人数大基数不变的情况下(基数1000)，倍率越大，相当于往里面添加了多个样本（8倍率），本来是1&#47;1000的概率变为了8&#47;1000。但是考虑到每次倍率越大没中签的用户重复的次数越多，基数也会跟着变大，相对于新加入的人来说其实是有优势的，但是新增的人其实远小于已经参与过抽签的人，所以才导致了感觉上变化不大</p>2022-12-01</li><br/>
 </ul>
+```

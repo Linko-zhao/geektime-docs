@@ -238,7 +238,7 @@ const App = {
 
 ```xml
   <div>
-    {{todos.filter(v=>!v.done).length}} 
+    {{todos.filter(v=>!v.done).length}}
     /
     {{todos.length}}
   </div>
@@ -256,7 +256,7 @@ const App = {
   <div>
     {{active}}  / {{all}}
   </div>
-  
+
 <script>
   computed:{
     active(){
@@ -380,44 +380,46 @@ computed:{
 
 考虑用户体验，如果离线在线都可修改，可以考虑给todo的每一项加个最后修改时间，挂载时把本地缓存数据和接口数据合并，当冲突时，只留下最新数据</p>2021-10-20</li><br/><li><span>www</span> 👍（57） 💬（7）<p>全选按钮使用 set 和 get 进行处理，真是妙啊。
 这一个方法就值了🎫了</p>2021-10-20</li><br/><li><span>ll</span> 👍（38） 💬（6）<p>思考题：这个涉及到页面状态保存，方法有很多，大概两类：
+
 1. 本地储存：
-a. localstorage
-b. workers
-c. router，也可以存到 route 中
-d. 存到本地文件
+   a. localstorage
+   b. workers
+   c. router，也可以存到 route 中
+   d. 存到本地文件
 2. 服务端：这个就是将状态保存到服务器，通过 axios 等方式和服务器交换数据等</p>2021-10-20</li><br/><li><span>老杨头</span> 👍（13） 💬（4）<p>交作业 ：
-通过watch监听数据变更并存储到localStorage中，然后在mounted时加载数据
+   通过watch监听数据变更并存储到localStorage中，然后在mounted时加载数据
 
 watch: {
-            todos: {&#47;&#47;监听数据变更
-                handler(newVal, oldVal) {
-                    console.info(&quot;todos-&gt;change&quot;)
-                    &#47;&#47;TODO::原来是在unmount时才保存的，但unmount代码没有执行，所以换成wathc了，不知道为什么unmount没有执行
-                    localStorage.setItem(&quot;todos&quot;, JSON.stringify(this.todos))
-                },
-                deep: true
-            }
-        },
-        mounted() {
-            &#47;&#47;加载数据
-            var todos = localStorage.getItem(&quot;todos&quot;);
-            if(todos) {
-                this.todos = JSON.parse(todos);
-            }
-        },
-        unmounted() {
-            &#47;&#47;保存数据
-            localStorage.setItem(&quot;todos&quot;, JSON.stringify(this.todos))
-        },
+todos: {&#47;&#47;监听数据变更
+handler(newVal, oldVal) {
+console.info(&quot;todos-&gt;change&quot;)
+&#47;&#47;TODO::原来是在unmount时才保存的，但unmount代码没有执行，所以换成wathc了，不知道为什么unmount没有执行
+localStorage.setItem(&quot;todos&quot;, JSON.stringify(this.todos))
+},
+deep: true
+}
+},
+mounted() {
+&#47;&#47;加载数据
+var todos = localStorage.getItem(&quot;todos&quot;);
+if(todos) {
+this.todos = JSON.parse(todos);
+}
+},
+unmounted() {
+&#47;&#47;保存数据
+localStorage.setItem(&quot;todos&quot;, JSON.stringify(this.todos))
+},
 
 原来是在unmount时才保存的，但unmount代码没有执行，所以换成wathc了，不知道为什么unmount没有执行</p>2021-10-25</li><br/><li><span>杨村长</span> 👍（12） 💬（1）<p>交作业：将数据存入localStorage，刷新时再取出来展现
 1.保存：watch一下todoList，变化存入
 2.读取：data设置为localStorage中读出的数据</p>2021-10-22</li><br/><li><span>南山</span> 👍（12） 💬（1）<p>打卡
+
 1. 保存时机，在unmount的生命周期进行保存
 2. 使用浏览器客户端存储，如sessionStorage，LocalStorage等api保存，保存时添加时间戳用于比对新老数据，使用服务端保存接口，将数据持久化到数据库，考虑接口请求失败时重试机制和友好提示
 3. 客户端存储在在data定义时直接从localStorage等获取，服务端接口在created周期请求获取数据并给data赋值
-4.考虑保存失败的情况，可以监听数据变化做自动保存</p>2021-10-20</li><br/><li><span>mixiuu</span> 👍（11） 💬（2）<p>仅刷新页面，并不会出发unmounted生命周期，在仅刷新页面的场景下可以在created生命周期里监听beforeunload事件，如果有todos，存入localstorage中</p>2021-10-28</li><br/><li><span>桃子-夏勇杰</span> 👍（6） 💬（2）<p> {{active}}  &#47; {{all}} 这里为什么要做成2个属性而不是直接做个1个属性呢？</p>2021-10-22</li><br/><li><span>付帅帅</span> 👍（6） 💬（1）<p>目前能想到的持久化方案： 一个是借助后端让数据入库，还有就是 localStorage 这种浏览器本地持久化</p>2021-10-20</li><br/><li><span>洪布斯</span> 👍（5） 💬（1）<p>在给输入框绑定事件 `addTodo` 时，把 `keydown` =&gt; `keyup` 是不是更合适，`keydown` 在按键按下时，会一直触发事件。或者做一个非空判断也可～</p>2021-11-13</li><br/><li><span>阿阳</span> 👍（5） 💬（1）<p>这一节看了好几遍，尤其是对于allDone这个计算属性，和v-model的结合使用，真是妙极了。以前走了不少弯路，没想到这个全选功能，实现的如此优雅。继续坚持学习。</p>2021-10-28</li><br/><li><span>cwang</span> 👍（5） 💬（1）<p>学习任何框架，都可以以这个To do List为起始点。</p>2021-10-20</li><br/><li><span>郭纯</span> 👍（4） 💬（1）<p>两种方式 客户端持久化 或者 服务端持久化 .
+   4.考虑保存失败的情况，可以监听数据变化做自动保存</p>2021-10-20</li><br/><li><span>mixiuu</span> 👍（11） 💬（2）<p>仅刷新页面，并不会出发unmounted生命周期，在仅刷新页面的场景下可以在created生命周期里监听beforeunload事件，如果有todos，存入localstorage中</p>2021-10-28</li><br/><li><span>桃子-夏勇杰</span> 👍（6） 💬（2）<p> {{active}} &#47; {{all}} 这里为什么要做成2个属性而不是直接做个1个属性呢？</p>2021-10-22</li><br/><li><span>付帅帅</span> 👍（6） 💬（1）<p>目前能想到的持久化方案： 一个是借助后端让数据入库，还有就是 localStorage 这种浏览器本地持久化</p>2021-10-20</li><br/><li><span>洪布斯</span> 👍（5） 💬（1）<p>在给输入框绑定事件 `addTodo` 时，把 `keydown` =&gt; `keyup` 是不是更合适，`keydown` 在按键按下时，会一直触发事件。或者做一个非空判断也可～</p>2021-11-13</li><br/><li><span>阿阳</span> 👍（5） 💬（1）<p>这一节看了好几遍，尤其是对于allDone这个计算属性，和v-model的结合使用，真是妙极了。以前走了不少弯路，没想到这个全选功能，实现的如此优雅。继续坚持学习。</p>2021-10-28</li><br/><li><span>cwang</span> 👍（5） 💬（1）<p>学习任何框架，都可以以这个To do List为起始点。</p>2021-10-20</li><br/><li><span>郭纯</span> 👍（4） 💬（1）<p>两种方式 客户端持久化 或者 服务端持久化 .
 
-客户端：localStorage  sessionStorage web sql cookie indexedDB
+客户端：localStorage sessionStorage web sql cookie indexedDB
 服务端：提供接口 客户端提交数据请求. </p>2021-10-20</li><br/><li><span>肆水流歌</span> 👍（3） 💬（1）<p>看了大家的留言，我发现我只会localstorage，是我太菜了</p>2021-10-21</li><br/><li><span>3.141516</span> 👍（3） 💬（1）<p>之前学过小程序，发现微信小程序应该就是借鉴 vue 的风格，数据驱动、for、if 等等</p>2021-10-20</li><br/>
 </ul>

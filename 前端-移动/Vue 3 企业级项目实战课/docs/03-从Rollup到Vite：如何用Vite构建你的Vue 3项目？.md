@@ -113,7 +113,7 @@ Vite是Vue.js作者尤雨溪早年基于Rollup做的一个开发工具，核心�
   height: 32px;
   min-width: 80px;
   cursor: pointer;
-} 
+}
 </style>
 
 ```
@@ -121,14 +121,13 @@ Vite是Vue.js作者尤雨溪早年基于Rollup做的一个开发工具，核心�
 以下是 src/index.js 项目的入口文件源码：
 
 ```javascript
-import { createApp } from 'vue';
-import App from './app.vue';
+import { createApp } from "vue";
+import App from "./app.vue";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   const app = createApp(App);
-  app.mount('#app');
-})
-
+  app.mount("#app");
+});
 ```
 
 当你完成了步骤一的项目目录的结构设计和源码准备后，就可以**进行第二步安装Rollup项目依赖的npm模块了，也就是安装项目所需要的npm模块**。
@@ -187,56 +186,56 @@ npm i --save-dev @babel/core @babel/preset-env @rollup/plugin-babel @rollup/plug
 在此，我先将完整的Rollup配置内容贴出来，后面再跟你详细讲解每个配置项的作用，你先看看完整的代码：
 
 ```javascript
-const path = require('path');
-const fs = require('fs');
-const { babel } = require('@rollup/plugin-babel');
-const vue = require('rollup-plugin-vue');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const commonjs = require('@rollup/plugin-commonjs');
-const postcss = require('rollup-plugin-postcss');
-const replace = require('@rollup/plugin-replace');
-const html = require('@rollup/plugin-html');
-const serve = require('rollup-plugin-serve');
+const path = require("path");
+const fs = require("fs");
+const { babel } = require("@rollup/plugin-babel");
+const vue = require("rollup-plugin-vue");
+const { nodeResolve } = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+const postcss = require("rollup-plugin-postcss");
+const replace = require("@rollup/plugin-replace");
+const html = require("@rollup/plugin-html");
+const serve = require("rollup-plugin-serve");
 
 const babelOptions = {
-  "presets": [
-    '@babel/preset-env',
-  ],
-  'babelHelpers': 'bundled'
-}
+  presets: ["@babel/preset-env"],
+  babelHelpers: "bundled",
+};
 
 module.exports = {
-  input: path.join(__dirname, 'src/index.js'),
+  input: path.join(__dirname, "src/index.js"),
   output: {
-    file: path.join(__dirname, 'dist/index.js'),
-  }, 
+    file: path.join(__dirname, "dist/index.js"),
+  },
   plugins: [
     vue(),
     postcss({
       extract: true,
-      plugins: []
+      plugins: [],
     }),
     nodeResolve(),
     commonjs(),
     babel(babelOptions),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      preventAssignment: true
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      preventAssignment: true,
     }),
     html({
-      fileName: 'index.html',
+      fileName: "index.html",
       template: () => {
-        const htmlFilePath = path.join(__dirname, 'index.html')
-        const html = fs.readFileSync(htmlFilePath, { encoding: 'utf8' })
+        const htmlFilePath = path.join(__dirname, "index.html");
+        const html = fs.readFileSync(htmlFilePath, { encoding: "utf8" });
         return html;
-      }
+      },
     }),
-    process.env.NODE_ENV === 'development' ? serve({
-      port: 6001,
-      contentBase: 'dist'
-    }) : null
+    process.env.NODE_ENV === "development"
+      ? serve({
+          port: 6001,
+          contentBase: "dist",
+        })
+      : null,
   ],
-}
+};
 ```
 
 我们对Rollup的配置从上到下一步步分析：
@@ -318,13 +317,13 @@ npm i --save-dev vite @vitejs/plugin-vue
 第三步，配置Vite的Vue.js 3编译配置，也就是在vite.config.js配置Vite的编译配置。
 
 ```javascript
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
   plugins: [vue()],
-  base: './'
-})
+  base: "./",
+});
 ```
 
 第四步，执行开发模式和生产模式的Vue.js 3编译，在package.json配置开发模式和生产模式的脚本命令。
@@ -365,7 +364,7 @@ export default defineConfig({
 2. 开发者用浏览器访问页面；
 3. Vite根据访问页面引用的ESM类型的JavaScript文件进行查找依赖，并将依赖通过esbuild编译成ESM模块的代码，保存在 node\_modules/.vite/ 目录下；
 4. 浏览器的ESM加载特性会根据页面依赖到ESM模块自动进行按需加载。
-   
+
    1. 再次修改代码，再次访问页面，会自动执行ESM按需加载，同时触发依赖到的变更文件重新单独编译；
    2. 修改代码只会触发刷新页面，不会直接触发代码编译，而且源码编译是浏览器通过ESM模块加载访问到对应文件才进行编译的；
    3. 开发模式下因为项目源码是通过esbuild编译，所以速度比Rollup快，同时由于是按页面里请求依赖进行按需编译，所以整体打包编译速度理论上是比Rollup快一些。
@@ -415,6 +414,7 @@ Vite开发模式下的esbuild的按需打包编译，真的是绝对比Rollup的
 期待你的分享。如果今天的课程让你有所收获，欢迎你把文章分享给有需要的朋友，我们下节课再见！
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/03)
+
 <div><strong>精选留言（12）</strong></div><ul>
 <li><span>WGH丶</span> 👍（1） 💬（1）<p>又双叒叕出新工具了---turbopack---采用Rust编写。自称webpack继任者，热更新比vite快10倍，比webpack快700倍。
 
@@ -425,10 +425,10 @@ Vite开发模式下的esbuild的按需打包编译，真的是绝对比Rollup的
 vite核心是利用了esBuild打包（依赖GO） + 基于原生 ESM 按需编译；所以绝大部分场景web场景应该是vite要快于Rollup （毕竟后者是用node打包 + devServer）；
 但是并不是所有的打包场景都是web，我认为在一些hybird-native 方案中，vite就不能使用，而传统的rollup基于强大的plugin就能处理。
 
-我也不知道我观点对不对，还请作者解密一下回答一下这个问题。</p>2022-11-27</li><br/><li><span>hao-kuai</span> 👍（0） 💬（0）<p>从文中的示例代码而言，Rollup的配置并没有比Webpack简单多少，从使用者的角度来说反而是Vite+Webpack的组合来说是一个普适性最好的方案，而且学习成本最低，不知道为啥从来见过这样的组合？如果为了兼容打包速度和学习成本而言，Rspack也是一个不错的选择啊！</p>2025-01-06</li><br/><li><span>米云鹏</span> 👍（0） 💬（0）<p>新手学习，mac端配置rollup的dev和build后报错，需要把后缀名改成cjs的，配置文件里也是，改了以后会好用，</p>2024-12-22</li><br/><li><span>李</span> 👍（0） 💬（0）<p>windward 下没有    NODE_ENV 可以安装
+我也不知道我观点对不对，还请作者解密一下回答一下这个问题。</p>2022-11-27</li><br/><li><span>hao-kuai</span> 👍（0） 💬（0）<p>从文中的示例代码而言，Rollup的配置并没有比Webpack简单多少，从使用者的角度来说反而是Vite+Webpack的组合来说是一个普适性最好的方案，而且学习成本最低，不知道为啥从来见过这样的组合？如果为了兼容打包速度和学习成本而言，Rspack也是一个不错的选择啊！</p>2025-01-06</li><br/><li><span>米云鹏</span> 👍（0） 💬（0）<p>新手学习，mac端配置rollup的dev和build后报错，需要把后缀名改成cjs的，配置文件里也是，改了以后会好用，</p>2024-12-22</li><br/><li><span>李</span> 👍（0） 💬（0）<p>windward 下没有 NODE_ENV 可以安装
 npm install cross-env --save-dev
- &quot;dev&quot;: &quot;cross-env NODE_ENV=development rollup -w -c .&#47;rollup.config.js&quot;,</p>2024-11-22</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-08-30</li><br/><li><span>文件</span> 👍（0） 💬（0）<p>文中有一处细节作者貌似忽略掉了，在配置完项目目录后需要运行 npm init -y 初始化项目后才能进行后期的安装依赖等操作</p>2024-01-28</li><br/><li><span>默默且听风</span> 👍（0） 💬（0）<p>因为win环境下没有设置NODE_ENV所以在启动的时候会有遇到“无法访问此网站”诸如此类的提示，可以修改一下Rollup中的设置  (process.env.NODE_ENV === &#39;development&#39; || !process.env.NODE_ENV) ? serve({
-      port: 6001,
-      contentBase: &#39;dist&#39;
-    }) : null 我是这样改的</p>2023-05-24</li><br/><li><span>Samuel</span> 👍（0） 💬（0）<p>vite 能实现webpack模块联邦的功能不？</p>2023-05-14</li><br/><li><span>avava</span> 👍（0） 💬（3）<p>跑不起来。。npm run dev后无法访问，windows平台，按理说作者不是windows平台开发的，没遇到NODE_DEV不是内部命令这些坑。。</p>2022-11-28</li><br/>
+&quot;dev&quot;: &quot;cross-env NODE_ENV=development rollup -w -c .&#47;rollup.config.js&quot;,</p>2024-11-22</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-08-30</li><br/><li><span>文件</span> 👍（0） 💬（0）<p>文中有一处细节作者貌似忽略掉了，在配置完项目目录后需要运行 npm init -y 初始化项目后才能进行后期的安装依赖等操作</p>2024-01-28</li><br/><li><span>默默且听风</span> 👍（0） 💬（0）<p>因为win环境下没有设置NODE_ENV所以在启动的时候会有遇到“无法访问此网站”诸如此类的提示，可以修改一下Rollup中的设置 (process.env.NODE_ENV === &#39;development&#39; || !process.env.NODE_ENV) ? serve({
+port: 6001,
+contentBase: &#39;dist&#39;
+}) : null 我是这样改的</p>2023-05-24</li><br/><li><span>Samuel</span> 👍（0） 💬（0）<p>vite 能实现webpack模块联邦的功能不？</p>2023-05-14</li><br/><li><span>avava</span> 👍（0） 💬（3）<p>跑不起来。。npm run dev后无法访问，windows平台，按理说作者不是windows平台开发的，没遇到NODE_DEV不是内部命令这些坑。。</p>2022-11-28</li><br/>
 </ul>

@@ -49,7 +49,7 @@ Perf这个工具最早是Linux内核著名开发者Ingo Molnar开发的，它的
   cpu-cycles OR cycles                               [Hardware event]
   instructions                                       [Hardware event]
   ref-cycles                                         [Hardware event]
- 
+
   alignment-faults                                   [Software event]
   bpf-output                                         [Software event]
   context-switches OR cs                             [Software event]
@@ -62,7 +62,7 @@ Perf这个工具最早是Linux内核著名开发者Ingo Molnar开发的，它的
   page-faults OR faults                              [Software event]
   task-clock                                         [Software event]
 …
- 
+
   block:block_bio_bounce                             [Tracepoint event]
   block:block_bio_complete                           [Tracepoint event]
   block:block_bio_frontmerge                         [Tracepoint event]
@@ -86,7 +86,7 @@ Hardware event来自处理器中的一个PMU（Performance Monitoring Unit），
 # perf stat
 ^C
  Performance counter stats for 'system wide':
- 
+
           58667.77 msec cpu-clock                 #   63.203 CPUs utilized
             258666      context-switches          #    0.004 M/sec
               2554      cpu-migrations            #    0.044 K/sec
@@ -95,7 +95,7 @@ Hardware event来自处理器中的一个PMU（Performance Monitoring Unit），
        24827718023      instructions              #    1.17  insn per cycle
         5402114113      branches                  #   92.080 M/sec
           59862316      branch-misses             #    1.11% of all branches
- 
+
        0.928237838 seconds time elapsed
 ```
 
@@ -115,19 +115,19 @@ __do_page_fault(struct pt_regs *regs, unsigned long hw_error_code,
                 unsigned long address)
 {
         prefetchw(&current->mm->mmap_sem);
- 
+
         if (unlikely(kmmio_fault(regs, address)))
                 return;
- 
+
         /* Was the fault on kernel-controlled part of the address space? */
         if (unlikely(fault_in_kernel_space(address)))
                 do_kern_addr_fault(regs, hw_error_code, address);
         else
-                do_user_addr_fault(regs, hw_error_code, address); 
-                /* 在do_user_addr_fault()里面调用了perf_sw_event() */ 
-            
+                do_user_addr_fault(regs, hw_error_code, address);
+                /* 在do_user_addr_fault()里面调用了perf_sw_event() */
+
 }
- 
+
 /* Handle faults in the user portion of the address space */
 static inline
 void do_user_addr_fault(struct pt_regs *regs,
@@ -160,13 +160,13 @@ void do_user_addr_fault(struct pt_regs *regs,
 
 ```shell
 # perf stat -e page-faults -- sleep 1
- 
+
  Performance counter stats for 'sleep 1':
- 
+
                 49      page-faults
- 
+
        1.001583032 seconds time elapsed
- 
+
        0.001556000 seconds user
        0.000000000 seconds sys
 ```
@@ -181,9 +181,9 @@ void do_user_addr_fault(struct pt_regs *regs,
 
 ```shell
 # perf stat -e cycles -- sleep 1
- 
+
  Performance counter stats for 'sleep 1':
- 
+
            1878165      cycles
 ```
 

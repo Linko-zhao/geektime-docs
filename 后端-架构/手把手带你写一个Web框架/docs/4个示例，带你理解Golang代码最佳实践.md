@@ -75,7 +75,7 @@ import github.com/pkg/errors
     ...
     if err := s.orm.Model(&db.Layout{}).Where("uid = ? and corp_id = ?", s.uid, s.corpId).Order("updated_at desc").Find(&layouts).Error; err != nil {
 		return nil, 0, errors.Wrap(err, "list layout failed")
-	} 
+	}
    ...
 
 
@@ -108,9 +108,9 @@ func (s *LayoutService) ListLayout(ctx context.Context) (layouts []*db.Layout, t
     if err := s.orm.WithContext(ctx).Model(&db.Layout{}).Where(whereClause).Order("updated_at desc").Find(&layouts).Error; err != nil {
         return nil, 0, err
     }
-    
+
     ...
-    
+
 ```
 
 第四处的问题更隐蔽，**SQL查询没有进行分页设计**。
@@ -139,15 +139,15 @@ func (s *LayoutService) ListLayout(ctx context.Context, offset, limit int64) (la
 ```plain
 func (s *LayoutService) ListLayout(ctx context.Context, offset, limit int64) (layouts []*db.Layout,
 	total int64, err error) {
-	
-    ... 
-    
+
+    ...
+
 	// 查询总数
 	if err := s.gdb.WithContext(ctx).Model(&db.Layout{}).Where("uid = ? and corp_id = ?", s.uid, s.corpId).
 		Count(&total).Error; err != nil {
 		return nil, 0, errors.Wrap(err, "list layout failed")
 	}
-    
+
     // 如果 total 为 0，就不进行列表查询
     if total == 0 {
       return nil, 0, nil
@@ -292,7 +292,7 @@ func getBatchUser(ctx context.Context, userKeys []*UserKey) (users []*User, erro
               continue
           }
           userList = append(userList, user)
-        }()   
+        }()
     }
 
 
@@ -419,12 +419,12 @@ func getBatchUser(ctx context.Context, userKeys []*UserKey) ([]*User, error) {
 
 
     for i, u := range userKeys {
-        ...      
+        ...
         wg.Add(1)
         // 使用 goroutine 并发加速接口
         go func(u *UserKey) {
             ...
-.            
+.
             mu.Lock()
             userList = append(userList, user)
             mu.Unlock()
@@ -517,7 +517,7 @@ var config Config
 
 func main() {
    loadConfig("../config.yaml")
-   
+
    StartProcess()
 }
 
@@ -531,7 +531,7 @@ func loadConfig(configFile string) error {
    if err != nil {
       return errors.Wrap("load config err", err)
    }
-   
+
    // 解析配置
     err = json.Unmarshal(data, &config)
     if err != nil {

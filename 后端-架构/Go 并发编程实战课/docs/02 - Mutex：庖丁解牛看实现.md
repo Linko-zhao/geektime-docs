@@ -32,7 +32,7 @@
         key  int32 // 锁是否被持有的标识
         sema int32 // 信号量专用，用以阻塞/唤醒goroutine
     }
-    
+
     // 保证成功在val上增加delta的值
     func xadd(val *int32, delta int32) (new int32) {
         for {
@@ -43,7 +43,7 @@
         }
         panic("unreached")
     }
-    
+
     // 请求锁
     func (m *Mutex) Lock() {
         if xadd(&m.key, 1) == 1 { //标识加1，如果等于1，成功获取到锁
@@ -51,13 +51,13 @@
         }
         semacquire(&m.sema) // 否则阻塞等待
     }
-    
+
     func (m *Mutex) Unlock() {
         if xadd(&m.key, -1) == 0 { // 将标识减去1，如果等于0，则没有其它等待者
             return
         }
         semrelease(&m.sema) // 唤醒其它阻塞的goroutine
-    }    
+    }
 ```
 
 这里呢，我先简单补充介绍下刚刚提到的CAS。
@@ -228,7 +228,7 @@ for循环是不断尝试获取锁，如果获取不到，就通过runtime.Semacq
         if (new+mutexLocked)&mutexLocked == 0 { //本来就没有加锁
             panic("sync: unlock of unlocked mutex")
         }
-    
+
         old := new
         for {
             if old>>mutexWaiterShift == 0 || old&(mutexLocked|mutexWoken) != 0 { // 没有等待者，或者有唤醒的waiter，或者锁原来已加锁
@@ -335,16 +335,16 @@ Mutex不能容忍这种事情发生。所以，2016年Go 1.9中Mutex增加了饥
         state int32
         sema  uint32
     }
-    
+
     const (
         mutexLocked = 1 << iota // mutex is locked
         mutexWoken
         mutexStarving // 从state字段中分出一个饥饿标记
         mutexWaiterShift = iota
-    
+
         starvationThresholdNs = 1e6
     )
-    
+
     func (m *Mutex) Lock() {
         // Fast path: 幸运之路，一下就获取到了锁
         if atomic.CompareAndSwapInt32(&m.state, 0, mutexLocked) {
@@ -353,7 +353,7 @@ Mutex不能容忍这种事情发生。所以，2016年Go 1.9中Mutex增加了饥
         // Slow path：缓慢之路，尝试自旋竞争或饥饿状态下饥饿goroutine竞争
         m.lockSlow()
     }
-    
+
     func (m *Mutex) lockSlow() {
         var waitStartTime int64
         starving := false // 此goroutine的饥饿标记
@@ -426,7 +426,7 @@ Mutex不能容忍这种事情发生。所以，2016年Go 1.9中Mutex增加了饥
             }
         }
     }
-    
+
     func (m *Mutex) Unlock() {
         // Fast path: drop lock bit.
         new := atomic.AddInt32(&m.state, -mutexLocked)
@@ -434,7 +434,7 @@ Mutex不能容忍这种事情发生。所以，2016年Go 1.9中Mutex增加了饥
             m.unlockSlow(new)
         }
     }
-    
+
     func (m *Mutex) unlockSlow(new int32) {
         if (new+mutexLocked)&mutexLocked == 0 {
             throw("sync: unlock of unlocked mutex")
@@ -547,26 +547,27 @@ Mutex可能处于两种操作模式下：**正常模式**和**饥饿模式**。
 <li><span>Junes</span> 👍（109） 💬（7）<p>老师讲得太棒了，我自己看Mutex源码时，没有前因后果，知识不成体系。交个作业：
 
 1. 目前 Mutex 的 state 字段有几个意义，这几个意义分别是由哪些字段表示的？
-和第四个阶段的讲解基本一致：前三个bit分别为mutexLocked、mutexWoken、mutexStarving，剩余bit表示mutexWaiter
+   和第四个阶段的讲解基本一致：前三个bit分别为mutexLocked、mutexWoken、mutexStarving，剩余bit表示mutexWaiter
 
 2. 等待一个 Mutex 的 goroutine 数最大是多少？是否能满足现实的需求？
-单从程序来看，可以支持 1&lt;&lt;(32-3) -1 ，约 0.5 Billion个
-    其中32为state的类型int32，3位waiter字段的shift
-考虑到实际goroutine初始化的空间为2K，0.5Billin*2K达到了1TB，单从内存空间来说已经要求极高了，当前的设计肯定可以满足了。</p>2020-10-14</li><br/><li><span>buckwheat</span> 👍（41） 💬（1）<p>这源码看的感觉好难啊，尤其是这种并发的源码，老师有什么好的建议吗？</p>2020-10-14</li><br/><li><span>Dragon Frog</span> 👍（15） 💬（2）<p>老师，你好我有个疑问。在第二版中的 mutexWoken 这个含义到底该怎么理解。没办法很好的理解这个字段的作用</p>2020-10-25</li><br/><li><span>锋</span> 👍（8） 💬（2）<p>老师您好，有个疑问。
-runtime_Semrelease 信号唤起的总队queue中的第一个吗？
-争抢锁在非饥饿模式下，是不是只有队首的waiter和新的goroutine之间发生？
-谢谢</p>2020-10-14</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（4） 💬（1）<p>老师，有一个关于编程的疑惑，很难解决：我以后可能也会写一些复杂的逻辑，特别是并发的逻辑，但如何用逻辑思维去证明代码是没有问题的？比如第二版本的 Mutex 代码，就写的很好。</p>2021-11-03</li><br/><li><span>Leo</span> 👍（4） 💬（1）<p>看第一遍的时候真的一脸懵，所以想起了老师开篇讲的很重要的一句“先建立体系”，所以我第二遍没有去关注源码，而是去理解老师文档中对锁实现过程的描述找到大体脉络。也就是先理解思路，再去逐个追究源码的细节。所以第三遍就能很顺利理解Mutex第一个版本的实现，第二个版本因为涉及到位运算，所以需要先把go的位运算基础搞清楚再继续分析。虽然还没有完全弄懂整个Mutex的实现，但现在也收获良多，因为从源码以及老师的文档描述中包含了程序的策略，而这些策略也可以用于我们开发中解决其他问题。</p>2021-06-29</li><br/><li><span>阿牛</span> 👍（4） 💬（1）<p>交作业
-1、目前 Mutex 的 state 字段有几个意义，这几个意义分别是由哪些字段表示的？
-state有四个字段：
-• mutexLocked 占1bit，持有锁标记
-• mutexWoken  占1bit，唤醒标记
-• mutexStarving 占1bit，饥饿标记
-• mutexWaiters  阻塞等待的waiter数量
-2、等待一个 Mutex 的 goroutine 数最大是多少？是否能满足现实的需求？
-32-3=29位=2^29=536 870 912</p>2021-02-19</li><br/><li><span>消逝文字</span> 👍（4） 💬（1）<p>底层实现的代码和业务代码果然有很大不同，理解起来也更加困难，光是上面那一堆位运算就已经够让人头疼的了，全程懵逼的看完了这一篇，还需要好好消化一下</p>2020-10-14</li><br/><li><span>Felix</span> 👍（2） 💬（1）<p>我有一件事想不明白，如果大家用的是同一个s
-ync.Mutex,那么在每个goroutine中的sema数值不都是一样的，如果其中一个goroutine中的mutexLocked变为1,所有goroutine中mutexLocked不都是变为1吗，我的理解是mutex没有用值传递，应该指向同一块内存区域啊。</p>2021-06-28</li><br/><li><span>果酱</span> 👍（2） 💬（2）<p>new = old + 1&lt;&lt;mutexWaiterShift.    1&lt;&lt;mutexWaiterShift这个结果是4 为啥大佬注释说的是加1啊 求解</p>2020-11-23</li><br/><li><span>星亦辰</span> 👍（2） 💬（1）<p>这一讲有点儿烧脑了 , 需要仔细看看</p>2020-10-14</li><br/><li><span>大飞</span> 👍（1） 💬（1）<p>交个作业加深印象：
-1、state有以下信息worken、starvin、locked。 这个是最后三位存储的。 前32-3=29位用来存储等待的goroutine的数量。
-2、最大数量为2的29次方= 536870912。大约5亿多。 每个goroutine占用2kb。5亿*2kb=1024G。从内存角度考虑，这个数量级已经足够了。
+   单从程序来看，可以支持 1&lt;&lt;(32-3) -1 ，约 0.5 Billion个
+   其中32为state的类型int32，3位waiter字段的shift
+   考虑到实际goroutine初始化的空间为2K，0.5Billin*2K达到了1TB，单从内存空间来说已经要求极高了，当前的设计肯定可以满足了。</p>2020-10-14</li><br/><li><span>buckwheat</span> 👍（41） 💬（1）<p>这源码看的感觉好难啊，尤其是这种并发的源码，老师有什么好的建议吗？</p>2020-10-14</li><br/><li><span>Dragon Frog</span> 👍（15） 💬（2）<p>老师，你好我有个疑问。在第二版中的 mutexWoken 这个含义到底该怎么理解。没办法很好的理解这个字段的作用</p>2020-10-25</li><br/><li><span>锋</span> 👍（8） 💬（2）<p>老师您好，有个疑问。
+   runtime_Semrelease 信号唤起的总队queue中的第一个吗？
+   争抢锁在非饥饿模式下，是不是只有队首的waiter和新的goroutine之间发生？
+   谢谢</p>2020-10-14</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（4） 💬（1）<p>老师，有一个关于编程的疑惑，很难解决：我以后可能也会写一些复杂的逻辑，特别是并发的逻辑，但如何用逻辑思维去证明代码是没有问题的？比如第二版本的 Mutex 代码，就写的很好。</p>2021-11-03</li><br/><li><span>Leo</span> 👍（4） 💬（1）<p>看第一遍的时候真的一脸懵，所以想起了老师开篇讲的很重要的一句“先建立体系”，所以我第二遍没有去关注源码，而是去理解老师文档中对锁实现过程的描述找到大体脉络。也就是先理解思路，再去逐个追究源码的细节。所以第三遍就能很顺利理解Mutex第一个版本的实现，第二个版本因为涉及到位运算，所以需要先把go的位运算基础搞清楚再继续分析。虽然还没有完全弄懂整个Mutex的实现，但现在也收获良多，因为从源码以及老师的文档描述中包含了程序的策略，而这些策略也可以用于我们开发中解决其他问题。</p>2021-06-29</li><br/><li><span>阿牛</span> 👍（4） 💬（1）<p>交作业
+   1、目前 Mutex 的 state 字段有几个意义，这几个意义分别是由哪些字段表示的？
+   state有四个字段：
+   • mutexLocked 占1bit，持有锁标记
+   • mutexWoken 占1bit，唤醒标记
+   • mutexStarving 占1bit，饥饿标记
+   • mutexWaiters 阻塞等待的waiter数量
+   2、等待一个 Mutex 的 goroutine 数最大是多少？是否能满足现实的需求？
+   32-3=29位=2^29=536 870 912</p>2021-02-19</li><br/><li><span>消逝文字</span> 👍（4） 💬（1）<p>底层实现的代码和业务代码果然有很大不同，理解起来也更加困难，光是上面那一堆位运算就已经够让人头疼的了，全程懵逼的看完了这一篇，还需要好好消化一下</p>2020-10-14</li><br/><li><span>Felix</span> 👍（2） 💬（1）<p>我有一件事想不明白，如果大家用的是同一个s
+   ync.Mutex,那么在每个goroutine中的sema数值不都是一样的，如果其中一个goroutine中的mutexLocked变为1,所有goroutine中mutexLocked不都是变为1吗，我的理解是mutex没有用值传递，应该指向同一块内存区域啊。</p>2021-06-28</li><br/><li><span>果酱</span> 👍（2） 💬（2）<p>new = old + 1&lt;&lt;mutexWaiterShift. 1&lt;&lt;mutexWaiterShift这个结果是4 为啥大佬注释说的是加1啊 求解</p>2020-11-23</li><br/><li><span>星亦辰</span> 👍（2） 💬（1）<p>这一讲有点儿烧脑了 , 需要仔细看看</p>2020-10-14</li><br/><li><span>大飞</span> 👍（1） 💬（1）<p>交个作业加深印象：
+   1、state有以下信息worken、starvin、locked。 这个是最后三位存储的。 前32-3=29位用来存储等待的goroutine的数量。
+   2、最大数量为2的29次方= 536870912。大约5亿多。 每个goroutine占用2kb。5亿*2kb=1024G。从内存角度考虑，这个数量级已经足够了。
+
 </p>2023-06-14</li><br/><li><span>神经蛙</span> 👍（1） 💬（3）<p>队列中的groutine中，在没唤醒之前，有个新的goroutine来申请锁，此时通过自旋把woken标记挂起，同时获得到锁的那个goroutine开始解锁，因为woken标志导致没释放信号量，新的goroutine直接获取到了锁，如果一直发生这种情况，是否就无法进入饥饿模式。 作者大大请帮忙解答下。 </p>2021-09-10</li><br/><li><span>张健华</span> 👍（1） 💬（3）<p>有个疑问，在最终版本中，如果一直有新goroutine到来且自旋的执行去执行Lock()操作，此时一个goroutine执行UnLcok()时，由于有自旋的goroutine将Woken位置为1，它是否就不会执行唤醒操作了？而不唤醒goroutine，也就无法计算它等待的时间差，怎么能进入饥饿模式呢？</p>2021-09-08</li><br/><li><span>那时刻</span> 👍（1） 💬（1）<p>老师对于mutex讲的很仔细，之前看过mutex源码，有些地方看的不是明白，看了老师的讲解后，清晰了很多。
 
 请问老师一个问题，从 1.14 版本起，Go 对 defer 做了优化，采用更有效的内联方式，这种内联方式和lock里slowlock内联方式一样么？

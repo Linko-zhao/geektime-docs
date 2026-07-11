@@ -468,12 +468,12 @@ public final class HigherOrderInlineExampleKt {
 
 ```plain
 // 不用inline的高阶函数
-fun foo(block: () -> Unit) { 
+fun foo(block: () -> Unit) {
     block()
 }
 
 // 使用inline的高阶函数
-inline fun fooInline(block: () -> Unit) { 
+inline fun fooInline(block: () -> Unit) {
     block()
 }
 
@@ -637,30 +637,34 @@ fun main() {
 }
 
 &#47;**
- * 文本清洗
- *&#47;
-private fun String.clean() =
-    replace(&quot;[^A-Za-z]&quot;.toRegex(), &quot; &quot;)
-        .trim()
+
+- 文本清洗
+  *&#47;
+  private fun String.clean() =
+  replace(&quot;[^A-Za-z]&quot;.toRegex(), &quot; &quot;)
+  .trim()
 
 &#47;**
- * 分词
- *&#47;
-private fun String.participle() = split(&quot; &quot;).toList()
+
+- 分词
+  *&#47;
+  private fun String.participle() = split(&quot; &quot;).toList()
 
 &#47;**
- * 计算词频
- *&#47;
-private fun List&lt;String&gt;.countWordFrequency(): Map&lt;String, Int&gt; {
-    val map = mutableMapOf&lt;String, Int&gt;()
-    forEach {
-        if (it.isNotBlank()) {
-            val count = map.getOrDefault(it, 0)
-            map[it] = count.plus(1)
-        }
-    }
-    return map.toMap()
-}
+
+- 计算词频
+  *&#47;
+  private fun List&lt;String&gt;.countWordFrequency(): Map&lt;String, Int&gt; {
+  val map = mutableMapOf&lt;String, Int&gt;()
+  forEach {
+  if (it.isNotBlank()) {
+  val count = map.getOrDefault(it, 0)
+  map[it] = count.plus(1)
+  }
+  }
+  return map.toMap()
+  }
+
 </p>2022-01-12</li><br/><li><span>奥特之光</span> 👍（2） 💬（5）<p>fun foo(block: () -&gt; Unit) { 
    block()
 }
@@ -669,10 +673,10 @@ https:&#47;&#47;stackoverflow.com&#47;questions&#47;24928922&#47;jmh-what-does-t
 源码连接错了</p>2022-01-12</li><br/><li><span>郑峰</span> 👍（2） 💬（0）<p>One liner
 
 fun processText(text: String) = text.replace(&quot;[^A-Za-z]&quot;.toRegex(), &quot; &quot;).trim()
-    .split(&quot; &quot;).filter(String::isNotBlank)
-    .groupingBy { it }.eachCount()
-    .map { WordFreq(it.key, it.value) }
-    .sortedByDescending { it.freq }
+.split(&quot; &quot;).filter(String::isNotBlank)
+.groupingBy { it }.eachCount()
+.map { WordFreq(it.key, it.value) }
+.sortedByDescending { it.freq }
 </p>2022-07-25</li><br/><li><span>ElleSky</span> 👍（1） 💬（0）<p>如果方法变得足够大，过度使用 inline 可能会妨碍或停止 Hotspot 优化（例如方法内联）。默认情况下， Hotspot 不会内联大于35个字节的方法。内联高阶函数也得根据实际情况吧？</p>2023-02-22</li><br/><li><span>ElleSky</span> 👍（0） 💬（0）<p>hi，你好呀，请问你这gif图是用的什么软件生成的呢？</p>2023-02-08</li><br/><li><span>晓春</span> 👍（0） 💬（0）<p>Kotlin 最新 sortedByDescending 返回的是 List，
 sortByDescending 返回的是 Unit</p>2023-01-12</li><br/><li><span>熊妈饭团</span> 👍（0） 💬（0）<p>为什么 inline mapToList 是private的method，当被拷贝到public area 执行时却不会报错呢？</p>2022-11-01</li><br/>
 </ul>

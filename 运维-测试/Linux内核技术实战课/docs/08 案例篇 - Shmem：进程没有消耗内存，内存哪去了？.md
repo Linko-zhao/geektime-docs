@@ -31,17 +31,17 @@ Shmem  16777216 kB
 
 int main()
 {
-        char *p; 
+        char *p;
 
         p = mmap(NULL, SIZE, PROT_READ|PROT_WRITE, MAP_ANON|MAP_SHARED, -1, 0);
         if (!p)
-                return -1; 
+                return -1;
 
         memset(p, 1, SIZE);
 
         while (1) {
                 sleep(1);
-        }   
+        }
 
         return 0;
 }

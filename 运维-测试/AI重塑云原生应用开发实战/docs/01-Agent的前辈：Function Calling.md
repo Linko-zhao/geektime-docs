@@ -395,22 +395,24 @@ OpenAI 公司为了解决这些问题，想到了让大模型与外界环境交�
 ```json
 {&quot;numbers&quot;:[1,2,3,4]}
 ```&lt;｜tool▁call▁end｜&gt;&lt;｜tool▁calls▁end｜&gt;</p>2025-02-10</li><br/><li><span>🤡</span> 👍（0） 💬（1）<p>遇到一个奇怪的问题
-代码中需要去计算 prompt := &quot;1+2-3+4-5+6=? Just give me a number result&quot; 
+代码中需要去计算 prompt := &quot;1+2-3+4-5+6=? Just give me a number result&quot;
 
 按照老师给的代码跑，会在循环中有好几轮计算，每次将计算结果附加到 messageStore 后面
 我修改代码将计算过程打印在命令行，每一轮计算使用 ----- 符号分隔
-第一轮计算调用  addTool 计算出 1 2 4 6 之和为13 
+第一轮计算调用 addTool 计算出 1 2 4 6 之和为13
 第二轮计算调用 subTool 计算出 3 5 只差 为 -2 （这里有问题）
-第三轮得出结论 最终计算结果为 5 
+第三轮得出结论 最终计算结果为 5
 这里我的问题是为什么 在 第二轮计算出的结果是 -2 ，添加到messageStore中，居然最后能得出正确的答案，本质上第二轮计算应该是 -3 -5 = -8 才是合理的
 后面又使用 go run main.go 多次实验都有同样的问题，请问下这个是什么原因呢？？
 
 附加某次实验的输出：
-大模型选择的工具是:  [{0xc0004c9bc0 call_81af19d5cf3247a99b0d45 function {AddTool {&quot;numbers&quot;: [1, 2, 4, 6]}}}]
-函数计算结果:  13
+大模型选择的工具是: [{0xc0004c9bc0 call_81af19d5cf3247a99b0d45 function {AddTool {&quot;numbers&quot;: [1, 2, 4, 6]}}}]
+函数计算结果: 13
 --------------
-大模型选择的工具是:  [{0xc000014a50 call_d7719388d48d42e5994cb0 function {SubTool {&quot;numbers&quot;: [3, 5]}}}]
-函数计算结果:  -2
+
+大模型选择的工具是: [{0xc000014a50 call_d7719388d48d42e5994cb0 function {SubTool {&quot;numbers&quot;: [3, 5]}}}]
+函数计算结果: -2
 --------
-大模型的最终回复:  The result of the calculation \( 1 + 2 - 3 + 4 - 5 + 6 \) is \( 5 \).</p>2025-02-01</li><br/><li><span>仲玄</span> 👍（0） 💬（1）<p>AddTool和SubTool的函数是需要用户自己实现吗? </p>2024-12-27</li><br/>
+
+大模型的最终回复: The result of the calculation \( 1 + 2 - 3 + 4 - 5 + 6 \) is \( 5 \).</p>2025-02-01</li><br/><li><span>仲玄</span> 👍（0） 💬（1）<p>AddTool和SubTool的函数是需要用户自己实现吗? </p>2024-12-27</li><br/>
 </ul>

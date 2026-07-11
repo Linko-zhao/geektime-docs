@@ -96,7 +96,7 @@ Group:   etcd.database.coreos.com
     Singular:  etcdcluster
   Scope:       Namespaced
   Version:     v1beta2
-  
+
 ...
 ```
 
@@ -159,14 +159,14 @@ $ etcd --name infra0 --initial-advertise-peer-urls http://10.0.1.10:2380 \
   --initial-cluster-token etcd-cluster-1 \
   --initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 \
   --initial-cluster-state new
-  
+
 $ etcd --name infra1 --initial-advertise-peer-urls http://10.0.1.11:2380 \
   --listen-peer-urls http://10.0.1.11:2380 \
 ...
   --initial-cluster-token etcd-cluster-1 \
   --initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 \
   --initial-cluster-state new
-  
+
 $ etcd --name infra2 --initial-advertise-peer-urls http://10.0.1.12:2380 \
   --listen-peer-urls http://10.0.1.12:2380 \
 ...
@@ -217,7 +217,7 @@ type ClusterSpec struct {
  // cluster equal to the expected size.
  // The vaild range of the size is from 1 to 7.
  Size int `json:"size"`
- ... 
+ ...
 }
 ```
 
@@ -314,13 +314,13 @@ func (c *Controller) Start() error {
 
 func (c *Controller) run() {
  ...
- 
+
  _, informer := cache.NewIndexerInformer(source, &api.EtcdCluster{}, 0, cache.ResourceEventHandlerFuncs{
   AddFunc:    c.onAddEtcdClus,
   UpdateFunc: c.onUpdateEtcdClus,
   DeleteFunc: c.onDeleteEtcdClus,
  }, cache.Indexers{})
- 
+
  ctx := context.TODO()
  // TODO: use workqueue to avoid blocking
  informer.Run(ctx.Done())

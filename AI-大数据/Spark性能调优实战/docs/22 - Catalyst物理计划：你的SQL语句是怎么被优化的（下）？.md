@@ -97,7 +97,7 @@ result.write.parquet("_")
 ```
 val result = txDF.select("price", "volume", "userId")
 .join(users.hint("shuffle_hash"), Seq("userId"), "inner")
-.groupBy(col("name"), col("age")).agg(sum(col("price") * 
+.groupBy(col("name"), col("age")).agg(sum(col("price") *
 col("volume")).alias("revenue"))
 ```
 
@@ -193,20 +193,20 @@ Sort Merge 个人认为是在大数据量下催生出来的一个解决方案，
 
 二、BSMJ分析(小表总规模N)
 1.实现
-   1.1小表先broadcast，所有节点再分别进行排序、合并。
-   1.2小表先排序再broadcast，最后两表进行合并。
+1.1小表先broadcast，所有节点再分别进行排序、合并。
+1.2小表先排序再broadcast，最后两表进行合并。
 2.原因
-   2.1先broadcast，再排序，最坏时相比BNLJ多了每个节点的O(N*lgN)小表排序耗时;最好时max{O(N*lgN)，O(m*lgm)}+O(M+N)不见得就一定比O(Mn)效果好。
-   2.2如果先排序，那driver端就需要排序耗时O(N*lgN)，driver极有可能是整个集群的瓶颈。
+2.1先broadcast，再排序，最坏时相比BNLJ多了每个节点的O(N*lgN)小表排序耗时;最好时max{O(N*lgN)，O(m*lgm)}+O(M+N)不见得就一定比O(Mn)效果好。
+2.2如果先排序，那driver端就需要排序耗时O(N*lgN)，driver极有可能是整个集群的瓶颈。
 
 磊哥看看哪里有问题没</p>2021-05-03</li><br/><li><span>金角大王</span> 👍（3） 💬（1）<p>老师您好，请问Physical Plan 中节点前的&quot;+-&quot;号有啥特殊含义吗？</p>2021-07-21</li><br/><li><span>Hiway</span> 👍（2） 💬（3）<p>老师，我觉得优化Spark Join这一步叫成优化不太好，实际上这一步是根据逻辑计划中的关系操作符一一映射成物理操作符，生成 Spark Plan。我读了源码发现其实spark plan就是physical plan。这两步理解为根据策略Strategies生成spark plan，和根据Rules优化spark plan更形象一点。</p>2021-11-07</li><br/><li><span>西南偏北</span> 👍（2） 💬（1）<p>broadcast广播模式下，排序没啥必要吧，因为本身被广播的数据集就比较小，hash join和NLJ完全够用了。而且SMJ本身就是针对大表关联大表设计的join算法</p>2021-05-05</li><br/><li><span>Hiway</span> 👍（1） 💬（4）<p>老师你好，在2.4.3中使用ShuffledHashJoin的前置条件有一个canBuildLocalHashMap，其要求就是数据大小要小于spark.sql.autoBroadcastJoinThreshold*spark.sql.shuffle.partitions，我想请教一下这里为什么需要小于Broadcast的大小*sqlshuffle的分区数呢？从ShuffledHashJoin的逻辑来看，应该不涉及到Broadcast呀</p>2021-09-24</li><br/><li><span>Z宇锤锤</span> 👍（1） 💬（3）<p>Broadcast Sort Merger Join中Broadcast指的是数据分发的方式，SMB指的是Join实现机制。
 Sort Merge Join的原理是将两张表的数据按照相同的分区算法，分发到各个Executor上。如果使用Broadcast传输，被广播的表会先在Executor端进行数据的拆分，拆分完成以后，所有的分区会被Collect到Driver端，再向每一个Executor分发完整数据。这使被广播的表数据即便拆分了，还是被聚合分发，浪费时间。</p>2021-05-03</li><br/><li><span>Unknown element</span> 👍（0） 💬（1）<p>老师您好 想问一下我有个 hive sql 只是执行了一个 insert overwrite select a join b 的操作，spark 日志却有6个job，点进二级链接后在dag visualization中可以看到：
-job0：WSCG然后sort; 
+job0：WSCG然后sort;
 job1：WSCG然后exchange；
 job2：exchange =&gt; WSCG =&gt; exchange
 job3：exchange =&gt; hash aggregate =&gt;sort
 job4：parallelize
-job5:  parallelize
+job5: parallelize
 我想请教一下为什么有这么多job呢？另外在sql页面显示的是completed queries，这个query又是什么概念呢？和job是一个东西吗？谢谢老师~</p>2022-01-12</li><br/><li><span>Sam</span> 👍（0） 💬（2）<p>老师，早上好！~
 
 本文中出现一句：“括号中数字相同的操”，这里的“操”，是值的意思吗？</p>2021-07-12</li><br/><li><span>小人物</span> 👍（0） 💬（5）<p>老师您好，我有两个问题想请教：

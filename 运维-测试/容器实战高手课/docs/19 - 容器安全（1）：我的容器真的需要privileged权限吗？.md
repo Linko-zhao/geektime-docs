@@ -18,7 +18,7 @@
 # docker run --name iptables -it registry/iptables:v1 bash
 [root@0b88d6486149 /]# iptables -L
 iptables v1.8.4 (nf_tables): Could not fetch rule set generation id: Permission denied (you must be root)
- 
+
 [root@0b88d6486149 /]# id
 uid=0(root) gid=0(root) groups=0(root)
 ```
@@ -37,10 +37,10 @@ iptables
 [root@44168f4b9b24 /]# iptables -L
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain FORWARD (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain OUTPUT (policy ACCEPT)
 target     prot opt source               destination
 ```
@@ -85,10 +85,10 @@ target     prot opt source               destination
 # sudo /usr/sbin/capsh --keep=1 --user=root   --drop=cap_net_admin  --   -c './iptables -L;sleep 100'
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain FORWARD (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain OUTPUT (policy ACCEPT)
 target     prot opt source               destination
 iptables: Permission denied (you must be root).
@@ -102,7 +102,7 @@ iptables: Permission denied (you must be root).
 # ps -ef | grep sleep
 root     22603 22275  0 19:44 pts/1    00:00:00 sudo /usr/sbin/capsh --keep=1 --user=root --drop=cap_net_admin -- -c ./iptables -L;sleep 100
 root     22604 22603  0 19:44 pts/1    00:00:00 /bin/bash -c ./iptables -L;sleep 100
- 
+
 # cat /proc/22604/status | grep Cap
 CapInh:            0000000000000000
 CapPrm:          0000003fffffefff
@@ -147,7 +147,7 @@ $ getcap ./iptables
 $./iptables -L
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain FORWARD (policy ACCEPT)
 target     prot opt source               destination
 DOCKER-USER  all  --  anywhere             anywhere
@@ -190,10 +190,10 @@ CapAmb:         0000000000000000
 [root@cfedf124dcf1 /]# iptables -L
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain FORWARD (policy ACCEPT)
 target     prot opt source               destination
- 
+
 Chain OUTPUT (policy ACCEPT)
 target     prot opt source               destination
 ```
@@ -222,22 +222,29 @@ target     prot opt source               destination
 setcap -r $(which ping)
 
 顺便举个之前使用过的例子：普通用户默认没有 tcpdump 抓包权限，可添加 net_raw、net_admin caps：
-sudo setcap cap_net_raw,cap_net_admin+ep $(which tcpdump)</p>2020-12-29</li><br/><li><span>朱新威</span> 👍（7） 💬（3）<p>已经更新20讲了，莫名有点心慌，生怕这么好的专栏结束了🤪</p>2020-12-28</li><br/><li><span>morse</span> 👍（4） 💬（1）<p>老师, 您好, 我在 Ubuntu20.04 下删除 ping 的 capabilities 后, 切换别的用户后, 还是可以正常使用 ping 的, 我进行了以下操作. 
+sudo setcap cap_net_raw,cap_net_admin+ep $(which tcpdump)</p>2020-12-29</li><br/><li><span>朱新威</span> 👍（7） 💬（3）<p>已经更新20讲了，莫名有点心慌，生怕这么好的专栏结束了🤪</p>2020-12-28</li><br/><li><span>morse</span> 👍（4） 💬（1）<p>老师, 您好, 我在 Ubuntu20.04 下删除 ping 的 capabilities 后, 切换别的用户后, 还是可以正常使用 ping 的, 我进行了以下操作.
+
 # getcap &#47;usr&#47;bin&#47;ping # 发现ping 具有cap_net_raw capability
 
 &#47;usr&#47;bin&#47;ping = cap_net_raw+ep
+
 # 删除全部 capabilites
+
 # sudo setcap -r &#47;usr&#47;bin&#47;ping
+
 # 切换普通用户 sudo su - appuser
+
 # ping localhost # 可以正常工作
+
 # capsh --print -- -c &quot;&#47;bin&#47;ping -c 1 localhost&quot; #可以看到还是具有cap_net_raw
+
 Current: =
 Bounding set =cap_chown,cap_dac_override,cap_dac_read_search,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_linux_immutable,cap_net_bind_service,cap_net_broadcast,cap_net_admin,cap_net_raw,cap_ipc_lock,cap_ipc_owner,cap_sys_module,cap_sys_rawio,cap_sys_chroot,cap_sys_ptrace,cap_sys_pacct,cap_sys_admin,cap_sys_boot,cap_sys_nice,cap_sys_resource,cap_sys_time,cap_sys_tty_config,cap_mknod,cap_lease,cap_audit_write,cap_audit_control,cap_setfcap,cap_mac_override,cap_mac_admin,cap_syslog,cap_wake_alarm,cap_block_suspend,cap_audit_read
 ....
 
-# capsh --print # 打印当前用户全部 capabilities, 发现当前用户是具有 cap_net_raw 
+# capsh --print # 打印当前用户全部 capabilities, 发现当前用户是具有 cap_net_raw
 
-给我的感觉, 在 Ubuntu 20.04 中, useradd appuser 创建好的用户, 初始就具有一定的 capabilites, 所以在运行程序的时候, 用户自身的 capabilities+程序的 capabliities 是最终的. 所以就算把文件的 capabilities 删除, 只要用户还具有这个能力, 那么还是可以正常执行的. 
+给我的感觉, 在 Ubuntu 20.04 中, useradd appuser 创建好的用户, 初始就具有一定的 capabilites, 所以在运行程序的时候, 用户自身的 capabilities+程序的 capabliities 是最终的. 所以就算把文件的 capabilities 删除, 只要用户还具有这个能力, 那么还是可以正常执行的.
 
 那么我的问题来了, 我没有找到, 如何对一个用户限制这种 capabilities, 即我 useradd 一个 用户, 怎么限制这个用户的 capabilities.
 </p>2021-01-11</li><br/><li><span>Sports</span> 👍（2） 💬（1）<p>selinux是不是实际上就是限制cap权限的操作</p>2021-08-02</li><br/><li><span>Tony</span> 👍（1） 💬（2）<p>老师你好。请问在Linux中（比如centos），在允许普通用户使用docker以后，如何如何限制用户不能读取，宿主机上非该普通用户的文件？</p>2020-12-28</li><br/><li><span>老酒馆</span> 👍（6） 💬（0）<p>getcap &#47;usr&#47;bin&#47;ping 查看ping进程当前cap

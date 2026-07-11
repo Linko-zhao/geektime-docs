@@ -27,7 +27,7 @@ $ rgrep Hel[^\\s]+ a.txt
 
 ```plain
 $ rgrep Hel[^\\s]+ a*.txt
-a.txt 
+a.txt
     55:1 Hello world. This is an exmaple text
     89:1 Help me! I need assistant!
     5:6  Use `Help` to get help.
@@ -65,17 +65,17 @@ use tokio::fs;
 #[clap(version = &quot;1.0&quot;, author = &quot;Custer&lt;custer@email.cn&gt;&quot;)]
 #[clap(setting = AppSettings::ColoredHelp)]
 struct Opts {
-    find: String,
-    path: String,
+find: String,
+path: String,
 }
 
 #[tokio::main]
 async fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
-    &#47;&#47; 1. 解析参数
-    let opts: Opts = Opts::parse();
-    let find = opts.find;
-    let path = opts.path;
-    let length = find.len();
+&#47;&#47; 1. 解析参数
+let opts: Opts = Opts::parse();
+let find = opts.find;
+let path = opts.path;
+let length = find.len();
 
     &#47;&#47; 2. 读取文件
     let contents = fs::read_to_string(path).await?;
@@ -94,8 +94,10 @@ async fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
         }
     }
     Ok(())
+
 }
-```
+
+````
 2. 允许用户提供一个正则表达式，来查找文件中所有包含该字符串的行
 ```rust
     &#47;&#47; 3. 匹配字符串
@@ -113,10 +115,11 @@ async fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
             );
         }
     }
-```
+````
+
 3. 允许用户提供一个正则表达式，来查找满足文件通配符的所有文件(好像并不需要使用globset 或者 glob 就可以处理通配符？）
 
-```rust
+````rust
 ...
 struct Opts {
     find: String,
@@ -179,7 +182,7 @@ async fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
     let re = Regex::new(&amp;re_key_word).unwrap();
 
     for file_path in file_path {
-        
+
         let mut file = File::open(&amp;file_path).await?;
         &#47;&#47; let mut contents = vec![];
         let result = tokio::fs::read_to_string(&amp;file_path).await?;
@@ -277,9 +280,11 @@ error: process didn&#39;t exit successfully: `E:\geektime-Rust-master\geektime-r
 把整个程序分成了fs、pattern、formatter三个部分，分别负责文件读写、匹配和高亮及输出console。先分别敲定了trait，然后实现。以后可以扩展使用不同的fs来源、更多的匹配模式、不同的formatter。
 不过在编写泛型的时候遇到了个问题：
 首先存在一个trait MatchOutput:
-```
+````
+
 pub trait MatchOutput&lt;T&gt;
-    where T: Display
+where T: Display
+
 ```
 当我想实现另一个trait Printer时：
 ``
@@ -288,12 +293,16 @@ pub struct Printer&lt;M: Display, T: MatchOutput&lt;M&gt;&gt;
     pub formatter: T,
 }
 ```
+
 rust会编译不通过，提示存在未使用的泛型M：
+
 ```
 error[E0392]: parameter `M` is never used
 ```
+
 对此不太理解，也不知道是不是因为这不是最佳实践。
 现在临时的解决方案是添加一个私有的变量_m:M，并在写new方法的时候将其初始化为None：
+
 ```
 pub struct Printer&lt;M: Display, T: MatchOutput&lt;M&gt;&gt;
 {
@@ -303,5 +312,6 @@ pub struct Printer&lt;M: Display, T: MatchOutput&lt;M&gt;&gt;
     pub formatter: T,
 }
 ```
+
 蹲个老师的解答。</p>2022-03-19</li><br/><li><span>Geek_994f3b</span> 👍（0） 💬（0）<p>也写了个：https:&#47;&#47;github.com&#47;startdusk&#47;rgrep，欢迎老师指正</p>2022-03-08</li><br/>
 </ul>

@@ -158,7 +158,7 @@ SVG和Canvas在使用上的不同主要可以分为两点，分别是**写法上
     ...
     circle.setAttribute('data-name', node.data.name);
     ...
-    
+
     if(children) {
      const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       ...
@@ -235,7 +235,7 @@ SVG和Canvas在使用上的不同主要可以分为两点，分别是**写法上
 
 欢迎在留言区和我讨论，分享你的答案和思考，也欢迎你把这节课分享给你的朋友，我们下节课见！
 
-* * *
+---
 
 ## 源码
 
@@ -243,28 +243,28 @@ SVG和Canvas在使用上的不同主要可以分为两点，分别是**写法上
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Link</span> 👍（36） 💬（4）<p>1. 使用 CSS 设置样式的好处：可以将样式和节点解耦，有利于样式的模块化和复用，比如多种主题色，一键换色等。
 2. 先用 SVG 生成层级关系图，再用 Canvas 来完成绘制，此时 SVG 将作为一张静态图片被绘制在 Canvas 中。和单独使用 Canvas 绘图相比，这种混合方式代码量更少，代码更加可读，易维护。</p>2020-06-27</li><br/><li><span>Geek_3469f6</span> 👍（7） 💬（4）<p>if(target.nodeName === &#39;text&#39;) target = target.parentNode;
- 
+
 请问，这句代码是不是有问题？找到文本节点的父节点，是group节点。设置了fill，有什么用处？</p>2020-06-26</li><br/><li><span>Frojan</span> 👍（5） 💬（1）<p>canvas绘制svg，和单独用svg对比，好处是可以规避svg节点过多时的性能瓶颈，但是也失去了svg方便的可交互性。和单独用canvas对比，写法就由写一堆绘制指令变成了写声明式svg加一句绘图指令，单纯绘制性能在绘制指令多且复杂的情况貌似有比较大的提升？(这个不确定svg的解析时间是不是可以忽略) ，但是交互还得使用canvas的方式实现，如果要做动画也会变得麻烦。</p>2020-09-06</li><br/><li><span>Geek_00734e</span> 👍（4） 💬（2）<p>SVG画出来的效果看着更加清晰，canvas画出来的好模糊，这是什么原因啊。尺寸都是一样的</p>2021-01-10</li><br/><li><span>Cailven</span> 👍（4） 💬（2）<p>关于svg，我补充一点，如今微信公众号互动图文支持使用svg制作交互和动画，但不支持js语言，因此掌握原生svg语言非常重要，并不是任何场景都可以使用js来声明和调用该系统的。</p>2020-06-28</li><br/><li><span>coder</span> 👍（3） 💬（1）<p>做可视化组件，从性能的角度来讲，是SVG好一些，还是Canvas好一些？</p>2020-07-03</li><br/><li><span>Geek_07ad60</span> 👍（3） 💬（2）<p>还是不太理解声明式和指令式，请老师再详解一下，谢谢！</p>2020-06-29</li><br/><li><span>特异型大光头</span> 👍（2） 💬（2）<p>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 
 &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;Document&lt;&#47;title&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;Document&lt;&#47;title&gt;
 &lt;&#47;head&gt;
 
 &lt;body&gt;
-    &lt;svg xmlns=&quot;http:&#47;&#47;www.w3.org&#47;2000&#47;svg&quot; version=&quot;1.1&quot;&gt;
-    &lt;&#47;svg&gt;
-    &lt;script&gt;
-        const svgroot = document.querySelector(&#39;svg&#39;);
-        const circle = document.createElementNS(&#39;http:&#47;&#47;http:&#47;&#47;www.w3.org&#47;2000&#47;svg&#39;, &#39;circle&#39;);
-        circle.setAttribute(&#39;cx&#39;, 100);
-        circle.setAttribute(&#39;cy&#39;, 100);
-        circle.setAttribute(&#39;r&#39;, 50);
-        circle.setAttribute(&#39;fill&#39;, &#39;#ff0000&#39;);
-        svgroot.appendChild(circle);
-    &lt;&#47;script&gt;
+&lt;svg xmlns=&quot;http:&#47;&#47;www.w3.org&#47;2000&#47;svg&quot; version=&quot;1.1&quot;&gt;
+&lt;&#47;svg&gt;
+&lt;script&gt;
+const svgroot = document.querySelector(&#39;svg&#39;);
+const circle = document.createElementNS(&#39;http:&#47;&#47;http:&#47;&#47;www.w3.org&#47;2000&#47;svg&#39;, &#39;circle&#39;);
+circle.setAttribute(&#39;cx&#39;, 100);
+circle.setAttribute(&#39;cy&#39;, 100);
+circle.setAttribute(&#39;r&#39;, 50);
+circle.setAttribute(&#39;fill&#39;, &#39;#ff0000&#39;);
+svgroot.appendChild(circle);
+&lt;&#47;script&gt;
 &lt;&#47;body&gt;
 
 &lt;&#47;html&gt;
@@ -289,25 +289,25 @@ Canvas是命令式的，通过JavaScript代码执行绘图指令来绘制图形�
 
 html
 &lt;svg id=&quot;hierarchy-svg&quot; ...&gt;  
-  &lt;!-- SVG内容，包括circle和text元素 --&gt;  
+&lt;!-- SVG内容，包括circle和text元素 --&gt;  
 &lt;&#47;svg&gt;
 你可以通过CSS来设置样式：
 
 css
 #hierarchy-svg circle {  
-  fill: #ddd; &#47;* 设置circle的背景色 *&#47;  
-  stroke: #000; &#47;* 设置circle的边框颜色 *&#47;  
-  stroke-width: 2px; &#47;* 设置circle的边框宽度 *&#47;  
-}  
-  
+fill: #ddd; &#47;* 设置circle的背景色 _&#47;  
+stroke: #000; &#47;_ 设置circle的边框颜色 _&#47;  
+stroke-width: 2px; &#47;_ 设置circle的边框宽度 *&#47;  
+}
+
 #hierarchy-svg circle:hover {  
-  fill: #f00; &#47;* 鼠标悬停时改变circle的背景色 *&#47;  
-}  
-  
+fill: #f00; &#47;* 鼠标悬停时改变circle的背景色 *&#47;  
+}
+
 #hierarchy-svg text {  
-  fill: #333; &#47;* 设置text的颜色 *&#47;  
-  font-family: Arial, sans-serif; &#47;* 设置字体 *&#47;  
-  font-size: 12px; &#47;* 设置字体大小 *&#47;  
+fill: #333; &#47;* 设置text的颜色 _&#47;  
+font-family: Arial, sans-serif; &#47;_ 设置字体 _&#47;  
+font-size: 12px; &#47;_ 设置字体大小 *&#47;  
 }
 这样做的好处
 统一样式管理：通过将SVG样式放在CSS文件中，你可以更容易地管理和维护样式。这意味着你可以在一个地方更改所有circle或text元素的样式，而不是在每个SVG元素中单独设置。

@@ -229,7 +229,7 @@ void Interpreter::run(CodeObject* codes) {
 ```python
 def foo():
     print("hello")
-	
+
 class A(object):
     def func(self):
         print(self)

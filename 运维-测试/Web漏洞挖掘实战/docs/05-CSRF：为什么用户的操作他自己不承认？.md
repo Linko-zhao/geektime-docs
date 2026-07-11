@@ -337,7 +337,7 @@ POST: <input type = "hidden" name = "csrf_token" value = "value"/>
 
 Samesite Cookie 是 HTTP 响应头 Set-Cookie 的属性之一，用于声明该Cookie是否仅限于第一方(首次发起请求的客户端)或者同一网站的后端上下文(后端设置该Cookie的失效时间，在这个失效时间内任意客户端进行通信使用该Cookie是合法的)。
 
-Samesite 支持三种参数形式，因为该参数是一个配置项，事实上是对 “Cookie&#47;Set-Cookie”  中的Cookie信息的使用进行规范，这种规范是对浏览器的功能进行规范的：
+Samesite 支持三种参数形式，因为该参数是一个配置项，事实上是对 “Cookie&#47;Set-Cookie” 中的Cookie信息的使用进行规范，这种规范是对浏览器的功能进行规范的：
 
 - “Lax” ： Cookies允许和顶级导航一起发送，这种方式就是跨域请求，即支持第三方搜索引擎的GET请求，支支持三种情况：链接、预加载请求、GET表单；
 
@@ -349,9 +349,9 @@ Samesite 支持三种参数形式，因为该参数是一个配置项，事实�
 
 Samesite Cookie 和 双重Cookie 两者技术的区别：
 
-- 根本区别： 
-  + Samesite Cookie 技术限制的是使用Cookie的范围，即其作用是：可以阻止第三方滥用Cookie，即上述所述对URL发送请求能否携带Cookie；
-  + 双重Cookie 的技术是：用户访问页面（拥有特定的域名），注入一个Cookie，该Cookie不是由后端决定的，是由前端随机生成的，提交给后端进行存储；当前端重新进行请求时，重新发送Cookie通过URL参数，后端进行验证是否与第一次访问相同，相同允许，不相同拒绝；
+- 根本区别：
+  - Samesite Cookie 技术限制的是使用Cookie的范围，即其作用是：可以阻止第三方滥用Cookie，即上述所述对URL发送请求能否携带Cookie；
+  - 双重Cookie 的技术是：用户访问页面（拥有特定的域名），注入一个Cookie，该Cookie不是由后端决定的，是由前端随机生成的，提交给后端进行存储；当前端重新进行请求时，重新发送Cookie通过URL参数，后端进行验证是否与第一次访问相同，相同允许，不相同拒绝；
 - Samesite 缺点：
   - 如果一个网站有多个子域，那么主域的Cookie无法被携带到子域；
   - Lax 下还有存在CSRF攻击的可能性的，如果设置为 Strict，那么用户体验不好；
@@ -369,7 +369,7 @@ Samesite Cookie 和 双重Cookie 两者技术的区别：
 &lt;script&gt;
 
 &lt;body onload = &quot;attack()&quot;&gt;
-    &#47;&#47; ...
+&#47;&#47; ...
 &lt;&#47;body&gt;
 
 这段攻击代码不是很理解，页面加载函数里form.submit()；

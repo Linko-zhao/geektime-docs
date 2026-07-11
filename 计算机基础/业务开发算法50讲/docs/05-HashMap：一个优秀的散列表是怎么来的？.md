@@ -56,12 +56,12 @@ public class Main {
         int bbb = 0;
         int ccc = 0;
         int ddd = 0;
-        
+
         for (String s : words) {
            if (s == "aaa") aaa++;
            if (s == "bbb") bbb++;
            if (s == "ccc") ccc++;
-           if (s == "ddd") ddd++;   
+           if (s == "ddd") ddd++;
         }
     }
 }
@@ -458,13 +458,11 @@ i=2 -&gt; h = 31 * (31 * (31 * 0 + val[0]) + val[1]) + val[2]
 复习 : 如果是2^n 那么只有最高位为1，所以 num &amp; 2^n -1 
 也就是 低位全是1 就获取到了取余的数据
 
-11 % 2 
+11 % 2
 
 1011 &amp;
 0001
-= 1</p>2021-12-22</li><br/><li><span>友</span> 👍（0） 💬（1）<p>31*i 可以直接转化为(i &lt;&lt; 5)- i 看到这句就想起csapp第二章（应该是第二章）</p>2021-12-22</li><br/><li><span>毛小树</span> 👍（1） 💬（0）<p>为什么hashCode的计算选择31?  1. 一定要奇数。不能用偶数。
-2. 素数不素数其实关系不大。
-3. 用31是因为31=2^5-1。可以把乘法转换成开销更小的位移操作。提高效率。
+= 1</p>2021-12-22</li><br/><li><span>友</span> 👍（0） 💬（1）<p>31*i 可以直接转化为(i &lt;&lt; 5)- i 看到这句就想起csapp第二章（应该是第二章）</p>2021-12-22</li><br/><li><span>毛小树</span> 👍（1） 💬（0）<p>为什么hashCode的计算选择31? 1. 一定要奇数。不能用偶数。2. 素数不素数其实关系不大。3. 用31是因为31=2^5-1。可以把乘法转换成开销更小的位移操作。提高效率。
 </p>2022-06-19</li><br/><li><span>拓山</span> 👍（0） 💬（0）<p>为什么是31?
 https:&#47;&#47;stackoverflow.com&#47;questions&#47;299304&#47;why-does-javas-hashcode-in-string-use-31-as-a-multiplier&#47;299748#299748
 排名第一的回答给出了理论公式：31 * i == (i &lt;&lt; 5) - i，但对工程实践意义不大。

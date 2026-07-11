@@ -52,7 +52,7 @@
         <i class="el-icon-location"></i>
         <span>直播操作台</span>
       </template>
-      <el-menu-item-group>  
+      <el-menu-item-group>
         <el-menu-item index="1-1">申请中心</el-menu-item>
         <el-menu-item index="1-2">直播间</el-menu-item>
       </el-menu-item-group>

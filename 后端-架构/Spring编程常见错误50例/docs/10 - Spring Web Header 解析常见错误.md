@@ -373,7 +373,7 @@ public void handleReturnValue(@Nullable Object returnValue, MethodParameter retu
 参考下面的关键代码：
 
 ```
-   //决策返回值是何种 MediaType    
+   //决策返回值是何种 MediaType
    MediaType selectedMediaType = null;
    MediaType contentType = outputMessage.getHeaders().getContentType();
    boolean isContentTypePreset = contentType != null && contentType.isConcrete();
@@ -386,7 +386,7 @@ public void handleReturnValue(@Nullable Object returnValue, MethodParameter retu
       HttpServletRequest request = inputMessage.getServletRequest();
       List<MediaType> acceptableTypes = getAcceptableMediaTypes(request);
       List<MediaType> producibleTypes = getProducibleMediaTypes(request, valueType, targetType);
-      //省略其他非关键代码 
+      //省略其他非关键代码
       List<MediaType> mediaTypesToUse = new ArrayList<>();
       for (MediaType requestedType : acceptableTypes) {
          for (MediaType producibleType : producibleTypes) {
@@ -395,13 +395,13 @@ public void handleReturnValue(@Nullable Object returnValue, MethodParameter retu
             }
          }
       }
-      //省略其他关键代码 
+      //省略其他关键代码
       for (MediaType mediaType : mediaTypesToUse) {
          if (mediaType.isConcrete()) {
             selectedMediaType = mediaType;
             break;
          }
-        //省略其他关键代码 
+        //省略其他关键代码
       }
 ```
 
@@ -561,7 +561,7 @@ private void findNext() {
 }
 然后说：返回结果并没有针对 Header 的名称做任何大小写忽略或转化工作。没看懂。其他小伙伴看懂了吗？
 
-这里说的返回结果指什么？ if( headers.getName( j ).equalsIgnoreCase( next ))  这行代码不是忽略了大小写了吗？
+这里说的返回结果指什么？ if( headers.getName( j ).equalsIgnoreCase( next )) 这行代码不是忽略了大小写了吗？
 
 </p>2021-05-16</li><br/>
 </ul>

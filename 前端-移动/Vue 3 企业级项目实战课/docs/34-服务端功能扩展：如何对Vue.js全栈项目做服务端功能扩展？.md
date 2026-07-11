@@ -133,22 +133,22 @@
 
 ```typescript
 // packages/work-server/src/index.ts
-import path from 'node:path';
-import Koa from 'koa';
-import koaStatic from 'koa-static';
-import koaMount from 'koa-mount';
+import path from "node:path";
+import Koa from "koa";
+import koaStatic from "koa-static";
+import koaMount from "koa-mount";
 // ...
 
 const app = new Koa();
 // ...
 
-const publicDirPath = path.join(getServerDir(), 'public');
-app.use(koaMount('/public', koaStatic(publicDirPath)));
+const publicDirPath = path.join(getServerDir(), "public");
+app.use(koaMount("/public", koaStatic(publicDirPath)));
 
 // 静态资源路径前缀“/static”，读取新的一个静态资源目录
-const staticDirPath = path.join(getServerDir(), 'static');
-app.use(koaMount('/static', koaStatic(staticDirPath)));
- 
+const staticDirPath = path.join(getServerDir(), "static");
+app.use(koaMount("/static", koaStatic(staticDirPath)));
+
 // ...
 ```
 
@@ -164,21 +164,21 @@ app.use(koaMount('/static', koaStatic(staticDirPath)));
 const context = {};
 
 async function middleware1(ctx: any, next: any) {
-  console.log('打印 001');
+  console.log("打印 001");
   await next();
-  console.log('打印 004');
+  console.log("打印 004");
 }
 
 async function middleware2(ctx: any, next: any) {
-  console.log('处理HTTP响应之前');
+  console.log("处理HTTP响应之前");
   await next();
-  console.log('处理HTTP响应之前');
+  console.log("处理HTTP响应之前");
 }
 
 async function middleware3(ctx: any, next: any) {
-  console.log('打印 002');
+  console.log("打印 002");
   await next();
-  console.log('打印 003');
+  console.log("打印 003");
 }
 
 Promise.resolve(
@@ -188,13 +188,13 @@ Promise.resolve(
         return Promise.resolve(
           middleware3(context, async () => {
             return Promise.resolve();
-          })
+          }),
         );
-      })
+      }),
     );
-  })
+  }),
 ).then(() => {
-  console.log('执行结束');
+  console.log("执行结束");
 });
 ```
 
@@ -211,7 +211,7 @@ Promise.resolve(
 基于这张的HTTP请求记录的设计图，可以这么来实现代码。
 
 ```typescript
-import type { Context, Next } from 'koa';
+import type { Context, Next } from "koa";
 
 export async function record(ctx: Context, next: Next) {
   const info = `[${ctx.method}] ${ctx.url}`;
@@ -222,7 +222,7 @@ export async function record(ctx: Context, next: Next) {
   // 跳出内部中间件后
   console.log(`${info} 执行内部所有中间件耗时 ${Date.now() - start}ms`);
   // 监听相应结束
-  ctx.res.on('finish', () => {
+  ctx.res.on("finish", () => {
     console.log(`${info} 请求完整耗时 ${Date.now() - start}ms`);
   });
 }
@@ -232,30 +232,30 @@ export async function record(ctx: Context, next: Next) {
 
 ```typescript
 // packages/work-server/src/index.ts
-import path from 'node:path';
-import Koa from 'koa';
-import koaStatic from 'koa-static';
-import koaMount from 'koa-mount';
-import koaBodyParser from 'koa-bodyparser';
-import routers from './router';
-import { getServerDir } from './util/file';
-import { syncFileFromCDN } from './middleware/sync-cdn';
-import { record } from './middleware/record';
+import path from "node:path";
+import Koa from "koa";
+import koaStatic from "koa-static";
+import koaMount from "koa-mount";
+import koaBodyParser from "koa-bodyparser";
+import routers from "./router";
+import { getServerDir } from "./util/file";
+import { syncFileFromCDN } from "./middleware/sync-cdn";
+import { record } from "./middleware/record";
 
 const app = new Koa();
 
 // 使用扩展的 HTTP 日志打印中间件
 app.use(record);
 
-const publicDirPath = path.join(getServerDir(), 'public');
+const publicDirPath = path.join(getServerDir(), "public");
 app.use(koaBodyParser());
-app.use(koaMount('/public', koaStatic(publicDirPath)));
+app.use(koaMount("/public", koaStatic(publicDirPath)));
 app.use(syncFileFromCDN);
 app.use(routers);
 
 const port = 8001;
 app.listen(port, () => {
-  console.log('服务启动: http://127.0.0.1:' + port);
+  console.log("服务启动: http://127.0.0.1:" + port);
 });
 ```
 
@@ -282,6 +282,7 @@ app.listen(port, () => {
 通过今天的学习，希望能加深你对技术项目功能扩展的认知，也希望你在以后的开发工作中，能举一反三，利用我们整理的“套路”，设计出更优雅的项目架构。我们下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/33-34)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-10-07</li><br/>
 </ul>

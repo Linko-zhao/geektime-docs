@@ -210,7 +210,7 @@ int get_count() const {
     return count;
 }
 在声明mutable  std::mutex m; 需要加 mutable</p>2021-05-25</li><br/><li><span>EncodedStar</span> 👍（12） 💬（1）<p>用好const 记住文章中的“ “const &amp;”可以引用任何类型，是函数入口参数的最佳类型” 是重点</p>2020-05-22</li><br/><li><span>罗杰</span> 👍（7） 💬（2）<p>C++ 中volatile 关键字, 我感觉最关键的是要知道, 他根本不构成 同步语义, 多线程编程中要杜绝使用. 
-记得之前看过一个资料, volatile 从C++ 标准中出现的原因是 为了解决 &quot;硬件映射到内存上...&quot; 的问题, 也就是说 一般的开发者, 根本不会涉及到这一块. 
+记得之前看过一个资料, volatile 从C++ 标准中出现的原因是 为了解决 &quot;硬件映射到内存上...&quot; 的问题, 也就是说 一般的开发者, 根本不会涉及到这一块.
 
 java 中 volatile 和 C++ 中的 volatile 还不一样, java 中的volatile 是构成 happen-before的, 是可以使用在多线程编程当中的</p>2020-08-04</li><br/><li><span>Stephen</span> 👍（7） 💬（2）<p>&quot;const 定义的常量在预处理阶段并不存在，而是直到运行阶段才会出现。&quot;,老师,那编译阶段它也没有出现吗?</p>2020-07-31</li><br/><li><span>木须柄</span> 👍（3） 💬（1）<p>万能引用 (universal reference) 一般是指在函数模板时传入的 &quot;T&amp;&amp;&quot; 这种形参形式，主要作用是用来同时匹配左值和右值实参的传入，这里我觉得罗老师更多是借用了这个概念，主旨是为了说明 &quot;const &amp;&quot; 使用的广泛性</p>2021-10-04</li><br/><li><span>IMBFD</span> 👍（3） 💬（1）<p>前辈在const函数那里为什么不说明其实是const修饰了this呢？这样就很好解释了</p>2020-09-08</li><br/><li><span>宇天飞</span> 👍（3） 💬（1）<p>学完了这节课，你觉得今后应该怎么用 const 呢？
 1、修饰常量、成员变量、成员函数

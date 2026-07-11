@@ -131,13 +131,13 @@ if image_path.exists():
     # 打开图像文件并调整尺寸
     with Image.open(image_path) as img:
         img = img.resize((1024, 576))  # 调整为1024x576的尺寸
-        
+       
         # 将调整后的图像保存到内存中
         from io import BytesIO
         buf = BytesIO()
         img.save(buf, format='JPEG')
         buf.seek(0)
-        
+       
         # 使用调整后的图像进行视频生成
         response = requests.post(
             f"https://api.stability.ai/v2beta/image-to-video",
@@ -153,12 +153,12 @@ if image_path.exists():
                 "motion_bucket_id": 127
             },
         )
-        
+       
         # 检查API响应
         if response.status_code == 200:
             generation_id = response.json()['id']
             print(f"视频生成已启动,生成ID: {generation_id}")
-            
+           
             # 循环查询视频生成结果
             while True:
                 response = requests.request(
@@ -169,7 +169,7 @@ if image_path.exists():
                         'authorization': f"Bearer {STABILITY_API_KEY}"
                     },
                 )
-                
+               
                 if response.status_code == 202:
                     print("视频生成中,10秒后再次查询...")
                     sleep(10)

@@ -72,10 +72,10 @@ PRAGMA SQLITE_THREADSAFE = 2
 如果使用WCDB在初始化的时候可以指定连接池的大小，在微信中我们设置的大小是4。
 
 ```
-public static SQLiteDatabase openDatabase (String path, 
-                    SQLiteDatabase.CursorFactory factory, 
-                    int flags, 
-                    DatabaseErrorHandler errorHandler, 
+public static SQLiteDatabase openDatabase (String path,
+                    SQLiteDatabase.CursorFactory factory,
+                    int flags,
+                    DatabaseErrorHandler errorHandler,
                     int poolSize)
 ```
 

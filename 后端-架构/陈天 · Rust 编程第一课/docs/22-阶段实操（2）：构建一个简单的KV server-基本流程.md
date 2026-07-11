@@ -950,59 +950,63 @@ KV server 并不是一个很难的项目，但想要把它写好，并不简单�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>newzai</span> 👍（15） 💬（3）<p>dev-dependencies 与 dependencies的第三方crate是如何划分的?tokio 为啥不放到 dependencies? 放到 dependencies 与 dev-dependencies 有啥区别？某些如何决策一个 crate放到哪个 dependencies？</p>2021-10-11</li><br/><li><span>Geek_b52974</span> 👍（7） 💬（1）<p>为何不是这样设计
 
-  fn set(&amp;self, table: &amp;str, key: String, value: impl Into&lt;Value&gt;) 
+fn set(&amp;self, table: &amp;str, key: String, value: impl Into&lt;Value&gt;)
 
 这样以来就可以让使用者知道他有一个新的type 需要存时应该 implement 这个 trait 也不会让使用时需要一直 写into</p>2021-11-06</li><br/><li><span>施泰博</span> 👍（6） 💬（1）<p>用powershell的。RUST _LOG=info。改成$env:RUST_LOG=&quot;info&quot;;然后再cargo run</p>2021-12-21</li><br/><li><span>Roy Liang</span> 👍（4） 💬（1）<p>老师，get_all接口为什么不好？</p>2021-10-20</li><br/><li><span>losuika</span> 👍（3） 💬（1）<p>感觉 get_iter 加上生命周期的约束好一些，因为现在 GAT 还没稳定，可以这样实现下，
 fn get_iter&lt;&#39;a&gt;(
-    &amp;&#39;a self,
-    table: &amp;str,
+&amp;&#39;a self,
+table: &amp;str,
 ) -&gt; Result&lt;Box&lt;dyn Iterator&lt;Item = crate::Kvpair&gt; + &#39;a&gt;, crate::KvError&gt; {
-    let table = self.get_or_create_table(table);
-    let inner = Iter::new(table);
-    Ok(Box::new(inner))
+let table = self.get_or_create_table(table);
+let inner = Iter::new(table);
+Ok(Box::new(inner))
 }
 
 struct Iter&lt;&#39;a&gt; {
-    _table: *const Ref&lt;&#39;static, String, DashMap&lt;String, Value&gt;&gt;,
-    inner: dashmap::iter::Iter&lt;&#39;a, String, Value&gt;,
+_table: *const Ref&lt;&#39;static, String, DashMap&lt;String, Value&gt;&gt;,
+inner: dashmap::iter::Iter&lt;&#39;a, String, Value&gt;,
 }
 
 impl&lt;&#39;a&gt; Iter&lt;&#39;a&gt; {
-    fn new(table: Ref&lt;&#39;a, String, DashMap&lt;String, Value&gt;&gt;) -&gt; Self {
-        let t = unsafe {std::mem::transmute::&lt;Ref&lt;&#39;a, String, DashMap&lt;String, Value&gt;&gt;, Ref&lt;&#39;static, String, DashMap&lt;String, Value&gt;&gt;&gt;(table)};
-        let _table = Box::leak(Box::new(t)) as *const Ref&lt;&#39;static, String, DashMap&lt;String, Value&gt;&gt;;
+fn new(table: Ref&lt;&#39;a, String, DashMap&lt;String, Value&gt;&gt;) -&gt; Self {
+let t = unsafe {std::mem::transmute::&lt;Ref&lt;&#39;a, String, DashMap&lt;String, Value&gt;&gt;, Ref&lt;&#39;static, String, DashMap&lt;String, Value&gt;&gt;&gt;(table)};
+let _table = Box::leak(Box::new(t)) as *const Ref&lt;&#39;static, String, DashMap&lt;String, Value&gt;&gt;;
 
         let inner = unsafe {(*_table).iter()};
         Self {_table, inner}
     }
+
 }
 
 impl&lt;&#39;a&gt; Iterator for Iter&lt;&#39;a&gt; {
-    type Item = crate::Kvpair;
+type Item = crate::Kvpair;
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
         let item = self.inner.next();
         item.map(|v| crate::Kvpair::new(v.key(), v.value().clone()))
     }
+
 }
 
 impl&lt;&#39;a&gt; Drop for Iter&lt;&#39;a&gt; {
-    fn drop(&amp;mut self) {
-        unsafe { drop_in_place(self._table as *mut Ref&lt;&#39;a, String, DashMap&lt;String, Value&gt;&gt;) };
-    }
+fn drop(&amp;mut self) {
+unsafe { drop_in_place(self._table as *mut Ref&lt;&#39;a, String, DashMap&lt;String, Value&gt;&gt;) };
+}
 }</p>2021-11-29</li><br/><li><span>罗杰</span> 👍（2） 💬（1）<p>必须仔细看老师的教程，不仔细就掉坑里了。说实话老师的文章讲的是真心详细，基本上把所有的坑都讲了。如果实在编译不过，去下载老师的源码，千万记得要坚持下去。</p>2021-10-24</li><br/><li><span>xl000</span> 👍（2） 💬（1）<p>```Rust
 impl Kvpair {
-    &#47;&#47;&#47; 创建一个新的 kv pair
-    fn new(key: impl Into&lt;String&gt;, value: impl Into&lt;Value&gt;) -&gt; Self {
-        Self {
-            key: key.into(),
-            value: Some(value.into()),
-        }
-    }
+&#47;&#47;&#47; 创建一个新的 kv pair
+fn new(key: impl Into&lt;String&gt;, value: impl Into&lt;Value&gt;) -&gt; Self {
+Self {
+key: key.into(),
+value: Some(value.into()),
 }
+}
+}
+
 ```
 老师Value类型的参数为什么不用impl Into&lt;Value&gt;来定义呢，会有什么问题吗</p>2021-10-15</li><br/><li><span>pedro</span> 👍（2） 💬（2）<p>得益于老师良好的抽象，我抽出了中午的时间，完成了 hdel 和 hexist 两个命令，如下：
 ```
+
 running 6 tests
 test service::command_service::tests::hget_with_non_exist_key_should_return_404 ... ok
 test service::command_service::tests::hexist_should_work ... ok
@@ -1010,6 +1014,7 @@ test service::command_service::tests::hget_should_work ... ok
 test service::command_service::tests::hdel_should_work ... ok
 test service::command_service::tests::hset_should_work ... ok
 test service::command_service::tests::hgetall_should_work ... ok
+
 ```
 
 有时间再来慢慢补充，rust 确实是爽的不行。</p>2021-10-11</li><br/><li><span>周</span> 👍（1） 💬（3）<p>我把prost的版本改成0.9（0.8版本的可以正常运行) ，然后再测试examples的时候 client.send的时候有个报错:
@@ -1111,3 +1116,4 @@ fn get_values(&amp;self, table: &amp;str, keys: &amp;Vec&lt;String&gt;) -&gt; Re
         assert_res_ok(res, &amp;[10.into(), 11.into()], &amp;[]);
     }</p>2021-10-23</li><br/><li><span>Roy Liang</span> 👍（0） 💬（1）<p>hmget&#47;hmset等命令调用storage接口时，如何进行错误处理比较好？我现在是忽略错误，返回默认值，感觉不太好</p>2021-10-20</li><br/>
 </ul>
+```

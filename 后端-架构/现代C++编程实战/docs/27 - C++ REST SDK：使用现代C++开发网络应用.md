@@ -501,7 +501,7 @@ C++ REST SDK 里的 `http_request` 和 `http_response` 都对 JSON 有原生支�
 “…”部分代表一个名字，而服务器应当返回一个 JSON 的回复，形如：
 
 ```json
-{"msg": "Hi, …!"}
+{ "msg": "Hi, …!" }
 ```
 
 这个服务器的有效代码行同样只有六十多行，如下所示：

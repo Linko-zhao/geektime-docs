@@ -348,12 +348,12 @@ class ApplicationShutdownHooks {
 
 Hook 本质上也是回调，但它往往和一些场景性的行为绑定在一起。在浏览器环境中，我们可以通过 img.onload = func1 来让图片在加载完后执行函数 func1，某种意义上算是一种 Hook。此外在 js 的 vue 框架中，也提供了组件生命周期的 Hook，比如 beforeDestory 钩子函数会在组件即将被销毁前执行，常用于销毁一些当前组件才会用到的定时器。</p>2020-03-19</li><br/><li><span>肖臧</span> 👍（5） 💬（0）<p>补充一下ResultSetExtractor类的extractData方法会回调RowMapper类的mapRow方法，在这里把ResultSet转成Entity实例，下面是具体的代码：
 public List&lt;T&gt; extractData(ResultSet rs) throws SQLException {
-	List&lt;T&gt; results = (this.rowsExpected &gt; 0 ? new ArrayList&lt;&gt;(this.rowsExpected) : new ArrayList&lt;&gt;());
-	int rowNum = 0;
-	while (rs.next()) {
-		results.add(this.rowMapper.mapRow(rs, rowNum++));
-	}
-	return results;
+List&lt;T&gt; results = (this.rowsExpected &gt; 0 ? new ArrayList&lt;&gt;(this.rowsExpected) : new ArrayList&lt;&gt;());
+int rowNum = 0;
+while (rs.next()) {
+results.add(this.rowMapper.mapRow(rs, rowNum++));
+}
+return results;
 }</p>2020-06-08</li><br/><li><span>Michael</span> 👍（5） 💬（1）<p>swift和OC的闭包也属于回调</p>2020-03-19</li><br/><li><span>黄林晴</span> 👍（5） 💬（4）<p>打卡
 回调接口如果定义了多个方法，不也需要全部实现吗
 
@@ -362,9 +362,11 @@ android 中有个hook 概念，多用于反射修改源码机制，进行插件�
 
 1. 如果我们的业务场景是针对老师文中所说的“业务算法”，那两种方式都可以，如果回调不是太复杂，不会导致整个业务逻辑的混乱，那么回调可能是更优雅的一种方案
 2. 有时我们面向的业务本身，可能就是一种模板，比如定义一种业务流程，具体实现是对这种模板的个性化，或者我们对场景是对一种工业加工工艺的数字化实现，这些场景，可以直接套用模版模式的逻辑，回调不能直观体现业务逻辑，就不用考虑了。</p>2020-09-16</li><br/><li><span>Richie</span> 👍（3） 💬（0）<p>Hook机制和观察者模式都是基于Callback来实现的，这两者又有什么区别呢？
-是否可以理解为：
-* Hook一般是同步阻塞回调，是对原应用、框架流程的干预和扩展；
-* 观察者模式一般是异步非阻塞回调，主要实现的语义是当某个事件发生时，我可以做一些其他事情，比如发送通知、比如对事件源做一些额外的处理；
-* Hook常用在框架层面，属于固定流程上一定会发生的；
-* Event Listener则比较常用在具体应用中，事件是可能发生也可能不发生，而且不确定什么时候会发生的；</p>2020-03-25</li><br/>
+   是否可以理解为：
+
+- Hook一般是同步阻塞回调，是对原应用、框架流程的干预和扩展；
+- 观察者模式一般是异步非阻塞回调，主要实现的语义是当某个事件发生时，我可以做一些其他事情，比如发送通知、比如对事件源做一些额外的处理；
+- Hook常用在框架层面，属于固定流程上一定会发生的；
+- Event Listener则比较常用在具体应用中，事件是可能发生也可能不发生，而且不确定什么时候会发生的；</p>2020-03-25</li><br/>
+
 </ul>

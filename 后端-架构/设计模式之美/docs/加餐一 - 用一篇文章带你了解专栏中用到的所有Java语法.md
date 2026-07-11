@@ -165,11 +165,11 @@ public class Dog { // 定义了一个Dog类
   public int getAge() { // 函数或者方法
     return age;
   }
-  
+
   public int getWeigt() {
     return weight;
   }
-  
+
   public void run() {
     // ...
   }
@@ -196,7 +196,7 @@ dog1.run();//调用dog1的run()方法
 public class Dog {// public修饰类
   private int age; // private修饰属性，只能在类内部使用
   private int weight;
-  
+
   public Dog(int age, int weight) {
     this.age = age;
     this.weight = weight;
@@ -205,7 +205,7 @@ public class Dog {// public修饰类
   public int getAge() { //public修饰的方法，任意代码都是可以调用
     return age;
   }
-  
+
   public void run() {
     // ...
   }
@@ -221,20 +221,20 @@ Java语言使用extends关键字来实现继承。被继承的类叫作父类，
 public class Animal { // 父类
   protected int age;
   protected int weight;
-  
+
   public Animal(int age, int weight) {
     this.age = age;
     this.weight = weight;
   }
-  
+
   public int getAge() { // 函数或者方法
     return age;
   }
-  
+
   public int getWeigt() {
     return weight;
   }
-  
+
   public void run() {
     // ...
   }
@@ -254,7 +254,7 @@ public class Cat extends Animal { //子类
   public Cat(int age, int weight) { // 构造函数
     super(age, weight); //调用父类的构造函数
   }
-  
+
   public void miaomiao() {
     //...
   }
@@ -295,7 +295,7 @@ public class Dog implements Runnable {
     return weight;
   }
 
-  @Override 
+  @Override
   public void run() { //实现接口中定义的run()方法
     // ...
   }
@@ -309,7 +309,7 @@ Java提供了一些现成的容器。容器可以理解为一些工具类，底�
 ```
 public class DemoA {
   private ArrayList<User> users;
-  
+
   public void addUser(User user) {
     users.add(user);
   }
@@ -355,7 +355,7 @@ public class UserController {
   public UserController(UserService userService) {
     this.userService = userService;
   }
-  
+
   public User getUserById(long userId) {
     User user = null;
     try { //捕获异常
@@ -429,14 +429,14 @@ public class DemoB {
 念书期间用c&#47;c++；后来第一份实习写了2个月的java,去重构一个项目，当时没人教，直接看别人的老代码，不会就网络查；再之后就是第一份正式工作，涉及到分布式存储，底层实现用了c++,客户端调用还是使用了python，python也是现学现卖；再后来，去搞区块链，当时那个区块链项目主要是go语言，我还没看go语言就给我派任务，我就直接用go写了，go的语法学习都是看看别人已经写好的代码，并且这完全不影响我开发的进度和质量，我的代码提交量还是number one。
 最近，又用go去搞搜索引擎，还是比较得心应手吧。
 总之，我同意争哥的说法，编程只是一个赚钱的手段，语言只是实现这个手段的一个工具，不重要。</p>2020-07-18</li><br/><li><span>小马哥</span> 👍（6） 💬（0）<p>大学课程中学习了C，工作中自学并使用JAVA，主要用于web和大数据开发，JAVA不仅仅是一门语言，还是一个技术体系，包括了后来的很多技术框架，学习JAVA语言如果有其他语言基础是很快的，精通后面的一些常用框架就需要一些设计模式的积累。所以还是学习能力最重要：学习，操练，总结，分享，这个路线是我认为很快捷的学习方法。最后学习的东西越多，越容易融会贯通，后来使用Python做推荐系统，我们几个JAVA开发人员，基本是用一个小时过了一遍Python语法，就开工了</p>2019-11-17</li><br/><li><span>相逢是缘</span> 👍（6） 💬（1）<p>非计算机专业，在学校就学习了C语言，在工作中也一直使用C。后来自己看了C++，JAVA。学习一门语言最开始就是一些基本语法和数据结构，了解了这两个就可以自己调试一些简单的demo。接下来就是你的程序不能只在控制台打印信息，要能对外输入和输出。这块一般是两部分:1、还是在自己的计算机内部，能从磁盘读取和保存数据。2、能够和别的计算机通信，也就是socket http等网络编程。再接下来就是一些每个编程语言自己特有的特性，需要好好琢磨和体会。深入一些就是编写的程序到计算机执行是个什么过程，对c来讲，程序如何被编译的，如何链接的，如何被系统装载运行的；对JAVA来讲，需要了解JVM。只有了解了这些，才能了解前辈大牛们的程序为什么那样去写，也才能解决后面遇到的一些深层次的问题。</p>2019-11-17</li><br/><li><span>William</span> 👍（4） 💬（0）<p>居然有加餐，666.
- 
+
 一篇文章涵盖java 语法，赞.
 
 另外补充一下，关于权限限定符，
-还有个default，支持的范围是 本包内可用， 
+还有个default，支持的范围是 本包内可用，
 
-protected 也支持本包内可使用. 
+protected 也支持本包内可使用.
 
-编程语言确实不是最重要的，因为在企业中需要的是能够产生价值的软件，而非其他. 
+编程语言确实不是最重要的，因为在企业中需要的是能够产生价值的软件，而非其他.
 </p>2019-11-17</li><br/>
 </ul>

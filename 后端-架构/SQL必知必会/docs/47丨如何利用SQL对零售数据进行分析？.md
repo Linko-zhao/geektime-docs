@@ -73,7 +73,7 @@ data = pd.read_sql_query(query, engine)
 data['Item'] = data['Item'].str.lower()
 # 去掉none项
 data = data.drop(data[data.Item == 'none'].index)
- 
+
 # 得到一维数组orders_series，并且将Transaction作为index, value为Item取值
 orders_series = data.set_index('Transaction')['Item']
 # 将数据集进行格式转换
@@ -123,49 +123,53 @@ x = [[1, 1, 1, 0, 0, 0],
      [1, 1, 1, 1, 0, 0]]
 df = pd.DataFrame(x, columns=title)
 
-
 # 创建两个表 分别作为支持度和置信度的准备表
+
 df1 = pd.DataFrame(np.zeros([1, 6]), index=[&#39;支持度&#39;], columns=title)
 df2 = pd.DataFrame(np.zeros([6, 6]), index=title, columns=title)
 df3 = pd.DataFrame(np.zeros([6, 6]), index=title, columns=title)
 
-
 # 计算支持度
+
 for i in x:
-    for j in range(1):
-        for k in range(j, 6):
-           if not i[k] : continue
-           df1.iloc[j,k] += 1
+for j in range(1):
+for k in range(j, 6):
+if not i[k] : continue
+df1.iloc[j,k] += 1
 
 support = df1.apply(lambda x: x &#47;5)
+
 # 返回支持度的结果
+
 print(support)
 
 # 计算置信度
+
 for i in x:
-    for j in range(5):
-        # 如果为0 就跳过
-        if not i[j] : continue
-        # 如果不0，继续遍历，如果有购买，便+1
-        for k in range(j+1,5):
-            if not i[k] : continue
-            df2.iloc[j,k] += 1
-            df2.iloc[k,j] += 1
+for j in range(5): # 如果为0 就跳过
+if not i[j] : continue # 如果不0，继续遍历，如果有购买，便+1
+for k in range(j+1,5):
+if not i[k] : continue
+df2.iloc[j,k] += 1
+df2.iloc[k,j] += 1
 for j in range(6):
-    df3.iloc[j] = df2.iloc[j] &#47; df.sum()[j]
+df3.iloc[j] = df2.iloc[j] &#47; df.sum()[j]
 confidence = df3.round(2) # 以3位小数返回置信度表
+
 # 返回置信度的结果
+
 print(confidence)
 
       牛奶   面包   尿布   可乐   啤酒   鸡蛋
-支持度  0.8  0.8  1.0  0.4  0.6  0.2
-      牛奶    面包   尿布    可乐   啤酒   鸡蛋
-牛奶  0.00  0.75  1.0  0.25  0.5  0.0
-面包  0.75  0.00  1.0  0.50  0.5  0.0
-尿布  0.80  0.80  0.0  0.40  0.6  0.0
-可乐  0.50  1.00  1.0  0.00  0.5  0.0
-啤酒  0.67  0.67  1.0  0.33  0.0  0.0
-鸡蛋  0.00  0.00  0.0  0.00  0.0  0.0
+
+支持度 0.8 0.8 1.0 0.4 0.6 0.2
+牛奶 面包 尿布 可乐 啤酒 鸡蛋
+牛奶 0.00 0.75 1.0 0.25 0.5 0.0
+面包 0.75 0.00 1.0 0.50 0.5 0.0
+尿布 0.80 0.80 0.0 0.40 0.6 0.0
+可乐 0.50 1.00 1.0 0.00 0.5 0.0
+啤酒 0.67 0.67 1.0 0.33 0.0 0.0
+鸡蛋 0.00 0.00 0.0 0.00 0.0 0.0
 </p>2019-09-27</li><br/><li><span>学习</span> 👍（2） 💬（1）<p>牛奶，面包，尿布同时出现是3，支持度是3&#47;5=0.6</p>2019-09-27</li><br/><li><span>mickey</span> 👍（1） 💬（1）<p>	支持度
 牛奶	0.8
 面包	0.8
@@ -197,69 +201,78 @@ import sqlalchemy as sql
 import pandas as pd
 
 # 数据加载
+
 engine = sql.create_engine(&#39;mysql+pymysql:&#47;&#47;root:passwd@localhost&#47;wucai&#39;)
 query = &#39;SELECT * FROM bread_basket&#39;
 data = pd.read_sql_query(query, engine)
 
 # 统一小写
+
 data[&#39;Item&#39;] = data[&#39;Item&#39;].str.lower()
+
 # 去掉none项
+
 data = data.drop(data[data.Item == &#39;none&#39;].index)
 
 # 得到一维数组orders_series，并且将Transaction作为index, value为Item取值
+
 orders_series = data.set_index(&#39;Transaction&#39;)[&#39;Item&#39;]
+
 # 将数据集进行格式转换
+
 transactions = transactions = list(data.groupby(&#39;Transaction&#39;).agg(lambda x: set(x.Item.values))[&#39;Item&#39;])
 
 # 挖掘频繁项集和频繁规则
+
 itemsets, rules = apriori(transactions, min_support=0.02, min_confidence=0.5)
 print(&#39;频繁项集：&#39;, itemsets)
 print(&#39;关联规则：&#39;, rules)
 
-# ----------输出结果------------------ #
+# ----------输出结果------------------
+
 频繁项集： {1: {(&#39;alfajores&#39;,): 344, (&#39;bread&#39;,): 3096, (&#39;brownie&#39;,): 379, (&#39;cake&#39;,): 983, (&#39;coffee&#39;,): 4528, (&#39;cookies&#39;,): 515, (&#39;farm house&#39;,): 371, (&#39;hot chocolate&#39;,): 552, (&#39;juice&#39;,): 365, (&#39;medialuna&#39;,): 585, (&#39;muffin&#39;,): 364, (&#39;pastry&#39;,): 815, (&#39;sandwich&#39;,): 680, (&#39;scandinavian&#39;,): 275, (&#39;scone&#39;,): 327, (&#39;soup&#39;,): 326, (&#39;tea&#39;,): 1350, (&#39;toast&#39;,): 318, (&#39;truffles&#39;,): 192}, 2: {(&#39;bread&#39;, &#39;cake&#39;): 221, (&#39;bread&#39;, &#39;coffee&#39;): 852, (&#39;bread&#39;, &#39;pastry&#39;): 276, (&#39;bread&#39;, &#39;tea&#39;): 266, (&#39;cake&#39;, &#39;coffee&#39;): 518, (&#39;cake&#39;, &#39;tea&#39;): 225, (&#39;coffee&#39;, &#39;cookies&#39;): 267, (&#39;coffee&#39;, &#39;hot chocolate&#39;): 280, (&#39;coffee&#39;, &#39;juice&#39;): 195, (&#39;coffee&#39;, &#39;medialuna&#39;): 333, (&#39;coffee&#39;, &#39;pastry&#39;): 450, (&#39;coffee&#39;, &#39;sandwich&#39;): 362, (&#39;coffee&#39;, &#39;tea&#39;): 472, (&#39;coffee&#39;, &#39;toast&#39;): 224}}
 关联规则： [{cake} -&gt; {coffee}, {cookies} -&gt; {coffee}, {hot chocolate} -&gt; {coffee}, {juice} -&gt; {coffee}, {medialuna} -&gt; {coffee}, {pastry} -&gt; {coffee}, {sandwich} -&gt; {coffee}, {toast} -&gt; {coffee}]</p>2019-09-27</li><br/><li><span>JustDoDT</span> 👍（2） 💬（0）<p>遇到错误：NotSupportedError: (mysql.connector.errors.NotSupportedError) Authentication plugin &#39;caching_sha2_password&#39; is not supported (Background on this error at: http:&#47;&#47;sqlalche.me&#47;e&#47;tw8g)
 解决方法
 engine = sql.create_engine( &#39;mysql+pymysql:&#47;&#47;{}:{}@{}&#47;{}&#39;.format(user, passwd, host, database))
 mysql+mysqlconnector 改成 mysql+pymysql 就行了</p>2019-09-27</li><br/><li><span>邵家伟</span> 👍（1） 💬（0）<p>C#
 string[] item = { &quot;牛奶&quot;, &quot;面包&quot;, &quot;尿布&quot;, &quot;鸡蛋&quot;, &quot;啤酒&quot;, &quot;可乐&quot; };
-            int[,] Record = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 0, 1, 0 }, { 1, 0, 1, 1, 1, 0 }, { 1, 1, 1, 0, 1, 0 }, { 1, 1, 1, 0, 0, 1 } };
-            double SupportRate;
-            for (int a = 0; a &lt; 6; a++)&#47;&#47;列遍历
-            {	int Count = 0;int total = 0;
-                for (int b = 0; b &lt; 5; b++)&#47;&#47;行遍历
-                {	total += 1;
-                    if (Record[b, a] == 1)  Count += 1;
-                }
-                SupportRate = Convert.ToDouble(Count) &#47; Convert.ToDouble(total);
-                Context.Response.Write(item[a] + &quot;支持度为&quot; + SupportRate+&quot;&lt;&#47;br&gt;&quot;);
-            }
-            double[,] BelieveRate = new double[6, 6];
-            for (int a = 0; a &lt; 6; a++)&#47;&#47;行
-            {	for (int b = 0; b &lt; 6; b++) &#47;&#47;列
-                {	if (a == b)  BelieveRate[a, b] = 0;
-                    else
-                    {	int total = 0;
-                        int count = 0;
-                        for (int c = 0; c &lt; 5; c++)
-                        {	if(Record[c,a]==1)
-                            {	total += 1;
-                                if (Record[c, b] == 1)	count += 1;
-                            }
-                        }
-             BelieveRate[a,b]=Convert.ToDouble(count)&#47;Convert.ToDouble(total);
-                    }    
-                }
-            }
-            for (int a = 0; a &lt; 7; a++)
-            {	for (int b = 0; b &lt; 7; b++)
-                {	if (a == 0 &amp;&amp; b == 0)	Context.Response.Write(&quot;置信度&quot;);
-                    if(a==0&amp;&amp;b&gt;0)	Context.Response.Write(&quot;&amp;nbsp; &amp;nbsp; &quot; + item[b-1]+ &quot;&amp;nbsp; &amp;nbsp;&amp;nbsp; &quot;);
-                    if (a &gt; 0 &amp;&amp; b == 0)	 Context.Response.Write(&quot;&amp;nbsp; &amp;nbsp;&quot; + item[a-1]+ &quot;&amp;nbsp; &amp;nbsp; &amp;nbsp;&quot;);
-                    if (a &gt; 0 &amp;&amp; b &gt; 0)	Context.Response.Write(BelieveRate[a - 1, b - 1].ToString(&quot;0.00&quot;) + &quot; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;  &quot;);
-                }
-                Context.Response.Write(&quot;&lt;&#47;br&gt;&quot;);
-            } 
+int[,] Record = { { 1, 1, 1, 0, 0, 0 }, { 0, 1, 1, 0, 1, 0 }, { 1, 0, 1, 1, 1, 0 }, { 1, 1, 1, 0, 1, 0 }, { 1, 1, 1, 0, 0, 1 } };
+double SupportRate;
+for (int a = 0; a &lt; 6; a++)&#47;&#47;列遍历
+{ int Count = 0;int total = 0;
+for (int b = 0; b &lt; 5; b++)&#47;&#47;行遍历
+{ total += 1;
+if (Record[b, a] == 1) Count += 1;
+}
+SupportRate = Convert.ToDouble(Count) &#47; Convert.ToDouble(total);
+Context.Response.Write(item[a] + &quot;支持度为&quot; + SupportRate+&quot;&lt;&#47;br&gt;&quot;);
+}
+double[,] BelieveRate = new double[6, 6];
+for (int a = 0; a &lt; 6; a++)&#47;&#47;行
+{ for (int b = 0; b &lt; 6; b++) &#47;&#47;列
+{ if (a == b) BelieveRate[a, b] = 0;
+else
+{ int total = 0;
+int count = 0;
+for (int c = 0; c &lt; 5; c++)
+{ if(Record[c,a]==1)
+{ total += 1;
+if (Record[c, b] == 1) count += 1;
+}
+}
+BelieveRate[a,b]=Convert.ToDouble(count)&#47;Convert.ToDouble(total);
+}  
+}
+}
+for (int a = 0; a &lt; 7; a++)
+{ for (int b = 0; b &lt; 7; b++)
+{ if (a == 0 &amp;&amp; b == 0) Context.Response.Write(&quot;置信度&quot;);
+if(a==0&amp;&amp;b&gt;0) Context.Response.Write(&quot;&amp;nbsp; &amp;nbsp; &quot; + item[b-1]+ &quot;&amp;nbsp; &amp;nbsp;&amp;nbsp; &quot;);
+if (a &gt; 0 &amp;&amp; b == 0) Context.Response.Write(&quot;&amp;nbsp; &amp;nbsp;&quot; + item[a-1]+ &quot;&amp;nbsp; &amp;nbsp; &amp;nbsp;&quot;);
+if (a &gt; 0 &amp;&amp; b &gt; 0) Context.Response.Write(BelieveRate[a - 1, b - 1].ToString(&quot;0.00&quot;) + &quot; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &quot;);
+}
+Context.Response.Write(&quot;&lt;&#47;br&gt;&quot;);
+}
 </p>2021-07-07</li><br/><li><span>邵家伟</span> 👍（0） 💬（0）<p>结果：
 牛奶支持度为0.8
 面包支持度为0.8

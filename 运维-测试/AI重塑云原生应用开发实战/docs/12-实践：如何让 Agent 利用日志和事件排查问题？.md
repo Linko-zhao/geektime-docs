@@ -191,35 +191,36 @@ func NewLogTool() *LogTool {
 首先是 Event 测试，我们需要制造一个含有 Warning 类型的 Event 事件的 Pod。我使用的方法是给 Pod 挂载一个 configmap，引用一个不存在的键 non\_existent\_key，下面是具体的 YAML。
 
 ```yaml
-apiVersion: v1                                                                                                                                                           
-kind: Pod                                                                                                                                                                
-metadata:                                                                                                                                                                
-  name: complex-faulty-pod                                                                                                                                               
-spec:                                                                                                                                                                    
-  containers:                                                                                                                                                            
-  - name: faulty-container                                                                                                                                               
-    image: docker.1ms.run/nginx:1.18                                                                                                                                     
-    command: ["/bin/sh", "-c", "while true; do echo 'Running...'; sleep 10; done"]                                                                                       
-    env:                                                                                                                                                                 
-      - name: FAULTY_ENV                                                                                                                                                 
-        valueFrom:                                                                                                                                                       
-          configMapKeyRef:                                                                                                                                               
-            name: faulty-configmap                                                                                                                                       
-            key: non_existent_key                                                                                                                                        
-    ports:                                                                                                                                                               
-      - containerPort: 80                                                                                                                                                
-    volumeMounts:                                                                                                                                                        
-      - name: faulty-volume                                                                                                                                              
-        mountPath: /data                                                                                                                                                 
-  volumes:                                                                                                                                                               
-    - name: faulty-volume                                                                                                                                                
-      emptyDir: {}                                                                                                                                                       
----                                                                                                                                                                      
-apiVersion: v1                                                                                                                                                           
-kind: ConfigMap                                                                                                                                                          
-metadata:                                                                                                                                                                
-  name: faulty-configmap                                                                                                                                                 
-data:                                                                                                                                                                    
+apiVersion: v1
+kind: Pod
+metadata:
+  name: complex-faulty-pod
+spec:
+  containers:
+    - name: faulty-container
+      image: docker.1ms.run/nginx:1.18
+      command:
+        ["/bin/sh", "-c", "while true; do echo 'Running...'; sleep 10; done"]
+      env:
+        - name: FAULTY_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: faulty-configmap
+              key: non_existent_key
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: faulty-volume
+          mountPath: /data
+  volumes:
+    - name: faulty-volume
+      emptyDir: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: faulty-configmap
+data:
   existing_key: "value"
 ```
 
@@ -266,46 +267,46 @@ func (k *K8sConfig) InitConfigInCluster() *K8sConfig {
 dockerfile 文件：
 
 ```plain
-FROM golang:1.22.9-alpine AS builder                                                                                                                      
-                                                                                                                                                                         
-WORKDIR /workspace                                                                                                                                                       
-                                                                                                                                                                         
-# Copy the Go Modules manifests                                                                                                                                          
-COPY go.mod go.mod                                                                                                                                                       
-COPY go.sum go.sum                                                                                                                                                       
-# Cache deps before building and copying source so that we don't need to re-download as much                                                                             
-# and so that source changes don't invalidate our downloaded layer                                                                                                       
-ENV GOPROXY=https://goproxy.cn,direct GO111MODULE=on                                                                                                                     
-RUN go mod download                                                                                                                                                      
-                                                                                                                                                                         
-# Copy the go source code                                                                                                                                                
-COPY main.go main.go                                                                                                                                                     
-COPY pkg/ pkg/                                                                                                                                                           
-                                                                                                                                                                         
-# Build                                                                                                                                                                  
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o /usr/bin/test main.go                                                                            
-                                                                                                                                                                         
-FROM scratch                                                                                                                                                             
-WORKDIR /                                                                                                                                                                
-COPY --from=builder /usr/bin/test .                                                                                                                                      
-                                                                                                                                                                         
+FROM golang:1.22.9-alpine AS builder
+
+WORKDIR /workspace
+
+# Copy the Go Modules manifests
+COPY go.mod go.mod
+COPY go.sum go.sum
+# Cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+ENV GOPROXY=https://goproxy.cn,direct GO111MODULE=on
+RUN go mod download
+
+# Copy the go source code
+COPY main.go main.go
+COPY pkg/ pkg/
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o /usr/bin/test main.go
+
+FROM scratch
+WORKDIR /
+COPY --from=builder /usr/bin/test .
+
 ENTRYPOINT ["/test"]
 ```
 
 pod 部署 YAML：
 
 ```plain
-apiVersion: v1                                                                                                                                                           
-kind: Pod                                                                                                                                                                
-metadata:                                                                                                                                                                
-  name: client-go-example                                                                                                                                                
-spec:                                                                                                                                                                    
-  serviceAccountName: default                                                                                                                                            
-  containers:                                                                                                                                                            
-  - name: example                                                                                                                                                        
-    image: registry.cn-hangzhou.aliyuncs.com/aitools/client-go-example:v1.0                                                                                              
-    imagePullPolicy: IfNotPresent                                                                                                                                        
-    ports:                                                                                                                                                               
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client-go-example
+spec:
+  serviceAccountName: default
+  containers:
+  - name: example
+    image: registry.cn-hangzhou.aliyuncs.com/aitools/client-go-example:v1.0
+    imagePullPolicy: IfNotPresent
+    ports:
     - containerPort: 8080
 ```
 

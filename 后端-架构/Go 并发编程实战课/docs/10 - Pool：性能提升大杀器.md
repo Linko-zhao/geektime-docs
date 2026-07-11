@@ -53,7 +53,7 @@ Pool struct包含一个New字段，这个字段的类型是函数 func() interfa
 
 ```
 var buffers = sync.Pool{
-	New: func() interface{} { 
+	New: func() interface{} {
 		return new(bytes.Buffer)
 	},
 }
@@ -137,7 +137,7 @@ func (p *Pool) Get() interface{} {
         // 从当前的local.shared弹出一个，注意是从head读取并移除
         x, _ = l.shared.popHead()
         if x == nil { // 如果没有，则去偷一个
-            x = p.getSlow(pid) 
+            x = p.getSlow(pid)
         }
     }
     runtime_procUnpin()
@@ -161,7 +161,7 @@ func (p *Pool) Get() interface{} {
 func (p *Pool) getSlow(pid int) interface{} {
 
     size := atomic.LoadUintptr(&p.localSize)
-    locals := p.local                       
+    locals := p.local
     // 从其它proc中尝试偷取一个元素
     for i := 0; i < int(size); i++ {
         l := indexLocal(locals, (pid+i+1)%int(size))
@@ -333,12 +333,12 @@ current := p.Len()
 		c        *channelPool
 		unusable bool
 	}
-	
+
     //拦截Close
 	func (p *PoolConn) Close() error {
 		p.mu.RLock()
 		defer p.mu.RUnlock()
-	
+
 		if p.unusable {
 			if p.Conn != nil {
 				return p.Conn.Close()
@@ -356,7 +356,7 @@ current := p.Len()
 		// 存储连接池的channel
 		mu    sync.RWMutex
 		conns chan net.Conn
-	
+
 
 		// net.Conn 的产生器
 		factory Factory
@@ -394,12 +394,12 @@ gomemcache Client有一个freeconn的字段，用来保存空闲的连接。当�
 		}
 		c.freeconn[addr.String()] = append(freelist, cn) // 加入到空闲列表中
 	}
-	
+
     // 得到一个空闲连接
 	func (c *Client) getFreeConn(addr net.Addr) (cn *conn, ok bool) {
 		c.lk.Lock()
 		defer c.lk.Unlock()
-		if c.freeconn == nil { 
+		if c.freeconn == nil {
 			return nil, false
 		}
 		freelist, ok := c.freeconn[addr.String()]
@@ -464,33 +464,35 @@ Pool是一个通用的概念，也是解决对象重用和预先分配的一个�
 
 1. 三色并发标记算法 这个 链接地址 Not found 了。
 2. 举例大的buffer 不被回收的 第一个 源码 函数：putEncodeState ，我没找到。请问一下在哪个文件里面呀。
+
 </p>2021-08-21</li><br/><li><span>冰糕不冰</span> 👍（0） 💬（1）<p>讲的太好了！ 真的是开启了新世界的大门。 感谢大佬</p>2022-03-26</li><br/><li><span>tingting</span> 👍（0） 💬（1）<p>请问老师，RPC request 池化的实现为什么不用sync.Map，而是选择使用链表实现呢？</p>2022-01-24</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（0） 💬（1）<p>「因为 Pool 回收的机制，这些大的 Buffer 可能不被回收」是什么原因？</p>2021-11-04</li><br/><li><span>Junes</span> 👍（13） 💬（1）<p>分享一下我的理解，主要分为回收和获取两个函数：
 
 func (server *Server) freeRequest(req *Request) {
-	server.reqLock.Lock()
-	&#47;&#47; 将req放在freeReq的头部，指向原先的链表头
-	&#47;&#47; 至于为什么放在头部、而不是尾部，我觉得是放在尾部需要遍历完这个链表(增加时间复杂度)、或者要额外维护一个尾部Request的指针(增加空间复杂度)，权衡下放在头部更方便
-	req.next = server.freeReq
-	server.freeReq = req
-	server.reqLock.Unlock()
+server.reqLock.Lock()
+&#47;&#47; 将req放在freeReq的头部，指向原先的链表头
+&#47;&#47; 至于为什么放在头部、而不是尾部，我觉得是放在尾部需要遍历完这个链表(增加时间复杂度)、或者要额外维护一个尾部Request的指针(增加空间复杂度)，权衡下放在头部更方便
+req.next = server.freeReq
+server.freeReq = req
+server.reqLock.Unlock()
 }
 
 func (server *Server) getRequest() *Request {
-	server.reqLock.Lock()
-	&#47;&#47; freeReq是一个链表，保存空闲的Request
-	req := server.freeReq
-	if req == nil {
-		&#47;&#47; 初始状态：freeReq为空时，在heap上重新分配一个对象
-		req = new(Request)
-	} else {
-		server.freeReq = req.next
-		&#47;&#47; 复用的关键在这里，这里并不是新建一个对象 new(Request)
-		&#47;&#47; 这里的思想类似于Reset，将原先有数据的Request设置为空
-		*req = Request{}
-	}
-	server.reqLock.Unlock()
-	return req
-}</p>2020-11-02</li><br/><li><span>Yayu</span> 👍（8） 💬（0）<p>谢谢老师，喜欢老师这篇文章中通过外链的方式列出一些老师常用的三方库，很有用！</p>2020-11-03</li><br/><li><span>大布丁</span> 👍（1） 💬（0）<p>一文解决之前组长问我的一个问题：除了使用更多的goroutine来干更多的活之外，还有什么设计与优化的思想？当时没往线程池跟sync.Pool去思考，现在感触很深了！身为年轻人，代码功底不足的情况，我还是喜欢阅读源码后，动手实现里面的几个方法，以便于自己能够更深刻的去理解第三方库！</p>2022-03-20</li><br/><li><span>虫子樱桃</span> 👍（1） 💬（2）<p>思考题的奥秘感觉在这两个函数 
+server.reqLock.Lock()
+&#47;&#47; freeReq是一个链表，保存空闲的Request
+req := server.freeReq
+if req == nil {
+&#47;&#47; 初始状态：freeReq为空时，在heap上重新分配一个对象
+req = new(Request)
+} else {
+server.freeReq = req.next
+&#47;&#47; 复用的关键在这里，这里并不是新建一个对象 new(Request)
+&#47;&#47; 这里的思想类似于Reset，将原先有数据的Request设置为空
+*req = Request{}
+}
+server.reqLock.Unlock()
+return req
+}</p>2020-11-02</li><br/><li><span>Yayu</span> 👍（8） 💬（0）<p>谢谢老师，喜欢老师这篇文章中通过外链的方式列出一些老师常用的三方库，很有用！</p>2020-11-03</li><br/><li><span>大布丁</span> 👍（1） 💬（0）<p>一文解决之前组长问我的一个问题：除了使用更多的goroutine来干更多的活之外，还有什么设计与优化的思想？当时没往线程池跟sync.Pool去思考，现在感触很深了！身为年轻人，代码功底不足的情况，我还是喜欢阅读源码后，动手实现里面的几个方法，以便于自己能够更深刻的去理解第三方库！</p>2022-03-20</li><br/><li><span>虫子樱桃</span> 👍（1） 💬（2）<p>思考题的奥秘感觉在这两个函数
+
 ```
 &#47;&#47; ServeRequest is like ServeCodec but synchronously serves a single request.
 &#47;&#47; It does not close the codec upon completion.
@@ -510,7 +512,7 @@ func (server *Server) ServeRequest(codec ServerCodec) error {
 	}
 	service.call(server, sending, nil, mtype, req, argv, replyv, codec)
 	return nil
-} 
+}
 
 func (server *Server) freeRequest(req *Request) {
 	server.reqLock.Lock()
@@ -519,5 +521,6 @@ func (server *Server) freeRequest(req *Request) {
 	server.reqLock.Unlock()
 }
 ```
+
 </p>2020-11-02</li><br/><li><span>怎么睡才能做这种梦</span> 👍（0） 💬（0）<p>请问老师, sync.Pool会有内存泄漏，怎么理解因为 Pool 回收的机制，这些大的 Buffer 可能不被回收？</p>2023-03-02</li><br/><li><span>Geek_b8670e</span> 👍（0） 💬（0）<p>数据库连接池上有没有必要再做多路复用？</p>2021-06-10</li><br/><li><span>Panda</span> 👍（0） 💬（0）<p>减少跟 OS 的 IO 次数  用池化手段来优化系统 </p>2021-01-27</li><br/><li><span>党</span> 👍（0） 💬（0）<p>可以用池化技术做任务队列么?尤其是worker pool这几个库</p>2020-11-03</li><br/><li><span>党</span> 👍（0） 💬（1）<p>那像websocke这种长连接，每个ws用一个goroutine来维护，是不是就没必要用池化技术了。</p>2020-11-03</li><br/>
 </ul>

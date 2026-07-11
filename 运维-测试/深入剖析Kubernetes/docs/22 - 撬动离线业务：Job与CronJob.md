@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: pi
-        image: resouer/ubuntu-bc 
+        image: resouer/ubuntu-bc
         command: ["sh", "-c", "echo 'scale=10000; 4*a(1)' | bc -l "]
       restartPolicy: Never
   backoffLimit: 4
@@ -33,7 +33,7 @@ spec:
 在这个Pod模板中，我定义了一个Ubuntu镜像的容器（准确地说，是一个安装了bc命令的Ubuntu镜像），它运行的程序是：
 
 ```
-echo "scale=10000; 4*a(1)" | bc -l 
+echo "scale=10000; 4*a(1)" | bc -l
 ```
 
 其中，bc命令是Linux里的“计算器”；-l表示，我现在要使用标准数学库；而a(1)，则是调用数学库中的arctangent函数，计算atan(1)。这是什么意思呢？
@@ -221,7 +221,7 @@ pi-62rbt   0/1       ContainerCreating   0         0s
 紧接着，Job Controller第二次创建出来的两个并行的Pod也进入了Running状态：
 
 ```
-$ kubectl get pods 
+$ kubectl get pods
 NAME       READY     STATUS      RESTARTS   AGE
 pi-5mt88   0/1       Completed   0          54s
 pi-62rbt   1/1       Running     0          13s
@@ -234,7 +234,7 @@ pi-gmcq5   0/1       Completed   0          54s
 这时，由于所有的Pod均已经成功退出，这个Job也就执行完了，所以你会看到它的SUCCESSFUL字段的值变成了4：
 
 ```
-$ kubectl get pods 
+$ kubectl get pods
 NAME       READY     STATUS      RESTARTS   AGE
 pi-5mt88   0/1       Completed   0          5m
 pi-62rbt   0/1       Completed   0          4m

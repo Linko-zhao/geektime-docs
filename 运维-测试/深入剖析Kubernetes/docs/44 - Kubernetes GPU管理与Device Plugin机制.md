@@ -151,7 +151,7 @@ Kubernetes 的 Device Plugin 机制，我可以用如下所示的一幅示意图
 
 Device Plugin 、kubelet、调度器如何协同工作：
 
-汇报资源： Device Plugin通过gRPC与本机kubelet连接 -&gt;  Device Plugin定期向kubelet汇报设备信息，比如GPU的数量 -&gt; kubelet 向APIServer发送的心跳中，以Extended Reousrce的方式加上这些设备信息，比如GPU的数量 
+汇报资源： Device Plugin通过gRPC与本机kubelet连接 -&gt; Device Plugin定期向kubelet汇报设备信息，比如GPU的数量 -&gt; kubelet 向APIServer发送的心跳中，以Extended Reousrce的方式加上这些设备信息，比如GPU的数量
 
 调度： Pod申明需要一个GPU -&gt; 调度器找到GPU数量满足条件的node -&gt; Pod绑定到对应的Node上 -&gt; kubelet发现需要拉起一个Pod，且该Pod需要GPU -&gt; kubelet向 Device Plugin 发起 Allocate()请求 -&gt; Device Plugin根据kubelet传递过来的需求，找到这些设备对应的设备路径和驱动目录，并返回给kubelet -&gt; kubelet将这些信息追加在创建Pod所对应的CRI请求中 -&gt; 容器创建完成之后，就会出现这个GPU设备（设备路径+驱动目录）-&gt; 调度完成
 </p>2020-12-20</li><br/><li><span>江山未</span> 👍（8） 💬（0）<p>GPU共享及虚拟化，可以搜索一下Orion VGPU</p>2020-10-22</li><br/><li><span>小河</span> 👍（7） 💬（2）<p>hi，张老师，我现在将gpu的服务迁移到kubernetes上，对外提供的是gRRC接口，我使用了ingres-nginx对gRPC进行负载均衡，但是发现支持并不好，又想使用Istio以sidecar模式代理gPRC，但是又觉得太重，请问目前有什么较好的方案在kuberntes支持对gRPC的负载均衡么😀</p>2019-08-04</li><br/><li><span>凌</span> 👍（7） 💬（1）<p>https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;NU8Cj6DL8wEKFzVYhuyzbQ</p>2019-05-27</li><br/><li><span>勇敢的心</span> 👍（4） 💬（0）<p>所以目前是无法实现多用户同时共享单块GPU咯？有没有可以实现这一功能的Magic？还有，目前可能实现GPU或者CPU数量的动态改变吗，在不重建pod的情况下？期待老师的解答</p>2018-12-13</li><br/><li><span>每日都想上班</span> 👍（4） 💬（0）<p>今天爆出kubenetes安全漏洞需要升级，请问要如何升级

@@ -426,7 +426,7 @@ async fn my_async_fn() {
 
 #[tokio::main]
 async fn main() {
-    pin! { 
+    pin! {
         let future1 = my_async_fn();
         let future2 = my_async_fn();
     }
@@ -484,10 +484,10 @@ async fn main() {
 举个例子：
 
 ```rust
-select! {     
-  客人A点了宫保鸡丁 => 去厨房下单宫保鸡丁,     
-  客人B点了鱼香肉丝 if 客人B不吃辣 => 去厨房下单不辣的鱼香肉丝,     
-  else => 休息一下 
+select! {
+  客人A点了宫保鸡丁 => 去厨房下单宫保鸡丁,
+  客人B点了鱼香肉丝 if 客人B不吃辣 => 去厨房下单不辣的鱼香肉丝,
+  else => 休息一下
 }
 ```
 
@@ -592,7 +592,7 @@ async fn main() {
     tokio::task_local! {
         static NUMBER: u32;
     }
-    
+
     NUMBER.scope(1, async move {
         println!("task local value: {}", NUMBER.get());
     }).await;
@@ -647,7 +647,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     println!("exit");
-    
+
     Ok(())
 }
 ```

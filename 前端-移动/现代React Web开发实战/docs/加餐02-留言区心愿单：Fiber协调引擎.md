@@ -15,7 +15,7 @@
 正如第6节课讲到的：
 
 > React组件会渲染出一棵元素树……每次有props、state等数据变动时，组件会渲染出新的元素树，React框架会与之前的树做Diffing对比，将元素的变动最终体现在浏览器页面的DOM中。这一过程就称为**协调（Reconciliation）**。
-> 
+>
 > > 在React的早期版本，协调是一个**同步过程**，这意味着当虚拟DOM足够复杂，或者元素渲染时产生的各种计算足够重，协调过程本身就可能超过16ms，严重的会导致页面卡顿。而从React v16开始，协调从之前的同步改成了**异步过程**，这主要得益于新的**Fiber协调引擎**。
 
 Fiber协调引擎做的事情基本上贯穿了React应用的整个生命周期，包括并不限于：
@@ -42,49 +42,49 @@ type Fiber = {
   // ---- Fiber类型 ----
 
   /** 工作类型，枚举值包括：函数组件、类组件、HTML元素、Fragment等 */
-  tag: WorkTag,
+  tag: WorkTag;
   /** 就是那个子元素列表用的key属性 */
-  key: null | string,
+  key: null | string;
   /** 对应React元素ReactElmement.type属性 */
-  elementType: any,
+  elementType: any;
   /** 函数组件对应的函数或类组件对应的类 */
-  type: any,
+  type: any;
 
   // ---- Fiber Tree树形结构 ----
 
   /** 指向父FiberNode的指针 */
-  return: Fiber | null,
+  return: Fiber | null;
   /** 指向子FiberNode的指针 */
-  child: Fiber | null,
+  child: Fiber | null;
   /** 指向平级FiberNode的指针 */
-  sibling: Fiber | null,
-  
+  sibling: Fiber | null;
+
   // ---- Fiber数据 ----
 
-  /** 经本次渲染更新的props值 */  
-  pendingProps: any,
+  /** 经本次渲染更新的props值 */
+  pendingProps: any;
   /** 上一次渲染的props值 */
-  memoizedProps: any,
+  memoizedProps: any;
   /** 上一次渲染的state值，或是本次更新中的state值 */
-  memoizedState: any,
+  memoizedState: any;
   /** 各种state更新、回调、副作用回调和DOM更新的队列 */
-  updateQueue: mixed,
+  updateQueue: mixed;
   /** 为类组件保存对实例对象的引用，或为HTML元素保存对真实DOM的引用 */
-  stateNode: any,
+  stateNode: any;
 
   // ---- Effect副作用 ----
 
   /** 副作用种类的位域，可同时标记多种副作用，如Placement、Update、Callback等 */
-  flags: Flags,
+  flags: Flags;
   /** 指向下一个具有副作用的Fiber的引用，在React 18中貌似已被弃用 */
-  nextEffect: Fiber | null,
+  nextEffect: Fiber | null;
 
   // ---- 异步性/并发性 ----
-  
+
   /** 当前Fiber与成对的进行中Fiber的双向引用 */
-  alternate: Fiber | null,
+  alternate: Fiber | null;
   /** 标记Lane车道模型中车道的位域，表示调度的优先级 */
-  lanes: Lanes
+  lanes: Lanes;
 };
 ```
 
@@ -92,19 +92,19 @@ type Fiber = {
 
 ```typescript
 type Hook = {
-  memoizedState: any,
-  baseState: any,
-  baseQueue: Update<any, any> | null,
-  queue: any,
-  next: Hook | null,
+  memoizedState: any;
+  baseState: any;
+  baseQueue: Update<any, any> | null;
+  queue: any;
+  next: Hook | null;
 };
 
 type Effect = {
-  tag: HookFlags,
-  create: () => (() => void) | void,
-  destroy: (() => void) | void,
-  deps: Array | null,
-  next: Effect,
+  tag: HookFlags;
+  create: () => (() => void) | void;
+  destroy: (() => void) | void;
+  deps: Array | null;
+  next: Effect;
 };
 ```
 
@@ -134,7 +134,7 @@ function workLoop() {
       workInProgress = child;
       continue;
     }
-    
+
     let completedWork = workInProgress;
     do {
       if (completedWork.sibling) {
@@ -165,11 +165,12 @@ function workLoop() {
 
 - **变更前（Before Mutation）子阶段**。这个子阶段会调用类组件的getSnapshotBeforeUpdate方法。
 - **变更（Mutation）子阶段**。这个子阶段会更新真实DOM树。
-  
+
   - 递归提交与删除相关的副作用，包括移除ref、移除真实DOM、执行类组件的 `componentWillUnmount` 。
   - 递归提交添加、重新排序真实DOM等副作用。
   - 依次执行 `FiberNode` 上 `useLayoutEffect` 的清除函数。
   - 引擎用 `FinishedWork` 树替换 `Current` 树，供下次渲染阶段使用。
+
 - **布局（Layout）子阶段**。这个子阶段真实DOM树已经完成了变更，会调用 `useLayoutEffect` 的副作用回调函数，和类组件的 `componentDidMount` 方法。
 
 在提交阶段中，引擎还会多次异步或同步调用 `flushPassiveEffects()` 。这个函数会先后两轮按深度优先遍历Fiber树上每个节点：

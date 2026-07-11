@@ -103,7 +103,7 @@ private DynamicRulePublisher<List<FlowRuleEntity>> rulePublisher;
 ```java
 @Component("flowRuleNacosPublisher")
 public class FlowRuleNacosPublisher implements DynamicRulePublisher<List<FlowRuleEntity>> {
-    
+
     // 底层借助configService与Nacos进行通信
     @Autowired
     private ConfigService configService;

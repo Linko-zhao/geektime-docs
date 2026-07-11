@@ -68,7 +68,7 @@
 public class VirtualWalletController {
   // 通过构造函数或者IOC框架注入
   private VirtualWalletService virtualWalletService;
-  
+
   public BigDecimal getBalance(Long walletId) { ... } //查询余额
   public void debit(Long walletId, BigDecimal amount) { ... } //出账
   public void credit(Long walletId, BigDecimal amount) { ... } //入账
@@ -96,13 +96,13 @@ public class VirtualWalletService {
   // 通过构造函数或者IOC框架注入
   private VirtualWalletRepository walletRepo;
   private VirtualWalletTransactionRepository transactionRepo;
-  
+
   public VirtualWalletBo getVirtualWallet(Long walletId) {
     VirtualWalletEntity walletEntity = walletRepo.getWalletEntity(walletId);
     VirtualWalletBo walletBo = convert(walletEntity);
     return walletBo;
   }
-  
+
   public BigDecimal getBalance(Long walletId) {
     return walletRepo.getBalance(walletId);
   }
@@ -164,22 +164,22 @@ public class VirtualWallet { // Domain领域模型(充血模型)
   private Long id;
   private Long createTime = System.currentTimeMillis();;
   private BigDecimal balance = BigDecimal.ZERO;
-  
+
   public VirtualWallet(Long preAllocatedId) {
     this.id = preAllocatedId;
   }
-  
+
   public BigDecimal balance() {
     return this.balance;
   }
-  
+
   public void debit(BigDecimal amount) {
     if (this.balance.compareTo(amount) < 0) {
       throw new InsufficientBalanceException(...);
     }
     this.balance = this.balance.subtract(amount);
   }
-  
+
   public void credit(BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) < 0) {
       throw new InvalidAmountException(...);
@@ -192,17 +192,17 @@ public class VirtualWalletService {
   // 通过构造函数或者IOC框架注入
   private VirtualWalletRepository walletRepo;
   private VirtualWalletTransactionRepository transactionRepo;
-  
+
   public VirtualWallet getVirtualWallet(Long walletId) {
     VirtualWalletEntity walletEntity = walletRepo.getWalletEntity(walletId);
     VirtualWallet wallet = convert(walletEntity);
     return wallet;
   }
-  
+
   public BigDecimal getBalance(Long walletId) {
     return walletRepo.getBalance(walletId);
   }
-  
+
   @Transactional
   public void debit(Long walletId, BigDecimal amount) {
     VirtualWalletEntity walletEntity = walletRepo.getWalletEntity(walletId);
@@ -216,7 +216,7 @@ public class VirtualWalletService {
     transactionRepo.saveTransaction(transactionEntity);
     walletRepo.updateBalance(walletId, wallet.balance());
   }
-  
+
   @Transactional
   public void credit(Long walletId, BigDecimal amount) {
     VirtualWalletEntity walletEntity = walletRepo.getWalletEntity(walletId);
@@ -249,22 +249,22 @@ public class VirtualWallet {
   private boolean isAllowedOverdraft = true;
   private BigDecimal overdraftAmount = BigDecimal.ZERO;
   private BigDecimal frozenAmount = BigDecimal.ZERO;
-  
+
   public VirtualWallet(Long preAllocatedId) {
     this.id = preAllocatedId;
   }
-  
+
   public void freeze(BigDecimal amount) { ... }
   public void unfreeze(BigDecimal amount) { ...}
   public void increaseOverdraftAmount(BigDecimal amount) { ... }
   public void decreaseOverdraftAmount(BigDecimal amount) { ... }
   public void closeOverdraft() { ... }
   public void openOverdraft() { ... }
-  
+
   public BigDecimal balance() {
     return this.balance;
   }
-  
+
   public BigDecimal getAvaliableBalance() {
     BigDecimal totalAvaliableBalance = this.balance.subtract(this.frozenAmount);
     if (isAllowedOverdraft) {
@@ -272,7 +272,7 @@ public class VirtualWallet {
     }
     return totalAvaliableBalance;
   }
-  
+
   public void debit(BigDecimal amount) {
     BigDecimal totalAvaliableBalance = getAvaliableBalance();
     if (totoalAvaliableBalance.compareTo(amount) < 0) {
@@ -280,7 +280,7 @@ public class VirtualWallet {
     }
     this.balance = this.balance.subtract(amount);
   }
-  
+
   public void credit(BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) < 0) {
       throw new InvalidAmountException(...);

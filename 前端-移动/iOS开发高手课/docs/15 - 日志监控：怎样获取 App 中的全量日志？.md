@@ -148,7 +148,7 @@ static void (&orig_nslog)(NSString *format, ...);
 
 void redirect_nslog(NSString *format, ...) {
     // 可以在这里先进行自己的处理
-    
+
     // 继续执行原 NSLog
     va_list va;
     va_start(va, format);
@@ -233,7 +233,7 @@ syslogd是一个进程，保护系统接收分发日志消息的进程？
 
 CocoaLumberJack这段有点乱，整理了一下：
 
-captureAslLogs方法对ASL日志的处理措施是：将日志消息转换成char * 字符串类型，然后再转成NSString类型，随后将其记录。 
+captureAslLogs方法对ASL日志的处理措施是：将日志消息转换成char * 字符串类型，然后再转成NSString类型，随后将其记录。
 记录使用DDLog：log：message：方法。
 记录时需要将NSString转成DDLogMessage类型，而DDLogMessage设置了日志级别，所以转换类型后也要设置日志级别。
 
@@ -242,9 +242,9 @@ NSLog的日志级别是Verbose。
 最后，iOS10之后，为了兼容新的统一日志系统，需要对NSLog日志的输出进行重定向。iOS10之后CocoaLumberJack获取不到NSLog的日志了？</p>2019-04-13</li><br/><li><span>daniel</span> 👍（8） 💬（0）<p>static void(*orig_nslog) (NSString *format,...); 这里声明的时候是*号不是&amp;号，声明是一个对象，估计老师那边打错了
 还有下面这段代码
 va_list va;
-    va_start(va,format);
-    NSLogv(format, va);
-    va_end(va);
+va_start(va,format);
+NSLogv(format, va);
+va_end(va);
 可以换成orig_nslog(format) ，这时候我们的orig_nslog就是原来NSLog在Mach-o中的地址了，这时候可以直接拦截使用了，老师希望课里面代码可以检查仔细点再发出来，好多次直接报错，然后又找不到原因，这样挺打击人的。。。还有注释可以再清楚点</p>2019-05-31</li><br/><li><span>Ant</span> 👍（6） 💬（0）<p>温故而知新， 对我来说是反过来说的， 知新而温故。
 main函数执行之前  
 加载可执行文件、
@@ -252,34 +252,35 @@ main函数执行之前
 运行时开始处理，
 objc类注册，category注册，selector唯一性检查，
 load方法，attribute修饰函数调用，
-创建c++静态全局变量</p>2019-04-17</li><br/><li><span>jimbo</span> 👍（3） 💬（0）<p>static void (&amp;orig_nslog)(NSString *format, ...); 这里是不是应该变成 static void (*orig_nslog)(NSString *format, ...);  不然报错</p>2019-04-16</li><br/><li><span>小赢一场</span> 👍（2） 💬（0）<p>不太明白，获取日志，怎么上传，什么时候上传日志到后台</p>2020-04-21</li><br/><li><span>jiang</span> 👍（1） 💬（0）<p>完成第一次作业，这样便可以无侵入的实现日志上报惹
+创建c++静态全局变量</p>2019-04-17</li><br/><li><span>jimbo</span> 👍（3） 💬（0）<p>static void (&amp;orig_nslog)(NSString *format, ...); 这里是不是应该变成 static void (*orig_nslog)(NSString *format, ...); 不然报错</p>2019-04-16</li><br/><li><span>小赢一场</span> 👍（2） 💬（0）<p>不太明白，获取日志，怎么上传，什么时候上传日志到后台</p>2020-04-21</li><br/><li><span>jiang</span> 👍（1） 💬（0）<p>完成第一次作业，这样便可以无侵入的实现日志上报惹
+
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    [self outLog];
-    [self writeMsg];
+  [super viewDidLoad];
+  [self outLog];
+  [self writeMsg];
 
 }
 
 - (void)outLog{
-    self.filePath = [NSString stringWithFormat:@&quot;%@&#47;Documents&#47;LOG&quot;, NSHomeDirectory()];
-    [[NSFileManager defaultManager] createDirectoryAtPath:self.filePath  withIntermediateDirectories:YES attributes:nil error:nil];
-    self.filePath = [self.filePath stringByAppendingString:@&quot;&#47;log.txt&quot;];
-    [[NSFileManager defaultManager] createFileAtPath:self.filePath contents:nil attributes:nil];
-    self.fileHandle =  [NSFileHandle fileHandleForWritingAtPath:self.filePath];
-    int fileDesc = self.fileHandle.fileDescriptor;
-    dup2(fileDesc, STDERR_FILENO);
-}
+  self.filePath = [NSString stringWithFormat:@&quot;%@&#47;Documents&#47;LOG&quot;, NSHomeDirectory()];
+  [[NSFileManager defaultManager] createDirectoryAtPath:self.filePath withIntermediateDirectories:YES attributes:nil error:nil];
+  self.filePath = [self.filePath stringByAppendingString:@&quot;&#47;log.txt&quot;];
+  [[NSFileManager defaultManager] createFileAtPath:self.filePath contents:nil attributes:nil];
+  self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.filePath];
+  int fileDesc = self.fileHandle.fileDescriptor;
+  dup2(fileDesc, STDERR_FILENO);
+  }
 
 int count = 0;
 
 - (void)writeMsg{
-    count ++;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSString *str = [NSString stringWithFormat:@&quot;+%d&quot;,count];
-        [self writeMsg];
-        NSLog(@&quot;%@&quot;,str);
-    });
-    
+  count ++;
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+  NSString *str = [NSString stringWithFormat:@&quot;+%d&quot;,count];
+  [self writeMsg];
+  NSLog(@&quot;%@&quot;,str);
+  });
+
 }
 </p>2020-11-27</li><br/><li><span>zhonglaoban</span> 👍（1） 💬（0）<p>所以nslog能输出日志到console.app里面是因为用了asl？</p>2020-08-02</li><br/><li><span>大年初一</span> 👍（1） 💬（0）<p>微信的 xlog 也不错</p>2019-12-21</li><br/><li><span>dingdongfm</span> 👍（1） 💬（0）<p>如果需要获取最终用户手机上的日志来定位问题的话，一般怎么获取日志？</p>2019-06-10</li><br/><li><span>mersa</span> 👍（1） 💬（0）<p>写文件不是耗电，还有影响app运行性能么。这个产线情况怎么能够保存全量日志同时性能和耗电都能最低</p>2019-06-02</li><br/><li><span>二木又土</span> 👍（1） 💬（0）<p>对App来说，网络请求使用AFNetworking，怎么把网络请求的log优雅点的过滤打印出来？另外log，在控制台还会遇到字符串太长显示被截断的问题</p>2019-04-25</li><br/><li><span>Geek_ecfaae</span> 👍（0） 💬（0）<p>iOS10之后，ASL已经被取代了。那磁盘监控就不能用kNotifyVFSLowDiskSpace了吧？</p>2022-02-16</li><br/>
 </ul>

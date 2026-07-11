@@ -10,16 +10,18 @@
 目前的任务列表：
 
 - Resource/RootResource/ResourceMethod
-  
+
   - 从Path标注中获取UriTemplate
-    
+
     - 如不存在Path标注，则抛出异常
+
   - 在处理请求派分时，可以根据客户端提供的Http方法，选择对应的资源方法
-    
+
     - 当请求与资源方法的Uri模版一致，且Http方法一致时，派分到该方法
     - 没有资源方法于请求的Uri和Http方法一致时，返回404
+
   - 在处理请求派分时，可以支持多级子资源
-    
+
     - 当没有资源方法可以匹配请求时，选择最优匹配SubResourceLocater，通过它继续进行派分
     - 如果SubResourceLocator也无法找到满足的请求时，返回404
 

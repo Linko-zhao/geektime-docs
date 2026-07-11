@@ -228,39 +228,41 @@ A:  Recv-Q为全连接队列当前使用了多少。 中文资料里这个问题
 交换容量有个乘以2，为什么包转发速率不需要乘以2？
 （我理解，端口速率1000bps，在全双工模式下，按照双向速率计算，即总速率是2000bps）</p>2019-03-12</li><br/><li><span>zhoufeng</span> 👍（3） 💬（1）<p>老师好，
 “当套接字处于listen状态时，使用ss命令看到的Send-Q表示最大的syn_backlog值”
-但是和&#47;proc&#47;sys&#47;net&#47;ipv4&#47;tcp_max_syn_backlog   查看到的值不一致，是我理解错了吗？
+但是和&#47;proc&#47;sys&#47;net&#47;ipv4&#47;tcp_max_syn_backlog 查看到的值不一致，是我理解错了吗？
 谢谢</p>2019-05-21</li><br/><li><span>Gaoyc</span> 👍（3） 💬（1）<p>通过ifconfig和ss看到的错误包或丢弃包等的一些错误是累加的嘛？是否可以清空这些错误包信息？</p>2019-02-22</li><br/><li><span>xfan</span> 👍（3） 💬（1）<p>Speed 有的通过ethtool查不到，是什么原因呢，那查不到的话，默认值是多少呢</p>2019-02-11</li><br/><li><span>zhoufeng</span> 👍（2） 💬（1）<p>老师好，再请教一个问题，查看max_syn_backlog值为2048，表示同时最大只能接受2048个请求吗？
-# cat &#47;proc&#47;sys&#47;net&#47;ipv4&#47;tcp_max_syn_backlog 
+
+# cat &#47;proc&#47;sys&#47;net&#47;ipv4&#47;tcp_max_syn_backlog
+
 2048
 </p>2019-05-21</li><br/><li><span>好好学习</span> 👍（2） 💬（1）<p>eth0: flags=4163
 这个什么意思，有点好奇</p>2019-03-09</li><br/><li><span>天草二十六</span> 👍（1） 💬（1）<p>请教下：丢包率，计算客户端程序到IDC机房的，一般使用什么量化工具？</p>2019-10-23</li><br/><li><span>Maxwell</span> 👍（1） 💬（1）<p>centos 6.8执行 sar 命令没有%ifutil,这个指标可以理解为网络利用率吗？</p>2019-03-26</li><br/><li><span>bzadhere</span> 👍（1） 💬（2）<p>netstat -nta  命令看到Listening状态下的Send-Q 值都是0，用man netstat 看到说明和实际情况不一样； 然后用ss -lnt 看到Send-Q  非0，应该怎么理解？
 
 [root@localhost ~]# man netstat
 ......
-   Recv-Q
-       Established:  The count of bytes not copied by the user program connected to this socket.  Listening: Since
-       Kernel 2.6.18 this column contains the current syn backlog.
+Recv-Q
+Established: The count of bytes not copied by the user program connected to this socket. Listening: Since
+Kernel 2.6.18 this column contains the current syn backlog.
 
-   Send-Q
-       Established: The count of bytes not acknowledged by the remote host.  Listening: Since Kernel  2.6.18  this
-       column contains the maximum size of the syn backlog.
+Send-Q
+Established: The count of bytes not acknowledged by the remote host. Listening: Since Kernel 2.6.18 this
+column contains the maximum size of the syn backlog.
 .......
 
 [root@localhost ~]# netstat -tna
 Active Internet connections (servers and established)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State      
-tcp        0      0 0.0.0.0:21              0.0.0.0:*               LISTEN     
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     
-tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN     
-tcp        0      0 192.168.137.20:22       192.168.137.1:52521     ESTABLISHED
-tcp6       0      0 :::22                   :::*                    LISTEN     
-tcp6       0      0 ::1:25                  :::*                    LISTEN     
+Proto Recv-Q Send-Q Local Address Foreign Address State  
+tcp 0 0 0.0.0.0:21 0.0.0.0:* LISTEN  
+tcp 0 0 0.0.0.0:22 0.0.0.0:* LISTEN  
+tcp 0 0 127.0.0.1:25 0.0.0.0:* LISTEN  
+tcp 0 0 192.168.137.20:22 192.168.137.1:52521 ESTABLISHED
+tcp6 0 0 :::22 :::* LISTEN  
+tcp6 0 0 ::1:25 :::* LISTEN
 
 [root@localhost ~]# ss -lnt
-State       Recv-Q Send-Q             Local Address:Port                            Peer Address:Port              
-LISTEN      0      32                             *:21                                         *:*                  
-LISTEN      0      128                            *:22                                         *:*                  
-LISTEN      0      100                    127.0.0.1:25                                         *:*                  
-LISTEN      0      128                           :::22                                        :::*                  
-LISTEN      0      100                          ::1:25                                        :::*  </p>2019-03-07</li><br/><li><span>MJ</span> 👍（1） 💬（1）<p>老师，带宽和吞吐量指标。区分上下行吗，？还是统计总量？</p>2019-02-25</li><br/><li><span>--SNIPER</span> 👍（1） 💬（1）<p>老师好，netstat -anu 输出中：网卡收发队列时不时的会排队500，这种该如何再深入排查下是哪里的问题</p>2019-02-20</li><br/>
+State Recv-Q Send-Q Local Address:Port Peer Address:Port  
+LISTEN 0 32 _:21 *:*  
+LISTEN 0 128 *:22 *:*  
+LISTEN 0 100 127.0.0.1:25 *:*  
+LISTEN 0 128 :::22 :::*  
+LISTEN 0 100 ::1:25 :::_ </p>2019-03-07</li><br/><li><span>MJ</span> 👍（1） 💬（1）<p>老师，带宽和吞吐量指标。区分上下行吗，？还是统计总量？</p>2019-02-25</li><br/><li><span>--SNIPER</span> 👍（1） 💬（1）<p>老师好，netstat -anu 输出中：网卡收发队列时不时的会排队500，这种该如何再深入排查下是哪里的问题</p>2019-02-20</li><br/>
 </ul>

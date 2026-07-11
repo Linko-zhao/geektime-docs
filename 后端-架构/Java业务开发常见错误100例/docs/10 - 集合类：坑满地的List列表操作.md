@@ -538,7 +538,7 @@ Node<E> node(int index) {
 同时，做了个小实验，如果是String类型的ArrayList，传参是Integer类型时，remove方法只是返回false，视为元素不存在。
 2. 原因：查看源码可以发现，remove方法会发生结构化修改，也就是 modCount 会增加。当循环过程中，比较当前 List 的 modCount 与初始的 modCount 不相等，就会报 ConcurrentModificationException。解决方法：1.使用 ArrayList 的迭代器 iterator，并调用之中的remove方法。查看源码可以发现，内部类的remove方法，会维护一个expectedModCount，使其与 ArrayList 的modCount保持一致。2.如果是java 8，可以使用removeIf方法进行删除操作。
 
-```
+````
 int expectedModCount = modCount;
 public void remove() {
     ...
@@ -584,7 +584,7 @@ while(var2.hasNext()) {
 
 假设数组初始长度时10，形成的结果就是：
 Iterator 初始化 expectedModCount = 10；
-然后删除某元素，数组长度9，Iterator 长度10，这时候如果调用next就会报错，所以，在这时候，重新初始化Iterator 
+然后删除某元素，数组长度9，Iterator 长度10，这时候如果调用next就会报错，所以，在这时候，重新初始化Iterator
 Iterator  长度初始化为9，与数组长度一致，就避免了报错。
 代码实现如下：
 Iterator var2 = list.iterator();
@@ -627,7 +627,8 @@ System.out.println(list + &quot; &quot; + list.size() + &quot; &quot; + list.get
 看源码遍历的remove是代参数的remove方法,会导致ModCount++，但expectedModCount不会改变，next会检查两值是否相等，因此会抛异常。从代码上也可以读出作者的想法，就是通过此种方式来禁止遍历时直接remove。
 
 迭代器删除是用的无参数remove，删除后会执行expectedModCount = modCount，将两值置为相等。</p>2020-09-09</li><br/><li><span>Avalon</span> 👍（1） 💬（1）<p>我有一个疑问，在LinkedList中addFirst方法调用的私有方法linkFirst方法如下：
-```
+````
+
     private void linkFirst(E e) {
         LinkedList.Node&lt;E&gt; f = this.first;
         LinkedList.Node&lt;E&gt; newNode = new LinkedList.Node((LinkedList.Node)null, e, f);
@@ -641,6 +642,7 @@ System.out.println(list + &quot; &quot; + list.size() + &quot; &quot; + list.get
         ++this.size;
         ++this.modCount;
     }
+
 ```
 这段代码里面仅针对一个位置进行了增加节点的操作，为什么addFirst的性能还是不及ArrayList的add方法呢？
 </p>2020-06-18</li><br/><li><span>LovePeace</span> 👍（1） 💬（1）<p>大量的业务开发其实没那么大的数据,linkendList在插入小量数据的时候还是比arraylist有优势的
@@ -676,3 +678,4 @@ ns         %     Task name
 000025500  027%  linkedListadd
 000067800  073%  arrayListadd</p>2020-05-19</li><br/><li><span>苏暮沉觞</span> 👍（1） 💬（1）<p>老师，对于ArrayList和LinkedList插入性能测试有点疑问：我们这是测量10W的数据量下的结果，如果数据量达到100W，推论还是成立吗？（想测试100W数据量，但是数据量逐步提高到30W以后，程序就运行很久很久）。判断两种数据类型的速度，能不能简单归纳为判断LinkedList查找下一个节点的时间和（ArrayList数组后移一个数据时间+扩容平均时间）哪个比较短？</p>2020-05-09</li><br/><li><span>csyangchsh</span> 👍（1） 💬（1）<p>ArrayList分配的内存空间是连续的，对会CPU Cache很友好。LinkedList还要包装成Node，又增加了开销。这个测试使用JMH，根据CPU Cache大小，定义不同的元素个数，可能更严谨一点。</p>2020-03-31</li><br/>
 </ul>
+```

@@ -42,9 +42,10 @@ trait Future {
 
 - `Output`：关联类型，表示 Future 完成后产生的值的类型。
 - `poll`：尝试执行 Future 的方法。它接收一个 `Pin<&mut Self>` 和一个 `Context`。`Pin` 用于防止 Future 在执行过程中被移动，这对于某些需要固定内存地址的 Future 非常重要。`Context` 提供了唤醒 Future 的能力。`poll` 方法返回一个 `Poll` 枚举：
-  
+
   - `Poll::Pending`：Future 尚未完成，需要稍后再次调用 `poll`。
   - `Poll::Ready(val)`：Future 已经完成，并返回结果 `val`。
+
 - `async` 和 `await` 关键字：这是 Rust 提供的语法糖，用于更方便地编写异步代码。`async` 用于创建异步代码块或异步函数。`async` 块或 `async fn` 会返回一个实现了 `Future` trait 的类型。`await` 用于暂停当前 Future 的执行，直到另一个 Future 完成。`await` 只能在 `async` 块或 `async fn` 中使用。
 
 ```rust
@@ -60,9 +61,10 @@ async fn another_async_function() {
 ```
 
 - `std::task` 模块：提供了与任务调度和执行相关的类型和函数，例如：
-  
+
   - `Context`：提供唤醒 Future 的能力。
   - `Waker`：用于通知执行器某个 Future 已经准备好再次被 `poll`。
+
 - `std::pin::Pin`：用于固定 Future 在内存中的位置，这对于某些需要固定内存地址的 Future 非常重要，例如自引用结构体。
 
 同时，你也一定要清楚地知道，**标准库不包含的内容：**

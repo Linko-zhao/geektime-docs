@@ -215,10 +215,11 @@ OS，能屏蔽底层的复杂性，例如 Linux ，我们不用关心程序运�
 
 2.1.3 Controller 管理器
 Controller 管理器实现了控制循环，完成集群监控与事件响应。它负责创建 controller。一般控制循环包括：工作节点 controller、终端 controller 以及副本 controller。集群监控目的是保证集群当前状态与期望状态相匹配。集群监控基础逻辑大致如下：
-* 获取期望状态。
-* 观察当前状态。
-* 判断差异。
-* 变更消除差异点。
+
+- 获取期望状态。
+- 观察当前状态。
+- 判断差异。
+- 变更消除差异点。
 
 2.1.4 调度器
 调度器职责是监听 API Server 来启动工作任务，并分配合适的节点。它的核心是排序系统，该系统有评分机制，将工作分配到分数最高的节点来运行任务。调度器确定可以执行任务的节点后，还会再进行前置校验，例如该节点是否仍然存在、分配的任务需要的端口当前选择的工作节点是否可以访问等，如果无法通过，该节点会被直接忽略，如果调度器最后无法找到合适的工作节点，则当前任务无法被调度，并被标记为暂停状态。 需要特别注意，调度器不负责运行任务，只为任务负责分配合适的工作节点。
@@ -233,29 +234,29 @@ Controller 管理器实现了控制循环，完成集群监控与事件响应。
 
 1. etcd能取代redis的大部分功能吗？
 
-2.  在 Kubernetes 里则只有一类人：DevOps。是不是意味着以后对开发或者运维人员都有更大的挑战，毕竟Kubernetes的也很很庞杂的知识要去学习。
+2. 在 Kubernetes 里则只有一类人：DevOps。是不是意味着以后对开发或者运维人员都有更大的挑战，毕竟Kubernetes的也很很庞杂的知识要去学习。
 
 3. 状态信息中的“AGE”代表启动时长吗？
 
 4. DNS插件在执行命令：minikube addons list 输出的列表中没看到。是不是说这个插件已经集成到k8s中了，不需要单独安装。</p>2022-07-25</li><br/><li><span>hiDaLao</span> 👍（9） 💬（6）<p>执行minikube dashboard无法在本机自动用浏览器打开dashboard页面，网上搜到的解决办法：执行
-kubectl proxy --port=8888 --address=&#39;虚拟机ip&#39; --accept-hosts=&#39;^.*&#39; &amp;
-然后在本机打开http:&#47;&#47;虚拟机ip:8888&#47;api&#47;v1&#47;namespaces&#47;kubernetes-dashboard&#47;services&#47;http:kubernetes-dashboard:&#47;proxy&#47;#&#47;workloads?namespace=default</p>2022-07-21</li><br/><li><span>peter</span> 👍（9） 💬（3）<p>请教老师几个问题：
-Q1：Mater的四个组件运行在一台主机上吗？
-一个mater包括四个组件，这四个组件是运行在同一台主机上吗？即“一个Mater对应一个主机”。或者是另外一种理解：mater是个逻辑概念，可以对应一台主机，也可以对应多台主机，比如两个组件运行在一台主机，另外两个组件运行在另外一台主机，两台主机合起来才是mater。哪一种理解对？
-Q2：Pod与docker容器是什么关系？
-一个pod就对应一个docker容器吗？ 比如创建一个nginx容器，那么此容器就对应一个pod。
-Q3：Pod是集中存储在master上，由master分发到各个node运行吗？
-Q4：启动k8s后台管理系统后，”node list”查询出的IP是固定的吗？
-09课文章中，用“minikube node list”查询出来的结果中，IP是“192.168.49.2”。在我的笔记本上，查出来的也是“192.168.49.2”。 请问，这个IP是固定的吗？
-Q5：09课中，启动nginx后怎么验证启动成功？
-09课的最后，用“kubectl run ngx --image=nginx:alpine”这个命令启动了nginx，此命令中没有指定端口映射。 请问，怎么验证启动成功？  Localhost:80 吗？</p>2022-07-13</li><br/><li><span>dao</span> 👍（8） 💬（2）<p>课后思考：
-1. kubernetes 算得上是一种操作系统，正如它定位的就是 cloud native 一样。它与传统意义上的操作系统不同的是管理、调度的都是虚拟化&#47;池化的资源，与硬件之间隔了一层宿主操作系统（传统 OS）。
-2. 哈哈，我觉得这里面的组件没有一个是多余的——都重要。没有 etcd 就没有持久化信息&#47;配置；没有 apiserver 整个集群就失联、失控；没有 kubelet 该节点就失联了；没有节点里的 container runtime 就没有 Pod，也就是没有任何应用服务；没有 kube-proxy，节点的服务就是孤岛；没有 controller manager 就无法管理节点及 Pod ，也就无法对外提供应用服务；没有 scheduler 集群就处于失衡状态。这里 apiserver 、 kubelet 、 kube-proxy 充当不同的桥接作用。</p>2022-07-16</li><br/><li><span>李一</span> 👍（6） 💬（2）<p>问一个小白问题，看架构图 ETCD是在Master节点上的，由于ETCD记录了节点信息、ConfigMap、Secret数据，如果Master 节点宕机或数据损坏，K8S 如何保证数据完整性？</p>2022-07-22</li><br/><li><span>三溪</span> 👍（5） 💬（1）<p>罗老师画思维导图是真的强</p>2022-07-26</li><br/><li><span>自由</span> 👍（5） 💬（2）<p>2.2.3 Kube-proxy
-负责本地集群网络，保障 Pod 间的网络路由与负载均衡</p>2022-07-15</li><br/><li><span>笨蛋小孩</span> 👍（5） 💬（1）<p>老师，是不是minikube的作用就是提供了以上的基础组件？</p>2022-07-13</li><br/><li><span>朱雯</span> 👍（3） 💬（1）<p>1. 什么是操作系统？根据我所学到知识，操作系统是帮助人管理硬件的，具体来说就是管理内存，cpu，硬盘这些内容。文件是硬盘的抽象，内存是内存条的抽象，进程是运行程序的抽象。总的来说，操作系统就是硬件再软件层面如何被抽象和管理的工具。从这个角度来看，k8s不算操作系统，因为k8s并不直接控制硬件，而是控制更高级别的抽象软件。但从结果上来看，k8s可以管理，并且主要是为这个产生的，所以又算是操作系统。与传统的操作系统区别在于，传统操作系统管理可以更多是单机管理，无法跨机器跨集群管理，但k8s可以，因为k8s天然在云上。
-2. 对于一个操作系统来说，管理的重点在于，网络，计算和存储，网络方面会使用到kube-proxy和apiserver，计算方面有contonller-manager，scheduler，apiserver和kubelet，存储方面主要是etcd，我觉得都挺重要，缺少一环都无法成就操作系统的管理了，但硬要说最重要，可能还是etcd，毕竟其他的一关机就没了，但存储还在。</p>2022-07-13</li><br/><li><span>美妙的代码</span> 👍（3） 💬（3）<p>一直没有清楚  module 和addon 区别，今天总于明白了😂</p>2022-07-13</li><br/><li><span>mango</span> 👍（2） 💬（1）<p>安装minikub碰到的问题，minikub start的时候，一直下载不了gcr.io&#47;k8s-minikube&#47;kicbase 。
-我的解决方法：下载其他代替镜像（anjone&#47;kicbase）
-docker pull anjone&#47;kicbase
-minikube start --vm-driver=docker --base-image=&quot;anjone&#47;kicbase&quot; --kubernetes-version=&#39;v1.22.0&#39; 
+   kubectl proxy --port=8888 --address=&#39;虚拟机ip&#39; --accept-hosts=&#39;^.*&#39; &amp;
+   然后在本机打开http:&#47;&#47;虚拟机ip:8888&#47;api&#47;v1&#47;namespaces&#47;kubernetes-dashboard&#47;services&#47;http:kubernetes-dashboard:&#47;proxy&#47;#&#47;workloads?namespace=default</p>2022-07-21</li><br/><li><span>peter</span> 👍（9） 💬（3）<p>请教老师几个问题：
+   Q1：Mater的四个组件运行在一台主机上吗？
+   一个mater包括四个组件，这四个组件是运行在同一台主机上吗？即“一个Mater对应一个主机”。或者是另外一种理解：mater是个逻辑概念，可以对应一台主机，也可以对应多台主机，比如两个组件运行在一台主机，另外两个组件运行在另外一台主机，两台主机合起来才是mater。哪一种理解对？
+   Q2：Pod与docker容器是什么关系？
+   一个pod就对应一个docker容器吗？ 比如创建一个nginx容器，那么此容器就对应一个pod。
+   Q3：Pod是集中存储在master上，由master分发到各个node运行吗？
+   Q4：启动k8s后台管理系统后，”node list”查询出的IP是固定的吗？
+   09课文章中，用“minikube node list”查询出来的结果中，IP是“192.168.49.2”。在我的笔记本上，查出来的也是“192.168.49.2”。 请问，这个IP是固定的吗？
+   Q5：09课中，启动nginx后怎么验证启动成功？
+   09课的最后，用“kubectl run ngx --image=nginx:alpine”这个命令启动了nginx，此命令中没有指定端口映射。 请问，怎么验证启动成功？ Localhost:80 吗？</p>2022-07-13</li><br/><li><span>dao</span> 👍（8） 💬（2）<p>课后思考：
+5. kubernetes 算得上是一种操作系统，正如它定位的就是 cloud native 一样。它与传统意义上的操作系统不同的是管理、调度的都是虚拟化&#47;池化的资源，与硬件之间隔了一层宿主操作系统（传统 OS）。
+6. 哈哈，我觉得这里面的组件没有一个是多余的——都重要。没有 etcd 就没有持久化信息&#47;配置；没有 apiserver 整个集群就失联、失控；没有 kubelet 该节点就失联了；没有节点里的 container runtime 就没有 Pod，也就是没有任何应用服务；没有 kube-proxy，节点的服务就是孤岛；没有 controller manager 就无法管理节点及 Pod ，也就无法对外提供应用服务；没有 scheduler 集群就处于失衡状态。这里 apiserver 、 kubelet 、 kube-proxy 充当不同的桥接作用。</p>2022-07-16</li><br/><li><span>李一</span> 👍（6） 💬（2）<p>问一个小白问题，看架构图 ETCD是在Master节点上的，由于ETCD记录了节点信息、ConfigMap、Secret数据，如果Master 节点宕机或数据损坏，K8S 如何保证数据完整性？</p>2022-07-22</li><br/><li><span>三溪</span> 👍（5） 💬（1）<p>罗老师画思维导图是真的强</p>2022-07-26</li><br/><li><span>自由</span> 👍（5） 💬（2）<p>2.2.3 Kube-proxy
+   负责本地集群网络，保障 Pod 间的网络路由与负载均衡</p>2022-07-15</li><br/><li><span>笨蛋小孩</span> 👍（5） 💬（1）<p>老师，是不是minikube的作用就是提供了以上的基础组件？</p>2022-07-13</li><br/><li><span>朱雯</span> 👍（3） 💬（1）<p>1. 什么是操作系统？根据我所学到知识，操作系统是帮助人管理硬件的，具体来说就是管理内存，cpu，硬盘这些内容。文件是硬盘的抽象，内存是内存条的抽象，进程是运行程序的抽象。总的来说，操作系统就是硬件再软件层面如何被抽象和管理的工具。从这个角度来看，k8s不算操作系统，因为k8s并不直接控制硬件，而是控制更高级别的抽象软件。但从结果上来看，k8s可以管理，并且主要是为这个产生的，所以又算是操作系统。与传统的操作系统区别在于，传统操作系统管理可以更多是单机管理，无法跨机器跨集群管理，但k8s可以，因为k8s天然在云上。
+7. 对于一个操作系统来说，管理的重点在于，网络，计算和存储，网络方面会使用到kube-proxy和apiserver，计算方面有contonller-manager，scheduler，apiserver和kubelet，存储方面主要是etcd，我觉得都挺重要，缺少一环都无法成就操作系统的管理了，但硬要说最重要，可能还是etcd，毕竟其他的一关机就没了，但存储还在。</p>2022-07-13</li><br/><li><span>美妙的代码</span> 👍（3） 💬（3）<p>一直没有清楚 module 和addon 区别，今天总于明白了😂</p>2022-07-13</li><br/><li><span>mango</span> 👍（2） 💬（1）<p>安装minikub碰到的问题，minikub start的时候，一直下载不了gcr.io&#47;k8s-minikube&#47;kicbase 。
+   我的解决方法：下载其他代替镜像（anjone&#47;kicbase）
+   docker pull anjone&#47;kicbase
+   minikube start --vm-driver=docker --base-image=&quot;anjone&#47;kicbase&quot; --kubernetes-version=&#39;v1.22.0&#39;
 
 </p>2023-06-16</li><br/><li><span>Andrew</span> 👍（2） 💬（1）<p>老师，在真实环境中需要登录到master node才能对集群进行操作吗？
 一般都会有一个kubeconfig文件，里面记录了server, user等信息，是通过本机直接和master node的api server进行交互吗？</p>2022-07-15</li><br/><li><span>psoracle</span> 👍（2） 💬（1）<p>回答下思考题：
@@ -264,10 +265,11 @@ minikube start --vm-driver=docker --base-image=&quot;anjone&#47;kicbase&quot; --
 Kubernetes的核心是容器编排，围绕着调度，发明了Pod，再通过声明式api、控制器这些概念将Pod高效地调度与运行起来。所以说它管理软件（容器，如业务容器，本质是Node OS上的一个进程），确实是的，它控制了Pod的启停、副本等；但说它管理硬件，倒没看出来，像CPU、内存、存储也只参与了调度算法而已。
 
 2. 和真正的操作系统相比有什么差异？说说你理解的 Kubernetes 组件的作用，你觉得哪几个最重要？
-a. kube-apiserver，是k8s系统入口，类似于操作系统上的系统调用
-b. kube-scheduler，调度器，容器编排最主要的组件，负责Pod调度，类似于操作系统上的控制器
-c. kube-manage-controller，控制器，负责管理k8s中资源对象
-d. kubelet，Pod生命周期管理，负责Pod运行环境创建，包括各种CRI、CNI等各种manager的管理
-当然，etcd存储k8s所有对象配置，提供查询与订阅功能，并且性能优秀也是很重要的。</p>2022-07-13</li><br/><li><span>星垂平野阔</span> 👍（2） 💬（2）<p>1.k8s感觉上更像是一个介于操作系统和应用之间的服务，相比传统的操作系统，它提供了更强大的资源抽象功能。
-2.scheduler和kubelet比较重要。前者提供了pod调度功能，没有它服务就无法部署运行；kubelet是更基础的组件，没有它容器都无法运行，也无法上报节点状态。</p>2022-07-13</li><br/>
+   a. kube-apiserver，是k8s系统入口，类似于操作系统上的系统调用
+   b. kube-scheduler，调度器，容器编排最主要的组件，负责Pod调度，类似于操作系统上的控制器
+   c. kube-manage-controller，控制器，负责管理k8s中资源对象
+   d. kubelet，Pod生命周期管理，负责Pod运行环境创建，包括各种CRI、CNI等各种manager的管理
+   当然，etcd存储k8s所有对象配置，提供查询与订阅功能，并且性能优秀也是很重要的。</p>2022-07-13</li><br/><li><span>星垂平野阔</span> 👍（2） 💬（2）<p>1.k8s感觉上更像是一个介于操作系统和应用之间的服务，相比传统的操作系统，它提供了更强大的资源抽象功能。
+   2.scheduler和kubelet比较重要。前者提供了pod调度功能，没有它服务就无法部署运行；kubelet是更基础的组件，没有它容器都无法运行，也无法上报节点状态。</p>2022-07-13</li><br/>
+
 </ul>

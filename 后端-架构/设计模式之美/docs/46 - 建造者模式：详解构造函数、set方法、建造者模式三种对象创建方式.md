@@ -75,7 +75,7 @@ public class ResourcePoolConfig {
   private int maxTotal = DEFAULT_MAX_TOTAL;
   private int maxIdle = DEFAULT_MAX_IDLE;
   private int minIdle = DEFAULT_MIN_IDLE;
-  
+
   public ResourcePoolConfig(String name) {
     if (StringUtils.isBlank(name)) {
       throw new IllegalArgumentException("name should not be empty.");
@@ -318,11 +318,12 @@ public class ConstructorArg_02 {
             return this;
         }
     }
+
 }
 咱也不知道写的好不好，希望争哥看到了检视指导一二</p>2020-11-16</li><br/><li><span>悠南</span> 👍（1） 💬（3）<p>你这建造者模式代码，看不懂，构造方法私有了，怎么来的Builder 方法</p>2020-06-22</li><br/><li><span>Morse</span> 👍（0） 💬（5）<p>为什么定义了一个长方形类，如果不使用建造者模式，采用先创建后 set 的方式，那就会导致在第一个 set 之后，对象处于无效状态？求大佬解答</p>2020-08-03</li><br/><li><span>Darren</span> 👍（128） 💬（4）<p>简单理解就是：工厂模式是根据不同的条件生成不同Class的对象，构建者模式是根据不同参数生成一个class的不同对象。</p>2020-04-10</li><br/><li><span>webmin</span> 👍（114） 💬（13）<p>public class ConstructorArg {
-    private boolean isRef;
-    private Class type;
-    private Object arg;
+private boolean isRef;
+private Class type;
+private Object arg;
 
     public boolean isRef() {
         return isRef;
@@ -395,6 +396,7 @@ public class ConstructorArg_02 {
             return this;
         }
     }
+
 }</p>2020-02-17</li><br/><li><span>相逢是缘</span> 👍（55） 💬（4）<p>打卡
 一、使用场景：
 1）类的构造函数必填属性很多，通过set设置，没有办法校验必填属性
@@ -409,63 +411,65 @@ public class ConstructorArg_02 {
 2）建造者模式：创建一种类型的复杂对象，通过很多可设置参数，“定制化”的创建对象</p>2020-02-17</li><br/><li><span>javaadu</span> 👍（52） 💬（0）<p>课堂讨论题：
 
 &#47;**
- * 在下面的 ConstructorArg 类中，
- * 当 isRef 为 true 的时候，arg 表示 String 类型的 refBeanId，type 不需要设置；
- * 当 isRef 为 false 的时候，arg、type 都需要设置
- *
- * @author javaadu
- *&#47;
-public class ConstructorArg {
-    private boolean isRef;
-    private Class type;
-    private Object arg;
 
-    private ConstructorArg(Builder builder) {
-        this.isRef = builder.isRef;
-        this.type = builder.type;
-        this.arg = builder.arg;
-    }
+- 在下面的 ConstructorArg 类中，
+- 当 isRef 为 true 的时候，arg 表示 String 类型的 refBeanId，type 不需要设置；
+- 当 isRef 为 false 的时候，arg、type 都需要设置
+-
+- @author javaadu
+  *&#47;
+  public class ConstructorArg {
+  private boolean isRef;
+  private Class type;
+  private Object arg;
 
-    public static class Builder {
-        private boolean isRef;
-        private Class type;
-        private Object arg;
+  private ConstructorArg(Builder builder) {
+  this.isRef = builder.isRef;
+  this.type = builder.type;
+  this.arg = builder.arg;
+  }
 
-        public ConstructorArg build() {
-            if (arg == null) {
-                throw new IllegalArgumentException(&quot;arg必须设置&quot;);
-            }
-            if (isRef) {
-                if (!(arg instanceof String)) {
-                    throw new IllegalArgumentException(&quot;arg必须为String类型的对象&quot;);
-                }
-            } else {
-                if (type == null) {
-                    throw new IllegalArgumentException(&quot;arg必须设置&quot;);
-                }
-            }
+  public static class Builder {
+  private boolean isRef;
+  private Class type;
+  private Object arg;
 
-            return new ConstructorArg(this)
-        }
+       public ConstructorArg build() {
+           if (arg == null) {
+               throw new IllegalArgumentException(&quot;arg必须设置&quot;);
+           }
+           if (isRef) {
+               if (!(arg instanceof String)) {
+                   throw new IllegalArgumentException(&quot;arg必须为String类型的对象&quot;);
+               }
+           } else {
+               if (type == null) {
+                   throw new IllegalArgumentException(&quot;arg必须设置&quot;);
+               }
+           }
 
-        public Builder setRef(boolean ref) {
-            isRef = ref;
-            return this;
-        }
+           return new ConstructorArg(this)
+       }
 
-        public Builder setArg(Object arg) {
-            this.arg = arg;
-            return this;
-        }
+       public Builder setRef(boolean ref) {
+           isRef = ref;
+           return this;
+       }
 
-        public Builder setType(Class type) {
-            this.type = type;
-            return this;
-        }
-    }
-}</p>2020-02-17</li><br/><li><span>小文同学</span> 👍（18） 💬（0）<p>说说自己读了 Builder 模式的最大感悟：
-1、Builder 模式可以保证对象的状态。
-2、Builder 模式可以把对象的构造鉴定逻辑写在Builder类中，保证了类的简洁。
+       public Builder setArg(Object arg) {
+           this.arg = arg;
+           return this;
+       }
+
+       public Builder setType(Class type) {
+           this.type = type;
+           return this;
+       }
+
+  }
+  }</p>2020-02-17</li><br/><li><span>小文同学</span> 👍（18） 💬（0）<p>说说自己读了 Builder 模式的最大感悟：
+  1、Builder 模式可以保证对象的状态。
+  2、Builder 模式可以把对象的构造鉴定逻辑写在Builder类中，保证了类的简洁。
 
 平时普普通通地使用 lombok 生成 Builder，应该更加深入地了解一下。</p>2020-03-07</li><br/><li><span>黄林晴</span> 👍（12） 💬（2）<p>打卡~
 最近半年用的最多的就是Builder模式了</p>2020-02-17</li><br/><li><span>王涛</span> 👍（9） 💬（0）<p>最近，在学习本专栏的过程中。
@@ -487,9 +491,9 @@ setAttr()放属性自己的逻辑判断，比如不要为null，不能大于或�
 build()方法放多个属性间的校验逻辑，因为调用builde()时，属性都set完成，这时候才有机会通过builde()来全局考虑所有属性的逻辑。
 基于此，我的答案如下
 public class ConstructorArg {
-    private boolean isRef;
-    private Class type;
-    private Object arg;
+private boolean isRef;
+private Class type;
+private Object arg;
 
     private ConstructorArg(Builder builder) {
         this.isRef = builder.isRef;
@@ -536,42 +540,43 @@ public class ConstructorArg {
             return this;
         }
     }
+
 public static void main(String[] args) {
-        ConstructorArg.Builder builder = new ConstructorArg.Builder();
-&#47;&#47;        java.lang.IllegalArgumentException: 当 isRef 为 true 的时候，arg 表示 String 类型refBeanId
-        builder.setRef(true).setArg(1).build();
-    }</p>2020-03-07</li><br/><li><span>啦啦啦</span> 👍（7） 💬（0）<p>用php实现了一个
+ConstructorArg.Builder builder = new ConstructorArg.Builder();
+&#47;&#47; java.lang.IllegalArgumentException: 当 isRef 为 true 的时候，arg 表示 String 类型refBeanId
+builder.setRef(true).setArg(1).build();
+}</p>2020-03-07</li><br/><li><span>啦啦啦</span> 👍（7） 💬（0）<p>用php实现了一个
 &lt;?php
 class ResourcePoolConfig{
-    private $maxTotal;
+private $maxTotal;
     private $maxIdle;
-    private $minIdle;
+private $minIdle;
     public function __construct(build $build)
-    {
-        $this-&gt;maxTotal = $build-&gt;maxTotal;
-        $this-&gt;maxIdle = $build-&gt;maxIdle;
-        $this-&gt;minIdle = $build-&gt;minIdle;
-        echo &#39;maxTotal&#39;.$this-&gt;maxTotal;
+{
+$this-&gt;maxTotal = $build-&gt;maxTotal;
+$this-&gt;maxIdle = $build-&gt;maxIdle;
+$this-&gt;minIdle = $build-&gt;minIdle;
+echo &#39;maxTotal&#39;.$this-&gt;maxTotal;
         echo &#39;&lt;br &#47;&gt;&#39;;
         echo &#39;maxIdle&#39;.$this-&gt;maxIdle;
-        echo &#39;&lt;br &#47;&gt;&#39;;
-        echo &#39;minIdle&#39;.$this-&gt;minIdle;
-        echo &#39;&lt;br &#47;&gt;&#39;;
-    }
+echo &#39;&lt;br &#47;&gt;&#39;;
+echo &#39;minIdle&#39;.$this-&gt;minIdle;
+echo &#39;&lt;br &#47;&gt;&#39;;
+}
 }
 
 class Builder{
-    public $maxTotal;
+public $maxTotal;
     public $maxIdle;
-    public $minIdle;
+public $minIdle;
     public function noodleValidate(){
         if($this-&gt;maxIdle&gt;$this-&gt;maxTotal){
             throw new Exception(&quot;maxIdle抛出异常&quot;);
         }
         if($this-&gt;minIdle&gt;$this-&gt;maxTotal){
-            throw new Exception(&quot;minIdle抛出异常&quot;);
-        }
-    }
+throw new Exception(&quot;minIdle抛出异常&quot;);
+}
+}
 
     public function setMaxTotal($value=20){
         $this-&gt;maxTotal = $value;
@@ -587,6 +592,7 @@ class Builder{
         $this-&gt;minIdle = $value;
         return $this;
     }
+
 }
 
 $b = new Builder();

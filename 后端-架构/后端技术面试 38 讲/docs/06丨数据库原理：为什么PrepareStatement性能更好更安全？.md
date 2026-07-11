@@ -11,9 +11,9 @@ statement.executeUpdate("UPDATE Users SET stateus = 2 WHERE userID=233");
 PrepareStatement预编译的方式如下：
 
 ```
-PreparedStatement updateUser = con.prepareStatement("UPDATE Users SET stateus = ? WHERE userID = ?"); 
-updateUser.setInt(1, 2); 
-updateUser.setInt(2,233); 
+PreparedStatement updateUser = con.prepareStatement("UPDATE Users SET stateus = ? WHERE userID = ?");
+updateUser.setInt(1, 2);
+updateUser.setInt(2,233);
 updateUser.executeUpdate();
 ```
 

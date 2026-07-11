@@ -27,7 +27,7 @@ CREATE TABLE t_user
     `phone`       String COMMENT '手机号',
     `address`     String COMMENT '地址',
     `create_date` DateTime COMMENT '创建时间'
-) 
+)
 ```
 
 用户行为表：以user\_id分区。

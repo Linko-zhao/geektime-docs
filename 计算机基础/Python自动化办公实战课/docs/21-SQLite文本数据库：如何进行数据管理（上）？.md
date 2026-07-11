@@ -210,7 +210,7 @@ conn = sqlite3.connect(db)
 cur = conn.cursor()
 
 # 定义要执行的SQL语句
-sql2 = '''SELECT phone FROM address_book WHERE name = "Tom" ''' 
+sql2 = '''SELECT phone FROM address_book WHERE name = "Tom" '''
 
 # 执行SQL
 try:
@@ -233,7 +233,7 @@ finally:
 那在这一查找流程中，我们要重点关注的就是“SELECT”语句，它是实现读取内容的语句。在任何一个数据库中，它都是最常用的SQL语句。我们从它的结构开始分析。
 
 ```
-SELECT phone FROM address_book WHERE name = "Tom" 
+SELECT phone FROM address_book WHERE name = "Tom"
 ```
 
 这条语句的执行顺序和书写顺序是不同的，它的执行顺序是从“FROM”到“WHERE”，再到“SELECT”关键字。它们三个的含义分别是：

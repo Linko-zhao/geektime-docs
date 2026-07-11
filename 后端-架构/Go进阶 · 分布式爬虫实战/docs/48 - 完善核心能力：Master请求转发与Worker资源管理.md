@@ -22,7 +22,7 @@ func (m *Master) Campaign() {
 		case resp := <-leaderChange:
 			m.logger.Info("watch leader change", zap.String("leader:", string(resp.Kvs[0].Value)))
 			m.leaderID = string(resp.Kvs[0].Value)
-		}	
+		}
 		for {
 			select {
 			case err := <-leaderCh:
@@ -93,7 +93,7 @@ func RunGRPCServer(m *master.Master, logger *zap.Logger, reg registry.Registry, 
 接着访问master3服务暴露的HTTP接口。虽然master3并不是Leader，但是访问master3添加资源时，操作仍然能够成功。
 
 ```plain
-» curl  --request POST 'http://localhost:8082/crawler/resource' --header 'Content-Type: application/json' --data '{"id":"zjx","name": "task-forward"}' 
+» curl  --request POST 'http://localhost:8082/crawler/resource' --header 'Content-Type: application/json' --data '{"id":"zjx","name": "task-forward"}'
 {"id":"go.micro.server.worker-1","Address":"192.168.0.105:9090"}
 ```
 

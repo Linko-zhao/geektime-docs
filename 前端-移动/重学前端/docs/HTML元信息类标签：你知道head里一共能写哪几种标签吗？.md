@@ -180,6 +180,7 @@ application-name：如果页面是Web application，用这个标签表示应用�
 2. Twitter 的标签组，包括 card, title, description 和 image，是为 Twitter 分享提供信息；
 
 3. msapplication 的标签组，包括 TileColor 和 TileImage，是为 Windows 8 以及以上系统识别 favicons 用的。
+
 </p>2019-02-21</li><br/><li><span>MarlboroKay</span> 👍（8） 💬（1）<p>meta基本用法：
   &lt;meta name=application-name content=&quot;lsForums&quot;&gt;
 name = application-name 是不是少了 “”

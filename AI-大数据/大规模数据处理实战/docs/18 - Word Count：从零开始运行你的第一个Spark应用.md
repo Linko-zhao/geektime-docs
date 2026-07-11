@@ -196,7 +196,7 @@ if __name__ == "__main__":
        .groupBy("word")
        .count()
    wordCounts.show()
-   
+
    spark.stop()
 ```
 
@@ -242,9 +242,9 @@ spark = SparkSession.builder.appName(&quot;WordCount&quot;).getOrCreate()
 ds_lines = spark.read.text(&quot;&#47;Users&#47;apple&#47;code_tool&#47;spark&#47;WordCount&#47;demo.md&quot;)
 #针对df特定的计算格式
 words = ds_lines.select(
-   explode(
-       split(ds_lines.value, &quot; &quot;)
-   ).alias(&quot;word&quot;)
+explode(
+split(ds_lines.value, &quot; &quot;)
+).alias(&quot;word&quot;)
 )
 #返回的RDD进行计数
 wordCounts = words.groupBy(&quot;word&quot;).count()
@@ -268,7 +268,6 @@ AttributeError: &#39;DataFrame&#39; object has no attribute &#39;flatMap&#39;
 import os
 from pyspark import SparkContext, SparkConf
 
-
 os.environ[&#39;SPARK_HOME&#39;] = &#39;&#47;usr&#47;local&#47;spark&#39;
 os.environ[&#39;HADOOP_HOME&#39;] = &#39;&#47;usr&#47;local&#47;hadoop-2.7.7&#39;
 
@@ -281,7 +280,7 @@ counts = text_file.filter(lambda x: len(x.strip()) &gt; 0).flatMap(lambda x: x.s
 
 print(&#39;|{0: ^20}|{1: ^20}|&#39;.format(&#39;Word&#39;, &#39;Count&#39;))
 for (word, num) in counts.take(10):
-    print(&#39;|{0: ^20}|{1: ^20}|&#39;.format(word, num))
+print(&#39;|{0: ^20}|{1: ^20}|&#39;.format(word, num))
 
 </p>2019-05-31</li><br/><li><span>Geek_4ldh1g</span> 👍（3） 💬（0）<p>用java写 有点冗长  我不敢苟同，因为java8 已经是函数编程了！而且spark开发我觉得大部分还是spark  sql多点！这样基本没啥区别  </p>2019-05-29</li><br/><li><span>这个名字居然都有</span> 👍（3） 💬（1）<p>老师，你给一个完整的案例吧，</p>2019-05-29</li><br/><li><span>大志</span> 👍（2） 💬（1）<p>老师，本地已经安装了Spark，有Demo吗，只看代码片段的话还是无从下手啊</p>2019-05-29</li><br/>
 </ul>

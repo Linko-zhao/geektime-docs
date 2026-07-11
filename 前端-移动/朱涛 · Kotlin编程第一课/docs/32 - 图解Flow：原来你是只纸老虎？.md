@@ -186,7 +186,7 @@ private suspend fun testFlow() {
         emit(5)
     }
         // 变化在这里
-        .collect(object : FlowCollector<Int>{ 
+        .collect(object : FlowCollector<Int>{
             // 2
             override suspend fun emit(value: Int) {
                 logX(value)
@@ -320,7 +320,7 @@ inline fun <T> Flow<T>.filter(
 // 2
 internal inline fun <T, R> Flow<T>.unsafeTransform(
     crossinline transform: suspend FlowCollector<R>.(value: T) -> Unit
-): Flow<R> = unsafeFlow { 
+): Flow<R> = unsafeFlow {
     // 6
     collect { value ->
         // 7
@@ -576,6 +576,7 @@ public fun interface FlowCollector<in T> {
     public suspend fun emit(value: T)
 }
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Paul Shan</span> 👍（11） 💬（1）<p>Flow 接口引用了FlowCollector接口，并封装了一段调用逻辑，作为将来FlowCollector使用的来源。FlowCollector，带有emit函数的接口，统一了上游的发送方的数据输出和下游接收方的数据输入。FlowCollector的做法和通常扩展函数不太一样，通常的扩展函数是先有核心类，然后扩展函数扩充核心类的功能。FlowCollector是先在上游的构造器里构建了高阶的扩展函数，然后在下游collect里实现了带有emit的核心类。下游collect触发流程，然后上游的emit驱动下游的emit。这么设计原因应该是上游的构造器，相对复杂，而且是推迟执行的，需要给开发人员以足够的灵活性，所以采用了扩展函数的格式，下游接受数据相对固定，而且是同步执行的，采用固定的FlowCollector接口。
 </p>2022-04-06</li><br/><li><span>大土豆</span> 👍（3） 💬（1）<p>老师，下节课的目录得改下。。。应该是Android开发者还有未来吗？市场基本都没需求了</p>2022-04-06</li><br/><li><span>zyaire</span> 👍（1） 💬（2）<p>老师，“Flow 上游与下游的协程上下文就会不一致，它们整体的结构也会被破坏，从而导致“结构化并发”的特性也被破坏。”这句话不是很能理解，以代码11来说，即使在flow中调用withContext切换了上下文，当外部协程取消时，不也是会响应取消操作吗</p>2022-04-11</li><br/><li><span>再前进一点</span> 👍（1） 💬（1）<p>同问：为啥transform{}这方法在IDE里点击跳转到的源码是unsafeTransform这个方法呢</p>2022-04-08</li><br/><li><span>dawn</span> 👍（1） 💬（3）<p>@PublishedApi
@@ -591,79 +592,79 @@ internal inline fun &lt;T, R&gt; Flow&lt;T&gt;.unsafeTransform(
 
 @PublishedApi
 internal inline fun &lt;T&gt; unsafeFlow(@BuilderInference crossinline block: suspend FlowCollector&lt;T&gt;.() -&gt; Unit): Flow&lt;T&gt; {
-    return object : Flow&lt;T&gt; {
-        override suspend fun collect(collector: FlowCollector&lt;T&gt;) {
-            collector.block()
-        }
-    }
+return object : Flow&lt;T&gt; {
+override suspend fun collect(collector: FlowCollector&lt;T&gt;) {
+collector.block()
+}
+}
 }</p>2022-04-08</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>&#47;&#47; 2
 internal inline fun &lt;T, R&gt; Flow&lt;T&gt;.unsafeTransform(
-    crossinline transform: suspend FlowCollector&lt;R&gt;.(value: T) -&gt; Unit
-): Flow&lt;R&gt; = unsafeFlow { 
-    &#47;&#47; 6
-    collect { value -&gt;
-        &#47;&#47; 7
-        return@collect transform(value)
-    }
+crossinline transform: suspend FlowCollector&lt;R&gt;.(value: T) -&gt; Unit
+): Flow&lt;R&gt; = unsafeFlow {
+&#47;&#47; 6
+collect { value -&gt;
+&#47;&#47; 7
+return@collect transform(value)
+}
 }
 
 老师，可以解答下么：
 
-1、transform 的接受者是哪个实例呢？是 flow {}.filter {}.collect {} 中终止操作符号  collect 传入的 FlowCollector
+1、transform 的接受者是哪个实例呢？是 flow {}.filter {}.collect {} 中终止操作符号 collect 传入的 FlowCollector
 
-还是注释 6 处  collect 传入的 FlowCollector 实例呢？
+还是注释 6 处 collect 传入的 FlowCollector 实例呢？
 
 按照逻辑的话，应该是终止操作符号 collect {} 传入的 FlowCollector。
 
 但是看逻辑，注释 6 处的 collect 的参数也是个 FlowCollector 实例，那么 transform 的接受者应该是它？？</p>2022-04-26</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>&#47;&#47; 2
 internal inline fun &lt;T, R&gt; Flow&lt;T&gt;.unsafeTransform (
-    crossinline transform: suspend FlowCollector&lt;R&gt;.(value: T) -&gt; Unit
-): Flow&lt;R&gt; = unsafeFlow { 
-    &#47;&#47; 6
-    collect { value -&gt;
-        &#47;&#47; 7
-        return@collect transform (value)
-    }
+crossinline transform: suspend FlowCollector&lt;R&gt;.(value: T) -&gt; Unit
+): Flow&lt;R&gt; = unsafeFlow {
+&#47;&#47; 6
+collect { value -&gt;
+&#47;&#47; 7
+return@collect transform (value)
+}
 }</p>2022-04-26</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>
 &#47;&#47; 代码段8
 
 &#47;&#47; 1
 inline fun &lt;T&gt; Flow&lt;T&gt;.filter(
-    crossinline predicate: suspend (T) -&gt; Boolean
+crossinline predicate: suspend (T) -&gt; Boolean
 ): Flow&lt;T&gt; = transform { value -&gt;
-    &#47;&#47; 8
-    if (predicate(value)) return@transform emit(value)
+&#47;&#47; 8
+if (predicate(value)) return@transform emit(value)
 }
 
 &#47;&#47; 2
 internal inline fun &lt;T, R&gt; Flow&lt;T&gt;.unsafeTransform(
-    crossinline transform: suspend FlowCollector&lt;R&gt;.(value: T) -&gt; Unit
-): Flow&lt;R&gt; = unsafeFlow { 
-    &#47;&#47; 6
-    collect { value -&gt;
-        &#47;&#47; 7
-        return@collect transform(value)
-    }
+crossinline transform: suspend FlowCollector&lt;R&gt;.(value: T) -&gt; Unit
+): Flow&lt;R&gt; = unsafeFlow {
+&#47;&#47; 6
+collect { value -&gt;
+&#47;&#47; 7
+return@collect transform(value)
+}
 }
 
 &#47;&#47; 3
 internal inline fun &lt;T&gt; unsafeFlow(
-    crossinline block: suspend FlowCollector&lt;T&gt;.() -&gt; Unit
+crossinline block: suspend FlowCollector&lt;T&gt;.() -&gt; Unit
 ): Flow&lt;T&gt; {
-    &#47;&#47; 4
-    return object : Flow&lt;T&gt; {
-        &#47;&#47; 5
-        override suspend fun collect(collector: FlowCollector&lt;T&gt;) {
-            collector.block()
-        }
-    }
+&#47;&#47; 4
+return object : Flow&lt;T&gt; {
+&#47;&#47; 5
+override suspend fun collect(collector: FlowCollector&lt;T&gt;) {
+collector.block()
+}
+}
 }
 
 老师好，想在问一个问题：
- 
-unsafeTransform  中的 collect 参数是一个 FlowCollector 匿名内部类实例
 
-那 return@collect transform(value) 中的  transform 的接收者是这个 FlowCollector 匿名内部类实例
+unsafeTransform 中的 collect 参数是一个 FlowCollector 匿名内部类实例
+
+那 return@collect transform(value) 中的 transform 的接收者是这个 FlowCollector 匿名内部类实例
 
 还是 flow{}.filter{}.collect{} 中，终止操作符传入的 FlowCollector 匿名内部类实例呢？？</p>2022-04-26</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>老师好，对于 Flow 的 fliter 的源码，确实没看懂，可以详细讲下么？？
 
@@ -672,23 +673,23 @@ unsafeTransform  中的 collect 参数是一个 FlowCollector 匿名内部类实
 &#47;&#47; unsafeTransform
 &#47;&#47; 2
 inline fun &lt;T&gt; Flow&lt;T&gt;.unsafeTransform(
-    crossinline transform: suspend FlowCollector&lt;T&gt;.(value: T) -&gt; Unit &#47;&#47; FlowCollector.transform
+crossinline transform: suspend FlowCollector&lt;T&gt;.(value: T) -&gt; Unit &#47;&#47; FlowCollector.transform
 ): Flow&lt;T&gt; {
-    return unsafeFlow { 
-        &#47;&#47; 这里的作用域应该是 FlowCollector，为什么可以调用 collect 函数
-        collect(object : FlowCollector&lt;T&gt; { 
-            override suspend fun emit(value: T) {
-                &#47;&#47; 7
-                transform(value)
-            }
-        })
-        &#47;&#47; 6
-&#47;&#47;        collect { value -&gt;
-&#47;&#47;            &#47;&#47; 7
-&#47;&#47;            return@collect transform(value)
-&#47;&#47;        }
-    }
-}</p>2022-04-24</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（2）<p>难道说是因为 unsafeFlow 创建的是一个匿名内部类的实例，匿名内部类的实例是持有外部对象 SafeFlow 的引用？？？</p>2022-04-23</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>filter(..）貌似是新建了一个 FLow，flow {... ... ...} 创建  SafeFlow 貌似没用到呀
+return unsafeFlow {
+&#47;&#47; 这里的作用域应该是 FlowCollector，为什么可以调用 collect 函数
+collect(object : FlowCollector&lt;T&gt; {
+override suspend fun emit(value: T) {
+&#47;&#47; 7
+transform(value)
+}
+})
+&#47;&#47; 6
+&#47;&#47; collect { value -&gt;
+&#47;&#47; &#47;&#47; 7
+&#47;&#47; return@collect transform(value)
+&#47;&#47; }
+}
+}</p>2022-04-24</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（2）<p>难道说是因为 unsafeFlow 创建的是一个匿名内部类的实例，匿名内部类的实例是持有外部对象 SafeFlow 的引用？？？</p>2022-04-23</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>filter(..）貌似是新建了一个 FLow，flow {... ... ...} 创建 SafeFlow 貌似没用到呀
 
 老师解答下呀，谢谢。。
 
@@ -710,11 +711,11 @@ inline fun &lt;T&gt; Flow&lt;T&gt;.filter(
 老师我想问下，假设我维持了父子关系，从理论来说是不是就没问题了
 
 lifecycleScope.launch {
-            flow&lt;Int&gt; {
-                emit(1)
-                emit(2)
-                emit(3)
-                withContext(Job(parent = currentCoroutineContext()[Job])) {
+flow&lt;Int&gt; {
+emit(1)
+emit(2)
+emit(3)
+withContext(Job(parent = currentCoroutineContext()[Job])) {
 
                 }
             }

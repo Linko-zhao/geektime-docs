@@ -31,8 +31,8 @@ expression
     | expression postfix=('++' | '--')
     | prefix=('+'|'-'|'++'|'--') expression
     | prefix=('~'|'!') expression
-    | expression bop=('*'|'/'|'%') expression  
-    | expression bop=('+'|'-') expression 
+    | expression bop=('*'|'/'|'%') expression
+    | expression bop=('+'|'-') expression
     | expression ('<' '<' | '>' '>' '>' | '>' '>') expression
     | expression bop=('<=' | '>=' | '>' | '<') expression
     | expression bop=INSTANCEOF typeType
@@ -126,9 +126,9 @@ else{
 它的语法规则是这样的：
 
 ```
-statement : 
+statement :
           ...
-          | IF parExpression statement (ELSE statement)? 
+          | IF parExpression statement (ELSE statement)?
           ...
           ;
 parExpression : '(' expression ')';
@@ -211,19 +211,19 @@ for (int i = 0; i < 10; i++){
 相关的语法规则如下：
 
 ```
-statement : 
+statement :
          ...
           | FOR '(' forControl ')' statement
          ...
           ;
 
-forControl 
+forControl
           : forInit? ';' expression? ';' forUpdate=expressionList?
           ;
 
-forInit 
-          : variableDeclarators 
-          | expressionList 
+forInit
+          : variableDeclarators
+          | expressionList
           ;
 
 expressionList
@@ -313,7 +313,7 @@ public Object visitExpression(ExpressionContext ctx) {
             case PlayScriptParser.SUB:        //减法运算
                 rtn = minus(leftObject, rightObject, type);
                 break;
-            ...   
+            ...
             }
         }
         ...
@@ -323,7 +323,7 @@ public Object visitExpression(ExpressionContext ctx) {
 其中ExpressionContext就是AST中表达式的节点，叫做Context，意思是你能从中取出这个节点所有的上下文信息，包括父节点、子节点等。其中，每个子节点的名称跟语法中的名称是一致的，比如加减法语法规则是下面这样：
 
 ```
-expression bop=('+'|'-') expression 
+expression bop=('+'|'-') expression
 ```
 
 那么我们可以用ExpressionContext的这些方法访问子节点：
@@ -396,6 +396,7 @@ while (true) {
 - PlayScript.java（入口程序）： [码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/playscript-java/src/main/play/PlayScript.java) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/main/play/PlayScript.java)
 - PlayScript.g4（语法规则）： [码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/playscript-java/src/main/play/PlayScript.g4) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/main/play/PlayScript.g4)
 - ASTEvaluator.java（解释器）： [码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/playscript-java/src/main/play/ASTEvaluator.java) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/main/play/ASTEvaluator.java)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>李懂</span> 👍（20） 💬（2）<p>现在都是用一门语言去实现这些功能，我想知道最开始的语言是怎么实现分析的呢！有一点鸡生蛋蛋生鸡！</p>2019-08-29</li><br/><li><span>Spring</span> 👍（17） 💬（1）<p>老师，你好。请教一下，词法，语法解析后生成 AST 后，计算机怎么指导我的AST 中的“+” 就是执行 add  的计算呢？这其中是不是还有还存在一个中间层？</p>2019-08-28</li><br/><li><span>Void_seT</span> 👍（15） 💬（1）<p>老师，目前的学习过程中，比如表达式语法规则、语句语法规则等，虽然能知道它们表示了什么，但是并不知道它是怎么凭空产生的；请问：这种规则是相对比较固定的，我们要使用时，可以参照“标准”的规则文法进行修改呢？还是要自己掌握各种类型语法规则的各个组成细节，以便于在写语法规则时可以信手拈来呢？如果需要熟练掌握语法规则的各个组成细节，目前的工作如果还用不到生成“小编译器”这种技能，也就是没有练习或高强度的训练时间的话，是否需要现在就硬啃下这块硬骨头（因为怕长时间不使用，将来真正要使用时，还是要重新再训练一遍）？</p>2019-08-28</li><br/><li><span>宇智波芭芭干</span> 👍（8） 💬（7）<p>学习时总感觉节奏在老师那边，自己的思路并不连贯，对于初学者容易出现断片。在极客时间其它老师那里也同步购买了linux以及网络协议，另外一边通过故事的形式通熟易懂的讲解了一些底层知识原理，学习也是相当顺畅有兴趣，而这里不知道为啥就是顺畅不起来，差距不是一般的大。</p>2019-09-10</li><br/><li><span>windpiaoxue</span> 👍（8） 💬（1）<p>老师您好
 例如下面这个规则：

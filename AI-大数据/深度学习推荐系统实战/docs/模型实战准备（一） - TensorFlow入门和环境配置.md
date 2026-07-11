@@ -32,7 +32,7 @@ TensorFlow这个名字还是很有意思的，翻译过来是“张量流动”�
 
 ```
 docker pull tensorflow/tensorflow:latest  # Download latest stable image
-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-jupyter  # Start Jupyter server 
+docker run -it -p 8888:8888 tensorflow/tensorflow:latest-jupyter  # Start Jupyter server
 
 ```
 
@@ -117,9 +117,9 @@ x_train, x_test = x_train / 255.0, x_test / 255.0
 //定义模型结构和模型参数
 model = tf.keras.models.Sequential([
     //输入层28*28维矩阵
-    tf.keras.layers.Flatten(input_shape=(28, 28)), 
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
     //128维隐层，使用relu作为激活函数
-    tf.keras.layers.Dense(128, activation='relu'), 
+    tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dropout(0.2),
     //输出层采用softmax模型，处理多分类问题
     tf.keras.layers.Dense(10, activation='softmax')

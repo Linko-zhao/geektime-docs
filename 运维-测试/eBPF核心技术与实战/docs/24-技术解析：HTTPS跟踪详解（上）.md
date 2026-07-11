@@ -245,7 +245,7 @@ int main(int argc, char **argv)
     // 将eBPF程序挂载到原始套接字
     int sock = open_raw_sock("eth0");
     int prog_fd = bpf_program__fd(skel->progs.http_trace);
-    if (setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd, sizeof(prog_fd))) 
+    if (setsockopt(sock, SOL_SOCKET, SO_ATTACH_BPF, &prog_fd, sizeof(prog_fd)))
     {
         fprintf(stderr, "Failed to attach eBPF prog\n");
         goto cleanup;
@@ -253,7 +253,7 @@ int main(int argc, char **argv)
 
 
     // 循环等待从ring buffer中读取数据
-    while ((err = ring_buffer__poll(rb, 100)) >= 0) ;  
+    while ((err = ring_buffer__poll(rb, 100)) >= 0) ;
 
 
 cleanup: // 释放资源
@@ -378,32 +378,34 @@ libbpf: failed to load BPF skeleton &#39;http_trace_bpf&#39;: -13
 Failed to open and load BPF skeleton
 
 产生这个错误信息的原因是因为 bpf_skb_load_bytes 的第四个参数必须是常量类型，而 read_length 是变量。这里分享一下找到这个原因的过程：
+
 1. 在对应版本的内核当中找到这个错误信息 invalid zero-sized read，通过错误信息定位到 kfunc：check_mem_size_reg
 2. 通过 bpftrace 追踪 check_mem_size_reg 返回值非零时的 kstack 。执行 sudo bpftrace -e &#39;kretprobe:check_mem_size_reg &#47;retval != 0&#47; { print(kstack());}&#39;, 得到以下调用栈：
-        check_func_arg+1013
-        check_helper_call.isra.0+514
-        do_check+2778
-        do_check_common+486
-        bpf_check+1934
-        bpf_prog_load+1733
-        __sys_bpf+1381
-        __x64_sys_bpf+26
-        x64_sys_call+6552
-        do_syscall_64+127
-        entry_SYSCALL_64_after_hwframe+120
+   check_func_arg+1013
+   check_helper_call.isra.0+514
+   do_check+2778
+   do_check_common+486
+   bpf_check+1934
+   bpf_prog_load+1733
+   __sys_bpf+1381
+   __x64_sys_bpf+26
+   x64_sys_call+6552
+   do_syscall_64+127
+   entry_SYSCALL_64_after_hwframe+120
 3. 通过阅读代码或者 faddr2line 找到 check_func_arg+1013 对应的位置, 即以下代码：
-case ARG_CONST_SIZE:
-		err = check_mem_size_reg(env, reg, regno, false, meta);
+   case ARG_CONST_SIZE:
+   err = check_mem_size_reg(env, reg, regno, false, meta);
 4. 通过 ARG_CONST_SIZE 可以找到 bpf_arg_type 定义，进而找到 bpf_func_proto。 通过注释，可以知道 bpf_func_proto 是用来帮助 verifier 对一个 ebpf helper func 进行验证的
 5. 通过 bpf_func_proto 和对应的 helper bpf_skb_load_bytes 可以找到以下定义：
-static const struct bpf_func_proto bpf_skb_load_bytes_proto = {
-	.func		= bpf_skb_load_bytes,
-	.gpl_only	= false,
-	.ret_type	= RET_INTEGER,
-	.arg1_type	= ARG_PTR_TO_CTX,
-	.arg2_type	= ARG_ANYTHING,
-	.arg3_type	= ARG_PTR_TO_UNINIT_MEM,
-	.arg4_type	= ARG_CONST_SIZE,
-};
-至此可以确定 bpf_skb_load_bytes 要求第四个参数 len 的类型必须是常量类型</p>2024-12-31</li><br/>
+   static const struct bpf_func_proto bpf_skb_load_bytes_proto = {
+   .func = bpf_skb_load_bytes,
+   .gpl_only = false,
+   .ret_type = RET_INTEGER,
+   .arg1_type = ARG_PTR_TO_CTX,
+   .arg2_type = ARG_ANYTHING,
+   .arg3_type = ARG_PTR_TO_UNINIT_MEM,
+   .arg4_type = ARG_CONST_SIZE,
+   };
+   至此可以确定 bpf_skb_load_bytes 要求第四个参数 len 的类型必须是常量类型</p>2024-12-31</li><br/>
+
 </ul>

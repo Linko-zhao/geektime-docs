@@ -74,7 +74,7 @@ statement
     | FOR '(' forControl ')' statement
     | WHILE parExpression statement
     | DO statement WHILE parExpression ';'
-    | SWITCH parExpression '{' switchBlockStatementGroup* switchLabel*                
+    | SWITCH parExpression '{' switchBlockStatementGroup* switchLabel*
     | RETURN expression? ';'
     | BREAK IDENTIFIER? ';'
     | CONTINUE IDENTIFIER? ';'
@@ -109,7 +109,7 @@ blockStatements
 ```
 expression	: assign ;
 assign	: equal | assign1 ;
-assign1 : '=' equal assign1 | ε;  
+assign1 : '=' equal assign1 | ε;
 equal	: rel equal1 ;
 equal1	: ('==' | '!=') rel equal1 | ε ;
 rel		: add rel1 ;
@@ -149,7 +149,7 @@ type : 'int' | 'long' | 'double' ;
 
 ```
 public int a;
-int b; 
+int b;
 ```
 
 这时，type能够产生的终结符 ‘int’、‘long’和‘double’也在memberDeclaration的First集合中。这样，我们实际上把accessModifier给穿透了，直接到了下一个非终结符type。所以这类问题依靠First集合仍然能解决。在解析的过程中，如果下一个Token是 ‘int’，我们可以认为accessModifier返回了ε，忽略它，继续解析下一个元素type，因为它的First集合中才会包含 ‘int’。
@@ -166,7 +166,7 @@ block
 blockStatements
     : blockStatement*
     ;
-    
+
 blockStatement
     : variableDeclarators ';'
     | statement
@@ -255,7 +255,7 @@ int cacl(int a, int b){
 
 ```
 statement: declarator | other;
-declarator : declarePrefix （variableDeclarePostfix                
+declarator : declarePrefix （variableDeclarePostfix
                             |functionDeclarePostfix) ;
 variableDeclarePostfix : ('=' expression)? ;
 functionDeclarePostfix : '(' parameterList ')' block ;
@@ -279,6 +279,7 @@ functionDeclarePostfix : '(' parameterList ')' block ;
 
 - lab/16～18（算法篇的示例代码）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/tree/master/lab/16-18) [GitHub](https://github.com/RichardGong/PlayWithCompiler/tree/master/lab/16-18)
 - LLParser.java（LL算法的语法解析器）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/16-18/src/main/java/play/parser/LLParser.java) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/16-18/src/main/java/play/parser/LLParser.java)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>沉淀的梦想</span> 👍（11） 💬（1）<p>Antlr中LL(k)中k是多少，是Antlr根据我们的文法动态决定的吗？还是老师文中说的那些写LL文法的注意点，我们在写Antlr文法的时候需要注意吗？Antlr会帮助我们自动处理这些吗？</p>2019-09-22</li><br/><li><span>czh</span> 👍（4） 💬（1）<p>今日份总结：今天是一个扫盲的学习，有以下两点总结
 
@@ -293,14 +294,14 @@ functionDeclarePostfix : '(' parameterList ')' block ;
 如果通过下面右递归版的产生式推导似乎省略了一步？
 add -&gt; mul | mul + add
 mul -&gt; pri | pri * mul
-pri -&gt; Id | Num | (add) 
+pri -&gt; Id | Num | (add)
 
 后面一幅图中节点8, 9, 10在节点12, 13之前生成，似乎这与前一幅图第6到8行的展开顺序不一致？</p>2019-10-02</li><br/><li><span>Geek_f9ea2d</span> 👍（1） 💬（2）<p>老师好，对First集合我基本能理解，对Fllow集合的计算，我看的有点懵，这个方法：addToRightChild 为什么需要：把某个节点的Follow集合，也给它所有右边分枝的后代节点？</p>2019-09-28</li><br/><li><span>瓜瓜</span> 👍（0） 💬（1）<p>这个符号通常记做 $，意味一个程序的结束。比如在表达式的语法里，expression 后面可能跟这个符号，expression 的所有右侧分支的后代节点也都可能跟这个符号，也就是它们都可能出现在程序的末尾。但另一些非终结符，后面不会跟这个符号，如 blockstatements，因为它后面肯定会有“}”。
 这一段看了好几遍，没有看懂，老师能不能再解释下？</p>2020-02-05</li><br/><li><span>LeeR</span> 👍（0） 💬（1）<p>老师你好，$ 是不是就是EOF符号，表示程序和文件的结束？</p>2019-12-01</li><br/><li><span>余晓飞</span> 👍（0） 💬（1）<p>我把程序打印输出的 First 和 follow 集合整理如下（其实打印输出还包含一些中间节点，这里就不展示了）：
 
-这段下面的图中 assign1 的First 集合应该包含 Epsilon</p>2019-10-29</li><br/><li><span>余晓飞</span> 👍（0） 💬（1）<p>expression  : assign ;
-assign  : equal | assign1 ;
-assign1 : &#39;=&#39; equal assign1 | ε;  
+这段下面的图中 assign1 的First 集合应该包含 Epsilon</p>2019-10-29</li><br/><li><span>余晓飞</span> 👍（0） 💬（1）<p>expression : assign ;
+assign : equal | assign1 ;
+assign1 : &#39;=&#39; equal assign1 | ε;
 
 文中这里第二行 assign 是不写错了？
 我看代码SimpleGrammar.java中有这一行GrammarNode assign = exp.createChild(&quot;assign&quot;, GrammarNodeType.And);

@@ -59,7 +59,7 @@ Markdown 是由 John Gruber（约翰 · 格鲁伯）在 2004 年发明的，它�
 
 我们上一讲已经提到了文本宽度选项 `textwidth`。在对英文文本编辑时，这个选项的推荐数值通常是 72，比标准列宽 80 稍窄。这个设置有历史原因，但更重要的是，这也是经过历史验证对人阅读比较舒适的设定：既不会产生频繁的换行而打乱阅读节奏，也不会因为行太长而发生寻找下一行起始位置的困难。
 
-被誉为“排版圣经”的 *The Elements of Typographic Style* 对行宽有这样的描述：
+被誉为“排版圣经”的 _The Elements of Typographic Style_ 对行宽有这样的描述：
 
 > Anything between 45 to 75 characters is widely regarded as a satisfactory length of line for a single-column page. . . . The 66-character line . . . is widely regarded as ideal.
 
@@ -256,7 +256,7 @@ vim:autoindent:expandtab:formatoptions=tcqlmn:textwidth=72:
 之前也从没有想过在这个方向上折腾.
 等有时间了,我再参考本文把我的配置调整一下.
 
-说起vim写markdown,我用的是插件[markdown-preview.nvim](https:&#47;&#47;github.com&#47;iamcco&#47;markdown-preview.nvim)来实时预览.
+说起vim写markdown,我用的是插件[markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim)来实时预览.
 不知道其他小伙伴有没有更好的推荐.
 </p>2020-08-19</li><br/>
 </ul>

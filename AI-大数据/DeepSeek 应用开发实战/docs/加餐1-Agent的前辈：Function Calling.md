@@ -110,7 +110,7 @@ pip install openai
 
 ```python
 client = OpenAI(
-    api_key=os.getenv("AliDeep"),  
+    api_key=os.getenv("AliDeep"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 ```
@@ -121,7 +121,7 @@ client = OpenAI(
 
 ```python
 client = OpenAI(
-    api_key=os.getenv("DeepSeek"),  
+    api_key=os.getenv("DeepSeek"),
     base_url="https://api.deepseek.com/v1"
 )
 ```
@@ -296,11 +296,11 @@ def get_closing_price(name):
 ```python
 if response.choices[0].message.tool_calls != None:
         tool_call = response.choices[0].message.tool_calls[0]
-        
+
         if tool_call.function.name == "get_closing_price":
             arguments_dict = json.loads(tool_call.function.arguments)
             price = get_closing_price(arguments_dict['name'])
-            
+
             messages.append(response.choices[0].message)
 
             messages.append({
@@ -361,61 +361,64 @@ ChatCompletion(id=&#39;73fd3b2f-41be-4508-843e-99f9fb0fd4c3&#39;, choices=[Choic
 
 工具选择：
 [ChatCompletionMessageToolCall(id=&#39;call_0_4bd01b14-0489-4693-abb7-fae3798bb5cd&#39;, function=Function(arguments=&#39;{&quot;name&quot;:&quot;青岛啤酒&quot;}&#39;, name=&#39;get_closing_price&#39;), type=&#39;function&#39;, index=0)]
-messages:  [{&#39;role&#39;: &#39;user&#39;, &#39;content&#39;: &#39;青岛啤酒的收盘价是多少？&#39;}, ChatCompletionMessage(content=&#39;&#39;, refusal=None, role=&#39;assistant&#39;, audio=None, function_call=None, tool_calls=[ChatCompletionMessageToolCall(id=&#39;call_0_4bd01b14-0489-4693-abb7-fae3798bb5cd&#39;, function=Function(arguments=&#39;{&quot;name&quot;:&quot;青岛啤酒&quot;}&#39;, name=&#39;get_closing_price&#39;), type=&#39;function&#39;, index=0)]), {&#39;role&#39;: &#39;tool&#39;, &#39;content&#39;: &#39;67.92&#39;, &#39;tool_call_id&#39;: &#39;call_0_4bd01b14-0489-4693-abb7-fae3798bb5cd&#39;}]
+messages: [{&#39;role&#39;: &#39;user&#39;, &#39;content&#39;: &#39;青岛啤酒的收盘价是多少？&#39;}, ChatCompletionMessage(content=&#39;&#39;, refusal=None, role=&#39;assistant&#39;, audio=None, function_call=None, tool_calls=[ChatCompletionMessageToolCall(id=&#39;call_0_4bd01b14-0489-4693-abb7-fae3798bb5cd&#39;, function=Function(arguments=&#39;{&quot;name&quot;:&quot;青岛啤酒&quot;}&#39;, name=&#39;get_closing_price&#39;), type=&#39;function&#39;, index=0)]), {&#39;role&#39;: &#39;tool&#39;, &#39;content&#39;: &#39;67.92&#39;, &#39;tool_call_id&#39;: &#39;call_0_4bd01b14-0489-4693-abb7-fae3798bb5cd&#39;}]
 回复：
 
 [Finished in 22.2s]</p>2025-03-12</li><br/><li><span>轩爷</span> 👍（1） 💬（1）<p>def send_messages(messages):
-    response = client.chat.completions.create(
-        model=&quot;qwen-max&quot;, #如果使用的是 DS 官方服务，则换成 deepseek-chat
-        messages=messages,
-        tools=tools,
-        tool_choice=&quot;auto&quot;
-    )
-    return response.choices[0].message
+response = client.chat.completions.create(
+model=&quot;qwen-max&quot;, #如果使用的是 DS 官方服务，则换成 deepseek-chat
+messages=messages,
+tools=tools,
+tool_choice=&quot;auto&quot;
+)
+return response.choices[0].message
 
 这里应该直接 return response，否则，后面print的部分就不对了
 
-if __name__ == &quot;__main__&quot;:
-    messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;青岛啤酒的收盘价是多少？&quot;}]
-    response = send_messages(messages)
+if **name** == &quot;**main**&quot;:
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;青岛啤酒的收盘价是多少？&quot;}]
+response = send_messages(messages)
 
     print(&quot;回复：&quot;)
     print(response.choices[0].message.content)
 
     print(&quot;工具选择：&quot;)
     print(response.choices[0].message.tool_calls)</p>2025-03-11</li><br/><li><span>宏鬼</span> 👍（1） 💬（1）<p>我用的天翼云ds-r1满血模型，python 3.11.5，本地更新了最新openai库，
+
 在内马尔的那个例子中，如果代码是：
 
-``` Python
+```Python
 print(&quot;思考过程：&quot;)
 print(completion.choices[0].message.reasoning_content)
 ```
 
 会报错，错误如下：
 
-``` Shell
-AttributeError: &#39;ChatCompletionMessage&#39; object has no attribute &#39;reasoning_content&#39; 
+```Shell
+AttributeError: &#39;ChatCompletionMessage&#39; object has no attribute &#39;reasoning_content&#39;
 ```
+
 屏蔽上述两句，直接输出，能得到正确结果：
 
-``` Shell
-最终答案：                                                                                    
+```Shell
+最终答案：
 &lt;think&gt;
 嗯，用户现在问的是内马尔，他是个葡萄牙运动员吗？不过我记得内马尔不是葡萄牙的，而是巴西的。那我得先回顾一下之前的对话历史，看看上下文是不是有什么关联。之前用户问了C罗是哪个国家的，我回答他 是葡萄牙的，现在接下来说内马尔呢？这可能是在继续询问其他著名球员的国籍。
-内马尔确实是一个非常著名的足球运动员，尤其在巴黎圣日耳曼和之前的巴塞罗那效力。他应该是巴西人，对不对？不过，我还记得有段时间他和法国联系紧密，因为他代表法国踢过一些比赛。但是，实际上他出生在巴西，拥有巴西和法国双重国籍，对吗？所以，我需要明确回答他是巴西人，但也要提到他的法国国籍，以防用户有更深的了解。                     
-另外，用户可能是在做一个关于球员国籍的列表，或者想要了解这些球星的背景信息。内马尔和C罗都处于 顶尖水平，所以用户可能对他们的国籍比较感兴趣。我需要确保信息准确，所以最好再核实一下内马尔的国籍信息，避免提供错误的信息。                    
+内马尔确实是一个非常著名的足球运动员，尤其在巴黎圣日耳曼和之前的巴塞罗那效力。他应该是巴西人，对不对？不过，我还记得有段时间他和法国联系紧密，因为他代表法国踢过一些比赛。但是，实际上他出生在巴西，拥有巴西和法国双重国籍，对吗？所以，我需要明确回答他是巴西人，但也要提到他的法国国籍，以防用户有更深的了解。
+另外，用户可能是在做一个关于球员国籍的列表，或者想要了解这些球星的背景信息。内马尔和C罗都处于 顶尖水平，所以用户可能对他们的国籍比较感兴趣。我需要确保信息准确，所以最好再核实一下内马尔的国籍信息，避免提供错误的信息。
 最后，我应该用友好和简洁的方式回答，确认他的巴西国籍，同时提到法国国籍，这样用户如果想了解更多，就能得到全面的信息了。这样既解答了问题，又提供了额外的有用信息，满足了用户的潜在需求。
-&lt;&#47;think&gt;                                                                                 
+&lt;&#47;think&gt;
 内马尔是巴西足球运动员！他出生在巴西，拥有巴西和法国双重国籍，目前代表巴西国家队参赛。
 ```
+
 暂时没看文档，不确定是不是openai库改了返回参数。</p>2025-03-07</li><br/><li><span>小牛人</span> 👍（1） 💬（1）<p>Chat completions的messages一般会传多少个上下文，传太少容易聊着聊着gpt就不知道你之前说过的内容了，传太多会很费token吧？</p>2025-03-07</li><br/><li><span>王晓聪</span> 👍（0） 💬（1）<p>用提示词的方式让模型识别需要调用工具的方式比较麻烦，并且使用不同的模型可能还得修改提示词；有了 functionCalling 应该可以解决 </p>2025-05-19</li><br/><li><span>小一</span> 👍（0） 💬（1）<p>类似于prompt提示的方式解决不支持function calling的问题</p>2025-05-05</li><br/><li><span>Geek_66f829</span> 👍（0） 💬（1）<p>def send_messages(messages):
-    response = client.chat.completions.create(
-        model=&quot;deepseek-v3&quot;,
-        messages=messages,
-        tools=tools,
-        tool_choice=&quot;auto&quot;
-    )
-    return response
+response = client.chat.completions.create(
+model=&quot;deepseek-v3&quot;,
+messages=messages,
+tools=tools,
+tool_choice=&quot;auto&quot;
+)
+return response
 
 把模型改成deepseek-v3，得到报错，deepseek不支持function call吗？
 

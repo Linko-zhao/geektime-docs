@@ -26,7 +26,7 @@ public class SynchronizedStack<T> {
         stack[index] = obj;
         return true;
     }
-    
+
     //这个方法用来获取对象
     public synchronized T pop() {
         if (index == -1) {
@@ -36,7 +36,7 @@ public class SynchronizedStack<T> {
         stack[index--] = null;
         return result;
     }
-    
+
     //扩展对象数组长度，以2倍大小扩展
     private void expand() {
       int newSize = size * 2;
@@ -78,14 +78,14 @@ public class ArrayByteBufferPool implements ByteBufferPool
 {
     private final int _min;//最小size的Buffer长度
     private final int _maxQueue;//Queue最大长度
-    
+
     //用不同的Bucket(桶)来持有不同size的ByteBuffer对象,同一个桶中的ByteBuffer size是一样的
     private final ByteBufferPool.Bucket[] _direct;
     private final ByteBufferPool.Bucket[] _indirect;
-    
+
     //ByteBuffer的size增量
     private final int _inc;
-    
+
     public ArrayByteBufferPool(int minSize, int increment, int maxSize, int maxQueue)
     {
         //检查参数值并设置默认值
@@ -95,18 +95,18 @@ public class ArrayByteBufferPool implements ByteBufferPool
             increment=1024;//默认以1024递增
         if (maxSize<=0)
             maxSize=64*1024;//ByteBuffer的最大长度默认是64K
-        
+
         //ByteBuffer的最小长度必须小于增量
-        if (minSize>=increment) 
+        if (minSize>=increment)
             throw new IllegalArgumentException("minSize >= increment");
-            
+
         //最大长度必须是增量的整数倍
         if ((maxSize%increment)!=0 || increment>=maxSize)
             throw new IllegalArgumentException("increment must be a divisor of maxSize");
-         
+
         _min=minSize;
         _inc=increment;
-        
+
         //创建maxSize/increment个桶,包含直接内存的与heap的
         _direct=new ByteBufferPool.Bucket[maxSize/increment];
         _indirect=new ByteBufferPool.Bucket[maxSize/increment];
@@ -144,7 +144,7 @@ public ByteBuffer acquire(int size, boolean direct)
         return newByteBuffer(size,direct);
     //这里其实调用了Deque的poll方法
     return bucket.acquire(direct);
-        
+
 }
 
 //释放Buffer
@@ -154,7 +154,7 @@ public void release(ByteBuffer buffer)
     {
       //找到对应的桶
       ByteBufferPool.Bucket bucket = bucketFor(buffer.capacity(),buffer.isDirect());
-      
+
       //这里调用了Deque的offerFirst方法
   if (bucket!=null)
       bucket.release(buffer);
@@ -194,8 +194,8 @@ Tomcat和Jetty都用到了对象池技术，这是因为处理一次HTTP请求�
 <li><span>802.11</span> 👍（15） 💬（2）<p>工厂模式和池化思想有什么区别呢</p>2019-06-27</li><br/><li><span>yang</span> 👍（5） 💬（1）<p>同步栈有看到，但是不知道它是做池化用的 😂😂😂
 
 线程池 里面维护了线程数组和任务队列
-连接池 
+连接池
 jvm的常量池 ？</p>2019-08-15</li><br/><li><span>-W.LI-</span> 👍（5） 💬（4）<p>老师好学到了。通过threadlocal来减少锁竞争上下文切换的开销。
 可是我看见好多帖子说threadlocal容易内存泄露啥的肯比较多需要慎用。五年码龄从没用过😂。
-请教一个问题threadLocal中的对象如果用完不清。下次别的请求Tomcat线程池中拿到同个线程，能取到之前请求存入的数据么?</p>2019-06-25</li><br/><li><span>清风</span> 👍（4） 💬（3）<p>也看了些书上的讲解，看完后还是没有像老师这样能总结出一个清晰的逻辑结构，这样的情况需要怎么办呢</p>2019-07-01</li><br/><li><span>Liam</span> 👍（4） 💬（1）<p>tomcat和jetty的对象池没有空闲超时&#47;超量回收的机制吗？</p>2019-06-25</li><br/><li><span>kyon</span> 👍（3） 💬（1）<p>您好，请问 ArrayByteBufferPool 中，direct 和 indirect 都是 new 出来的，区别是什么？另外在 new ByteBufferPool.Bucket(this,size,_maxQueue) 中，参数 _maxQueue 的作用是什么？</p>2019-06-26</li><br/><li><span>WL</span> 👍（2） 💬（3）<p>请问老师Tomcat为什么用栈做对象池，那要去栈底的对象不是很麻烦很不灵活吗？为啥不用map的方式呢？</p>2019-06-25</li><br/><li><span>XxxxxxxMr</span> 👍（0） 💬（1）<p>老师 我有一个疑问  池化。对象池 、线程池 、数据库连接池等等 他们都是如出一辙吗？还是大同小异</p>2019-09-16</li><br/><li><span>TJ</span> 👍（0） 💬（1）<p>为什么tomcat不使用java本身的stack class? 它也是基于数组的。自己再加一个同步就可以了</p>2019-06-25</li><br/><li><span>肖臧</span> 👍（6） 💬（0）<p>Java的Integer类的IntegerCache就是利用了池化技术，还有String.intern()也算池化技术</p>2020-06-05</li><br/><li><span>Wiggle Wiggle</span> 👍（4） 💬（0）<p>“并且它本身只支持扩容不支持缩容，也就是说数组对象在使用过程中不会被重新赋值，也就不会被 GC”。这句话是不是写错了？我觉得是不是想说【数组元素】在使用过程中不会被重新赋值？因为扩容的话，创建了新的数组；缩容的话反而不用创建新的数组</p>2019-08-26</li><br/><li><span>惘 闻</span> 👍（1） 💬（0）<p>老师对象池可以认为是享元模式吗?对象结构和一些重复参数是元</p>2021-01-26</li><br/><li><span>sun留白</span> 👍（1） 💬（2）<p>理解tomcat的数组是每个位置的对象set好后，不会被替换掉，当需要新的不存在的额对象时，再建立。那么，数组长度如何控制呢？达到长度限制时，长时间未用的对象被新的对象替换掉吗？请问老师，我这样理解对吗？</p>2020-01-06</li><br/><li><span>尔东橙</span> 👍（0） 💬（0）<p>Spring的单例池也算一种对象池吧？</p>2022-09-09</li><br/><li><span>Geek_00271d</span> 👍（0） 💬（0）<p>在工作中会用到okhttpclient，看了里面源码，里面用到了连接池</p>2022-01-19</li><br/>
+请教一个问题threadLocal中的对象如果用完不清。下次别的请求Tomcat线程池中拿到同个线程，能取到之前请求存入的数据么?</p>2019-06-25</li><br/><li><span>清风</span> 👍（4） 💬（3）<p>也看了些书上的讲解，看完后还是没有像老师这样能总结出一个清晰的逻辑结构，这样的情况需要怎么办呢</p>2019-07-01</li><br/><li><span>Liam</span> 👍（4） 💬（1）<p>tomcat和jetty的对象池没有空闲超时&#47;超量回收的机制吗？</p>2019-06-25</li><br/><li><span>kyon</span> 👍（3） 💬（1）<p>您好，请问 ArrayByteBufferPool 中，direct 和 indirect 都是 new 出来的，区别是什么？另外在 new ByteBufferPool.Bucket(this,size,_maxQueue) 中，参数 _maxQueue 的作用是什么？</p>2019-06-26</li><br/><li><span>WL</span> 👍（2） 💬（3）<p>请问老师Tomcat为什么用栈做对象池，那要去栈底的对象不是很麻烦很不灵活吗？为啥不用map的方式呢？</p>2019-06-25</li><br/><li><span>XxxxxxxMr</span> 👍（0） 💬（1）<p>老师 我有一个疑问 池化。对象池 、线程池 、数据库连接池等等 他们都是如出一辙吗？还是大同小异</p>2019-09-16</li><br/><li><span>TJ</span> 👍（0） 💬（1）<p>为什么tomcat不使用java本身的stack class? 它也是基于数组的。自己再加一个同步就可以了</p>2019-06-25</li><br/><li><span>肖臧</span> 👍（6） 💬（0）<p>Java的Integer类的IntegerCache就是利用了池化技术，还有String.intern()也算池化技术</p>2020-06-05</li><br/><li><span>Wiggle Wiggle</span> 👍（4） 💬（0）<p>“并且它本身只支持扩容不支持缩容，也就是说数组对象在使用过程中不会被重新赋值，也就不会被 GC”。这句话是不是写错了？我觉得是不是想说【数组元素】在使用过程中不会被重新赋值？因为扩容的话，创建了新的数组；缩容的话反而不用创建新的数组</p>2019-08-26</li><br/><li><span>惘 闻</span> 👍（1） 💬（0）<p>老师对象池可以认为是享元模式吗?对象结构和一些重复参数是元</p>2021-01-26</li><br/><li><span>sun留白</span> 👍（1） 💬（2）<p>理解tomcat的数组是每个位置的对象set好后，不会被替换掉，当需要新的不存在的额对象时，再建立。那么，数组长度如何控制呢？达到长度限制时，长时间未用的对象被新的对象替换掉吗？请问老师，我这样理解对吗？</p>2020-01-06</li><br/><li><span>尔东橙</span> 👍（0） 💬（0）<p>Spring的单例池也算一种对象池吧？</p>2022-09-09</li><br/><li><span>Geek_00271d</span> 👍（0） 💬（0）<p>在工作中会用到okhttpclient，看了里面源码，里面用到了连接池</p>2022-01-19</li><br/>
 </ul>

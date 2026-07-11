@@ -138,7 +138,7 @@ Sub 打印工作表()
 
     For Each sht In ActiveWorkbook.Worksheets
         sht.Select
-        ActiveWindow.SelectedSheets.PrintOut Copies:=1, _    
+        ActiveWindow.SelectedSheets.PrintOut Copies:=1, _
         Collate:=True, IgnorePrintAreas:=False, _
         printtofile:=True, _
         prtofilename:=filepath & sht.Name & ".pdf"

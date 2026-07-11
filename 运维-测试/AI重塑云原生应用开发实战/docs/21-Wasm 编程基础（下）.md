@@ -260,7 +260,7 @@ tinygo build -o main.wasm -scheduler=none -target=wasi -gc=custom -tags='customm
 之后可以将其打包成 docker 镜像，传至镜像仓库，便于在 Higress 上部署插件。Dockerfile 文件内容如下：
 
 ```dockerfile
-FROM scratch                                                                                                                                                             
+FROM scratch
 COPY main.wasm plugin.wasm
 ```
 

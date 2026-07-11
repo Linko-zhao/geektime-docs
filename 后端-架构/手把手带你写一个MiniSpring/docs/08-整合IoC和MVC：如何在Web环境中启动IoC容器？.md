@@ -62,7 +62,7 @@ import javax.servlet.ServletContextListener;
 public class ContextLoaderListener implements ServletContextListener {
 	public static final String CONFIG_LOCATION_PARAM = "contextConfigLocation";
 	private WebApplicationContext context;
-	
+
 	public ContextLoaderListener() {
 	}
 	public ContextLoaderListener(WebApplicationContext context) {
@@ -148,7 +148,7 @@ import com.minis.context.ClassPathXmlApplicationContext;
 public class AnnotationConfigWebApplicationContext 
 					extends ClassPathXmlApplicationContext implements WebApplicationContext{
 	private ServletContext servletContext;
-	
+
 	public AnnotationConfigWebApplicationContext(String fileName) {
 		super(fileName);
 	}
@@ -190,7 +190,7 @@ public class AnnotationConfigWebApplicationContext 
         <property type="com.test.service.BaseService" name="ref1" ref="baseservice"/>
 	</bean>
 	<bean id="baseservice" class="com.test.service.BaseService"> 
-	</bean>	
+	</bean>
 </beans>
 ```
 
@@ -375,17 +375,17 @@ public class HelloWorldBean {
 DispatcherServlet：
 
 protected void initController() {
-        this.controllerNames = scanPackages(this.packageNames);
-        for (String controllerName : this.controllerNames) {
-            Object obj = null;
-            Class&lt;?&gt; clz = null;
-            try {
-                clz = Class.forName(controllerName);
-                obj = clz.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            this.controllerClasses.put(controllerName, clz);
+this.controllerNames = scanPackages(this.packageNames);
+for (String controllerName : this.controllerNames) {
+Object obj = null;
+Class&lt;?&gt; clz = null;
+try {
+clz = Class.forName(controllerName);
+obj = clz.newInstance();
+} catch (Exception e) {
+e.printStackTrace();
+}
+this.controllerClasses.put(controllerName, clz);
 
             populateBean(obj);
             this.controllerObjs.put(controllerName, obj);
@@ -410,6 +410,7 @@ protected void initController() {
             }
         }
     }
+
 ```</p>2023-03-29</li><br/><li><span>不是早晨，就是黄昏</span> 👍（2） 💬（1）<p>最后，在 com.minis.test.HelloworldBean 内的测试方法上
 但是你项目代码里有新建了一个test目录，且是和minis同级，而minisMVC-servlet.xml里配置的也是com.test，文章给的代码也是com.test里的，感觉写的有点过于随意了。。。。</p>2023-04-04</li><br/><li><span>Cooler</span> 👍（0） 💬（1）<p>老师，目前wac.setServletContext(servletContext); 这一块相关代码是不是没有用在这一章讲的内容</p>2023-06-16</li><br/><li><span>啊良梓是我</span> 👍（0） 💬（1）<p>课后题，通过WebApplicationContext 可以访问到DispatcherServlet里面的bean吗？
 我觉得是分成两种情况来讲的？
@@ -422,3 +423,4 @@ Q2：用idea创建的项目缺省是基于tomcat吗？
 Q3：spring必须基于tomcat，不能独立工作吗？
 按文中的说法，servlet必须要用tomcat这个容器，这样的话，spring并不能独立使用，必须依赖于tomcat。</p>2023-03-31</li><br/><li><span>马儿</span> 👍（0） 💬（1）<p>课后习题：目前Dispatcher可以 访问到WebApplicationContext中的bean，Dispatcher中的bean目前也存在对象的属性中了，但是Dispatcher没有被WebApplicationContext引用所以不能被访问。请问老师spring在管理controller产生的bean的时候是将这些bean统一注册到WebApplicationContext吗？</p>2023-03-30</li><br/><li><span>Shark</span> 👍（0） 💬（1）<p>在tomcat启动的过程中，是先初始化IoC容器，再初始化DispatcherServlet，在初始化DispatcherServlet的过程中记录URI与负责执行的方法和方法的对象关系映射，所以这些URI对应的对象此时是由DispatcherServlet管理的，而非IoC容器，而DispatcherServlet也不是IoC容器管理的，后续是不是会统一到IoC容器中？</p>2023-03-29</li><br/><li><span>7up</span> 👍（1） 💬（0）<p>看代码这里将controller放到Dispatcher容器中，其他bean放到webApplicationContext容器中，在Dispatcher初始化时将两者关联起来，第7节课则是没有区分。统一放到了MVC容器中，没有关联IOC容器。</p>2023-11-15</li><br/><li><span>白不吃</span> 👍（0） 💬（0）<p>看完之后，感觉清晰了很多，不像以前 tomcat 和 spring 对于我来说，就是两个黑盒</p>2025-01-20</li><br/>
 </ul>
+```

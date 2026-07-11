@@ -165,6 +165,7 @@ DPoS共识机制本身将“矿池”纳入系统内部，并把它们统称为�
 
 1. [https://mp.weixin.qq.com/s/r-bmH1tu-Gnn1eJ3GhI0nQ](https://mp.weixin.qq.com/s/r-bmH1tu-Gnn1eJ3GhI0nQ)
 2. [http://me.tryblockchain.org/blockchain-dpos-bm-eos.html](http://me.tryblockchain.org/blockchain-dpos-bm-eos.html)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>朱显杰</span> 👍（10） 💬（1）<p>中本聪不理BM是有原因的，DPoS已经和区块链原教旨主义去中心化背道而驰，但谁规定区块链一定是去中心化的呢？如果区块链想要有实际落地的应用场景，完全去中心化不太现实，弱中心化是大趋势。</p>2018-04-27</li><br/><li><span>来碗绿豆汤</span> 👍（3） 💬（1）<p>数字货币的推出会对法币产生一定的冲击。如果哪天政府想操控数字货币，那么控制21个节点就可以了，很危险啊</p>2018-06-16</li><br/><li><span>王宁</span> 👍（3） 💬（1）<p>区块链的分叉与合并这个在哪一节有介绍？
 对这一块特别困惑:

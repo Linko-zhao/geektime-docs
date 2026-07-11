@@ -171,7 +171,7 @@ resp1, err := http.Get(url1)
 <li><span>嘎嘎</span> 👍（9） 💬（1）<p>看测试用例中是用 srv.Shutdown(context.Background()) 的方式停止服务，通过RegisterOnShutdown可添加服务停止时的调用</p>2019-04-04</li><br/><li><span>袁树立</span> 👍（1） 💬（1）<p>如此一来，每当一个 HTTP 请求被递交时，就都会产生一个新的网络连接。这样做会明显地加重网络服务以及客户端的负载，并会让每个 HTTP 事务都耗费更多的时间。所以，在一般情况下，我们都不要去设置这个DisableKeepAlives字段。
 
 老师，针对这句话，有个问题。
-因为我们的服务调用其他内网接口，会通过公司的负载均衡。七层负载均衡是关闭了keep-alive的。所以我们的http就每次都是短链接。   那每次http事务耗费的时间大概是什么量级？  我这里看到，设置了500ms超时的情况下。在频繁请求的场景，每过几分钟就会有一批超时。报net&#47;http  timeout 。
+因为我们的服务调用其他内网接口，会通过公司的负载均衡。七层负载均衡是关闭了keep-alive的。所以我们的http就每次都是短链接。 那每次http事务耗费的时间大概是什么量级？ 我这里看到，设置了500ms超时的情况下。在频繁请求的场景，每过几分钟就会有一批超时。报net&#47;http timeout 。
 用http trace看，是在getConn前就耗费了500ms
 
 请问，这种情况正常吗？</p>2019-10-23</li><br/><li><span>lesserror</span> 👍（0） 💬（1）<p>郝林老师，在demo94.go中这个字段的值：
@@ -187,14 +187,14 @@ signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 server := http.Server{..}
 
 go func(){
-     server. ListenAndServe()
+server. ListenAndServe()
 }()
 
 &lt;-quit
 
 server.Shutdown()
 
-Shutdown 并不会立即退出，他会首先停止监听，并且启动一个定时器，避免新的请求进来，然后关闭空闲链接，等待处理中的请求完成或者如果定时器到了，再退出，和 NGINX 的 平滑退出很像。</p>2018-11-30</li><br/><li><span>My dream</span> 👍（5） 💬（0）<p>老师可以讲一下这个不：gomonkey，我看半天都没明白这个打桩是什么意思</p>2018-11-28</li><br/><li><span>aebn</span> 👍（2） 💬（0）<p>谢谢老师分享，努力学习中^_^</p>2018-11-28</li><br/><li><span>路人</span> 👍（1） 💬（0）<p>这节老师讲得特别好，特别是问题的衍生能思考到很多go的其他重要模块，比如net、io等。</p>2019-07-14</li><br/><li><span>新世界</span> 👍（0） 💬（0）<p>讲的很不错，把http常用的参数注意事项都讲了一遍，这一块是通用技能，无论哪种语言，发送http请求都会有这些参数，很不错</p>2022-05-25</li><br/><li><span>窝窝头</span> 👍（0） 💬（0）<p>我一般通过context的cancel函数，同时通过系统信号量来触发cancel事件</p>2022-05-18</li><br/><li><span>上山的o牛</span> 👍（0） 💬（0）<p>学习中，衍生的内容可以看一周</p>2019-10-12</li><br/><li><span>Timo</span> 👍（0） 💬（1）<p>demo91.go  例子中
+Shutdown 并不会立即退出，他会首先停止监听，并且启动一个定时器，避免新的请求进来，然后关闭空闲链接，等待处理中的请求完成或者如果定时器到了，再退出，和 NGINX 的 平滑退出很像。</p>2018-11-30</li><br/><li><span>My dream</span> 👍（5） 💬（0）<p>老师可以讲一下这个不：gomonkey，我看半天都没明白这个打桩是什么意思</p>2018-11-28</li><br/><li><span>aebn</span> 👍（2） 💬（0）<p>谢谢老师分享，努力学习中^_^</p>2018-11-28</li><br/><li><span>路人</span> 👍（1） 💬（0）<p>这节老师讲得特别好，特别是问题的衍生能思考到很多go的其他重要模块，比如net、io等。</p>2019-07-14</li><br/><li><span>新世界</span> 👍（0） 💬（0）<p>讲的很不错，把http常用的参数注意事项都讲了一遍，这一块是通用技能，无论哪种语言，发送http请求都会有这些参数，很不错</p>2022-05-25</li><br/><li><span>窝窝头</span> 👍（0） 💬（0）<p>我一般通过context的cancel函数，同时通过系统信号量来触发cancel事件</p>2022-05-18</li><br/><li><span>上山的o牛</span> 👍（0） 💬（0）<p>学习中，衍生的内容可以看一周</p>2019-10-12</li><br/><li><span>Timo</span> 👍（0） 💬（1）<p>demo91.go 例子中
 reqStrTpl := `HEAD &#47; HTTP&#47;1.1
 Accept: *&#47;*
 Accept-Encoding: gzip, deflate

@@ -102,9 +102,9 @@ fonts:
   - family: RobotoCondensed  #字体名字
     fonts:
       - asset: assets/fonts/RobotoCondensed-Regular.ttf #普通字体
-      - asset: assets/fonts/RobotoCondensed-Italic.ttf 
+      - asset: assets/fonts/RobotoCondensed-Italic.ttf
         style: italic  #斜体
-      - asset: assets/fonts/RobotoCondensed-Bold.ttf 
+      - asset: assets/fonts/RobotoCondensed-Bold.ttf
         weight: 700  #粗体
 ```
 

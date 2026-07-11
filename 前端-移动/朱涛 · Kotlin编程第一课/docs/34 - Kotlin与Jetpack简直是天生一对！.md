@@ -359,6 +359,7 @@ public abstract class ViewModel {
     }
 }
 ```
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>Paul Shan</span> 👍（6） 💬（3）<p>思考题:viewModelScope是一个CloseableCoroutineScope，这个对象是懒加载的，第一次使用的时候才会创建，一旦创建以后，这个对象有一个close函数，会在ViewModel clear的时候调用，确保了viewModelScope的Coroutine scope和viewModel生命周期一致。了viewModelScope总体上和lifecycle的scope实现类似。区别是创建的时候，lifecycle用的是无锁+不断循环+compareAndSet方式，而viewModelScope实现的是synchronized带锁的方式，请问老师Android为什么会在两种类似的情况下采用不同的线程同步策略?</p>2022-04-11</li><br/><li><span>遥远的救世主</span> 👍（0） 💬（3）<p>Android KTX 已经归档，不推荐使用了</p>2022-09-15</li><br/>
 </ul>

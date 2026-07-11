@@ -725,7 +725,7 @@ int core_sys_select(int n, fd_set __user *inp, fd_set __user *outp,
     /*
      * We need 6 bitmaps (in/out/ex for both incoming and outgoing),
      * since we used fdset we need to allocate memory in units of
-     * long-words. 
+     * long-words.
      */
     size = FDS_BYTES(n);
     bits = stack_fds;
@@ -774,7 +774,7 @@ static int do_select(int n, fd_set_bits *fds, struct timespec64 *end_time)
                 i += BITS_PER_LONG;
                 continue;
             }
-        
+
         if (!poll_schedule_timeout(&table, TASK_INTERRUPTIBLE,
                    to, slack))
         timed_out = 1;
@@ -805,5 +805,5 @@ epoll维护了一棵红黑树来跟踪所有待检测的文件描述字，黑红
 1.ep_send_events_proc这个函数在把events列表拷贝到用户空间前会调用ep_item_poll函数，已确定对应的fd上的事件依旧有效。那ep_item_poll是根据什么来确定事件的有效性呢？
 2.在ep_send_events_proc处理level-triggered的时候，有这么一段话“At this point, no one can insert into ep-&gt;rdllist besides us. The epoll_ctl()  callers are locked out by ep_scan_ready_list() holding &quot;mtx&quot; and the  poll callback will queue them in ep-&gt;ovflist.”意思是说epoll_ctl（）的调用者也被锁在外面了。这个锁是说在ep_send_events_proc还没处理完的时候，epoll_ctl()无法操纵rdllist，但是之后是可以的，以实现再次注册感兴趣的时间。是这样吗？</p>2019-10-29</li><br/><li><span>沉淀的梦想</span> 👍（1） 💬（1）<p>缺乏C语言和linux内核基础的人读起这些源码来相当吃力，虽然老师讲得很好</p>2019-10-19</li><br/><li><span>西门吹牛</span> 👍（0） 💬（1）<p>当内核监测到有就绪事件后，将对应的fd 加入就绪 队列，这里其实还会涉及到将有事件的fd拷贝到用户空间，可不可以让用户空间和内核空间采用共享内存的方式，避免拷贝呢</p>2022-01-27</li><br/><li><span>Geek_68d3d2</span> 👍（0） 💬（3）<p> epi&gt;nwait &gt;= 0请问这行代码什么意思</p>2020-01-08</li><br/><li><span>haozhang</span> 👍（0） 💬（1）<p>老师   进程阻塞的形式是什么呢   是for死循环吗     还是加入到等待队列呢，我看for循环前面不是加入到等待队列了吗？</p>2019-11-06</li><br/><li><span>初见</span> 👍（0） 💬（5）<p>老师，我之前面试被问到过说，epoll 更适合连接很多，但活跃的连接较少的情况
 
-那么，连接很多，活跃连接也很多的情况下，用什么方案呢？  堆机器嘛</p>2019-10-25</li><br/>
+那么，连接很多，活跃连接也很多的情况下，用什么方案呢？ 堆机器嘛</p>2019-10-25</li><br/>
 </ul>

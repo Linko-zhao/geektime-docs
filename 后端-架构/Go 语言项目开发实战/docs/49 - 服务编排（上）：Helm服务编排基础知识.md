@@ -68,8 +68,8 @@ Helm3架构图如下：
 replicas: 2
 tag: latest
 common:
-    username: colin
-    password: iam1234
+  username: colin
+  password: iam1234
 ```
 
 所以在Helm中，部署一个应用可以简化为`Chart模板（多个服务） + Chart配置 -> 应用`，如下图所示：
@@ -263,7 +263,7 @@ servers:
   - port: 80
 ```
 
-多个值也可以通过这种方式来设置。```--set servers[0] [0].host=``marmotedu``` 变成了：
+多个值也可以通过这种方式来设置。`--set servers[0] [0].host=``marmotedu` 变成了：
 
 ```yaml
 servers:
@@ -418,8 +418,10 @@ get extended information about the release, including:
 - The hooks associated with the release
 
 Usage:
-  helm get [command]
+helm get [command]
+
 # ... and many more
+
 ```</p>2022-03-20</li><br/><li><span>yandongxiao</span> 👍（0） 💬（1）<p>总结：
 helm 作为Kubernetes的包管理工具，有三个概念：Chart、Repository、Release。
 Chart：是一个 helm package，它是一个模板，包含了应用所需要的各种资源的定义。
@@ -427,3 +429,4 @@ Repository：存放 helm chart 的地方
 Release: 每个 Chart 可以被部署多次，每次部署会创建一个对应的release。
 Helm 关键的命令：helm repo list&#47;add, helm search, helm Install, helm upgrade 等</p>2021-12-05</li><br/><li><span>Wayne</span> 👍（0） 💬（0）<p>老师好，请问文章部署图中描述的【服务1】【服务2】指的是k8s资源这些吗（Deployment、Pod、Service）？</p>2023-07-15</li><br/>
 </ul>
+```

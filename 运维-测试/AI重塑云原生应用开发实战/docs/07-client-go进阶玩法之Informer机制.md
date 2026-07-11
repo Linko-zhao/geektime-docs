@@ -58,7 +58,7 @@ Informer 的设计初衷就是为了让 Client-go更快地返回List/Get请求�
 .
 |-- pkg
 | |-- config
-| | |-- k8sconfig.go 
+| | |-- k8sconfig.go
 | |-- handlers
 | | |-- podhandler.go
 |-- go.mod
@@ -331,7 +331,7 @@ lw := cache.NewListWatchFromClient(client.CoreV1().RESTClient(), "pods", "defaul
 
 
 fact := informers.NewSharedInformerFactoryWithOptions(client, 0, informers.WithNamespace("default"))
-    
+   
 podInformer := fact.Core().V1().Pods()
 podInformer.Informer().AddEventHandler(&handlers.PodHandler{})
 
@@ -437,15 +437,16 @@ SharedInformerFactory 可以使用 GVR 来创建 Informer，那我们是否能�
 当用户传入 resource = pods 时，使用上一节代码中的 mappingFor() 方法，获取到 RESTMapping，RESTMapping 中的 Resource 就是完整的GVR信息，将其传给 fact.ForResource() 方法即可创建 informer。核心代码如下：
 
         mapper := InitRestMapper(client)
-	restMapping, _ := mappingFor(&quot;pods&quot;, &amp;mapper)
+    restMapping, _ := mappingFor(&quot;pods&quot;, &amp;mapper)
 
-	fact := informers.NewSharedInformerFactoryWithOptions(client, 0, informers.WithNamespace(&quot;default&quot;))
-	informer, err := fact.ForResource(restMapping.Resource)
-	if err != nil {
-		panic(err)
-	}
-	informer.Informer().AddEventHandler(&amp;PodHandler{})
-	fact.Start(wait.NeverStop)
+    fact := informers.NewSharedInformerFactoryWithOptions(client, 0, informers.WithNamespace(&quot;default&quot;))
+    informer, err := fact.ForResource(restMapping.Resource)
+    if err != nil {
+    	panic(err)
+    }
+    informer.Informer().AddEventHandler(&amp;PodHandler{})
+    fact.Start(wait.NeverStop)
 
-	select {}</p>2025-02-20</li><br/><li><span>Samaritan.</span> 👍（0） 💬（1）<p>不错不错，关于client-go的一些知识经过讲解之后更清晰了，谢谢老师</p>2025-01-05</li><br/><li><span>stevensafin</span> 👍（0） 💬（1）<p>跟 AI 有什么关系？</p>2024-12-27</li><br/><li><span>ly</span> 👍（0） 💬（0）<p>三节k8s的课了，我的agent呢</p>2024-12-29</li><br/>
+    select {}</p>2025-02-20</li><br/><li><span>Samaritan.</span> 👍（0） 💬（1）<p>不错不错，关于client-go的一些知识经过讲解之后更清晰了，谢谢老师</p>2025-01-05</li><br/><li><span>stevensafin</span> 👍（0） 💬（1）<p>跟 AI 有什么关系？</p>2024-12-27</li><br/><li><span>ly</span> 👍（0） 💬（0）<p>三节k8s的课了，我的agent呢</p>2024-12-29</li><br/>
+
 </ul>

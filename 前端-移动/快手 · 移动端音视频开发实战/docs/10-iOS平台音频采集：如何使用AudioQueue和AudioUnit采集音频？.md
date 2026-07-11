@@ -105,7 +105,7 @@ AudioQueueNewInput(&dataformat, recoderCB, (__bridge void *)self, NULL, NULL, 0,
 ```plain
 static void recoderCB(void *aqData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer, const AudioTimeStamp *timestamp, UInt32 inNumPackets, const AudioStreamPacketDescription *inPacketDesc) {
     //1 inBuffer->mAudioData 处理 & IO
-    
+
     //2 重新入队
     AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, NULL);
 }
@@ -235,6 +235,7 @@ ExtAudioFileDispose(audioFile);
 A: 播放音乐的过程中录音是启动的。只不过塞的是空白帧，开始录制时，填充录制帧？
 
 2. 使用蓝牙耳机的情况下，在保证录制高音质音频的同时，音乐作品如何保持声音的流畅性呢？
-A: 采集用手机Mic，播放用蓝牙耳机？</p>2022-10-25</li><br/><li><span>peter</span> 👍（0） 💬（0）<p>请教老师一个问题：
-Q1：关于“混音”功能，是的，这个功能有点类似于回森App的弹幕功能。其实就是一个音乐编辑的功能。音乐编辑的APP，我搜到并下载了“音乐剪辑”、“音频音乐”这两个APP，都具有“混音”、“变速”、“变调”等功能。关于“混音”功能，从实现的角度，安卓上应该怎么做？基于安卓的MediaPlayer来开发吗？ (我感觉MediaPlayer不能实现该功能，就是说没有API可以调用)。是基于OpenSL ES或AAudio来开发吗？ 也许OpenSL ES、AAudio有音频合并方面的API，调用即可。（甚至，需要采用FFmpeg来开发？）。针对安卓平台的“混音”开发，请老师从架构、技术方案层面给我一点指导，非常感谢！  （“混音”也可能只是一种叫法，或者叫“音频合并”？）</p>2022-08-16</li><br/><li><span>余生不渝</span> 👍（0） 💬（0）<p>请问audioqueue可以在后台执行开始录音采集么</p>2024-04-23</li><br/>
+   A: 采集用手机Mic，播放用蓝牙耳机？</p>2022-10-25</li><br/><li><span>peter</span> 👍（0） 💬（0）<p>请教老师一个问题：
+   Q1：关于“混音”功能，是的，这个功能有点类似于回森App的弹幕功能。其实就是一个音乐编辑的功能。音乐编辑的APP，我搜到并下载了“音乐剪辑”、“音频音乐”这两个APP，都具有“混音”、“变速”、“变调”等功能。关于“混音”功能，从实现的角度，安卓上应该怎么做？基于安卓的MediaPlayer来开发吗？ (我感觉MediaPlayer不能实现该功能，就是说没有API可以调用)。是基于OpenSL ES或AAudio来开发吗？ 也许OpenSL ES、AAudio有音频合并方面的API，调用即可。（甚至，需要采用FFmpeg来开发？）。针对安卓平台的“混音”开发，请老师从架构、技术方案层面给我一点指导，非常感谢！ （“混音”也可能只是一种叫法，或者叫“音频合并”？）</p>2022-08-16</li><br/><li><span>余生不渝</span> 👍（0） 💬（0）<p>请问audioqueue可以在后台执行开始录音采集么</p>2024-04-23</li><br/>
+
 </ul>

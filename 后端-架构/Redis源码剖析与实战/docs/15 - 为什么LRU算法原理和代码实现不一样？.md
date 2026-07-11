@@ -102,7 +102,7 @@ getLRUClock函数是在[evict.c](https://github.com/redis/redis/tree/5.0/src/evi
 以下代码就展示了刚才介绍到的宏定义，以及getLRUClock函数的执行逻辑，你可以看下。
 
 ```
-#define LRU_BITS 24  
+#define LRU_BITS 24
 #define LRU_CLOCK_MAX ((1<<LRU_BITS)-1)  //LRU时钟的最大值
 #define LRU_CLOCK_RESOLUTION 1000 //以毫秒为单位的LRU时钟精度
 
@@ -354,7 +354,7 @@ if (server.maxmemory_policy & MAXMEMORY_FLAG_LRU) {
 ```
 for (k = EVPOOL_SIZE-1; k >= 0; k--) { //从数组最后一个key开始查找
    if (pool[k].key == NULL) continue; //当前key为空值，则查找下一个key
-   
+
    ... //从全局哈希表或是expire哈希表中，获取当前key对应的键值对；并将当前key从EvictionPoolLRU数组删除
 
     //如果当前key对应的键值对不为空，选择当前key为被淘汰的key
@@ -446,49 +446,49 @@ Redis 这种对性能要求极高的数据库，在系统调用上的优化也�
 
 &#47;&#47; 如果执行释放空间超过限制时间，则添加一个时间事件，时间事件中继续释放内存
 if (elapsedUs(evictionTimer) &gt; eviction_time_limit_us) {
-    &#47;&#47; We still need to free memory - start eviction timer proc
-    if (!isEvictionProcRunning) {
-        isEvictionProcRunning = 1;
-        &#47;&#47; 新增时间时间
-        aeCreateTimeEvent(server.el, 0,
-                evictionTimeProc, NULL, NULL);
-    }
-    break;
+&#47;&#47; We still need to free memory - start eviction timer proc
+if (!isEvictionProcRunning) {
+isEvictionProcRunning = 1;
+&#47;&#47; 新增时间时间
+aeCreateTimeEvent(server.el, 0,
+evictionTimeProc, NULL, NULL);
+}
+break;
 }
 
 如果一次时间事件没结束，则该时间事件不结束，等待一段时间，继续执行
 &#47;&#47; 如果返回值不是AE_NOMORE，则继续把当前事件间隔retval毫秒后继续执行
 if (retval != AE_NOMORE) {
-    te-&gt;when = now + retval * 1000;
+te-&gt;when = now + retval * 1000;
 } else {
-    te-&gt;id = AE_DELETED_EVENT_ID;
+te-&gt;id = AE_DELETED_EVENT_ID;
 }</p>2021-09-06</li><br/><li><span>曾轼麟</span> 👍（4） 💬（0）<p>首先回答老师的问题：
 
 是为了均衡性能和精度才这样设计的，如果server.hz设置的值小，精度要求小于LRU_CLOCK_RESOLUTION全局的频率精度，那么直接获预先计算的值对性能友好。如果server.hz设置的值较大，精度要求高于LRU_CLOCK_RESOLUTION的精度，那么就会在每次通过getLRUClock函数计算出结果。此外atomicGet的方法证明server.lruclock这个值是可能并发修改。此外在getLRUClock方法中，其本身是调用gettimeofday这个操作系统级别的API获取的。
 
 本篇文章老师介绍了Redis-LRU的实现：
-    1、为了妥协性能和资源，Redis使用的是，近似LRU算法，并且通过全局时钟去预计算LRU时钟的值。
-    2、通过每次调用命令都访问freeMemoryIfNeeded函数，判断是否需要释放内存，从而保证Redis能及时通过淘汰算法进行数据驱逐，而保证服务正常运行。
-    3、serverCron时间事件，会定期执行全局LRU时钟的更新，而在后续的运行中如果精度设置的要求不高基本上都会使用预先计算好的值。</p>2021-09-06</li><br/><li><span>Ethan New</span> 👍（4） 💬（0）<p>server.lruclock相当于是一个缓存值，serverCron每100ms更新一次server.lruclock，避免了频繁进行系统调用获取系统时钟</p>2021-08-28</li><br/><li><span>风轻扬</span> 👍（1） 💬（0）<p>回答课后问题：
+1、为了妥协性能和资源，Redis使用的是，近似LRU算法，并且通过全局时钟去预计算LRU时钟的值。
+2、通过每次调用命令都访问freeMemoryIfNeeded函数，判断是否需要释放内存，从而保证Redis能及时通过淘汰算法进行数据驱逐，而保证服务正常运行。
+3、serverCron时间事件，会定期执行全局LRU时钟的更新，而在后续的运行中如果精度设置的要求不高基本上都会使用预先计算好的值。</p>2021-09-06</li><br/><li><span>Ethan New</span> 👍（4） 💬（0）<p>server.lruclock相当于是一个缓存值，serverCron每100ms更新一次server.lruclock，避免了频繁进行系统调用获取系统时钟</p>2021-08-28</li><br/><li><span>风轻扬</span> 👍（1） 💬（0）<p>回答课后问题：
 redis全局时钟，计算公式为：
 unsigned int getLRUClock(void) {
-     return (mstime()&#47;LRU_CLOCK_RESOLUTION) &amp; LRU_CLOCK_MAX;
+return (mstime()&#47;LRU_CLOCK_RESOLUTION) &amp; LRU_CLOCK_MAX;
 }
 就像老师文章中所说，redis的全局时钟，精度是1秒。
 unsigned int LRU_CLOCK(void) {
-    unsigned int lruclock;
-    &#47;&#47;hz的值没有配置为1或者比1更大的值,此时说明redis服务端需要的全局时钟精度是秒,直接获取全局变量的时钟即可
-    if (1000&#47;server.hz &lt;= LRU_CLOCK_RESOLUTION) {
-        atomicGet(server.lruclock,lruclock);
-    } else {
-        &#47;&#47;如果hz的值配置为1或者比1更小的值,此时说明redis服务端需要的全局时钟精度是毫秒,需要实时计算全局时钟
-        lruclock = getLRUClock();
-    }
-    return lruclock;
+unsigned int lruclock;
+&#47;&#47;hz的值没有配置为1或者比1更大的值,此时说明redis服务端需要的全局时钟精度是秒,直接获取全局变量的时钟即可
+if (1000&#47;server.hz &lt;= LRU_CLOCK_RESOLUTION) {
+atomicGet(server.lruclock,lruclock);
+} else {
+&#47;&#47;如果hz的值配置为1或者比1更小的值,此时说明redis服务端需要的全局时钟精度是毫秒,需要实时计算全局时钟
+lruclock = getLRUClock();
+}
+return lruclock;
 }</p>2023-11-13</li><br/><li><span>Geek_3b4ae8</span> 👍（1） 💬（1）<p>假设第一次执行lru。数组里面没有元素。随机采样5个，那此时这5个都能插入数组，也就都会被淘汰。但是这5个不一定是最近最少使用的啊，甚至可能是最近最常使用的啊。这里不太明白。感觉就是随机的，并不是lru</p>2022-04-22</li><br/><li><span>JJPeng</span> 👍（1） 💬（1）<p>老师，您好。我认为您原文中”如果一个数据前后两次访问的时间间隔小于 1 秒，那么这两次访问的时间戳就是一样的。“这句话的描述是有误的。
 因为一秒钟表示一个时间跨度，如果对一个数据的访问分别是在前一秒的结束和后一秒的开始，这样的话，虽然两次操作的时间间隔小于1秒，但LRU时间戳的值应该是不一样的。
 反之，如果您的描述正确的话，那在每次时间间隔小于1秒的情况下连续对某个键进行访问，那该键的LRU时间戳就始终与第一次访问时的时间戳保持一致，这样应该是有问题的。</p>2022-04-03</li><br/><li><span>可怜大灰狼</span> 👍（1） 💬（0）<p>getLRUClock内部是通过gettimeofday系统调用来获取时间。redis的QPS每秒近10w，如果始终通过系统调用，会导致用户态和内核态来回切换，会造成很大的性能损失。</p>2021-08-31</li><br/><li><span>末日，成欢</span> 👍（0） 💬（1）<p>while (k &lt; EVPOOL_SIZE &amp;&amp;
-	       pool[k].key &amp;&amp;
-	       pool[k].idle &lt; idle) k++;
-如果在当前集合中找到一个空闲时间小于采用数据的空闲时间，不应该k++,不是不会增加吗？ 应该是大于把？</p>2022-03-12</li><br/><li><span>末日，成欢</span> 👍（0） 💬（1）<p>如果配置的时候没有配置maxmemory会怎么样？是不是redis使用内存就无上限了吗？</p>2022-03-12</li><br/><li><span>ikel</span> 👍（0） 💬（0）<p>这篇开始源码版本又回到5.xx了么</p>2021-11-17</li><br/><li><span>奕</span> 👍（0） 💬（4）<p>随机取  maxmemory_samples 配置的 5个 key 保存到待淘汰数组里面，然后淘汰最后一个时间空闲最长的 key，这样很大的可能淘汰不是最近最少使用的啊</p>2021-08-29</li><br/>
+pool[k].key &amp;&amp;
+pool[k].idle &lt; idle) k++;
+如果在当前集合中找到一个空闲时间小于采用数据的空闲时间，不应该k++,不是不会增加吗？ 应该是大于把？</p>2022-03-12</li><br/><li><span>末日，成欢</span> 👍（0） 💬（1）<p>如果配置的时候没有配置maxmemory会怎么样？是不是redis使用内存就无上限了吗？</p>2022-03-12</li><br/><li><span>ikel</span> 👍（0） 💬（0）<p>这篇开始源码版本又回到5.xx了么</p>2021-11-17</li><br/><li><span>奕</span> 👍（0） 💬（4）<p>随机取 maxmemory_samples 配置的 5个 key 保存到待淘汰数组里面，然后淘汰最后一个时间空闲最长的 key，这样很大的可能淘汰不是最近最少使用的啊</p>2021-08-29</li><br/>
 </ul>

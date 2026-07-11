@@ -70,7 +70,7 @@ JVM定义了一套字节码规范，只要是符合这种规范的，都可以�
 ```plain
 println("Hello world.") /*
           编译
-           ↓            */    
+           ↓            */
 LDC "Hello world."
 INVOKESTATIC kotlin/io/ConsoleKt.println (Ljava/lang/Object;)V  /*
          反编译
@@ -335,6 +335,7 @@ val isAdult
    }
 
 2.
+
 val isAdult = age &gt;= 18
 反编译后，可以看到：
 会定义一个isAdult属性：
@@ -342,12 +343,11 @@ private final boolean isAdult;
 并在构造函数里根据age来赋值：
 this.isAdult = this.age &gt;= 18;
 
-
 </p>2021-12-31</li><br/><li><span>文茂权</span> 👍（6） 💬（1）<p>JVM 由于存在多种实现，依赖的是一套标准规范。尽管学习 Kotlin 不需要直接接触 JVM ，但参考 JVM 的设计规范对于我们学习 JVM 编程语言的设计是很有作用的。
 这里附上 JVM 不同版本的设计规范文档：https:&#47;&#47;docs.oracle.com&#47;javase&#47;specs&#47;index.html</p>2022-01-16</li><br/><li><span>3.141516</span> 👍（5） 💬（1）<p>kotlin 的一些语法特性在编译为字节码后会增多 class 数量，所以会增加字节码的大小。
 
-想请教下老师，在 Android 中，Kotlin 还有哪些方面会增加包大小呢？谢谢</p>2022-02-09</li><br/><li><span>droidYu</span> 👍（4） 💬（1）<p>Kotlin语言的简洁得益于Kotlin编译器的强大，之所以Java和Kotlin能完全兼容，是因为Java和Kotlin编译后的成果都是Java字节码。</p>2022-03-20</li><br/><li><span>郑峰</span> 👍（3） 💬（1）<p>You can define custom accessors for a property. 
-If you define a custom getter, it will be called every time you access the property (this way you can implement a computed property). 
+想请教下老师，在 Android 中，Kotlin 还有哪些方面会增加包大小呢？谢谢</p>2022-02-09</li><br/><li><span>droidYu</span> 👍（4） 💬（1）<p>Kotlin语言的简洁得益于Kotlin编译器的强大，之所以Java和Kotlin能完全兼容，是因为Java和Kotlin编译后的成果都是Java字节码。</p>2022-03-20</li><br/><li><span>郑峰</span> 👍（3） 💬（1）<p>You can define custom accessors for a property.
+If you define a custom getter, it will be called every time you access the property (this way you can implement a computed property).
 If you define a custom setter, it will be called every time you assign a value to the property, except its initialization.</p>2022-01-15</li><br/><li><span>qinsi</span> 👍（2） 💬（2）<p>直觉上反编译都是有损的，不知道有没有遇到过反编译结果不对的例子？</p>2022-01-01</li><br/><li><span>PoPlus</span> 👍（2） 💬（2）<p>关于 Kotlin 包装类型优化原始类型，我的实验结果和老师的结论有一点出入，不知道是不是编译器版本的原因。🌚
 var a: Long = 1 &#47;&#47; private static long a = 1L;
 val b: Long = 2 &#47;&#47; private static final long b = 2L;
@@ -367,39 +367,39 @@ Long b = 2L;
 Long.valueOf(a).equals(b);
 
 &#47;&#47; 是不是可以认为val一定被转成成基本类型 可空类型遇到和对象相关操作的都会被转成包装类型</p>2022-02-04</li><br/><li><span>陈彬</span> 👍（1） 💬（1）<p>class Person(val name: String, var age: Int) {
-    val isAdult = age &gt;= 18
+val isAdult = age &gt;= 18
 }
 经过老师教的方法把Kotlin 对应的字节码反编译之后代码如下:
 public final class Person {
-   private final boolean isAdult;
-   @NotNull
-   private final String name;
-   private int age;
+private final boolean isAdult;
+@NotNull
+private final String name;
+private int age;
 
-   public final boolean isAdult() {
-      return this.isAdult;
-   }
+public final boolean isAdult() {
+return this.isAdult;
+}
 
-   @NotNull
-   public final String getName() {
-      return this.name;
-   }
+@NotNull
+public final String getName() {
+return this.name;
+}
 
-   public final int getAge() {
-      return this.age;
-   }
+public final int getAge() {
+return this.age;
+}
 
-   public final void setAge(int var1) {
-      this.age = var1;
-   }
+public final void setAge(int var1) {
+this.age = var1;
+}
 
-   public Person(@NotNull String name, int age) {
-      Intrinsics.checkParameterIsNotNull(name, &quot;name&quot;);
-      super();
-      this.name = name;
-      this.age = age;
-      this.isAdult = this.age &gt;= 18;
-   }
+public Person(@NotNull String name, int age) {
+Intrinsics.checkParameterIsNotNull(name, &quot;name&quot;);
+super();
+this.name = name;
+this.age = age;
+this.isAdult = this.age &gt;= 18;
+}
 }
 可以看到这种写法在初始化构造函数的时候就对isAdult属性进行赋值，导致以后不管如何修改age的值，isAdult()返回值永远不会改变。
 我理解之所以这样的原因是在kotlin中，val定义的属性默认会生成getter方法，而第一种方式没问题是因为其重写了属性的getter方法。</p>2021-12-31</li><br/><li><span>Xeon</span> 👍（1） 💬（1）<p>个人理解：上面那个自定义getter的方式最终会被编译成一个isAdult()方法，return this.age &gt;= 18; 并没有实际的isAdult属性产生（之前的文章中有提到过），此时isAdult的值是会根据age值的变化而变化的。

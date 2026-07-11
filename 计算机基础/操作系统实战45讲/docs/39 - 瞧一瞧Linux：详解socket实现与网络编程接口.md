@@ -38,7 +38,7 @@ struct socket是套接字结构类型，每个套接字在内核中都对应唯�
 我们来看看struct socket数据结构是什么样，代码如下，我相信配合注释，你有能力理解它。
 
 ```
-struct socket { 
+struct socket {
     socket_state            state;  // 套接字的状态
     unsigned long           flags;  // 套接字的设置标志。存放套接字等待缓冲区的状态信息，其值的形式如SOCK_ASYNC_NOSPACE等
     struct fasync_struct    *fasync_list;  // 等待被唤醒的套接字列表，该链表用于异步文件调用
@@ -132,24 +132,24 @@ Linux内核支持的地址族非常多，TCP/IP协议栈在套接字层注册的
 
 ```
 static int __init sock_init(void) {
-int err;       
- /*      
-  *      初始化.sock缓存       
-  */        
- sk_init();       
-  /*     
-  *      初始化sk_buff缓存       
-        skb_init();           
-  /*      初始化协议模块缓存      
-        
-  init_inodecache();           
+int err;
+ /*
+  *      初始化.sock缓存
+  */
+ sk_init();
+  /*
+  *      初始化sk_buff缓存
+        skb_init();
+  /*      初始化协议模块缓存
+
+  init_inodecache();
   /* 注册文件系统类型   */
-err = register_filesystem(&sock_fs_type);       
-if (err)           goto out_fs;       
-sock_mnt = kern_mount(&sock_fs_type);       
-if (IS_ERR(sock_mnt)) {        
-  err = PTR_ERR(sock_mnt);         
-   goto out_mount;      
+err = register_filesystem(&sock_fs_type);
+if (err)           goto out_fs;
+sock_mnt = kern_mount(&sock_fs_type);
+if (IS_ERR(sock_mnt)) {
+  err = PTR_ERR(sock_mnt);
+   goto out_mount;
   }
  }
 ```
@@ -173,10 +173,10 @@ struct inet_protosw {
 	struct list_head list;
 	unsigned short	 type;	   /* AF_INET协议族套接字的类型,如TCP为SOCK_STREAM*/
 	unsigned short	 protocol; /* 协议族中某个协议实例的编号。如TCP协议的编码为IPPROTO_TCP  */
- 
+
 	struct proto	 *prot;
 	const struct proto_ops *ops;
-  
+
 	unsigned char	 flags;      /* 该套接字属性的相关标志  */
 
 }

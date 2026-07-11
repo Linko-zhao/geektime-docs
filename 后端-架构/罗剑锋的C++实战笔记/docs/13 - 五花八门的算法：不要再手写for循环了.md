@@ -31,16 +31,16 @@ C++标准库目前提供了上百个算法，真的可以说是“五花八门�
 ```
 vector<int> v = {1,3,1,7,5};    // vector容器
 
-auto n1 = std::count(          // count算法计算元素的数量 
+auto n1 = std::count(          // count算法计算元素的数量
     begin(v), end(v), 1        // begin()、end()获取容器的范围
-);  
+);
 
 int n2 = 0;
 for(auto x : v) {              // 手写for循环
     if (x == 1) {              // 判断条件，然后统计
         n2++;
     }
-}  
+}
 ```
 
 你可能会问，既然是这样，我们直接写for循环不就好了吗，为什么还要调用算法来“多此一举”呢？
@@ -210,7 +210,7 @@ auto mid_iter =                            // 中位数的位置
     next(begin(v), v.size()/2);
 std::nth_element( begin(v), mid_iter, end(v));// 排序得到中位数
 cout << "median is " << *mid_iter << endl;
-    
+
 // partition
 auto pos = std::partition(                // 找出所有大于9的数
     begin(v), end(v),
@@ -218,8 +218,8 @@ auto pos = std::partition(                // 找出所有大于9的数
     {
         return x > 9;
     }
-); 
-for_each(begin(v), pos, print);         // 输出分组后的数据  
+);
+for_each(begin(v), pos, print);         // 输出分组后的数据
 
 // min/max
 auto value = std::minmax_element(        //找出第一名和倒数第一
@@ -243,7 +243,7 @@ std::sort(begin(v), end(v));        // 快速排序
 
 auto found = binary_search(         // 二分查找，只能确定元素在不在
     cbegin(v), cend(v), 7
-); 
+);
 ```
 
 想要在已序容器上执行二分查找，要用到一个名字比较怪的算法：lower\_bound，它返回第一个“**大于或等于**”值的位置：
@@ -253,13 +253,13 @@ decltype(cend(v)) pos;            // 声明一个迭代器，使用decltype
 
 pos = std::lower_bound(          // 找到第一个>=7的位置
     cbegin(v), cend(v), 7
-);  
+);
 found = (pos != cend(v)) && (*pos == 7); // 可能找不到，所以必须要判断
 assert(found);                          // 7在容器里
 
 pos = std::lower_bound(               // 找到第一个>=9的位置
     cbegin(v), cend(v), 9
-);  
+);
 found = (pos != cend(v)) && (*pos == 9); // 可能找不到，所以必须要判断
 assert(!found);                          // 9不在容器里
 ```
@@ -315,7 +315,7 @@ decltype(v.end()) pos;          // 声明一个迭代器，使用decltype
 
 pos = std::find(                 // 查找算法，找到第一个出现的位置
     begin(v), end(v), 3
-);  
+);
 assert(pos != end(v));         // 与end()比较才能知道是否找到
 
 pos = std::find_if(            // 查找算法，用lambda判断条件
@@ -323,14 +323,14 @@ pos = std::find_if(            // 查找算法，用lambda判断条件
     [](auto x) {              // 定义一个lambda表达式
         return x % 2 == 0;    // 判断是否偶数
     }
-);  
+);
 assert(pos == end(v));        // 与end()比较才能知道是否找到
 
 array<int, 2> arr = {3,5};    // array容器
 pos = std::find_first_of(      // 查找一个子区间
     begin(v), end(v),
     begin(arr), end(arr)
-);  
+);
 assert(pos != end(v));       // 与end()比较才能知道是否找到
 ```
 
@@ -381,17 +381,19 @@ typedef std::map&lt;sd::string, std::map&lt;std::string, std::map&lt;string, Inf
 
 老师有没有好的解决方法呢？</p>2020-08-06</li><br/><li><span>EncodedStar</span> 👍（4） 💬（2）<p>用c++很多年了，确实会遇到手写类似标准库的函数，手写完之后才发现标准库有同样功能高效的函数，简直让人感觉是闭门造车，哭笑不得。
 既然老师文章都提到以后尽量用for_each，我也觉得就可以替代for，以后尽量用老师教的，还有就是小技巧很实用！</p>2020-06-04</li><br/><li><span>EncodedStar</span> 👍（4） 💬（1）<p>这个标题成功吸引了我。</p>2020-06-04</li><br/><li><span>怪兽</span> 👍（3） 💬（1）<p>老师，在实践中遇到的2个问题：
+
 1. 一个线程中，每间隔几秒调用sort，对vector中的元素进行排序。其他N个线程依据某种条件，从该vector容器中取出元素。对着这样的操作，vector容器作为公共资源需要上锁吗？也就是说sort是只读算法吗？
 2. set&#47;map中的lower_bound和upper_bound成员函数，也都是二分查找法吗？它们和find成员函数的查找效率哪个更高，或者哪个更好？</p>2020-07-19</li><br/><li><span>KevinJ</span> 👍（1） 💬（1）<p>C++17 允许并行策略 但是gcc9下需要引进intel TBB。也可以使用gnu自带的并行算法库拓展 但是必须开启fopenmp。但是在gcc11下就不用了 直接开启C++20标准然后include execution就好。</p>2022-05-29</li><br/><li><span>Stephen</span> 👍（1） 💬（2）<p>1.感觉for_each不能够完全替代for循环,就像if-else,break,continue这些for_each没法用.
-2.根据自己的需求选择合适的算法:
-排序中:
-只是找出前几名的,选择partial_sort;而如果选出第一名和最后一名采用minmax_element;对于list容器,使用成员函数sort;有序容器map,set已经排好序了,直接迭代就可.
-查找中:
-需要先排好序的:
-二分查找binary_search只能够告知元素是否存在;真正好用的还是lower_bound和upper_bound分别是返回该值的下界位置和上界位置(后一个位置);
-有序的set&#47;map,提供等价的成员函数find&#47;lower_bound&#47;upper_bound.
-不需要排序的:
-find,search</p>2021-03-02</li><br/><li><span>Geek_5dc295</span> 👍（1） 💬（1）<p>有时候find 如果未找到对应位置不是会返回值有时候和npos对比判断，想问一下npos和迭代器之间是什么关系呀</p>2020-06-06</li><br/><li><span>hy</span> 👍（1） 💬（1）<p>lambda表达式里面发生错误或者是出现异常外面是不是无法捕获的呀???</p>2020-06-04</li><br/><li><span>灯盖</span> 👍（0） 💬（1）<p>确实对于算法用的少
+   2.根据自己的需求选择合适的算法:
+   排序中:
+   只是找出前几名的,选择partial_sort;而如果选出第一名和最后一名采用minmax_element;对于list容器,使用成员函数sort;有序容器map,set已经排好序了,直接迭代就可.
+   查找中:
+   需要先排好序的:
+   二分查找binary_search只能够告知元素是否存在;真正好用的还是lower_bound和upper_bound分别是返回该值的下界位置和上界位置(后一个位置);
+   有序的set&#47;map,提供等价的成员函数find&#47;lower_bound&#47;upper_bound.
+   不需要排序的:
+   find,search</p>2021-03-02</li><br/><li><span>Geek_5dc295</span> 👍（1） 💬（1）<p>有时候find 如果未找到对应位置不是会返回值有时候和npos对比判断，想问一下npos和迭代器之间是什么关系呀</p>2020-06-06</li><br/><li><span>hy</span> 👍（1） 💬（1）<p>lambda表达式里面发生错误或者是出现异常外面是不是无法捕获的呀???</p>2020-06-04</li><br/><li><span>灯盖</span> 👍（0） 💬（1）<p>确实对于算法用的少
+
 </p>2024-09-04</li><br/><li><span>辰</span> 👍（0） 💬（1）<p>老师，sort()底层并不是纯粹的快速排序。我记得在元素少时用插入排序，元素多时可能使用堆排序或者快速排序</p>2023-11-21</li><br/><li><span>发烫的椰子</span> 👍（0） 💬（1）<p>注意 lower_bound 的查找条件是“大于等于”，而不是“等于”，所以它的真正含义是“大于等于值的第一个位置”。相应的也就有“大于等于值的最后一个位置”，算法叫 upper_bound，返回的是第一个“大于”值的元素。
 您好，老师，“大于等于值的最后一个位置”和返回的是第一个“大于”值的元素 我的理解两者是不一样的。[3,3,3,3,5],比如“大于等于值的最后一个位置”是指最后一个3的位置，返回的是第一个“大于”值的元素是指5的位置，所以我怎么也想不通两者是相等的，还请老师解惑。</p>2023-07-19</li><br/>
 </ul>

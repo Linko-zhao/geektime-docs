@@ -128,7 +128,7 @@ if (parent->balfac < -1 || parent->balfac > 1)
 
 ```plain
 AVLTree<int> mybtr;
-int array[] = { 95,60,120,40,20 };	
+int array[] = { 95,60,120,40,20 };
 int acount = sizeof(array) / sizeof(int);
 for (int i = 0; i < acount; ++i)
 	mybtr.InsertElem(array[i]);
@@ -304,17 +304,13 @@ int array[] = { 12,4,1,3,7,8,10,9,2,11,6,5 };
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>摩诃不思议</span> 👍（0） 💬（1）<p>&quot;平衡二叉树也叫平衡二叉搜索树，英文名是 Balanced Binary Tree，简称 AVL 树（平衡树）。&quot;
 
-这里是一个明显的错误。 AVL 树是平衡二叉搜索树的其中一种实现。😅</p>2023-06-18</li><br/><li><span>꯭@꯭T꯭</span> 👍（2） 💬（0）<p>1. 全部按照二叉查找树的方式插入
-2. 右旋转point 12
-3. 左旋转point 7
-4. 左旋转point 8
-5. 右旋转point 3，左旋转point 1
+这里是一个明显的错误。 AVL 树是平衡二叉搜索树的其中一种实现。😅</p>2023-06-18</li><br/><li><span>꯭@꯭T꯭</span> 👍（2） 💬（0）<p>1. 全部按照二叉查找树的方式插入2. 右旋转point 12 3. 左旋转point 7 4. 左旋转point 8 5. 右旋转point 3，左旋转point 1
 总共旋转了4次：
-                                 7
-                              &#47;     \
-                            4       10
-                        &#47;      \    &#47; \
-                       2         6 8  11
-                      &#47; \       &#47;   \   \
-                     1   3     5     9   12</p>2024-07-07</li><br/>
+7
+&#47; \
+4 10
+&#47; \ &#47; \
+2 6 8 11
+&#47; \ &#47; \ \
+1 3 5 9 12</p>2024-07-07</li><br/>
 </ul>

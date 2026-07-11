@@ -29,7 +29,7 @@
 下面的例子演示了异常发生次数的具体统计方法。我们使用全局变量exceptionCount，在异常捕获的回调方法\_reportError中持续地累加捕获到的异常次数：
 
 ```
-int exceptionCount = 0; 
+int exceptionCount = 0;
 Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
   exceptionCount++; //累加异常次数
   FlutterCrashPlugin.postException(error, stackTrace);
@@ -74,8 +74,8 @@ class MyApp extends StatelessWidget {
          MyObserver(),
        ],
        home: HomePage(),
-    ); 
-  }   
+    );
+  }
 }
 ```
 

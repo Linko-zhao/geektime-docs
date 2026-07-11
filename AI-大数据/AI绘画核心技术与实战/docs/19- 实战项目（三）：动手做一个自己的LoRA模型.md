@@ -29,7 +29,7 @@ dataset = load_dataset("lambdalabs/pokemon-blip-captions", split="train")
 接着，我们便可以通过后面这几行代码，可视化数据集中的图片和对应prompt。
 
 ```python
-from PIL import Image 
+from PIL import Image
 
 width, height = 360, 360
 new_image = Image.new('RGB', (2*width, 2*height))
@@ -94,19 +94,19 @@ SD模型的微调需要同时使用图片和prompt。**如果我们手中的图�
 ```python
  for epoch in range(num_train_epochs):
      for step, batch in enumerate(train_dataloader):
-     
+
          # VAE模块将图像编码到潜在空间
          latents = vae.encode(batch["pixel_values"].to(weight_dtype)).latent_dist.sample()
-         
+
          # 随机噪声 & 加噪到第t步
          noise = torch.randn_like(latents)
          timesteps = torch.randint(0, noise_scheduler.config.num_train_timesteps)
          noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)
-         
+
          # 使用CLIP将文本描述作为输入
          encoder_hidden_states = text_encoder(batch["input_ids"])[0]
          target = noise
-         
+
          # 预测噪声并计算loss
          model_pred = unet(noisy_latents, timesteps, encoder_hidden_states).sample
          loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
@@ -178,15 +178,15 @@ $$Y = （W + weight\_{1} * A\_{1}\\cdot B\_{1} + weight\_{2} * A\_{2}\\cdot B\_{
 首先，你需要先在你的命令行环境下，登录Hugging Face账号，保证你的代码能够访问到Hugging Face服务器上的数据和基础模型。
 
 ```bash
-huggingface-cli login 
-# 密码在你的Hugging Face账号Setting页面获取 
+huggingface-cli login
+# 密码在你的Hugging Face账号Setting页面获取
 ```
 
 然后你只需要将上面的[训练代码](https://github.com/huggingface/diffusers/blob/main/examples/text_to_image/train_text_to_image_lora.py)拷贝到你的机器上，然后创建一个run.sh文件，写下后面的启动指令。
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
-export DATASET_NAME="lambdalabs/pokemon-blip-captions" 
+export DATASET_NAME="lambdalabs/pokemon-blip-captions"
 
 accelerate launch --mixed_precision="fp16" train_text_to_image_lora.py \
   --pretrained_model_name_or_path=$MODEL_NAME \
@@ -203,7 +203,7 @@ accelerate launch --mixed_precision="fp16" train_text_to_image_lora.py \
 然后我们运行这个启动脚本，便可以完成宝可梦的LoRA模型训练。
 
 ```bash
-sh run.sh 
+sh run.sh
 ```
 
 需要注意，上面启动脚本中的基础模型是SD1.4，你可以在Hugging Face中获取其他基础模型的model\_id进行替换。比如可以通过一行代码，把基础模型替换为Anything V5模型。
@@ -396,30 +396,31 @@ information:
 
         python -m bitsandbytes
 
-        Inspect the output of the command and see if you can locate CUDA libraries. You might need 
+        Inspect the output of the command and see if you can locate CUDA libraries. You might need
+
 to add them
-        to your LD_LIBRARY_PATH. If you suspect a bug, please take the information from python -m 
+to your LD_LIBRARY_PATH. If you suspect a bug, please take the information from python -m
 bitsandbytes
-        and open an issue at: https:&#47;&#47;github.com&#47;TimDettmers&#47;bitsandbytes&#47;issues
-CalledProcessError: Command &#39;[&#39;&#47;usr&#47;bin&#47;python3&#39;, &#39;train_network.py&#39;, 
-&#39;--sample_prompts=&#47;content&#47;LoRA&#47;config&#47;sample_prompt.txt&#39;, 
-&#39;--dataset_config=&#47;content&#47;LoRA&#47;config&#47;dataset_config.toml&#39;, 
+and open an issue at: https:&#47;&#47;github.com&#47;TimDettmers&#47;bitsandbytes&#47;issues
+CalledProcessError: Command &#39;[&#39;&#47;usr&#47;bin&#47;python3&#39;, &#39;train_network.py&#39;,
+&#39;--sample_prompts=&#47;content&#47;LoRA&#47;config&#47;sample_prompt.txt&#39;,
+&#39;--dataset_config=&#47;content&#47;LoRA&#47;config&#47;dataset_config.toml&#39;,
 &#39;--config_file=&#47;content&#47;LoRA&#47;config&#47;config_file.toml&#39;]&#39; returned non-zero exit status 1.</p>2024-01-11</li><br/><li><span>ALAN</span> 👍（0） 💬（0）<p>还有这块代码在哪个文件里，好像也没找到。
- for epoch in range(num_train_epochs):
-     for step, batch in enumerate(train_dataloader):
-     
+for epoch in range(num_train_epochs):
+for step, batch in enumerate(train_dataloader):
+
          # VAE模块将图像编码到潜在空间
          latents = vae.encode(batch[&quot;pixel_values&quot;].to(weight_dtype)).latent_dist.sample()
-         
+
          # 随机噪声 &amp; 加噪到第t步
          noise = torch.randn_like(latents)
          timesteps = torch.randint(0, noise_scheduler.config.num_train_timesteps)
          noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)
-         
+
          # 使用CLIP将文本描述作为输入
          encoder_hidden_states = text_encoder(batch[&quot;input_ids&quot;])[0]
          target = noise
-         
+
          # 预测噪声并计算loss
          model_pred = unet(noisy_latents, timesteps, encoder_hidden_states).sample
          loss = F.mse_loss(model_pred.float(), target.float(), reduction=&quot;mean&quot;)

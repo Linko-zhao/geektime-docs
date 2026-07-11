@@ -122,7 +122,7 @@ sys	0m0.213s
 再次读取文件的耗时如下：
 
 ```
-$ time cat /home/yafang/test/dd.out &> /dev/null 
+$ time cat /home/yafang/test/dd.out &> /dev/null
 real	0m0.132s
 user	0m0.001s
 sys	0m0.130s

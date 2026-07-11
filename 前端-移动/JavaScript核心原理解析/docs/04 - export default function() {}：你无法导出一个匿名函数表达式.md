@@ -135,7 +135,7 @@ export var x = 100;
 export default <expression>;
 ```
 
-中的“*expression*”呢？要知道所谓表达式，就是程序的计算逻辑啊。
+中的“_expression_”呢？要知道所谓表达式，就是程序的计算逻辑啊。
 
 所以，这里先得出了第一个关键结论：
 
@@ -159,7 +159,7 @@ export var x = 100;
 
 所以，导出名字与导出值本质上并没有差异，在静态装配的阶段，它们都只是表达为一个名字而已。
 
-然后，也正是如同`var x = 100;`在执行阶段需要有一个将“值100”绑定给“变量x（的引用）”的过程一样，这个`export default ...;`语句也需要有完全相同的一个过程来将它后面的表达式（*expression*）的结果绑定给“default”这个名字。如果不这么做，那么“*export default*”在语义上的就无法实现导出名字“*default*”了——在静态装配阶段，名字“default”只是被初始化为一个“单次绑定的、未初始化的标识符”。
+然后，也正是如同`var x = 100;`在执行阶段需要有一个将“值100”绑定给“变量x（的引用）”的过程一样，这个`export default ...;`语句也需要有完全相同的一个过程来将它后面的表达式（_expression_）的结果绑定给“default”这个名字。如果不这么做，那么“_export default_”在语义上的就无法实现导出名字“_default_”了——在静态装配阶段，名字“default”只是被初始化为一个“单次绑定的、未初始化的标识符”。
 
 所以现在你就可以在语义上模拟这样一个过程，即：
 
@@ -175,7 +175,7 @@ export var default = function() {}
 你可以进一步地模拟JavaScript后续的装配过程。这个过程其实非常简单：
 
 - 找到并遍历模块依赖树的所有模块（这个树是排序的），然后
-- 执行这些模块最顶层的代码（*Top Level Module Evaluation*）。
+- 执行这些模块最顶层的代码（_Top Level Module Evaluation_）。
 
 在执行到上述`var default ....`（或类似对应的`export default ...`）语句时，执行后面的表达式，并将执行结果（Result）绑定给左侧的那个变量就可以了。如此，直到所有模块的顶层代码都执行完毕，那么所有的导出名字和它们的值也都必然是绑定完成了的。
 
@@ -198,7 +198,7 @@ export var default = function() {}
 var x1 = function x2() {
   ...
 }
-  
+
 // 具名函数（声明）
 function x3() {
   ...
@@ -216,15 +216,15 @@ export default function x() { }
 
 这段处理逻辑被添加在语法：
 
-> *ExportDeclaration*: **export** **default** *AnonymousFunctionDefinition*;
+> _ExportDeclaration_: **export** **default** _AnonymousFunctionDefinition_;
 
-> NOTE: ECMAScript是将这里导出的对象称为\_Expression\_/*AssignmentExpression*，这里所谓\_AnonymousFunctionDefinition\_则是其中\_AssignmentExpression\_的一个具体实例。
+> NOTE: ECMAScript是将这里导出的对象称为\_Expression\_/_AssignmentExpression_，这里所谓\_AnonymousFunctionDefinition\_则是其中\_AssignmentExpression\_的一个具体实例。
 
-的执行（*Evaluation*）处理过程中。也就是说当执行这行声明时，如果后面的表达式是匿名函数声明，那么它将强制在当前作用域中登记为“***default***”这样一个特殊的名字，并且在执行时绑定该匿名函数。所以，尽管语义上我们需要将它登记为类似`var default ...`所声明的名字“***default***”，但事实上它被处理成了一个不可访问的中间名字，然后影射给该模块的“某个名字表”。
+的执行（_Evaluation_）处理过程中。也就是说当执行这行声明时，如果后面的表达式是匿名函数声明，那么它将强制在当前作用域中登记为“_**default**_”这样一个特殊的名字，并且在执行时绑定该匿名函数。所以，尽管语义上我们需要将它登记为类似`var default ...`所声明的名字“_**default**_”，但事实上它被处理成了一个不可访问的中间名字，然后影射给该模块的“某个名字表”。
 
-不过需要注意的是，这是一个**匿名函数定义**（*AnonymousFunctionDefinition*），而不是一个匿名函数表达式（*Anonymous FunctionExpression*）。一般函数的语句则被称为声明（或更严谨地称为宣告，*Function Declarations*）。而所谓**匿名函数定义**，其本身是表述为：
+不过需要注意的是，这是一个**匿名函数定义**（_AnonymousFunctionDefinition_），而不是一个匿名函数表达式（_Anonymous FunctionExpression_）。一般函数的语句则被称为声明（或更严谨地称为宣告，_Function Declarations_）。而所谓**匿名函数定义**，其本身是表述为：
 
-> *aName* = ***FunctionExpression***
+> _aName_ = _**FunctionExpression**_
 
 或类似于此的语法风格的。它可以用在一般的赋值表达式、变量声明的右操作数，以及对象声明的成员初始值等等位置。在这些位置上，该函数表达式总是被关联给一个名字。一方面，这种关联不是严格意义上的“名字-&gt;值”的绑定语义；另一方面，当该函数关联给名字（`aName`）时，JavaScript又会反向地处理该函数（作为对象`f`）的属性`f.name`，使该名字指向`aName`。
 
@@ -232,9 +232,9 @@ export default function x() { }
 
 它并不是导出了一个匿名函数表达式，而是导出了一个匿名函数定义（Anonymous Function Definition）。
 
-因此，该匿名函数初始化时才会绑定给它左侧的名字“***default***”，这会导致`import f from ...`之后访问`f.name`值会得到“***default***”这个名字。
+因此，该匿名函数初始化时才会绑定给它左侧的名字“_**default**_”，这会导致`import f from ...`之后访问`f.name`值会得到“_**default**_”这个名字。
 
-类似的，你使用下面的代码也会得到这个“***default***”：
+类似的，你使用下面的代码也会得到这个“_**default**_”：
 
 ```
 var obj = {
@@ -248,7 +248,7 @@ console.log(obj.default.name); // "default"
 关于export，还可以有一些补充的知识点。
 
 - `export ...`语句通常是按它的词法声明来创建的标识符的，例如`export var x = ...`就意味着在当前模块环境中创建的是一个变量，并可以修改等等。但是当它被导入时，在`import`语句所在的模块中却是一个常量，因此总是不可写的。
-- 由于`export default ...`没有显式地约定名字“default（或*default*）”应该按`let/const/var`的哪一种来创建，因此JavaScript缺省将它创建成一个普通的变量（var），但即使是在当前模块环境中，它事实上也是不可写的，因为你无法访问一个命名为“*default*”的变量——它不是一个合法的标识符。
+- 由于`export default ...`没有显式地约定名字“default（或*default*）”应该按`let/const/var`的哪一种来创建，因此JavaScript缺省将它创建成一个普通的变量（var），但即使是在当前模块环境中，它事实上也是不可写的，因为你无法访问一个命名为“_default_”的变量——它不是一个合法的标识符。
 - 所谓匿名函数，仅仅是当它直接作为操作数（而不是具有上述“匿名函数定义”的语法结构）时，才是真正匿名的，例如：
 
 ```
@@ -258,7 +258,7 @@ console.log((function(){}).name);  // ""
 - 由于类表达式（包括匿名类表达式）在本质上就是函数，因此它作为default导出时的性质与上面所讨论的是一致的。
 - 导出项（的名字）总是作为词法声明被声明在当前模块作用域中的，这意味着它不可删除，且不可重复导出。亦即是说即使是用`var x...`来声明，这个`x`也是在\_lexicalNames\_中，而不是在\_varNames\_中。
 - 所谓“某个名字表”，对于export来说是模块的导出表，对于import来说就是名字空间（名字空间是用户代码可以操作的组件，它映射自内部的模块导入名字表）。不过，如果用户代码不使用“import * as …”的语法来创建这个名字空间，那么该名字表就只存在于JavaScript的词法分析过程中，而不会（或并不必要）创建它在运行期的实例。这也是我一直用“某个名字表”来称呼它的原因，它并不总是以实体形式存在的。
-- 上述名字表简化了ECMAScript中对导入导出记录（*ImportEntry/ExportEntry Record Fields*）的理解。因此如果你试图了解更多，建议你阅读ECMAScript的具体章节。
+- 上述名字表简化了ECMAScript中对导入导出记录（_ImportEntry/ExportEntry Record Fields_）的理解。因此如果你试图了解更多，建议你阅读ECMAScript的具体章节。
 - 没有模块会导出（传统意义上的）main()，因为ECMAScript为了维护模块的静态语义，而把执行过程及其入口的定义丢回给了引擎或宿主本身。
 
 ## 思考题
@@ -298,10 +298,10 @@ import { count }， 这个count也会每次都改变。这就是所说的映射�
 
 这个映射关系是怎么做到的？</p>2020-03-23</li><br/><li><span>许童童</span> 👍（10） 💬（1）<p>为什么在 import 语句中会出现“变量提升”的效果？
 如老师所说，在代码真正被执行前，会先进行模块的装配过程，也就是执行一次顶层代码。所以如果import了一个模块，就会先执行模块内部的顶层代码，看起来的现象就是“变量提升”了。</p>2019-11-18</li><br/><li><span>leslee</span> 👍（7） 💬（1）<p>第三个结论推导过程的中间语法定义的引用那里(markdown &#39;&gt;&#39; 符号表示的引用)读得不是很通顺, 有点迷....</p>2019-11-19</li><br/><li><span>Marvin</span> 👍（6） 💬（4）<p>export default v=&gt;v 这种，箭头函数是特例吗？</p>2019-11-20</li><br/><li><span>七月有风</span> 👍（5） 💬（1）<p>ECMAScript 6 模块是静态装配的，而传统的 Node.js 模块却是动态加载的。是不是说node是在执行阶段才会执行模块的顶层代码。</p>2020-02-22</li><br/><li><span>Gamehu</span> 👍（5） 💬（1）<p>所以当都是export default...，以default为名字，但是import xx from ...，其实xx是import 重命名了default是么？不然就没法使用了</p>2020-02-21</li><br/><li><span>Geek_885849</span> 👍（4） 💬（2）<p>&quot;use strict&quot;;
-      (function a() {
-        const a = 2;
-        console.log(a);
-      })();
+(function a() {
+const a = 2;
+console.log(a);
+})();
 老师您好,这个函数名a 不是已经作为函数内部的标识符了吗,为什么还可以重新声明呢?</p>2020-08-21</li><br/><li><span>晓小东</span> 👍（4） 💬（1）<p>老师，我又来了，怕您看不到我的问题，接上一个问题，函数声明标识符不应该放入词法环境用中，本来我想函数声明标识符放入词法环境，来验证函数声明提升优先级高于var ，因为标识符的查找先从词法环境中查找，再到变量环境，再到上级作用域，从而实现声明的优先级。老师对于函数声明的优先级，你怎么看。</p>2019-12-19</li><br/><li><span>leslee</span> 👍（4） 💬（1）<p>是否可以理解为，一个具有了名字的函数表达式就可以称为函数定义</p>2019-12-14</li><br/><li><span>穿秋裤的男孩</span> 👍（4） 💬（1）<p>可以这样理解吗？
 静态解析期：export只导出名字到某个名字表，import从名字表获取映射关系。
 执行期：执行代码，为名字赋值。</p>2019-11-29</li><br/><li><span>穿秋裤的男孩</span> 👍（4） 💬（2）<p>所谓模块的装配过程，就是执行一次顶层代码而已。

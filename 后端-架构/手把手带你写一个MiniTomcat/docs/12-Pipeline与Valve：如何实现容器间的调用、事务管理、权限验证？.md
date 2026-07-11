@@ -157,7 +157,7 @@ public abstract class LoggerBase implements Logger {
     }
     //这个log方法由上层业务程序员实现
     public abstract void log(String msg);
-    
+
     public void log(Exception exception, String msg) {
         log(msg, exception);
     }
@@ -356,7 +356,7 @@ public class FileLogger extends LoggerBase{
                 }
             }
         }
-        // 记录日志，带上时间戳 
+        // 记录日志，带上时间戳
         if (writer != null) {
             if (timestamp) {
                 writer.println(tsString + " " + msg);
@@ -510,7 +510,7 @@ public class HttpConnector implements Connector, Runnable {
     public static Map<String, HttpSession> sessions = new ConcurrentHashMap<>();
     Container container = null;
     private String threadName = null;
-    
+
     //启动connector，记录启动日志
     public void start() {
         threadName = "HttpConnector[" + port + "]";
@@ -518,7 +518,7 @@ public class HttpConnector implements Connector, Runnable {
         Thread thread = new Thread(this);
         thread.start();
     }
-    
+
     private HttpProcessor newProcessor() {
         HttpProcessor initprocessor = new HttpProcessor(this);
         initprocessor.start();
@@ -687,16 +687,16 @@ public final class AccessLogValve extends ValveBase {
     private LocalDate currentDate = null;
     private String space = " ";
     private long rotationLastChecked = 0L;
-    
+
     //省略属性的getter/setter
-    
+
     //这是核心方法invoke
     public void invoke(Request request, Response response, ValveContext context)
             throws IOException, ServletException {
         // 先调用context中的invokeNext，实现职责链调用
         // Pass this request on to the next valve in our pipeline
         context.invokeNext(request, response);
-        
+
         //以下是本valve本身的业务逻辑
         LocalDate date = getDate();
         StringBuffer result = new StringBuffer();
@@ -805,7 +805,7 @@ public class StandardPipeline implements Pipeline{
     protected int debug = 0;
     protected String info = "com.minit.core.StandardPipeline/0.1";
     protected Valve valves[] = new Valve[0]; //一组valve，可以逐个调用
-    
+
     public Valve getBasic() {
         return (this.basic);
     }
@@ -851,7 +851,7 @@ public class StandardPipeline implements Pipeline{
         // Invoke the first Valve in this pipeline for this request
         (new StandardPipelineValveContext()).invokeNext(request, response);
     }
-    
+
     public void removeValve(Valve valve) {
         synchronized (valves) {
             // Locate this Valve in our list
@@ -876,7 +876,7 @@ public class StandardPipeline implements Pipeline{
             valves = results;
         }
     }
-    
+
     //内部类，维护了stage，表示valves数组中的位置，逐个invoke
     protected class StandardPipelineValveContext implements ValveContext {
         protected int stage = 0;

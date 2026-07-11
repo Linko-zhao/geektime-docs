@@ -133,7 +133,7 @@ func main() {
 该示例的运行结果如下：
 
 ```plain
-$go run readall.go 
+$go run readall.go
 正常读取：Read 13 bytes: Hello, World!, error=<nil>
 未读到任何数据：Read 0 bytes: , error=<nil>
 ```
@@ -148,7 +148,7 @@ $go run readall.go
 
 ```plain
 // $GOROOT/src/io/io.go
-func WriteString(w Writer, s string) (n int, err error) 
+func WriteString(w Writer, s string) (n int, err error)
 ```
 
 下面是WriteString函数的一个使用示例：

@@ -78,7 +78,7 @@ OK，我们可以得出两个结论。一是工作流输出的 `a` 被返回给�
 - **工作流2：退款审批（基于Python实现）。**
 
 ```plain
-if orderId == "1": 
+if orderId == "1":
   return '您的退换货申请已通过，钱款已按原路径退还'
 else:
   return '没有查询到'
@@ -240,7 +240,7 @@ def out_user_message(s):
 
 
     print('服务员：'  + s)
-    
+
 
 
 if __name__ == '__main__':
@@ -507,7 +507,7 @@ steps:
     description: '获取用户标签和营销需求'
     input:
       description: '用户输入的标签和营销需求'
-      example: 
+      example:
         tag: '潜在客户'
         marketing_need: '推广新产品'
     output:

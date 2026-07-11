@@ -18,7 +18,7 @@
 
 ```plain
 在数据库中存在
--表departments，字段为[DepartmentId, DepartmentName], 
+-表departments，字段为[DepartmentId, DepartmentName],
 -表students，字段为[DepartmentId, StudentId, StudentName]
 请为"查找所有计算机学院的学生"生成MySQL的查询语句
 ```
@@ -212,45 +212,49 @@ API
 llm = Tongyi()
 
 # Define the API design and implementation prompt templates
+
 api_design_prompt = ChatPromptTemplate.from_template(
-    &quot;&quot;&quot;\
-    需求背景
-    =======
-    {requirements}
-    
+&quot;&quot;&quot;\
+需求背景
+\=======
+{requirements}
+
     API要求
     =====
     API返回的结果是json格式；
     当查找的SKU不存在时，返回404；
     按关键搜索功能使用POST而不是GET；
-    
+
     任务
     ===
     按照API要求为需求设计RESTful API接口。使用RAML描述。
     &quot;&quot;&quot;
+
 )
 
 api_implementation_prompt = ChatPromptTemplate.from_template(
-    &quot;&quot;&quot;\
-    需求背景
-    =======
-    {requirements}
-    
+&quot;&quot;&quot;\
+需求背景
+\=======
+{requirements}
+
     API
     ===
     {API}
-    
+
     要求
     ===
     使用Java实现
-    
+
     任务
     ===
     按照要求，根据需求实现API中提及的RESTful API
     &quot;&quot;&quot;
+
 )
 
 # Output parser remains the same as it just converts model output to string
+
 output_parser = StrOutputParser()
 
 requirements = &quot;&quot;&quot;\
@@ -261,21 +265,21 @@ requirements = &quot;&quot;&quot;\
 &quot;&quot;&quot;
 
 # Designing API
+
 api_design_result = (api_design_prompt | llm | output_parser).invoke({&quot;requirements&quot;: requirements})
 print(&quot;================================API设计结果:\n&quot;, api_design_result)
 
 # Implementing API
+
 api_implementation_result = (api_implementation_prompt | llm | output_parser).invoke({
-    &quot;requirements&quot;: requirements,
-    &quot;API&quot;: api_design_result
+&quot;requirements&quot;: requirements,
+&quot;API&quot;: api_design_result
 })
 print(&quot;================================API实现结果:\n&quot;, api_implementation_result)
 </p>2024-04-22</li><br/><li><span>hakunamatata</span> 👍（2） 💬（0）<p>https:&#47;&#47;www.youtube.com&#47;watch?v=ug8XX2MpzEw&amp;t=11s
 Dave Thomas在演讲里面讲到(37:50)过一点,通过潜意识传递的信息效率最高。因为这些“信息”的“传递”几乎是“自动”完成的(另外一种“认知模式”)。
 
 比如不要读下面的一段话
-
-
 
 “I TOLD YOU NOT TO READ IT!”
 </p>2024-03-21</li><br/><li><span>大卫</span> 👍（2） 💬（0）<p>清晰的问题，清晰的期望答案 =&gt; 正确的文档代码测试等
@@ -294,8 +298,10 @@ Dave Thomas在演讲里面讲到(37:50)过一点,通过潜意识传递的信息�
 例如：
 介绍背景：使用 DDD 设计一个图片管理系统的领域模型
 问题描述：
+
 1. 有哪些领域对象？
 2. 每个领域对象都有哪些关键属性？
 3. 领域对象之间的关系是什么？
 4. 对接不同云服务商的图片存储服务时，如何通过领域模型实现开闭原则？</p>2024-03-20</li><br/><li><span>赫伯伯</span> 👍（0） 💬（0）<p>最近看过一些 TW 组织的 AI 赋能软件研发的专场分享，涉及业务分析，编码，产品设计，交互设计和测试。每个嘉宾都很优秀，不过分享这种形式，内容上总是支离破碎的，希望徐老师的课程能给我带来体系化的思考和认识</p>2024-03-19</li><br/><li><span>webmin</span> 👍（0） 💬（0）<p>根据在工作遇到的问题,有意识的根据老师教的问题分类方法,把问题分类后,与GPT进行问答练习,多练才能找到与GPT配合的感觉,和形成自己的模板.</p>2024-03-18</li><br/>
+
 </ul>

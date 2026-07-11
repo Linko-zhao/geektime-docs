@@ -395,49 +395,50 @@ OpenAI 公司为了解决这些问题，想到了让大模型与外界环境交�
 ```json
 {&quot;numbers&quot;:[1,2,3,4]}
 ```&lt;｜tool▁call▁end｜&gt;&lt;｜tool▁calls▁end｜&gt;</p>2025-02-10</li><br/><li><span>🤡</span> 👍（0） 💬（1）<p>遇到一个奇怪的问题
-代码中需要去计算 prompt := &quot;1+2-3+4-5+6=? Just give me a number result&quot; 
+代码中需要去计算 prompt := &quot;1+2-3+4-5+6=? Just give me a number result&quot;
 
 按照老师给的代码跑，会在循环中有好几轮计算，每次将计算结果附加到 messageStore 后面
 我修改代码将计算过程打印在命令行，每一轮计算使用 ----- 符号分隔
-第一轮计算调用  addTool 计算出 1 2 4 6 之和为13 
+第一轮计算调用 addTool 计算出 1 2 4 6 之和为13
 第二轮计算调用 subTool 计算出 3 5 只差 为 -2 （这里有问题）
-第三轮得出结论 最终计算结果为 5 
+第三轮得出结论 最终计算结果为 5
 这里我的问题是为什么 在 第二轮计算出的结果是 -2 ，添加到messageStore中，居然最后能得出正确的答案，本质上第二轮计算应该是 -3 -5 = -8 才是合理的
 后面又使用 go run main.go 多次实验都有同样的问题，请问下这个是什么原因呢？？
 
 附加某次实验的输出：
-大模型选择的工具是:  [{0xc0004c9bc0 call_81af19d5cf3247a99b0d45 function {AddTool {&quot;numbers&quot;: [1, 2, 4, 6]}}}]
-函数计算结果:  13
+大模型选择的工具是: [{0xc0004c9bc0 call_81af19d5cf3247a99b0d45 function {AddTool {&quot;numbers&quot;: [1, 2, 4, 6]}}}]
+函数计算结果: 13
 --------------
-大模型选择的工具是:  [{0xc000014a50 call_d7719388d48d42e5994cb0 function {SubTool {&quot;numbers&quot;: [3, 5]}}}]
-函数计算结果:  -2
+
+大模型选择的工具是: [{0xc000014a50 call_d7719388d48d42e5994cb0 function {SubTool {&quot;numbers&quot;: [3, 5]}}}]
+函数计算结果: -2
 --------
-大模型的最终回复:  The result of the calculation \( 1 + 2 - 3 + 4 - 5 + 6 \) is \( 5 \).</p>2025-02-01</li><br/><li><span>仲玄</span> 👍（0） 💬（1）<p>AddTool和SubTool的函数是需要用户自己实现吗? </p>2024-12-27</li><br/><li><span>0mfg</span> 👍（0） 💬（1）<p>老师您好，请教两个可能和functioncall本身关系不大的问题，主要还是go语言本身的问题或者说是openai go sdk的问题。
+
+大模型的最终回复: The result of the calculation \( 1 + 2 - 3 + 4 - 5 + 6 \) is \( 5 \).</p>2025-02-01</li><br/><li><span>仲玄</span> 👍（0） 💬（1）<p>AddTool和SubTool的函数是需要用户自己实现吗? </p>2024-12-27</li><br/><li><span>0mfg</span> 👍（0） 💬（1）<p>老师您好，请教两个可能和functioncall本身关系不大的问题，主要还是go语言本身的问题或者说是openai go sdk的问题。
 问题1：我的go是1.24.1版本，按照您的代码addtooldefine代码里关于加法参数的定义，我的环境编译运行报错“2025&#47;03&#47;30 00:23:08 error, status code: 400, status: 400 Bad Request, message: Invalid type for &#39;tools[0].function.parameters&#39;: expected an object, but got a string instead. (request id: 2025032916230715366345006827442)。 定位下来代码是这个地方有问题，
 Parameters: `{&quot;type&quot;:&quot;object&quot;,&quot;properties&quot;:{&quot;numbers&quot;:{&quot;type&quot;:&quot;array&quot;,&quot;items&quot;:{&quot;type&quot;:&quot;integer&quot;}}}}`,
-	},
+},
 
 我修改成这样写执行正常了：
 Parameters: map[string]any{
-			&quot;type&quot;: &quot;object&quot;,
-			&quot;properties&quot;: map[string]any{
-				&quot;numbers&quot;: map[string]any{
-					&quot;type&quot;: &quot;array&quot;,
-					&quot;items&quot;: map[string]any{
-						&quot;type&quot;: &quot;integer&quot;,
-					},
-				},
+&quot;type&quot;: &quot;object&quot;,
+&quot;properties&quot;: map[string]any{
+&quot;numbers&quot;: map[string]any{
+&quot;type&quot;: &quot;array&quot;,
+&quot;items&quot;: map[string]any{
+&quot;type&quot;: &quot;integer&quot;,
+},
+},
 
 想确认一下这个是sdk的版本更新还是go版本更新导致的。
 
 问题2：tomessage方法的具体考虑或者设计的巧妙思路能否具体说明一下，因为我调试了一下发现函数调用的时候，参数直接传就行，不用调用tomessage方法也可以成功运行。
 
-			&#47;&#47;response = ai.ToolsChat(ai.MessageStore.ToMessage(), toolsList)
-			response = ai.ToolsChat(ai.MessageStore, toolsList)
-			toolCalls = response.ToolCalls
+    		&#47;&#47;response = ai.ToolsChat(ai.MessageStore.ToMessage(), toolsList)
+    		response = ai.ToolsChat(ai.MessageStore, toolsList)
+    		toolCalls = response.ToolCalls
 
 感谢老师百忙中抽空答复
-
 
 </p>2025-03-31</li><br/><li><span>0.0</span> 👍（0） 💬（2）<p>看起来和 MCP 有同样的异曲同工之妙,只是 MCP 更加通用,直接制定标准协议,MCP 会一统江湖吗?</p>2025-03-20</li><br/><li><span>Geek_b73ed3</span> 👍（0） 💬（1）<p>大模型推导出来提交的tool这块老师有了解嘛？它怎么知道我扔给它的是golang的代码？</p>2025-03-04</li><br/>
 </ul>

@@ -42,16 +42,17 @@ PWA的核心是Service Worker，它是一种可以控制页面加载和行为的
 
 ```javascript
 // 注册 Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(registration => {
-        console.log('Service Worker 注册成功:', registration);
-      })
-      .catch(error => {
-        console.log('Service Worker 注册失败:', error);
-      });
-  });
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then((registration) => {
+        console.log("Service Worker 注册成功:", registration);
+      })
+      .catch((error) => {
+        console.log("Service Worker 注册失败:", error);
+      });
+  });
 }
 ```
 

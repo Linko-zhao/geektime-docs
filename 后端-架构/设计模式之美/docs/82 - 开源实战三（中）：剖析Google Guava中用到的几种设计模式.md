@@ -133,7 +133,7 @@ public abstract class ForwardingCollection<E> extends ForwardingObject implement
   public Object[] toArray() {
     return this.delegate().toArray();
   }
-  
+
   //...省略部分代码...
 }
 ```
@@ -225,7 +225,7 @@ public class User {
   private String name;
   private int age;
   private Address addr;
-  
+
   public User(String name, int age, Address addr) {
     this.name = name;
     this.age = age;
@@ -249,7 +249,7 @@ public class User {
   private String name;
   private int age;
   private Address addr;
-  
+
   public User(String name, int age, Address addr) {
     this.name = name;
     this.age = age;
@@ -353,52 +353,56 @@ public static void main(String[] args) {
 
     mutable.name = &quot;mutable&quot;;
     System.out.println(guavaCopy);
-&#47;&#47;    [Student{age=10, name=&#39;xiaoqiang&#39;}, Student{age=8, name=&#39;mutable&#39;}, Student{age=12, name=&#39;lameda&#39;}]
 
-  }</p>2020-05-11</li><br/><li><span>小晏子</span> 👍（4） 💬（0）<p>JDK中的unmodifiableList的构造函数是对原始集合的浅拷贝，而Guava.ImmutableList.copyOf是对原始集合的深拷贝。从source code可以看出来：
+&#47;&#47; [Student{age=10, name=&#39;xiaoqiang&#39;}, Student{age=8, name=&#39;mutable&#39;}, Student{age=12, name=&#39;lameda&#39;}]
+
+}</p>2020-05-11</li><br/><li><span>小晏子</span> 👍（4） 💬（0）<p>JDK中的unmodifiableList的构造函数是对原始集合的浅拷贝，而Guava.ImmutableList.copyOf是对原始集合的深拷贝。从source code可以看出来：
 UnmodifiableList
-      UnmodifiableList(List&lt;? extends E&gt; list) {
-            super(list);
-            this.list = list;
-        }
+UnmodifiableList(List&lt;? extends E&gt; list) {
+super(list);
+this.list = list;
+}
 Guava.ImmutableList.copyOf
 public static &lt;E&gt; ImmutableList&lt;E&gt; copyOf(Collection&lt;? extends E&gt; elements) {
-    if (elements instanceof ImmutableCollection) {
-      @SuppressWarnings(&quot;unchecked&quot;) &#47;&#47; all supported methods are covariant
-      ImmutableList&lt;E&gt; list = ((ImmutableCollection&lt;E&gt;) elements).asList();
-      return list.isPartialView() ? ImmutableList.&lt;E&gt;asImmutableList(list.toArray()) : list;
-    }
-    return construct(elements.toArray());
-  }
-  &#47;** Views the array as an immutable list. Checks for nulls; does not copy. *&#47;
-  private static &lt;E&gt; ImmutableList&lt;E&gt; construct(Object... elements) {
-    return asImmutableList(checkElementsNotNull(elements));
-  }
+if (elements instanceof ImmutableCollection) {
+@SuppressWarnings(&quot;unchecked&quot;) &#47;&#47; all supported methods are covariant
+ImmutableList&lt;E&gt; list = ((ImmutableCollection&lt;E&gt;) elements).asList();
+return list.isPartialView() ? ImmutableList.&lt;E&gt;asImmutableList(list.toArray()) : list;
+}
+return construct(elements.toArray());
+}
+&#47;** Views the array as an immutable list. Checks for nulls; does not copy. *&#47;
+private static &lt;E&gt; ImmutableList&lt;E&gt; construct(Object... elements) {
+return asImmutableList(checkElementsNotNull(elements));
+}
 
-  &#47;**
-   * Views the array as an immutable list. Does not check for nulls; does not copy.
-   *
-   * &lt;p&gt;The array must be internally created.
-   *&#47;
+&#47;**
+
+- Views the array as an immutable list. Does not check for nulls; does not copy.
+-
+- &lt;p&gt;The array must be internally created.
+  *&#47;
   static &lt;E&gt; ImmutableList&lt;E&gt; asImmutableList(Object[] elements) {
-    return asImmutableList(elements, elements.length);
+  return asImmutableList(elements, elements.length);
   }
 
-  &#47;**
-   * Views the array as an immutable list. Copies if the specified range does not cover the complete
-   * array. Does not check for nulls.
-   *&#47;
+&#47;**
+
+- Views the array as an immutable list. Copies if the specified range does not cover the complete
+- array. Does not check for nulls.
+  *&#47;
   static &lt;E&gt; ImmutableList&lt;E&gt; asImmutableList(Object[] elements, int length) {
-    switch (length) {
-      case 0:
-        return of();
-      case 1:
-        return of((E) elements[0]);
-      default:
-        if (length &lt; elements.length) {
-          elements = Arrays.copyOf(elements, length);
-        }
-        return new RegularImmutableList&lt;E&gt;(elements);
-    }
+  switch (length) {
+  case 0:
+  return of();
+  case 1:
+  return of((E) elements[0]);
+  default:
+  if (length &lt; elements.length) {
+  elements = Arrays.copyOf(elements, length);
+  }
+  return new RegularImmutableList&lt;E&gt;(elements);
+  }
   }</p>2020-05-11</li><br/><li><span>test</span> 👍（4） 💬（0）<p>jdk是浅拷贝，guava是深拷贝，在修改的时候报错</p>2020-05-11</li><br/><li><span>Frank</span> 👍（2） 💬（0）<p>unmodifiableList 内部还是使用了Warpper模式，重新实现了某些方法，比如add,remove等，当调用这些方法时，抛出异常，而有些方法还是委托给原始list进行操作，比如get操作。所以这里在原始类添加元素后，使用不jdk的变类可以打印出新添加的元素。而Guava 中的ImmutableList 时采用拷贝的方式将原始集合中的数据拷贝到一个对象数组中，后续原始集合添加，删除元素，其结果都不会影响该ImmutableList。</p>2020-05-11</li><br/><li><span>汝林外史</span> 👍（2） 💬（1）<p>我觉得 ForwardingCollection 类就应该理解为缺省的装饰器类，前面的文章就说过代理模式、装饰器模式、适配器模式代码的写法几乎一样，差别就是各自的使用场景，我觉得ForwardingCollection这些类的使用场景就是作为装饰类来用的，不会应用到代理和适配器的场景，王老师貌似又掉入了以代码写法判断设计模式的自己说的陷阱中。</p>2020-05-11</li><br/><li><span>八年老萌新</span> 👍（1） 💬（0）<p>jdk的UnmodifiableCollection看起来更像是个装饰器，内部持有源集合的引用，对源集合的操作进行包装。所以直接操作源集合的同时也改变了不可变集合。而guava的ImmutableList则是通过Arrays.copyOf去创建新的不可变集合，所以改变源集合并不能改变不可变集合</p>2023-05-19</li><br/><li><span>yu</span> 👍（1） 💬（0）<p>JDK与Guava的不可变集合都是属于普通不可变集合，试了一下，无法增减元素，但都是可以对集合中的对像的成员变量修改的。不同的是，原集合改动之后，JDK跟着改变，Guava不跟着变</p>2020-05-22</li><br/><li><span>董大大</span> 👍（1） 💬（0）<p>深究设计模式，对阅读开源代码大有好处</p>2020-05-21</li><br/><li><span>落尘kira</span> 👍（1） 💬（0）<p>还有一点就是 作者觉得 不可变的例子，我看起来深拷贝和浅拷贝的代码是一摸一样的？深拷贝是对于对象类型的是否要加入 deepCopy（object）方法？</p>2020-05-13</li><br/>
+
 </ul>

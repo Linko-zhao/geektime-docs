@@ -307,7 +307,7 @@ class ErrorBoundary extends React.Component {
       return <View>404页面</View>;
     }
 
-    return this.props.children; 
+    return this.props.children;
   }
 }
 // 使用方法

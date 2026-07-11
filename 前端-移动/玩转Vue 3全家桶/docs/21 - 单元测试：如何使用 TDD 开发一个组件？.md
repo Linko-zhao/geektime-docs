@@ -13,11 +13,11 @@
 add函数虽然看起来很简单，但实际使用时可能会遇到很多情况。比如说x如果是字符串，或者对象等数据类型的时候，add结果是否还可以符合预期？而且add函数还有可能被你的同事不小心加了其他逻辑，这都会干扰add函数的行为。
 
 ```javascript
-function add(x,y){
-  return x+y
+function add(x, y) {
+  return x + y;
 }
 
-console.log(3 == add(1,2))
+console.log(3 == add(1, 2));
 ```
 
 为了让add函数的行为符合预期，你希望能添加很多Console的判断逻辑，并且让这些代码自动化执行。
@@ -25,31 +25,31 @@ console.log(3 == add(1,2))
 我们来到src目录下，新建一个add.js。下面的代码中，我们定义了函数test执行测试函数，可以给每个测试起个名字，方便调试的时候查找，expect可以判断传入的值和预期是否相符。
 
 ```javascript
-function add(x,y){
-  return x+y
+function add(x, y) {
+  return x + y;
 }
 
-function expect(ret){
+function expect(ret) {
   return {
-    toBe(arg){
-      if(ret!==arg){
-        throw Error(`预计和实际不符,预期是${arg}，实际是${ret}`)
+    toBe(arg) {
+      if (ret !== arg) {
+        throw Error(`预计和实际不符,预期是${arg}，实际是${ret}`);
       }
-    }
+    },
+  };
+}
+function test(title, fn) {
+  try {
+    fn();
+    console.log(title, "测试通过");
+  } catch (e) {
+    console.log(e);
+    console.error(title, "测试失败");
   }
 }
-function test(title, fn){
-  try{
-    fn()
-    console.log(title,'测试通过')
-  }catch(e){
-    console.log(e)
-    console.error(title,'测试失败')
-  }
-}
-test('测试数字相加',()=>{
-  expect(add(1,2)).toBe(3)
-})
+test("测试数字相加", () => {
+  expect(add(1, 2)).toBe(3);
+});
 ```
 
 命令行执行node add.js以后，我们就可以看到下面的结果。如果每次Git提交代码之前，我们都能执行一遍add.js去检查add函数的逻辑，add函数相当于有了个自动检查员，这样就可以很好地提高add函数的可维护性。
@@ -62,9 +62,9 @@ test('测试数字相加',()=>{
 下一步，我们如果想让add函数支持更多的数据类型，比如我们想支持数字字符串的相加，又要怎么处理呢？我们可以先写好测试代码，在下面的代码中，我们希望数字1和字符串2也能以数字的形式相加。
 
 ```javascript
-test('测试数字和字符串数字相加',()=>{
-  expect(add(1,'2')).toBe(3)
-})
+test("测试数字和字符串数字相加", () => {
+  expect(add(1, "2")).toBe(3);
+});
 ```
 
 我们在命令行里执行node add.js之后，就会提示下面的报错信息，这说明现在代码还没有符合新的需求，我们需要进一步丰富add函数的逻辑。  
@@ -73,13 +73,12 @@ test('测试数字和字符串数字相加',()=>{
 我们把add函数改成下面的代码，再执行add.js后，就会提示你两个测试都通过了，这样我们就确保新增逻辑的时候，也没有影响到之前的代码逻辑。
 
 ```javascript
-function add(x,y){
-  if(Number(x)==x && Number(y)==y){
-    return Number(x) + Number(y)
+function add(x, y) {
+  if (Number(x) == x && Number(y) == y) {
+    return Number(x) + Number(y);
   }
-  return x+y
+  return x + y;
 }
-
 ```
 
 这是一个非常简单的场景演示，但这个例子能够帮助你快速了解什么是单元测试。下一步，我们要在Vue中给我们的组件加上测试。
@@ -91,8 +90,8 @@ function add(x,y){
 不过，因为我们组件库使用TypeScript开发，所以需要安装一些插件，通过命令行执行下面的命令，vue-jest和@vue/test-utils是测试Vue组件必备的库，然后安装babel相关的库，最后安装Jest适配TypeScript的库。代码如下：
 
 ```javascript
-npm install -D jest@26 vue-jest@next @vue/test-utils@next 
-npm install -D babel-jest@26 @babel/core @babel/preset-env 
+npm install -D jest@26 vue-jest@next @vue/test-utils@next
+npm install -D babel-jest@26 @babel/core @babel/preset-env
 npm install -D ts-jest@26 @babel/preset-typescript @types/jest
 ```
 
@@ -101,11 +100,10 @@ npm install -D ts-jest@26 @babel/preset-typescript @types/jest
 ```javascript
 module.exports = {
   presets: [
-    ['@babel/preset-env', { targets: { node: 'current' } }],
-    '@babel/preset-typescript',
+    ["@babel/preset-env", { targets: { node: "current" } }],
+    "@babel/preset-typescript",
   ],
-}
-
+};
 ```
 
 然后，我们还需要新建jest.config.js，用来配置jest的测试行为。不同格式的文件需要使用不同命令来配置，对于.vue文件我们使用vue-jest，对于.js或者.jsx结果的文件，我们就要使用babel-jest，而对于.ts结尾的文件我们使用ts-jest，然后匹配文件名是xx.spect.js。这里请注意，**Jest只会执行.spec.js结尾的文件**。
@@ -114,15 +112,14 @@ module.exports = {
 module.exports = {
   transform: {
     // .vue文件用 vue-jest 处理
-    '^.+\\.vue$': 'vue-jest',
+    "^.+\\.vue$": "vue-jest",
     // .js或者.jsx用 babel-jest处理
-    '^.+\\.jsx?$': 'babel-jest', 
+    "^.+\\.jsx?$": "babel-jest",
     //.ts文件用ts-jest处理
-    '^.+\\.ts$': 'ts-jest'
+    "^.+\\.ts$": "ts-jest",
   },
-  testMatch: ['**/?(*.)+(spec).[jt]s?(x)']
-}
-
+  testMatch: ["**/?(*.)+(spec).[jt]s?(x)"],
+};
 ```
 
 然后配置package.json，在scrips配置下面新增test命令，即可启动Jest。
@@ -142,24 +139,19 @@ module.exports = {
 我们可以在src目录下新增test.spec.js，再输入下面代码来进行测试。在这段代码中，我们使用expect().toBe()来判断值是否相等，使用toHavaBeenCalled来判断函数是否执行。更多的断言函数你可以去[官网](https://www.jestjs.cn/docs/expect)查看，这些函数可以覆盖我们测试场景的方方面面。
 
 ```javascript
-
-
-
-
-function sayHello(name,fn){
-  if(name=='大圣'){
-    fn()
+function sayHello(name, fn) {
+  if (name == "大圣") {
+    fn();
   }
 }
-test('测试加法',()=>{
-  expect(1+2).toBe(3)
-})
-test('测试函数',()=>{
-  const fn = jest.fn()
-  sayHello('大圣',fn)
-  expect(fn).toHaveBeenCalled()
-})
-  
+test("测试加法", () => {
+  expect(1 + 2).toBe(3);
+});
+test("测试函数", () => {
+  const fn = jest.fn();
+  sayHello("大圣", fn);
+  expect(fn).toHaveBeenCalled();
+});
 ```
 
 ## TDD开发组件
@@ -171,30 +163,29 @@ test('测试函数',()=>{
 参考 [Element3的button组件](https://e3.shengxinjing.cn/#/component/button)，el-button组件可以通过传递size来配置按钮的大小。现在我们先根据需求去写测试代码，因为现在Button.vue还不存在，所以我们可以先根据Button的行为去书写测试案例。
 
 ```javascript
-import Button from './Button.vue'
-import { mount } from '@vue/test-utils'
-describe('按钮测试', () => {
-  it('按钮能够显示文本', () => {
-    const content = '大圣小老弟'
+import Button from "./Button.vue";
+import { mount } from "@vue/test-utils";
+describe("按钮测试", () => {
+  it("按钮能够显示文本", () => {
+    const content = "大圣小老弟";
     const wrapper = mount(Button, {
       slots: {
-        default: content
-      }
-    })
-    expect(wrapper.text()).toBe(content)
-  })
-  it('通过size属性控制大小', () => {
-    const size = 'small'
+        default: content,
+      },
+    });
+    expect(wrapper.text()).toBe(content);
+  });
+  it("通过size属性控制大小", () => {
+    const size = "small";
     const wrapper = mount(Button, {
       props: {
-        size
-      }
-    })
+        size,
+      },
+    });
     // size内部通过class控制
-    expect(wrapper.classes()).toContain('el-button--small')
-  })  
-
-})
+    expect(wrapper.classes()).toContain("el-button--small");
+  });
+});
 ```
 
 我们首先要从@vue/test-utils库中导入mount函数，这个函数可以在命令行里模拟Vue的组件渲染。在Button的slot传递了文本之后，wrapper.text()就能获取到文本内容，然后对Button渲染结果进行判断。之后，我们利用size参数，即可通过渲染不同的class来实现按钮的大小，这部分内容我们很熟悉了，在[第20讲](https://time.geekbang.org/column/article/464098)里的Container组件中就已经实现过了。
@@ -212,7 +203,7 @@ TDD的优势就相当于有一位老师，在我们旁边不停做批改，哪�
 ```xml
 <template>
   <button
-    class="el-button" 
+    class="el-button"
     :class="[size ? `el-button--${size}` : '',]"
   >
     <slot />
@@ -235,7 +226,7 @@ const props = withDefaults(defineProps<Props>(),{
 为了让你抓住重点，这里的Sass代码我放几个核心逻辑，完整代码你可以在项目的[GitHub](https://github.com/shengxinjing/ailemente/blob/main/src/components/button/Button.vue#L40)里看到。
 
 ```scss
-@include b(button){
+@include b(button) {
   display: inline-block;
   cursor: pointer;
   background: $--button-default-background-color;
@@ -272,31 +263,25 @@ const props = withDefaults(defineProps<Props>(),{
 然后我们接着往下进行，想要设置按钮的大小，除了通过props传递，还可以通过全局配置的方式设置默认大小。我们进入到代码文件src/main.ts中，设置全局变量$AILEMENTE中的size为large，并且还可以通过type="primary"或者type="success"的方式，设置按钮的主体颜色，代码如下：
 
 ```typescript
-const app = createApp(App)
+const app = createApp(App);
 app.config.globalProperties.$AILEMENTE = {
-  size:'large'
-}
-app.use(ElContainer)
-  .use(ElButton)
-  .mount('#app')
-
-
-
+  size: "large",
+};
+app.use(ElContainer).use(ElButton).mount("#app");
 ```
 
 首先我们要支持全局的size配置，在src目录下新建util.ts，写入下面的代码。我们通过vue提供的getCurrentInstance获取当前的实例，然后返回全局配置的$AILEMENTE。这里请注意，由于很多组件都需要读取全局配置，所以我们封装了useGlobalConfig函数。
 
 ```typescript
-import { getCurrentInstance,ComponentInternalInstance } from 'vue'
+import { getCurrentInstance, ComponentInternalInstance } from "vue";
 
-export function useGlobalConfig(){
-  const instance:ComponentInternalInstance|null =getCurrentInstance()
-  if(!instance){
-    console.log('useGlobalConfig 必须得在setup里面整')
-    return
+export function useGlobalConfig() {
+  const instance: ComponentInternalInstance | null = getCurrentInstance();
+  if (!instance) {
+    console.log("useGlobalConfig 必须得在setup里面整");
+    return;
   }
-  return instance.appContext.config.globalProperties.$AILEMENTE || {}
-  
+  return instance.appContext.config.globalProperties.$AILEMENTE || {};
 }
 ```
 
@@ -305,7 +290,7 @@ export function useGlobalConfig(){
 ```xml
 <template>
   <button
-    class="el-button" 
+    class="el-button"
     :class="[
       buttonSize ? `el-button--${buttonSize}` : '',
       type ? `el-button--${type}` : ''
@@ -355,7 +340,7 @@ const buttonSize = computed(()=>{
   <el-button size="small">
     按钮
   </el-button>
-  
+
 ```
 
 不同按钮的显示效果如下所示：  
@@ -367,15 +352,14 @@ const buttonSize = computed(()=>{
 module.exports = {
   transform: {
     //  用 `vue-jest` 处理 `*.vue` 文件
-    '^.+\\.vue$': 'vue-jest', //vuejest 处理.vue
-    '^.+\\.jsx?$': 'babel-jest',  // babel jest处理js or jsx
-    '^.+\\.tsx?$': 'ts-jest', // ts-jest 处理.ts .tsx
+    "^.+\\.vue$": "vue-jest", //vuejest 处理.vue
+    "^.+\\.jsx?$": "babel-jest", // babel jest处理js or jsx
+    "^.+\\.tsx?$": "ts-jest", // ts-jest 处理.ts .tsx
   },
-  testMatch: ['**/?(*.)+(spec).[jt]s?(x)'],
+  testMatch: ["**/?(*.)+(spec).[jt]s?(x)"],
   collectCoverage: true,
   coverageReporters: ["json", "html"],
-}
-
+};
 ```
 
 然后在执行npm run test后，项目的根目录下就会出现一个coverage目录。  
@@ -450,6 +434,7 @@ TypeError: Cannot read properties of null (reading &#39;compilerOptions&#39;)
       at ScriptTransformer._transformAndBuildScript (node_modules&#47;@jest&#47;transform&#47;build&#47;ScriptTransformer.js:569:40)
       at ScriptTransformer.transform (node_modules&#47;@jest&#47;transform&#47;build&#47;ScriptTransformer.js:607:25)
       at Object.&lt;anonymous&gt; (test&#47;packages&#47;button.spec.ts:1:1)</p>2022-12-14</li><br/><li><span>金针菇饲养员</span> 👍（0） 💬（0）<p>ReferenceError: module is not defined in ES module scope
+
 </p>2022-08-10</li><br/><li><span>金针菇饲养员</span> 👍（0） 💬（0）<p>你们都按照老师代码敲了么，有发现这些报错么？
 babel.config.js: Error while loading config - You appear to be using a native ECMAScript module configuration file, which is only supported when running Babel asynchronously.</p>2022-08-10</li><br/>
 </ul>

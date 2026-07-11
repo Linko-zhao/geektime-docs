@@ -515,8 +515,8 @@ let stream = match tls.accept(socket).await {
 };</p>2024-12-30</li><br/><li><span>杨学者</span> 👍（0） 💬（0）<p>不太懂，但是代码能跑！</p>2024-12-02</li><br/><li><span>David.Du</span> 👍（0） 💬（0）<p>感谢大神！</p>2023-11-30</li><br/><li><span>新新人类</span> 👍（0） 💬（0）<p>思考题1: 将 ServerConfig 的 ClientCertVerifier 改成 AllowAnyAuthenticatedClient
 
 pub fn new(cert: &amp;str, key: &amp;str, client_ca: Option&lt;&amp;str&gt;) -&gt; Result&lt;Self, KvError&gt; {
-    let certs = load_certs(cert)?;
-    let key = load_key(key)?;
+let certs = load_certs(cert)?;
+let key = load_key(key)?;
 
     let mut root_store = match rustls_native_certs::load_native_certs() {
       Ok(store) | Err((Some(store), _)) =&gt; store,
@@ -542,5 +542,6 @@ pub fn new(cert: &amp;str, key: &amp;str, client_ca: Option&lt;&amp;str&gt;) -&g
     Ok(Self {
       inner: Arc::new(config),
     })
-  }</p>2022-05-14</li><br/>
+
+}</p>2022-05-14</li><br/>
 </ul>

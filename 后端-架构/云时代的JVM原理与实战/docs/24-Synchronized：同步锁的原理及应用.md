@@ -61,7 +61,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLockExample {
    private final ReentrantLock lock = new ReentrantLock();
    private int counter = 0;
-   
+
    public void incrementCounter() {
         lock.lock(); // 获取锁
         try {
@@ -111,7 +111,7 @@ ReadWriteLock 是一种读写锁，它可以同时允许多个线程读取共享
 ```java
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-public class ReadWriteLockExample { 
+public class ReadWriteLockExample {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private int counter = 0;
 

@@ -233,7 +233,7 @@ public @interface Metrics {
 @Slf4j
 public class MetricsAspect {
     //让Spring帮我们注入ObjectMapper，以方便通过JSON序列化来记录方法入参和出参
-    
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -260,7 +260,7 @@ public class MetricsAspect {
         //通过连接点获取方法签名和方法上Metrics注解，并根据方法签名生成日志中要输出的方法定义描述
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Metrics metrics = signature.getMethod().getAnnotation(Metrics.class);
- 
+
         String name = String.format("【%s】【%s】", signature.getDeclaringType().toString(), signature.toLongString());
         //因为需要默认对所有@RestController标记的Web控制器实现@Metrics注解的功能，在这种情况下方法上必然是没有@Metrics注解的，我们需要获取一个默认注解。虽然可以手动实例化一个@Metrics注解的实例出来，但为了节省代码行数，我们通过在一个内部类上定义@Metrics注解方式，然后通过反射获取注解的小技巧，来获得一个默认的@Metrics注解的实例
         if (metrics == null) {
@@ -525,14 +525,14 @@ if (metrics == null) {
 	4、@Autowired可以作用在变量、setter方法、构造函数上。
 
 @Inject
-	1、@Inject是JSR330 (Dependency Injection for Java)中的规范，需要导入javax.inject.Inject;实现注入。
-	2、@Inject是根据类型进行自动装配的，如果需要按名称进行装配，则需要配合@Named；
-	3、@Inject可以作用在变量、setter方法、构造函数上。
+1、@Inject是JSR330 (Dependency Injection for Java)中的规范，需要导入javax.inject.Inject;实现注入。
+2、@Inject是根据类型进行自动装配的，如果需要按名称进行装配，则需要配合@Named；
+3、@Inject可以作用在变量、setter方法、构造函数上。
 
 @Resource
-	1、@Resource是JSR250规范的实现，需要导入javax.annotation实现注入。
-	2、@Resource是根据名称进行自动装配的，一般会指定一个name属性
-	3、@Resource可以作用在变量、setter方法上。
+1、@Resource是JSR250规范的实现，需要导入javax.annotation实现注入。
+2、@Resource是根据名称进行自动装配的，一般会指定一个name属性
+3、@Resource可以作用在变量、setter方法上。
 
 总结：
 1、@Autowired是spring自带的，@Inject是JSR330规范实现的，@Resource是JSR250规范实现的，需要导入不同的包
@@ -540,36 +540,33 @@ if (metrics == null) {
 3、@Autowired、@Inject是默认按照类型匹配的，@Resource是按照名称匹配的
 4、@Autowired如果需要按照名称匹配需要和@Qualifier一起使用，@Inject和@Name一起使用
 
-
 二：循环依赖：
 直观解决方法时通过set方法去处理，背后的原理其实是缓存。
 主要解决方式：使用三级缓存
 singletonObjects： 一级缓存， Cache of singleton objects: bean name --&gt; bean instance
-earlySingletonObjects： 二级缓存， Cache of early singleton objects: bean name --&gt; bean instance  提前曝光的BEAN缓存
+earlySingletonObjects： 二级缓存， Cache of early singleton objects: bean name --&gt; bean instance 提前曝光的BEAN缓存
 singletonFactories： 三级缓存， Cache of singleton factories: bean name --&gt; ObjectFactory</p>2020-04-26</li><br/><li><span>norman</span> 👍（8） 💬（1）<p>@Resource 和 @Autowired @Inject 三者区别：
 1 @Resource默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来装配注入。
 2 @Autowired默认是按照类型装配注入的，如果想按照名称来转配注入，则需要结合@Qualifier。这个注释是Spring特有的。
 3 @Inject是根据类型进行自动装配的，如果需要按名称进行装配，则需要配合@Named</p>2020-04-25</li><br/><li><span>左琪</span> 👍（7） 💬（1）<p>这里的代理类不是单例么，还是说会在增强逻辑里不断创建被代理类？</p>2020-04-26</li><br/><li><span>Demon.Lee</span> 👍（4） 💬（1）<p>连接点: 程序执行过程中能够应用通知的所有点；通知（增强）: 即切面的工作，定义了What以及When；切点定义了Where，通知被应用的具体位置（哪些连接点）
 ----Spring实战（第4版）</p>2020-04-25</li><br/><li><span>龙行秀</span> 👍（3） 💬（3）<p>“架构师一开始定义了这么一个 SayService 抽象类，其中维护了一个类型是 ArrayList 的字段 data，用于保存方法处理的中间数据。每次调用 say 方法都会往 data 加入新数据，可以认为 SayService 是有状态，如果 SayService 是单例的话必然会 OOM”
 -----为什么单例就会OOM，多例就不会呢？没看懂</p>2020-09-01</li><br/><li><span>Joker</span> 👍（3） 💬（1）<p>老师，请教一下，那个sayservice里的data有啥用，那个单例是为了一种重复使用data对吧，那换成每次都生成一个新的bean，那个data还有效果吗。。</p>2020-04-25</li><br/><li><span>小学生</span> 👍（1） 💬（3）<p>老师，您好，您讲 的切面执行顺序好像不对啊，我的执行顺序和你说的不一致！
-[10:34:11.367] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:31  ] - TestAspectWithOrder10 @Around before
-[10:34:11.377] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:21  ] - TestAspectWithOrder10 @Before
-[10:34:11.377] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:31  ] - TestAspectWithOrder20 @Around before
-[10:34:11.378] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:21  ] - TestAspectWithOrder20 @Before
-[10:34:11.379] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.aopmetrics.MetricsAspect:79  ] - 【入参日志】调用 【class org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController】【public void org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController.test()】【http:&#47;&#47;localhost:45678&#47;test】 的参数是：【[]】
-[10:34:11.379] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.aopmetrics.MetricsAspect:88  ] - 【成功打点】调用 【class org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController】【public void org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController.test()】【http:&#47;&#47;localhost:45678&#47;test】 成功，耗时：0 ms
+[10:34:11.367] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:31 ] - TestAspectWithOrder10 @Around before
+[10:34:11.377] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:21 ] - TestAspectWithOrder10 @Before
+[10:34:11.377] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:31 ] - TestAspectWithOrder20 @Around before
+[10:34:11.378] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:21 ] - TestAspectWithOrder20 @Before
+[10:34:11.379] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.aopmetrics.MetricsAspect:79 ] - 【入参日志】调用 【class org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController】【public void org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController.test()】【http:&#47;&#47;localhost:45678&#47;test】 的参数是：【[]】
+[10:34:11.379] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.aopmetrics.MetricsAspect:88 ] - 【成功打点】调用 【class org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController】【public void org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController.test()】【http:&#47;&#47;localhost:45678&#47;test】 成功，耗时：0 ms
 [10:34:11.379] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.aopmetrics.MetricsAspect:107 ] - 【出参日志】调用 【class org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController】【public void org.geekbang.time.commonmistakes.springpart1.aopmetrics.TestController.test()】【http:&#47;&#47;localhost:45678&#47;test】 的返回是：【null】
-[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:26  ] - TestAspectWithOrder20 @After
-[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:33  ] - TestAspectWithOrder20 @Around after
-[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:26  ] - TestAspectWithOrder10 @After
-[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:33  ] - TestAspectWithOrder10 @Around after
+[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:26 ] - TestAspectWithOrder20 @After
+[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder20:33 ] - TestAspectWithOrder20 @Around after
+[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:26 ] - TestAspectWithOrder10 @After
+[10:34:11.380] [http-nio-45678-exec-4] [INFO ] [o.g.t.c.s.a.TestAspectWithOrder10:33 ] - TestAspectWithOrder10 @Around after
 </p>2020-10-16</li><br/><li><span>track6688</span> 👍（1） 💬（1）<p>老师，请教一个问题，我使用这个注解，@Order(Ordered.HIGHEST_PRECEDENCE)，使用@AfterThrowing这个时，报No MethodInvocation found: Check that an AOP invocation is in progress, and that the ExposeInvocationInterceptor is upfront in the interceptor chain. Specifically, note that advices with order HIGHEST_PRECEDENCE will execute before ExposeInvocationInterceptor!，怎么处理呢？</p>2020-06-12</li><br/><li><span>看不到de颜色</span> 👍（1） 💬（1）<p>感觉Spring Intercepter的执行顺序和Servlet Filter的执行过程是一样的，一个递归调用栈。
 有个疑问想请老师解答一下。采用创建内部类的方式获取默认注解配置，这样不会每调用一次就会在元空间中生成一个c的Class信息吗？</p>2020-05-16</li><br/><li><span>David Mo</span> 👍（1） 💬（1）<p>@sevice 的坑踩过，代理类一开始不行白，后来说动态创建就懂了。当时是用一个类似工厂类解决的</p>2020-04-30</li><br/><li><span>Geek_3b1096</span> 👍（1） 💬（1）<p>很有收获谢谢老师</p>2020-04-30</li><br/><li><span>Husiun</span> 👍（17） 💬（0）<p>问题2，循环依赖会抛出异常BeanCurrentlyInCreationException，官网的解决方案是由构造器注入改为setter注入</p>2020-04-25</li><br/><li><span>和海明威下棋</span> 👍（8） 💬（0）<p>&#47;&#47;@annotation指示器实现对标记了Metrics注解的方法进行匹配
    @Pointcut(&quot;within(@org.geekbang.time.commonmistakes.springpart1.aopmetrics.Metrics *)&quot;
 
 这里是不是有笔误？我试了下within无法拦截方法的注解，换成@annotation就可以了</p>2020-11-25</li><br/><li><span>OneDy</span> 👍（7） 💬（0）<p>关于循环依赖的解决，看到了三种处理方式：
-1.使用@Lazy 对其中一个bean懒加载
-2. 使用setter属性注入，而并不是构造器注入
-3. 使用@PostConstruct在依赖注入后执行初始化
+1.使用@Lazy 对其中一个bean懒加载2. 使用setter属性注入，而并不是构造器注入3. 使用@PostConstruct在依赖注入后执行初始化
 具体可以参考：https:&#47;&#47;www.baeldung.com&#47;circular-dependencies-in-spring</p>2020-08-14</li><br/><li><span>W</span> 👍（5） 💬（0）<p>MetricsAspect 这个类里面的小技巧学到了</p>2020-04-25</li><br/>
 </ul>

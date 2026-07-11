@@ -69,7 +69,7 @@ menuentry 'CentOS Linux (3.10.0-862.el7.x86_64) 7 (Core)' --class centos --class
 	else
 	  search --no-floppy --fs-uuid --set=root b1aceb95-6b9e-464a-a589-bed66220ebee
 	fi
-	linux16 /boot/vmlinuz-3.10.0-862.el7.x86_64 root=UUID=b1aceb95-6b9e-464a-a589-bed66220ebee ro console=tty0 console=ttyS0,115200 crashkernel=auto net.ifnames=0 biosdevname=0 rhgb quiet 
+	linux16 /boot/vmlinuz-3.10.0-862.el7.x86_64 root=UUID=b1aceb95-6b9e-464a-a589-bed66220ebee ro console=tty0 console=ttyS0,115200 crashkernel=auto net.ifnames=0 biosdevname=0 rhgb quiet
 	initrd16 /boot/initramfs-3.10.0-862.el7.x86_64.img
 }
 ```
@@ -155,15 +155,16 @@ grub2是一个非常牛的Linux启动管理器，请你研究一下grub2的命�
   后果是多出来了 100000 ~ 10FFEF （访问这些地址时会回绕到 0 ~ FFEF）
 
 - 80286 开始地址线变多，寻址范围大大增大，但是又必须兼容旧程序，8086在访问 100000 ~ 10FFEF时会回绕，但是 80286 不会 ，因为有第21根线的存在，会访问到实际的 100000 ~ 10FFEF 地址的内存。
-于是 Gate A20 开关就诞生了，它的作用是：
+  于是 Gate A20 开关就诞生了，它的作用是：
 
 - 实模式下 （存在的唯一理由是为了兼容8086）：
-  - 打开 -&gt;  寻址100000 ~ 10FFEF会真正访问
+  - 打开 -&gt; 寻址100000 ~ 10FFEF会真正访问
   - 关闭-&gt; 回绕到 0 ~ FFEF
 
 - 保护模式下：
   - 打开 -&gt; 可连续访问内存
-  - 关闭 -&gt; 只能访问到奇数的1M段，即 00000-FFFFF, 200000-2FFFFF,300000-3FFFFF…  
+  - 关闭 -&gt; 只能访问到奇数的1M段，即 00000-FFFFF, 200000-2FFFFF,300000-3FFFFF…
+
 </p>2019-04-16</li><br/><li><span>我爱北京天安门</span> 👍（55） 💬（5）<p>看来从这篇开始我要看三遍四遍五遍的节奏了</p>2019-04-10</li><br/><li><span>Memoria</span> 👍（33） 💬（2）<p>大家有兴趣实践的话可以参考清华大学的操作系统实验课，里面第一个实验讲的就是启动的过程，可以让人理解的更加透彻。https:&#47;&#47;github.com&#47;chyyuu&#47;ucore_os_lab</p>2019-05-20</li><br/><li><span>wahaha</span> 👍（18） 💬（2）<p>grub2 是一个非常牛的 Linux 启动管理器
 这句应该去掉Linux，因为GRUB2也能启动其它操作系统</p>2019-04-12</li><br/><li><span>赵又新</span> 👍（17） 💬（1）<p>之前课上说的，如果没有理解错的话：
 32位，分为16位寻址空间和16位偏移量。但通过左移4位的方式，将寻址空间扩充为20位。所以，0xFFFF的位置实际指的是0xFFFF0。</p>2019-04-11</li><br/><li><span>随风</span> 👍（10） 💬（5）<p>当电脑刚加电的时候，会做一些重置的工作，将 CS 设置为 0xFFFF,将 IP 设置为 0x0000,所以第一条指令就会指向 0xFFFF0。这个所以怎么得到的结果？为什么上面都是五位0xFFFFF, cs&#47;ip都是四位0xFFFF? 小白越看越不明白了。

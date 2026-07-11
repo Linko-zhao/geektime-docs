@@ -64,12 +64,12 @@ class OptSqlite(object):
 if __name__ == "__main__":
 
     my_query = OptSqlite("contents.db")
-    
+
     my_query.set_one_phone("Jerry","12344445555")
-    
+
     phone = my_query.get_one_phone("Tom")
-    phone2 = my_query.get_one_phone("Jerry")    
-    
+    phone2 = my_query.get_one_phone("Jerry")
+
     my_query.close()
 
     print(phone)
@@ -289,7 +289,7 @@ class OptSqlite(object):
         增加或修改一个联系人的电话
         """
         if self.get_one_phone(name):
-            self.set_user_phone_sql = '''UPDATE address_book 
+            self.set_user_phone_sql = '''UPDATE address_book
             SET phone= ? WHERE name=?'''
             self.v =  (int(phone), str(name))
         else:
@@ -306,7 +306,7 @@ class OptSqlite(object):
         """
         删除一个联系人的电话
         """
-        self.delete_user_sql = f'''DELETE FROM address_book 
+        self.delete_user_sql = f'''DELETE FROM address_book
                 WHERE name="{name}"'''
 
         try:
@@ -322,14 +322,14 @@ if __name__ == "__main__":
 
     # 创建一张表
     # my_query.new_table("address_book")
-    
+
     # 增加或修改一个联系人的电话
     my_query.set_one_phone("Jerry","12344445556")
-    
+
     # 查询一个联系人的电话
-    phone = my_query.get_one_phone("Jerry")    
+    phone = my_query.get_one_phone("Jerry")
     print(phone)
-    
+
     # 查询所有人的电话
     contents = my_query.get_all_contents()
     print(contents)
@@ -338,7 +338,7 @@ if __name__ == "__main__":
     my_query.delete_one_content("Jerry")
 
     contents = my_query.get_all_contents()
-    print(contents)   
+    print(contents)
 
     # 关闭连接
     my_query.close()

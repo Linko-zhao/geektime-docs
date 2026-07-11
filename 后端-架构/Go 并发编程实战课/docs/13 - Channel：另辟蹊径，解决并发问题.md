@@ -65,8 +65,8 @@ chan<- struct{}      // 只能发送struct{}
 chan中的元素是任意的类型，所以也可能是chan类型，我来举个例子，比如下面的chan类型也是合法的：
 
 ```
-chan<- chan int   
-chan<- <-chan int  
+chan<- chan int
+chan<- <-chan int
 <-chan <-chan int
 chan (<-chan int)
 ```
@@ -76,7 +76,7 @@ chan (<-chan int)
 ```
 chan<- （chan int） // <- 和第一个chan结合
 chan<- （<-chan int） // 第一个<-和最左边的chan结合，第二个<-和左边第二个chan结合
-<-chan （<-chan int） // 第一个<-和最左边的chan结合，第二个<-和左边第二个chan结合 
+<-chan （<-chan int） // 第一个<-和最左边的chan结合，第二个<-和左边第二个chan结合
 chan (<-chan int) // 因为括号的原因，<-和括号内第一个chan结合
 ```
 
@@ -188,10 +188,10 @@ Go在编译的时候，会根据容量的大小选择调用makechan64，还是ma
 ```
 func makechan(t *chantype, size int) *hchan {
 		elem := t.elem
-	
+
         // 略去检查代码
         mem, overflow := math.MulUintptr(elem.size, uintptr(size))
-        
+
 		//
 		var c *hchan
 		switch {
@@ -209,7 +209,7 @@ func makechan(t *chantype, size int) *hchan {
 			c = new(hchan)
 			c.buf = mallocgc(mem, elem, true)
 		}
-	
+
         // 元素大小、类型、容量都记录下来
 		c.elemsize = uint16(elem.size)
 		c.elemtype = elem
@@ -268,7 +268,7 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
 ```
 	    // 第四部分，从接收队列中出队一个等待的receiver
         if sg := c.recvq.dequeue(); sg != nil {
-			// 
+			//
 			send(c, sg, ep, func() { unlock(&c.lock) }, 3)
 			return true
 		}
@@ -414,14 +414,14 @@ chanrecv1和chanrecv2传入的block参数的值是true，都是阻塞方式，�
 		if c == nil { // chan为nil, panic
 			panic(plainError("close of nil channel"))
 		}
-	
+
 		lock(&c.lock)
 		if c.closed != 0 {// chan已经closed, panic
 			unlock(&c.lock)
 			panic(plainError("close of closed channel"))
 		}
 
-		c.closed = 1	
+		c.closed = 1
 
 		var glist gList
 
@@ -433,7 +433,7 @@ chanrecv1和chanrecv2传入的block参数的值是true，都是阻塞方式，�
 			......
 			glist.push(gp)
 		}
-	
+
 		// 释放所有的writer (它们会panic)
 		for {
 			sg := c.sendq.dequeue()
@@ -443,7 +443,7 @@ chanrecv1和chanrecv2传入的block参数的值是true，都是阻塞方式，�
 			glist.push(gp)
 		}
 		unlock(&c.lock)
-	
+
 		for !glist.empty() {
 			gp := glist.pop()
 			gp.schedlink = 0
@@ -555,27 +555,28 @@ import &quot;fmt&quot;
 import &quot;time&quot;
 
 func main() {
-	chArr := [4]chan struct{} {
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-	}
+chArr := [4]chan struct{} {
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+}
 
-	for i := 0; i &lt; 4; i++ {
-		go func(i int) {
-			for {
-				&lt;- chArr[i % 4]
-				fmt.Printf(&quot;i am %d\n&quot;, i)
-	
-				time.Sleep(1 * time.Second)
-				chArr[(i + 1) % 4] &lt;- struct{}{}
-			}
-		}(i)
-	}
+    for i := 0; i &lt; 4; i++ {
+    	go func(i int) {
+    		for {
+    			&lt;- chArr[i % 4]
+    			fmt.Printf(&quot;i am %d\n&quot;, i)
 
-	chArr[0] &lt;- struct{}{}
-	select{}
+    			time.Sleep(1 * time.Second)
+    			chArr[(i + 1) % 4] &lt;- struct{}{}
+    		}
+    	}(i)
+    }
+
+    chArr[0] &lt;- struct{}{}
+    select{}
+
 }</p>2021-12-19</li><br/><li><span>星星之火</span> 👍（4） 💬（3）<p>channel 中包含的 mutex 是什么呢，和课程最开始的 sync.mutex 是同一个东西吗？
 因为 sync.mutex 是依赖 channel 实现的，感觉应该不是同一个 mutex？</p>2020-12-05</li><br/><li><span>Geek_43dc82</span> 👍（2） 💬（3）<p>我实在是太蠢了，只能写出这样的代码了
 package main
@@ -583,34 +584,35 @@ package main
 import &quot;fmt&quot;
 
 func main() {
-	signChan1 := make(chan struct{})
-	signChan2 := make(chan struct{})
-	signChan3 := make(chan struct{})
-	signChan4 := make(chan struct{})
-	mainSignChan := make(chan struct{})
+signChan1 := make(chan struct{})
+signChan2 := make(chan struct{})
+signChan3 := make(chan struct{})
+signChan4 := make(chan struct{})
+mainSignChan := make(chan struct{})
 
-	for i := 1; i &lt;= 4; i++ {
-		go func(i int) {
-			for {
-				select {
-				case &lt;-signChan1:
-					fmt.Println(1)
-					signChan2 &lt;- struct{}{}
-				case &lt;-signChan2:
-					fmt.Println(2)
-					signChan3 &lt;- struct{}{}
-				case &lt;-signChan3:
-					fmt.Println(3)
-					signChan4 &lt;- struct{}{}
-				case &lt;-signChan4:
-					fmt.Println(4)
-					signChan1 &lt;- struct{}{}
-				}
-			}
-		}(i)
-	}
-	signChan1 &lt;- struct{}{}
-	&lt;-mainSignChan
+    for i := 1; i &lt;= 4; i++ {
+    	go func(i int) {
+    		for {
+    			select {
+    			case &lt;-signChan1:
+    				fmt.Println(1)
+    				signChan2 &lt;- struct{}{}
+    			case &lt;-signChan2:
+    				fmt.Println(2)
+    				signChan3 &lt;- struct{}{}
+    			case &lt;-signChan3:
+    				fmt.Println(3)
+    				signChan4 &lt;- struct{}{}
+    			case &lt;-signChan4:
+    				fmt.Println(4)
+    				signChan1 &lt;- struct{}{}
+    			}
+    		}
+    	}(i)
+    }
+    signChan1 &lt;- struct{}{}
+    &lt;-mainSignChan
+
 }
 </p>2022-04-19</li><br/><li><span>陌</span> 👍（2） 💬（1）<p>Goroutine 泄漏的那个例子，如果把 unbuffered chan 改成容量为 1 的 buffered chan，那么假如函数超时了，子 goroutine 也能够往 channel 中发送数据。那么 GC 会把这个 channel 回收吗?</p>2021-04-27</li><br/><li><span>老猫</span> 👍（1） 💬（1）<p>func chgoroutine(in,out,stop chan struct{},n int) {
 	for{
@@ -626,59 +628,60 @@ func main() {
 }
 
 func main() {
-	ch1 := make(chan struct{}, 0)
-	ch2 := make(chan struct{},0)
-	ch3 := make(chan struct{},0)
-	ch4 := make(chan struct{},0)
-	stop := make(chan struct{},0)
+ch1 := make(chan struct{}, 0)
+ch2 := make(chan struct{},0)
+ch3 := make(chan struct{},0)
+ch4 := make(chan struct{},0)
+stop := make(chan struct{},0)
 
-	go chgoroutine(ch1,ch2,stop,1)
-	go chgoroutine(ch2,ch3,stop,2)
-	go chgoroutine(ch3,ch4,stop,3)
-	go chgoroutine(ch4,ch1,stop,4) 
+    go chgoroutine(ch1,ch2,stop,1)
+    go chgoroutine(ch2,ch3,stop,2)
+    go chgoroutine(ch3,ch4,stop,3)
+    go chgoroutine(ch4,ch1,stop,4)
 
-	ch1 &lt;-struct{}{}
+    ch1 &lt;-struct{}{}
 
-	time.Sleep(time.Second * 20)
+    time.Sleep(time.Second * 20)
 
-	stop &lt;-struct{}{}
+    stop &lt;-struct{}{}
+
 }</p>2022-01-23</li><br/><li><span>滴水穿石</span> 👍（0） 💬（1）<p>package main
 
 import (
-	&quot;fmt&quot;
-	&quot;strconv&quot;
-	&quot;time&quot;
+&quot;fmt&quot;
+&quot;strconv&quot;
+&quot;time&quot;
 )
 
 func main() {
-	var ch = []chan struct{}{
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-	}
+var ch = []chan struct{}{
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+}
 
-	for i := 0; i &lt; 4; i++ {
-		go func(i int) {
-			for {
-				select {
-				case &lt;-ch[i]:
-					fmt.Println(&quot;Hello world &quot; + strconv.Itoa(i))
-				}
-			}
-		}(i)
-	}
+    for i := 0; i &lt; 4; i++ {
+    	go func(i int) {
+    		for {
+    			select {
+    			case &lt;-ch[i]:
+    				fmt.Println(&quot;Hello world &quot; + strconv.Itoa(i))
+    			}
+    		}
+    	}(i)
+    }
 
-	for i := 0; i &lt; 1000; i++ {
-		time.Sleep(time.Second)
-		chIndex := i % 4
-		ch[chIndex] &lt;- struct{}{}
-	}
+    for i := 0; i &lt; 1000; i++ {
+    	time.Sleep(time.Second)
+    	chIndex := i % 4
+    	ch[chIndex] &lt;- struct{}{}
+    }
 
 }</p>2024-10-24</li><br/><li><span>呦呦鹿鸣</span> 👍（0） 💬（1）<p>老师，向一个nil的chan中send数据，我这边测试的结果是死锁，我看文章后面的表格里写的是block：
 func main() {
-	var c chan int
-	c &lt;- 1
+var c chan int
+c &lt;- 1
 }
 
 fatal error: all goroutines are asleep - deadlock!
@@ -689,242 +692,246 @@ main.main()
 	n := 4
 	cs := make([]chan struct{}, n)
 
-	for i := 0; i &lt; n; i++ {
-		c := make(chan struct{})
-		cs[i] = c
-		go func(i int) {
-			for {
-				select {
-				case &lt;-c:
-					fmt.Println(i + 1)
-					time.Sleep(time.Second)
-					cs[(i+1)%n] &lt;- struct{}{}
-				}
-			}
-		}(i)
-	}
-	cs[0] &lt;- struct{}{}
-	select {}
+    for i := 0; i &lt; n; i++ {
+    	c := make(chan struct{})
+    	cs[i] = c
+    	go func(i int) {
+    		for {
+    			select {
+    			case &lt;-c:
+    				fmt.Println(i + 1)
+    				time.Sleep(time.Second)
+    				cs[(i+1)%n] &lt;- struct{}{}
+    			}
+    		}
+    	}(i)
+    }
+    cs[0] &lt;- struct{}{}
+    select {}
+
 }</p>2024-07-26</li><br/><li><span>huizhou92</span> 👍（0） 💬（1）<p>func main() {
-	wg := sync.WaitGroup{}
-	ctx, cancelFunc := context.WithCancel(context.Background())
-	f := func(wg *sync.WaitGroup, index int, req, resp chan struct{}) {
-		defer wg.Done()
-		for {
-			select {
-			case _ = &lt;-req:
-				fmt.Println(fmt.Sprintf(&quot;Hello, World!%d&quot;, index))
-				time.Sleep(time.Second * 1)
-				resp &lt;- struct{}{}
-			case &lt;-ctx.Done():
-				return
-			}
-		}
-	}
-	chain := make([]chan struct{}, 4)
-	for i := 0; i &lt; 4; i++ {
-		chain[i] = make(chan struct{}, 1)
-	}
-	wg.Add(4)
-	for i := 0; i &lt; 4; i++ {
-		go f(&amp;wg, i+1, chain[i], chain[(i+1)%4])
-	}
-	chain[0] &lt;- struct{}{}
-	&lt;-time.After(time.Second * 20)
-	cancelFunc()
-	wg.Wait()
+wg := sync.WaitGroup{}
+ctx, cancelFunc := context.WithCancel(context.Background())
+f := func(wg *sync.WaitGroup, index int, req, resp chan struct{}) {
+defer wg.Done()
+for {
+select {
+case _ = &lt;-req:
+fmt.Println(fmt.Sprintf(&quot;Hello, World!%d&quot;, index))
+time.Sleep(time.Second * 1)
+resp &lt;- struct{}{}
+case &lt;-ctx.Done():
+return
+}
+}
+}
+chain := make([]chan struct{}, 4)
+for i := 0; i &lt; 4; i++ {
+chain[i] = make(chan struct{}, 1)
+}
+wg.Add(4)
+for i := 0; i &lt; 4; i++ {
+go f(&amp;wg, i+1, chain[i], chain[(i+1)%4])
+}
+chain[0] &lt;- struct{}{}
+&lt;-time.After(time.Second * 20)
+cancelFunc()
+wg.Wait()
 }</p>2024-03-01</li><br/><li><span>chimission</span> 👍（0） 💬（1）<p>package main
 
 import (
-	&quot;fmt&quot;
-	&quot;time&quot;
+&quot;fmt&quot;
+&quot;time&quot;
 )
 
 func printChan(c chan int) {
-	st := &lt;-c
-	fmt.Println(st%4 + 1)
-	time.Sleep(1 * time.Second)
-	c &lt;- st + 1
-	go printChan(c)
+st := &lt;-c
+fmt.Println(st%4 + 1)
+time.Sleep(1 * time.Second)
+c &lt;- st + 1
+go printChan(c)
 }
 
 func main() {
-	ch := make(chan int, 4)
-	ch &lt;- 0
-	printChan(ch)
+ch := make(chan int, 4)
+ch &lt;- 0
+printChan(ch)
 
-	select {}
+    select {}
 
 }</p>2023-01-07</li><br/><li><span>清风</span> 👍（0） 💬（1）<p>func main() {
-	chArr := []chan struct{}{
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-		make(chan struct{}),
-	}
-	for k, _ := range chArr {
-		if k == len(chArr)-1 {
-			go goon(chArr[k], chArr[0], k+1)
-		} else {
-			go goon(chArr[k], chArr[k+1], k+1)
-		}
-	}
+chArr := []chan struct{}{
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+make(chan struct{}),
+}
+for k, _ := range chArr {
+if k == len(chArr)-1 {
+go goon(chArr[k], chArr[0], k+1)
+} else {
+go goon(chArr[k], chArr[k+1], k+1)
+}
+}
 
-	chArr[0] &lt;- struct{}{}
-	select {}
+    chArr[0] &lt;- struct{}{}
+    select {}
 
 }
 
 func goon(ch chan struct{}, ch2 chan struct{}, index int) {
-	time.Sleep(time.Duration(index*10) * time.Millisecond)
-	for {
-		&lt;-ch
-		fmt.Printf(&quot;I am No %d Goroutine\n&quot;, index)
-		time.Sleep(time.Second)
-		ch2 &lt;- struct{}{}
-	}
+time.Sleep(time.Duration(index*10) * time.Millisecond)
+for {
+&lt;-ch
+fmt.Printf(&quot;I am No %d Goroutine\n&quot;, index)
+time.Sleep(time.Second)
+ch2 &lt;- struct{}{}
+}
 }
 </p>2022-10-19</li><br/><li><span>张觥</span> 👍（0） 💬（1）<p>func TestChannel1Practice(t *testing.T) {
 	var ch = make(chan struct{})
 	wg := sync.WaitGroup{}
 	wg.Add(4)
 
-	go func() {
-		ch &lt;- struct{}{}
-	}()
+    go func() {
+    	ch &lt;- struct{}{}
+    }()
 
-	for thread := 1; thread &lt;= 4; thread++ {
-		go func(thead int) {
-			_, ok := &lt;-ch
-			if ok {
-				for i := 1; i &lt;= 4; i++ {
-					t.Logf(&quot;%d: %d&quot;, thead, i)
-					time.Sleep(1 * time.Second)
-				}
-				wg.Done()
-				ch &lt;- struct{}{}
-			}
-		}(thread)
-	}
+    for thread := 1; thread &lt;= 4; thread++ {
+    	go func(thead int) {
+    		_, ok := &lt;-ch
+    		if ok {
+    			for i := 1; i &lt;= 4; i++ {
+    				t.Logf(&quot;%d: %d&quot;, thead, i)
+    				time.Sleep(1 * time.Second)
+    			}
+    			wg.Done()
+    			ch &lt;- struct{}{}
+    		}
+    	}(thread)
+    }
 
-	wg.Wait()
-	t.Log(&quot;finished&quot;)
+    wg.Wait()
+    t.Log(&quot;finished&quot;)
+
 }</p>2022-10-18</li><br/><li><span>草色青青</span> 👍（0） 💬（1）<p>func tt(ctx context.Context, c1, c2 *chan int) {
-	for {
-		select {
-		case n := &lt;-*c1:
-			fmt.Println(n)
-			nn := n + 1
-			if n == 4 {
-				nn = 1
-			}
-			*c2 &lt;- nn
-			&#47;&#47;fmt.Printf(&quot;c1:%p,c2:%p\n&quot;, c1, c2)
-		case &lt;-ctx.Done():
-			return
+for {
+select {
+case n := &lt;-*c1:
+fmt.Println(n)
+nn := n + 1
+if n == 4 {
+nn = 1
+}
+*c2 &lt;- nn
+&#47;&#47;fmt.Printf(&quot;c1:%p,c2:%p\n&quot;, c1, c2)
+case &lt;-ctx.Done():
+return
 
-		}
-	}
+    	}
+    }
+
 }
 func PrintInfo() {
-	ctx, cancel := context.WithCancel(context.Background())
-	c1, c2, c3, c4 := make(chan int, 2), make(chan int, 2), make(chan int, 2), make(chan int, 2)
-	fmt.Printf(&quot;c1:%p,c2:%p,c3:%p,c4:%p\n&quot;, &amp;c1, &amp;c2, &amp;c3, &amp;c4)
-	go tt(ctx, &amp;c1, &amp;c2)
-	go tt(ctx, &amp;c2, &amp;c3)
-	go tt(ctx, &amp;c3, &amp;c4)
-	go tt(ctx, &amp;c4, &amp;c1)
-	c1 &lt;- 1
+ctx, cancel := context.WithCancel(context.Background())
+c1, c2, c3, c4 := make(chan int, 2), make(chan int, 2), make(chan int, 2), make(chan int, 2)
+fmt.Printf(&quot;c1:%p,c2:%p,c3:%p,c4:%p\n&quot;, &amp;c1, &amp;c2, &amp;c3, &amp;c4)
+go tt(ctx, &amp;c1, &amp;c2)
+go tt(ctx, &amp;c2, &amp;c3)
+go tt(ctx, &amp;c3, &amp;c4)
+go tt(ctx, &amp;c4, &amp;c1)
+c1 &lt;- 1
 
-	fmt.Println(&quot;Hello, 世界&quot;)
-	time.Sleep(time.Millisecond * 70)
-	cancel()
+    fmt.Println(&quot;Hello, 世界&quot;)
+    time.Sleep(time.Millisecond * 70)
+    cancel()
 
-	fmt.Println(&quot;Hello, 世界&quot;)
+    fmt.Println(&quot;Hello, 世界&quot;)
+
 }</p>2022-09-18</li><br/><li><span>Penn</span> 👍（0） 💬（1）<p>&#47;&#47; 4个goroutine
-	ch1 := make(chan struct{})
-	ch2 := make(chan struct{})
-	ch3 := make(chan struct{})
-	ch4 := make(chan struct{})
+ch1 := make(chan struct{})
+ch2 := make(chan struct{})
+ch3 := make(chan struct{})
+ch4 := make(chan struct{})
 
-	go func() {
-		for {
-			&lt;-ch1
-			fmt.Println(&quot;1&quot;)
-			time.Sleep(time.Second)
-			ch2 &lt;- struct{}{}
-			&#47;&#47; &lt;-ch1
-		}
-	}()
+    go func() {
+    	for {
+    		&lt;-ch1
+    		fmt.Println(&quot;1&quot;)
+    		time.Sleep(time.Second)
+    		ch2 &lt;- struct{}{}
+    		&#47;&#47; &lt;-ch1
+    	}
+    }()
 
-	go func() {
-		for {
-			&lt;-ch2
-			fmt.Println(&quot;2&quot;)
-			time.Sleep(time.Second)
-			ch3 &lt;- struct{}{}
-		}
-	}()
+    go func() {
+    	for {
+    		&lt;-ch2
+    		fmt.Println(&quot;2&quot;)
+    		time.Sleep(time.Second)
+    		ch3 &lt;- struct{}{}
+    	}
+    }()
 
-	go func() {
-		for {
-			&lt;-ch3
-			fmt.Println(&quot;3&quot;)
-			time.Sleep(time.Second)
-			ch4 &lt;- struct{}{}
-		}
-	}()
+    go func() {
+    	for {
+    		&lt;-ch3
+    		fmt.Println(&quot;3&quot;)
+    		time.Sleep(time.Second)
+    		ch4 &lt;- struct{}{}
+    	}
+    }()
 
-	go func() {
-		for {
-			&lt;-ch4
-			fmt.Println(&quot;4&quot;)
-			time.Sleep(time.Second)
-			ch1 &lt;- struct{}{}
-		}
-	}()
+    go func() {
+    	for {
+    		&lt;-ch4
+    		fmt.Println(&quot;4&quot;)
+    		time.Sleep(time.Second)
+    		ch1 &lt;- struct{}{}
+    	}
+    }()
 
-	ch1 &lt;- struct{}{}
-	select {}</p>2021-12-22</li><br/><li><span>石头娃</span> 👍（0） 💬（2）<p>思考题：
+    ch1 &lt;- struct{}{}
+    select {}</p>2021-12-22</li><br/><li><span>石头娃</span> 👍（0） 💬（2）<p>思考题：
 
 func main() {
-	var a = make(chan int, 1)
-	var b = make(chan int, 1)
-	var c = make(chan int, 1)
-	var d = make(chan int, 1)
-	var e = make(chan string)
-	go func() {
-		for {
-			flag := &lt;-d
-			log.Println(1)
-			a &lt;- flag
-		}
-	}()
-	go func() {
-		for {
-			flag := &lt;-a
-			log.Println(2)
-			b &lt;- flag
-		}
-	}()
-	go func() {
-		for {
-			flag := &lt;-b
-			log.Println(3)
-			c &lt;- flag
-		}
-	}()
-	go func() {
-		for {
-			flag := &lt;-c
-			log.Println(4)
-			time.Sleep(time.Second)
-			d &lt;- flag
-		}
-	}()
-	d &lt;- 1
-	&lt;-e
+var a = make(chan int, 1)
+var b = make(chan int, 1)
+var c = make(chan int, 1)
+var d = make(chan int, 1)
+var e = make(chan string)
+go func() {
+for {
+flag := &lt;-d
+log.Println(1)
+a &lt;- flag
+}
+}()
+go func() {
+for {
+flag := &lt;-a
+log.Println(2)
+b &lt;- flag
+}
+}()
+go func() {
+for {
+flag := &lt;-b
+log.Println(3)
+c &lt;- flag
+}
+}()
+go func() {
+for {
+flag := &lt;-c
+log.Println(4)
+time.Sleep(time.Second)
+d &lt;- flag
+}
+}()
+d &lt;- 1
+&lt;-e
 }</p>2020-11-19</li><br/>
 </ul>

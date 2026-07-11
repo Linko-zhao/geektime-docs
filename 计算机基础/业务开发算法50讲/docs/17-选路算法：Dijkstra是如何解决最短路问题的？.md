@@ -171,7 +171,7 @@ public:
         vector<int> dist(n, inf); // 所有节点未被探索时距离都初始化为无穷
         vector<bool> used(n, false); // 标记是否已经被加入树中
         dist[k - 1] = 0; // 记录原点距离为0
-        
+
         for (int i = 0; i < n; ++i) {
             int x = -1;
             // 找出候选集中到S距离最短的节点
@@ -187,7 +187,7 @@ public:
                 dist[y] = min(dist[y], dist[x] + g[x][y]);
             }
         }
-        
+
         // 取出最短路中的最大值
         int ans = *max_element(dist.begin(), dist.end());
         return ans == inf ? -1 : ans;
@@ -272,5 +272,6 @@ private int dijkstra(List&lt;int[]&gt;[] graph, int src, int k, int dst) {
 
         return -1;
     }
+
 </p>2022-03-06</li><br/>
 </ul>

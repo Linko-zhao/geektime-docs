@@ -18,7 +18,7 @@ Linux 中的NAT ，基于内核的连接跟踪模块实现。所以，它维护�
 ```
   # Ubuntu
   $ apt-get install -y docker.io tcpdump curl apache2-utils
-  
+
   # CentOS
   $ curl -fsSL https://get.docker.com | sh
   $ yum install -y tcpdump curl httpd-tools
@@ -355,7 +355,7 @@ $ dmesg | tail
 
 ```
 # 连接跟踪对象大小为376，链表项大小为16
-nf_conntrack_max*连接跟踪对象大小+nf_conntrack_buckets*链表项大小 
+nf_conntrack_max*连接跟踪对象大小+nf_conntrack_buckets*链表项大小
 = 1000*376+65536*16 B
 = 1.4 MB
 ```
@@ -460,9 +460,9 @@ net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120
 <li><span>分清云淡</span> 👍（48） 💬（1）<p>https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;VYBs8iqf0HsNg9WAxktzYQ：（多个容器snat时因为搜索本地可用端口（都从1025开始，到找到可用端口并插入到conntrack表是一个非事务并且有时延--第二个插入会失败，进而导致第一个syn包被扔掉的错误，扔掉后重传找到新的可用端口，表现就是时延偶尔为1秒或者3秒）
 
 这篇文章是我见过诊断NAT问题最专业的，大家要多学习一下里面的思路和手段</p>2019-03-01</li><br/><li><span>腾达</span> 👍（11） 💬（1）<p>这个案例，能不能讲讲怎么找到是NAT问题？这个很关键，但文章里直接点明说是NAT问题，这个就不好了，一般看cpu,看其他指标很难想到是nat问题，真实场景里，怎么会想到是nat问题呢？</p>2019-03-01</li><br/><li><span>vvccoe</span> 👍（10） 💬（3）<p>‘# 连接跟踪对象大小为 376，链表项大小为 16
-nf_conntrack_max* 连接跟踪对象大小 +nf_conntrack_buckets* 链表项大小 
+nf_conntrack_max* 连接跟踪对象大小 +nf_conntrack_buckets* 链表项大小
 = 1000*376+65536*16 B
-= 1.4 MB’   
+= 1.4 MB’  
 老师 上面的376和16 是固定值吗？
 </p>2019-02-27</li><br/><li><span>Geek_007</span> 👍（7） 💬（2）<p>老师你好，有两个问题想请教一下。
 第一点，了解到ip_conntrack模块既然会限制链接，且调大会导致占用内存，而且调大了也不一定能解决大流量服务器的网络性能问题，我理解是不是应该关掉ip_conntrack模块，因为业务服务器按理说是不需要状态追踪的。
@@ -487,7 +487,7 @@ semantic error: while resolving probe point: identifier &#39;kernel&#39; at drop
 
 semantic error: no match
 
-Pass 2: analysis failed.  [man error::pass2]
+Pass 2: analysis failed. [man error::pass2]
 Tip: &#47;usr&#47;share&#47;doc&#47;systemtap&#47;README.Debian should help you get started.
 </p>2019-03-24</li><br/><li><span>夜空中最亮的星</span> 👍（1） 💬（1）<p>以前只是知道net性能不好，今天通过老师的讲解彻底明白了来龙去脉。
 公司内部上网用的就是net 人一多就特别慢。

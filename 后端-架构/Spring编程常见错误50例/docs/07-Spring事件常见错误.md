@@ -63,7 +63,7 @@ public ConfigurableApplicationContext run(String... args) {
       //省略非关键代码
       prepareContext(context, environment, listeners, applicationArguments, printedBanner);
       refreshContext(context);
-      //省略非关键代码 
+      //省略非关键代码
       return context;
 }
 ```
@@ -125,7 +125,7 @@ public class HelloWorldController {
 
     @RequestMapping(path = "publishEvent", method = RequestMethod.GET)
     public String notifyEvent(){
-        applicationContext.start();       
+        applicationContext.start();
         return "ok";
     };
 }
@@ -280,7 +280,7 @@ org.springframework.context.ApplicationListener=\
 org.springframework.boot.ClearCachesApplicationListener,\
 org.springframework.boot.builder.ParentContextCloserApplicationListener,\
 org.springframework.boot.cloud.CloudFoundryVcapEnvironmentPostProcessor,\
-//省略其他监听器 
+//省略其他监听器
 ```
 
 说到这里，相信你已经意识到本案例的问题所在。我们定义的监听器并没有被放置在META-INF/spring.factories中，实际上，我们的监听器监听的体系是另外一套，其关键组件如下：
@@ -524,12 +524,12 @@ try {
         return caster;
     }</p>2021-05-06</li><br/><li><span>繁空</span> 👍（0） 💬（0）<p>MyContextRefreshedEventListener这个类里面少了日志的注解</p>2023-10-28</li><br/><li><span>棒棒糖</span> 👍（0） 💬（0）<p>Spring 事件，往往完成的都是一些有趣的、强大的功能，例如动态配置。</p>2023-03-10</li><br/><li><span>Bo</span> 👍（0） 💬（0）<p>为什么案例一的listener不需要像案例二的listener一样，写到spring.factories文件里面？
 
-“applicationEventMulticaster广播器生效的监..器：由上述提及的 ...&#47;spring.factories 中加载的监..器以及扫描到的 Appli...Listener 类型的 Bean 共同组成”，说明还会包括 ApplicationListener 类型的 Bean。</p>2023-03-03</li><br/><li><span>Bo</span> 👍（0） 💬（0）<p>为什么案例一的listener不需要像案例二的listener一样，写到spring_factories文件里面？</p>2023-03-03</li><br/><li><span>粽</span> 👍（0） 💬（0）<p>老师有几个地方讲的其实是有点混乱的，我自己整理了一下，大家可以参考下https:&#47;&#47;blog.csdn.net&#47;Zong_0915&#47;article&#47;details&#47;126525246。</p>2022-08-25</li><br/><li><span>路在哪</span> 👍（0） 💬（0）<p>为什么案例一的listener不需要像案例二的listener一样，写到spring。factories文件里面</p>2022-07-05</li><br/><li><span>路在哪</span> 👍（0） 💬（0）<p>感觉脑子不够用</p>2022-07-05</li><br/><li><span>| ~浑蛋~</span> 👍（0） 💬（0）<p>从代码得知，有线程池的话就会把listener提交到线程池执行，所以设置multicaster的线程池就能异步执行事件监听逻辑了</p>2022-06-28</li><br/><li><span>雨落～紫竹</span> 👍（0） 💬（1）<p>为什么我很少在现在的java应用看到EventListener 这种我只在mq和 桌面级开发上看到过</p>2022-06-20</li><br/><li><span>梁亚利</span> 👍（0） 💬（0）<p>使用SimpleAsyncTaskExecutor
+“applicationEventMulticaster广播器生效的监..器：由上述提及的 ...&#47;spring.factories 中加载的监..器以及扫描到的 Appli...Listener 类型的 Bean 共同组成”，说明还会包括 ApplicationListener 类型的 Bean。</p>2023-03-03</li><br/><li><span>Bo</span> 👍（0） 💬（0）<p>为什么案例一的listener不需要像案例二的listener一样，写到spring_factories文件里面？</p>2023-03-03</li><br/><li><span>粽</span> 👍（0） 💬（0）<p>老师有几个地方讲的其实是有点混乱的，我自己整理了一下，大家可以参考下https:&#47;&#47;blog.csdn.net&#47;Zong_0915&#47;article&#47;details&#47;126525246。</p>2022-08-25</li><br/><li><span>路在哪</span> 👍（0） 💬（0）<p>为什么案例一的listener不需要像案例二的listener一样，写到spring。factories文件里面</p>2022-07-05</li><br/><li><span>路在哪</span> 👍（0） 💬（0）<p>感觉脑子不够用</p>2022-07-05</li><br/><li><span>| ~~浑蛋~~</span> 👍（0） 💬（0）<p>从代码得知，有线程池的话就会把listener提交到线程池执行，所以设置multicaster的线程池就能异步执行事件监听逻辑了</p>2022-06-28</li><br/><li><span>雨落～紫竹</span> 👍（0） 💬（1）<p>为什么我很少在现在的java应用看到EventListener 这种我只在mq和 桌面级开发上看到过</p>2022-06-20</li><br/><li><span>梁亚利</span> 👍（0） 💬（0）<p>使用SimpleAsyncTaskExecutor
 
- @Bean
-    public ApplicationEventMulticaster applicationEventMulticaster(){
-        SimpleApplicationEventMulticaster simpleApplicationEventMulticaster=new SimpleApplicationEventMulticaster();
-        simpleApplicationEventMulticaster.setTaskExecutor(new SimpleAsyncTaskExecutor(&quot;event-task&quot;));
-        return  simpleApplicationEventMulticaster;
-    }</p>2022-03-23</li><br/><li><span>黑白颠倒</span> 👍（0） 💬（1）<p>第二个不是很懂啊</p>2021-08-02</li><br/>
+@Bean
+public ApplicationEventMulticaster applicationEventMulticaster(){
+SimpleApplicationEventMulticaster simpleApplicationEventMulticaster=new SimpleApplicationEventMulticaster();
+simpleApplicationEventMulticaster.setTaskExecutor(new SimpleAsyncTaskExecutor(&quot;event-task&quot;));
+return simpleApplicationEventMulticaster;
+}</p>2022-03-23</li><br/><li><span>黑白颠倒</span> 👍（0） 💬（1）<p>第二个不是很懂啊</p>2021-08-02</li><br/>
 </ul>

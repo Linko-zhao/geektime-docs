@@ -137,16 +137,16 @@ MapReduce可以说是一种批量计算，与我们今天介绍的用于实时�
 离线计算、批量计算、实时计算、流式计算都是要计算的，这是它们的共同特点；
 
 批量和流式是描述计算的时候计算资源的特点的，是描述计算数据的维度。
-    批量计算
-    	是等到计算数据积累到一定数量才开始计算
-    流式计算
-    	是数据量很小时候就可以开始计算，有了资源就可以开始，源源不断
+批量计算
+是等到计算数据积累到一定数量才开始计算
+流式计算
+是数据量很小时候就可以开始计算，有了资源就可以开始，源源不断
 
 离线和实时是描述计算的时效性，是描述计算的维度。
-    离线计算
-    	因为计算数据不能来了就计算，需要累计到一定阈值，所以按照时效性来说，计算是离线的
-    实时计算
-    	因为计算数据来了就开始计算，计算没得延迟，，所以按照时效性来说，计算是实时的
+离线计算
+因为计算数据不能来了就计算，需要累计到一定阈值，所以按照时效性来说，计算是离线的
+实时计算
+因为计算数据来了就开始计算，计算没得延迟，，所以按照时效性来说，计算是实时的
 
 批量和流式是一个维度，离线和实时是另外一个维度，但是两个维度之间又有联系：
 因为目前现有的技术发展，不能大批量计算做到实时的效果，所以只能少量资源做到实时计算，且通过流式计算来达到实时的效果；
@@ -158,17 +158,15 @@ In contrast, an offline algorithm is given the whole problem data from the begin
 
 In computer science, streaming algorithms are algorithms for processing data streams in which the input is presented as a sequence of items and can be examined in only a few passes (typically just one). In most models, these algorithms have access to limited memory (generally logarithmic in the size of and&#47;or the maximum value in the stream). They may also have limited processing time per item.
 
-In computer science, real-time computing (RTC), or reactive computing describes hardware and software systems subject to a &quot;real-time constraint&quot;, for example from event to system response.[1] Real-time programs must guarantee response within specified time constraints, often referred to as &quot;deadlines&quot;. 
-
+In computer science, real-time computing (RTC), or reactive computing describes hardware and software systems subject to a &quot;real-time constraint&quot;, for example from event to system response.[1] Real-time programs must guarantee response within specified time constraints, often referred to as &quot;deadlines&quot;.
 
 从维基百科的定义可以，他们侧重的点不同，个人总结如下：
-1.online algorithm  只能看到数据的一部分，必须基于此做决定（可能不是最优的）
+1.online algorithm 只能看到数据的一部分，必须基于此做决定（可能不是最优的）
 2.offline algorithm 可以看到解决问题的所有数据
 3.streaming algorithms 处理序列流（内存有限，流大小有限，单个序列项处理时间有限）
-4.real-time computing 强调响应时间,有时间限制。 
+4.real-time computing 强调响应时间,有时间限制。
 
 参考自https:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Online_algorithm 及其See also:
-
 
 </p>2019-10-28</li><br/><li><span>Jackey</span> 👍（5） 💬（0）<p>不太好说是否等价，因为离线和实时是针对时延判断的，批量和流式是针对数据处理方式判断的。只能目前说离线和批量使用的框架、处理方法相同（实时和流式相同）。但如果以后发展出能批量进行实时数据计算的计算机就不能说批量=离线了吧</p>2019-10-28</li><br/><li><span>林通</span> 👍（2） 💬（0）<p>storm都快被淘汰了吧，为啥不讲讲最流行的框架呢</p>2020-11-12</li><br/><li><span>随心而至</span> 👍（2） 💬（0）<p>聂老师从一般到具体，讲的真好。
 我认为批量计算是离线计算的一种实现方式；流式计算是实习计算的一种实现方式。待会我查下他们的定义看看自己理解的对不对</p>2019-10-28</li><br/><li><span>旭东(Frank)</span> 👍（2） 💬（2）<p>如果历史数据回放进行就处理也算流量处理吧；个人认为注意区别点还是处理数据的时效性，如果对处理结果不要求那么及时，新鲜。

@@ -150,7 +150,7 @@ metadata:
   name: nginx-node
 spec:
   nodeSelector:
-    hardware: high    # 这里是你的节点标签
+    hardware: high  # 这里是你的节点标签
   containers:
   - name: nginx
     image: nginx

@@ -60,7 +60,7 @@ public class Request implements HttpServletRequest {}
 ```
 public class RequestFacade implements HttpServletRequest {
   protected Request request = null;
-  
+
   public HttpSession getSession(boolean create) {
      return request.getSession(create);
   }
@@ -77,7 +77,7 @@ if (context == null) {
 
 Manager manager = context.getManager();
 if (manager == null) {
-    return null;      
+    return null;
 }
 
 session = manager.createSession(sessionId);
@@ -118,7 +118,7 @@ public Session createSession(String sessionId) {
     }
     session.setId(id);// 这里会将Session添加到ConcurrentHashMap中
     sessionCounter++;
-    
+
     //将创建时间添加到LinkedList中，并且把最先添加的时间移除
     //主要还是方便清理过期Session
     SessionTiming timing = new SessionTiming(session.getCreationTime(), 0);
@@ -176,9 +176,9 @@ public void backgroundProcess() {
  * 单线程处理，不存在线程安全问题
  */
 public void processExpires() {
- 
+
     // 获取所有的 Session
-    Session sessions[] = findSessions();   
+    Session sessions[] = findSessions();
     int expireHere = 0 ;
     for (int i = 0; i < sessions.length; i++) {
         // Session 的过期是在isValid()方法里处理的
@@ -200,7 +200,7 @@ public interface HttpSessionListener extends EventListener {
     //Session创建时调用
     public default void sessionCreated(HttpSessionEvent se) {
     }
-    
+
     //Session销毁时调用
     public default void sessionDestroyed(HttpSessionEvent se) {
     }
@@ -243,23 +243,23 @@ public void tellNew() {
     Context context = manager.getContext();
     Object listeners[] = context.getApplicationLifecycleListeners();
     if (listeners != null && listeners.length > 0) {
-    
+
         //创建HttpSessionEvent
         HttpSessionEvent event = new HttpSessionEvent(getSession());
         for (int i = 0; i < listeners.length; i++) {
             //判断是否是HttpSessionListener
             if (!(listeners[i] instanceof HttpSessionListener))
                 continue;
-                
+
             HttpSessionListener listener = (HttpSessionListener) listeners[i];
             //注意这是容器内部事件
-            context.fireContainerEvent("beforeSessionCreated", listener);   
+            context.fireContainerEvent("beforeSessionCreated", listener);
             //触发Session Created 事件
             listener.sessionCreated(event);
-            
+
             //注意这也是容器内部事件
             context.fireContainerEvent("afterSessionCreated", listener);
-            
+
         }
     }
 }

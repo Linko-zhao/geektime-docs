@@ -88,9 +88,10 @@ InnoDB怎么判断要给某个叶子页面创建Hash索引呢？
 
 - 在索引中查找数据，访问叶子页面时，更新索引访问模式的相关信息，包括索引访问信息（search\_info.n\_hash\_potential，search\_info.prefix\_info）和索引页面的访问信息（block-&gt;n\_hash\_helps，block-&gt;ahi.recommended\_prefix\_info）。
 - 如果多次访问一个索引时，访问模式一致（prefix\_info一致)，并且对索引页的访问次数超过一定的阈值，就给当前的页面建立hash索引。这个阈值是由下面这几点决定。
-  
+
   - 访问次数超过block中的记录数/BTR\_SEARCH\_PAGE\_BUILD\_LIMIT
   - 访问索引的次数超过BTR\_SEARCH\_BUILD\_LIMIT
+
 - 如果检测到索引访问模式发生变化，则会重建block的hash索引。
 
 ## Change Buffer
@@ -158,7 +159,7 @@ MySQL 8.0将Double Buffer从系统表空间拆分到了单独的文件。
 
 ```plain
 # ls *.dblwr
-#ib_16384_0.dblwr	
+#ib_16384_0.dblwr
 #ib_16384_1.dblwr
 ```
 

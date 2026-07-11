@@ -38,7 +38,7 @@ def start():
         setupTargetEnv()
         action()
         return True
-    
+
     # 这个配置设定url和爬虫深度。
     if conf.url and not any((conf.forms, conf.crawlDepth)):
         kb.targets.add((conf.url, conf.method, conf.data, conf.cookie, None))
@@ -119,7 +119,7 @@ conf.data = targetData
 conf.cookie = targetCookie
 conf.httpHeaders = list(initialHeaders)
 conf.httpHeaders.extend(targetHeaders or [])
- 
+
 
 ```
 
@@ -176,7 +176,7 @@ if not testSqlInj:
 ```python
 def _setRequestParams():
 
-# ...  
+# ...
 # 检查请求的get参数，若有将它存储起来，供测试时使用。
     if conf.parameters.get(PLACE.GET):
         parameters = conf.parameters[PLACE.GET]
@@ -196,7 +196,7 @@ def _setRequestParams():
     conf.parameters[PLACE.POST] = conf.data
 
 # ...
-# 检查是否有get参数、post参数。 
+# 检查是否有get参数、post参数。
     if re.search(URI_INJECTABLE_REGEX, conf.url, re.I) and not any(place in conf.parameters for place in (PLACE.GET, PLACE.POST)) and not kb.postHint and kb.customInjectionMark not in (conf.data or "") and conf.url.startswith("http"):
 
 # 若没有找到get参数和post参数，系统会发出警告信息。
@@ -295,7 +295,7 @@ checkWaf()
 进入到checkWaf函数之后，大家可以结合我写的注释，对这个函数进行理解和学习。我们会发现，程序首先会从准备好的文件中，获取容易引起waf响应的代码片段组，然后结合之前设置的注入位置信息，将它组合成一个payload发送给目标。这样就可以获取到该payload响应的值，我们可以将这个值和正常的响应做比较，计算出页面相似度的值。
 
 ```python
-# 判断waf是否存在。 
+# 判断waf是否存在。
 def checkWaf():
 
 # ...
@@ -349,7 +349,7 @@ b='ab123'
 seq=difflib.SequenceMatcher(None,a,b)
 d=seq.ratio()
 print(d)
-# d=0.44444444... 
+# d=0.44444444...
 ```
 
 在这个例子里，我们用SequenceMatcher函数计算了字符串a和字符串b的相似度，计算的结果为“0.4444…”。
@@ -382,7 +382,7 @@ print(d)
 
 ```plain
 # 正常响应
-talent&nbspsec<br /><br/>SELECT first_name,last_name FROM users WHERE user_id = '1'; 
+talent&nbspsec<br /><br/>SELECT first_name,last_name FROM users WHERE user_id = '1';
 
 # waf拦截的响应
 您的请求带有不合法参数，已被网站管理员设置拦截!可能原因：您提交的内容包含危险的攻击请求。
@@ -410,5 +410,6 @@ talent&nbspsec<br /><br/>SELECT first_name,last_name FROM users WHERE user_id = 
 
 对于 “页面相似度判断的阈值应该与哪些因素相关呢？” 问题答案我认为：
 
-+ 在拥有返回报文内容信息的时候，消除相同的响应页面代码 - 页脚、页眉、网页表识、网页类型、内容类别、标题、关键词、摘要、正文、相关链接等容易重复要素，再使用算法进行对比。</p>2022-01-25</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习了</p>2023-03-14</li><br/>
+- 在拥有返回报文内容信息的时候，消除相同的响应页面代码 - 页脚、页眉、网页表识、网页类型、内容类别、标题、关键词、摘要、正文、相关链接等容易重复要素，再使用算法进行对比。</p>2022-01-25</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习了</p>2023-03-14</li><br/>
+
 </ul>

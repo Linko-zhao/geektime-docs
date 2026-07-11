@@ -49,7 +49,7 @@ def post_comment(request, ...):
     if not authenticate(request):
         raise Exception('U must log in first')
     ...
-    
+
 # 发表状态
 def post_moment(request, ...):
     if not authenticate(request):

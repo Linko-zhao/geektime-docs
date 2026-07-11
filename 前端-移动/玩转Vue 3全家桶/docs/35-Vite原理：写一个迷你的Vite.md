@@ -17,7 +17,7 @@ webpack的核心原理就是通过分析JavaScript中的require语句，分析�
 前端的项目之所以需要webpack打包，是因为**浏览器里的JavaScript没有很好的方式去引入其他文件**。webpack提供的打包功能可以帮助我们更好地组织开发代码，但是现在大部分浏览器都支持了ES6的module功能，我们在浏览器内使用type="module"标记一个script后，在src/main.js中就可以直接使用import语法去引入一个新的JavaScript文件。这样我们其实可以不依赖webpack的打包功能，利用浏览器的module功能就可以重新组织我们的代码。
 
 ```javascript
-    <script type="module" src="/src/main.js"></script>
+<script type="module" src="/src/main.js"></script>
 ```
 
 ## Vite原理
@@ -31,35 +31,36 @@ webpack的核心原理就是通过分析JavaScript中的require语句，分析�
 **我们需要解决以上三个问题，才能让Vue项目很好地在浏览器里跑起来。**
 
 ```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import './index.css'
+import { createApp } from "vue";
+import App from "./App.vue";
+import "./index.css";
 
-const app = createApp(App)
-app.mount('#app')
-
+const app = createApp(App);
+app.mount("#app");
 ```
 
 怎么做呢？首先我们需要使用Koa搭建一个server，用来拦截浏览器发出的所有网络请求，才能实现上述功能。在下面代码中，我们使用Koa启动了一个服务器，并且访问首页内容读取index.html的内容。
 
 ```javascript
-const fs = require('fs')
-const path = require('path')
-const Koa = require('koa')
-const app = new Koa()
+const fs = require("fs");
+const path = require("path");
+const Koa = require("koa");
+const app = new Koa();
 
-app.use(async ctx=>{
-  const {request:{url,query} } = ctx
-if(url=='/'){
-    ctx.type="text/html"
-    let content = fs.readFileSync('./index.html','utf-8')
-    
-    ctx.body = content
+app.use(async (ctx) => {
+  const {
+    request: { url, query },
+  } = ctx;
+  if (url == "/") {
+    ctx.type = "text/html";
+    let content = fs.readFileSync("./index.html", "utf-8");
+
+    ctx.body = content;
   }
-})
-app.listen(24678, ()=>{
-  console.log('快来快来数一数，端口24678')
-})
+});
+app.listen(24678, () => {
+  console.log("快来快来数一数，端口24678");
+});
 ```
 
 下面就是首页index.html的内容，一个div作为Vue启动的容器，并且通过script引入src.main.js。我们访问首页之后，就会看到浏览器内显示的geektime文本，并且发起了一个main.js的HTTP请求，**然后我们来解决页面中的报错问题**。
@@ -87,41 +88,42 @@ app.listen(24678, ()=>{
 在下面的代码中，我们判断如果请求地址是js结尾，就去读取对应的文件内容，使用rewriteImport函数处理后再返回文件内容。在rewriteImport中我们实现了路径的替换，把Vue变成了 @modules/vue， 现在浏览器就会发起一个[http://localhost:24678/@modules/vue](http://localhost:24678/@modules/vue) 的请求，下一步我们要在Koa中拦截这个请求，并且返回Vue的代码内容。
 
 ```javascript
-const fs = require('fs')
-const path = require('path')
-const Koa = require('koa')
-const app = new Koa()
+const fs = require("fs");
+const path = require("path");
+const Koa = require("koa");
+const app = new Koa();
 
-function rewriteImport(content){
-  return content.replace(/ from ['|"]([^'"]+)['|"]/g, function(s0,s1){
+function rewriteImport(content) {
+  return content.replace(/ from ['|"]([^'"]+)['|"]/g, function (s0, s1) {
     // . ../ /开头的，都是相对路径
-    if(s1[0]!=='.'&& s1[1]!=='/'){
-      return ` from '/@modules/${s1}'`
-    }else{
-      return s0
+    if (s1[0] !== "." && s1[1] !== "/") {
+      return ` from '/@modules/${s1}'`;
+    } else {
+      return s0;
     }
-  })
+  });
 }
 
-app.use(async ctx=>{
-  const {request:{url,query} } = ctx
-  if(url=='/'){
-      ctx.type="text/html"
-      let content = fs.readFileSync('./index.html','utf-8')
-      
-      ctx.body = content
-  }else if(url.endsWith('.js')){
-    // js文件
-    const p = path.resolve(__dirname,url.slice(1))
-    ctx.type = 'application/javascript'
-    const content = fs.readFileSync(p,'utf-8')
-    ctx.body = rewriteImport(content)
-  }
-})
-app.listen(24678, ()=>{
-  console.log('快来快来说一书，端口24678')
-})
+app.use(async (ctx) => {
+  const {
+    request: { url, query },
+  } = ctx;
+  if (url == "/") {
+    ctx.type = "text/html";
+    let content = fs.readFileSync("./index.html", "utf-8");
 
+    ctx.body = content;
+  } else if (url.endsWith(".js")) {
+    // js文件
+    const p = path.resolve(__dirname, url.slice(1));
+    ctx.type = "application/javascript";
+    const content = fs.readFileSync(p, "utf-8");
+    ctx.body = rewriteImport(content);
+  }
+});
+app.listen(24678, () => {
+  console.log("快来快来说一书，端口24678");
+});
 ```
 
 ![图片](https://static001.geekbang.org/resource/image/c3/62/c39f700e37b638345ae4cbd0228fd762.png?wh=1125x387)
@@ -183,7 +185,7 @@ if(url.indexOf('.vue')>-1){
 
       ctx.body = rewriteImport(render)
     }
-    
+
 ```
 
 上面的代码实现之后，我们就可以在浏览器中看到App.vue组件解析的结果。App.vue会额外发起一个App.vue?type=template的请求，最终完成了整个App组件的解析。
@@ -193,20 +195,20 @@ if(url.indexOf('.vue')>-1){
 **接下来我们再来实现对CSS文件的支持。**下面的代码中，如果url是CSS结尾，我们就返回一段JavaScript代码。这段JavaScript代码会在浏览器里创建一个style标签，标签内部放入我们读取的CSS文件代码。这种对CSS文件的处理方式，让CSS以JavaScript的形式返回，这样我们就实现了在Node中对Vue组件的渲染。
 
 ```javascript
-if(url.endsWith('.css')){
-    const p = path.resolve(__dirname,url.slice(1))
-    const file = fs.readFileSync(p,'utf-8')
-    const content = `
-    const css = "${file.replace(/\n/g,'')}"
+if (url.endsWith(".css")) {
+  const p = path.resolve(__dirname, url.slice(1));
+  const file = fs.readFileSync(p, "utf-8");
+  const content = `
+    const css = "${file.replace(/\n/g, "")}"
     let link = document.createElement('style')
     link.setAttribute('type', 'text/css')
     document.head.appendChild(link)
     link.innerHTML = css
     export default css
-    `
-    ctx.type = 'application/javascript'
-    ctx.body = content
-  }
+    `;
+  ctx.type = "application/javascript";
+  ctx.body = content;
+}
 ```
 
 ![图片](https://static001.geekbang.org/resource/image/9f/f7/9f50c5ca0d9b74b680e41963055c99f7.png?wh=1920x628)
@@ -271,7 +273,7 @@ async function handleMessage(payload: any) {
       payload.updates.forEach((update: Update) => {
         if (update.type === 'js-update') {
           fetchUpdate(update);
-        } 
+        }
       });
       break;
   }

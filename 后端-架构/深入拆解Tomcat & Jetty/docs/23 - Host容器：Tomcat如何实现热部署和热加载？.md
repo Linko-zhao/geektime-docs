@@ -40,9 +40,9 @@ protected class ContainerBackgroundProcessor implements Runnable {
         try {
             //1. 调用当前容器的backgroundProcess方法。
             container.backgroundProcess();
-            
+
             //2. 遍历所有的子容器，递归调用processChildren，
-            //这样当前容器的子孙都会被处理            
+            //这样当前容器的子孙都会被处理
             Container[] children = container.findChildren();
             for (int i = 0; i < children.length; i++) {
             //这里请你注意，容器基类有个变量叫做backgroundProcessorDelay，如果大于0，表明子容器有自己的后台线程，无需父容器来调用它的processChildren方法。
@@ -71,20 +71,20 @@ public void backgroundProcess() {
     if (cluster != null) {
         cluster.backgroundProcess();
     }
-    
+
     //2.执行容器中Realm组件的周期性任务
     Realm realm = getRealmInternal();
     if (realm != null) {
         realm.backgroundProcess();
    }
-   
+
    //3.执行容器中Valve组件的周期性任务
     Valve current = pipeline.getFirst();
     while (current != null) {
        current.backgroundProcess();
        current = current.getNext();
     }
-    
+
     //4. 触发容器的"周期事件"，Host容器的监听器HostConfig就靠它来调用
     fireLifecycleEvent(Lifecycle.PERIODIC_EVENT, null);
 }
@@ -110,21 +110,21 @@ public void backgroundProcess() {
     //WebappLoader周期性的检查WEB-INF/classes和WEB-INF/lib目录下的类文件
     Loader loader = getLoader();
     if (loader != null) {
-        loader.backgroundProcess();        
+        loader.backgroundProcess();
     }
-    
+
     //Session管理器周期性的检查是否有过期的Session
     Manager manager = getManager();
     if (manager != null) {
         manager.backgroundProcess();
     }
-    
+
     //周期性的检查静态资源是否有变化
     WebResourceRoot resources = getResources();
     if (resources != null) {
         resources.backgroundProcess();
     }
-    
+
     //调用父类ContainerBase的backgroundProcess方法
     super.backgroundProcess();
 }
@@ -161,7 +161,7 @@ public void lifecycleEvent(LifecycleEvent event) {
     // 执行check方法。
     if (event.getType().equals(Lifecycle.PERIODIC_EVENT)) {
         check();
-    } 
+    }
 }
 ```
 
@@ -174,7 +174,7 @@ protected void check() {
         // 检查这个Host下所有已经部署的Web应用
         DeployedApplication[] apps =
             deployed.values().toArray(new DeployedApplication[0]);
-            
+
         for (int i = 0; i < apps.length; i++) {
             //检查Web应用目录是否有变化
             checkResources(apps[i], false);

@@ -279,7 +279,7 @@ train_set, test_set = gen_data_set(data, negsample)
 然后我们就可以调用之前的gen\_model\_input函数将训练集和测试集转化为模型的输入格式，包括训练集/测试集的用户ID、历史物品ID序列、历史物品ID序列的长度和待预测物品ID。这些数据会作为训练模型的输入。
 
 ```plain
-train_model_input, train_label = gen_model_input(train_set, user_info, self.SEQ_LEN) 
+train_model_input, train_label = gen_model_input(train_set, user_info, self.SEQ_LEN)
 test_model_input, test_label = gen_model_input(test_set, user_info, self.SEQ_LEN)
 ```
 
@@ -313,7 +313,7 @@ model.fit(train_model_input, train_label, batch_size=512, epochs=20, verbose=1, 
 最后，利用训练好的模型提取用户和物品的Embedding Layer，以便后续计算召回率和命中率。具体地，使用Model函数将模型的输入和它的用户/物品Embedding层关联起来，然后调用predict函数计算得到预测结果。
 
 ```plain
-user_embs = user_embedding_model.predict(test_model_input, batch_size=2 ** 12) 
+user_embs = user_embedding_model.predict(test_model_input, batch_size=2 ** 12)
 item_embs = item_embedding_model.predict(all_item_model_input, batch_size=2 ** 12)
 ```
 
@@ -389,7 +389,7 @@ ps：add源码如下：
         r&quot;&quot;&quot; default add uses sa_encode&quot;&quot;&quot;
         return _swigfaiss.IndexFlatCodes_add(self, n, x)</p>2023-06-07</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>YoutubeDNN是拿来就能用吗？类似于工具软件那种，不需要开发。</p>2023-06-06</li><br/><li><span>Emma</span> 👍（1） 💬（0）<p>请问老师，youtubeDNN的排序部分的代码有吗</p>2024-09-29</li><br/><li><span>爱极客</span> 👍（0） 💬（1）<p># 定义模型
         model = YoutubeDNN(self.user_feature_columns, self.item_feature_columns, num_sampled=100,
-                           user_dnn_hidden_units=(128, 64, self.embedding_dim))  
+                           user_dnn_hidden_units=(128, 64, self.embedding_dim))
 
 这个参数 num_sampled=100 在新版的模型API里面是没有的，希望老师解答</p>2024-06-30</li><br/>
 </ul>

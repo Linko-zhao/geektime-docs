@@ -173,8 +173,8 @@ from backend.data.model import (
     APIKeyCredentials,
     OAuth2Credentials,
     Credentials,
-    SchemaField, 
-    CredentialsField, 
+    SchemaField,
+    CredentialsField,
     CredentialsMetaInput
 )
 from backend.integrations.providers import ProviderName
@@ -190,7 +190,7 @@ class MyWikipediaSummaryBlock(Block):
             description="The GitHub integration can be used with "
             "any API key with sufficient permissions for the blocks it is used on.",
         )
-        
+
     class Output(BlockSchema):
         summary: str = SchemaField(
             description="summary"
@@ -205,10 +205,10 @@ class MyWikipediaSummaryBlock(Block):
     ) -> Any:
         if headers is None:
             headers = {}
-        
+
         response = requests.get(url, headers=headers)
         return response.json() if json else response.text
-    
+
     def __init__(self):
         super().__init__(
             # Unique ID for the block, used across users for templates
@@ -225,16 +225,16 @@ class MyWikipediaSummaryBlock(Block):
         )
 
     def run(
-        self, 
-        input_data: Input, 
-        *, 
-        credentials: APIKeyCredentials, 
+        self,
+        input_data: Input,
+        *,
+        credentials: APIKeyCredentials,
         **kwargs
     ) -> BlockOutput:
         try:
             topic = input_data.topic
             topic = urllib.parse.quote(topic, safe='/', encoding=None, errors=None)
-            
+
             url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{topic}"
 
             response = self.get_request(url, json=True)
@@ -347,10 +347,11 @@ poetry run pytest -s test/block/customized/test_single_block.py --block Wikipedi
 
 1. 提供现实的 test\_input： 确保你的测试输入涵盖典型用例。
 2. 定义适当的 test\_output：
-   
+
    - 对于确定性输出，使用特定的预期值。
    - 对于非确定性输出或仅类型重要时，使用 Python 类型（如 str、int、dict）。
    - 可以混合使用特定值和类型，如（“key1”, str）、（“key2”, 42）。
+
 3. 使用 test\_mock 进行网络调用：这样可以防止测试因网络问题或 API 更改而失败。
 4. 对于没有外部依赖的 Block，可以考虑省略 test\_mock：如果你的代码块不进行网络调用或使用外部资源，你可能不需要 mock。
 5. 考虑边缘情况：在 run() 函数中包含针对潜在错误条件的测试。

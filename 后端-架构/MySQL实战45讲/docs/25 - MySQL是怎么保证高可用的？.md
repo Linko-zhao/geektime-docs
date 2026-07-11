@@ -265,6 +265,7 @@ start slave;
 > @Jonh同学提到了IGNORE\_SERVER\_IDS这个解决方法；
 
 > @React 提到，如果主备设置不同的步长，备库是不是可以设置为可读写。我的建议是，只要这个节点设计内就不会有业务直接在上面执行更新，就建议设置为readonly。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>某、人</span> 👍（202） 💬（15）<p>遇到过下面几种造成主从延迟的情况:
 1.主库DML语句并发大,从库qps高
@@ -283,7 +284,6 @@ start slave;
 昨天去面试另一家公司，问mysql的问题，问罢之后。
 面试官:我看你对mysql了解的还蛮深得，是不是也看了极客时间的。。。～
 我: 没有没有(连忙否认，有一种提前看了考试答案的罪恶感😂😂😂)
-
 
 所以最后我有个问题，如果后面还有这样的问题，老师您觉得我应该怎么回答？</p>2019-03-27</li><br/><li><span>aubrey</span> 👍（50） 💬（5）<p>semi-sync在网络故障超时的情况下会退化成async，这个时候如果刚好主库掉电了，有些binlog还没有传给从库，从库无法判断数据跟主库是否一致，如果强行切换可能会导致丢数据，在金融业务场景下只能＂人工智能＂来做切换，服务中断时间长。AliSQL采用双通道复制更容易判断主备数据是否一致，如果一致可以自动切换，如果不一致才需要人工恢复数据。</p>2019-02-14</li><br/><li><span>linqw</span> 👍（38） 💬（7）<p>总结下学习完高可用，老师有空帮忙看下
 1、主备延迟，就是在同一个事务在备库执行完成的时间和主库执行完成的时间之间的差值，包括主库事务执行完成时间和将binlog发送给备库，备库事务的执行完成时间的差值。每个事务的seconds_behind_master延迟时间，每个事务的 binlog 里面都有一个时间字段，用于记录主库上的写入时间，备库取出当前正在执行的事务的时间字段的值，计算它与当前系统时的差值。
@@ -311,28 +311,33 @@ salve_net_timeout=多少秒，从库会通过这个参数定时的检测是否�
 
 但是有的时候在分析问题的时候，看很多日志，比如error log中的死锁日志，报错日志中每个字段是什么意思，以及show innodb engine status中每个日志段的意思，比如在将redo log的时候innodb status就会记录，这样就可以结合课程中的log write，page cahce和fsync逻辑到数据库中实际感受到学到的原因，在应用中怎么一一对应。
 比如，show innodb engine status中：
- --------
- FILE I&#47;O
- --------
-***
-***
- Pending normal aio reads: 0 [0, 0, 0, 0, 0, 0, 0, 0] , aio writes: 0 [0, 0, 0, 0, 0, 0, 0, 0] ,
-  ibuf aio reads: 0, log i&#47;o&#39;s: 0, sync i&#47;o&#39;s: 0
- Pending flushes (fsync) log: 1; buffer pool: 0
- 14321192292 OS file reads, 120057595 OS file writes, 60413577 OS fsyncs
- 10 pending preads, 1 pending pwrites
- 4648.01 reads&#47;s, 16383 avg bytes&#47;read, 48.09 writes&#47;s, 34.98 fsyncs&#47;s
+--------
 
+FILE I&#47;O
+--------
 
- ---
- LOG
- ---
- Log sequence number 3893849611607
- Log flushed up to   3893849603096
- Pages flushed up to 3893705803837
- Last checkpoint at  3893705803837
- 1 pending log writes, 0 pending chkp writes
- 28053287 log i&#47;o&#39;s done, 10.15 log i&#47;o&#39;s&#47;second
+---
+
+---
+
+Pending normal aio reads: 0 [0, 0, 0, 0, 0, 0, 0, 0] , aio writes: 0 [0, 0, 0, 0, 0, 0, 0, 0] ,
+ibuf aio reads: 0, log i&#47;o&#39;s: 0, sync i&#47;o&#39;s: 0
+Pending flushes (fsync) log: 1; buffer pool: 0
+14321192292 OS file reads, 120057595 OS file writes, 60413577 OS fsyncs
+10 pending preads, 1 pending pwrites
+4648.01 reads&#47;s, 16383 avg bytes&#47;read, 48.09 writes&#47;s, 34.98 fsyncs&#47;s
+
+---
+
+LOG
+---
+
+Log sequence number 3893849611607
+Log flushed up to 3893849603096
+Pages flushed up to 3893705803837
+Last checkpoint at 3893705803837
+1 pending log writes, 0 pending chkp writes
+28053287 log i&#47;o&#39;s done, 10.15 log i&#47;o&#39;s&#47;second
 
 之前看过网上的一些分析，由于和原理脱离，所以理解的都不深。
 非常期待老师能结合error log一些常见问题分析比如dead lock，常见crash啊之类的，

@@ -95,8 +95,8 @@ if ((System.currentTimeMillis() - now) >= maxWait) {
 DefaultSqlSession类中配置两个data source，形如：
 
 ```plain
-	private DataSource readDataSource;	
-	private DataSource writeDataSource;	
+	private DataSource readDataSource;
+	private DataSource writeDataSource;
 ```
 
 然后在selectOne()中这么判断：
@@ -120,7 +120,7 @@ jdbcTemplate.setDatasource(readDataSource);
 2、注入双数据源。
 因为我们配置到applicationContext.xml中的是SqlSessionFactory，所以数据源的注入要在这个类中。
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
-    ........
+........
 
     @Autowired
     private DataSource readDataSource;
@@ -136,12 +136,13 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
         .......
     }
     ........
+
 }
 
 3、根据sqlType将不同的数据源注入jdbcTemplate中
 之后在openSession的时候，塞给SqlSession对象。当用户执行操作的时候，根据操作类型的不同，给JdbcTemplate注入不同的数据源
 public class DefaultSqlSession implements SqlSession{
-    
+
     .........
 
     private DataSource readDataSource;
@@ -167,6 +168,7 @@ public class DefaultSqlSession implements SqlSession{
         return jdbcTemplate.delete(mapperNode.getSql(), args);
     }
     .........
+
 }</p>2023-05-21</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师几个问题：
 Q1：会讲解MiniTomcat吗？
 很期望针对Tomcat也出一个类似的专栏。

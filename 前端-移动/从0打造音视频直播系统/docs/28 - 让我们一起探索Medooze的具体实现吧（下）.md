@@ -77,15 +77,15 @@ DTLS连接建立过程图
 
 当某个参与人（Participator ）加入房间后，需要建立一个 DTLS 连接使客户端与Medooze可以进行通信，上图描述了各个对象实例之间的先后调用关系。其具体连接建立过程说明如下（步骤较多，建议对照上图来理解和学习）：
 
-01. 当有参与人（Participator）加入时，如果此时房间内只有一个人，则该 Participator 对象会调用 MediaServer::createEndpoint 接口，来创建一个接入点。
-02. MediaServer 对象会创建一个 Endpoint 实例。
-03. Endpoint 对象会创建一个 Native RTPBundleTransport 实例。
-04. Native RTPBundleTransport 实例创建好后，Endpoint 再调用 RTPBundleTransport 实例的init()方法对 RTPBundleTransport 实例进行初始化。
-05. 在 RTPBundleTransport 初始化过程中，会创建 UDP socket，动态绑定一个端口。这个动态端口的范围，用户是可以指定的。
-06. RTPBundleTransport 中包含了一个 EventLoop 实例，所以会创建事件循环实例，初始化 pipe。
-07. EvenLoop 会创建一个事件循环线程。
-08. 事件循环线程中会执行 poll，进入事件循环逻辑。**此时，Endpoint 的初始过程算是完成了**。
-09. Participator 需要创建一个 **DTLS 连接**，DTLS 连接是由 Endpoint::createTransport 函数来创建的。
+1.  当有参与人（Participator）加入时，如果此时房间内只有一个人，则该 Participator 对象会调用 MediaServer::createEndpoint 接口，来创建一个接入点。
+2.  MediaServer 对象会创建一个 Endpoint 实例。
+3.  Endpoint 对象会创建一个 Native RTPBundleTransport 实例。
+4.  Native RTPBundleTransport 实例创建好后，Endpoint 再调用 RTPBundleTransport 实例的init()方法对 RTPBundleTransport 实例进行初始化。
+5.  在 RTPBundleTransport 初始化过程中，会创建 UDP socket，动态绑定一个端口。这个动态端口的范围，用户是可以指定的。
+6.  RTPBundleTransport 中包含了一个 EventLoop 实例，所以会创建事件循环实例，初始化 pipe。
+7.  EvenLoop 会创建一个事件循环线程。
+8.  事件循环线程中会执行 poll，进入事件循环逻辑。**此时，Endpoint 的初始过程算是完成了**。
+9.  Participator 需要创建一个 **DTLS 连接**，DTLS 连接是由 Endpoint::createTransport 函数来创建的。
 10. Endpoint 创建一个 Transport 实例，此实例是 Native 的一个 wrapper。
 11. Transport 调用 RTPBundleTransport::AddICETransport 接口，准备创建 Native DTLS 实例。
 12. RTPBundleTransport 创建一个 DTLSICETransport 实例。

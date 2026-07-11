@@ -141,14 +141,14 @@ LEVEL4_CACHE_LINESIZE              0
 // cache.c
 #include <stdio.h>
 #include <stdlib.h>
- 
+
 #define M  64
 #define N  10000000
 int main( )
 {
    printf("%ld",sizeof(long long));
    long long (*a)[N] = (long long(*)[N])calloc(M * N, sizeof(long long));
- 
+
    for(int i = 0; i < 100000000; i++) {
        for(int j = 0; j < 4096; j+=512) {
            a[5][j]++;
@@ -195,14 +195,14 @@ sys 0m0.001s
 ```
 #include <stdio.h>
 #include <stdlib.h>
- 
+
 #define M  10000
 #define N  10000
 int main( )
 {
    printf("%ld",sizeof(long long));
    long long (*a)[N] = (long long(*)[N])calloc(M * N, sizeof(long long));
-   
+
    for(int i = 0; i < M; i++) {
        for(int j = 0; j < N; j++) {
            a[i][j]++;
@@ -259,12 +259,12 @@ sys 0m0.548s
 ```
 #include <stdio.h>
 #include <pthread.h>
- 
+
 struct S{
    long long a;
    long long b;
 } s;
- 
+
 void *thread1(void *args)
 {
     for(int i = 0;i < 100000000; i++){
@@ -272,7 +272,7 @@ void *thread1(void *args)
     }
     return NULL;
 }
- 
+
 void *thread2(void *args)
 {
     for(int i = 0;i < 100000000; i++){
@@ -280,7 +280,7 @@ void *thread2(void *args)
     }
     return NULL;
 }
- 
+
 int main(int argc, char *argv[]) {
     pthread_t t1, t2;
     s.a = 0;
@@ -300,7 +300,7 @@ int main(int argc, char *argv[]) {
 # gcc -Wall false_sharing.c -lpthread
 # time ./a.out
 a = 100000000, b = 100000000
- 
+
 real 0m0.790s
 user 0m1.481s
 sys 0m0.008s
@@ -329,7 +329,7 @@ struct S{
 # gcc -Wall false_sharing.c -lpthread
 # time ./a.out
 a = 100000000, b = 100000000
- 
+
 real 0m0.347s
 user 0m0.693s
 sys 0m0.001s
@@ -371,12 +371,12 @@ cache被翻译成缓存，buffer被翻译成缓冲区。那么，请你思考一
 1、CPU如何把数据读取到cache的呢？
 某个时刻一个CPU指令访问数据地址0，一个cache line 64个字节，CPU会把0~63这64个字节全部读取到cache line，假如数据线是64位，一次能读取8个字节，也需要读取8次，如果读取一次需要100个CPU时钟周期，那读取一个cache line需要800个时钟周期。但是下条指令访问的数据地址可能是0x100000，这时CPU是插入NOP操作，等待800个时钟周期等着cache line填充完吗？还是怎么操作的呢？
 2、缓存做成多级，每一级电路上有什么不同吗（都是SRAM？），主要是因为硬件集成电路价格的原因去分为这么多级缓存吗？
-3、了解到L1级缓存一般都分为指令Icache和数据Dcache，而到L2、L3就不分了Icache和Dcache了呢？</p>2021-11-29</li><br/><li><span>aikeke</span> 👍（1） 💬（2）<p>老师，一个cache line里，V（valid）、M（modified）以及tag这几个字段是保存在哪里呢？&quot;假设要寻址一个 32 位的地址，缓存块的大小是 64 字节，缓存组织方式是 4 路组相连，缓存大小是 8K。经过计算我们得到缓存一共有 32 个组（8×1024÷64÷4=32）&quot;</p>2021-12-12</li><br/><li><span>🐮</span> 👍（0） 💬（1）<p>老师，你好，平台我们为提升读取数据性能，会把所需要的数据尽量放在同一个cache line中，但如果存在多个进程会对相临数据写时又要尽量不要把数据放在同一个cache line中，这块是否是从读和写来理解比较好啊，如果是读，就放一起，多进程写就不要放一起；</p>2021-11-30</li><br/><li><span>那时刻</span> 👍（0） 💬（1）<p>从文件角度理解，buffer可以理解为是一类特殊文件的cache，这类特殊文件就是设备文件，比如&#47;dev&#47;sda1, 这类设备文件的内容被读到内存后就是buffer。而cache则是普通文件的内容被读到了内存。</p>2021-11-30</li><br/><li><span>linker</span> 👍（0） 💬（1）<p>LEVEL1_ICACHE_SIZE                 32768
-LEVEL1_ICACHE_ASSOC                8
-LEVEL1_ICACHE_LINESIZE             64
-LEVEL1_DCACHE_SIZE                 32768
-LEVEL1_DCACHE_ASSOC                8
-LEVEL1_DCACHE_LINESIZE             64
+3、了解到L1级缓存一般都分为指令Icache和数据Dcache，而到L2、L3就不分了Icache和Dcache了呢？</p>2021-11-29</li><br/><li><span>aikeke</span> 👍（1） 💬（2）<p>老师，一个cache line里，V（valid）、M（modified）以及tag这几个字段是保存在哪里呢？&quot;假设要寻址一个 32 位的地址，缓存块的大小是 64 字节，缓存组织方式是 4 路组相连，缓存大小是 8K。经过计算我们得到缓存一共有 32 个组（8×1024÷64÷4=32）&quot;</p>2021-12-12</li><br/><li><span>🐮</span> 👍（0） 💬（1）<p>老师，你好，平台我们为提升读取数据性能，会把所需要的数据尽量放在同一个cache line中，但如果存在多个进程会对相临数据写时又要尽量不要把数据放在同一个cache line中，这块是否是从读和写来理解比较好啊，如果是读，就放一起，多进程写就不要放一起；</p>2021-11-30</li><br/><li><span>那时刻</span> 👍（0） 💬（1）<p>从文件角度理解，buffer可以理解为是一类特殊文件的cache，这类特殊文件就是设备文件，比如&#47;dev&#47;sda1, 这类设备文件的内容被读到内存后就是buffer。而cache则是普通文件的内容被读到了内存。</p>2021-11-30</li><br/><li><span>linker</span> 👍（0） 💬（1）<p>LEVEL1_ICACHE_SIZE 32768
+LEVEL1_ICACHE_ASSOC 8
+LEVEL1_ICACHE_LINESIZE 64
+LEVEL1_DCACHE_SIZE 32768
+LEVEL1_DCACHE_ASSOC 8
+LEVEL1_DCACHE_LINESIZE 64
 
 一个cacheline == 64bytes, 总共有8路，64组，64*64*8=32768bytes是这样吗？
 如果是这样的话，每个路就相当于一个cacheline</p>2021-11-29</li><br/><li><span>linker</span> 👍（0） 💬（1）<p>大佬，L1 cache，一路等于64个cacheline， 这个是怎么计算出来的，有点懵？</p>2021-11-29</li><br/><li><span>shenglin</span> 👍（0） 💬（1）<p>cache的物理介质是SRAM，存储的是主存里某些地址上的数据，buffer是主存的一部分，物理介质是DRAM，存储的是业务的缓冲数据。</p>2021-11-29</li><br/><li><span>满分💯</span> 👍（3） 💬（0）<p>看完收获很多，最近看了一票文章 ，结合这看，效果更加 https:&#47;&#47;coolshell.cn&#47;articles&#47;20793.html

@@ -318,9 +318,9 @@ Vuex的出现，让我们整个项目中的数据流动变得非常自然。数�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>ll</span> 👍（39） 💬（2）<p>非常棒的一节，在学习内容的过程中，我也在回顾之前学习关于 Vuex 的知识，在写miniVuex 的实现的代码后，对组件化有了新的认识，简单说下体会。
 
- “组件化” 是解决“复杂”问题的重要思想。其实现就是一个个“组件”，即使表现方式不同，核心还是 MVX 的模型。
+“组件化” 是解决“复杂”问题的重要思想。其实现就是一个个“组件”，即使表现方式不同，核心还是 MVX 的模型。
 
- 这样理解，组件内的 state 就是 model，渲染出来的“图形”就是 view，而这个 X 是这 model 与 view 的“沟通方式”，它可以是 control，也可以是 view model，大概就这个意思。这里要注意，model 和 view 不应该直接沟通。
+这样理解，组件内的 state 就是 model，渲染出来的“图形”就是 view，而这个 X 是这 model 与 view 的“沟通方式”，它可以是 control，也可以是 view model，大概就这个意思。这里要注意，model 和 view 不应该直接沟通。
 
 我们现在的工作就是在“搭积木”，怎么搭很重要，但是了解手中的“积木”也同样重要。
 
@@ -330,23 +330,23 @@ Vue2 提供的积木有 MVX(一般组件)，VX(函数式组件)，MX(vuex)；而
 
 可是具体这个是怎么实现的？
 大概说下几个API：install，provide，use 等，大圣讲的很清楚，回头多看几遍，最主要的是多写写。</p>2021-11-08</li><br/><li><span>一个小🍎</span> 👍（23） 💬（1）<p>我Vuex4都还没学完，Pinia就出来了，学不完了。
-（话说想请教大圣老师，在前端技术发展如此之快的情况下，我们应该如何做取舍呢？）</p>2021-11-08</li><br/><li><span>乐叶</span> 👍（16） 💬（5）<p>  constructor(options) {
-    this._state = reactive({
-      &#47;&#47;  data: options.state
-      data: options.state()
-    })
-    this.mutations = options.mutations
-  }
+（话说想请教大圣老师，在前端技术发展如此之快的情况下，我们应该如何做取舍呢？）</p>2021-11-08</li><br/><li><span>乐叶</span> 👍（16） 💬（5）<p> constructor(options) {
+this._state = reactive({
+&#47;&#47; data: options.state
+data: options.state()
+})
+this.mutations = options.mutations
+}
 
-  get state() {
-    return this._state.data
-  }
+get state() {
+return this._state.data
+}
 
 options.state这样写使用调试发现获取到的是函数
 options.state()写成这样才可以正常运行</p>2021-11-08</li><br/><li><span>Geek_4578dc</span> 👍（7） 💬（1）<p>建议大圣老师把每节的代码放出来，这样有利于阅读</p>2021-11-08</li><br/><li><span>也許有一天</span> 👍（6） 💬（1）<p>我们公司导入rxjs来取代vuex，不得不说rxjs是真的猛...</p>2021-12-05</li><br/><li><span>深蓝</span> 👍（4） 💬（1）<p>状态管理感觉是前端代码的核心，其他所有组件，监听数据流的变化，或改变数据，然后与这个数据流相关的页面组件作出响应变化，动态菜单，导航栏，以及主页面的组件就随之改变了，整个Web服务就动起来了，最近几天vuex 看的有点晕，有个地方有点疑惑
 
-1  vue &lt; script&gt; computed &lt;&#47;script&gt;
-2 vuex  也有 getters 
+1 vue &lt; script&gt; computed &lt;&#47;script&gt;
+2 vuex 也有 getters
 
 两者都是计算属性，这里绕来绕去，还是理不清这里怎么使用最好？
 

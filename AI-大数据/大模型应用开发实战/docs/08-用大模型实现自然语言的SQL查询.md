@@ -177,7 +177,7 @@ SQL代码无误，查询结果也准确。至此，我们展示了从提问到�
 
 ```plain
 # 插入新员工
-question = "在销售部门增加一个新员工,姓名为张三,工资为45000"  
+question = "在销售部门增加一个新员工,姓名为张三,工资为45000"
 sql_query = ask_claude(question, schema_str)
 cursor.execute(sql_query)
 conn.commit()

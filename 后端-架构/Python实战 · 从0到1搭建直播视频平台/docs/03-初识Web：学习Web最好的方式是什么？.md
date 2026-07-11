@@ -184,10 +184,10 @@ CSS的官方定义是，层叠样式表（英文全称：Cascading Style Sheets�
 ```css
 /*给页面上的段落文字设置颜色为红色，对齐方式为居中对齐，字体为serif，字号为14px*/
 p {
-color:red;
-text-align:center;
-font-family:serif;
-font-size:14px;
+  color: red;
+  text-align: center;
+  font-family: serif;
+  font-size: 14px;
 }
 ```
 
@@ -203,14 +203,22 @@ CSS除了可以装饰文本，还能装饰超链接标签，也就是a标签。a
 
 ```css
 在a之后加上:link表示未访问链接时，
-:visited表示已访问链接时，
-:hover表示鼠标移动到链接上悬停时，
-:active表示鼠标点击时。
-这些状态下可以各自设置链接的颜色：
-a:link {color:#000000;}      /* 未访问链接*/
-a:visited {color:#00FF00;}  /* 已访问链接 */
-a:hover {color:#FF00FF;}  /* 鼠标移动到链接上 */
-a:active {color:#0000FF;}  /* 鼠标点击时 */
+  :visited表示已访问链接时，
+  :hover表示鼠标移动到链接上悬停时，
+  :active表示鼠标点击时。
+  这些状态下可以各自设置链接的颜色：
+  a:link {
+  color: #000000;
+} /* 未访问链接*/
+a:visited {
+  color: #00ff00;
+} /* 已访问链接 */
+a:hover {
+  color: #ff00ff;
+} /* 鼠标移动到链接上 */
+a:active {
+  color: #0000ff;
+} /* 鼠标点击时 */
 ```
 
 当我们想划分区块时，还可以设置区块的宽、高、内边距、边框、外边距。
@@ -218,12 +226,12 @@ a:active {color:#0000FF;}  /* 鼠标点击时 */
 ![](https://static001.geekbang.org/resource/image/0y/17/0yya689b7297dcb80d659499ab732617.jpg?wh=2071x1135)
 
 ```css
- /* 给这个区块设置为 宽300px，边框25px绿色，内边距25px，外边距25px*/
+/* 给这个区块设置为 宽300px，边框25px绿色，内边距25px，外边距25px*/
 div {
-    width: 300px;
-    border: 25px solid green;
-    padding: 25px;
-    margin: 25px;
+  width: 300px;
+  border: 25px solid green;
+  padding: 25px;
+  margin: 25px;
 }
 ```
 
@@ -382,21 +390,22 @@ function showAlert(){
             p1.textContent = &quot;变化前-1&quot;;
         }
     }
+
 &lt;&#47;script&gt;
 &lt;&#47;html&gt;</p>2023-04-28</li><br/><li><span>Geek_6634a6</span> 👍（0） 💬（1）<p>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-    &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;title&gt;动效小测试&lt;&#47;title&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;动效小测试&lt;&#47;title&gt;
 &lt;&#47;head&gt;
 &lt;body&gt;
 &lt;p id=&quot;myParagraph&quot;&gt;变化前-1&lt;&#47;p&gt;
 &lt;button onclick=&quot;changeText()&quot;&gt;文本变换&lt;&#47;button&gt;
 
 &lt;script&gt;
-    function changeText() {
-        document.getElementById(&quot;myParagraph&quot;).innerHTML = &quot;变化后-2&quot;;
-    }
+function changeText() {
+document.getElementById(&quot;myParagraph&quot;).innerHTML = &quot;变化后-2&quot;;
+}
 &lt;&#47;script&gt;
 
 &lt;&#47;body&gt;
@@ -415,11 +424,11 @@ function showAlert(){
 &lt;script&gt;
 var p1 = document.getElementById(&quot;text&quot;)
 function changetext(){
-  if (p1.textContent === &quot;变化前-1&quot;) {
-    p1.textContent = &quot;变化前-2&quot;;
-  } else {
-    p1.textContent = &quot;变化前-1&quot;;
-  }
+if (p1.textContent === &quot;变化前-1&quot;) {
+p1.textContent = &quot;变化前-2&quot;;
+} else {
+p1.textContent = &quot;变化前-1&quot;;
+}
 }
 
 &lt;&#47;script&gt;
@@ -427,9 +436,9 @@ function changetext(){
 &lt;html lang=&quot;en&quot;&gt;
 
 &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;文本变换示例&lt;&#47;title&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;文本变换示例&lt;&#47;title&gt;
 &lt;&#47;head&gt;
 
 &lt;body&gt;
@@ -442,12 +451,12 @@ function changetext(){
 
 &lt;!-- JavaScript代码，用于实现文本变换功能 --&gt;
 &lt;script&gt;
-    function changeText() {
-        &#47;&#47; 获取p标签元素
-        var textElement = document.getElementById(&#39;text&#39;);
-        &#47;&#47; 更改p标签的文本内容
-        textElement.innerHTML = &quot;变化后 - 2&quot;;
-    }
+function changeText() {
+&#47;&#47; 获取p标签元素
+var textElement = document.getElementById(&#39;text&#39;);
+&#47;&#47; 更改p标签的文本内容
+textElement.innerHTML = &quot;变化后 - 2&quot;;
+}
 &lt;&#47;script&gt;
 
 &lt;&#47;body&gt;
@@ -456,31 +465,32 @@ function changetext(){
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
-	&lt;meta charset=&quot;utf-8&quot;&gt;
-	&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-	&lt;title&gt;动效小测试&lt;&#47;title&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;动效小测试&lt;&#47;title&gt;
 &lt;&#47;head&gt;
 &lt;body&gt;
-	&lt;p&gt;变换前 -1&lt;&#47;p&gt;
-	&lt;button id=&#39;btn&#39;&gt;文本变换&lt;&#47;button&gt;
+&lt;p&gt;变换前 -1&lt;&#47;p&gt;
+&lt;button id=&#39;btn&#39;&gt;文本变换&lt;&#47;button&gt;
 
-	&lt;script&gt;
-		let num = -1
-		p = document.querySelector(&#39;p&#39;)
-		btn = document.querySelector(&quot;#btn&quot;)
+    &lt;script&gt;
+    	let num = -1
+    	p = document.querySelector(&#39;p&#39;)
+    	btn = document.querySelector(&quot;#btn&quot;)
 
-		btn.onclick = function() {
-			if (num == -1) {
-				p.innerText = &#39;变换后 -2&#39;
-				return num = -2
-			}
+    	btn.onclick = function() {
+    		if (num == -1) {
+    			p.innerText = &#39;变换后 -2&#39;
+    			return num = -2
+    		}
 
-			if (num == -2) {
-				p.innerText = &#39;变换前 -1&#39;
-				return num = -1
-			}
-		}
-	&lt;&#47;script&gt;
+    		if (num == -2) {
+    			p.innerText = &#39;变换前 -1&#39;
+    			return num = -1
+    		}
+    	}
+    &lt;&#47;script&gt;
+
 &lt;&#47;body&gt;
 &lt;&#47;html&gt;</p>2023-06-03</li><br/><li><span>camel</span> 👍（0） 💬（1）<p>请问前端开发应该用什么idea？可能会介绍前端开发环境的搭建吗？</p>2023-05-13</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师两个问题：
 Q1: PyCharm自身没有python解释器吗？我用PyCharm创建了一个工程，interpreter是本机上安装的Anaconda的python.exe。
@@ -492,9 +502,9 @@ Q2：前端开发IDE是用VSCode吗？</p>2023-05-02</li><br/><li><span>Geek_840
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;title&gt;动效小测试&lt;&#47;title&gt;
 &lt;script&gt;
-    function displayDate(){
-        document.getElementsByTagName(&quot;p&quot;)[0].innerHTML=&quot;变化后-2&quot;;
-    }
+function displayDate(){
+document.getElementsByTagName(&quot;p&quot;)[0].innerHTML=&quot;变化后-2&quot;;
+}
 &lt;&#47;script&gt;
 &lt;&#47;head&gt;
 &lt;body&gt;
@@ -504,19 +514,19 @@ Q2：前端开发IDE是用VSCode吗？</p>2023-05-02</li><br/><li><span>Geek_840
 &lt;&#47;html&gt;</p>2023-04-29</li><br/><li><span>GAC·DU</span> 👍（0） 💬（2）<p>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;动效小测试&lt;&#47;title&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;动效小测试&lt;&#47;title&gt;
 &lt;&#47;head&gt;
 &lt;body&gt;
-    &lt;p&gt;变化前-1&lt;&#47;p&gt;
-    &lt;button&gt;文本变换&lt;&#47;button&gt;
-    &lt;script&gt;
-        const btn = document.querySelector(&quot;button&quot;)
-        const p = document.querySelector(&quot;p&quot;)
-        btn.onclick = function () {
-            p.innerText = &quot;变化后-2&quot;
-        }
-    &lt;&#47;script&gt;
+&lt;p&gt;变化前-1&lt;&#47;p&gt;
+&lt;button&gt;文本变换&lt;&#47;button&gt;
+&lt;script&gt;
+const btn = document.querySelector(&quot;button&quot;)
+const p = document.querySelector(&quot;p&quot;)
+btn.onclick = function () {
+p.innerText = &quot;变化后-2&quot;
+}
+&lt;&#47;script&gt;
 &lt;&#47;body&gt;
 &lt;&#47;html&gt;</p>2023-04-28</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第3讲打卡~</p>2024-07-18</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师两个问题：
 Q1: PyCharm自身没有python解释器吗？我用PyCharm创建了一个工程，interpreter是本机上安装的Anaconda的python.exe。

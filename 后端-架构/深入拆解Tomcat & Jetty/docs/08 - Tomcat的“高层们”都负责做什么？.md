@@ -100,7 +100,7 @@ public void addService(Service service) {
     synchronized (servicesLock) {
         //创建一个长度+1的新数组
         Service results[] = new Service[services.length + 1];
-        
+
         //将老的数据复制过去
         System.arraycopy(services, 0, results, 0, services.length);
         results[services.length] = service;
@@ -136,7 +136,7 @@ Service组件的具体实现类是StandardService，我们先来看看它的定�
 public class StandardService extends LifecycleBase implements Service {
     //名字
     private String name = null;
-    
+
     //Server实例
     private Server server = null;
 
@@ -146,7 +146,7 @@ public class StandardService extends LifecycleBase implements Service {
 
     //对应的Engine容器
     private Engine engine = null;
-    
+
     //映射器及其监听器
     protected final Mapper mapper = new Mapper();
     protected final MapperListener mapperListener = new MapperListener(this);
@@ -170,7 +170,7 @@ protected void startInternal() throws LifecycleException {
             engine.start();
         }
     }
-    
+
     //3. 再启动Mapper监听器
     mapperListener.start();
 
@@ -221,17 +221,17 @@ final class StandardEngineValve extends ValveBase {
 
     public final void invoke(Request request, Response response)
       throws IOException, ServletException {
-  
+
       //拿到请求中的Host容器
       Host host = request.getHost();
       if (host == null) {
           return;
       }
-  
+
       // 调用Host容器中的Pipeline中的第一个Valve
       host.getPipeline().getFirst().invoke(request, response);
   }
-  
+
 }
 ```
 
@@ -253,7 +253,7 @@ Server组件的在启动连接器和容器时，都分别加了锁，这是为�
 
 不知道今天的内容你消化得如何？如果还有疑问，请大胆的在留言区提问，也欢迎你把你的课后思考和心得记录下来，与我和其他同学一起讨论。如果你觉得今天有所收获，欢迎你把它分享给你的朋友。
 <div><strong>精选留言（15）</strong></div><ul>
-<li><span>大卫</span> 👍（37） 💬（2）<p>老师好，tomcat一般生产环境线程数大小建议怎么设置呢</p>2019-06-05</li><br/><li><span>Geek_ebda96</span> 👍（34） 💬（5）<p>老师最近遇到一个问题，刚到新公司，看他们把一个tomact的connector的线程池设置成800，这个太夸张了吧，connector的线程池只是用来处理接收的http请求，线程池不会用来处理其他业务本身的事情，设置再大也只能提高请求的并发，并不能提高系统的响应，让这个线程池干其他的事情，而且线程数太高，线程上下文切换时间也高，反而会降低系统的响应速度吧？我理解是不是对的，老师？还有一个问题就是设置的connector线程数，是tomcat启动的时候就会初始化这么多固定的线程还是这只是一个上限，还有就是如果线程处于空闲状态，会不会进行上下文切换呢？</p>2019-06-05</li><br/><li><span>yang</span> 👍（21） 💬（2）<p>老师，我看的慢。  
+<li><span>大卫</span> 👍（37） 💬（2）<p>老师好，tomcat一般生产环境线程数大小建议怎么设置呢</p>2019-06-05</li><br/><li><span>Geek_ebda96</span> 👍（34） 💬（5）<p>老师最近遇到一个问题，刚到新公司，看他们把一个tomact的connector的线程池设置成800，这个太夸张了吧，connector的线程池只是用来处理接收的http请求，线程池不会用来处理其他业务本身的事情，设置再大也只能提高请求的并发，并不能提高系统的响应，让这个线程池干其他的事情，而且线程数太高，线程上下文切换时间也高，反而会降低系统的响应速度吧？我理解是不是对的，老师？还有一个问题就是设置的connector线程数，是tomcat启动的时候就会初始化这么多固定的线程还是这只是一个上限，还有就是如果线程处于空闲状态，会不会进行上下文切换呢？</p>2019-06-05</li><br/><li><span>yang</span> 👍（21） 💬（2）<p>老师，我看的慢。
 
 一个子容器只有一个父容器， 如 a的父容器是容器b；
 那此时，只有父容器会调用子容器的start()方法吧？
@@ -267,10 +267,10 @@ Server组件的在启动连接器和容器时，都分别加了锁，这是为�
 所以这块加锁具体的作用我也看不懂，难道是起到多线程同步阻塞的作用？？</p>2019-05-29</li><br/><li><span>What for</span> 👍（5） 💬（1）<p>老师您好，问个问题：
 文中提到用动态数组节省内存，据我所知对象数组里放的是引用而不是对象本身，所以理论上建一个稍微大一点的数组（比如说常见的 16）似乎并不会占用太多空间，请问我的理解有没有问题？</p>2019-07-23</li><br/><li><span>-W.LI-</span> 👍（5） 💬（1）<p>老师好!catalina的start()方法末尾那部分不太理解能帮忙讲解下么。
 &#47;&#47; 用 await 方法监听停止请求
-    if (await) {
-        await();
-        stop();
-    }
+if (await) {
+await();
+stop();
+}
 if里面那个await我理解是一个属性值是否启用await。然后进入await()方法，出了await()就直接stop()了。下文老师说await()是调用了Server的await()方法，然后Server的await()方法会死循环监听8005端口。读取到停止命令就会退出死循环。回到catalina执行stop方法。我这边的问题是。调用catalina.start方法的线程一直阻塞着，处理监听事件么，监听到关闭事件就去stop()?。感觉好怪啊!请老师看下哪里理解错了。
 课后问题:文中说部分通过线程池实现并发加载，加同步方法就是为了保证线程安全。</p>2019-05-29</li><br/><li><span>Monday</span> 👍（5） 💬（3）<p>根据老师的给出的Github上Tomcat源码调试Tomcat的启动过程，遇到以下这个问题。
 经debug发现，运行完Catalina.load()方法的第566行digester.parse(inputSource)初始化了Server对象。但是我单步进入第566行，各种操作都没有跟踪到具体是哪一行初始化了Server对象。莫非有Listener？</p>2019-05-29</li><br/><li><span>微思</span> 👍（4） 💬（2）<p>老师，以上源码是基于tomcat的哪个版本？</p>2019-05-28</li><br/><li><span>王智</span> 👍（2） 💬（1）<p>老师,具体的注入是个什么样的概念,上节课说的子组件注入到父组件,内层组件注入到外层组件,这是个什么样的操作,在上面的代码中并没有看到具体的操作呢?</p>2019-05-29</li><br/>

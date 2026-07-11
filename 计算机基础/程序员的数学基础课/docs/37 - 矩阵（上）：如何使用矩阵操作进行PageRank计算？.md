@@ -151,18 +151,24 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # 创建有向图
+
 G = nx.DiGraph()
+
 # 添加带权重有向边
+
 G.add_weighted_edges_from([(1, 3, 1), (2, 1, 1), (2, 3, 1), (3, 1, 1), (5, 2, 1)])
+
 # 添加孤立节点
+
 G.add_node(4)
+
 # 计算pagerank值
+
 pagerank_list = nx.pagerank(G, alpha=0.85)
 print(&quot;pagerank 值是：&quot;, pagerank_list)
 
 nx.draw(G, with_labels=True, font_weight=&#39;bold&#39;)
 plt.show()
-
 
 pagerank 值是： {1: 0.43042160902192195, 3: 0.43042160902192195, 2: 0.06686758646711714, 5: 0.03614459774451953, 4: 0.03614459774451953}</p>2019-03-11</li><br/><li><span>qinggeouye</span> 👍（5） 💬（1）<p>思考题
 https:&#47;&#47;github.com&#47;qinggeouye&#47;GeekTime&#47;blob&#47;master&#47;MathematicProgrammer&#47;37_Matrix2PageRank&#47;lesson37_1.py
@@ -185,35 +191,36 @@ round 6 [[0.46010028 0.03905229 0.46010028 0.02037357 0.02037357]]</p>2019-03-23
 当数据量达到一定的程度的时候，network联图的建立都无法完成的时候，我们应该如何处理呢？
 这里的大数据量大概是300万条数据的样子。谢谢</p>2020-04-01</li><br/><li><span>Geek_3e9d7d</span> 👍（0） 💬（0）<p>思考题：
 for i in range(0, 20):
-  pre_pr = pr
-  pr = np.dot(pr, adj)
+pre_pr = pr
+pr = np.dot(pr, adj)
 
-  pr_jump = np.full([N,2], [[0, 1&#47;N]])
-  pr_jump[:, :-1] = pr.transpose()
+pr_jump = np.full([N,2], [[0, 1&#47;N]])
+pr_jump[:, :-1] = pr.transpose()
 
-  pr = np.dot(pr_jump, jump)
+pr = np.dot(pr_jump, jump)
 
-  pr = pr.transpose()
-  pr = pr &#47; pr.sum()
+pr = pr.transpose()
+pr = pr &#47; pr.sum()
 
-  print(&quot;rount&quot;, i+1, pr)
-  
-  diff = np.mean(np.abs(pr - pre_pr))
-  if diff &lt; 0.000001:
-    break</p>2024-04-07</li><br/><li><span>013923</span> 👍（0） 💬（0）<p>Never too old to learn!</p>2022-09-14</li><br/><li><span>建强</span> 👍（0） 💬（0）<p>思考题：
+print(&quot;rount&quot;, i+1, pr)
+
+diff = np.mean(np.abs(pr - pre_pr))
+if diff &lt; 0.000001:
+break</p>2024-04-07</li><br/><li><span>013923</span> 👍（0） 💬（0）<p>Never too old to learn!</p>2022-09-14</li><br/><li><span>建强</span> 👍（0） 💬（0）<p>思考题：
 我尝试改了一下老师的代码，把迭代结束条件改为计算前后两次PageRank向量的差的平均值是否小于指定精度，发现这个迭代过程收敛很快，只用了7轮循环就结束了，程序部分代码如下，不当之处请老师指正：
+
 # 采样迭代方式，判断前后两次PageRank向量的差的平均值是否小于指定精度。
+
 pricision = 1e-9 # 设置计算精度
 last_pr = None
 i = 0
-while True:
-    # 进行点乘，计算Σ(PR(pj)&#47;L(pj))
-    pr = np.dot(pr, adj)
+while True: # 进行点乘，计算Σ(PR(pj)&#47;L(pj))
+pr = np.dot(pr, adj)
 
     # 转置保存Σ(PR(pj)&#47;L(pj))结果的矩阵，并增加长度为N的列向量，其中每个元素的值为1&#47;N，便于下一步的点乘。
     pr_jump = np.full([N, 2], [[0, 1&#47;N]])
-    
-    pr_jump[:,:-1] = pr.transpose() 
+
+    pr_jump[:,:-1] = pr.transpose()
 
     # 进行点乘，计算α(Σ(PR(pj)&#47;L(pj))) + (1-α)&#47;N)
     pr = np.dot(pr_jump, jump)
@@ -221,15 +228,16 @@ while True:
     # 归一化PageRank得分，由于计算后pr是列向量，因此需要做转置
     pr = pr.transpose()
     pr = pr &#47; pr.sum()
-    
+
     print(&quot;round&quot;, i + 1, pr)
-   
+
     if last_pr is not None:
         diff = np.average(np.absolute(pr - last_pr))
         if diff &lt;= pricision:
             break
     last_pr = pr.copy()
     i += 1
+
 ############程序输出#############
 round 1 [[0.37027027 0.24864865 0.37027027 0.00540541 0.00540541]]
 round 2 [[0.46740902 0.02498642 0.46740902 0.02009777 0.02009777]]
@@ -241,9 +249,8 @@ round 7 [[0.46010028 0.03905229 0.46010028 0.02037357 0.02037357]]</p>2020-09-26
 #==========================
 i = 0
 errorRate = 0.000001
-while (True):
-    # 进行点乘，计算Σ(PR(pj)&#47;L(pj))
-    pr = np.dot(pr_tmp, adj)
+while (True): # 进行点乘，计算Σ(PR(pj)&#47;L(pj))
+pr = np.dot(pr_tmp, adj)
 
     # 转置保存Σ(PR(pj)&#47;L(pj))结果的矩阵，并增加长度为N的列向量，其中每个元素的值为1&#47;N，便于下一步的点乘。
     pr_jump = np.full([N, 2], [[0, 1 &#47; N]])

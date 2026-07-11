@@ -132,12 +132,14 @@ flannel实际上是将docker出来的包再加udp封装，以支持二层网络�
   b) VXLAN封包: Node eth0 MAC头|Node IP头|UDP头(?port)|VXLAN头|flannel.1 MAC头|容器IP头|Payload
 
 flannel方案简析:
-1) Overlay via UDP基于用户态处理网络流量，性能较差;
-2) 数据面与控制面未分析, 规模增长后可能存在管理问题。</p>2023-01-06</li><br/><li><span>Geek_536b07</span> 👍（2） 💬（0）<p>容器网络，讲的的太模糊了，容器集群注册的一般是podip，一般都会遇到跨集群访问的问题，这才是开发人员要去解决的重点</p>2022-08-11</li><br/><li><span>饭粒</span> 👍（2） 💬（0）<p>#  tcpdump -i eth0 dst 192.168.1.7 -w  dst.pcap
-抓了下 vxlan 类型的 flannel 容器间的包，确实是 udp 的封包，但是没有看到 vxlan 的信息，不知道这要怎么看？
-Frame 3: 201 bytes on wire (1608 bits), 201 bytes captured (1608 bits)
-Ethernet II, Src: fa:16:3e:08:a8:46 (fa:16:3e:08:a8:46), Dst: fa:16:3e:5a:de:91 (fa:16:3e:5a:de:91)
-Internet Protocol Version 4, Src: 192.168.1.4, Dst: 192.168.1.7
-User Datagram Protocol, Src Port: 54228, Dst Port: 8472
-Data (159 bytes)</p>2019-12-07</li><br/><li><span>jacy</span> 👍（2） 💬（1）<p>udp丢包能接受吗</p>2019-03-13</li><br/>
+
+1. Overlay via UDP基于用户态处理网络流量，性能较差;
+2. 数据面与控制面未分析, 规模增长后可能存在管理问题。</p>2023-01-06</li><br/><li><span>Geek_536b07</span> 👍（2） 💬（0）<p>容器网络，讲的的太模糊了，容器集群注册的一般是podip，一般都会遇到跨集群访问的问题，这才是开发人员要去解决的重点</p>2022-08-11</li><br/><li><span>饭粒</span> 👍（2） 💬（0）<p># tcpdump -i eth0 dst 192.168.1.7 -w dst.pcap
+   抓了下 vxlan 类型的 flannel 容器间的包，确实是 udp 的封包，但是没有看到 vxlan 的信息，不知道这要怎么看？
+   Frame 3: 201 bytes on wire (1608 bits), 201 bytes captured (1608 bits)
+   Ethernet II, Src: fa:16:3e:08:a8:46 (fa:16:3e:08:a8:46), Dst: fa:16:3e:5a:de:91 (fa:16:3e:5a:de:91)
+   Internet Protocol Version 4, Src: 192.168.1.4, Dst: 192.168.1.7
+   User Datagram Protocol, Src Port: 54228, Dst Port: 8472
+   Data (159 bytes)</p>2019-12-07</li><br/><li><span>jacy</span> 👍（2） 💬（1）<p>udp丢包能接受吗</p>2019-03-13</li><br/>
+
 </ul>

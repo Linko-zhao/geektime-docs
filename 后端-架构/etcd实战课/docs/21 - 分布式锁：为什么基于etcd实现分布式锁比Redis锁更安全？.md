@@ -21,7 +21,7 @@
 首先和你简单介绍下此案例中的Redis简易分布式锁实现方案，它使用了Redis SET命令来实现。
 
 ```
-SET key value [EX seconds|PX milliseconds|EXAT timestamp|PXAT milliseconds-timestamp|KEEPTTL] [NX|XX] 
+SET key value [EX seconds|PX milliseconds|EXAT timestamp|PXAT milliseconds-timestamp|KEEPTTL] [NX|XX]
 [GET]
 ```
 
@@ -167,7 +167,7 @@ Unlock
 若create\_revision是0，你就可发起put操作创建相关key，具体代码如下:
 
 ```
-txn := client.Txn(ctx).If(v3.Compare(v3.CreateRevision(k), 
+txn := client.Txn(ctx).If(v3.Compare(v3.CreateRevision(k),
 "=", 0))
 ```
 
@@ -337,51 +337,52 @@ Redisson 是一个 Java 语言实现的 Redis SDK 客户端，在使用分布式
 package main
 
 import (
-	&quot;context&quot;
-	&quot;fmt&quot;
-	&quot;github.com&#47;coreos&#47;etcd&#47;clientv3&quot;
-	&quot;github.com&#47;coreos&#47;etcd&#47;clientv3&#47;concurrency&quot;
-	&quot;sync&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+&quot;github.com&#47;coreos&#47;etcd&#47;clientv3&quot;
+&quot;github.com&#47;coreos&#47;etcd&#47;clientv3&#47;concurrency&quot;
+&quot;sync&quot;
 )
 
 func main() {
-	cli, _ := clientv3.New(clientv3.Config{
-		Endpoints: []string{&quot;192.168.2.45:2379&quot;, &quot;192.168.2.46:2379&quot;, &quot;192.168.2.47:2379&quot;},
-	})
-	defer cli.Close()
-	session, _ := concurrency.NewSession(cli)
-	defer session.Close()
-	mutex := concurrency.NewMutex(session, &quot;&#47;mylock&#47;&quot;)
+cli, _ := clientv3.New(clientv3.Config{
+Endpoints: []string{&quot;192.168.2.45:2379&quot;, &quot;192.168.2.46:2379&quot;, &quot;192.168.2.47:2379&quot;},
+})
+defer cli.Close()
+session, _ := concurrency.NewSession(cli)
+defer session.Close()
+mutex := concurrency.NewMutex(session, &quot;&#47;mylock&#47;&quot;)
 
-	wg := sync.WaitGroup{}
-	wg.Add(2)
-	sum := 0
-	go func() {
-		defer wg.Done()
-		for i := 0; i &lt; 100; i++ {
-			fmt.Println(&quot;1号协程拿到了锁&quot;)
-			mutex.Lock(context.Background())
-			sum = sum + 1
-			fmt.Println(&quot;1号协程中sum是 &quot;, sum)
-			mutex.Unlock(context.Background())
-			fmt.Println(&quot;1号协程释放了锁&quot;)
-		}
+    wg := sync.WaitGroup{}
+    wg.Add(2)
+    sum := 0
+    go func() {
+    	defer wg.Done()
+    	for i := 0; i &lt; 100; i++ {
+    		fmt.Println(&quot;1号协程拿到了锁&quot;)
+    		mutex.Lock(context.Background())
+    		sum = sum + 1
+    		fmt.Println(&quot;1号协程中sum是 &quot;, sum)
+    		mutex.Unlock(context.Background())
+    		fmt.Println(&quot;1号协程释放了锁&quot;)
+    	}
 
-	}()
-	go func() {
-		defer wg.Done()
-		for i := 0; i &lt; 100; i++ {
-			mutex.Lock(context.Background())
-			fmt.Println(&quot;2号协程拿到了锁&quot;)
-			sum = sum - 1
-			fmt.Println(&quot;2号协程中sum是 &quot;, sum)
-			mutex.Unlock(context.Background())
-			fmt.Println(&quot;2号协程释放了锁&quot;)
-		}
-	}()
-	
-	wg.Wait()
-	fmt.Println(sum)
+    }()
+    go func() {
+    	defer wg.Done()
+    	for i := 0; i &lt; 100; i++ {
+    		mutex.Lock(context.Background())
+    		fmt.Println(&quot;2号协程拿到了锁&quot;)
+    		sum = sum - 1
+    		fmt.Println(&quot;2号协程中sum是 &quot;, sum)
+    		mutex.Unlock(context.Background())
+    		fmt.Println(&quot;2号协程释放了锁&quot;)
+    	}
+    }()
+
+    wg.Wait()
+    fmt.Println(sum)
+
 }
 </p>2023-01-21</li><br/><li><span>星星</span> 👍（0） 💬（0）<p>强行吹 
 Redisson 或者你自己写个watchdog 都可以解决续期问题 

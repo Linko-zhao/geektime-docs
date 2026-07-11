@@ -209,7 +209,7 @@ tcp_connection_new(int connected_fd, struct event_loop *eventLoop,
     if (tcpConnection->connectionCompletedCallBack != NULL) {
         tcpConnection->connectionCompletedCallBack(tcpConnection);
     }
-  
+
     //把该套集字对应的channel对象注册到event_loop事件分发器上
     event_loop_add_channel_event(tcpConnection->eventLoop, connected_fd, tcpConnection->channel);
     return tcpConnection;
@@ -294,25 +294,24 @@ event\_loop\_handle\_pending\_channel函数的作用是遍历当前event loop里
 为什么event_loop_channel_buffer_nolock(eventLoop, fd, channel1, type);是往子线程的数据中增加需要处理的 channel event 对象呢?
 
 void event_loop_channel_buffer_nolock(struct event_loop *eventLoop, int fd, struct channel *channel1, int type) {
-    &#47;&#47;add channel into the pending list
-    struct channel_element *channelElement = malloc(sizeof(struct channel_element));
-    channelElement-&gt;channel = channel1;
-    channelElement-&gt;type = type;&#47;&#47;1 add  (1: add  2: delete)
-    channelElement-&gt;next = NULL;
-    &#47;&#47;第一个元素  channel_element是channel的链表，
-    &#47;&#47; eventLoop pending_head和pending_tail维护的是channelElement的链表
-    &#47;&#47;这样的话最终还是event_loop包含了channel(event_loop-&gt;channelElement-&gt;channel)
-    if (eventLoop-&gt;pending_head == NULL) {
-        eventLoop-&gt;pending_head = eventLoop-&gt;pending_tail = channelElement;
-    } else {
-        eventLoop-&gt;pending_tail-&gt;next = channelElement;
-        eventLoop-&gt;pending_tail = channelElement;
-    }
+&#47;&#47;add channel into the pending list
+struct channel_element *channelElement = malloc(sizeof(struct channel_element));
+channelElement-&gt;channel = channel1;
+channelElement-&gt;type = type;&#47;&#47;1 add (1: add 2: delete)
+channelElement-&gt;next = NULL;
+&#47;&#47;第一个元素 channel_element是channel的链表，
+&#47;&#47; eventLoop pending_head和pending_tail维护的是channelElement的链表
+&#47;&#47;这样的话最终还是event_loop包含了channel(event_loop-&gt;channelElement-&gt;channel)
+if (eventLoop-&gt;pending_head == NULL) {
+eventLoop-&gt;pending_head = eventLoop-&gt;pending_tail = channelElement;
+} else {
+eventLoop-&gt;pending_tail-&gt;next = channelElement;
+eventLoop-&gt;pending_tail = channelElement;
+}
 }
 
-
 void *event_loop_thread_run(void *arg) {
-    struct event_loop_thread *eventLoopThread = (struct event_loop_thread *) arg;
+struct event_loop_thread *eventLoopThread = (struct event_loop_thread *) arg;
 
     pthread_mutex_lock(&amp;eventLoopThread-&gt;mutex);
 
@@ -325,19 +324,19 @@ void *event_loop_thread_run(void *arg) {
 
     &#47;&#47;子线程event loop run
     event_loop_run(eventLoopThread-&gt;eventLoop);
+
 }
 struct event_loop_thread {
-    struct event_loop *eventLoop;&#47;&#47;主线程和子线程共享
-    pthread_t thread_tid;        &#47;* thread ID *&#47;
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
-    char * thread_name;
-    long thread_count;    &#47;* # connections handled *&#47;
+struct event_loop _eventLoop;&#47;&#47;主线程和子线程共享
+pthread_t thread_tid; &#47;_ thread ID _&#47;
+pthread_mutex_t mutex;
+pthread_cond_t cond;
+char * thread_name;
+long thread_count; &#47;_ # connections handled *&#47;
 };
 
-
 event_loop_channel_buffer_nolock这个函数中是往eventLoop的链表中注册事件,可是这里的eventLoop是和子线程处理函数
-event_loop_thread_run中eventLoopThread-&gt;eventLoop不是一个eventLoop啊,这个eventLoopThread-&gt;eventLoop不才是主子线程共享的吗?</p>2019-12-11</li><br/><li><span>时间</span> 👍（5） 💬（4）<p>线程池个数有限，如何处理成千上万的链接？假如线程池共四个线程，正在处理四个链接。再来一个链接如何处理呢？</p>2020-09-23</li><br/><li><span>YUAN</span> 👍（4） 💬（1）<p>为什么不直接让子线程自己调用accept而要主线程调用呢？</p>2020-12-11</li><br/><li><span>郑祖煌</span> 👍（2） 💬（1）<p>第一道， 可以直接在应用层上将输入的线程个数*2 。  第二道，(1)可以判断已经创建好的线程 那个线程的事件个数最少，挂在事件最少的那个线程上。 </p>2020-07-15</li><br/><li><span>消失的时光</span> 👍（1） 💬（4）<p>老师你好，不是很理解为什么要socketpair唤醒，直接把新连接的socket加到epoll里面，有发送就的数据过来，这个线程自己不会醒吗？</p>2022-01-07</li><br/><li><span>keepgoing</span> 👍（1） 💬（2）<p>想问问老师关于基础语法的问题，代码里很多地方对象都是相互引用的，比如tcp_connection里引用了channel指针, channel 对象里引用了tcp_connection指针, dispatcher里引用了event_loop指针, event_loop里也引用了dispatcher指针。这样代码编译的时候为什么不会引起报错。。</p>2020-08-24</li><br/><li><span>MoonGod</span> 👍（1） 💬（2）<p>老师关于加锁这里有个疑问，如果加锁的目的是让主线程等待子线程初始化event loop。那不加锁不是也可以达到这个目的吗？主线程while 循环里面不断判断子线程的event loop是否不为null不就可以了？为啥一定要加一把锁呢？</p>2019-10-23</li><br/><li><span>鱼向北游</span> 👍（1） 💬（3）<p>netty选子线程是两种算法，都是有个原子自增计数，如果线程数不是2的幂用取模，如果是就是按位与线程数减一</p>2019-10-23</li><br/><li><span>雨里</span> 👍（0） 💬（2）<p>没有看明白主从reactor这个主线程是如何唤醒子线程的？？？
+event_loop_thread_run中eventLoopThread-&gt;eventLoop不是一个eventLoop啊,这个eventLoopThread-&gt;eventLoop不才是主子线程共享的吗?</p>2019-12-11</li><br/><li><span>时间</span> 👍（5） 💬（4）<p>线程池个数有限，如何处理成千上万的链接？假如线程池共四个线程，正在处理四个链接。再来一个链接如何处理呢？</p>2020-09-23</li><br/><li><span>YUAN</span> 👍（4） 💬（1）<p>为什么不直接让子线程自己调用accept而要主线程调用呢？</p>2020-12-11</li><br/><li><span>郑祖煌</span> 👍（2） 💬（1）<p>第一道， 可以直接在应用层上将输入的线程个数*2 。 第二道，(1)可以判断已经创建好的线程 那个线程的事件个数最少，挂在事件最少的那个线程上。 </p>2020-07-15</li><br/><li><span>消失的时光</span> 👍（1） 💬（4）<p>老师你好，不是很理解为什么要socketpair唤醒，直接把新连接的socket加到epoll里面，有发送就的数据过来，这个线程自己不会醒吗？</p>2022-01-07</li><br/><li><span>keepgoing</span> 👍（1） 💬（2）<p>想问问老师关于基础语法的问题，代码里很多地方对象都是相互引用的，比如tcp_connection里引用了channel指针, channel 对象里引用了tcp_connection指针, dispatcher里引用了event_loop指针, event_loop里也引用了dispatcher指针。这样代码编译的时候为什么不会引起报错。。</p>2020-08-24</li><br/><li><span>MoonGod</span> 👍（1） 💬（2）<p>老师关于加锁这里有个疑问，如果加锁的目的是让主线程等待子线程初始化event loop。那不加锁不是也可以达到这个目的吗？主线程while 循环里面不断判断子线程的event loop是否不为null不就可以了？为啥一定要加一把锁呢？</p>2019-10-23</li><br/><li><span>鱼向北游</span> 👍（1） 💬（3）<p>netty选子线程是两种算法，都是有个原子自增计数，如果线程数不是2的幂用取模，如果是就是按位与线程数减一</p>2019-10-23</li><br/><li><span>雨里</span> 👍（0） 💬（2）<p>没有看明白主从reactor这个主线程是如何唤醒子线程的？？？
 1、就单reactor而言，主线程创建管道fd，正常来说应该是在epoll_wait上注册0端读事件，往管道1端写数据的方式来唤醒epoll。
 2、而主从reactor代码来看，主线程和子线程都创建了一对pairfd，主线程的管道1端注册在主线程的epoll上，这样即使往管道中写数据，也只是唤醒主线程，怎么会唤醒子线程呢？？，代码中好像没有将主线程的管道fd一端注册在子线程的epoll上。是不是下面的这行代码导致的
 eventLoop-&gt;eventDispatcher = &amp;poll_dispatcher;
@@ -346,5 +345,6 @@ eventLoop-&gt;eventDispatcher = &amp;poll_dispatcher;
 1. 为什么主线程要等待子线程初始化完成？是担心 tcp_server_init 后、但子线程还未初始化完成时，thread_pool_get_loop 无法找到子线程来处理新来的连接吗？
 
 2. 文中提到”你可能会问，主线程是循环在等待每个子线程完成初始化，如果进入第二个循环，等待第二个子线程完成初始化，而此时第二个子线程已经初始化完成了，该怎么办？“
-主线程不是等第一个子线程初始化完成后才会进入下一个循环启动第二个子线程吗？怎么会出现”而此时第二个子线程已经初始化完成了“？</p>2022-02-20</li><br/><li><span>Janus Pen</span> 👍（0） 💬（1）<p>老师：event_loop_do_channel_event函数中的event_loop_handle_pending_channel函数调用与event_loop_run函数中的event_loop_handle_pending_channel函数调用是否重复?</p>2022-01-10</li><br/><li><span>菜鸡互啄</span> 👍（0） 💬（1）<p>老师你好 关于第二点 是不是相当于没有需要遍历的描述符 导致一直卡在poll或者select上。所以手动构造socketpair作为初始描述符。再添加真正新的描述符时 用socketpair把程序从poll或者select阻塞上解放出来 以获取达到添加描述符的时机？我的理解对吗？</p>2022-01-05</li><br/><li><span>群书</span> 👍（0） 💬（1）<p>老师你好，逻辑线程写数据到发送队列，同时通知唤醒io线程，这个通知方式目前比较常规的做法是套接字对或者事件fd 实际测试下来 都会增加主线程的系统调用 有什么优化办法呢</p>2021-11-12</li><br/><li><span>YUAN</span> 👍（0） 💬（1）<p>主线程和丛线程不是共享内存吗？为什么还要socketpair唤醒呢？</p>2020-12-04</li><br/><li><span>忆水寒</span> 👍（0） 💬（4）<p>老师，main-EventLoop和sub-EventLoop里面的eventLoop-&gt;eventDispatcher = &amp;epoll_dispatcher;都是指向一个epoll_dispatcher。其中main-EventLoop用于accept新连接，获得新连接封装channel交给某一个sub-EventLoop去处理。假如dispatch有事件，是不是子线程也会从dispatch处惊醒，这是不是有“惊群效应”吗？</p>2020-09-06</li><br/>
+   主线程不是等第一个子线程初始化完成后才会进入下一个循环启动第二个子线程吗？怎么会出现”而此时第二个子线程已经初始化完成了“？</p>2022-02-20</li><br/><li><span>Janus Pen</span> 👍（0） 💬（1）<p>老师：event_loop_do_channel_event函数中的event_loop_handle_pending_channel函数调用与event_loop_run函数中的event_loop_handle_pending_channel函数调用是否重复?</p>2022-01-10</li><br/><li><span>菜鸡互啄</span> 👍（0） 💬（1）<p>老师你好 关于第二点 是不是相当于没有需要遍历的描述符 导致一直卡在poll或者select上。所以手动构造socketpair作为初始描述符。再添加真正新的描述符时 用socketpair把程序从poll或者select阻塞上解放出来 以获取达到添加描述符的时机？我的理解对吗？</p>2022-01-05</li><br/><li><span>群书</span> 👍（0） 💬（1）<p>老师你好，逻辑线程写数据到发送队列，同时通知唤醒io线程，这个通知方式目前比较常规的做法是套接字对或者事件fd 实际测试下来 都会增加主线程的系统调用 有什么优化办法呢</p>2021-11-12</li><br/><li><span>YUAN</span> 👍（0） 💬（1）<p>主线程和丛线程不是共享内存吗？为什么还要socketpair唤醒呢？</p>2020-12-04</li><br/><li><span>忆水寒</span> 👍（0） 💬（4）<p>老师，main-EventLoop和sub-EventLoop里面的eventLoop-&gt;eventDispatcher = &amp;epoll_dispatcher;都是指向一个epoll_dispatcher。其中main-EventLoop用于accept新连接，获得新连接封装channel交给某一个sub-EventLoop去处理。假如dispatch有事件，是不是子线程也会从dispatch处惊醒，这是不是有“惊群效应”吗？</p>2020-09-06</li><br/>
+
 </ul>

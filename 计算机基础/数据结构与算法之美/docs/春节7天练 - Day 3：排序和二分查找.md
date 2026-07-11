@@ -6,7 +6,7 @@
 
 前两天的内容，是关于数组和链表、排序和二分查找的。如果你错过了，点击文末的“上一篇”，即可进入测试。
 
-* * *
+---
 
 ## 关于排序和二分查找的几个必知必会的代码实现
 
@@ -28,7 +28,7 @@
 
 中文版：[https://leetcode-cn.com/problems/sqrtx/](https://leetcode-cn.com/problems/sqrtx/)
 
-* * *
+---
 
 做完题目之后，你可以点击“请朋友读”，把测试题分享给你的朋友，说不定就帮他解决了一个难题。
 
@@ -76,17 +76,18 @@ public class TopK {
         array[right] = tmp;
         return i;
     }
+
 }</p>2019-02-13</li><br/><li><span>C_love</span> 👍（1） 💬（1）<p>Use Binary Search
 
 class Solution {
-    public int mySqrt(int x) {
-        if (x == 0 || x == 1) {
-            return x;
-        }
-        
+public int mySqrt(int x) {
+if (x == 0 || x == 1) {
+return x;
+}
+
         int start = 0;
         int end = (x &gt;&gt; 1) + 1;
-        
+
         while (start + 1 &lt; end) {
             final int mid = start + ((end - start) &gt;&gt; 1);
             final int quotient = x &#47; mid;
@@ -98,44 +99,46 @@ class Solution {
                 start = mid;
             }
         }
-        
+
         return start;
     }
+
 }</p>2019-02-07</li><br/><li><span>涤生</span> 👍（0） 💬（1）<p>使用了二分法和牛顿法来解决平方根的求解问题。
 二分法：
 class Solution:
-    def mySqrt(self, x):
-        &quot;&quot;&quot;
-        :type x: int
-        :rtype: int
-        &quot;&quot;&quot;
-        if x == 1:
-            return 1
-        def binarysearch(l, r, x):
-            while(l&lt;=r):
-                mid = l + ((r-l)&gt;&gt;1)
-                if abs(mid*mid-x)&lt;1:
-                    return mid
-                elif mid*mid &gt; x:
-                    r = mid - 1
-                else:
-                    l = mid + 1
-            return r
-        return binarysearch(0, x&#47;&#47;2, x)
+def mySqrt(self, x):
+&quot;&quot;&quot;
+:type x: int
+:rtype: int
+&quot;&quot;&quot;
+if x == 1:
+return 1
+def binarysearch(l, r, x):
+while(l&lt;=r):
+mid = l + ((r-l)&gt;&gt;1)
+if abs(mid*mid-x)&lt;1:
+return mid
+elif mid*mid &gt; x:
+r = mid - 1
+else:
+l = mid + 1
+return r
+return binarysearch(0, x&#47;&#47;2, x)
 牛顿法：
 class Solution:
-    def mySqrt(self, x):
-        &quot;&quot;&quot;
-        :type x: int
-        :rtype: int
-        &quot;&quot;&quot;
-        if x == 1:
-            return 1
-        ans = x&#47;&#47;2
-        while(ans * ans - x&gt;0): # 可以是其他精度
-            ans = (x &#47;&#47; ans + ans) &#47;&#47; 2
-        return ans</p>2019-02-07</li><br/><li><span>李皮皮皮皮皮</span> 👍（13） 💬（0）<p>各种排序算法真要说起来实际中使用的最多的也就是快排了。然而各种编程语言内置的标准库都包含排序算法的实现，基本没有自己动手实现的必要。然后作为经典的算法，自己实现一遍，分析分析时间空间复杂度对自己的算法设计大有裨益。需要注意的是为了高效，在实际的实现中，多种排序算法往往是组合使用的。例如c标准库中总体上是快排，但当数据量小于一定程度，会转而使用选择或插入排序。
+def mySqrt(self, x):
+&quot;&quot;&quot;
+:type x: int
+:rtype: int
+&quot;&quot;&quot;
+if x == 1:
+return 1
+ans = x&#47;&#47;2
+while(ans * ans - x&gt;0): # 可以是其他精度
+ans = (x &#47;&#47; ans + ans) &#47;&#47; 2
+return ans</p>2019-02-07</li><br/><li><span>李皮皮皮皮皮</span> 👍（13） 💬（0）<p>各种排序算法真要说起来实际中使用的最多的也就是快排了。然而各种编程语言内置的标准库都包含排序算法的实现，基本没有自己动手实现的必要。然后作为经典的算法，自己实现一遍，分析分析时间空间复杂度对自己的算法设计大有裨益。需要注意的是为了高效，在实际的实现中，多种排序算法往往是组合使用的。例如c标准库中总体上是快排，但当数据量小于一定程度，会转而使用选择或插入排序。
 求平方根使用牛顿法二分逼近😄</p>2019-02-06</li><br/><li><span>虎虎❤️</span> 👍（5） 💬（0）<p>基本排序算法的关注点分为：
+
 1. 时间复杂度。如n的平方（冒泡，选择，插入）；插入排序的优化希尔排序，则把复杂度降低到n的3&#47;2次方；n乘以logn(快排，归并排序，堆排序）。
 2. 是否为原地排序。如，归并排序需要额外的辅助空间。
 3. 算法的稳定性。稳定排序（by nature）如冒泡，插入，归并。如果把次序考虑在内，可以把其他的排序（如快排，堆排序）也实现为稳定排序。
@@ -149,56 +152,56 @@ import random
 import time
 
 def Array(n):
-    a = []
-    for i in range(n):
-        a.append(random.randint(0 , n))
-    return a
+a = []
+for i in range(n):
+a.append(random.randint(0 , n))
+return a
 def QuickSort(n):
-    array = Array(100)
-    if n &gt; len(array) or n &lt; 1:
-        print(&quot;超出范围，找不到&quot;)
-        return
-    n = n-1
-    a = qsort(0 , len(array)-1 , array , n)
-    print(sorted(array))
-    print(&quot;-----------------------------&quot;)
-    print(a)
+array = Array(100)
+if n &gt; len(array) or n &lt; 1:
+print(&quot;超出范围，找不到&quot;)
+return
+n = n-1
+a = qsort(0 , len(array)-1 , array , n)
+print(sorted(array))
+print(&quot;-----------------------------&quot;)
+print(a)
 
 def qsort(start , end , array , n):
-    if start == end:
-        res = array[start]
-    if start &lt; end:
-        key = partation(array , start , end)
-        print(start , key , end)
-        if key &gt; n :
-            res = qsort(start , key-1 , array , n)
-        elif key &lt; n:
-            res = qsort(key+1 , end , array , n)
-        else:
-            res = array[key]
-    return res
+if start == end:
+res = array[start]
+if start &lt; end:
+key = partation(array , start , end)
+print(start , key , end)
+if key &gt; n :
+res = qsort(start , key-1 , array , n)
+elif key &lt; n:
+res = qsort(key+1 , end , array , n)
+else:
+res = array[key]
+return res
 
 def swap(array , start , end):
-    temp = array[start]
-    array[start] = array[end]
-    array[end] = temp
+temp = array[start]
+array[start] = array[end]
+array[end] = temp
 
 def partation(array , start , end):
-    temp = array[start]
-    while start &lt; end :
-        while start&lt;end and array[end]&lt;=temp:
-            end-=1
-        swap(array , start , end)
-        while start&lt;end and array[start]&gt;=temp:
-            start+=1
-        swap(array , start , end)
-    return start</p>2019-02-16</li><br/><li><span>kai</span> 👍（2） 💬（0）<p>实现模糊二分查找算法2:
+temp = array[start]
+while start &lt; end :
+while start&lt;end and array[end]&lt;=temp:
+end-=1
+swap(array , start , end)
+while start&lt;end and array[start]&gt;=temp:
+start+=1
+swap(array , start , end)
+return start</p>2019-02-16</li><br/><li><span>kai</span> 👍（2） 💬（0）<p>实现模糊二分查找算法2:
 
 public class BinarySearch {
-    &#47;&#47; 3. 查找第一个大于等于给定值的元素
-    public static int bsFistGE(int[] array, int target) {
-        int lo = 0;
-        int hi = array.length - 1;
+&#47;&#47; 3. 查找第一个大于等于给定值的元素
+public static int bsFistGE(int[] array, int target) {
+int lo = 0;
+int hi = array.length - 1;
 
         while (lo &lt;= hi) {
             int mid = lo + ((hi - lo) &gt;&gt; 1);
@@ -238,43 +241,45 @@ public class BinarySearch {
 
         return -1;
     }
+
 }</p>2019-02-11</li><br/><li><span>TryTs</span> 👍（1） 💬（0）<p>#include&lt;iostream&gt;
 #include&lt;cmath&gt;
 using namespace std;
 double a = 1e-6;
 double sqrt(double n){
-	double low = 0.0;
-	double high = n;
-	
+double low = 0.0;
+double high = n;
+
 int i = 1000;
 
-	while(i--){
-		double mid = low + (high - low) &#47; 2.0; 
-		&#47;&#47;cout&lt;&lt;&quot;n:&quot;&lt;&lt;n&lt;&lt;endl;
-		double square = mid * mid;
-		&#47;&#47;cout&lt;&lt;&quot;sq:&quot;&lt;&lt;square&lt;&lt;endl;
-		&#47;&#47;cout&lt;&lt;&quot;s:&quot;&lt;&lt;abs(square - n)&lt;&lt;endl;
-		if(abs(mid * mid - n) &lt; a){
-			return mid;
-		}
-		else{
+    while(i--){
+    	double mid = low + (high - low) &#47; 2.0;
+    	&#47;&#47;cout&lt;&lt;&quot;n:&quot;&lt;&lt;n&lt;&lt;endl;
+    	double square = mid * mid;
+    	&#47;&#47;cout&lt;&lt;&quot;sq:&quot;&lt;&lt;square&lt;&lt;endl;
+    	&#47;&#47;cout&lt;&lt;&quot;s:&quot;&lt;&lt;abs(square - n)&lt;&lt;endl;
+    	if(abs(mid * mid - n) &lt; a){
+    		return mid;
+    	}
+    	else{
 
-			if(square &gt; n){
-				high = mid;
-			} 
-			else{
-			    low = mid; 
-			}
-		}
-	}
-	return -2.0;
+    		if(square &gt; n){
+    			high = mid;
+    		}
+    		else{
+    		    low = mid;
+    		}
+    	}
+    }
+    return -2.0;
+
 }
 int main(){
-	double t;
-	while(true){
-		cin&gt;&gt;t;
-		cout&lt;&lt;sqrt(t)&lt;&lt;endl;
-	}
+double t;
+while(true){
+cin&gt;&gt;t;
+cout&lt;&lt;sqrt(t)&lt;&lt;endl;
+}
 }</p>2019-02-14</li><br/><li><span>EidLeung</span> 👍（1） 💬（0）<p>编程实现 O(n) 时间复杂度内找到一组数据的第 K 大元素。
 这个的时间复杂路应该是n·logk吧？</p>2019-02-12</li><br/><li><span>Abner</span> 👍（1） 💬（0）<p>java实现冒泡排序
 代码如下：
@@ -308,7 +313,7 @@ public class BubbleSort {
 </p>2019-02-11</li><br/><li><span>kai</span> 👍（1） 💬（0）<p>实现模糊二分查找算法1:
 
 public class BinarySearch {
-    
+
     &#47;&#47; 1. 查找第一个值等于给定值的元素
     public static int bsFirst(int[] array, int target) {
         int lo = 0;
@@ -356,13 +361,14 @@ public class BinarySearch {
 
         return -1;
     }
+
 }</p>2019-02-11</li><br/><li><span>kai</span> 👍（1） 💬（0）<p>实现一个有序数组的二分查找算法:
 
 public class BinarySearch {
-    &#47;&#47; 最简单的二分查找算法：针对有序无重复元素数组
-    &#47;&#47; 迭代
-    public static int binarySearch(int[] array, int target) {
-        if (array == null) return -1;
+&#47;&#47; 最简单的二分查找算法：针对有序无重复元素数组
+&#47;&#47; 迭代
+public static int binarySearch(int[] array, int target) {
+if (array == null) return -1;
 
         int lo = 0;
         int hi = array.length-1; &#47;&#47; 始终在[lo, hi]范围内查找target
@@ -402,5 +408,6 @@ public class BinarySearch {
 
         return -1;
     }
+
 }</p>2019-02-11</li><br/><li><span>纯洁的憎恶</span> 👍（1） 💬（0）<p>这道题似乎可以等价于从1到x中找到一个数y，使得y*y小于等于x，且（y+1）*（y+1）大于x。那么可以从1到x逐个尝试，提高效率可以采用二分查找方法，时间复杂度为O（logx）。</p>2019-02-09</li><br/>
 </ul>

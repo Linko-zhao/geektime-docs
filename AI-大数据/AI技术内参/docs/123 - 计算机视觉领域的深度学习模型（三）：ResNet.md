@@ -51,6 +51,7 @@ F(x)=H(x)-x，当我们把x移动到F的一边，这个时候就得到了残差�
 **参考文献**
 
 1. Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. **Deep Residual Learning for Image Recognition**. The IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 770-778, 2016.
+
 <div><strong>精选留言（4）</strong></div><ul>
 <li><span>Andy</span> 👍（2） 💬（0）<p>老师 为什么层数多了之后就不用dropout了呢？</p>2018-09-15</li><br/><li><span>sky</span> 👍（1） 💬（2）<p>我还有个大胆地猜想，在几何领域，有保角映射和等距离映射这样的反应几何特性的映射，如果我想要神经网络提高对这些特征的识别，是否可以把输入做保角映射或者等距离映射，然后作为残差网络的捷径</p>2018-09-12</li><br/><li><span>sky</span> 👍（1） 💬（1）<p>我能不能这样理解，resnet的捷径其实就是给网络加了一个线性因子，resnet其实就是线性和非线性的组合达到了这样的效果，其实我还是不太明白作者为什么回想到用去逼近残差，逼近残差在其他地方有类似的应用吗</p>2018-09-12</li><br/><li><span>皮特尔</span> 👍（0） 💬（0）<p>不止层数越来越多，网络架构越来越复杂了，比如GoogleNet新增了平行层，ResNet新增了捷径</p>2020-06-05</li><br/>
 </ul>

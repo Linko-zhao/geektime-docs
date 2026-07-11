@@ -18,7 +18,7 @@ PageRank算法工具在sklearn中并不存在，我们需要找到新的工具�
 ```
 import networkx as nx
 # 创建有向图
-G = nx.DiGraph() 
+G = nx.DiGraph()
 # 有向图之间边的关系
 edges = [("A", "B"), ("A", "C"), ("A", "D"), ("B", "A"), ("B", "D"), ("C", "A"), ("D", "B"), ("D", "C")]
 for edge in edges:
@@ -99,7 +99,7 @@ file = pd.read_csv("./input/Persons.csv")
 persons = {}
 for index, row in file.iterrows():
     persons[row['Id']] = row['Name']
-# 针对别名进行转换        
+# 针对别名进行转换
 def unify_name(name):
     # 姓名统一小写
     name = str(name).lower()
@@ -159,7 +159,7 @@ pagerank_threshold = 0.005
 small_graph = graph.copy()
 # 剪掉 PR 值小于 pagerank_threshold 的节点
 for n, p_rank in graph.nodes(data=True):
-    if p_rank['pagerank'] < pagerank_threshold: 
+    if p_rank['pagerank'] < pagerank_threshold:
         small_graph.remove_node(n)
 # 画网络图,采用circular_layout布局让筛选出来的点组成一个圆
 show_graph(small_graph, 'circular_layout')
@@ -201,12 +201,16 @@ show_graph(small_graph, 'circular_layout')
 <li><span>third</span> 👍（7） 💬（1）<p>pagerank 值是： {&#39;C&#39;: 0.22514635472743896, &#39;A&#39;: 0.3245609358176832, &#39;D&#39;: 0.22514635472743894, &#39;B&#39;: 0.22514635472743896}
 
 import networkx as nx
+
 # 创建有向图
+
 G = nx.DiGraph()
+
 # 有向图之间边的关系
+
 edges = [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;D&quot;), (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;D&quot;), (&quot;C&quot;, &quot;A&quot;), (&quot;D&quot;, &quot;B&quot;), (&quot;D&quot;, &quot;C&quot;)]
 for edge in edges:
-    G.add_edge(edge[0], edge[1])
+G.add_edge(edge[0], edge[1])
 pagerank_list = nx.pagerank(G, alpha=0.85)
 print(&quot;pagerank 值是：&quot;, pagerank_list)
 </p>2019-02-27</li><br/><li><span>永降不息之雨</span> 👍（5） 💬（4）<p>老师关于希拉里邮件的案例，这一段一直看不懂。
@@ -238,17 +242,21 @@ alpha指的是阻尼因子。根据公式了解到，这因子代表用户按照
 
 2、代码
 import networkx as nx
+
 # 创建有向图
+
 G=nx.DiGraph()
+
 # 有向图之间边的关系
+
 edges = [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;D&quot;), (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;D&quot;), (&quot;C&quot;, &quot;A&quot;), (&quot;D&quot;, &quot;B&quot;), (&quot;D&quot;, &quot;C&quot;)]
 for edge in edges:
-    G.add_edge(edge[0],edge[1])
+G.add_edge(edge[0],edge[1])
 pagerank_list=nx.pagerank(G,alpha=0.85)
 print(&#39;pagerank 值是: &#39;, pagerank_list)
 
 3、结果
-pagerank 值是:  {&#39;A&#39;: 0.3245609358176831, &#39;B&#39;: 0.22514635472743894, &#39;C&#39;: 0.22514635472743894, &#39;D&#39;: 0.22514635472743894}
+pagerank 值是: {&#39;A&#39;: 0.3245609358176831, &#39;B&#39;: 0.22514635472743894, &#39;C&#39;: 0.22514635472743894, &#39;D&#39;: 0.22514635472743894}
 
 </p>2019-03-01</li><br/><li><span>白夜</span> 👍（2） 💬（1）<p>默认阻尼就是0.85，alpha去掉完事、、
 pagerank 值是： {&#39;A&#39;: 0.3245609358176831, &#39;B&#39;: 0.22514635472743894, &#39;C&#39;: 0.22514635472743894, &#39;D&#39;: 0.22514635472743894}</p>2019-02-27</li><br/><li><span>小晨</span> 👍（1） 💬（2）<p>#!&#47;usr&#47;bin&#47;env python
@@ -258,8 +266,7 @@ pagerank 值是： {&#39;A&#39;: 0.3245609358176831, &#39;B&#39;: 0.225146354727
 import networkx as nx
 import matplotlib.pyplot as plt
 
-def show_graph(graph):
-    # 使用Sprint Layout布局，类似中心放射状
+def show_graph(graph): # 使用Sprint Layout布局，类似中心放射状
 
     positions = nx.spring_layout(graph)
     # 设置网格图中的节点大小，大小与pagerank无关，因为pagerank值很小所以需要*20000
@@ -276,18 +283,27 @@ def show_graph(graph):
     plt.show()
 
 # 创建有向图
+
 G = nx.DiGraph()
+
 # 有向图之间边的关系
+
 edges = [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;D&quot;), (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;D&quot;), (&quot;C&quot;, &quot;A&quot;), (&quot;D&quot;, &quot;B&quot;), (&quot;D&quot;, &quot;C&quot;)]
 for edge in edges:
-    G.add_edge(edge[0],edge[1])
+G.add_edge(edge[0],edge[1])
 pagerank = nx.pagerank(G)
 print(&#39;Pagerank值：&#39;,pagerank)
+
 # 获取每个节点的pagerank数值
+
 pagerank_list = {node: rank for node, rank in pagerank.items()}
+
 # 将 pagerank 数值作为节点的属性
+
 nx.set_node_attributes(G, name = &#39;pagerank&#39;, values = pagerank)
+
 # 画网络图
+
 show_graph(G)</p>2021-02-26</li><br/><li><span>小匚</span> 👍（1） 💬（1）<p>老师好，我在跑的时候发现提示没有这个 edge_size 参数，我直接去掉了也跑出了和文章中相同的结果。nx.draw_networkx_edges(graph, positions, alpha=0.2)</p>2021-02-20</li><br/><li><span>等待</span> 👍（1） 💬（3）<p>老师您好，想询问以下就是，在分析希拉里的邮件人物关系的过程中，阻尼因子为0.85是什么意思呢？什么情况之下才要阻尼因子为1呢？
 麻烦老师了</p>2020-03-30</li><br/><li><span>滢</span> 👍（1） 💬（1）<p>%15跳转概率，对应的阻尼因子是0.85 ， 阻尼因子默认就是0.85，所以在创建的时候可以直接省略啊alpha参数的设定。
 import networkx
@@ -296,23 +312,22 @@ digraph = networkx.DiGraph()
 #有向图之间边的关系
 edges = [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;D&quot;), (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;D&quot;), (&quot;C&quot;, &quot;A&quot;), (&quot;D&quot;, &quot;B&quot;), (&quot;D&quot;, &quot;C&quot;)]
 for edge in edges:
-    digraph.add_edge(edge[0],edge[1])
+digraph.add_edge(edge[0],edge[1])
 pagerank_list = networkx.pagerank(digraph)
 print(&#39;PageRank 值是：&#39;,pagerank_list)
 输出结果：
 PageRank 值是： {&#39;A&#39;: 0.3245609358176831, &#39;B&#39;: 0.22514635472743894, &#39;C&#39;: 0.22514635472743894, &#39;D&#39;: 0.22514635472743894}</p>2019-04-21</li><br/><li><span>厚积薄发</span> 👍（0） 💬（1）<p>老师，问一下哈，edges_weights_temp = defaultdict(list)这行代码 使用list 是不是可以换成int,换成int,我试了一下也是可以的，使用defaultdict(list) 有什么特殊的用吗？</p>2020-10-29</li><br/><li><span>Ronnyz</span> 👍（0） 💬（1）<p>将alpha=0.85
 pagerank值为： {&#39;A&#39;: 0.3245609358176831, &#39;B&#39;: 0.22514635472743894, &#39;C&#39;: 0.22514635472743894, &#39;D&#39;: 0.22514635472743894}</p>2019-11-23</li><br/><li><span>third</span> 👍（1） 💬（0）<p>提问：
- UserWarning: Pandas doesn&#39;t allow columns to be created via a new attribute name - see https:&#47;&#47;pandas.pydata.org&#47;pandas-docs&#47;stable&#47;indexing.html#attribute-access
+UserWarning: Pandas doesn&#39;t allow columns to be created via a new attribute name - see https:&#47;&#47;pandas.pydata.org&#47;pandas-docs&#47;stable&#47;indexing.html#attribute-access
 
 不允许列被新属性创建？？？
 
 点击网页进去，也没有找到这个警告。
 需要修改或者别的什么东西吗？</p>2019-02-27</li><br/><li><span>非同凡想</span> 👍（0） 💬（0）<p>import networkx as nx
 
-
 def test_page_rank():
-    G = nx.DiGraph()
-    edges = [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;D&quot;), (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;D&quot;), (&quot;C&quot;, &quot;A&quot;), (&quot;D&quot;, &quot;B&quot;), (&quot;D&quot;, &quot;C&quot;)]
+G = nx.DiGraph()
+edges = [(&quot;A&quot;, &quot;B&quot;), (&quot;A&quot;, &quot;C&quot;), (&quot;A&quot;, &quot;D&quot;), (&quot;B&quot;, &quot;A&quot;), (&quot;B&quot;, &quot;D&quot;), (&quot;C&quot;, &quot;A&quot;), (&quot;D&quot;, &quot;B&quot;), (&quot;D&quot;, &quot;C&quot;)]
 
     for edge in edges:
         G.add_edge(edge[0], edge[1])

@@ -29,7 +29,7 @@ OpenAI API返回的错误主要分为以下几类：
 import os
 
 # 创建OpenAI客户端
-from openai import OpenAI 
+from openai import OpenAI
 client = OpenAI()
 
 input_directory = '10_Applications/06_VideoCaption/output'
@@ -206,7 +206,7 @@ pip install -U langsmith
 接下来，设置环境变量。
 
 ```plain
-export LANGCHAIN_TRACING_V2=true 
+export LANGCHAIN_TRACING_V2=true
 export LANGCHAIN_API_KEY=<your-api-key>
 ```
 

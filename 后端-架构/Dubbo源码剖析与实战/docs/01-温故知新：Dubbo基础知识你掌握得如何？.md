@@ -155,8 +155,8 @@ public class Dubbo04XmlBootConsumerApplication {
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        
-       http://dubbo.apache.org/schema/dubbo        
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://dubbo.apache.org/schema/dubbo
        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
     <!-- 消费者的应用服务名称，最好是大家当前应用归属的系统名称 -->
     <dubbo:application name="dubbo-04-xml-boot-consumer"></dubbo:application>
@@ -175,9 +175,9 @@ public class Dubbo04XmlBootConsumerApplication {
 
 ```markdown
 java.lang.IllegalStateException: Failed to check the status of the service com.hmilyylimh.cloud.facade.demo.DemoFacade. No provider available for the service com.hmilyylimh.cloud.facade.demo.DemoFacade from the url consumer://192.168.100.183/com.hmilyylimh.cloud.facade.demo.DemoFacade?application=dubbo-04-xml-boot-consumer&background=false&dubbo=2.0.2&interface=com.hmilyylimh.cloud.facade.demo.DemoFacade&methods=sayHello,say&pid=11876&qos.enable=false&register.ip=192.168.100.183&release=3.0.7&side=consumer&sticky=false&timestamp=1668219196431 to the consumer 192.168.100.183 use dubbo version 3.0.7
-	at org.apache.dubbo.config.ReferenceConfig.checkInvokerAvailable(ReferenceConfig.java:545) ~[dubbo-3.0.7.jar:3.0.7]
-	at org.apache.dubbo.config.ReferenceConfig.init(ReferenceConfig.java:293) ~[dubbo-3.0.7.jar:3.0.7]
-	at org.apache.dubbo.config.ReferenceConfig.get(ReferenceConfig.java:219) ~[dubbo-3.0.7.jar:3.0.7]
+at org.apache.dubbo.config.ReferenceConfig.checkInvokerAvailable(ReferenceConfig.java:545) ~[dubbo-3.0.7.jar:3.0.7]
+at org.apache.dubbo.config.ReferenceConfig.init(ReferenceConfig.java:293) ~[dubbo-3.0.7.jar:3.0.7]
+at org.apache.dubbo.config.ReferenceConfig.get(ReferenceConfig.java:219) ~[dubbo-3.0.7.jar:3.0.7]
 ```
 
 又看到了非法状态异常的类，告诉我们检查 DemoFacade 的状态失败了，并提示 `No provider available` 说明还暂时没有提供者，导致消费方无法启动成功。
@@ -189,8 +189,9 @@ java.lang.IllegalStateException: Failed to check the status of the service com.h
 
 ```markdown
 <!-- 引用远程服务 -->
+
 <dubbo:reference id="demoFacade" check="false"
-        interface="com.hmilyylimh.cloud.facade.demo.DemoFacade">
+interface="com.hmilyylimh.cloud.facade.demo.DemoFacade">
 </dubbo:reference>
 ```
 
@@ -198,6 +199,7 @@ java.lang.IllegalStateException: Failed to check the status of the service com.h
 
 ```markdown
 <!-- 为整个消费方添加启动不检查提供方服务是否正常 -->
+
 <dubbo:consumer check="false"></dubbo:consumer>
 ```
 

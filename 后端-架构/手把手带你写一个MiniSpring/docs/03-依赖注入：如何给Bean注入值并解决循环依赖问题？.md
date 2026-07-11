@@ -28,7 +28,7 @@ public class AServiceImpl implements AService {
     private int level;
     private String property1;
     private String property2;
-    
+
     public AServiceImpl() {
     }
     public AServiceImpl(String name, int level) {
@@ -38,8 +38,8 @@ public class AServiceImpl implements AService {
     }
     public void sayHello() {
         System.out.println(this.property1 + "," + this.property2);
-    } 
-    // 在此省略property1和property2的setter、getter方法   
+    }
+    // 在此省略property1和property2的setter、getter方法
 }
 ```
 
@@ -86,7 +86,7 @@ beanClassName);
                 PVS.addPropertyValue(new PropertyValue(pType, pName, pValue));
             }
             beanDefinition.setPropertyValues(PVS);
-            
+           
             //处理构造器参数
             List<Element> constructorElements = element.elements("constructor-
 arg");
@@ -98,7 +98,7 @@ arg");
                 AVS.addArgumentValue(new ArgumentValue(aType, aName, aValue));
             }
             beanDefinition.setConstructorArgumentValues(AVS);
-            
+           
             this.simpleBeanFactory.registerBeanDefinition(beanID, 
 beanDefinition);
         }
@@ -152,7 +152,7 @@ argumentValue.getValue());
                     //按照特定构造器创建实例
                     con = clz.getConstructor(paramTypes);
                     obj = con.newInstance(paramValues);
-                } 
+                }
             } else { //如果没有参数，直接创建实例
                 obj = clz.newInstance();
             }
@@ -189,10 +189,10 @@ propertyValues.getPropertyValueList().get(i);
                 Method method = null;
                 try {
                     method = clz.getMethod(methodName, paramTypes);
-                } 
+                }
                 try {
                     method.invoke(obj, paramValues);
-                } 
+                }
             }
         }
         return obj;
@@ -257,7 +257,7 @@ public class AServiceImpl implements AService {
     private String property1;
     private String property2;
     private BaseService ref1;
-    
+
     public AServiceImpl() {
     }
     public AServiceImpl(String name, int level) {
@@ -268,8 +268,8 @@ public class AServiceImpl implements AService {
     public void sayHello() {
         System.out.println(this.property1 + "," + this.property2);
     }
- 
-    // 在此省略property1和property2的setter、getter方法   
+
+    // 在此省略property1和property2的setter、getter方法
 }
 ```
 
@@ -355,7 +355,7 @@ beanDefinition);
 	private Object createBean(BeanDefinition bd) {
 		... ...
 		handleProperties(bd, clz, obj);
-		return obj;	
+		return obj;
 	}
 
 	private void handleProperties(BeanDefinition bd, Class<?> clz, Object obj) {
@@ -370,7 +370,7 @@ beanDefinition);
 				String pType = propertyValue.getType();
     			Object pValue = propertyValue.getValue();
     			boolean isRef = propertyValue.getIsRef();
-    			Class<?>[] paramTypes = new Class<?>[1];    			
+    			Class<?>[] paramTypes = new Class<?>[1];   
 				Object[] paramValues =   new Object[1];  
     			if (!isRef) { //如果不是ref，只是普通属性
                     //对每一个属性，分数据类型分别处理
@@ -386,7 +386,7 @@ beanDefinition);
 					else {
 						paramTypes[0] = String.class;
 					}
-					
+
 					paramValues[0] = pValue;
     			}
     			else { //is ref, create the dependent beans
@@ -398,20 +398,20 @@ beanDefinition);
     				try {
                         //再次调用getBean创建ref的bean实例
 						paramValues[0] = getBean((String)pValue);
-					} 
+					}
     			}
- 
+
                 //按照setXxxx规范查找setter方法，调用setter方法设置属性
-    			String methodName = "set" + pName.substring(0,1).toUpperCase() + pName.substring(1);				    			
+    			String methodName = "set" + pName.substring(0,1).toUpperCase() + pName.substring(1);				   
     			Method method = null;
 				try {
 					method = clz.getMethod(methodName, paramTypes);
-				} 
+				}
     			try {
 					method.invoke(obj, paramValues);
-				} 
+				}
 			}
-		}		
+		}
 	}
 ```
 
@@ -483,7 +483,7 @@ public Object getBean(String beanName) throws BeansException {
     }
     return singleton;
   }
-  
+
 private Object createBean(BeanDefinition beanDefinition) {
     Class<?> clz = null;
     //创建毛胚bean实例
@@ -492,7 +492,7 @@ private Object createBean(BeanDefinition beanDefinition) {
     this.earlySingletonObjects.put(beanDefinition.getId(), obj);
     try {
         clz = Class.forName(beanDefinition.getClassName());
-    } 
+    }
     //处理属性
     handleProperties(beanDefinition, clz, obj);
     return obj;
@@ -506,7 +506,7 @@ private Object doCreateBean(BeanDefinition bd) {
 
 		try {
     		clz = Class.forName(bd.getClassName());
-    		
+   
     		//handle constructor
     		ArgumentValues argumentValues = bd.getConstructorArgumentValues();
     		if (!argumentValues.isEmpty()) {
@@ -528,7 +528,7 @@ private Object doCreateBean(BeanDefinition bd) {
     				}
     				else {
     					paramTypes[i] = String.class;
-        				paramValues[i] = argumentValue.getValue();    					
+        				paramValues[i] = argumentValue.getValue();   
     				}
     			}
 				try {
@@ -539,9 +539,9 @@ private Object doCreateBean(BeanDefinition bd) {
     		else {
     			obj = clz.newInstance();
     		}
-		} 
-		
-		System.out.println(bd.getId() + " bean created. " + bd.getClassName() + " : " + obj.toString());		
+		}
+
+		System.out.println(bd.getId() + " bean created. " + bd.getClassName() + " : " + obj.toString());
 		return obj;
 
 }
@@ -565,7 +565,7 @@ public void refresh() {
     for (String beanName : beanDefinitionNames) {
         try {
             getBean(beanName);
-        } 
+        }
     }
 }
 ```
@@ -619,7 +619,7 @@ public class AServiceImpl implements AService {
     private String property2;
     private BaseService ref1;
     // 省略 getter、setter方法
-}  
+}
 ```
 
 相应的XML配置如下：
@@ -664,7 +664,6 @@ ref="basebaseservice" />
 
 老师这个用了两个缓存，spring多一个创建bean实例工厂缓存，详细如下
 
-
 三级缓存机制包括以下三个缓存：
 
 1. singletonObjects：用于存储完全创建好的单例bean实例。
@@ -683,13 +682,13 @@ Spring支持一个Bean构造器注入另一个Bean，工作中也都是尽量通
 通过属性注入的方式能解决循环依赖的问题，原理是通过缓存的方式解决的，这里的关键点是属性注入是在bean创建后注入的
 
 而构造器注入不能解决循环依赖问题
-因为需要在创建bean时就需要将依赖的bean传入到构造函数中，如果依赖的bean尚未创建完成，就不能传入到构造函数中，循环依赖就不能解决</p>2023-03-17</li><br/><li><span>Geek_320730</span> 👍（9） 💬（1）<p>loadBeanDefinitions结束的时候会registerBeanDefinition，看代码中registerBeanDefinition又会根据这个Bean是否是单例来判断要不要getBean。如果getBean的话：如果这个Bean有依赖的Bean,会继续getBean,如果xml中 这个被依赖的Bean定义在这个Bean后面，那么后面被依赖的Bean的BeanDefintion还没有被loadBeanDefinitions，createBean的时候就会报错。</p>2023-03-19</li><br/><li><span>木  昜</span> 👍（5） 💬（2）<p>您好，目前所写的逻辑是加载一个BeanDefinition，然后放入Map，同时判断是否为懒加载，不是的话就创建该bean，然后加载下一个bean定义。
+因为需要在创建bean时就需要将依赖的bean传入到构造函数中，如果依赖的bean尚未创建完成，就不能传入到构造函数中，循环依赖就不能解决</p>2023-03-17</li><br/><li><span>Geek_320730</span> 👍（9） 💬（1）<p>loadBeanDefinitions结束的时候会registerBeanDefinition，看代码中registerBeanDefinition又会根据这个Bean是否是单例来判断要不要getBean。如果getBean的话：如果这个Bean有依赖的Bean,会继续getBean,如果xml中 这个被依赖的Bean定义在这个Bean后面，那么后面被依赖的Bean的BeanDefintion还没有被loadBeanDefinitions，createBean的时候就会报错。</p>2023-03-19</li><br/><li><span>木 昜</span> 👍（5） 💬（2）<p>您好，目前所写的逻辑是加载一个BeanDefinition，然后放入Map，同时判断是否为懒加载，不是的话就创建该bean，然后加载下一个bean定义。
 如果xml在a的bean定义在b之前，并且a依赖了b。
 此时 加载a的定义，创建a，发现a依赖b，就去getBean（b），但是此时b的定义还没有加载进map，就会抛出异常。
 是否可以改为加载完全部的bean定义之后再进行bean的创建。把两步骤分开？</p>2023-03-19</li><br/><li><span>风轻扬</span> 👍（4） 💬（1）<p>老师，我看其他同学提了这个问题。就是如果xml中A定义在前，依赖B，但是B定义在后。此时会因为beanDefinitionMap中不存在beanDefinition而报错。我看您给你的解决方案是先将beanDefinition对象一次性全部加载完成。那是不是将SimpleBeanFactory类中的方法registerBeanDefinition中的以下逻辑去掉就可以了。
 if (!bd.isLazyInit()) {
-            getBean(name);
-        }
+getBean(name);
+}
 我试了试，这样是ok的，因为ClassPathXmlApplicationContext中的refresh方法会执行到getBean</p>2023-03-22</li><br/><li><span>追梦</span> 👍（3） 💬（2）<p>老师好，这个反射构造器和反射setXXX()方法这样写有点硬编码的味道，有没有简洁的写法，如何不硬编码解决基本类型的反射问题</p>2023-03-27</li><br/><li><span>康Geek</span> 👍（2） 💬（1）<p>文稿中 ClassPathXmlApplicationContext 这个类的构造方法中 isRefresh 有个错误：
 if (!isRefresh) { this.beanFactory.refresh(); } 这个 if 的条件中时取反的，但是在老师 github 仓库中 geek_ioc3 分支的 ClassPathXmlApplicationContext.java 构造方法中是没有取反的：
 if (isRefresh) { this.beanFactory.refresh();}

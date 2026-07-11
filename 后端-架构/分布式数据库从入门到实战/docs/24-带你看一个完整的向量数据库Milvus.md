@@ -56,7 +56,7 @@ Milvus的逻辑模型与关系型数据库类似。
 
 ```shell
 from pymilvus import connections, db
-conn = connections.connect(host="127.0.0.1", port=19530) 
+conn = connections.connect(host="127.0.0.1", port=19530)
 database = db.create_database("RAG")
 ```
 
@@ -65,7 +65,7 @@ database = db.create_database("RAG")
 ```shell
 from pymilvus import MilvusClient
 client = MilvusClient(
-    uri='http://127.0.0.1:19530', 
+    uri='http://127.0.0.1:19530',
     token='root:Milvus' # username:password
 )
 client.create_role(

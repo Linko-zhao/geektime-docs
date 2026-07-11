@@ -165,7 +165,7 @@ sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule require
 ```
 $ bin/kafka-console-producer.sh --broker-list localhost:9092,localhost:9093 --topic test  --producer.config <your_path>/producer.conf
 >hello, world
->   
+>
 ```
 
 可以看到，Console Producer程序发送消息成功。
@@ -183,7 +183,7 @@ sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule require
 之后运行Console Consumer程序：
 
 ```
-$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092,localhost:9093 --topic test --from-beginning --consumer.config <your_path>/consumer.conf 
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092,localhost:9093 --topic test --from-beginning --consumer.config <your_path>/consumer.conf
 hello, world
 ```
 
@@ -216,7 +216,7 @@ $ bin/kafka-console-producer.sh --broker-list localhost:9092,localhost:9093 --to
 
 ```
 $ bin/kafka-console-producer.sh --broker-list localhost:9092,localhost:9093 --topic test  --producer.config <your_path>/producer.conf
->Good!  
+>Good!
 ```
 
 现在，Console Producer可以正常发送消息了。
@@ -249,7 +249,8 @@ ity-type users --entity-name admin
 requirement failed: Unknown Dynamic Configuration: Set(&#39;SCRAM-SHA-256).
 网上搜了很久，没有找到解决方案，，请老师解惑。感谢</p>2019-08-28</li><br/><li><span>渴望。</span> 👍（0） 💬（1）<p>老师，配置成功启动，出现Connection to node 1(kafka01&#47;192.168.100.101:9092) failed authentication due to : Authentication failed during authentication due to invalid credentials with SASL mechanism SCRAM-SHA-256 (org.apache.kafka.clients.NetworkClient)    这个报错。这是什么原因呢？</p>2021-03-03</li><br/><li><span>胡小禾</span> 👍（0） 💬（1）<p>基于 SSL 的认证主要是指 Broker 和客户端的双路认证（2-way authentication）。通常来说，SSL 加密（Encryption）已经启用了单向认证，即客户端认证 Broker 的证书（Certificate）。
 
----------
+---
+
 这里不是很理解。何谓： SSL 已经启用了单向认证？</p>2021-03-01</li><br/><li><span>建华</span> 👍（0） 💬（1）<p>是不是用户信息只能建到zookeeper节点上？</p>2020-12-25</li><br/><li><span>李枭冰</span> 👍（0） 💬（2）<p>本低环境用apache kafka配置很简单，但是用cdh反而搞不定，一直说security.inter.broker.protocol can not be set to SASL_PLAINTEXT, as Kerberos is not enabled on this Kafka broker。求帮助。
 </p>2020-06-18</li><br/><li><span>七步</span> 👍（0） 💬（1）<p>动态增减用户，是否可以使用java api编码调用的方式？</p>2020-04-27</li><br/>
 </ul>

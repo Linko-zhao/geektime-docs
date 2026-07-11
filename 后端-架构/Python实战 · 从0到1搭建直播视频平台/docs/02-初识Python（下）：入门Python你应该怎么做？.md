@@ -48,7 +48,7 @@ print(time4-time3)
 接下来，我们使用Numpy创建多维数组。
 
 ```python
-import numpy as np 
+import numpy as np
 array1=np.array([['a','b','c'],['d','e','f']])
 print(array1)
 >>>输出结果：
@@ -57,11 +57,11 @@ print(array1)
 ```
 
 ```python
-import numpy as np 
-e = np.array([[1,2],[3,4],[5,6]]) 
-print("原数组",e) 
+import numpy as np
+e = np.array([[1,2],[3,4],[5,6]])
+print("原数组",e)
 e=e.reshape(2,3) #把原矩阵转换成2行3列
-print("新数组",e)  
+print("新数组",e)
 >>>输出结果：
 原数组 [[1 2]
  [3 4]
@@ -78,7 +78,7 @@ import numpy as np
 a=np.zeros(6)     #创建1行6个都是0的数组
 print(a)
 b = np.zeros((3,2), dtype = int) #创建3行2列都是0类型为int的多维数组
-print(b)  
+print(b)
 >>>输出结果
 [0. 0. 0. 0. 0. 0.]
 
@@ -278,35 +278,42 @@ plt.show()
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 data = np.array([10, 20, 30, 40, 50])
 fig = plt.figure()
 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 ax.pie(
-		data,
-		labels = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot;, &quot;five&quot;],  # 设置5个图例标志
-		colors = [&quot;b&quot;, &quot;g&quot;, &quot;c&quot;, &quot;m&quot;, &quot;y&quot;]  # 设置5个颜色
-	)
+data,
+labels = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot;, &quot;five&quot;], # 设置5个图例标志
+colors = [&quot;b&quot;, &quot;g&quot;, &quot;c&quot;, &quot;m&quot;, &quot;y&quot;] # 设置5个颜色
+)
 ax.set_title(&quot;Pie&quot;)
-plt.legend(loc=&quot;upper left&quot;)  # 图例位置放置左上方
+plt.legend(loc=&quot;upper left&quot;) # 图例位置放置左上方
 plt.show()</p>2023-05-24</li><br/><li><span>Geek_团子</span> 👍（1） 💬（1）<p>啥是mvt？</p>2023-05-14</li><br/><li><span>张申傲</span> 👍（0） 💬（1）<p>第2讲打卡~
 通过这节课，领略了Python在数据分析领域的强大能力~</p>2024-07-17</li><br/><li><span>好困啊</span> 👍（0） 💬（1）<p># 饼状图
+
 # 数据
+
 sizes = [15, 30, 45, 10]
 labels = [&#39;Frogs&#39;, &#39;Hogs&#39;, &#39;Dogs&#39;, &#39;Logs&#39;]
 
 # 绘制饼状图
+
 plt.pie(sizes, labels=labels, autopct=&#39;%1.1f%%&#39;, shadow=False, startangle=90)
 
 # 设置标题
+
 plt.title(&#39;Pie&#39;)
 
 # 使饼状图为正圆形
+
 plt.axis(&#39;equal&#39;)
 
 # 显示图形
+
 plt.show()</p>2023-08-19</li><br/><li><span>Geek_e5f033</span> 👍（0） 💬（2）<p>老师有一个问题,经常在网上看到一些python代码,拿来用时,就会发现有好多问题,不是这个库没有装,就是那个库版本不对,作为一个开发者,我们怎样才能根据代码,安装正确的库呢?</p>2023-05-06</li><br/><li><span>Geek_gong1zu</span> 👍（0） 💬（1）<p>import matplotlib.pyplot as plt
+
 # 设置画布
+
 plt.rcParams[&#39;font.sans-serif&#39;] =&#39;SimHei&#39;
 plt.figure(figsize=(6, 6))
 label = [&#39;第一产业&#39;, &#39;第二产业 &#39;, &#39;第三产业&#39;]
@@ -326,20 +333,22 @@ Q2: 本专栏的源码放哪里？
 
 Q3: 我笔记本是win10，装了Anaconda。但是，Anaconda不能运行python命令
 Win10，开始菜单中运行”Anaconda Powershell prompt”，弹出一个命令行窗口，命令提示符前面是“(base) PS C:\Users\Administrator&gt;”，操作如下：
-1 输入: 5+4，显示9. 
+1 输入: 5+4，显示9.
 2 输入:print(“hello”), 提示“无法初始化设备 PRN”；
 3 输入：a+=10，回车后提示：a+=10 : 无法将“a+=10”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。
 为什么？</p>2023-04-27</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（1）<p>快更！</p>2023-04-27</li><br/><li><span>安静点</span> 👍（0） 💬（1）<p>期待更新！</p>2023-04-27</li><br/><li><span>一米</span> 👍（0） 💬（1）<p>1.numpy数组与python列表性能对比处 应该有两处勘误
-# 1.1应该引入time 
+
+# 1.1应该引入time
+
 # 1.2原代码第9行使用的变量应该是d
+
 import numpy as np
 #import time
 
 time1 = time.time()
 array = []
 for d in range(100000):
-    array.append(x**2)
-    # array.append(d**2)
+array.append(x**2) # array.append(d**2)
 time2 = time.time()
 use_time = time2 - time1
 print(use_time)

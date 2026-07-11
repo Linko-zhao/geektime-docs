@@ -127,7 +127,7 @@ long newEpochZxid = registerWithLeader(Leader.FOLLOWERINFO);
 
 ```
 // 创建LEADINFO消息
-QuorumPacket newEpochPacket = new 
+QuorumPacket newEpochPacket = new
 QuorumPacket(Leader.LEADERINFO, newLeaderZxid, ver, null);
 // 发送LEADINFO消息给跟随者
 oa.writeRecord(newEpochPacket, "packet");
@@ -291,7 +291,8 @@ self.setZabState(QuorumPeer.ZabState.BROADCAST);
 如果一个提案已经被复制到大多数节点上了，但是在 Leader 向节点发送 commit 之前崩溃了，那么 follower 是没有收到 commit 请求的，那这个提案最终也会被提交吗？为什么？</p>2022-01-21</li><br/><li><span>豆豆酱</span> 👍（0） 💬（0）<p>我一直以为zk的读是顺序一致性，然后今天读到这个commit的特性。
 zk这个commit 的特性（退出跟随者时commit），会不会影响顺序一致性？如果这个时候commit的提案被读了，后面又被删了？那这样就是最终一致性了。所以到底是什么？</p>2023-05-09</li><br/><li><span>simple_孙</span> 👍（0） 💬（1）<p>ZAB必须有数据同步的操作是不是因为Raft在提交数据的时候，跟随者会检查上一条数据是否提交成功，没成功的话就会重新同步；而ZAB的数据同步就是一个二阶段提交，没法检查上一个位置的同步结果。</p>2021-11-13</li><br/><li><span>我可能是个假开发</span> 👍（0） 💬（0）<p>应该怎么样理解大多数当选领导呢？
 即是LOOKING状态的节点会在一段时间内（多久呢）收集选票？对于epoch相同的情况，按zxid从大到小遍历选票，如果看到某一个zxid的数量满足大多数条件（count(zxid)&gt;(n&#47;2)+1)，则投票该zxid中集群id最大的节点为领导者？</p>2021-06-30</li><br/><li><span>Geek_672f79</span> 👍（0） 💬（4）<p>韩老师， 你在ZAB协议（1） 有这么一句话：ZAB 的领导者选举，选举出的是大多数节点中数据最完整的节点。
- 但在本章有这么一句话 ：如果写请求对应的提案“SET X = 1”未被复制到大多数节点上，比如在领导者广播消息过程中，领导者崩溃了，那么，提案“SET X = 1”，可能被复制到大多数节点上，并提交和之后就不再改变，也可能会被删除。这个行为是未确定的，取决于新的领导者是否包含该提案。
+但在本章有这么一句话 ：如果写请求对应的提案“SET X = 1”未被复制到大多数节点上，比如在领导者广播消息过程中，领导者崩溃了，那么，提案“SET X = 1”，可能被复制到大多数节点上，并提交和之后就不再改变，也可能会被删除。这个行为是未确定的，取决于新的领导者是否包含该提案。
 
     我该如何去理解？</p>2021-03-21</li><br/>
+
 </ul>

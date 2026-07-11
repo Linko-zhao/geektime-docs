@@ -49,7 +49,7 @@ interface ArticleRepository {
 ```
 class ArticleService {
   private ArticleRepository repository;
-  
+
   public Article findByTitle(final String title) {
     // 做参数校验
     return this.repository.findByTitle(title);
@@ -62,7 +62,7 @@ class ArticleService {
 ```
 class ArticleService {
   private ArticleRepository repository = new DBArticleRepository();
-  
+
   public Article findByTitle(final String title) {
     // 做参数校验
     return this.repository.findByTitle(title);
@@ -75,11 +75,11 @@ class ArticleService {
 ```
 class ArticlService {
   private ArticleRepository repository;
-  
+
   public ArticlService(final Connection connection) {
     this.repository = new DBArticleRepository(connection);
   }
-  
+
   public Article findByTitle(final String title) {
     // 做参数校验
     return this.repository.findByTitle(title);
@@ -125,11 +125,11 @@ class ArticlService {
 ```
 class ArticleService {
   private ArticleRepository repository;
-  
+
   public ArticleService(final ArticleRepository repository) {
     this.repository = repository;
   }
-  
+
   public Article findByTitle(final String title) {
     // 做参数校验
     return this.repository.findByTitle(title);

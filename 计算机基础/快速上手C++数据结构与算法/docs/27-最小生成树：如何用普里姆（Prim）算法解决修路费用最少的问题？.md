@@ -94,7 +94,7 @@ public:
 			delete[] pm_Edges[i];
 		} //end for
 		delete[] pm_Edges;
-	}		
+	}
 public:
 	//插入顶点
 	bool InsertVertex(const T& tmpv)
@@ -122,7 +122,7 @@ public:
 			return false;
 		if (pm_Edges[idx1][idx2] != INT_MAX_MY)//边重复
 			return false;
-		pm_Edges[idx1][idx2] = pm_Edges[idx2][idx1] = weight; //无向图是个对称矩阵。tmpv1到tmpv2之间插入边就等于tmpv2到tmpv1之间插入了边						
+		pm_Edges[idx1][idx2] = pm_Edges[idx2][idx1] = weight; //无向图是个对称矩阵。tmpv1到tmpv2之间插入边就等于tmpv2到tmpv1之间插入了边
 		m_numEdges++; //边数量增加1
 		return true;
 	}
@@ -131,7 +131,7 @@ public:
 		cout <<"";  //为了凑一些对齐关系，所以先输出三个空格
 		//输出图中的顶点，其实就是矩阵的最顶上一行的顶点名信息
 		for (int i = 0; i < m_numVertices; ++i)
-		{				
+		{
 			printf("%5c", pm_VecticesList[i]);  //5：不够5位的右对齐
 		}
 		cout << endl; //换行
@@ -143,7 +143,7 @@ public:
 			for (int j = 0; j < m_numVertices; ++j)
 			{
 				if (pm_Edges[i][j] == INT_MAX_MY)
-				{			
+				{
 					printf("%5s", "∞");  //两个顶点之间没有边
 				}
 				else
@@ -167,15 +167,15 @@ public:
 	}
 	//用 普里姆（Prim）算法创建最小生成树
 	bool CreateMinSpanTree_Prim(const T& tmpv)  //tmpv作为创建最小生成树时的起始顶点
-	{			
+	{
 		int idx = GetVertexIdx(tmpv);
 		if (idx == -1) //顶点不存在
 			return false;
-					
+
 		int in_MstVertCount = 1;  //已经增加到生成树【最小生成树】中的顶点数量，刚开始肯定是要把起始顶点放进去所以这里给1
 		int* p_inMstVertIdxArray = new int[m_numVertices]; //已经增加到生成树中的顶点的下标会保存到该数组中
 		p_inMstVertIdxArray[0] = idx; //起始顶点下标
-		int minWeight = INT_MAX_MY;  //用来记录当前的最小权值，先给成最大值		
+		int minWeight = INT_MAX_MY;  //用来记录当前的最小权值，先给成最大值
 		int minTmpStartVertIdx = -1; //临时存放一个开始顶点的下标值（一个边的开始顶点）
 		int minTmpEndVertIdx = -1; //临时存放一个目标顶点的下标值（一个边的末端顶点）
 		while (true)
@@ -184,7 +184,7 @@ public:
 				break;
 			minWeight = INT_MAX_MY; //权值先给成最大值
 			for (int iv = 0; iv < in_MstVertCount; ++iv) //遍历所有生成树中已有的顶点，从其中找到以该顶点开始的边中权值最小的边所对应的目标顶点
-			{	
+			{
 				int tmpidx = p_inMstVertIdxArray[iv]; //拿到该位置的信息【顶点索引】
 				for (int i = 0; i < m_numVertices; ++i) //遍历所有顶点以找到所有以tmpidx顶点为起点的边
 				{
@@ -201,7 +201,7 @@ public:
 					}
 				} //end for i
 			}//end for iv
-			//走到这里，肯定找到了个新顶点，输出最小生成树的边信息	
+			//走到这里，肯定找到了个新顶点，输出最小生成树的边信息
 			cout << pm_VecticesList[minTmpStartVertIdx] <<"--->"<< pm_VecticesList[minTmpEndVertIdx] <<" : 权值="<< minWeight << endl;
 			p_inMstVertIdxArray[in_MstVertCount] = minTmpEndVertIdx;  //将新顶点增加到最小生成树的下标数组中
 			in_MstVertCount++;
@@ -328,15 +328,15 @@ bool CreateMinSpanTree_Prim2(const T& tmpv)//tmpv作为创建最小生成树时�
 	for (int i = 0; i < m_numVertices; ++i)
 	{
 		lowcost[i] = pm_Edges[idx][i];   //保存开始顶点的权值信息
-		veridx[i] = idx;                 //保持开始顶点的下标信息	
+		veridx[i] = idx;                 //保持开始顶点的下标信息
 	} //end for
-	
+
 	int minTmpStartVertIdx = -1;
 	int minTmpEndVertIdx = -1;
 	for (int i = 0; i < m_numVertices - 1; ++i)//循环“顶点数-1”次即可创建出最小生成树
 	{
 		//在lowcost数组中找权值最小的顶点
-		int minWeight = INT_MAX_MY;				
+		int minWeight = INT_MAX_MY;
 		for (int w = 0; w < m_numVertices; ++w) //遍历lowcost数组，找到其中权值最小的
 		{
 			if(lowcost[w] != 0 && minWeight > lowcost[w])
@@ -350,7 +350,7 @@ bool CreateMinSpanTree_Prim2(const T& tmpv)//tmpv作为创建最小生成树时�
 		lowcost[minTmpEndVertIdx]= 0;//权值设置为0表示该顶点被放入了最小生成树中
 		//通过最新寻找到的顶点来修改lowcost数组和veridx数组中的内容
 		for (int v = 0; v < m_numVertices; ++v)
-		{	
+		{
 			if (lowcost[v] > pm_Edges[minTmpEndVertIdx][v])
 			{
 				lowcost[v] = pm_Edges[minTmpEndVertIdx][v];

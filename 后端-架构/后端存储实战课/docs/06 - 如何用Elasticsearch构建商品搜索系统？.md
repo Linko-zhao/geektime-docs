@@ -218,57 +218,57 @@ TCC可以理解为业务层面的2PC（也有观点主张TCC和2PC是完全不�
 全文检索要把 title 的 type 设置为 text
 前缀推荐要把 title 的 type 设置为 completion
 想同时支持全文检索和前缀匹配推荐如何做？
-用 fields 
+用 fields
 
 mapping 文件如下
 PUT sku
 {
-  &quot;mappings&quot;: {
-    &quot;properties&quot;: {
-      &quot;sku_id&quot;:{
-        &quot;type&quot;: &quot;long&quot;
-      },
-      &quot;title&quot;:{
-        &quot;type&quot;: &quot;text&quot;,
-        &quot;analyzer&quot;: &quot;ik_max_word&quot;,
-        &quot;search_analyzer&quot;: &quot;ik_max_word&quot;,
-        &quot;fields&quot;: {
-          &quot;title_suggest&quot;:{
-            &quot;type&quot;:&quot;completion&quot;
-          }
-        }
-      }
-    }
-  }
+&quot;mappings&quot;: {
+&quot;properties&quot;: {
+&quot;sku_id&quot;:{
+&quot;type&quot;: &quot;long&quot;
+},
+&quot;title&quot;:{
+&quot;type&quot;: &quot;text&quot;,
+&quot;analyzer&quot;: &quot;ik_max_word&quot;,
+&quot;search_analyzer&quot;: &quot;ik_max_word&quot;,
+&quot;fields&quot;: {
+&quot;title_suggest&quot;:{
+&quot;type&quot;:&quot;completion&quot;
+}
+}
+}
+}
+}
 }
 
 支持全文检索
 GET sku&#47;_search?pretty
 {
-  &quot;query&quot;: {
-    &quot;match&quot;: {
-      &quot;title&quot;: &quot;苹果手机&quot;
-    }
-  }
+&quot;query&quot;: {
+&quot;match&quot;: {
+&quot;title&quot;: &quot;苹果手机&quot;
+}
+}
 }
 
 支持前缀匹配
 POST sku&#47;_search?pretty
 {
-  &quot;size&quot;:0,
-  &quot;suggest&quot;: {
-    &quot;suggester&quot;: {
-      &quot;prefix&quot;: &quot;烟台&quot;,
-      &quot;completion&quot;: {
-        &quot;field&quot;: &quot;title.title_suggest&quot;
-      }
-    }
-  }
+&quot;size&quot;:0,
+&quot;suggest&quot;: {
+&quot;suggester&quot;: {
+&quot;prefix&quot;: &quot;烟台&quot;,
+&quot;completion&quot;: {
+&quot;field&quot;: &quot;title.title_suggest&quot;
+}
+}
+}
 }</p>2020-03-15</li><br/><li><span>黄平</span> 👍（10） 💬（4）<p>老师，es除了做搜索，还有哪些业务场景可以使用呢？能简单列举下吗？</p>2020-03-19</li><br/><li><span>大秦皇朝</span> 👍（8） 💬（1）<p>李sir我还想再问下，根据我们不同的业务，选分词插件有啥讲究没？虽有点跑题，但是能不能简单说下，感谢~</p>2020-03-11</li><br/><li><span>呦呦鹿鸣</span> 👍（4） 💬（3）<p>李老师好，请问下ES在做深度分页查询时的场景下有什么好的方案么</p>2020-04-14</li><br/><li><span>王超</span> 👍（4） 💬（2）<p>老师，针对订单中心的表数据，业务库用mysql，同步到es做查询时，比如一个订单主表，关联5个子表，在es存的时候是以嵌套的形式存一个index，还是mysql一张表，对应es的一个index，然后维护父子关系？或者有更好的方案</p>2020-03-31</li><br/><li><span>Jax</span> 👍（4） 💬（2）<p>老师您好，是否可以做一些电商这种海量数据下，后台管理系统存储方面的最佳实践。还有对于不同系统之间的数据同步，也希望得到一些比较好的实践方案或者工具。
 
 以下是比较具体的点：
 
 我在上家公司也是做电商系统的，不过我负责的是后台商品数据的维护系统。前台可以用各种缓存来提速，但是对于后台系统，该如何让系统变得比较快？尤其是后台管理系统往往会涉及大批量商品的价格，库存之类的更新，并且更新后业务团队希望能实时看到他们更新成功了，而且有不少更新的操作对丢数据的容忍度比较低，这种情况下缓存也很难做，所以想得到一些对于这种大批量数据后台管理系统的实践经验。
 
-对于数据同步，主要是有的原始数据存储在传统数据库，而为了速度，会存储到一些no sql产品做缓存，但是我们在实践中，经常会有一些丢数据，或者未能及时同步的情况发生，希望能得到这方面的一些经验分享。</p>2020-03-10</li><br/><li><span>旅途</span> 👍（4） 💬（2）<p>老师 您说的二次查找是指在第一次的查找结果中继续查找吗</p>2020-03-10</li><br/><li><span>发条橙子 。</span> 👍（3） 💬（2）<p>老师 面试中经常会有问到几千万条数据列表的查询如何实现 ，本质就是考避免使用数据库而选择这种es来搜索是么 。 那几千万条数据在es中查询 “苹果” 是不是也会有性能之类的问题</p>2020-03-10</li><br/><li><span>郭刚</span> 👍（2） 💬（1）<p>用ES有两个问题，1.它不适合多索引关联，就像关系数据库的多表关联，那关系数据库多表关联查询的情况是不是建一张中间表，把中间表的数据导入到es   2.要做到准实时的要求，有没有好的方式</p>2020-03-24</li><br/><li><span>每天晒白牙</span> 👍（1） 💬（2）<p>老师，请教个问题，比如一个商品搜索系统，给一些商品打标签，然后支持根据商品信息和标签搜索商品，有啥方案吗？</p>2020-03-10</li><br/><li><span>1</span> 👍（0） 💬（1）<p>比如商品搜索跟每个用户签了某些商品的价格，每个客户看到签的价格不一样，用es查询给每个用户都建一个index，还是有什么更好的方法？想让它可以按价格排序</p>2020-03-23</li><br/><li><span>何妨</span> 👍（0） 💬（1）<p>那一般什么时候来更新索引呢？是建立一个定时任务来更新么</p>2020-03-10</li><br/><li><span>hello</span> 👍（52） 💬（2）<p>老师，能否来一篇加餐，讲讲ES、MySQL、MongoDB、RocketMQ&#47;Kafka、newSQL这些存储的对比，底层是基于什么原理擅长干哪些事，不擅长干哪些事？</p>2020-03-10</li><br/>
+对于数据同步，主要是有的原始数据存储在传统数据库，而为了速度，会存储到一些no sql产品做缓存，但是我们在实践中，经常会有一些丢数据，或者未能及时同步的情况发生，希望能得到这方面的一些经验分享。</p>2020-03-10</li><br/><li><span>旅途</span> 👍（4） 💬（2）<p>老师 您说的二次查找是指在第一次的查找结果中继续查找吗</p>2020-03-10</li><br/><li><span>发条橙子 。</span> 👍（3） 💬（2）<p>老师 面试中经常会有问到几千万条数据列表的查询如何实现 ，本质就是考避免使用数据库而选择这种es来搜索是么 。 那几千万条数据在es中查询 “苹果” 是不是也会有性能之类的问题</p>2020-03-10</li><br/><li><span>郭刚</span> 👍（2） 💬（1）<p>用ES有两个问题，1.它不适合多索引关联，就像关系数据库的多表关联，那关系数据库多表关联查询的情况是不是建一张中间表，把中间表的数据导入到es 2.要做到准实时的要求，有没有好的方式</p>2020-03-24</li><br/><li><span>每天晒白牙</span> 👍（1） 💬（2）<p>老师，请教个问题，比如一个商品搜索系统，给一些商品打标签，然后支持根据商品信息和标签搜索商品，有啥方案吗？</p>2020-03-10</li><br/><li><span>1</span> 👍（0） 💬（1）<p>比如商品搜索跟每个用户签了某些商品的价格，每个客户看到签的价格不一样，用es查询给每个用户都建一个index，还是有什么更好的方法？想让它可以按价格排序</p>2020-03-23</li><br/><li><span>何妨</span> 👍（0） 💬（1）<p>那一般什么时候来更新索引呢？是建立一个定时任务来更新么</p>2020-03-10</li><br/><li><span>hello</span> 👍（52） 💬（2）<p>老师，能否来一篇加餐，讲讲ES、MySQL、MongoDB、RocketMQ&#47;Kafka、newSQL这些存储的对比，底层是基于什么原理擅长干哪些事，不擅长干哪些事？</p>2020-03-10</li><br/>
 </ul>

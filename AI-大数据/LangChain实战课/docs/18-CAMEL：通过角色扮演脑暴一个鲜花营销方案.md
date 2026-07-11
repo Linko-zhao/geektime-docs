@@ -375,6 +375,7 @@ while n < chat_turn_limit:
 
 1. CAMEL 项目[官网](https://www.camel-ai.org/) [GitHub](https://github.com/camel-ai/camel) 论文
 2. 新闻[「零人工含量」的「游戏公司」](https://mp.weixin.qq.com/s/GKHD6M74rqC42u2w8EFjJw)- Chen, Q., Cong, X., Yang, C., Chen, W., Su, Y., Xu, J., Liu, Z., &amp; Sun, M. (2023). [Communicative Agents for Software Development.](https://arxiv.org/abs/2307.07924) arXiv preprint arXiv:2307.07924 \[cs.SE].
+
 <div><strong>精选留言（8）</strong></div><ul>
 <li><span>neohope</span> 👍（6） 💬（1）<p>一、感觉可以再增加一个方案评价的角色，每一轮对结果进行挑战和质疑，帮助AI进一步进行优化，这样方案是不是就可以用于实操了。
 以鲜花营销方案为例，可以这样调整一下：
@@ -392,11 +393,9 @@ AI User (花店老板):
 指令：确定目标人群。
 输入：夏季玫瑰之夜的目标人群是年龄在25-45岁的城市居民，对浪漫活动和花卉有兴趣的人群。他们可能是情侣、夫妻或单身人士，他们喜欢参加社交活动并寻求独特的体验。他们有一定的消费能力，愿意为特殊的活动支付适当的费用。
 
-
 AI Assistant (花店营销专员):
 
 解决方案：夏季玫瑰之夜的目标人群是年龄在25-45岁的城市居民，对浪漫活动和花卉有兴趣的人群。他们可能是情侣、夫妻或单身人士，他们喜欢参加社交活动并寻求独特的体验。他们有一定的消费能力，愿意为特殊的活动支付适当的费用。下一个请求。
-
 
 最后的对话==================
 
@@ -404,31 +403,30 @@ AI User (花店老板):
 
 指令：设计广告和社交媒体推广计划。
 输入：设计夏季玫瑰之夜的广告和社交媒体推广计划需要考虑以下方面：
+
 1. 广告渠道：选择适合目标人群的广告渠道，如报纸、杂志、户外广告牌等。
 2. 广告内容：设计吸引人的广告内容，包括活动主题、时间、地点和参与方式等信息。
 3. 社交媒体平台：选择适合目标人群的社交媒体平台，如Facebook、Instagram、微信等。
 4. 社交媒体内容：制作有吸引力的社交媒体内容，包括活动海报、短视频、活动介绍等。
 5. 广告预算：确定广告投放的预算，并根据预算选择合适的广告形式和频率。
 6. 推广策略：制定推广策略，如合作推广、优惠活动、分享抽奖等，以吸引更多参与者。
-请提供下一个请求。
-
+   请提供下一个请求。
 
 AI Assistant (花店营销专员):
 
 解决方案：设计夏季玫瑰之夜的广告和社交媒体推广计划如下：
+
 1. 广告渠道：选择适合目标人群的广告渠道，如在当地报纸和杂志上发布广告，租用户外广告牌等。
 2. 广告内容：xxx字数超限以xxx代替
 3. 社交媒体平台：xxx
 4. 社交媒体内容：xxx
 5. 广告预算：xxx
 6. 推广策略：xxx
-下一个请求。
-
+   下一个请求。
 
 AI User (花店老板):
 
 &lt;CAMEL_TASK_DONE&gt;
-
 
 AI Assistant (花店营销专员):
 
@@ -437,19 +435,23 @@ AI Assistant (花店营销专员):
 </p>2023-11-10</li><br/><li><span>徐冰</span> 👍（3） 💬（1）<p>貌似这种模式对大模型本身要求还有一点高。实测下来，3.5turbo会逐步变成老板自己给方案，但是格式起码还一直对的。换成通义千问qwen-max测试，结果聊着聊着连格式都不跟随了，两个代理最后 相互加油变成死循环。尝试调整了pompt也效果不大。o(╥﹏╥)o</p>2024-01-31</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p>将课程代码的大模型修订为国产通义千问模型qwen-turbo，测试结果理想。
 
 ## 新代码1
+
 在from 代码后，增加：
 llm = ChatOpenAI(
-        model_name=&quot;qwen-turbo&quot;, #用通义模型
-        api_key=“API_KEY”, #填写你自己的DASHSCOPE_API_KEY
-        base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;
-	）
+model_name=&quot;qwen-turbo&quot;, #用通义模型
+api_key=“API_KEY”, #填写你自己的DASHSCOPE_API_KEY
+base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;
+）
 
 ## 旧代码2
+
 model: ChatOpenAI,
 task_specify_agent = CAMELAgent(task_specifier_sys_msg, ChatOpenAI(model_name = &#39;gpt-4&#39;, temperature=1.0))
 assistant_agent = CAMELAgent(assistant_sys_msg, ChatOpenAI(temperature=0.2))
 user_agent = CAMELAgent(user_sys_msg, ChatOpenAI(temperature=0.2))
+
 ## 新代码2
+
 model: llm,
 task_specify_agent = CAMELAgent(task_specifier_sys_msg, llm)
 assistant_agent = CAMELAgent(assistant_sys_msg, llm)

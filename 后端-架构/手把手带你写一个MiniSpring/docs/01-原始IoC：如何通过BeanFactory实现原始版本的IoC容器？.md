@@ -73,10 +73,10 @@ this.getClass().getClassLoader().getResource(fileName);
                 String beanClassName = element.attributeValue("class");
                 BeanDefinition beanDefinition = new BeanDefinition(beanID,
 beanClassName);
-                //将Bean的定义存放到beanDefinitions 
+                //将Bean的定义存放到beanDefinitions
                 beanDefinitions.add(beanDefinition);
             }
-        } 
+        }
     }
     //利用反射创建Bean实例，并存储在singletons中
     private void instanceBeans() {
@@ -84,8 +84,8 @@ beanClassName);
             try {
                 singletons.put(beanDefinition.getId(),
 Class.forName(beanDefinition.getClassName()).newInstance());
-            } 
-        } 
+            }
+        }
     }
     //这是对外的一个方法，让外部程序从容器中获取Bean实例，会逐步演化成核心方法
     public Object getBean(String beanName) {
@@ -120,7 +120,7 @@ public interface AService {
 public class AServiceImpl implements AService {
     public void sayHello() {
         System.out.println("a service 1 say hello");
-    } 
+    }
 } 
 ```
 
@@ -142,7 +142,7 @@ public class Test1 {
 ClassPathXmlApplicationContext("beans.xml");
         AService aService = (AService)ctx.getBean("aservice");
         aService.sayHello();
-    } 
+    }
 } 
 ```
 
@@ -216,7 +216,7 @@ public class ClassPathXmlResource implements Resource{
             this.document = saxReader.read(xmlPath);
             this.rootElement = document.getRootElement();
             this.elementIterator = this.rootElement.elementIterator();
-        } 
+        }
     }
     public boolean hasNext() {
         return this.elementIterator.hasNext();
@@ -282,7 +282,7 @@ public class SimpleBeanFactory implements BeanFactory{
                 BeanDefinition beanDefinition = beanDefinitions.get(i);
                 try {
                     singleton = Class.forName(beanDefinition.getClassName()).newInstance();
-                } 
+                }
                 //注册Bean实例
                 singletons.put(beanDefinition.getId(), singleton);
             }
@@ -351,13 +351,14 @@ public class ClassPathXmlApplicationContext implements BeanFactory{
 2. 发现课程的内容还是有点偏向 Spring 那种感觉，就是有点类似：啊，Spring 是这样拆分几个类功能，那我们就这样拆分，这个方式感觉还是有点死板
 感觉应该是：从一个设计者角度来讲，这样拆分更灵活，扩展性更强，叭叭叭等等，这样才能把读者带入进入课程，产生共鸣。
 
-个人想法，欢迎交流，不知道是不是就我自己有这样感受，还是其他....</p>2023-03-13</li><br/><li><span>姐姐</span> 👍（20） 💬（4）<p>从最初的简单ApplicationContext拆解成后面的复杂ApplicationContext，我理解起来还是有困难的，努力理解如下，大神勿喷：1 readxml方法从资源文件读取内容并存入beanDefinitions，这件事情有两个地方不确定，资源的来源不同、资源的格式不同，抽象的Resource的接口，它的不同子类从不同的来源读取，但是最终都是以Resource接口的形式提供给外部访问的，这样解决了第一个不确定来源的问题；但是resource接口中被迭代的object又是根据不同格式不同而不同的，element只是xml格式的，所以又定义了BeanDefinitionReader接口，它的不同子类可以读取不同格式的资源来形成beanDefinition 。 2 . instanceBeans方法取消了 。  3. getBean方法功能增强了，不仅是获得bean，对于未创建的bean还要创建bean  4 新的applicationContext负责组装，可以根据它的名字来体现它的组装功能，例如ClassPathXmlApplicationContext  它组装的Resource的实现类是ClassPathXmlResource  ，然后因为是xml的，所以需要BeanDefinitionReader的实现类XmlBeanDefinitionReader来读取并注册进beanFactory，同时ApplicationContext也提供了getBean底层调用beanfactory的实现，提供了registerBeanDefinition  来向底层的beanFactory注册bean。5 beanFactory 提供了registerBeanDefinition和getBean接口，这样无论是applicationContext还是beanDefinitionReader都可以向它注册beanDefinition，只要向它注册了，就可以调用它的getBean方法，我一直很纠结为什么不是beanfactory调用不同的beanDefinitionReader，写完这些，好像有点理解了，这样beanfactory就很专注自己的getBean方法，别的组件要怎么注入，它都不管了。</p>2023-03-22</li><br/><li><span>adelyn</span> 👍（17） 💬（4）<p>请问会不会穿插讲一下用到的设计模式，单独学设计模式总是学不扎实，如果能讲到就太好了</p>2023-03-13</li><br/><li><span>风轻扬</span> 👍（14） 💬（1）<p>说一下自己对思考题的理解。
+个人想法，欢迎交流，不知道是不是就我自己有这样感受，还是其他....</p>2023-03-13</li><br/><li><span>姐姐</span> 👍（20） 💬（4）<p>从最初的简单ApplicationContext拆解成后面的复杂ApplicationContext，我理解起来还是有困难的，努力理解如下，大神勿喷：1 readxml方法从资源文件读取内容并存入beanDefinitions，这件事情有两个地方不确定，资源的来源不同、资源的格式不同，抽象的Resource的接口，它的不同子类从不同的来源读取，但是最终都是以Resource接口的形式提供给外部访问的，这样解决了第一个不确定来源的问题；但是resource接口中被迭代的object又是根据不同格式不同而不同的，element只是xml格式的，所以又定义了BeanDefinitionReader接口，它的不同子类可以读取不同格式的资源来形成beanDefinition 。 2 . instanceBeans方法取消了 。 3. getBean方法功能增强了，不仅是获得bean，对于未创建的bean还要创建bean 4 新的applicationContext负责组装，可以根据它的名字来体现它的组装功能，例如ClassPathXmlApplicationContext 它组装的Resource的实现类是ClassPathXmlResource ，然后因为是xml的，所以需要BeanDefinitionReader的实现类XmlBeanDefinitionReader来读取并注册进beanFactory，同时ApplicationContext也提供了getBean底层调用beanfactory的实现，提供了registerBeanDefinition 来向底层的beanFactory注册bean。5 beanFactory 提供了registerBeanDefinition和getBean接口，这样无论是applicationContext还是beanDefinitionReader都可以向它注册beanDefinition，只要向它注册了，就可以调用它的getBean方法，我一直很纠结为什么不是beanfactory调用不同的beanDefinitionReader，写完这些，好像有点理解了，这样beanfactory就很专注自己的getBean方法，别的组件要怎么注入，它都不管了。</p>2023-03-22</li><br/><li><span>adelyn</span> 👍（17） 💬（4）<p>请问会不会穿插讲一下用到的设计模式，单独学设计模式总是学不扎实，如果能讲到就太好了</p>2023-03-13</li><br/><li><span>风轻扬</span> 👍（14） 💬（1）<p>说一下自己对思考题的理解。
 控制反转。
 控制：java对象创建的控制权。
 反转：将java对象创建的控制权从程序员手中反转到IOC容器手中。
 另外，说一下学完这一讲的感受。直白点说，很激动。我看过Spring这部分的源码，当时感觉挺简单的，并没有往深处想，其实忽略了“Spring为什么要这样写“的问题，现在感觉这才是源码的核心所在，突然有一点融会贯通的感觉，感觉很好。一直知道Spring的扩展性好，今天实实在在看到了。感谢老师传道解惑</p>2023-03-15</li><br/><li><span>未聞花名</span> 👍（9） 💬（1）<p>给老师个建议，可以点一下为什么类中要放这些属性和方法，突然抽到几个新类感觉过渡有点快，这样对之后自己去设计类也能举一反三，感觉自己平时设计不太好，如果自己实现起来的话比Spring的优雅可读性要差很多。
 最后附上dom4j的maven依赖，希望帮助到其他人
-```java
+
+````java
 &lt;!-- https:&#47;&#47;mvnrepository.com&#47;artifact&#47;dom4j&#47;dom4j --&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;dom4j&lt;&#47;groupId&gt;
@@ -378,3 +379,4 @@ https:&#47;&#47;gitee.com&#47;rabbit2&#47;mini-spring&#47;commit&#47;1bf7247dd85
 1、老师给的源码地址感觉应该是最终的成品的地址了，不是按照课程一节一节的区分开来，从学习跟随者的角度看，可能不太友好，无法从源码中找到项目从0到1的那种获得感；
 2、针对本节中源码的讲述个人感觉还是有点跳跃了，不过本身Spring体系太过庞杂，无法面面俱到，也无法真的能从0去反推出Spring中相关类设计的原因，所以也表示理解。但有些设计意图还是希望老师能尽量多言一些，而不是因为Spring包或类那样设计的就强行往Spring身上靠，感觉有些突然。比如本节中抽象出了BeanFactory后，为什么又突然来一个SimpleBeanFactory，而ClassPathXmlApplicationContext同样也是实现自该接口，那通过SimpleBeanFactory在组合到ClassPathXmlApplicationContext中实现功能是出于什么考虑呢？ 虽然在评论区实际有看到小伙伴的讨论，大概能明白这样设计的意思。</p>2023-03-18</li><br/>
 </ul>
+````

@@ -241,8 +241,5 @@ echo "GET http://192.168.1.92:31617" | vegeta attack -duration 60s -connections 
 VPA 有什么示列吗？</p>2024-04-19</li><br/><li><span>Starduster</span> 👍（1） 💬（0）<p>老师好，请问VPA做不到对pod资源限制的热更新吗？假设host资源足够，是不是只需要更改k8s记录的资源限制字段就行了，一定要重启pod才能生效吗？</p>2024-07-01</li><br/><li><span>于加硕</span> 👍（0） 💬（0）<p>老师你好。微服务架构下，应用服务需要做容量规划么？还是统一用HPA来支撑流量变化？
 </p>2024-12-15</li><br/><li><span>斯蒂芬.赵</span> 👍（0） 💬（0）<p>首先，VPA 不像 HPA，HPA 不会更改正在运行的 Pod，而 VPA 会更新正在运行的 Pod 资源配置，这会导致 Pod 的重建和重启。而且 Pod 有可能被调度到其他的节点上，这有可能会中断应用程序，这点可以说是 VPA 落地的最大的阻碍
 
-
-
-
 这句话有毛病吧，VPA 不会中断正在运行的 pod。VPA 的策略是通过 gradual rolling updates 实现平滑地应用升级，避免影响 pod 的运行。</p>2024-09-04</li><br/>
 </ul>

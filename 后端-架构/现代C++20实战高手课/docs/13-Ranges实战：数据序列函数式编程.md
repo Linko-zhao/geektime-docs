@@ -1110,7 +1110,7 @@ auto operator | (R r, P p) {
 export struct Coroutine {
     struct promise_type {
         std::string _value;
-        
+
         Coroutine get_return_object() {
             return {
                 ._handle = std::coroutine_handle&lt;promise_type&gt;::from_promise(*this)
@@ -1130,44 +1130,45 @@ export struct Coroutine {
     };
 
     std::coroutine_handle&lt;promise_type&gt; _handle;
+
 };
 
 字符串的处理：
 export string RemoveNumber(string&amp; input)
 {
-    return input | views::filter([](char ch) {
-        return !isdigit(ch);
-        }) | to&lt;string&gt;();
+return input | views::filter([](char ch) {
+return !isdigit(ch);
+}) | to&lt;string&gt;();
 }
 
 main.cpp中的调用：
 Coroutine asyncStr()
 {
-    string input;
-    while (getline(cin, input))
-    {
-        if (input == &quot;End&quot;)
-        {
-            break;
-        }
-        co_yield input;
-    }
+string input;
+while (getline(cin, input))
+{
+if (input == &quot;End&quot;)
+{
+break;
 }
-
+co_yield input;
+}
+}
 
 int main()
 {
-    auto h = asyncStr()._handle;
-    auto&amp; promise = h.promise();
-    while (!h.done())
-    {
-        cout &lt;&lt; &quot;处理结果：&quot; &lt;&lt; promise._value &lt;&lt; endl;
-        h();
-    }
+auto h = asyncStr()._handle;
+auto&amp; promise = h.promise();
+while (!h.done())
+{
+cout &lt;&lt; &quot;处理结果：&quot; &lt;&lt; promise._value &lt;&lt; endl;
+h();
+}
 
     h.destroy();
 
     return 0;
+
 }</p>2024-01-27</li><br/><li><span>李云龙</span> 👍（1） 💬（2）<p>分享一下我的思考题的答案，我这里只给出关键代码：
 export module asyncString.stringHandle:handler;
 
@@ -1186,8 +1187,8 @@ using std::string;
 using std::istringstream;
 
 namespace asyncString::stringHandle {
-    namespace views = std::ranges::views;
-    namespace ranges = std::ranges;
+namespace views = std::ranges::views;
+namespace ranges = std::ranges;
 
     using asyncString::utils::views::to;
     using asyncString::task::asyncify;
@@ -1220,6 +1221,7 @@ namespace asyncString::stringHandle {
             return RemoveNumber(inputVec);
             });
     }
+
 }
 完整代码，请参阅gitee仓库：https:&#47;&#47;gitee.com&#47;devin21&#47;rangeAssignment&#47;tree&#47;master</p>2024-01-14</li><br/><li><span>常振华</span> 👍（0） 💬（0）<p>还是更喜欢传统的方式，可以用不修改原来变量的方式去实现多线程处理</p>2023-10-19</li><br/>
 </ul>

@@ -24,7 +24,7 @@ wget https://downloads.percona.com/downloads/Percona-XtraBackup-8.0/Percona-Xtra
 
 ```plain
 tar zxvf percona-xtrabackup-8.0.35-31-Linux-x86_64.glibc2.17.tar.gz -C /opt
-ln -s percona-xtrabackup-8.0.35-31-Linux-x86_64.glibc2.17 /opt/xtrabackup8.0 
+ln -s percona-xtrabackup-8.0.35-31-Linux-x86_64.glibc2.17 /opt/xtrabackup8.0
 ```
 
 Xtrabackup支持全量备份和增量备份，先来看全量备份。
@@ -36,7 +36,7 @@ Xtrabackup支持全量备份和增量备份，先来看全量备份。
 执行下面这个命令，将数据库备份到本地的/data/backup/backup\_3306目录中。
 
 ```plain
-cd /opt/xtrabackup8.0 
+cd /opt/xtrabackup8.0
 ./bin/xtrabackup \
   --backup \
   --slave-info  \
@@ -91,12 +91,13 @@ tree /data/backup/backup_3306/ -L 1
 - xtrabackup\_binlog\_info：binlog位点信息和GTID信息。备份恢复出来后，需要从这里的binlog位点开始增量数据的恢复。
 - xtrabackup\_slave\_info：备份实例的slave位点信息。
 - xtrabackup\_checkpoints：备份的一些内部信息。
-  
+
   - backup\_type：full-backuped
   - from\_lsn：0表示全量备份。非0表示增量备份起始日志序列号。
   - to\_lsn：备份结束时的checkpoint lsn。也是下一个增量备份的开始lsn。如果数据块的lsn小于to\_lsn，则增量备份不需要备份这些数据块。
   - last\_lsn：apply log时需要应用到的最大日志序列号。超过last\_lsn的日志不需要应用到数据文件中。
   - flushed\_lsn：备份结束时，实例的checkpoint lsn。
+
 - xtrabackup\_info：备份元数据。
 - 数据库
 - binlog
@@ -202,7 +203,7 @@ OSS（对象存储）也适合用来存储备份文件。我们可以先在本�
 我们使用ossutil工具上传备份文件。先下载ossutil工具。
 
 ```plain
-wget -O ossutil-v1.7.16-linux-amd64.zip "https://gosspublic.alicdn.com/ossutil/1.7.16/ossutil-v1.7.16-linux-amd64.zip?spm=a2c4g.120075.0.0.33ee51f9DUd7FF&file=ossutil-v1.7.16-linux-amd64.zip" 
+wget -O ossutil-v1.7.16-linux-amd64.zip "https://gosspublic.alicdn.com/ossutil/1.7.16/ossutil-v1.7.16-linux-amd64.zip?spm=a2c4g.120075.0.0.33ee51f9DUd7FF&file=ossutil-v1.7.16-linux-amd64.zip"
 unzip ossutil-v1.7.16-linux-amd64.zip
 cp ossutil-v1.7.16-linux-amd64/ossutil64 /usr/local/bin/
 chmod +x /usr/local/bin/ossutil64
@@ -489,8 +490,8 @@ chown -R mysql:mysql /data/full_restore/
 ```plain
 # mysqld_safe --defaults-file=/data/full_restore/my.cnf &
 [1] 13010
-# 2023-06-26T03:19:12.376984Z mysqld_safe error: 
- log-error set to '/data/full_restore/log/alert.log', 
+# 2023-06-26T03:19:12.376984Z mysqld_safe error:
+ log-error set to '/data/full_restore/log/alert.log',
  however file don't exists. Create writable for user 'mysql'.
 ```
 

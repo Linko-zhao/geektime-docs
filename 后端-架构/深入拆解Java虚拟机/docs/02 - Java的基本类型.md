@@ -152,6 +152,7 @@ public class Foo {
   }
 }
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>丨落灬小莫</span> 👍（342） 💬（13）<p>当替换为2的时候无输出
 当替换为3的时候打印HelloJava及HelloJVM
@@ -164,8 +165,8 @@ public class Foo {
 putBoolean和putByte也是通过宏SET_FIELD模板出的函数
 
 #define SET_FIELD(obj, offset, type_name, x) \
-  oop p = JNIHandles::resolve(obj); \
-  *(type_name*)index_oop_from_field_offset_long(p, offset) = truncate_##type_name(x)
+oop p = JNIHandles::resolve(obj); \
+_(type_name_)index_oop_from_field_offset_long(p, offset) = truncate_##type_name(x)
 
 unsafe.cpp中定义宏做truncate
 #define truncate_jboolean(x) ((x) &amp; 1)
@@ -179,14 +180,16 @@ unsafe.cpp中定义宏做truncate
 
 综上：unsafe.Put*不会对值做修改
 ------------------------------------------------------------------------------------
+
 getBoolean和getByte也是通过宏GET_FIELD模板出的函数
 
 #define GET_FIELD(obj, offset, type_name, v) \
-  oop p = JNIHandles::resolve(obj); \
-  type_name v = *(type_name*)index_oop_from_field_offset_long(p, offset)
+oop p = JNIHandles::resolve(obj); \
+type_name v = _(type_name_)index_oop_from_field_offset_long(p, offset)
 
 综上，unsafe.Get*不会对值做修改
 ------------------------------------------------------------------------------------
+
 验证：
 unsafe.putByte(foo, addr, (byte)2); &#47;&#47; 设置为: 2
 System.out.println(unsafe.getByte(foo, addr)); &#47;&#47; 打印getByte: 2
@@ -196,23 +199,23 @@ unsafe.putByte(foo, addr, (byte)1); &#47;&#47; 设置为: 1
 System.out.println(unsafe.getByte(foo, addr)); &#47;&#47; 打印getByte: 1
 System.out.println(unsafe.getBoolean(foo, addr)); &#47;&#47; 打印getBoolean: true
 ------------------------------------------------------------------------------------
+
 疑问：
-if(foo.flag)判断，使用getfield	Field flag:&quot;Z&quot;，执行逻辑等于：0 ！= flag
-if(foo.getFlag())判断，使用invokevirtual	Method getFlag:&quot;()Z&quot;，执行逻辑等于： 0 != （(flag) &amp; 1）
+if(foo.flag)判断，使用getfield Field flag:&quot;Z&quot;，执行逻辑等于：0 ！= flag
+if(foo.getFlag())判断，使用invokevirtual Method getFlag:&quot;()Z&quot;，执行逻辑等于： 0 != （(flag) &amp; 1）
 
 求大神帮忙解答
 
---------------------------
+---
+
 附getFlag jasm码：
 public Method getFlag:&quot;()Z&quot;
-	stack 1 locals 1
+stack 1 locals 1
 {
-		aload_0;
-		getfield	Field flag:&quot;Z&quot;;
-		ireturn;
+aload_0;
+getfield Field flag:&quot;Z&quot;;
+ireturn;
 }
-
-
 
 https:&#47;&#47;gist.github.com&#47;qudongfang&#47;49635d86882c03e49cff2b0f7d833805
 </p>2018-07-23</li><br/><li><span>Geek_dde3ac</span> 👍（34） 💬（2）<p>你好，在内存中都是0，那么是如何区别是哪种类型数据的呢？</p>2018-07-23</li><br/><li><span>落叶飞逝的恋</span> 👍（21） 💬（1）<p>其实那个boolean的true虚拟机里面为1，也就是if(true==吃了没)其实可以替换成if(1==2)这样理解吧</p>2018-07-24</li><br/><li><span>dong</span> 👍（18） 💬（1）<p>感觉&quot;吃饭了&quot;例子，弄得有点饶了。也有些地方语句的起承转合不是很通顺，个人理解。</p>2018-07-27</li><br/><li><span>别处</span> 👍（16） 💬（1）<p>以下两个引至本文内容：

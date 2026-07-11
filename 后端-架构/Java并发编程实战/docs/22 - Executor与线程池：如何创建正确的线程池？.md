@@ -12,7 +12,7 @@ class XXXPool{
   // 释放池化资源
   void release(XXX x){
   }
-}  
+}
 ```
 
 ## 线程池是一种生产者-消费者模式
@@ -28,7 +28,7 @@ class ThreadPool{
   // 释放线程
   void release(Thread t){
   }
-} 
+}
 //期望的使用
 ThreadPool pool；
 Thread T1=pool.acquire();
@@ -47,10 +47,10 @@ class MyThreadPool{
   //利用阻塞队列实现生产者-消费者模式
   BlockingQueue<Runnable> workQueue;
   //保存内部工作线程
-  List<WorkerThread> threads 
+  List<WorkerThread> threads
     = new ArrayList<>();
   // 构造方法
-  MyThreadPool(int poolSize, 
+  MyThreadPool(int poolSize,
     BlockingQueue<Runnable> workQueue){
     this.workQueue = workQueue;
     // 创建工作线程
@@ -71,19 +71,19 @@ class MyThreadPool{
       while(true){ ①
         Runnable task = workQueue.take();
         task.run();
-      } 
+      }
     }
-  }  
+  }
 }
 
 /** 下面是使用示例 **/
 // 创建有界阻塞队列
-BlockingQueue<Runnable> workQueue = 
+BlockingQueue<Runnable> workQueue =
   new LinkedBlockingQueue<>(2);
-// 创建线程池  
+// 创建线程池
 MyThreadPool pool = new MyThreadPool(
   10, workQueue);
-// 提交任务  
+// 提交任务
 pool.execute(()->{
     System.out.println("hello");
 });
@@ -105,7 +105,7 @@ ThreadPoolExecutor(
   TimeUnit unit,
   BlockingQueue<Runnable> workQueue,
   ThreadFactory threadFactory,
-  RejectedExecutionHandler handler) 
+  RejectedExecutionHandler handler)
 ```
 
 下面我们一一介绍这些参数的意义，你可以**把线程池类比为一个项目组，而线程就是项目组的成员**。
@@ -116,7 +116,7 @@ ThreadPoolExecutor(
 - **workQueue**：工作队列，和上面示例代码的工作队列同义。
 - **threadFactory**：通过这个参数你可以自定义如何创建线程，例如你可以给线程指定一个有意义的名字。
 - **handler**：通过这个参数你可以自定义任务的拒绝策略。如果线程池中所有的线程都在忙碌，并且工作队列也满了（前提是工作队列是有界队列），那么此时提交任务，线程池就会拒绝接收。至于拒绝的策略，你可以通过handler这个参数来指定。ThreadPoolExecutor已经提供了以下4种策略。
-  
+
   - CallerRunsPolicy：提交任务的线程自己去执行该任务。
   - AbortPolicy：默认的拒绝策略，会throws RejectedExecutionException。
   - DiscardPolicy：直接丢弃任务，没有任何异常抛出。
@@ -141,7 +141,7 @@ try {
   //按需处理
 } catch (Throwable x) {
   //按需处理
-} 
+}
 ```
 
 ## 总结
@@ -207,6 +207,7 @@ try {
         }
         return t;
     }
+
 }</p>2019-04-21</li><br/><li><span>Red Cape</span> 👍（25） 💬（6）<p>请问老师，有界队列的长度怎么确定呢</p>2019-04-22</li><br/><li><span>海鸿</span> 👍（21） 💬（1）<p>1.利用guava的ThreadFactoryBuilder
 2.自己实现ThreadFactory</p>2019-04-18</li><br/><li><span>Uncle Drew</span> 👍（20） 💬（4）<p>老师请教一下，如果线上系统宕机了，线程池中的阻塞队列怎么处理才能保证任务不丢失</p>2019-12-06</li><br/><li><span>yang</span> 👍（15） 💬（1）<p>老师，有一个问题想问一下:
 
@@ -216,10 +217,10 @@ try {
 
 老师，请教个问题，在工程中，线程池的定义一般是在全局还是局部呢？如果全局的话，是不用shutdown吗？不关闭线程池有没有问题呢？</p>2019-04-18</li><br/><li><span>郑晨Cc</span> 👍（9） 💬（2）<p>可参照SDK中的 DefaultThreadFactory 自定义DYIThreadFactory
 static class DIYThreadFactory implements ThreadFactory {
-        private static final AtomicInteger poolNumber = new AtomicInteger(1);
-        private final ThreadGroup group;
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
-        private final String namePrefix;
+private static final AtomicInteger poolNumber = new AtomicInteger(1);
+private final ThreadGroup group;
+private final AtomicInteger threadNumber = new AtomicInteger(1);
+private final String namePrefix;
 
         DIYThreadFactory(String diyName) {
             SecurityManager s = System.getSecurityManager();
@@ -240,6 +241,7 @@ static class DIYThreadFactory implements ThreadFactory {
             return t;
         }
     }
-	
-	ExecutorService executor = Executors.newFixedThreadPool(4,new DIYThreadFactory(&quot;xxx&quot;));</p>2019-04-18</li><br/><li><span>大胖子呀、</span> 👍（7） 💬（2）<p>请教一下大家，线程池执行数据更新任务，还能简单的使用事务注解来回滚事务吗？</p>2020-08-05</li><br/><li><span>linqw</span> 👍（7） 💬（1）<p>最近打算分析下Executor系列源码，先分析了下FutureTask源码，https:&#47;&#47;juejin.im&#47;post&#47;5d08be8ce51d455d6c0ad925，老师有空帮忙看下哦</p>2019-06-19</li><br/><li><span>magict4</span> 👍（4） 💬（1）<p>老师您好，请问有什么推荐的替代 Executors 的方案吗？</p>2019-04-18</li><br/><li><span>ub8</span> 👍（3） 💬（2）<p>老师您好，在我们使用线程池时候，如果队列中还有任务未执行，此时重启了服务，那队列中的任务是否会丢。像这样的场景线程池配置的策略应该是什么样的呢</p>2021-08-30</li><br/>
+
+    ExecutorService executor = Executors.newFixedThreadPool(4,new DIYThreadFactory(&quot;xxx&quot;));</p>2019-04-18</li><br/><li><span>大胖子呀、</span> 👍（7） 💬（2）<p>请教一下大家，线程池执行数据更新任务，还能简单的使用事务注解来回滚事务吗？</p>2020-08-05</li><br/><li><span>linqw</span> 👍（7） 💬（1）<p>最近打算分析下Executor系列源码，先分析了下FutureTask源码，https:&#47;&#47;juejin.im&#47;post&#47;5d08be8ce51d455d6c0ad925，老师有空帮忙看下哦</p>2019-06-19</li><br/><li><span>magict4</span> 👍（4） 💬（1）<p>老师您好，请问有什么推荐的替代 Executors 的方案吗？</p>2019-04-18</li><br/><li><span>ub8</span> 👍（3） 💬（2）<p>老师您好，在我们使用线程池时候，如果队列中还有任务未执行，此时重启了服务，那队列中的任务是否会丢。像这样的场景线程池配置的策略应该是什么样的呢</p>2021-08-30</li><br/>
+
 </ul>

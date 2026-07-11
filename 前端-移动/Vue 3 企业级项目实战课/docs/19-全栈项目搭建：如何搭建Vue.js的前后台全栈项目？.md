@@ -94,16 +94,16 @@
 
 ```typescript
 /* eslint-disable no-console */
-import mysql from 'mysql';
+import mysql from "mysql";
 
 // 需要创建的数据库名称
-const database = 'hello_vue_project';
+const database = "hello_vue_project";
 // 数据库连接配置
 const config = {
-  host: '127.0.0.1',
+  host: "127.0.0.1",
   port: 3306,
-  user: 'root',
-  password: 'xxxxx' // 这里需要填写自己电脑本地MySQL数据库的密码
+  user: "root",
+  password: "xxxxx", // 这里需要填写自己电脑本地MySQL数据库的密码
 };
 
 // 创建一个数据库连接池
@@ -135,7 +135,6 @@ async function init() {
 
 // 开始数据库初始化
 init();
-
 ```
 
 上述代码中，我在Node.js环境里，用SQL语法实现了一个数据库“hello\_vue\_project”的创建，代码里面的账号密码都是本地MySQL数据库的。我这里用root主要是方便调试，**实际企业项目中，必须创建一个新的账户来操作数据库，同时，密码也不能像这里那么简单。**
@@ -151,7 +150,7 @@ Error: ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protoc
 这个问题是由于MySQL最新版本的加密方式和Node.js的mysql客户端不一致产生的，通过以下MySQL脚本，在MySQL命令框里修改就能解决问题。
 
 ```shell
-# 更新root账号密码，用其他加密形式处理 
+# 更新root账号密码，用其他加密形式处理
 # 里面的'password'为实际的密码
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 
@@ -163,16 +162,16 @@ FLUSH PRIVILEGES;
 
 ```typescript
 /* eslint-disable no-console */
-import mysql from 'mysql';
+import mysql from "mysql";
 
 // 需要创建的数据库名称
-const database = 'hello_vue_project';
+const database = "hello_vue_project";
 // 数据库连接配置
 const config = {
-  host: '127.0.0.1',
+  host: "127.0.0.1",
   port: 3306,
-  user: 'root',
-  password: '1234abcd'
+  user: "root",
+  password: "1234abcd",
 };
 
 // 创建一个数据库连接池
@@ -210,12 +209,11 @@ async function init() {
   `;
   // 执行建表操作
   await queryDatabaseSQLByPool(sqlDB);
-  console.log('运营搭建平台 - 数据表 user_info 创建成功！');
+  console.log("运营搭建平台 - 数据表 user_info 创建成功！");
 }
 
 // 开始数据库初始化
 init();
-
 ```
 
 上述代码中，用SQL语法，在数据库“hello\_vue\_project”，实现了一个表"user\_info"的创建，用来存储用户数据信息。
@@ -224,17 +222,17 @@ init();
 
 ```typescript
 /* eslint-disable no-console */
-import mysql from 'mysql';
-import type { OkPacket } from 'mysql';
+import mysql from "mysql";
+import type { OkPacket } from "mysql";
 
 // 数据库名称
-const database = 'hello_vue_project';
+const database = "hello_vue_project";
 // 数据库连接配置
 const config = {
-  host: '127.0.0.1',
+  host: "127.0.0.1",
   port: 3306,
-  user: 'root',
-  password: 'xxxxx'
+  user: "root",
+  password: "xxxxx",
 };
 
 // 封装连接执行方法
@@ -267,7 +265,7 @@ async function init() {
   // 执行插入数据操作
   const data: OkPacket = await queryDatabaseSQL(sql, []);
   console.log(
-    `运营搭建平台 - 数据表 user_info 成功插入${data?.affectedRows}条数据`
+    `运营搭建平台 - 数据表 user_info 成功插入${data?.affectedRows}条数据`,
   );
 }
 
@@ -281,17 +279,17 @@ init();
 
 ```typescript
 /* eslint-disable no-console */
-import mysql from 'mysql';
-import type { OkPacket } from 'mysql';
+import mysql from "mysql";
+import type { OkPacket } from "mysql";
 
 // 数据库名称
-const database = 'hello_vue_project';
+const database = "hello_vue_project";
 // 数据库连接配置
 const config = {
-  host: '127.0.0.1',
+  host: "127.0.0.1",
   port: 3306,
-  user: 'root',
-  password: 'xxxx'
+  user: "root",
+  password: "xxxx",
 };
 
 // 封装连接执行方法
@@ -324,7 +322,6 @@ async function init() {
 
 // 开始执行数据库操作
 init();
-
 ```
 
 上述代码，是用SQL的SELECT语句进行查询数据操作，查找了id为1的的用户数据。结果返回是一个对象数组。
@@ -333,17 +330,17 @@ init();
 
 ```typescript
 /* eslint-disable no-console */
-import mysql from 'mysql';
-import type { OkPacket } from 'mysql';
+import mysql from "mysql";
+import type { OkPacket } from "mysql";
 
 // 数据库名称
-const database = 'hello_vue_project';
+const database = "hello_vue_project";
 // 数据库连接配置
 const config = {
-  host: '127.0.0.1',
+  host: "127.0.0.1",
   port: 3306,
-  user: 'root',
-  password: '1234abcd'
+  user: "root",
+  password: "1234abcd",
 };
 
 // 封装连接执行方法
@@ -371,18 +368,17 @@ async function init() {
 
   // 执行更新数据操作
   const data: OkPacket = (await queryDatabaseSQL(sql, [
-    'hi_vue_001',
-    1
+    "hi_vue_001",
+    1,
   ])) as OkPacket;
   console.log(
-    `运营搭建平台 - 数据表 user_info 成功更新${data?.affectedRows}条数据`
+    `运营搭建平台 - 数据表 user_info 成功更新${data?.affectedRows}条数据`,
   );
   console.log(data);
 }
 
 // 开始执行数据库操作
 init();
-
 ```
 
 上述代码是用SQL的UPDATE语句进行查询数据操作，将id为1的的用户名称更新。  
@@ -414,8 +410,8 @@ MYSQL_PASSWORD = "xxxx"
 在项目服务端代码中，可以这么来使用环境变量。
 
 ```typescript
-import mysql from 'mysql';
-import dotenv from 'dotenv';
+import mysql from "mysql";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -426,23 +422,22 @@ const config = {
   host: process.env.MYSQL_HOST,
   port: parseInt(process.env.MYSQL_PORT),
   user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD
+  password: process.env.MYSQL_PASSWORD,
 };
 
 const pool = mysql.createPool(config);
-
 ```
 
 如果在开发过程中，出现TypeScript类型声明报错，可以重新定义环境变量的类型声明。
 
 ```typescript
-declare module 'process' {
+declare module "process" {
   global {
     // eslint-disable-next-line no-var
     var process: NodeJS.Process;
     namespace NodeJS {
       interface ProcessEnv extends Dict<string> {
-        NODE_ENV: 'development' | 'production';
+        NODE_ENV: "development" | "production";
         MYSQL_HOST: string;
         MYSQL_PORT: string;
         MYSQL_USER: string;
@@ -478,6 +473,7 @@ declare module 'process' {
 期待在留言区看到你的思考。除了掌握今天课程中全栈项目设计思路外，也希望你能举一反三设计出更优雅的全栈项目。我们下节课再见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/19)
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>Akili</span> 👍（0） 💬（1）<p>静态文件适合做些配置文件，如果使用静态文件存储动态的数据，需要进行读写文件，效率不高，还有读写静态文件会缺失数据库有的事物、约束、索引等等。</p>2023-02-17</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-20</li><br/><li><span>冰糖爱白开水</span> 👍（0） 💬（0）<p>运营搭建平台分为前后台，是普遍的实现方案吗？</p>2024-03-12</li><br/>
 </ul>

@@ -97,14 +97,14 @@ int findHeadVertidx(int* pLinkSign,int curridx)
 		curridx = pLinkSign[curridx];
 	return curridx;
 }
-	
+
 //用克鲁斯卡尔（Kruskal）算法创建最小生成树
 bool CreateMinSpanTree_Kruskal()
 {
 	//单独创建一个边数组来保存图中所有的边，之所以创建数组，是为了方便对这个数组进行单独操作
 	Edge* pedge = new Edge[m_numVertices*(m_numVertices-1)/2];    //含有n个顶点的无向图最多有n(n-1)/2条边，这里的n代表顶点数
 	int edgecount = 0;  //边的数量统计
-	
+
 	//因为是采用邻接矩阵存储图，这是个对称矩阵，所以只考察该矩阵的一半内容即可得到图中所有边的信息
 	for (int i = 0; i < m_numVertices; ++i)
 	{
@@ -225,7 +225,7 @@ gm.InsertEdge('C', 'E', 6);
 gm.InsertEdge('C', 'F', 4);
 gm.InsertEdge('D', 'F', 2);
 gm.InsertEdge('E', 'F', 6);
-gm.DispGraph();	
+gm.DispGraph();
 gm.CreateMinSpanTree_Kruskal();
 ```
 
@@ -242,19 +242,19 @@ void SwapE(Edge* pedges, int i, int j)
 	tmpedgeobj.idx_startVert = pedges[i].idx_startVert;
 	tmpedgeobj.idx_endVert = pedges[i].idx_endVert;
 	tmpedgeobj.weight = pedges[i].weight;
-	
+
 	pedges[i].idx_startVert = pedges[j].idx_startVert;
 	pedges[i].idx_endVert = pedges[j].idx_endVert;
 	pedges[i].weight = pedges[j].weight;
-	
+
 	pedges[j].idx_startVert = tmpedgeobj.idx_startVert;
 	pedges[j].idx_endVert = tmpedgeobj.idx_endVert;
 	pedges[j].weight = tmpedgeobj.weight;
 }
-	
+
 //按权值对边进行排序（冒泡排序）
 void WeightSort(Edge *pedges,int edgecount) //edgecount：边数量
-{			
+{
 	for (int i = 0; i < edgecount - 1; ++i)
 	{
 		for (int j = i + 1; j < edgecount; ++j)

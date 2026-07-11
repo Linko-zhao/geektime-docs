@@ -25,10 +25,10 @@ Emscripten 作为构建可运行于 Web 浏览器上的 Wasm 应用的首选编�
 注：此命令行形式仅适用于 Linux / MacOS 系统，对于 Windows 则会有所区别。你可以参考 [Emscripten 官方文档](https://emscripten.org/docs/index.html)来查看相关细节。
 
 ```
-EMCC_DEBUG=1 emcc dip.cc 
-  -s WASM=1 
-  -O3 
-  --no-entry 
+EMCC_DEBUG=1 emcc dip.cc
+  -s WASM=1
+  -O3
+  --no-entry
   -o dip.wasm
 ```
 
@@ -65,11 +65,11 @@ EMCC_DEBUG=1 emcc dip.cc
 不仅如此，在 “-g4” 这个级别下，emcc 还会为我们生成可用于在 Web 浏览器中进行“源码级”调试的特殊 DWARF 信息。通过这些特殊格式的信息，我们便可以直接在 Web 浏览器中对 Wasm 模块编译之前的源代码进行诸如“设置断点”、“单步跟踪”等调试手段。如下所示，假设此时我们使用该参数重新编译上一节课中的 DIP Web 应用。
 
 ```
-emcc dip.cc 
-  -g4 
-  -s WASM=1 
-  -O3 
-  --no-entry  
+emcc dip.cc
+  -g4
+  -s WASM=1
+  -O3
+  --no-entry
   -o dip.wasm
 ```
 

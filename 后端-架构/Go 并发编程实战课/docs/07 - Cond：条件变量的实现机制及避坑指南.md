@@ -332,96 +332,98 @@ https:&#47;&#47;stackoverflow.com&#47;questions&#47;36857167&#47;how-to-correctl
 package main
 
 import (
-	&quot;fmt&quot;
-	&quot;sync&quot;
-	&quot;sync&#47;atomic&quot;
+&quot;fmt&quot;
+&quot;sync&quot;
+&quot;sync&#47;atomic&quot;
 )
 
 type TaskQueue struct {
-	q        []interface{}
-	capacity int
-	size     int32
-	front    int
-	rear     int
-	popLock  sync.Mutex
-	pushLock sync.Mutex
-	pushCon  *sync.Cond
-	popCon   *sync.Cond
+q []interface{}
+capacity int
+size int32
+front int
+rear int
+popLock sync.Mutex
+pushLock sync.Mutex
+pushCon *sync.Cond
+popCon *sync.Cond
 }
 
 func NewTaskQueue(capacity int) *TaskQueue {
-	tq := &amp;TaskQueue{
-		q: make([]interface{}, capacity),
-		capacity: capacity,
-		front: 0,
-		rear: 0,
-		size: 0,
-	}
-	tq.pushCon = sync.NewCond(&amp;tq.pushLock)
-	tq.popCon = sync.NewCond(&amp;tq.popLock)
-	return tq
-} 
+tq := &amp;TaskQueue{
+q: make([]interface{}, capacity),
+capacity: capacity,
+front: 0,
+rear: 0,
+size: 0,
+}
+tq.pushCon = sync.NewCond(&amp;tq.pushLock)
+tq.popCon = sync.NewCond(&amp;tq.popLock)
+return tq
+}
 
 func (tq *TaskQueue) Size() int {
-	return int(atomic.LoadInt32(&amp;tq.size))
+return int(atomic.LoadInt32(&amp;tq.size))
 }
 
 func (tq *TaskQueue) PushTask(v interface{}) {
-	tq.pushLock.Lock()
-	defer tq.pushLock.Unlock()
-	for tq.Size() == tq.capacity {
-		tq.pushCon.Wait()
-	}
+tq.pushLock.Lock()
+defer tq.pushLock.Unlock()
+for tq.Size() == tq.capacity {
+tq.pushCon.Wait()
+}
 
-	tq.q[tq.rear] = v
-	tq.rear = (tq.rear + 1) % tq.capacity
-	atomic.AddInt32(&amp;tq.size, 1)
-	tq.popCon.Signal()
+    tq.q[tq.rear] = v
+    tq.rear = (tq.rear + 1) % tq.capacity
+    atomic.AddInt32(&amp;tq.size, 1)
+    tq.popCon.Signal()
+
 }
 
 func (tq *TaskQueue) PopTask() interface{} {
-	tq.popLock.Lock()
-	defer tq.popLock.Unlock()
-	for tq.Size() == 0 {
-		tq.popCon.Wait()
-	}
+tq.popLock.Lock()
+defer tq.popLock.Unlock()
+for tq.Size() == 0 {
+tq.popCon.Wait()
+}
 
-	v := tq.q[tq.front]
-	tq.front = (tq.front + 1) % tq.capacity
-	atomic.AddInt32(&amp;tq.size, -1)
-	tq.pushCon.Signal()
-	return v
+    v := tq.q[tq.front]
+    tq.front = (tq.front + 1) % tq.capacity
+    atomic.AddInt32(&amp;tq.size, -1)
+    tq.pushCon.Signal()
+    return v
+
 }</p>2024-12-01</li><br/><li><span>叶君度</span> 👍（0） 💬（1）<p>对比waitGroup。cond 实质是将waitGroup 的 计数能力 暴露给开发者，让开发自定义”计数”，waitGroup的计数state是atomic的原子操作，cond 通过 mutex来保证原子操作。所以在 更新 和 判断时，需要加锁检查。</p>2024-04-16</li><br/><li><span>Krean</span> 👍（0） 💬（1）<p>不知道现在发还会不会被看到😂，浇给作业
 type queue struct {
-	vals []int
-	cap int
-	cond *sync.Cond
+vals []int
+cap int
+cond *sync.Cond
 }
 
 func (q *queue) enQueue(v int) {
-	if q.cap == len(q.vals) {
-		q.cond.L.Lock()
-		q.cond.Wait()
-		q.cond.L.Unlock()
-	}
-	q.vals = append(q.vals, v)
-	q.cond.Signal()
+if q.cap == len(q.vals) {
+q.cond.L.Lock()
+q.cond.Wait()
+q.cond.L.Unlock()
+}
+q.vals = append(q.vals, v)
+q.cond.Signal()
 }
 
 func (q *queue) deQueue() int {
-	if len(q.vals) == 0 {
-		q.cond.L.Lock()
-		q.cond.Wait()
-		q.cond.L.Unlock()
-	}
-	ret := q.vals[0]
-	q.vals = q.vals[1:]
-	q.cond.Signal()
-	return ret
+if len(q.vals) == 0 {
+q.cond.L.Lock()
+q.cond.Wait()
+q.cond.L.Unlock()
+}
+ret := q.vals[0]
+q.vals = q.vals[1:]
+q.cond.Signal()
+return ret
 }</p>2024-03-22</li><br/><li><span>kyo</span> 👍（0） 💬（2）<p>
 func main() {
-    c := sync.NewCond(&amp;sync.Mutex{})
-    var ready int
+c := sync.NewCond(&amp;sync.Mutex{})
+var ready int
 
     for i := 0; i &lt; 10; i++ {
         go func(i int) {
@@ -447,8 +449,9 @@ func main() {
 
     &#47;&#47;所有的运动员是否就绪
     log.Println(&quot;所有运动员都准备就绪。比赛开始，3，2，1, ......&quot;)
+
 }
 
-这个例子有问题吧.  这里的 ready 变量共享了变量 c 的锁.  会导致在 c.Wait() 语句执行前 for 中的   goroutine 全部堵塞. 在 c.Wait() 前加句 time.Sleep(time.Second * 10) 试试就知道了. 是不是应该给 ready 变量单独定义一个 Mutex?</p>2022-12-04</li><br/><li><span>Geek_b45293</span> 👍（0） 💬（1）<p>有个问题，为什么 Mutex 不使用 copyChecker 来检测是否被复制呢？</p>2022-09-26</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（0） 💬（1）<p>文章中在描述 Cond 的复杂性时，说明了 3 点，第三点：「条件变量的更改」 是否可需改为：「等待条件的更改」？</p>2021-11-03</li><br/><li><span>bearlu</span> 👍（0） 💬（1）<p>老师请教一个问题，如果Wait前加锁，然后执行完Wait又Unlock有什么作用，我把Wait后面的Unlock去掉，好似程序也能正常运行。是我漏了什么？</p>2021-07-24</li><br/><li><span>网管</span> 👍（0） 💬（1）<p>老师，Kubernetes  PriorityQueue的那个Pop方法里没有使用p.cond.L.Lock()方法，他们是怎么防止不出现释放未加锁的panic啊。</p>2020-11-01</li><br/><li><span>S.S Mr Lin</span> 👍（0） 💬（2）<p>每次调用wait前都要加锁，为啥加锁语句放在了fo的外面？第二次wait是不是就没有加锁了？</p>2020-10-28</li><br/><li><span>syuan</span> 👍（0） 💬（1）<p>Wait 方法，会把调用者 Caller 放入 Cond 的等待队列中并阻塞，直到被 Signal 或者 Broadcast 的方法从等待队列中移除并唤醒。
-百米跑代码第22行:    c.Wait(),把调用者加入队列阻塞，不理解? for循环一直检查，是把c一直加入阻塞队列吗？还是waiter方法自已生成t对象加入阻塞队列？如果是，同一个c对应t( t := runtime_notifyListAdd(&amp;c.notify)对象唯一吗？</p>2020-10-26</li><br/><li><span>儿戏</span> 👍（0） 💬（1）<p>老师，请教个课程外的问题，使用httputil.ReverseProxy 做方向代理，压测的时候大量报出 http: proxy error: context canceled 这个错误。linux 打开文件数调整了，time_waite也都优化过了，一直没有找到问题，您的博客也看了还是不能定位，求赐教</p>2020-10-26</li><br/>
+这个例子有问题吧. 这里的 ready 变量共享了变量 c 的锁. 会导致在 c.Wait() 语句执行前 for 中的 goroutine 全部堵塞. 在 c.Wait() 前加句 time.Sleep(time.Second * 10) 试试就知道了. 是不是应该给 ready 变量单独定义一个 Mutex?</p>2022-12-04</li><br/><li><span>Geek_b45293</span> 👍（0） 💬（1）<p>有个问题，为什么 Mutex 不使用 copyChecker 来检测是否被复制呢？</p>2022-09-26</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（0） 💬（1）<p>文章中在描述 Cond 的复杂性时，说明了 3 点，第三点：「条件变量的更改」 是否可需改为：「等待条件的更改」？</p>2021-11-03</li><br/><li><span>bearlu</span> 👍（0） 💬（1）<p>老师请教一个问题，如果Wait前加锁，然后执行完Wait又Unlock有什么作用，我把Wait后面的Unlock去掉，好似程序也能正常运行。是我漏了什么？</p>2021-07-24</li><br/><li><span>网管</span> 👍（0） 💬（1）<p>老师，Kubernetes PriorityQueue的那个Pop方法里没有使用p.cond.L.Lock()方法，他们是怎么防止不出现释放未加锁的panic啊。</p>2020-11-01</li><br/><li><span>S.S Mr Lin</span> 👍（0） 💬（2）<p>每次调用wait前都要加锁，为啥加锁语句放在了fo的外面？第二次wait是不是就没有加锁了？</p>2020-10-28</li><br/><li><span>syuan</span> 👍（0） 💬（1）<p>Wait 方法，会把调用者 Caller 放入 Cond 的等待队列中并阻塞，直到被 Signal 或者 Broadcast 的方法从等待队列中移除并唤醒。
+百米跑代码第22行: c.Wait(),把调用者加入队列阻塞，不理解? for循环一直检查，是把c一直加入阻塞队列吗？还是waiter方法自已生成t对象加入阻塞队列？如果是，同一个c对应t( t := runtime_notifyListAdd(&amp;c.notify)对象唯一吗？</p>2020-10-26</li><br/><li><span>儿戏</span> 👍（0） 💬（1）<p>老师，请教个课程外的问题，使用httputil.ReverseProxy 做方向代理，压测的时候大量报出 http: proxy error: context canceled 这个错误。linux 打开文件数调整了，time_waite也都优化过了，一直没有找到问题，您的博客也看了还是不能定位，求赐教</p>2020-10-26</li><br/>
 </ul>

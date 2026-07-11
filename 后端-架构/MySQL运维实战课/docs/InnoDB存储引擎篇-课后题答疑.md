@@ -69,10 +69,10 @@ struct dict_sys_t {  /** The data dictionary tablespace ID. */
 mysql> SET SESSION debug='+d,skip_dd_table_access_check';
 Query OK, 0 rows affected (0.00 sec)
 
-mysql> select t1.name as table_name, t2.name as index_name, t2.se_private_data 
+mysql> select t1.name as table_name, t2.name as index_name, t2.se_private_data
     from mysql.tables t1, mysql.indexes t2
-    where t1.id = t2.table_id 
-    order by t1.id, t2.id 
+    where t1.id = t2.table_id
+    order by t1.id, t2.id
     limit 20;
 
 +-------------------------+----------------------+---------------------------------------------------------+
@@ -131,7 +131,7 @@ select replace(cast(properties as char),'\\', '') from dd_properties\G
 MySQL 8.0.23的[Release Notes](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-23.html#mysqld-8-0-23-feature)中对这个问题也有一些描述。
 
 - InnoDB: Performance was improved for the following operations:
-  
+
   - Dropping a large tablespace on a MySQL instance with a large buffer pool (&gt;32GBs).
   - Dropping a tablespace with a significant number of pages referenced from the adaptive hash index.
   - Truncating temporary tablespaces.
@@ -236,8 +236,8 @@ alter undo tablespace innodb_undo_001 set inactive;
 
 ```plain
 
-mysql> select * 
-  from information_schema.innodb_tablespaces 
+mysql> select *
+  from information_schema.innodb_tablespaces
   where row_format='Undo';
 +------------+-----------------+------------+------------+----------+--------+
 | SPACE      | NAME            | ROW_FORMAT | SPACE_TYPE |FILE_SIZE | STATE  |
@@ -329,9 +329,9 @@ mysql> show global status like '%row_lock%';
 performance\_schema.data\_lock\_waits表可以查看行锁等待关系。查询这个表有一点需要注意，就是如果有N个会话都在等待同一个锁，被某个会话阻塞了，那么这里会有N\*(N-1)条行锁等待记录。
 
 ```plain
-mysql> select  REQUESTING_THREAD_ID as thread_id, 
-    BLOCKING_ENGINE_LOCK_ID, 
-    BLOCKING_THREAD_ID  
+mysql> select  REQUESTING_THREAD_ID as thread_id,
+    BLOCKING_ENGINE_LOCK_ID,
+    BLOCKING_THREAD_ID
   from data_lock_waits;
 +----------+-----------------------------------------+--------------------+
 |THREAD_ID | BLOCKING_ENGINE_LOCK_ID                 | BLOCKING_THREAD_ID |
@@ -365,7 +365,7 @@ update stat_item_detail set sold = sold + 1 where id = 1
 information\_schema.INNODB\_METRICS表里也能查到一些死锁的信息。可以在监控系统中把这里的数据也采集起来。
 
 ```plain
-mysql> select * from information_schema.INNODB_METRICS 
+mysql> select * from information_schema.INNODB_METRICS
   where name = 'lock_deadlocks'\G
 *************************** 1. row ***************************
            NAME: lock_deadlocks

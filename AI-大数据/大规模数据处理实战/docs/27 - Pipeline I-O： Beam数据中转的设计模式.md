@@ -48,7 +48,7 @@ Java
 PCollection<String> inputs = p.apply(TextIO.read().from("filepath/.../YYYY/MM/*.csv");
 ```
 
-因为在Google Cloud Storage的通配符规则里面，“*”只能匹配到“*”自己所在的那一层子目录而已。所以"filepath/…/YYYY/MM/\*.csv"这个文件路径并不能找到“filepath/…/YYYY/MM/DD/…”这一层目录了。如果要达到我们的目标，我们就需要用到“\*\*”的通配符，也就是如以下的写法。
+因为在Google Cloud Storage的通配符规则里面，“_”只能匹配到“_”自己所在的那一层子目录而已。所以"filepath/…/YYYY/MM/\*.csv"这个文件路径并不能找到“filepath/…/YYYY/MM/DD/…”这一层目录了。如果要达到我们的目标，我们就需要用到“\*\*”的通配符，也就是如以下的写法。
 
 Java
 

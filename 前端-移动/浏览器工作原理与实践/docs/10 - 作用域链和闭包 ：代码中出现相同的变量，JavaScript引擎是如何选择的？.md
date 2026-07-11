@@ -216,7 +216,7 @@ var bar = {
     myName:"time.geekbang.com",
     printName: function () {
         console.log(myName)
-    }    
+    }
 }
 function foo() {
     let myName = "极客时间"
@@ -247,20 +247,19 @@ let _printName = foo()
 _printName()
 bar.printName()
 
-
 全局执行上下文：
 变量环境：
 Bar=undefined
-Foo= function 
+Foo= function
 词法环境：
-myname = undefined 
-_printName = undefined 
+myname = undefined
+_printName = undefined
 
 开始执行：
 bar ={myname: &quot;time.geekbang.com&quot;, printName: function(){...}}
 
 myName = &quot; 极客邦 &quot;
- _printName = foo() 调用foo函数，压执行上下文入调用栈
+_printName = foo() 调用foo函数，压执行上下文入调用栈
 
 foo函数执行上下文：
 变量环境： 空
@@ -283,7 +282,6 @@ console.log(myName)
 打印&quot; 极客邦 &quot;
 pop bar.printName的执行上下文
 
-
 bar.printName() 压bar.printName方法的执行上下文入调用栈
 
 bar.printName函数执行上下文：
@@ -295,9 +293,6 @@ console.log(myName)
 打印&quot; 极客邦 &quot;
 pop bar.printName的执行上下文
 
-
-
-
 </p>2019-08-27</li><br/><li><span>许童童</span> 👍（93） 💬（13）<p>思考题：
 这道题其实是个障眼法，只需要确定好函数调用栈就可以很轻松的解答，调用了foo()后，返回的是bar.printName，后续就跟foo函数没有关系了，所以结果就是调用了两次bar.printName()，根据词法作用域，结果都是“极客邦”，也不会形成闭包。
 闭包还可以这样理解：当函数嵌套时，内层函数引用了外层函数作用域下的变量，并且内层函数在全局作用域下可访问时，就形成了闭包。</p>2019-08-27</li><br/><li><span>pyhhou</span> 👍（71） 💬（4）<p>思考题，最后输出的都是 “极客邦”，这里不会产生函数闭包，解释如下：
@@ -305,15 +300,15 @@ pop bar.printName的执行上下文
 1. bar 不是一个函数，因此 bar 当中的 printName 其实是一个全局声明的函数，bar 当中的 myName 只是对象的一个属性，也和 printName 没有联系，如果要产生联系，需要使用 this 关键字，表示这里的 myName 是对象的一个属性，不然的话，printName 会通过词法作用域链去到其声明的环境，也就是全局，去找 myName
 
 2. foo 函数返回的 printName 是全局声明的函数，因此和 foo 当中定义的变量也没有任何联系，这个时候 foo 函数返回 printName 并不会产生闭包</p>2019-08-27</li><br/><li><span>李艺轩</span> 👍（55） 💬（7）<p>关于闭包的概念：
-老师提出的概念：内部函数引用外部函数的变量的集合。
-高级程序设计中的概念：闭包是指有权访问另一个函数作用域中的变量的函数。
-MDN上的概念：闭包是函数和声明该函数的词法环境的组合。
-所以到底哪个是对的。。MDN = 老师 + 高程</p>2019-09-04</li><br/><li><span>李懂</span> 👍（13） 💬（5）<p>本来对这篇文章充满期待,看完后还是有很多疑惑
-又翻看了一下小红书
-有以下疑问:
+   老师提出的概念：内部函数引用外部函数的变量的集合。
+   高级程序设计中的概念：闭包是指有权访问另一个函数作用域中的变量的函数。
+   MDN上的概念：闭包是函数和声明该函数的词法环境的组合。
+   所以到底哪个是对的。。MDN = 老师 + 高程</p>2019-09-04</li><br/><li><span>李懂</span> 👍（13） 💬（5）<p>本来对这篇文章充满期待,看完后还是有很多疑惑
+   又翻看了一下小红书
+   有以下疑问:
 
-1. 最后的分析图是不是有问题,全局上下文中变量环境怎么会有myName
-foo上下文中的innerBar是对象,用了函数?
+3. 最后的分析图是不是有问题,全局上下文中变量环境怎么会有myName
+   foo上下文中的innerBar是对象,用了函数?
 
 2.闭包是存在调用栈里的,现在的模块化存在大量闭包,那不是调用栈底部存在大量闭包
 很容易栈溢出吧
@@ -321,25 +316,25 @@ foo上下文中的innerBar是对象,用了函数?
 
 4.闭包是包含了整个变量环境和词法环境,还是只是包含用到的变量</p>2019-08-27</li><br/><li><span>早起不吃虫</span> 👍（11） 💬（1）<p>作为一名前端虽然这些都是早已熟悉的，但是老师讲的确实是好呀，深入浅出，逻辑清晰，期待后面的课程！</p>2019-08-27</li><br/><li><span>hzj.</span> 👍（9） 💬（3）<p>首先两个函数都会打印 : 极客邦
 社区中对闭包的定义: 函数执行产生私有作用域, 函数内部返回一个调用的函数, 由于外部会拿到内部函数的返回值, 所以内部函数不会被垃圾回收, 这个私有作用域就是闭包.
-闭包的作用有两点: 1. 保护私有变量      2. 维持内部私有变量的状态
-但是在 sicp (计算机程序的构造与解释) 中认为:   只要函数调用, 那么就会产生闭包.
+闭包的作用有两点: 1. 保护私有变量 2. 维持内部私有变量的状态
+但是在 sicp (计算机程序的构造与解释) 中认为: 只要函数调用, 那么就会产生闭包.
 所以, 我认为是会产生闭包的
 _printName() 输出 极客邦, 因为 _printName拿到了bar.printName, 打印上面的 myName即可.
 bar.printName() 输出 极客邦, 因为会直接打印全局的 myName.
 最后, 只有在 foo() 函数中有 log, 才会输出 &quot;极客时间&quot;, 因为 这个值是在 foo 函数的私有作用域中的!!!</p>2019-08-27</li><br/><li><span>oc7</span> 👍（7） 💬（1）<p>function foo() {
-    var myName = &quot; 极客时间 &quot;
-    let test1 = 1
-    const test2 = 2
-    var innerBar = {
-        getName:function(){
-            console.log(test1)
-            return myName
-        },
-        setName:function(newName){
-            myName = newName
-        }
-    }
-    return innerBar
+var myName = &quot; 极客时间 &quot;
+let test1 = 1
+const test2 = 2
+var innerBar = {
+getName:function(){
+console.log(test1)
+return myName
+},
+setName:function(newName){
+myName = newName
+}
+}
+return innerBar
 }
 var bar = foo()
 bar.setName(&quot; 极客邦 &quot;)
@@ -350,10 +345,9 @@ console.log(bar.getName())
 在return innerBar的时候 bar.setName(&quot; 极客邦 &quot;)和bar.getName()这两个函数还没有执行 为什么会执行词法作用域的分析 之前不是说只有函数调用时才创建这个函数的执行作用域和可执行代码</p>2019-09-04</li><br/><li><span>忘忧草的约定</span> 👍（6） 💬（3）<p>老师我想请教一个问题：函数执行上下文是在函数执行前的编译阶段存入执行栈的、那么执行上下文中的outer也是在编译阶段通过分析函数声明的位置来赋值的吗？</p>2019-08-29</li><br/><li><span>ChaoZzz</span> 👍（4） 💬（1）<p>不会产生闭包，函数在被创建的时候它的作用域链就已经确定了，所以不论是直接调用bar对象中的printName方法还是在foo函数中返回的printName方法他们的作用域链都是[自身的AO, 全局作用域]，自身的AO中没有myName就到全局中找，找到了全局作用域中的myName = &#39; 极客邦 &#39;，所以两次打印都是“极客邦”啦~</p>2019-08-27</li><br/><li><span>Marvin</span> 👍（3） 💬（4）<p>请问
 console.log(a)
 {
-  function a(){}
+function a(){}
 }
-为何会log一个undefined？目测function的变量提升会受到块的影响，这是标准浏览器的特性造成的，还是IE6时代就是这样呢？</p>2019-08-27</li><br/><li><span>mfist</span> 👍（3） 💬（1）<p>1. _printName是一个全局函数，执行的话 不会访问到内部变量。输出全局变量的myName 极客邦
-2. bar.printName 同样输出是极客邦
+为何会log一个undefined？目测function的变量提升会受到块的影响，这是标准浏览器的特性造成的，还是IE6时代就是这样呢？</p>2019-08-27</li><br/><li><span>mfist</span> 👍（3） 💬（1）<p>1. _printName是一个全局函数，执行的话 不会访问到内部变量。输出全局变量的myName 极客邦2. bar.printName 同样输出是极客邦
 
 随着专栏的推进，发现看一遍文章的时间一直在增长。发现了很多的知识盲区，很多内容只是知道，不知道底层原理。
 

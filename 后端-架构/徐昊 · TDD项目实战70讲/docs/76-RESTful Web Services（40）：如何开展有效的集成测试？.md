@@ -8,7 +8,7 @@
 目前的任务列表：
 
 - Resource/RootResource/ResourceMethods
-  
+
   - 使用默认构造函数转换matrix, form, header, cookie
   - 使用默认构造函数转换List, Set, SortSet, Arrary
 

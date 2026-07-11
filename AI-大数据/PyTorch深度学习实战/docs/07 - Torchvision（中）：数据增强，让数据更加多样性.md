@@ -403,10 +403,10 @@ UserWarning: Argument interpolation should be of type InterpolationMode instead 
 在之前的回答中给的解决方案的第二条：将Image.BICUBIC 替换为InterpolationMode.BICUBIC，这个是在哪儿替换?transforms.py的源代码中也没有相关代码</p>2021-12-18</li><br/><li><span>亚林</span> 👍（2） 💬（1）<p>Torchvision 中 transforms 模块的作用图像数据的预处理。怎么标准化，这些标准化参数是如何确定的类？</p>2022-05-12</li><br/><li><span>问鼎苍穹</span> 👍（1） 💬（1）<p>老师您好，transforms是只能对图像的tensor数据进行处理是吧，对于表格类型的数据是不能进行数据增强的操作是吗，如果要对表格类型的数据进行数据增强应该如何操作呢</p>2022-09-11</li><br/><li><span>快快🔥</span> 👍（1） 💬（1）<p>老师，我想问下，在transform.dataset()中进行transforms的转换操作，是会将原图像数据覆盖掉吗，还是产生新的转换后的数据。</p>2021-11-28</li><br/><li><span>书木子谢明</span> 👍（0） 💬（1）<p>老师您好，标准化用到的均值、标准差需要提前通过图片计算出来吗？还是根据经验拍一个数据？</p>2024-08-30</li><br/><li><span>ifelse</span> 👍（0） 💬（1）<p>transform可以进行图片与tensor的数据转类型转换，还可以进行旋转，裁剪，缩放等操作，与datasets搭配使用时，可以在加载数据的过程中，完成数据的增强操作。</p>2023-11-25</li><br/><li><span>Jacob.C</span> 👍（0） 💬（1）<p>方远老师好，像FiveCrop这样一个样本变多个样本的变换，dataset加载的时候，标签如何跟着变多呢？不然会对不齐呀。</p>2023-01-24</li><br/><li><span>🐰</span> 👍（0） 💬（1）<p>老师好，我想问一下，我在运行时最后结果不显示图片只显示标签是为什么呢？</p>2022-09-10</li><br/><li><span>John(易筋)</span> 👍（0） 💬（1）<p>加上逗号解决：too many indices for tensor of dimension 0
 The problem is that the mean and std have to be sequences (e.g., tuples), therefore you should add a comma after the values:
 
-
 # 定义一个transform
+
 my_transform = transforms.Compose([transforms.ToTensor(),
-                                   transforms.Normalize((0.5,), (0.5,))
+transforms.Normalize((0.5,), (0.5,))
 
 ref: https:&#47;&#47;stackoverflow.com&#47;questions&#47;56745486&#47;pytorch-dataloader-indexerror-too-many-indices-for-tensor-of-dimension-0</p>2022-07-29</li><br/><li><span>Geek_b454ca</span> 👍（0） 💬（1）<p>老师您好，Torchvision中有transform这些可以对数据进行标准化的函数，如果不是要处理图像数据，在pytorch中是不是也有类似的对数据进行标准化等transform操作的函数呢？</p>2022-03-24</li><br/><li><span>黑暗骑士</span> 👍（0） 💬（1）<p>老师您好，
 这节课我们对于数据本身进行了一系列操作，请问相应的标签如何处理呢？是不是会自动匹配？</p>2022-03-05</li><br/>

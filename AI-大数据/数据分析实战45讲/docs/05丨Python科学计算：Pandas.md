@@ -41,7 +41,7 @@ dtype: int64
 ```
 d = {'a':1, 'b':2, 'c':3, 'd':4}
 x3 = Series(d)
-print x3 
+print x3
 ```
 
 运行结果：
@@ -147,8 +147,8 @@ df = df.drop_duplicates() #去除重复行
 这是个比较常用的操作，因为很多时候数据格式不规范，我们可以使用astype函数来规范数据格式，比如我们把Chinese字段的值改成str类型，或者int64可以这么写：
 
 ```
-df2['Chinese'].astype('str') 
-df2['Chinese'].astype(np.int64) 
+df2['Chinese'].astype('str')
+df2['Chinese'].astype(np.int64)
 ```
 
 **数据间的空格**
@@ -380,38 +380,52 @@ Pandas包与NumPy工具库配合使用可以发挥巨大的威力，正是有了
 import pandas as pd
 
 data = {&#39;Chinese&#39;: [66, 95, 93, 90, 80, 80], &#39;English&#39;: [65, 85, 92, 88, 90, 90],
-        &#39;Math&#39;: [None, 98, 96, 77, 90, 90]}
+&#39;Math&#39;: [None, 98, 96, 77, 90, 90]}
 df = pd.DataFrame(data, index=[&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;],
-                  columns=[&#39;English&#39;, &#39;Math&#39;, &#39;Chinese&#39;])
+columns=[&#39;English&#39;, &#39;Math&#39;, &#39;Chinese&#39;])
+
 # 去除重复行
+
 df = df.drop_duplicates()
+
 # 列名重新排序
+
 cols = [&#39;Chinese&#39;, &#39;English&#39;, &#39;Math&#39;]
 df = df.filter(cols, axis=1)
-# 列名改为中文
-df.rename(columns={&#39;Chinese&#39;: &#39;语文&#39;, &#39;English&#39;: &#39;英语&#39;,
-                   &#39;Math&#39;: &#39;数学&#39;}, inplace=True)
 
+# 列名改为中文
+
+df.rename(columns={&#39;Chinese&#39;: &#39;语文&#39;, &#39;English&#39;: &#39;英语&#39;,
+&#39;Math&#39;: &#39;数学&#39;}, inplace=True)
 
 def total_score(df):
-    df[&#39;总分&#39;] = df[&#39;语文&#39;] + df[&#39;英语&#39;] + df[&#39;数学&#39;]
-    return df
-
+df[&#39;总分&#39;] = df[&#39;语文&#39;] + df[&#39;英语&#39;] + df[&#39;数学&#39;]
+return df
 
 # 求成绩的和，用老师讲的 apply 方法
+
 df = df.apply(total_score, axis=1)
+
 # 或者可以用这个方法求和
+
 # df[&#39;总分&#39;] = df[&#39;语文&#39;] + df[&#39;英语&#39;] + df[&#39;数学&#39;]
+
 # 按照总分排序，从高到低，此时有缺失值
+
 df.sort_values([&#39;总分&#39;], ascending=[False], inplace=True)
+
 # 打印显示成绩单信息，张飞有空值
+
 print(df.isnull().sum())
 print(df.describe())
 print(df)
 
 # 使用数学成绩均值填充张飞同学的缺失值
+
 df[&#39;数学&#39;].fillna(df[&#39;数学&#39;].mean(), inplace=True)
+
 # 再次求成绩的和并打印显示成绩单情况
+
 df = df.apply(total_score, axis=1)
 print(df.isnull().sum())
 print(df.describe())
@@ -429,23 +443,27 @@ Pandas中有Series和DataFrame两种重要的数据结构。
         查找空值：lsnull
         apply
 
-
 &quot;&quot;&quot;
 from pandas import DataFrame
 
 # Scores of students
+
 scores = {&#39;Chinese&#39;: [66, 95, 95, 90, 80, 80],
-          &#39;English&#39;: [65, 85, 92, 80, 90, 90],
-          &#39;Math&#39;: [None, 98, 96, 77, 90, 90],
-          &#39;Total&#39;: [None, None, None, None, None, None]}
+&#39;English&#39;: [65, 85, 92, 80, 90, 90],
+&#39;Math&#39;: [None, 98, 96, 77, 90, 90],
+&#39;Total&#39;: [None, None, None, None, None, None]}
 df = DataFrame(scores, index=[&#39;Zhang Fei&#39;, &#39;Guan Yu&#39;, &#39;Zhao Yun&#39;, &#39;Huang Zhong&#39;, &#39;Dian Wei&#39;,&#39;Dian Wei&#39;],)
 
 # Data ckeaning.
+
 # remove the duplicated record.
+
 df = df.drop_duplicates()
+
 # print(df)
 
 # Calculate the total scores.
+
 df[&#39;Total&#39;] = df.sum(axis=1)
 print(df.describe())</p>2018-12-24</li><br/><li><span>知悉者也</span> 👍（7） 💬（2）<p>stu_score = pd.DataFrame([[&#39;张飞&#39;, 66, 65, np.nan],
                          [&#39;关羽&#39;, 95, 85, 98],
@@ -456,49 +474,64 @@ print(df.describe())</p>2018-12-24</li><br/><li><span>知悉者也</span> 👍�
                         columns = [&#39;姓名&#39;,&#39;语文&#39;, &#39;英语&#39;, &#39;数学&#39;])
 stu_score = stu_score.set_index(&#39;姓名&#39;)  # 将某一列作为索引
 
-stu_score = stu_score.fillna(axis=1, method=&#39;ffill&#39;)  # 以左边来填充缺失值
+stu_score = stu_score.fillna(axis=1, method=&#39;ffill&#39;) # 以左边来填充缺失值
 stu_score[&#39;总分&#39;] = stu_score.apply(sum , axis=1)
 stu_score</p>2019-11-07</li><br/><li><span>董大琳儿</span> 👍（6） 💬（1）<p>都没听懂，感到淡淡的忧伤~~~</p>2019-06-20</li><br/><li><span>Answer Liu</span> 👍（5） 💬（1）<p>df6 = pd.DataFrame(
-    {&quot;语文&quot;: [66, 95, 95, 90, 80, 80], &quot;数学&quot;: [65, 85, 92, 88, 90, 90], &quot;英语&quot;: [np.nan, 98, 96, 77, 90, 90]},
-    index=[&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;]
+{&quot;语文&quot;: [66, 95, 95, 90, 80, 80], &quot;数学&quot;: [65, 85, 92, 88, 90, 90], &quot;英语&quot;: [np.nan, 98, 96, 77, 90, 90]},
+index=[&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;]
 )
+
 # 去重
+
 df7 = df6.drop_duplicates()
+
 # 替换NaN值
+
 df8 = df7.fillna(df7[&#39;英语&#39;].mean())
+
 # 增加一行统计
+
 df8[&#39;sum&#39;] = [df8.loc[name].sum() for name in df8.index]
+
 # 按总分倒序排列
+
 df9 = df8.sort_values(by=&quot;sum&quot;, ascending=False)
 print(df9)</p>2019-10-22</li><br/><li><span>qinggeouye</span> 👍（4） 💬（2）<p>import numpy as np
 import pandas as pd
 
 scores = pd.DataFrame(
-    {&#39;姓名&#39;: [&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;], &#39;语文&#39;: [66, 95, 95, 90, 80, 80], &#39;英语&#39;: [65, 85, 92, 88, 90, 90],
-     &#39;数学&#39;: [np.NaN, 98, 96, 77, 90, 90], })
+{&#39;姓名&#39;: [&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;], &#39;语文&#39;: [66, 95, 95, 90, 80, 80], &#39;英语&#39;: [65, 85, 92, 88, 90, 90],
+&#39;数学&#39;: [np.NaN, 98, 96, 77, 90, 90], })
 
 print(scores)
 
 # 查找空值所在的列
-isNaN = scores.isna().any()  # isnull(), isnull().any()
+
+isNaN = scores.isna().any() # isnull(), isnull().any()
 isNaN = isNaN[isNaN == True]
 print(scores[isNaN.index])
 
 # 列的平均值填充空值
+
 for col in isNaN.index:
-    scores[col].fillna(scores[col].mean(), inplace=True)
+scores[col].fillna(scores[col].mean(), inplace=True)
 print(scores)
 
 # 去除不必要的行（空值）
+
 # scores = scores.drop(index=[0])
+
 # scores = scores.dropna()
 
 # 去除重复行
+
 scores = scores.drop_duplicates()
 print(scores)
 
 # 新增一列&#39;总和&#39;
+
 # scores[&#39;总和&#39;] = scores[&#39;语文&#39;] + scores[&#39;数学&#39;] + scores[&#39;英语&#39;]
+
 scores[&#39;总和&#39;] = scores.sum(axis=1)
 print(scores)
 </p>2019-11-03</li><br/><li><span>龟仙人</span> 👍（4） 💬（3）<p>老师你好，你好像没有在哪里明确说明自己的环境是python2.7的，结果大家的使用环境大多数是3.0的，多多少少会引发一些问题。还有请问，微信群怎么加？</p>2019-01-27</li><br/><li><span>Grandia_Z</span> 👍（3） 💬（1）<p>照着老师写 df2 = df2.drop(columns=[&#39;Chinese&#39;]) 这行代码后,返回结果是:
@@ -520,19 +553,16 @@ df[u&#39;总和&#39;] = df[u&#39;语文&#39;]+df[u&#39;英语&#39;]+df[u&#39;数
 df.head()
 </p>2019-06-24</li><br/><li><span>青石</span> 👍（2） 💬（1）<p>from pandas import DataFrame
 
-
 def score(df):
-    df[&#39;score&#39;] = df[u&#39;Chinese&#39;] + df[u&#39;English&#39;] + df[u&#39;Math&#39;]
-    return df
+df[&#39;score&#39;] = df[u&#39;Chinese&#39;] + df[u&#39;English&#39;] + df[u&#39;Math&#39;]
+return df
 
 data = {&#39;Chinese&#39;: [66, 95, 95, 90, 80, 80], &#39;English&#39;: [65, 85, 92, 88, 90, 90], &#39;Math&#39;: [None, 98, 96, 77, 90, 90]}
 df = DataFrame(data, index=[&#39;ZhangFei&#39;, &#39;GuanYu&#39;, &#39;ZhaoYun&#39;, &#39;HuangZhong&#39;, &#39;DianWei&#39;, &#39;DianWei&#39;], columns=[&#39;Chinese&#39;, &#39;English&#39;, &#39;Math&#39;])
 df = df.drop_duplicates().fillna(0)
 df = df.apply(score, axis=1)
 
-print(df)</p>2019-04-11</li><br/><li><span>初</span> 👍（2） 💬（1）<p>None竟然是浮点型数据....没想到</p>2019-03-05</li><br/><li><span>lingmacker</span> 👍（2） 💬（1）<p>def exercise():
-    # 1. 对于下表的数据，请使用Pandas中的DataFrame进行创建，并对数据进行清洗。
-    # 2. 同时新增一列“总和”计算每个人的三科成绩之和。
+print(df)</p>2019-04-11</li><br/><li><span>初</span> 👍（2） 💬（1）<p>None竟然是浮点型数据....没想到</p>2019-03-05</li><br/><li><span>lingmacker</span> 👍（2） 💬（1）<p>def exercise(): # 1. 对于下表的数据，请使用Pandas中的DataFrame进行创建，并对数据进行清洗。# 2. 同时新增一列“总和”计算每个人的三科成绩之和。
 
     # 列名使用了中文，打印需要列对其的话，则需要设置这两个参数
     pd.set_option(&#39;display.unicode.ambiguous_as_wide&#39;, True)
@@ -542,7 +572,7 @@ print(df)</p>2019-04-11</li><br/><li><span>初</span> 👍（2） 💬（1）<p>
             &quot;语文&quot;: [66, 95, 95, 90, 80, 80],
             &quot;英语&quot;: [65, 85, 92, 88, 90, 90],
             &quot;数学&quot;: [None, 98, 96, 77, 90, 90]}
-    
+
     score_table = pd.DataFrame(data, columns=[&quot;姓名&quot;, &quot;语文&quot;, &quot;英语&quot;, &quot;数学&quot;])
     print(score_table, &quot;\n&quot;)
 
@@ -554,6 +584,7 @@ print(df)</p>2019-04-11</li><br/><li><span>初</span> 👍（2） 💬（1）<p>
     score_table.fillna(0, inplace=True)  # 将NaN替换为0
     score_table[&quot;总分&quot;] = score_table[&quot;语文&quot;] + score_table[&quot;英语&quot;] + score_table[&quot;数学&quot;]
     print(score_table)</p>2018-12-24</li><br/><li><span>姜戈</span> 👍（2） 💬（1）<p># -*- coding: utf-8 -*-
+
 import pandas as pd
 from pandas import Series, DataFrame
 
@@ -570,7 +601,9 @@ print df
 df[&#39;总计&#39;]=df[&#39;语文&#39;]+df[&#39;英语&#39;]+df[&#39;数学&#39;]
 df.replace(to_replace=0, value=&#39;&#39;, inplace=True)
 print df</p>2018-12-24</li><br/><li><span>mickey</span> 👍（2） 💬（1）<p>#!&#47;usr&#47;bin&#47;python
+
 # vim: set fileencoding:utf-8
+
 &#39;&#39;&#39;
 1.对于下表的数据，请使用Pandas中的DataFrame进行创建，并对数据进行清洗。
 2.同时新增一列“总和”计算每个人的三科成绩之和。
@@ -579,51 +612,59 @@ import pandas as pd
 from pandas import DataFrame
 
 # 导入成绩
+
 data = pd.read_excel(u&#39;成绩表.xlsx&#39;)
 df = DataFrame(data)
 print df
 
-
 # 求和，并增加一列“总和”
-def addtotal(df):
-    df[u&#39;总和&#39;] = df[u&#39;语文&#39;] + df[u&#39;英语&#39;] + df[u&#39;数学&#39;]
-    return df
 
+def addtotal(df):
+df[u&#39;总和&#39;] = df[u&#39;语文&#39;] + df[u&#39;英语&#39;] + df[u&#39;数学&#39;]
+return df
 
 # 清洗为空的数据
+
 df1 = df.dropna()
 
 # 清洗重复的数据
+
 df1 = df1.drop_duplicates()
 
 # 生成新数据结构
+
 df1= df1.apply(addtotal, axis=1)
 print(df1)</p>2018-12-24</li><br/><li><span>郭 冲</span> 👍（1） 💬（1）<p>#!&#47;usr&#47;bin&#47;env python3
-# -*- coding: utf-8 -*-
+
+# -_- coding: utf-8 -_-
 
 import pandas as pd
 
 data = {&#39;语文&#39;: [66, 95, 95, 90, 80, 80],
-        &#39;英语&#39;: [65, 85, 92, 88, 90, 90],
-        &#39;数学&#39;: [None, 98, 96, 77, 90, 90]}
+&#39;英语&#39;: [65, 85, 92, 88, 90, 90],
+&#39;数学&#39;: [None, 98, 96, 77, 90, 90]}
 
-df_hw = DataFrame(data, 
-                  index=[&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;], 
-                  columns=[&#39;语文&#39;, &#39;英语&#39;, &#39;数学&#39;])
+df_hw = DataFrame(data,
+index=[&#39;张飞&#39;, &#39;关羽&#39;, &#39;赵云&#39;, &#39;黄忠&#39;, &#39;典韦&#39;, &#39;典韦&#39;],
+columns=[&#39;语文&#39;, &#39;英语&#39;, &#39;数学&#39;])
 
 # 1.去除重复的值
+
 df_hw = df_hw.drop_duplicates()
 
 # 2.查找空值
+
 df_hw.isnull()
 
 # 3. 使用数学成绩均值填充张飞同学的缺失值
+
 df_hw[&#39;数学&#39;].fillna(df_hw[&#39;数学&#39;].mean(), inplace=True)
 
 # 4.使用apply函数增加“总和”列
+
 def sum_together(df):
-    df[&#39;总和&#39;] = df[&#39;语文&#39;] + df[&#39;英语&#39;] + df[&#39;数学&#39;]
-    return df
+df[&#39;总和&#39;] = df[&#39;语文&#39;] + df[&#39;英语&#39;] + df[&#39;数学&#39;]
+return df
 
 df_hw = df_hw.apply(sum_together,axis=1)
 

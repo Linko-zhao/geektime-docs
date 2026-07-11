@@ -18,7 +18,7 @@ System TOTAL: 2.1% user + 16% kernel + 9.2% iowait + 0.2% irq + 0.1% softirq + 7
 CPU Core: 8
 Load Average: 8.74 / 7.74 / 7.36
 
-Process:com.sample.app 
+Process:com.sample.app
   50% 23468/com.sample.app(S): 11% user + 38% kernel faults:4965
 
 Threads:

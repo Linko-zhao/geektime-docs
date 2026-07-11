@@ -20,12 +20,12 @@ WebAppContext -&gt; SessionHandler -&gt; SecurityHandler -&gt; ServletHandler
 public class HandlerWrapper extends AbstractHandlerContainer
 {
    protected Handler _handler;
-   
+
    @Override
-    public void handle(String target, 
-                       Request baseRequest, 
-                       HttpServletRequest request, 
-                       HttpServletResponse response) 
+    public void handle(String target,
+                       Request baseRequest,
+                       HttpServletRequest request,
+                       HttpServletResponse response)
                        throws IOException, ServletException
     {
         Handler handler=_handler;
@@ -42,10 +42,10 @@ public class HandlerWrapper extends AbstractHandlerContainer
 ScopedHandler的父类是HandlerWrapper，ScopedHandler重写了handle方法，在HandlerWrapper的handle方法的基础上引入了doScope方法。
 
 ```
-public final void handle(String target, 
-                         Request baseRequest, 
+public final void handle(String target,
+                         Request baseRequest,
                          HttpServletRequest request,
-                         HttpServletResponse response) 
+                         HttpServletResponse response)
                          throws IOException, ServletException
 {
     if (isStarted())
@@ -104,7 +104,7 @@ protected void doStart() throws Exception
     {
         //请注意_outScope是一个实例变量，而__outerScope是一个全局变量。先读取全局的线程私有变量__outerScope到_outerScope中
  _outerScope=__outerScope.get();
- 
+
         //如果全局的__outerScope还没有被赋值，说明执行doStart方法的是头节点
         if (_outerScope==null)
             //handler链的头节点将自己的引用填充到__outerScope
@@ -158,17 +158,17 @@ finally
 实际上在ScopedHandler中对于doScope和doHandle方法是没有具体实现的，但是提供了nextHandle和nextScope两个方法，下面是它们的源码：
 
 ```
-public void doScope(String target, 
-                    Request baseRequest, 
-                    HttpServletRequest request, 
+public void doScope(String target,
+                    Request baseRequest,
+                    HttpServletRequest request,
                     HttpServletResponse response)
        throws IOException, ServletException
 {
     nextScope(target,baseRequest,request,response);
 }
 
-public final void nextScope(String target, 
-                            Request baseRequest, 
+public final void nextScope(String target,
+                            Request baseRequest,
                             HttpServletRequest request,
                             HttpServletResponse response)
                             throws IOException, ServletException
@@ -181,17 +181,17 @@ public final void nextScope(String target,
         doHandle(target,baseRequest,request, response);
 }
 
-public abstract void doHandle(String target, 
-                              Request baseRequest, 
+public abstract void doHandle(String target,
+                              Request baseRequest,
                               HttpServletRequest request,
                               HttpServletResponse response)
        throws IOException, ServletException;
-       
 
-public final void nextHandle(String target, 
+
+public final void nextHandle(String target,
                              final Request baseRequest,
                              HttpServletRequest request,
-                             HttpServletResponse response) 
+                             HttpServletResponse response)
        throws IOException, ServletException
 {
     if (_nextScope!=null && _nextScope==_handler)
@@ -212,7 +212,7 @@ A.handle(...)
             B.doHandle(...)
               X.handle(...)
                 C.handle(...)
-                  C.doHandle(...)  
+                  C.doHandle(...)
 ```
 
 因此通过设置`_outScope`和`_nextScope`的值，并且在代码中判断这些值并采取相应的动作，目的就是让ScopedHandler链上的**doScope方法在doHandle、handle方法之前执行**。并且不同ScopedHandler的doScope都是按照它在链上的先后顺序执行的，doHandle和handle方法也是如此。
@@ -228,7 +228,7 @@ private ContextHandler(Context context, HandlerContainer parent, String contextP
 {
     //_scontext就是Servlet规范中的ServletContext
     _scontext = context == null?new Context():context;
-  
+
     //Web应用的初始化参数
     _initParams = new HashMap<String, String>();
     ...
@@ -270,10 +270,10 @@ public void doScope(String target, Request baseRequest, HttpServletRequest reque
       old_classloader = current_thread.getContextClassLoader();
       current_thread.setContextClassLoader(_classLoader);
   }
-  
+
   //3. 调用nextScope
   nextScope(target,baseRequest,request,response);
-  
+
   ...
 }
 ```
@@ -292,7 +292,7 @@ public void doHandle(String target, Request baseRequest, HttpServletRequest requ
             requestInitialized(baseRequest,request);
 
         ...
- 
+
         //继续调用下一个Handler，下一个Handler可能是ServletHandler、SessionHandler ...
         nextHandle(target,baseRequest,request,response);
     }
@@ -325,42 +325,41 @@ ScopedHandler的doStart方法，最后一步是将线程私有变量`__outerScop
 
 protected void doStart() throws Exception
 {
-    try{
-        _outerScope=__outerScope.get();
-        if (_outerScope==null){
-           &#47;&#47;本次处理的第一个scope handler
-           &#47;&#47;告知后续scope handler，_outerScope选我
-            __outerScope.set(this);
-        }
-        super.doStart();
-        _nextScope= getChildHandlerByClass(ScopedHandler.class);
-    }
-    finally
-    {
-        if (_outerScope==null){
-           &#47;&#47;本次处理结束
-           &#47;&#47;为了下次同一个线程处理是，
-           &#47;&#47;还能正常的设置第一个scope handler
-           &#47;&#47;必须把threadlocal变量设为null
-            __outerScope.set(null);
-        }
-    }
+try{
+_outerScope=__outerScope.get();
+if (_outerScope==null){
+&#47;&#47;本次处理的第一个scope handler
+&#47;&#47;告知后续scope handler，_outerScope选我
+__outerScope.set(this);
 }
-
+super.doStart();
+_nextScope= getChildHandlerByClass(ScopedHandler.class);
+}
+finally
+{
+if (_outerScope==null){
+&#47;&#47;本次处理结束
+&#47;&#47;为了下次同一个线程处理是，
+&#47;&#47;还能正常的设置第一个scope handler
+&#47;&#47;必须把threadlocal变量设为null
+__outerScope.set(null);
+}
+}
+}
 
 此外，这一节里有一个non scoped handler X，一开始没太看懂调阅顺序。
 后来发现是这样的：
 
 public final void nextHandle(String target...)...
 {
-    if (_nextScope!=null &amp;&amp; _nextScope==_handler){
-        &#47;&#47;上面条件可以保证下一个handler是scope handler
-        _nextScope.doHandle(target,baseRequest,request, response);
-    }
-    else if (_handler!=null){
-        &#47;&#47;non scpoe handler调用下一个handler的
-        super.handle(target,baseRequest,request,response);
-    }
+if (_nextScope!=null &amp;&amp; _nextScope==_handler){
+&#47;&#47;上面条件可以保证下一个handler是scope handler
+_nextScope.doHandle(target,baseRequest,request, response);
+}
+else if (_handler!=null){
+&#47;&#47;non scpoe handler调用下一个handler的
+super.handle(target,baseRequest,request,response);
+}
 }
 
 感觉类成员的命名不太合适，

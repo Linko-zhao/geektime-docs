@@ -6,7 +6,7 @@
 
 ```
 package geektime.tdd.di;
-    
+
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import java.lang.reflect.Constructor;
@@ -17,14 +17,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static java.util.Arrays.stream;
-   
+
 public class Context {
     private Map<Class<?>, Provider<?>> providers = new HashMap<>();
-    
+
     public <Type> void bind(Class<Type> type, Type instance) {
         providers.put(type, (Provider<Type>) () -> instance);
     }
-    
+
     public <Type, Implementation extends Type>
     void bind(Class<Type> type, Class<Implementation> implementation) {
         Constructor<Implementation> injectConstructor = getInjectConstructor(implementation);
@@ -39,7 +39,7 @@ public class Context {
             }
         });
     }
-    
+
     private <Type> Constructor<Type> getInjectConstructor(Class<Type> implementation) {
         List<Constructor<?>> injectConstructors = stream(implementation.getConstructors())
                 .filter(c -> c.isAnnotationPresent(Inject.class)).collect(Collectors.toList());
@@ -52,7 +52,7 @@ public class Context {
                     }
                 });
     }
-    
+
     public <Type> Optional<Type> get(Class<Type> type) {
         return Optional.ofNullable(providers.get(type)).map(provider -> (Type)provider.get());
     }
@@ -83,7 +83,6 @@ public class Context {
 我想到的方式就是用spring的方式，1.通过@Component来指明实现类；2.通过xml或者@Configuration来指明如何初始化。
 还想到一个方法就是bind必须按照顺序初始化，无依赖的先初始化，类似有向图，没有出度的节点先初始化。</p>2022-04-20</li><br/><li><span>努力努力再努力</span> 👍（0） 💬（0）<p>问题1：对于依赖的检测，目前代码的实现是在实际创建组件对象时进行的。如果改为预先检查，我们要做哪些改变呢？
 如果改为在 bind 处检查，可以维护一个哈希表，key是componentType， value 是构造函数参数的集合。每绑定一个组件的时候，获取构造函数的参数到哈希表中查询，如果存在，判断对应的 value 中是否包含 component，包含则可以认为 存在循环依赖，抛出异常。
-
 
 问题2：在今天这节课中，最让你有收获的地方是什么？为什么？
 最有收获的是老师在编码过程中，将突发想到的问题，转化为测试用例记录在案。这让我想到一些平时在工作中，前一个月修复的Bug，基本都是在生产代码上直接进行修改的，有时候可能仅仅是加了一个 if 分支的判断，然而个把月后突然看到这个分支，完全想不起来当初为什么会这样加。如果有测试用例可以回溯，那么也方便后续的问题跟踪</p>2022-09-23</li><br/><li><span>蝴蝶</span> 👍（0） 💬（0）<p>问题 1：增加类似 builder 模式里面 build 的方法来检查依赖。</p>2022-08-13</li><br/><li><span>Geek_874b6f</span> 👍（0） 💬（0）<p>Idea 支持将匿名类转化内部类的</p>2022-05-31</li><br/><li><span>keep_curiosity</span> 👍（0） 💬（0）<p>使用Set存放循环依赖的组件不能保证组件依赖的顺序吧？如何构造有效的测试验证顺序呢？

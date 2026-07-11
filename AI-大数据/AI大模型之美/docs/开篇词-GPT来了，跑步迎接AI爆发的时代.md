@@ -39,7 +39,7 @@ from llama_index import GPTListIndex, LLMPredictor, SimpleDirectoryReader
 
 documents = SimpleDirectoryReader('./data/mr_fujino').load_data()
 llm_predictor = LLMPredictor(llm=OpenAIChat(temperature=0, model_name="gpt-3.5-turbo", max_tokens=1024))
-list_index = GPTListIndex(documents, llm_predictor=llm_predictor, 
+list_index = GPTListIndex(documents, llm_predictor=llm_predictor,
                           text_splitter=SpacyTextSplitter(pipeline="zh_core_web_sm", chunk_size = 2048))
 response = list_index.query("下面鲁迅先生以第一人称‘我’写的内容，请你用中文总结一下:", response_mode="tree_summarize")
 print(response)
@@ -137,7 +137,7 @@ https:&#47;&#47;www.cursor.so&#47;
 
 又用了一会儿 ChatGPT，我也觉得“强人工智能”的时代可能已经来了。
 
-因为 AI 应用开发的门槛降低了，那么之前那些有数学基础，掌握机器学习和深度学习……会炼丹的算法工程师怎么办？想来他们还是会先人一步。 
+因为 AI 应用开发的门槛降低了，那么之前那些有数学基础，掌握机器学习和深度学习……会炼丹的算法工程师怎么办？想来他们还是会先人一步。
 
 CLIP 通过 4 亿个图片、文本对的训练，还有类似的数字，ChatGPT 真的是大力出奇迹么？</p>2023-03-21</li><br/><li><span>丫头</span> 👍（1） 💬（1）<p>需要什么前置知识吗？</p>2023-03-21</li><br/>
 </ul>

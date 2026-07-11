@@ -493,20 +493,19 @@ std::ostream& operator<<(
 
 “上一讲的结尾，我们给出了一个在类型参数 C 没有 reserve 成员函数时不能编译的代码：”
 
-
 这里提到使用 if constexpr，可以解决上述问题。这里没有过多的解释，我理解是：使用if constexpr之后，如果没有reserve成员，那就会在编译期跳过这个if中的内容，因此不会检查container.reserve()。
 
 不知道理解是否正确？</p>2020-02-04</li><br/><li><span>geek</span> 👍（2） 💬（2）<p>试着回答一下两个思考问题：
 1 我认为不用consexpr,就要用enable_if，类似于上一节的append方法那样，在有两种可能情况时，要写两个方法，做标签分发。这种方式的一个推广就是：有多少种可能，就要写多少个对应的分发方法。
-2 不用constexpr的缺点，就是代码冗余而且不易读。那么用constexpr的优点就是代码无冗余，易读。</p>2021-03-08</li><br/><li><span>Jerry Tan</span> 👍（2） 💬（5）<p>您好老师, 请问想学C++ 您有什么比较好的推荐的开发工具吗  谢谢 </p>2019-12-30</li><br/><li><span>Slience-0°C</span> 👍（1） 💬（1）<p>常量区分编译期？和运行期？</p>2022-02-18</li><br/><li><span>Slience-0°C</span> 👍（1） 💬（1）<p>老师好，现代C++如何优雅的定义字符串常量？直接使用const std::string var = &quot;xxxx &quot;有些静态代码检查工具会提示可能会抛出无法捕获的异常！</p>2022-02-18</li><br/><li><span>心态正常</span> 👍（1） 💬（1）<p>吴老师，您好，有个问题想请教一下，文章开头的两个示例我在centos8上使用g++ 8.3.1的编译器编译通过了，因为没有用到constexpr的特性，预期在int a[n]这一行会报错，但是实际上并没有给出错误，这是编译器做了优化处理吗？</p>2021-04-26</li><br/><li><span>清水</span> 👍（1） 💬（1）<p>吴老师，你好，请教个问题
+2 不用constexpr的缺点，就是代码冗余而且不易读。那么用constexpr的优点就是代码无冗余，易读。</p>2021-03-08</li><br/><li><span>Jerry Tan</span> 👍（2） 💬（5）<p>您好老师, 请问想学C++ 您有什么比较好的推荐的开发工具吗 谢谢 </p>2019-12-30</li><br/><li><span>Slience-0°C</span> 👍（1） 💬（1）<p>常量区分编译期？和运行期？</p>2022-02-18</li><br/><li><span>Slience-0°C</span> 👍（1） 💬（1）<p>老师好，现代C++如何优雅的定义字符串常量？直接使用const std::string var = &quot;xxxx &quot;有些静态代码检查工具会提示可能会抛出无法捕获的异常！</p>2022-02-18</li><br/><li><span>心态正常</span> 👍（1） 💬（1）<p>吴老师，您好，有个问题想请教一下，文章开头的两个示例我在centos8上使用g++ 8.3.1的编译器编译通过了，因为没有用到constexpr的特性，预期在int a[n]这一行会报错，但是实际上并没有给出错误，这是编译器做了优化处理吗？</p>2021-04-26</li><br/><li><span>清水</span> 👍（1） 💬（1）<p>吴老师，你好，请教个问题
 
 constexpr int factorial(int n)
 {
-  if (n == 0) {
-    return 1;
-  } else {
-    return n * factorial(n - 1);
-  }
+if (n == 0) {
+return 1;
+} else {
+return n * factorial(n - 1);
+}
 }
 如果constexpr 修饰函数 这样是编译不过的，提示not a return-statement (至少c++11不行)
 没有尝试过是否其他编译器 多行编译 通过
@@ -520,10 +519,10 @@ template &lt;typename T&gt;
 struct is_pair : std::false_type {};
 template &lt;typename T, typename U&gt;
 struct is_pair&lt;std::pair&lt;T, U&gt;&gt;
-  : std::true_type {};
+: std::true_type {};
 template &lt;typename T&gt;
 inline constexpr bool is_pair_v =
-  is_pair&lt;T&gt;::value;
+is_pair&lt;T&gt;::value;
 
 template &lt;typename T, typename U&gt;
 struct is_pair&lt;std::pair&lt;T, U&gt;&gt;: std::true_type {}; 看着应该是一个偏特化，模板的参数却变多了，一般偏特化不应该是参数变少吗？谢谢</p>2020-04-01</li><br/><li><span>tt</span> 👍（1） 💬（1）<p>文中一开始用constexpr
@@ -531,26 +530,25 @@ struct is_pair&lt;std::pair&lt;T, U&gt;&gt;: std::true_type {}; 看着应该是�
 
 const本质是一个运行时常量，constexpr才是编译期常数，除了内联展开这个含义，再根据文中ODR的表述，说明constexpr变量是切实分配了内存空间的，是一个左值对象。综合上面的考虑，constexpr意味着被声明的对象是存放在数据段里面的。
 
-
-constexpr 变量模板表达一个和某个类型相关的编译期常量，让变量也可以是模板，这句话在本课中，我觉得理解成“把模板对象用一个变量命名”更合适，即把所有符号都绑定到了一个实体上，这样if constexpr才变得可行。解决了上一讲中说的c++中不能像Python一样写代码的问题。</p>2019-12-30</li><br/><li><span>Chillstep</span> 👍（0） 💬（1）<p>老师您好，这一段我发现有一些疑问：&quot;这是因为 ODR-use 的类静态常量也需要有一个定义，在没有内联变量之前需要在某一个源代码文件（非头文件）中这样写：const int magic::number = 42;  &quot;这一段我实验了下发现并不能过编译，我认为number已经是const的，应该是没办法在赋值的了，这里应该只需要const int magic::number;即可，这样是可以过编译的。</p>2022-07-23</li><br/><li><span>ano</span> 👍（0） 💬（1）<p>老师，我想请教一下。一个 function 标记为 inline, 但如果 function body 中有循环的话，编译器就不会在这个函数的调用处 inline? 编译器是出于什么考虑，不做这个 inline?</p>2021-10-18</li><br/><li><span>常振华</span> 👍（0） 💬（1）<p>
+constexpr 变量模板表达一个和某个类型相关的编译期常量，让变量也可以是模板，这句话在本课中，我觉得理解成“把模板对象用一个变量命名”更合适，即把所有符号都绑定到了一个实体上，这样if constexpr才变得可行。解决了上一讲中说的c++中不能像Python一样写代码的问题。</p>2019-12-30</li><br/><li><span>Chillstep</span> 👍（0） 💬（1）<p>老师您好，这一段我发现有一些疑问：&quot;这是因为 ODR-use 的类静态常量也需要有一个定义，在没有内联变量之前需要在某一个源代码文件（非头文件）中这样写：const int magic::number = 42; &quot;这一段我实验了下发现并不能过编译，我认为number已经是const的，应该是没办法在赋值的了，这里应该只需要const int magic::number;即可，这样是可以过编译的。</p>2022-07-23</li><br/><li><span>ano</span> 👍（0） 💬（1）<p>老师，我想请教一下。一个 function 标记为 inline, 但如果 function body 中有循环的话，编译器就不会在这个函数的调用处 inline? 编译器是出于什么考虑，不做这个 inline?</p>2021-10-18</li><br/><li><span>常振华</span> 👍（0） 💬（1）<p>
 &#47;&#47; Type trait to detect std::pair
 template &lt;typename T&gt;
 struct is_pair : std::false_type {};
 template &lt;typename T, typename U&gt;
 struct is_pair&lt;std::pair&lt;T, U&gt;&gt;
-  : std::true_type {};
+: std::true_type {};
 template &lt;typename T&gt;
 inline constexpr bool is_pair_v =
-  is_pair&lt;T&gt;::value;
+is_pair&lt;T&gt;::value;
 
 is_pair模板并没有定义value成员啊，为什么可以::value？</p>2021-10-13</li><br/><li><span>yuchen</span> 👍（0） 💬（2）<p>template &lt;typename T&gt;
 struct is_pair : std::false_type {};
 template &lt;typename T, typename U&gt;
 struct is_pair&lt;std::pair&lt;T, U&gt;&gt;
-  : std::true_type {};
+: std::true_type {};
 template &lt;typename T&gt;
 inline constexpr bool is_pair_v =
-  is_pair&lt;T&gt;::value;
+is_pair&lt;T&gt;::value;
 吴老师好，请问这里template &lt;typename T, typename U&gt;
 struct is_pair&lt;std::pair&lt;T, U&gt;&gt;是特化还是偏特化呢？</p>2020-08-17</li><br/>
 </ul>

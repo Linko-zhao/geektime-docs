@@ -124,10 +124,10 @@ const SNAKE_HEAD_COLOR: Color = Color::rgb(0.7, 0.7, 0.7);
 #[derive(Component)]
 struct SnakeHead;
 
-  // 
+  //
   .add_systems(Startup, (setup_camera, spawn_snake))
   //
-  
+
 fn spawn_snake(mut commands: Commands) {
     commands
         .spawn(SpriteBundle {
@@ -242,7 +242,7 @@ impl Size {
 
         //
         .add_systems(Update, (snake_movement, size_scaling, position_translation))
-        
+
         //
         .insert(Position { x: 3, y: 3 })
         .insert(Size::square(0.8));
@@ -266,7 +266,7 @@ fn position_translation(primary_query: Query<&Window, With<bevy::window::Primary
         let tile_size = bound_window / bound_game;
         pos / bound_game * bound_window - (bound_window / 2.) + (tile_size / 2.)
     }
-    
+   
     let window = primary_query.get_single().unwrap();
     for (pos, mut transform) in q.iter_mut() {
         transform.translation = Vec3::new(
@@ -325,7 +325,7 @@ fn snake_movement(
 ```plain
 const ARENA_WIDTH: u32 = 25;
 const ARENA_HEIGHT: u32 = 25;
-        
+
         //
         .add_plugins(DefaultPlugins.set(WindowPlugin {
                 primary_window: Some( Window {
@@ -488,14 +488,14 @@ impl Direction {
         )))
         // 更新Update模式下的system集
         .add_systems(Update, (
-            snake_movement_input.before(snake_movement), 
-            snake_movement, 
-            size_scaling, 
+            snake_movement_input.before(snake_movement),
+            snake_movement,
+            size_scaling,
             position_translation))
 
 // 根据用户键盘行为，预处理蛇的前进方向
 fn snake_movement_input(
-    keyboard_input: Res<Input<KeyCode>>, 
+    keyboard_input: Res<Input<KeyCode>>,
     mut heads: Query<&mut SnakeHead>) {
     if let Some(mut head) = heads.iter_mut().next() {
         let dir: Direction = if keyboard_input.just_pressed(KeyCode::Left) {
@@ -565,7 +565,7 @@ struct SnakeSegments(Vec<Entity>);
     // 插入蛇的结构，定义为资源
     .insert_resource(SnakeSegments::default())
 
-// 创建蛇，用SnakeSegments来维护蛇的结构    
+// 创建蛇，用SnakeSegments来维护蛇的结构
 fn spawn_snake(mut commands: Commands, mut segments: ResMut<SnakeSegments>) {
     *segments = SnakeSegments(vec![
         commands
@@ -697,16 +697,16 @@ struct LastTailPosition(Option<Position>);
 
         // 更新Update system集合
         .add_systems(Update, (
-            snake_movement_input.before(snake_movement), 
+            snake_movement_input.before(snake_movement),
             snake_movement,
             snake_eating,
             snake_growth,
-            size_scaling, 
+            size_scaling,
             position_translation))
 
     *last_tail_position = LastTailPosition(Some(*segment_positions.last().unwrap()));
- 
-// 处理蛇吃食物的system   
+
+// 处理蛇吃食物的system
 fn snake_eating(
     mut commands: Commands,
     mut growth_writer: EventWriter<GrowthEvent>,
@@ -764,12 +764,12 @@ struct GameOverEvent;
         // 注册事件到world中
         .add_event::<GameOverEvent>()
         .add_systems(Update, (
-            snake_movement_input.before(snake_movement), 
+            snake_movement_input.before(snake_movement),
             snake_movement,
             game_over.after(snake_movement),
             snake_eating,
             snake_growth,
-            size_scaling, 
+            size_scaling,
             position_translation))
 
         // 判断撞墙的逻辑
@@ -841,17 +841,17 @@ Bevy的核心是一套ECS系统，ECS本质上来说是一套编程范式，不�
 
 &#47;&#47; 修改food_spawner
 fn food_spawner(
-    mut commands: Commands, 
-    time: Res&lt;Time&gt;,
-    mut timer: ResMut&lt;FoodSpawnTimer&gt;,
-    segment_pos_set: Query&lt;&amp;Position, With&lt;SnakeSegment&gt;&gt;
+mut commands: Commands,
+time: Res&lt;Time&gt;,
+mut timer: ResMut&lt;FoodSpawnTimer&gt;,
+segment_pos_set: Query&lt;&amp;Position, With&lt;SnakeSegment&gt;&gt;
 )
 {
-    &#47;&#47; ...
+&#47;&#47; ...
 
     let rand_x: i32 = (random::&lt;f32&gt;() * ARENA_WIDTH as f32) as i32;
     let rand_y: i32 = (random::&lt;f32&gt;() * ARENA_HEIGHT as f32) as i32;
-        
+
     for pos in segment_pos_set.iter() {
         if pos.x == rand_x &amp;&amp; pos.y == rand_y {
             return;
@@ -864,6 +864,7 @@ fn food_spawner(
         y: rand_y,
     })
     &#47;&#47; ...
+
 }
 
 BUG: 食物有可能在已经产生过的地方产生

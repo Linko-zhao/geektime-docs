@@ -101,54 +101,56 @@ public abstract class WebappClassLoaderBase extends URLClassLoader</p>2019-07-06
 
 虽然问题解决了，但却不明就里，不知道是不是web应用没有做隔离的缘故。不知道这样理解对不对。。</p>2019-07-06</li><br/><li><span>帽子丨影</span> 👍（1） 💬（1）<p>老师好，有个疑问。既然不同的类加载器实例加载的类是不同的，那如果Tomcat给每一个context使用各自的AppClassLoader实例来加载，那不是也可以达到应用隔离的目标了吗</p>2019-09-25</li><br/><li><span>玉芟</span> 👍（1） 💬（1）<p>老师，您好：
 我对Thread.currentThread().setContextClassLoader(ClassLoader cl)用法一直有个疑问：
+
 - setContextClassLoader以后是不是只能显示地通过getContextClassLoader获取ClassLoader后调用loadClass(String name, boolean resolve)方法加载类才能是自定义加载器加载的(验证方法：打印obj.getClass().getClassLoader())？
 - setContextClassLoader以后通过Class.forName(String name)方法等反射得到的类是不是就只能是AppClassLoader加载的？
-我做了个实验：
-自定义类加载器：
-public class DIYClassLoader extends URLClassLoader {
-    public DIYClassLoader(URL[] urls) { super(urls); }
-    &#47;**
-     * 策略很简单：
-     * 1)、首先尝试ExtClassLoader|BootstrapClassLoader加载
-     * 2)、之后尝试自己加载
-     * 3)、最后尝试真正父加载器加载
-     *&#47;
+  我做了个实验：
+  自定义类加载器：
+  public class DIYClassLoader extends URLClassLoader {
+  public DIYClassLoader(URL[] urls) { super(urls); }
+  &#47;**
+  - 策略很简单：
+  - 1)、首先尝试ExtClassLoader|BootstrapClassLoader加载
+  - 2)、之后尝试自己加载
+  - 3)、最后尝试真正父加载器加载
+    *&#47;
     @Override
     protected Class&lt;?&gt; loadClass(String name, boolean resolve) throws ClassNotFoundException {
-        Class&lt;?&gt; c = findLoadedClass(name);
-        ClassLoader parent = getParent();
-        if (parent != null) {
-            ClassLoader ecl = parent;
-            while (ecl.getParent() != null)&#47;&#47; 找ExtClassLoader
-                ecl = ecl.getParent();
-            try {
-                c = ecl.loadClass(name);
-            } catch (ClassNotFoundException e) { }
-            if (c == null) {
-                try {
-                    c = findClass(name);&#47;&#47; DIYClassLoader自己来
-                } catch (ClassNotFoundException e) {}
-                if (c == null) {
-                    &#47;&#47; 尝试真正父加载器加载，多半是AppClassLoader
-                    c = parent.loadClass(name);
-                }
-            }
-        }else {
-            &#47;&#47; 直接自己尝试加载
-            c = findClass(name);
-        }
-        if (resolve)
-            resolveClass(c);
-        return c;
+    Class&lt;?&gt; c = findLoadedClass(name);
+    ClassLoader parent = getParent();
+    if (parent != null) {
+    ClassLoader ecl = parent;
+    while (ecl.getParent() != null)&#47;&#47; 找ExtClassLoader
+    ecl = ecl.getParent();
+    try {
+    c = ecl.loadClass(name);
+    } catch (ClassNotFoundException e) { }
+    if (c == null) {
+    try {
+    c = findClass(name);&#47;&#47; DIYClassLoader自己来
+    } catch (ClassNotFoundException e) {}
+    if (c == null) {
+    &#47;&#47; 尝试真正父加载器加载，多半是AppClassLoader
+    c = parent.loadClass(name);
     }
-}
-main方法：
-URL url = Main.class.getClassLoader().getResource(&quot;.&quot;);
-DIYClassLoader scl = new DIYClassLoader(new URL[] {url});
-Thread.currentThread().setContextClassLoader(scl);
-Class clazz = Class.forName(&quot;xx.xx.Xxx&quot;);
-&#47;&#47; sun.misc.Launcher$AppClassLoader@18b4aac2
-clazz = scl.loadClass(&quot;xx.xx.Xxx&quot;);
-&#47;&#47; xx.xx.DIYClassLoader@682a0b20
-不知道我把问题描述清楚了吗？还望老师解答</p>2019-07-07</li><br/><li><span>Demter</span> 👍（0） 💬（1）<p>老师，spring的依赖类具体是指哪些啊</p>2019-08-22</li><br/><li><span>尔东橙</span> 👍（0） 💬（1）<p>老师，JVM判断两个class实例相不相同，一个是看类加载器，另一个是看全路径名？那么如果全限定名不一样的servlet，为什么不能同时被一个加载器加载？</p>2019-08-16</li><br/><li><span>吕</span> 👍（0） 💬（2）<p>今天把springboot打成的多个war包放到tomcat，并且设置了host，但是无法访问到静态资源，而放到Root下就可以，实在搞不懂了</p>2019-07-17</li><br/>
+    }
+    }else {
+    &#47;&#47; 直接自己尝试加载
+    c = findClass(name);
+    }
+    if (resolve)
+    resolveClass(c);
+    return c;
+    }
+    }
+    main方法：
+    URL url = Main.class.getClassLoader().getResource(&quot;.&quot;);
+    DIYClassLoader scl = new DIYClassLoader(new URL[] {url});
+    Thread.currentThread().setContextClassLoader(scl);
+    Class clazz = Class.forName(&quot;xx.xx.Xxx&quot;);
+    &#47;&#47; sun.misc.Launcher$AppClassLoader@18b4aac2
+    clazz = scl.loadClass(&quot;xx.xx.Xxx&quot;);
+    &#47;&#47; xx.xx.DIYClassLoader@682a0b20
+    不知道我把问题描述清楚了吗？还望老师解答</p>2019-07-07</li><br/><li><span>Demter</span> 👍（0） 💬（1）<p>老师，spring的依赖类具体是指哪些啊</p>2019-08-22</li><br/><li><span>尔东橙</span> 👍（0） 💬（1）<p>老师，JVM判断两个class实例相不相同，一个是看类加载器，另一个是看全路径名？那么如果全限定名不一样的servlet，为什么不能同时被一个加载器加载？</p>2019-08-16</li><br/><li><span>吕</span> 👍（0） 💬（2）<p>今天把springboot打成的多个war包放到tomcat，并且设置了host，但是无法访问到静态资源，而放到Root下就可以，实在搞不懂了</p>2019-07-17</li><br/>
+
 </ul>

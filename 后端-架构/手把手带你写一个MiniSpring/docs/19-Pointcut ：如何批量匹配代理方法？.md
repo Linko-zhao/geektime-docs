@@ -116,7 +116,7 @@ public static boolean simpleMatch( String pattern,  String str) {
 	if (firstIndex == -1) {
 		return pattern.equals(str);
 	}
-    //是否首字符就是*,意味着这个是*XXX格式		
+    //是否首字符就是*,意味着这个是*XXX格式
     if (firstIndex == 0) {
 		if (pattern.length() == 1) {  //模式就是*,通配全部串
 			return true;
@@ -280,7 +280,7 @@ public class ProxyFactoryBean implements FactoryBean<Object>, BeanFactoryAware {
     }
 
     //省略一些getter/setter
-    
+
     protected AopProxy createAopProxy() {
         return getAopProxyFactory().createAopProxy(target, this.advisor);
     }
@@ -317,7 +317,7 @@ public class ProxyFactoryBean implements FactoryBean<Object>, BeanFactoryAware {
 ```plain
 	@Autowired
 	IAction action;
-	
+
 	@RequestMapping("/testaop")
 	public void doTestAop(HttpServletRequest request, HttpServletResponse response) {
 		action.doAction();
@@ -325,7 +325,7 @@ public class ProxyFactoryBean implements FactoryBean<Object>, BeanFactoryAware {
 	@RequestMapping("/testaop2")
 	public void doTestAop2(HttpServletRequest request, HttpServletResponse response) {
 		action.doSomething();
-	}	
+	}
 ```
 
 配置文件就是我们最早希望达成的样子。
@@ -339,7 +339,7 @@ public class ProxyFactoryBean implements FactoryBean<Object>, BeanFactoryAware {
 </bean>  
 <bean id="action" class="com.minis.aop.ProxyFactoryBean">
     <property type="String" name="interceptorName" value="advisor" />
-    <property type="java.lang.Object" name="target" ref="realaction"/>	
+    <property type="java.lang.Object" name="target" ref="realaction"/>
 </bean>
 ```
 

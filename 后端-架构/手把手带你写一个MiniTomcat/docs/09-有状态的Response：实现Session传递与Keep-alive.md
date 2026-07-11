@@ -163,7 +163,7 @@ HttpRespose返回类中需要调整的核心方法是sendHeaders，通过这个�
 package server;
 public class HttpResponse implements HttpServletResponse {
     ArrayList<Cookie> cookies = new ArrayList<>();
-    
+
     public void sendHeaders() throws IOException {
         PrintWriter outputWriter = getWriter();
         outputWriter.print(this.getProtocol());
@@ -211,7 +211,7 @@ public class HttpResponse implements HttpServletResponse {
         outputWriter.print("\r\n");
         outputWriter.flush();
    }
-   
+
     @Override
     public void addCookie(Cookie cookie) {
       synchronized (cookies) {

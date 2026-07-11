@@ -80,7 +80,7 @@ python3 -m venv rag_env
 
 ```plain
 source rag_env/bin/activate
-pip install -U pip jieba rank_bm25 chromadb langchain langchain_community sentence-transformers dashscope unstructured pdfplumber python-docx python-pptx markdown openpyxl pandas -i https://pypi.tuna.tsinghua.edu.cn/simple 
+pip install -U pip jieba rank_bm25 chromadb langchain langchain_community sentence-transformers dashscope unstructured pdfplumber python-docx python-pptx markdown openpyxl pandas -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 代码中设置大模型qwen\_model，qwen\_api\_key参数，访问[阿里云百炼大模型服务平台](https://www.aliyun.com/product/bailian)获得。
@@ -226,7 +226,7 @@ python3 -m venv rag_env
 
 ```plain
 source rag_env/bin/activate
-pip install -U pip  FlagEmbedding Peft jieba rank_bm25 chromadb langchain langchain_community sentence-transformers dashscope unstructured pdfplumber python-docx python-pptx markdown openpyxl pandas -i https://pypi.tuna.tsinghua.edu.cn/simple 
+pip install -U pip  FlagEmbedding Peft jieba rank_bm25 chromadb langchain langchain_community sentence-transformers dashscope unstructured pdfplumber python-docx python-pptx markdown openpyxl pandas -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 代码中设置大模型qwen\_model，qwen\_api\_key参数，访问[阿里云百炼大模型服务平台](https://www.aliyun.com/product/bailian)获得。

@@ -643,7 +643,7 @@ impl<T, U> Into<U> for T where U: From<T>,
 
 我的疑问是Box&lt;dyn Storage&gt;为什么不满足Storage呢？
 
-server.rs代码如下: 
+server.rs代码如下:
 use anyhow::Result;
 use async_prost::AsyncProstStream;
 use futures::prelude::*;
@@ -679,43 +679,43 @@ async fn main() -&gt; Result&lt;()&gt; {
 ​info!(&quot;Start listening on {}&quot;, addr);
 
 ​let db : Box&lt;dyn Storage&gt; = match args.storage {
-  ​StorageType::Memory =&gt; Box::new(MemTable::default()),
-  ​StorageType::Sled =&gt; Box::new(SledDb::new(args.sled_dir)),
+​StorageType::Memory =&gt; Box::new(MemTable::default()),
+​StorageType::Sled =&gt; Box::new(SledDb::new(args.sled_dir)),
 ​};
 
 ​let service: Service&lt;Box&lt;dyn Storage&gt;&gt; = ServiceInner::new(db).into();
 ​loop {
- ​let (stream, addr) = listener.accept().await?;
- ​info!(&quot;Client {:?} connected&quot;, addr);
- ​let service_cloned = service.clone();
- ​tokio::spawn(async move {
-  ​let mut stream =
-   ​AsyncProstStream::&lt;_, CommandRequest, CommandResponse, _&gt;::from(stream).for_async();
-  ​while let Some(Ok(msg)) = stream.next().await {
-   ​info!(&quot;Got a new command: {:?}&quot;, msg);
-   ​let resp = service_cloned.execute(msg);
-   ​info!(&quot;Response: {:?}&quot;, resp);
-   ​stream.send(resp).await.unwrap();
-  ​}
-  ​info!(&quot;Client {:?} disconnected&quot;, addr);
- ​});
+​let (stream, addr) = listener.accept().await?;
+​info!(&quot;Client {:?} connected&quot;, addr);
+​let service_cloned = service.clone();
+​tokio::spawn(async move {
+​let mut stream =
+​AsyncProstStream::&lt;_, CommandRequest, CommandResponse, _&gt;::from(stream).for_async();
+​while let Some(Ok(msg)) = stream.next().await {
+​info!(&quot;Got a new command: {:?}&quot;, msg);
+​let resp = service_cloned.execute(msg);
+​info!(&quot;Response: {:?}&quot;, resp);
+​stream.send(resp).await.unwrap();
+​}
+​info!(&quot;Client {:?} disconnected&quot;, addr);
+​});
 ​}</p>2022-01-14</li><br/><li><span>无常</span> 👍（0） 💬（1）<p>请问老师，设计和架构应该如何学习，有什么推荐的资料吗？</p>2021-12-29</li><br/><li><span>dva</span> 👍（0） 💬（2）<p>第二题我想到的是，不过这样要改注册函数，看起来怪怪的，不知道老师的方法是什么
 pub trait Notify1&lt;Arg,E&gt;{
-    fn notify(&amp;self,arg:&amp;Arg)-&gt;Option&lt;E&gt;;
+fn notify(&amp;self,arg:&amp;Arg)-&gt;Option&lt;E&gt;;
 }
 
 impl &lt;Arg,E&gt;Notify1&lt;Arg,E&gt;for Vec&lt;fn(&amp;Arg)-&gt;Option&lt;E&gt;&gt; {
-    fn notify(&amp;self, arg: &amp;Arg) -&gt; Option&lt;E&gt; {
-        for f in self{
-            match f(arg){
-                Some(e)=&gt; return Some(e),
-                _=&gt;{},
-            }
-        }
-        None
-    }
+fn notify(&amp;self, arg: &amp;Arg) -&gt; Option&lt;E&gt; {
+for f in self{
+match f(arg){
+Some(e)=&gt; return Some(e),
+_=&gt;{},
+}
+}
+None
+}
 }
 
 第三题和老师写的sleddb差不多，直接加了一些TryFrom，中间遇到没有装llvm clang的错误 “error: failed to run custom build command for `librocksdb-sys ...” 还有起名字 rocksdb和包名冲突。写这个扩展有个非常深的体会就是，编译器提示真好。</p>2021-11-26</li><br/><li><span>陈卧虫</span> 👍（0） 💬（0）<p>还有人和我一样在学么</p>2025-01-22</li><br/><li><span>bestgopher</span> 👍（0） 💬（0）<p>我们服务是异步的，但是sled读取文件没看到异步操作，这样是否有问题呢？</p>2022-06-11</li><br/><li><span>Alvin</span> 👍（0） 💬（5）<p>老师 跟着课程的代码实现过程发现最后持久化存储这边会报个错
- the trait `From&lt;&amp;[u8]&gt;` is not implemented for `abi::Value`</p>2022-04-16</li><br/>
+ the trait `From&lt;&amp;[u8]&gt;`is not implemented for`abi::Value`</p>2022-04-16</li><br/>
 </ul>

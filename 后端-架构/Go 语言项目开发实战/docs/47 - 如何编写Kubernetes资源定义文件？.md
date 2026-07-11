@@ -21,11 +21,11 @@ spec:
   clusterIP: 192.168.0.231
   externalTrafficPolicy: Cluster
   ports:
-  - name: https
-    nodePort: 30443
-    port: 8443
-    protocol: TCP
-    targetPort: 8443
+    - name: https
+      nodePort: 30443
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
   selector:
     app: iam-apiserver
   sessionAffinity: None
@@ -182,15 +182,15 @@ spec:  # 必须，容器的详细定义
           cpu: string # 非必须，cpu资源，单位是core，从0.1开始
           memory: string 内存限制，单位为MiB,GiB
         requests:  # 非必须，启动时分配的资源
-          cpu: string 
+          cpu: string
           memory: string
       livenessProbe:   # 非必须，容器健康检查的探针探测方式
         exec: # 探测命令
           command: [string] # 探测命令或者脚本
         httpGet: # httpGet方式
           path: string  # 探测路径，例如 http://ip:port/path
-          port: number  
-          host: string  
+          port: number
+          host: string
           scheme: string
           httpHeaders:
             - name: string
@@ -200,7 +200,7 @@ spec:  # 必须，容器的详细定义
           initialDelaySeconds: 0 #容器启动完成多少秒后的再进行首次探测，单位为s
           timeoutSeconds: 0  #探测响应超时的时间,默认是1s,如果失败，则认为容器不健康，会重启该容器
           periodSeconds: 0  # 探测间隔时间，默认是10s
-          successThreshold: 0  # 
+          successThreshold: 0  #
           failureThreshold: 0
         securityContext:
           privileged: false
@@ -260,72 +260,72 @@ spec:
       affinity:
         podAntiAffinity: # Pod反亲和性，尽量避免同一个应用调度到相同Node
           preferredDuringSchedulingIgnoredDuringExecution: # 软需求
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions: # 有多个选项，只有同时满足这些条件的节点才能运行 Pod
-                - key: app
-                  operator: In # 设定标签键与一组值的关系，In、NotIn、Exists、DoesNotExist
-                  values:
-                  - iam-apiserver
-              topologyKey: kubernetes.io/hostname
-            weight: 100 # weight 字段值的范围是1-100。
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions: # 有多个选项，只有同时满足这些条件的节点才能运行 Pod
+                    - key: app
+                      operator: In # 设定标签键与一组值的关系，In、NotIn、Exists、DoesNotExist
+                      values:
+                        - iam-apiserver
+                topologyKey: kubernetes.io/hostname
+              weight: 100 # weight 字段值的范围是1-100。
       containers:
-      - command: # 指定运行命令
-        - /opt/iam/bin/iam-apiserver # 运行参数
-        - --config=/etc/iam/iam-apiserver.yaml
-        image: ccr.ccs.tencentyun.com/lkccc/iam-apiserver-amd64:v1.0.6 # 镜像名，遵守镜像命名规范
-        imagePullPolicy: Always # 镜像拉取策略。IfNotPresent：优先使用本地镜像；Never：使用本地镜像，本地镜像不存在，则报错；Always：默认值，每次都重新拉取镜像
-        # lifecycle: # kubernetes支持postStart和preStop事件。当一个容器启动后，Kubernetes将立即发送postStart事件；在容器被终结之前，Kubernetes将发送一个preStop事件
-        name: iam-apiserver # 容器名称，与应用名称保持一致
-        ports: # 端口设置
-        - containerPort: 8443 # 容器暴露的端口
-          name: secure # 端口名称
-          protocol: TCP # 协议，TCP和UDP
-        livenessProbe: # 存活检查，检查容器是否正常，不正常则重启实例
-          httpGet: # HTTP请求检查方法
-            path: /healthz # 请求路径
-            port: 8080 # 检查端口
-            scheme: HTTP # 检查协议
-          initialDelaySeconds: 5 # 启动延时，容器延时启动健康检查的时间
-          periodSeconds: 10 # 间隔时间，进行健康检查的时间间隔
-          successThreshold: 1 # 健康阈值，表示后端容器从失败到成功的连续健康检查成功次数
-          failureThreshold: 1 # 不健康阈值，表示后端容器从成功到失败的连续健康检查成功次数
-          timeoutSeconds: 3 # 响应超时，每次健康检查响应的最大超时时间
-        readinessProbe: # 就绪检查，检查容器是否就绪，不就绪则停止转发流量到当前实例
-          httpGet: # HTTP请求检查方法
-            path: /healthz # 请求路径
-            port: 8080 # 检查端口
-            scheme: HTTP # 检查协议
-          initialDelaySeconds: 5 # 启动延时，容器延时启动健康检查的时间
-          periodSeconds: 10 # 间隔时间，进行健康检查的时间间隔
-          successThreshold: 1 # 健康阈值，表示后端容器从失败到成功的连续健康检查成功次数
-          failureThreshold: 1 # 不健康阈值，表示后端容器从成功到失败的连续健康检查成功次数
-          timeoutSeconds: 3 # 响应超时，每次健康检查响应的最大超时时间
-        startupProbe: # 启动探针，可以知道应用程序容器什么时候启动了
-          failureThreshold: 10
-          httpGet:
-            path: /healthz
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 3
-        resources: # 资源管理
-          limits: # limits用于设置容器使用资源的最大上限,避免异常情况下节点资源消耗过多
-            cpu: "1" # 设置cpu limit，1核心 = 1000m
-            memory: 1Gi # 设置memory limit，1G = 1024Mi
-          requests: # requests用于预分配资源,当集群中的节点没有request所要求的资源数量时,容器会创建失败
-            cpu: 250m # 设置cpu request
-            memory: 500Mi # 设置memory request
-        terminationMessagePath: /dev/termination-log # 容器终止时消息保存路径
-        terminationMessagePolicy: File # 仅从终止消息文件中检索终止消息
-        volumeMounts: # 挂载日志卷
-        - mountPath: /etc/iam/iam-apiserver.yaml # 容器内挂载镜像路径
-          name: iam # 引用的卷名称
-          subPath: iam-apiserver.yaml # 指定所引用的卷内的子路径，而不是其根路径。
-        - mountPath: /etc/iam/cert
-          name: iam-cert
+        - command: # 指定运行命令
+            - /opt/iam/bin/iam-apiserver # 运行参数
+            - --config=/etc/iam/iam-apiserver.yaml
+          image: ccr.ccs.tencentyun.com/lkccc/iam-apiserver-amd64:v1.0.6 # 镜像名，遵守镜像命名规范
+          imagePullPolicy: Always # 镜像拉取策略。IfNotPresent：优先使用本地镜像；Never：使用本地镜像，本地镜像不存在，则报错；Always：默认值，每次都重新拉取镜像
+          # lifecycle: # kubernetes支持postStart和preStop事件。当一个容器启动后，Kubernetes将立即发送postStart事件；在容器被终结之前，Kubernetes将发送一个preStop事件
+          name: iam-apiserver # 容器名称，与应用名称保持一致
+          ports: # 端口设置
+            - containerPort: 8443 # 容器暴露的端口
+              name: secure # 端口名称
+              protocol: TCP # 协议，TCP和UDP
+          livenessProbe: # 存活检查，检查容器是否正常，不正常则重启实例
+            httpGet: # HTTP请求检查方法
+              path: /healthz # 请求路径
+              port: 8080 # 检查端口
+              scheme: HTTP # 检查协议
+            initialDelaySeconds: 5 # 启动延时，容器延时启动健康检查的时间
+            periodSeconds: 10 # 间隔时间，进行健康检查的时间间隔
+            successThreshold: 1 # 健康阈值，表示后端容器从失败到成功的连续健康检查成功次数
+            failureThreshold: 1 # 不健康阈值，表示后端容器从成功到失败的连续健康检查成功次数
+            timeoutSeconds: 3 # 响应超时，每次健康检查响应的最大超时时间
+          readinessProbe: # 就绪检查，检查容器是否就绪，不就绪则停止转发流量到当前实例
+            httpGet: # HTTP请求检查方法
+              path: /healthz # 请求路径
+              port: 8080 # 检查端口
+              scheme: HTTP # 检查协议
+            initialDelaySeconds: 5 # 启动延时，容器延时启动健康检查的时间
+            periodSeconds: 10 # 间隔时间，进行健康检查的时间间隔
+            successThreshold: 1 # 健康阈值，表示后端容器从失败到成功的连续健康检查成功次数
+            failureThreshold: 1 # 不健康阈值，表示后端容器从成功到失败的连续健康检查成功次数
+            timeoutSeconds: 3 # 响应超时，每次健康检查响应的最大超时时间
+          startupProbe: # 启动探针，可以知道应用程序容器什么时候启动了
+            failureThreshold: 10
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources: # 资源管理
+            limits: # limits用于设置容器使用资源的最大上限,避免异常情况下节点资源消耗过多
+              cpu: "1" # 设置cpu limit，1核心 = 1000m
+              memory: 1Gi # 设置memory limit，1G = 1024Mi
+            requests: # requests用于预分配资源,当集群中的节点没有request所要求的资源数量时,容器会创建失败
+              cpu: 250m # 设置cpu request
+              memory: 500Mi # 设置memory request
+          terminationMessagePath: /dev/termination-log # 容器终止时消息保存路径
+          terminationMessagePolicy: File # 仅从终止消息文件中检索终止消息
+          volumeMounts: # 挂载日志卷
+            - mountPath: /etc/iam/iam-apiserver.yaml # 容器内挂载镜像路径
+              name: iam # 引用的卷名称
+              subPath: iam-apiserver.yaml # 指定所引用的卷内的子路径，而不是其根路径。
+            - mountPath: /etc/iam/cert
+              name: iam-cert
       dnsPolicy: ClusterFirst
       restartPolicy: Always # 重启策略，Always、OnFailure、Never
       schedulerName: default-scheduler # 指定调度器的名字
@@ -334,17 +334,17 @@ spec:
       securityContext: {} # 指定安全上下文
       terminationGracePeriodSeconds: 5 # 优雅关闭时间，这个时间内优雅关闭未结束，k8s 强制 kill
       volumes: # 配置数据卷，类型详见https://kubernetes.io/zh/docs/concepts/storage/volumes
-      - configMap: # configMap 类型的数据卷
-          defaultMode: 420 #权限设置0~0777，默认0664
-          items:
-          - key: iam-apiserver.yaml
-            path: iam-apiserver.yaml
-          name: iam # configmap名称
-        name: iam # 设置卷名称，与volumeMounts名称对应
-      - configMap:
-          defaultMode: 420
+        - configMap: # configMap 类型的数据卷
+            defaultMode: 420 #权限设置0~0777，默认0664
+            items:
+              - key: iam-apiserver.yaml
+                path: iam-apiserver.yaml
+            name: iam # configmap名称
+          name: iam # 设置卷名称，与volumeMounts名称对应
+        - configMap:
+            defaultMode: 420
+            name: iam-cert
           name: iam-cert
-        name: iam-cert
 ```
 
 在部署时，你可以根据需要来配置相应的字段，常见的需要配置的字段为：`labels`、`name`、`namespace`、`replicas`、`command`、`imagePullPolicy`、`container.name`、`livenessProbe`、`readinessProbe`、`resources`、`volumeMounts`、`volumes`、`imagePullSecrets`等。
@@ -448,11 +448,11 @@ spec:
   clusterIP: 192.168.0.231 # 虚拟服务地址
   externalTrafficPolicy: Cluster # 表示此服务是否希望将外部流量路由到节点本地或集群范围的端点
   ports: # service需要暴露的端口列表
-  - name: https #端口名称
-    nodePort: 30443 # 当type = NodePort时，指定映射到物理机的端口号
-    port: 8443 # 服务监听的端口号
-    protocol: TCP # 端口协议，支持TCP和UDP，默认TCP
-    targetPort: 8443 # 需要转发到后端Pod的端口号
+    - name: https #端口名称
+      nodePort: 30443 # 当type = NodePort时，指定映射到物理机的端口号
+      port: 8443 # 服务监听的端口号
+      protocol: TCP # 端口协议，支持TCP和UDP，默认TCP
+      targetPort: 8443 # 需要转发到后端Pod的端口号
   selector: # label selector配置，将选择具有label标签的Pod作为其后端RS
     app: iam-apiserver
   sessionAffinity: None # 是否支持session
@@ -537,8 +537,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: iam
-data:
-  {}
+data: {}
 ---
 # Source: iam/templates/iam-configmap.yaml
 apiVersion: v1

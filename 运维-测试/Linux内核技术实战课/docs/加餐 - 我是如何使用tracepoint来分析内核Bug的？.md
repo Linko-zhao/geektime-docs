@@ -24,7 +24,7 @@
 
 ```
 kworker/31:0: page allocation failure: order:5, mode:0x104050
-CPU: 31 PID: 635928 Comm: kworker/31:0 Tainted: G 
+CPU: 31 PID: 635928 Comm: kworker/31:0 Tainted: G
 0000000000104050 000000009a44a60e ffff882016b93808 ffffffff81686b13
 ffff882016b93898 ffffffff81187010 0000000000000000 ffff88207ffd8000
 0000000000000005 0000000000104050 ffff882016b93898 000000009a44a60e
@@ -87,7 +87,7 @@ nopage:
 Node 0 DMA free:15864kB min:48kB
 Node 0 DMA32 free:261328kB min:5412kB
 Node 0 Normal free:272880kB min:198808kB
-Node 1 Normal free:3315332kB min:205324kB 
+Node 1 Normal free:3315332kB min:205324kB
 ```
 
 从中我们可以发现，各个zone的free内存都大于min，而且相差不止32个page。也就是说，从free内存的大小来看，各个zone都是可以满足需求的。那么，为什么此时会申请内存失败呢？
@@ -158,7 +158,7 @@ osdmap_set_max_osd
 try_to_compact_pages
     int may_enter_fs = gfp_mask & __GFP_FS;
     int may_perform_io = gfp_mask & __GFP_IO;
-    
+
     if (!order || !may_enter_fs || !may_perform_io)
       return rc;
 ```
@@ -188,9 +188,9 @@ $ echo __alloc_pages_direct_compact > /sys/kernel/debug/tracing/set_ftrace_filte
      /* Check if the GFP flags allow compaction */
      if (!order || !may_enter_fs || !may_perform_io)
        return rc;
-     
+
       // 如果可以进行direct compact的话，会有COMPACTSTALL事件
-      count_compact_event(COMPACTSTALL);  
+      count_compact_event(COMPACTSTALL);
 ```
 
 从源码中我们能看到，如果可以进行direct compact的话，会有相应的COMPACTSTALL事件，而该事件会统计在/proc/vmstat中：
@@ -305,10 +305,10 @@ __zone_watermark_ok
 </p>2020-10-11</li><br/><li><span>我来也</span> 👍（1） 💬（1）<p># 这几个值合并起来是 0x100450 不是 0x104050呀。
 
 此时的 GFP flags 是 0x104050，对应于下面这几项：
-#define ___GFP_WAIT             0x10u
-#define ___GFP_IO               0x40u
-#define ___GFP_REPEAT           0x400u
-#define ___GFP_KMEMCG           0x100000u
+#define ___GFP_WAIT 0x10u
+#define ___GFP_IO 0x40u
+#define ___GFP_REPEAT 0x400u
+#define ___GFP_KMEMCG 0x100000u
 
 </p>2020-10-06</li><br/><li><span>xianhai</span> 👍（0） 💬（2）<p>能不能讲讲zone的概念？
 为什么要右移5？(205324kB &gt;&gt; 5)</p>2020-10-06</li><br/><li><span>镜</span> 👍（0） 💬（0）<p>除了cpu篇都大概看完了，老师功力深厚，点赞👍</p>2021-10-08</li><br/><li><span>Geek_e4c979</span> 👍（0） 💬（0）<p>tracepoint这些一会define一会undef咋理解呀</p>2021-04-21</li><br/>

@@ -122,7 +122,7 @@ B object internals:
      12     4        (object header)
      16     8   long A.l
      24     4    int A.i
-     28     4        (alignment/padding gap)                  
+     28     4        (alignment/padding gap)
      32     8   long B.l
      40     4    int B.i
      44     4        (loss due to the next object alignment)
@@ -189,7 +189,6 @@ java -cp jol-cli-0.9-full.jar org.openjdk.jol.Main internals java.lang.String
 该注解就是用来解决虚共享问题的，被该注解标识的变量，会独占一个CPU缓存行。但也因此浪费了大量的内存空间。
 
 </p>2018-10-11</li><br/><li><span>荷兰小猪8813</span> 👍（8） 💬（3）<p> 在默认情况下，Java 虚拟机中的 32 位压缩指针可以寻址到 2 的 35 次方个字节，也就是 32GB 的地址空间（超过 32GB 则会关闭压缩指针）。
-
 
 这里为啥是 35 ？？？？</p>2019-11-27</li><br/><li><span>一个坏人</span> 👍（7） 💬（3）<p>老师好，请教一下：“自动内存管理系统为什么要求对象的大小必须是8字节的整数倍？”，即内存对齐的根本原因在于？</p>2018-08-25</li><br/><li><span>大能猫</span> 👍（6） 💬（1）<p>最近研究String时遇到一个跟Java内存相关的问题：常量池里到底有没有存放对象？
 常量池主要存放两大类常量：字面量（Literal）和符号引用（Symbolic Reference）；

@@ -18,7 +18,7 @@
 之前的课程中，多次见到了创建新线程的 thread::spawn，它的参数就是一个闭包：
 
 ```rust
-pub fn spawn<F, T>(f: F) -> JoinHandle<T> 
+pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 where
     F: FnOnce() -> T,
     F: Send + 'static,
@@ -265,7 +265,7 @@ fn not_closure(arg: String) -> (String, String) {
 ```rust
 pub trait FnMut<Args>: FnOnce<Args> {
     extern "rust-call" fn call_mut(
-        &mut self, 
+        &mut self,
         args: Args
     ) -> Self::Output;
 }
@@ -563,6 +563,7 @@ fn main() {
     println!("{:?}", c1.call_once(("hola".into(), "hallo".into())));
 }
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>D. D</span> 👍（31） 💬（2）<p>1. 相当于：
 struct Closure&lt;&#39;a, &#39;b: &#39;a&gt; {
@@ -577,19 +578,20 @@ struct Closure&lt;&#39;a, &#39;b: &#39;a&gt; {
 2. 从定义可以看出，调用FnOnce的call_once方法会取得闭包的所有权。因此对于闭包c和c1来说，即使在声明时不使用mut关键字，也可以在其call_once方法中使用所捕获的变量的可变借用。
 
 3.
+
 impl&lt;F&gt; Executor for F
 where
-    F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;,
+F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;,
 {
-    fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
-        self(cmd)
-    }
+fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
+self(cmd)
+}
 }</p>2021-10-06</li><br/><li><span>罗杰</span> 👍（5） 💬（1）<p>Rust 闭包，看这一篇真的就够了</p>2021-10-06</li><br/><li><span>TheLudlows</span> 👍（2） 💬（1）<p>思路清晰，深入浅出，佩服陈天老师👍</p>2021-11-11</li><br/><li><span>lambda</span> 👍（2） 💬（3）<p>关于第三题有个问题，如果我把
 impl&lt;F&gt; Executor for F
 where
-    F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;
+F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;
 写成：
-impl Executor for fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; 
+impl Executor for fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;
 
 会报错：
 the trait `Executor` is not implemented for
@@ -599,15 +601,13 @@ the trait `Executor` is not implemented for
 
 老师，实际调试了一下你的代码，发现只要在`call_once`中传入闭包的引用，后续是可以继续使用闭包的，具体请看：
 
-https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=27cd35717d166f01a4045846721cf989</p>2021-10-07</li><br/><li><span>Geek_b52974</span> 👍（0） 💬（1）<p>1. 56
-2. 傳入 FnOnce 的時候是執行 fn call_once(self, args: Args) -&gt; Self::Output; 是傳入 self, 而非 &amp;mut self 所以不需要 mut 關鍵字
-3. 
-impl&lt;F&gt; Executor for F where 
-    F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;,
+https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=27cd35717d166f01a4045846721cf989</p>2021-10-07</li><br/><li><span>Geek_b52974</span> 👍（0） 💬（1）<p>1. 56 2. 傳入 FnOnce 的時候是執行 fn call_once(self, args: Args) -&gt; Self::Output; 是傳入 self, 而非 &amp;mut self 所以不需要 mut 關鍵字 3.
+impl&lt;F&gt; Executor for F where
+F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;,
 {
-    fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
-        self(cmd)
-    }
+fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
+self(cmd)
+}
 }
 </p>2021-11-04</li><br/><li><span>Marvichov</span> 👍（0） 💬（1）<p>两点思考, 请老师指正
 
@@ -630,7 +630,7 @@ main不是function pointer; 而是和closure有点相似的function item的insta
 https:&#47;&#47;github.com&#47;rust-lang&#47;rust&#47;issues&#47;62440
 
 &gt; This is the compiler&#39;s way of representing the unique zero sized type that corresponds to the function.
-&gt; 
+&gt;
 &gt; This is akin to how closures also create a unique type (but in that case, the size may be &gt;= 0 depending on the captured environment).
 
 function item需要被显式coerce到function pointer (https:&#47;&#47;doc.rust-lang.org&#47;nightly&#47;reference&#47;types&#47;function-item.html)
@@ -640,31 +640,31 @@ pub trait Executor {
 }
 
 struct BashExecutor {
-    env: String,
+env: String,
 }
 
 impl&lt;F&gt; Executor for F
 where
-    F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;,
+F: Fn(&amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt;,
 {
-    fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
-        self(cmd)
-    }
+fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
+self(cmd)
+}
 }
 
 impl Executor for BashExecutor {
-    fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
-        Ok(format!(
-            &quot;fake bash execute: env: {}, cmd: {}&quot;,
-            self.env, cmd
-        ))
-    }
+fn execute(&amp;self, cmd: &amp;str) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
+Ok(format!(
+&quot;fake bash execute: env: {}, cmd: {}&quot;,
+self.env, cmd
+))
+}
 }
 
 &#47;&#47; 看看我给的 tonic 的例子，想想怎么实现让 27 行可以正常执行
 
 fn main() {
-    let env = &quot;PATH=&#47;usr&#47;bin&quot;.to_string();
+let env = &quot;PATH=&#47;usr&#47;bin&quot;.to_string();
 
     let cmd = &quot;cat &#47;etc&#47;passwd&quot;;
     let r1 = execute(cmd, BashExecutor { env: env.clone() });
@@ -674,44 +674,44 @@ fn main() {
         Ok(format!(&quot;fake fish execute: env: {}, cmd: {}&quot;, env, cmd))
     });
     println!(&quot;{:?}&quot;, r2);
+
 }
 
 fn execute(cmd: &amp;str, exec: impl Executor) -&gt; Result&lt;String, &amp;&#39;static str&gt; {
-    exec.execute(cmd)
+exec.execute(cmd)
 }</p>2021-10-06</li><br/><li><span>记事本</span> 👍（0） 💬（2）<p>1、不能访问，name变量的所有权已经被移动闭包里面去了，move强制导致的
 3、pub trait Executor{
-    fn execute(&amp;self,cmd:&amp;str) -&gt;Result&lt;String,&amp;&#39;static str&gt;;
+fn execute(&amp;self,cmd:&amp;str) -&gt;Result&lt;String,&amp;&#39;static str&gt;;
 }
 
 struct BashExecutor{
-    env:String
+env:String
 }
 
 impl Executor for BashExecutor{
-    fn execute(&amp;self, cmd:&amp;str) -&gt;Result&lt;String,&amp;&#39;static str&gt; {
-       Ok(format!(
-            &quot;fake bash execute:env:{},cmd :{}&quot;,self.env,cmd
-       )) 
-    }
+fn execute(&amp;self, cmd:&amp;str) -&gt;Result&lt;String,&amp;&#39;static str&gt; {
+Ok(format!(
+&quot;fake bash execute:env:{},cmd :{}&quot;,self.env,cmd
+))
+}
 }
 
-impl &lt;F&gt; Executor for F 
+impl &lt;F&gt; Executor for F
 where F:Fn(&amp;str) -&gt;Result&lt;String,&amp;&#39;static str&gt;
 {
 
     fn execute(&amp;self, cmd:&amp;str) -&gt;Result&lt;String,&amp;&#39;static str&gt; {
         self(cmd)
     }
-    
+
 }
 
-
 fn execute(cmd:&amp;str,exec:impl Executor) -&gt; Result&lt;String,&amp;&#39;static str&gt;{
-    exec.execute(cmd)
+exec.execute(cmd)
 }
 
 pub fn test(){
-    let env = &quot;PATH=&#47;usr&#47;bin&quot;.to_string();
+let env = &quot;PATH=&#47;usr&#47;bin&quot;.to_string();
 
     let cmd = &quot;cat &#47;etc&#47;passwd&quot;;
 
@@ -728,10 +728,13 @@ pub fn test(){
 </p>2021-10-06</li><br/><li><span>f</span> 👍（21） 💬（2）<p>发现了老师文中的一个错误结论。当闭包不使用move时，是推断着判断如何去捕获变量的，先尝试不可变引用，然后尝试可变引用，最后尝试Move&#47;Copy，一旦尝试成功，将不再尝试。当使用move时，是强制Move&#47;Copy，而不是一步一步地去推断尝试。
 
 在the rust reference: https:&#47;&#47;doc.rust-lang.org&#47;reference&#47;expressions&#47;closure-expr.html里有说明：
+
 ```
 Without the move keyword, the closure expression infers how it captures each variable from its environment, preferring to capture by shared reference, effectively borrowing all outer variables mentioned inside the closure&#39;s body. If needed the compiler will infer that instead mutable references should be taken, or that the values should be moved or copied (depending on their type) from the environment. A closure can be forced to capture its environment by copying or moving values by prefixing it with the move keyword. This is often used to ensure that the closure&#39;s lifetime is &#39;static.
 ```
+
 代码验证：
+
 ```rust
 fn main() {
     let mut name = String::from(&quot;hello&quot;);

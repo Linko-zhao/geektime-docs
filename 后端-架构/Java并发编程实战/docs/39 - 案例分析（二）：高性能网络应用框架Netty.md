@@ -75,13 +75,13 @@ Netty中还有一个核心概念是**EventLoopGroup**，顾名思义，一个Eve
 
 ```
 //事件处理器
-final EchoServerHandler serverHandler 
+final EchoServerHandler serverHandler
   = new EchoServerHandler();
-//boss线程组  
-EventLoopGroup bossGroup 
-  = new NioEventLoopGroup(1); 
-//worker线程组  
-EventLoopGroup workerGroup 
+//boss线程组
+EventLoopGroup bossGroup
+  = new NioEventLoopGroup(1);
+//worker线程组
+EventLoopGroup workerGroup
   = new NioEventLoopGroup();
 try {
   ServerBootstrap b = new ServerBootstrap();
@@ -93,7 +93,7 @@ try {
        ch.pipeline().addLast(serverHandler);
      }
     });
-  //bind服务端端口  
+  //bind服务端端口
   ChannelFuture f = b.bind(9090).sync();
   f.channel().closeFuture().sync();
 } finally {
@@ -104,9 +104,9 @@ try {
 }
 
 //socket连接处理器
-class EchoServerHandler extends 
+class EchoServerHandler extends
     ChannelInboundHandlerAdapter {
-  //处理读事件  
+  //处理读事件
   @Override
   public void channelRead(
     ChannelHandlerContext ctx, Object msg){

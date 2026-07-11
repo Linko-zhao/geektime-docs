@@ -47,7 +47,7 @@ firstProcessor.processRequest(si);
 
 ```
 protected void setupRequestProcessors() {
-  // 创建finalProcessor，提交提案或响应查询     
+  // 创建finalProcessor，提交提案或响应查询
   RequestProcessor finalProcessor = new FinalRequestProcessor(this);
   // 创建commitProcessor，处理提案提交或读请求
   commitProcessor = new CommitProcessor(finalProcessor,   Long.toString(getServerId()), true, getZooKeeperServerListener());
@@ -100,13 +100,13 @@ protected void setupRequestProcessors() {
   RequestProcessor finalProcessor = new FinalRequestProcessor(this);
   // 创建toBeAppliedProcessor，存储可提交的提案，并在提交提案后，从toBeApplied队列移除已提交的
   RequestProcessor toBeAppliedProcessor = new Leader.ToBeAppliedRequestProcessor(finalProcessor, getLeader());
-  // 创建commitProcessor，处理提案提交或读请求      
+  // 创建commitProcessor，处理提案提交或读请求
   commitProcessor = new CommitProcessor(toBeAppliedProcessor, Long.toString(getServerId()), false, getZooKeeperServerListener());
   commitProcessor.start();
   // 创建proposalProcessor，按照顺序广播提案给跟随者
   ProposalRequestProcessor proposalProcessor = new ProposalRequestProcessor(this, commitProcessor);
         proposalProcessor.initialize();
-  // 创建prepRequestProcessor，根据请求创建提案      
+  // 创建prepRequestProcessor，根据请求创建提案
   prepRequestProcessor = new PrepRequestProcessor(this, proposalProcessor);
   prepRequestProcessor.start();
   // 创建firstProcessor，接收发给领导者的请求
@@ -150,7 +150,7 @@ zk.commitProcessor.commit(p.request);
 long firstElementZxid = pendingTxns.element().zxid;
 if (firstElementZxid != zxid) {
   LOG.error("Committing zxid 0x" + Long.toHexString(zxid)
-            + " but next pending txn 0x" + 
+            + " but next pending txn 0x" +
             Long.toHexString(firstElementZxid));
   ServiceUtils.requestSystemExit(ExitCode.UNMATCHED_TXN_COMMIT.getValue());
 }
@@ -244,22 +244,22 @@ case OpCode.getData : {
 
 -- 我觉得还是有意义的，因为ZK的Follower节点是可以用于查询的，经过数据同步尽可能保持于Leader数据一致，减少了不一致的可能，当然了也可以强制先sync先</p>2023-12-05</li><br/><li><span>悟空聊架构</span> 👍（0） 💬（0）<p>课后题：我提到 ZooKeeper 提供的是最终一致性，读操作可以在任何节点上执行。那么如果读操作访问的是备份节点，为什么无法保证每次都能读到最新的数据呢？
 
-回答：因为主节点发送 commit 消息给所有备份节点时，备份节点执行 commit 的时机不一定都是同步完成的，只有当 commit 之后，客户端读取的数据才是最新的，比如备份节点 B 先commit，客户端 1 连接的是 备份节点 B，那么客户端 1 肯定读到的是最新的，但是如果客户端连接的是备份节点 C，但是节点 C     还没有收到 commit 消息或者收到了，还没来得及 commit，客户端就发起请求了，这个时候读到的就是旧数据。但是过了短暂时间后，所有备份节点都 commit 了，这个时候任何客户端都可以读到最新的一致性数据了，这个就是最终一致性。
+回答：因为主节点发送 commit 消息给所有备份节点时，备份节点执行 commit 的时机不一定都是同步完成的，只有当 commit 之后，客户端读取的数据才是最新的，比如备份节点 B 先commit，客户端 1 连接的是 备份节点 B，那么客户端 1 肯定读到的是最新的，但是如果客户端连接的是备份节点 C，但是节点 C 还没有收到 commit 消息或者收到了，还没来得及 commit，客户端就发起请求了，这个时候读到的就是旧数据。但是过了短暂时间后，所有备份节点都 commit 了，这个时候任何客户端都可以读到最新的一致性数据了，这个就是最终一致性。
 补充：这里 commit 操作就是将数据 放到 znode 内存数据结构上，这样客户端就可以读到最新的数据了。</p>2022-03-22</li><br/><li><span>阿kai(aeo</span> 👍（0） 💬（0）<p>为什么觉得代码顺序是反的呢？比如下面这段FinalRequestProcessor怎么是首先创建的呢?
 
-RequestProcessor finalProcessor = new FinalRequestProcessor(this);            &#47;&#47; 创建finalProcessor，最终提交提案和响应查询
-  &#47;&#47; 创建toBeAppliedProcessor，存储可提交的提案，并在提交提案后，从toBeApplied队列移除已提交的
-  RequestProcessor toBeAppliedProcessor = new Leader.ToBeAppliedRequestProcessor(finalProcessor, getLeader());
-  &#47;&#47; 创建commitProcessor，处理提案提交或读请求      
-  commitProcessor = new CommitProcessor(toBeAppliedProcessor, Long.toString(getServerId()), false, getZooKeeperServerListener());
-  commitProcessor.start();
-  &#47;&#47; 创建proposalProcessor，按照顺序广播提案给跟随者
-  ProposalRequestProcessor proposalProcessor = new ProposalRequestProcessor(this, commitProcessor);
-  proposalProcessor.initialize();
-  &#47;&#47; 创建prepRequestProcessor，根据请求创建提案      
-  prepRequestProcessor = new PrepRequestProcessor(this, proposalProcessor);
-  prepRequestProcessor.start();
-  &#47;&#47; 创建firstProcessor，接收发给领导者的请求
-  firstProcessor = new LeaderRequestProcessor(this, prepRequestProcessor);
+RequestProcessor finalProcessor = new FinalRequestProcessor(this); &#47;&#47; 创建finalProcessor，最终提交提案和响应查询
+&#47;&#47; 创建toBeAppliedProcessor，存储可提交的提案，并在提交提案后，从toBeApplied队列移除已提交的
+RequestProcessor toBeAppliedProcessor = new Leader.ToBeAppliedRequestProcessor(finalProcessor, getLeader());
+&#47;&#47; 创建commitProcessor，处理提案提交或读请求  
+commitProcessor = new CommitProcessor(toBeAppliedProcessor, Long.toString(getServerId()), false, getZooKeeperServerListener());
+commitProcessor.start();
+&#47;&#47; 创建proposalProcessor，按照顺序广播提案给跟随者
+ProposalRequestProcessor proposalProcessor = new ProposalRequestProcessor(this, commitProcessor);
+proposalProcessor.initialize();
+&#47;&#47; 创建prepRequestProcessor，根据请求创建提案  
+prepRequestProcessor = new PrepRequestProcessor(this, proposalProcessor);
+prepRequestProcessor.start();
+&#47;&#47; 创建firstProcessor，接收发给领导者的请求
+firstProcessor = new LeaderRequestProcessor(this, prepRequestProcessor);
 </p>2022-01-13</li><br/><li><span>渔夫</span> 👍（0） 💬（0）<p>韩老师，想问下分布式集群模式下，FollowerZooKeeperServer.setupRequestProcessors方法是如何被调用的呢，找了好久找不到。不像standolone模式那么好找</p>2021-02-16</li><br/><li><span>Tesla</span> 👍（0） 💬（1）<p>老师，请问zk的最终一致性是以提升读的效率为目标的嘛，写的速率和强一致性的算法差不多吧？</p>2021-01-04</li><br/>
 </ul>

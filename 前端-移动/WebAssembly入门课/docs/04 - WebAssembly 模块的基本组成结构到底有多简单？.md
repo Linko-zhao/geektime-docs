@@ -192,15 +192,17 @@ int add (int a, int b) {
 <div><strong>精选留言（12）</strong></div><ul>
 <li><span>奕</span> 👍（4） 💬（1）<p>能不能结合 wasm 的可识别文本 来讲解各个  section ？ 这个干讲不是特别形象。
 
-比如 使用  assemblyscript 编译后生成的 wat 文件</p>2020-09-11</li><br/><li><span>Twittytop</span> 👍（2） 💬（1）<p>我有一个疑问，如果一个整数经过编码之后还变大了，那为什么还要编码？为啥不用它原来的大小存储</p>2022-04-25</li><br/><li><span>AIGC Weekly 周报</span> 👍（1） 💬（1）<p>对于文中 c++ 编译成 wasm二进制文件，我的疑问在于每个 Section 具体内容的所占字节如何确定呢？我在官网上也没有找到相应的知识。作者能辛苦解答下吗？或者评论区的大佬指导下？</p>2021-12-12</li><br/><li><span>xiaobang</span> 👍（1） 💬（1）<p>table section 中如果存放的不是anyfunc，调用call indirect 会失败的吧</p>2020-09-13</li><br/><li><span>忒亚</span> 👍（0） 💬（1）<p>这章好抽象</p>2022-06-12</li><br/><li><span>哄哄</span> 👍（0） 💬（1）<p>据我所知varint32编码的很小的整数仅占用一个字节。1和7编码后不应该是6个字节。</p>2021-05-29</li><br/><li><span>champ</span> 👍（0） 💬（3）<p>最后那个例子里面的，payload_len为什么是由5个16进制表示？
+比如 使用 assemblyscript 编译后生成的 wat 文件</p>2020-09-11</li><br/><li><span>Twittytop</span> 👍（2） 💬（1）<p>我有一个疑问，如果一个整数经过编码之后还变大了，那为什么还要编码？为啥不用它原来的大小存储</p>2022-04-25</li><br/><li><span>AIGC Weekly 周报</span> 👍（1） 💬（1）<p>对于文中 c++ 编译成 wasm二进制文件，我的疑问在于每个 Section 具体内容的所占字节如何确定呢？我在官网上也没有找到相应的知识。作者能辛苦解答下吗？或者评论区的大佬指导下？</p>2021-12-12</li><br/><li><span>xiaobang</span> 👍（1） 💬（1）<p>table section 中如果存放的不是anyfunc，调用call indirect 会失败的吧</p>2020-09-13</li><br/><li><span>忒亚</span> 👍（0） 💬（1）<p>这章好抽象</p>2022-06-12</li><br/><li><span>哄哄</span> 👍（0） 💬（1）<p>据我所知varint32编码的很小的整数仅占用一个字节。1和7编码后不应该是6个字节。</p>2021-05-29</li><br/><li><span>champ</span> 👍（0） 💬（3）<p>最后那个例子里面的，payload_len为什么是由5个16进制表示？
 我的理解是varuint32，不是应该有32bit，也就是4个16进制数字表示吗？
 
 还有最后的紫色方块由6个16进制数字表示一个函数签名也不太明白</p>2021-01-17</li><br/><li><span>大土豆</span> 👍（14） 💬（0）<p>ELF是和特定平台相关的二进制格式。WASM是一个通用的字节码格式，和平台无关，由浏览器的解释器执行</p>2020-09-11</li><br/><li><span>阿吉学习wasm</span> 👍（3） 💬（0）<p>ELF Section 和 Wasm Section 相同：都采用了线性结构，都有“魔数”和版本号等等。
 不同点：ELF是有段和节的划分，多个节构成段。而WASM直接是段。</p>2020-12-13</li><br/><li><span>胖狐狸</span> 👍（0） 💬（0）<p>除了其中名为 “Custom Secton”-&gt;除了其中名为 “Custom Section”
 发现一个typo</p>2023-12-07</li><br/><li><span>Geek_zbvt62</span> 👍（0） 💬（0）<p>还是看得稀里糊涂，对wasm没有理解，但感觉很吸引人。截止到现在有一些疑问：
+
 1. 为啥要把type section和function section这两个分开，按一般的思路会觉得是在一起的，像个头文件。
 2. 导入的memory，能被其他wasm模块使用？直接操作其他模块的内存么？应该不可能吧。或者是结合function section，从内存中获取一个函数的返回值？
 3. 既然很多语言都支持这套VM，那对于像golang这种有比较重的运行时的语言，运行时部分的功能是如何定义的？是每个golang生成的wasm模块都带一套运行时？还是共享？</p>2023-08-20</li><br/><li><span>becky</span> 👍（0） 💬（0）<p>大概看了一下wiki，ELF包含两种视图：program header显示运行时使用的segments，Section header列出section的集合；关于section的信息有code、data和section name，section包含用于链接和重定位的重要数据。
-两种section相同处是都有header描述section的信息，以及具体的数据。不同处是elf中用于描述section的header在elf的section header table中，而wasm的header是在section内部；并且elf中的section不用按顺序排列。
-对elf不太了解，不知道理解的对不对。</p>2023-08-10</li><br/>
+   两种section相同处是都有header描述section的信息，以及具体的数据。不同处是elf中用于描述section的header在elf的section header table中，而wasm的header是在section内部；并且elf中的section不用按顺序排列。
+   对elf不太了解，不知道理解的对不对。</p>2023-08-10</li><br/>
+
 </ul>

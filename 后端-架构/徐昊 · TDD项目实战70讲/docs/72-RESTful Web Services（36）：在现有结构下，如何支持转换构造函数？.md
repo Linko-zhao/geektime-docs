@@ -8,7 +8,7 @@
 目前的任务列表：
 
 - Resource/RootResource/ResourceMethods
-  
+
   - 当HEAD方法映射到GET方法时，忽略GET的返回值
   - 当没有OPTIONS方法时，提供默认实现
 

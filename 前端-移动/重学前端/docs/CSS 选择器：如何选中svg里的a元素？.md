@@ -181,20 +181,23 @@ of-type系列，是一个变形的语法糖，S:nth-of-type(An+B)是:nth-child(|
 还有一些草案中或者不常用的选择器，你仅做大概了解即可。
 
 - 国际化：用于处理国际化和多语言问题。
-  
+
   - dir
   - lang
+
 - 音频/视频：用于区分音视频播放状态。
-  
+
   - play
   - pause
+
 - 时序：用于配合读屏软件等时序性客户端的伪类。
-  
+
   - current
   - past
   - future
+
 - 表格：用于处理table的列的伪类。
-  
+
   - nth-col
   - nth-last-col
 
@@ -222,14 +225,14 @@ of-type系列，是一个变形的语法糖，S:nth-of-type(An+B)是:nth-child(|
 表示带有以 attr 命名的属性，且属性值是以&quot;value&quot;开头的元素。
 
 出处:https:&#47;&#47;developer.mozilla.org&#47;zh-CN&#47;docs&#47;Web&#47;CSS&#47;Attribute_selectors</p>2019-03-13</li><br/><li><span>奕</span> 👍（31） 💬（0）<p>
-选择器	描述
-[attribute]	用于选取带有指定属性的元素。
-[attribute=value]	用于选取带有指定属性和值的元素。
-[attribute~=value]	用于选取属性值中包含指定词汇的元素。
-[attribute|=value]	用于选取带有以指定值开头的属性值的元素，该值必须是整个单词。
-[attribute^=value]	匹配属性值以指定值开头的每个元素。
-[attribute$=value]	匹配属性值以指定值结尾的每个元素。
-[attribute*=value]	匹配属性值中包含指定值的每个元素。</p>2019-03-20</li><br/><li><span>GETStrongBENice</span> 👍（12） 💬（1）<p>属性以某值开头不是[attr^=xxx]吗（捂脸</p>2019-03-12</li><br/><li><span>阿成</span> 👍（12） 💬（2）<p>没想到写个 querySelector 这么费劲...
+选择器 描述
+[attribute] 用于选取带有指定属性的元素。
+[attribute=value] 用于选取带有指定属性和值的元素。
+[attribute~=value] 用于选取属性值中包含指定词汇的元素。
+[attribute|=value] 用于选取带有以指定值开头的属性值的元素，该值必须是整个单词。
+[attribute^=value] 匹配属性值以指定值开头的每个元素。
+[attribute$=value] 匹配属性值以指定值结尾的每个元素。
+[attribute*=value] 匹配属性值中包含指定值的每个元素。</p>2019-03-20</li><br/><li><span>GETStrongBENice</span> 👍（12） 💬（1）<p>属性以某值开头不是[attr^=xxx]吗（捂脸</p>2019-03-12</li><br/><li><span>阿成</span> 👍（12） 💬（2）<p>没想到写个 querySelector 这么费劲...
 还有很多情况没处理到的...
 emmm... 选择器字符串解析的部分应该上词法和语法分析的..
 差不多能用吧就...

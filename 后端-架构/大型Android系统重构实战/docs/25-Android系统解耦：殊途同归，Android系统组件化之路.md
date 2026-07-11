@@ -87,12 +87,12 @@
 class AMS{
   public void onCreate（）{
     //原生代码... ...
-    
+
     //扩展代码
     xxx
     yyy
     zzz
-    
+
     //原生代码... ...
   }
 }
@@ -106,10 +106,10 @@ interface IAMS{
 class AMS{
   public void onCreate（）{
     //原生代码... ...
-    
+
     //扩展代码
     IAMS.instance().onCreate();
-    
+
     //原生代码... ...
   }
 }

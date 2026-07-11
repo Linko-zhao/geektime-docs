@@ -93,7 +93,7 @@ var GlobalPrice = 1
 func Foo() bool {
   if GlobalPrice > 1 {
     return true
-  }  
+  }
   return false
 }
 ```
@@ -108,7 +108,7 @@ var GlobalPrice = 1
 func Foo(price int) bool {
   if price > 1 {
     return true
-  }  
+  }
   return false
 }
 
@@ -125,7 +125,7 @@ func Foo(price int) bool {
 func Foo() bool {
   if time.Now().Timestamp() % 10 > 3 {
     return true
-  }  
+  }
   return false
 }
 ```

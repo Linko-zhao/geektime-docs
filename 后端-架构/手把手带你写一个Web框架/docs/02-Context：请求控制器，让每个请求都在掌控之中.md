@@ -49,7 +49,7 @@ type Context interface {
 }
 
 //函数句柄
-type CancelFunc func() 
+type CancelFunc func()
 ```
 
 这个库虽然不大，但是设计感强，比较抽象，并不是很好理解。所以这里，我把 Context 的其他字段省略了。现在，我们只理解核心的 Done() 方法和 CancelFunc 这两个函数就可以了。
@@ -215,7 +215,7 @@ func Foo2(ctx *framework.Context) error {
 	}
     // 从请求体中获取参数
  	fooInt := ctx.FormInt("foo", 10)
-    // 构建返回结构  
+    // 构建返回结构
 	obj["data"] = fooInt
     // 输出返回结构
 	return ctx.Json(http.StatusOK, obj)

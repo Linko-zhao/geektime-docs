@@ -279,8 +279,8 @@ print np.var(a)
 a = np.array([[4,3,2],[2,4,1]])
 print np.sort(a)
 print np.sort(a, axis=None)
-print np.sort(a, axis=0)  
-print np.sort(a, axis=1)  
+print np.sort(a, axis=0)
+print np.sort(a, axis=1)
 ```
 
 运行结果：
@@ -325,17 +325,17 @@ import numpy as np
 &#39;&#39;&#39;
 
 scoretype = np.dtype({
-    &#39;names&#39;: [&#39;name&#39;, &#39;chinese&#39;, &#39;english&#39;, &#39;math&#39;],
-    &#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
+&#39;names&#39;: [&#39;name&#39;, &#39;chinese&#39;, &#39;english&#39;, &#39;math&#39;],
+&#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
 
 peoples = np.array(
-        [
-            (&quot;zhangfei&quot;, 66, 65, 30),
-            (&quot;guanyu&quot;, 95, 85, 98),
-            (&quot;zhaoyun&quot;, 93, 92, 96),
-            (&quot;huangzhong&quot;, 90, 88, 77),
-            (&quot;dianwei&quot;, 80, 90, 90)
-        ], dtype=scoretype)
+[
+(&quot;zhangfei&quot;, 66, 65, 30),
+(&quot;guanyu&quot;, 95, 85, 98),
+(&quot;zhaoyun&quot;, 93, 92, 96),
+(&quot;huangzhong&quot;, 90, 88, 77),
+(&quot;dianwei&quot;, 80, 90, 90)
+], dtype=scoretype)
 
 #print(peoples)
 
@@ -345,19 +345,19 @@ zhili = peoples[:][&#39;english&#39;]
 tili = peoples[:][&#39;math&#39;]
 
 def show(name,cj):
-    print name,
-    print &quot; |&quot;,
-    print np.mean(cj),
-    print &quot; | &quot;,
-    print np.min(cj),
-    print &quot; | &quot;,
-    print np.max(cj),
-    print &quot; | &quot;,
-    print np.var(cj),
-    print &quot; | &quot;,
-    print np.std(cj)
+print name,
+print &quot; |&quot;,
+print np.mean(cj),
+print &quot; | &quot;,
+print np.min(cj),
+print &quot; | &quot;,
+print np.max(cj),
+print &quot; | &quot;,
+print np.var(cj),
+print &quot; | &quot;,
+print np.std(cj)
 
-print(&quot;科目  | 平均成绩 | 最小成绩 | 最大成绩 | 方差 | 标准差&quot;)
+print(&quot;科目 | 平均成绩 | 最小成绩 | 最大成绩 | 方差 | 标准差&quot;)
 show(&quot;语文&quot;, wuli)
 show(&quot;英语&quot;, zhili)
 show(&quot;数学&quot;, tili)
@@ -366,7 +366,8 @@ print(&quot;排名:&quot;)
 ranking =sorted(peoples,cmp = lambda x,y: cmp(x[1]+x[2]+x[3],y[1]+y[2]+y[3]), reverse=True)
 print(ranking)</p>2018-12-21</li><br/><li><span>么春‮脸小的你了亲并‭</span> 👍（110） 💬（9）<p>排名第一的同学是用 Python 2 的写法，我用 Python 3 也写一遍，供大家参考。
 
-# -*- coding: utf-8 -*-
+# -_- coding: utf-8 -_-
+
 &quot;&quot;&quot;
 Created on Sun Jan 20 00:51:28 2019
 
@@ -382,11 +383,11 @@ print(np.sort(a, axis=1))
 print(&quot;\npart 6 作业\n&quot;)
 
 persontype = np.dtype({
-    &#39;names&#39;:[&#39;name&#39;, &#39;chinese&#39;,&#39;english&#39;,&#39;math&#39; ],
-    &#39;formats&#39;:[&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
+&#39;names&#39;:[&#39;name&#39;, &#39;chinese&#39;,&#39;english&#39;,&#39;math&#39; ],
+&#39;formats&#39;:[&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
 peoples = np.array([(&quot;ZhangFei&quot;,66,65,30),(&quot;GuanYu&quot;,95,85,98),
-       (&quot;ZhaoYun&quot;,93,92,96),(&quot;HuangZhong&quot;,90,88,77),
-       (&quot;DianWei&quot;,80,90,90)],dtype=persontype)
+(&quot;ZhaoYun&quot;,93,92,96),(&quot;HuangZhong&quot;,90,88,77),
+(&quot;DianWei&quot;,80,90,90)],dtype=persontype)
 #指定的竖列
 name = peoples[:][&#39;name&#39;]
 chinese = peoples[:][&#39;chinese&#39;]
@@ -394,8 +395,8 @@ english = peoples[:][&#39;english&#39;]
 math = peoples[:][&#39;math&#39;]
 #定义函数用于显示每一排的内容
 def show(name,cj):
-    print(&#39;{} |   {}  |   {}   |   {}   |   {}    |    {}   &#39;
-          .format(name,np.mean(cj),np.min(cj),np.max(cj),np.var(cj),np.std(cj)))
+print(&#39;{} | {} | {} | {} | {} | {} &#39;
+.format(name,np.mean(cj),np.min(cj),np.max(cj),np.var(cj),np.std(cj)))
 
 print(&quot;科目 | 平均成绩 | 最小成绩 | 最大成绩 | 方差 | 标准差&quot;)
 show(&quot;语文&quot;, chinese)
@@ -412,14 +413,16 @@ print(ranking)
 
 import numpy as np
 persontype = np.dtype({
-    &#39;names&#39;: [&#39;name&#39;,  &#39;chinese&#39;, &#39;math&#39;, &#39;english&#39;],
-    &#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
+&#39;names&#39;: [&#39;name&#39;, &#39;chinese&#39;, &#39;math&#39;, &#39;english&#39;],
+&#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
 peoples = np.array([(&quot;ZhangFei&quot;, 66, 65, 30), (&quot;GuanYu&quot;, 95, 85, 98),
-                    (&quot;ZhaoYun&quot;, 93, 92, 96), (&quot;HuangZhong&quot;, 90, 88, 77),
-                    (&quot;DianWei&quot;, 80, 90, 90)],
-                   dtype=persontype)
+(&quot;ZhaoYun&quot;, 93, 92, 96), (&quot;HuangZhong&quot;, 90, 88, 77),
+(&quot;DianWei&quot;, 80, 90, 90)],
+dtype=persontype)
 for col in peoples.dtype.names:
-#    print(col)
+
+# print(col)
+
     if col is &quot;name&quot;:
         continue
     print(&quot;mean of {}: {}&quot;.format(col, peoples[col].mean()))
@@ -430,29 +433,29 @@ for col in peoples.dtype.names:
 
 report = np.empty([0, 0])
 for i in range(peoples.size):
-    sum_score = peoples[&#39;chinese&#39;][i] + peoples[&#39;english&#39;][i] + peoples[&#39;math&#39;][i]
-    #print(sum_score)
-    report = np.append(report, [ sum_score])
+sum_score = peoples[&#39;chinese&#39;][i] + peoples[&#39;english&#39;][i] + peoples[&#39;math&#39;][i]
+#print(sum_score)
+report = np.append(report, [ sum_score])
 report = -np.sort(-report)
 print(&quot;sorted score:&quot;)
 print(report)
 
 怎么在 numpy 里作成绩求和还不是很清楚。另外，想把成绩和名字按排序后打印出来，要用索引，赶时间没研究，等看别人的结果。</p>2018-12-21</li><br/><li><span>从未在此</span> 👍（9） 💬（2）<p>根据我在网上找的学习资料，axis＝0，代表跨行；=1代表跨列，这样很容易理解。</p>2018-12-21</li><br/><li><span>Ben</span> 👍（7） 💬（1）<p>scoretype = np.dtype({&#39;names&#39;: [&#39;name&#39;, &#39;chinese&#39;, &#39;english&#39;, &#39;math&#39;],
-                      &#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
+&#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;i&#39;]})
 peoples = np.array(
-    [
-        (&quot;zhangfei&quot;, 66, 65, 30),
-        (&quot;guanyu&quot;, 95, 85, 98),
-        (&quot;zhaoyun&quot;, 93, 92, 96),
-        (&quot;huangzhong&quot;, 90, 88, 77),
-        (&quot;dianwei&quot;, 80, 90, 90)
-    ], dtype=scoretype)
+[
+(&quot;zhangfei&quot;, 66, 65, 30),
+(&quot;guanyu&quot;, 95, 85, 98),
+(&quot;zhaoyun&quot;, 93, 92, 96),
+(&quot;huangzhong&quot;, 90, 88, 77),
+(&quot;dianwei&quot;, 80, 90, 90)
+], dtype=scoretype)
 print(&quot;科目 | 平均成绩 | 最小成绩 | 最大成绩 | 方差 | 标准差&quot;)
 courses = {&#39;语文&#39;: peoples[:][&#39;chinese&#39;],
-           &#39;英文&#39;: peoples[:][&#39;english&#39;], &#39;数学&#39;: peoples[:][&#39;math&#39;]}
+&#39;英文&#39;: peoples[:][&#39;english&#39;], &#39;数学&#39;: peoples[:][&#39;math&#39;]}
 for course, scores in courses.items():
-    print(course, np.mean(scores), np.amin(scores), np.amax(scores), np.std(scores),
-          np.var(scores))
+print(course, np.mean(scores), np.amin(scores), np.amax(scores), np.std(scores),
+np.var(scores))
 print(&#39;Ranking&#39;)
 ranking = sorted(peoples, key=lambda x: x[1]+x[2]+x[3], reverse=True)
 print(ranking)</p>2019-07-01</li><br/><li><span>夕子</span> 👍（5） 💬（2）<p>一、为什么用numpy而不用list？
@@ -499,6 +502,7 @@ print(np.sort(peoples,order=&#39;total&#39;))
 方差 114.96000000000001
 标准差 10.721940122944169
 ------------------------------
+
 英语成绩：
 平均成绩 84.0
 最小成绩 65
@@ -506,6 +510,7 @@ print(np.sort(peoples,order=&#39;total&#39;))
 方差 95.6
 标准差 9.777525249264253
 ------------------------------
+
 数学成绩：
 平均成绩 78.2
 最小成绩 30
@@ -514,16 +519,16 @@ print(np.sort(peoples,order=&#39;total&#39;))
 标准差 25.19047439013406
 
 [(b&#39;ZhangFei&#39;, 66, 65, 30, 161) (b&#39;HuangZhong&#39;, 90, 88, 77, 255)
- (b&#39;DianWei&#39;, 80, 90, 90, 260) (b&#39;GuanYu&#39;, 95, 85, 98, 278)
- (b&#39;ZhaoYun&#39;, 93, 92, 96, 281)]
+(b&#39;DianWei&#39;, 80, 90, 90, 260) (b&#39;GuanYu&#39;, 95, 85, 98, 278)
+(b&#39;ZhaoYun&#39;, 93, 92, 96, 281)]
 
 我对结构数组不太熟悉，求总分那里试了对切片求和报错了，看了评论里老师的解答才知道在定义里做，这个要注意多练习。</p>2020-03-21</li><br/><li><span>抢地瓜的阿姨</span> 👍（4） 💬（1）<p>Dataframe 即将登场！哈哈哈</p>2018-12-22</li><br/><li><span>王张</span> 👍（3） 💬（2）<p> &#39;formats&#39;:[&#39;S32&#39;,&#39;i&#39;, &#39;i&#39;, &#39;i&#39;, &#39;f&#39;] 是什么意思？</p>2019-07-20</li><br/><li><span>小葱拌豆腐</span> 👍（3） 💬（1）<p>老师，请问一下您，没学过高数，没接触过计算机语言，要提前去把各种函数搞清楚吗？有没有推荐的办法，书籍，课程？</p>2018-12-21</li><br/><li><span>qinggeouye</span> 👍（2） 💬（2）<p>import numpy as np
 
 people_type = np.dtype({&#39;names&#39;: [&#39;name&#39;, &#39;chinese&#39;, &#39;math&#39;, &#39;english&#39;, &#39;total&#39;],
-                        &#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;f&#39;, &#39;f&#39;]})
+&#39;formats&#39;: [&#39;S32&#39;, &#39;i&#39;, &#39;i&#39;, &#39;f&#39;, &#39;f&#39;]})
 peoples = np.array([(&#39;ZhangFei&#39;, 60, 65, 30, 0), (&#39;GuanYu&#39;, 95, 85, 98, 0),
-                    (&#39;ZhaoYun&#39;, 93, 92, 96, 0), (&#39;HuangZhong&#39;, 90, 88, 77, 0),
-                    (&#39;DianWei&#39;, 80, 90, 90, 0)], dtype=people_type)
+(&#39;ZhaoYun&#39;, 93, 92, 96, 0), (&#39;HuangZhong&#39;, 90, 88, 77, 0),
+(&#39;DianWei&#39;, 80, 90, 90, 0)], dtype=people_type)
 
 chinese = peoples[:][&#39;chinese&#39;]
 math = peoples[:][&#39;math&#39;]
@@ -534,48 +539,48 @@ print(&quot;rank of total scores is \n %s&quot; % np.sort(peoples, order=&#39;to
 print(&quot;\n&quot;)
 
 for key in list(people_type.fields.keys())[1:4]:
-    print(&quot;mean of %s is %s&quot; % (key, np.mean(peoples[:][key])))
-    print(&quot;max of %s is %s&quot; % (key, np.amax(peoples[:][key])))
-    print(&quot;min of %s is %s&quot; % (key, np.amin(peoples[:][key])))
-    print(&quot;std of %s is %s&quot; % (key, np.std(peoples[:][key])))
-    print(&quot;var of %s is %s&quot; % (key, np.var(peoples[:][key])))
-    print(&quot;\n&quot;)</p>2019-10-31</li><br/><li><span>建强</span> 👍（2） 💬（1）<p>#简易学生成绩档案管理
+print(&quot;mean of %s is %s&quot; % (key, np.mean(peoples[:][key])))
+print(&quot;max of %s is %s&quot; % (key, np.amax(peoples[:][key])))
+print(&quot;min of %s is %s&quot; % (key, np.amin(peoples[:][key])))
+print(&quot;std of %s is %s&quot; % (key, np.std(peoples[:][key])))
+print(&quot;var of %s is %s&quot; % (key, np.var(peoples[:][key])))
+print(&quot;\n&quot;)</p>2019-10-31</li><br/><li><span>建强</span> 👍（2） 💬（1）<p>#简易学生成绩档案管理
 import numpy as np
 student_type = np.dtype({&#39;names&#39;:[&#39;studentname&#39;,&#39;Chinese&#39;,&#39;English&#39;,&#39;Math&#39;,&#39;Total&#39;],&#39;formats&#39;:[&#39;U10&#39;,&#39;i&#39;,&#39;i&#39;,&#39;i&#39;,&#39;f&#39;]})
 students = np.array([ (&quot;张飞&quot;,66,65,30,None),(&quot;关羽&quot;,95,85,98,None),(&quot;赵云&quot;,93,92,96,None),(&quot;黄忠&quot;,90,88,77,None),(&quot;典韦&quot;,80,90,90,None)]
-                    ,dtype = student_type)
+,dtype = student_type)
 Chinese = students[:][&#39;Chinese&#39;]
 English = students[:][&#39;English&#39;]
 Math = students[:][&#39;Math&#39;]
 
 #指标分析
 score_analy={&#39;平均成绩&#39;:{&#39;语文&#39;:np.mean(Chinese),&#39;英语&#39;: np.mean(English),&#39;数学&#39;:np.mean(Math)}
-            ,&#39;最小成绩&#39;:{&#39;语文&#39;:np.amin(Chinese),&#39;英语&#39;: np.amin(English),&#39;数学&#39;:np.amin(Math)}
-            ,&#39;最大成绩&#39;:{&#39;语文&#39;:np.amax(Chinese),&#39;英语&#39;: np.amax(English),&#39;数学&#39;:np.amax(Math)}
-            ,&#39;标准差&#39;  :{&#39;语文&#39;:np.std(Chinese) ,&#39;英语&#39;: np.std(English) ,&#39;数学&#39;: np.std(Math)}
-            ,&#39;方差&#39;    :{&#39;语文&#39;:np.var(Chinese) ,&#39;英语&#39;: np.var(English) ,&#39;数学&#39;: np.var(Math)}}
+,&#39;最小成绩&#39;:{&#39;语文&#39;:np.amin(Chinese),&#39;英语&#39;: np.amin(English),&#39;数学&#39;:np.amin(Math)}
+,&#39;最大成绩&#39;:{&#39;语文&#39;:np.amax(Chinese),&#39;英语&#39;: np.amax(English),&#39;数学&#39;:np.amax(Math)}
+,&#39;标准差&#39; :{&#39;语文&#39;:np.std(Chinese) ,&#39;英语&#39;: np.std(English) ,&#39;数学&#39;: np.std(Math)}
+,&#39;方差&#39; :{&#39;语文&#39;:np.var(Chinese) ,&#39;英语&#39;: np.var(English) ,&#39;数学&#39;: np.var(Math)}}
 
 #统计总成绩
 for i in range(len(students)):
-    students[i][&#39;Total&#39;] = sum(list(students[i])[1:-1])
+students[i][&#39;Total&#39;] = sum(list(students[i])[1:-1])
 
 #输出分析指标
-print(&quot;  指标项  \t\t   语文   \t\t   英语   \t\t   数学   &quot;)
+print(&quot; 指标项 \t\t 语文 \t\t 英语 \t\t 数学 &quot;)
 print((&quot;-&quot; * 10 +&quot;\t\t&quot;)*4)
 for index in score_analy:
-    report = f&quot;{index:10}&quot;.format(index) + &quot;\t\t{语文:&gt;10.2f}\t\t{英语:&gt;10.2f}\t\t{数学:&gt;10.2f}&quot;
-    print(report.format_map(score_analy[index]))
+report = f&quot;{index:10}&quot;.format(index) + &quot;\t\t{语文:&gt;10.2f}\t\t{英语:&gt;10.2f}\t\t{数学:&gt;10.2f}&quot;
+print(report.format_map(score_analy[index]))
 
 print((&quot;-&quot; * 82))
 
 #按总成绩输出排名
 print(&quot;名次\t\t姓名\t\t总分&quot;)
 print((&quot;-&quot; * 4 +&quot;\t\t&quot;)*3)
-    
+
 s = np.sort(students,order=&#39;Total&#39;)
 for i in range(len(s)):
-    k=-1 * (i+1)
-    print(&#39;{rank:4}\t\t{name:4}\t\t{score:&gt;4}&#39;.format(rank=i+1,name=s[k][&#39;studentname&#39;],score=s[k][&#39;Total&#39;]))
+k=-1 * (i+1)
+print(&#39;{rank:4}\t\t{name:4}\t\t{score:&gt;4}&#39;.format(rank=i+1,name=s[k][&#39;studentname&#39;],score=s[k][&#39;Total&#39;]))
 </p>2019-06-15</li><br/><li><span>Geek_ce3c1f</span> 👍（2） 💬（1）<p>import numpy as np
 persontype = np.dtype({
     &#39;names&#39;:[&#39;name&#39;, &#39;chinese&#39;, &#39;english&#39;, &#39;math&#39;],

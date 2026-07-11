@@ -97,7 +97,7 @@ SubstrateVM的启动时间和内存开销都非常少，这主要得益于在AOT
 
 Metropolis项目将运用SubstrateVM项目，逐步地将HotSpot虚拟机中的C++代码替换成Java代码，从而提升HotSpot虚拟机的可维护性，也加快新Java功能的开发效率。
 
-* * *
+---
 
 今天的实践环节，请你参考我们官网的[SubstrateVM教程](https://www.graalvm.org/docs/examples/java-kotlin-aot/)，AOT编译一段Java-Kotlin代码。
 <div><strong>精选留言（7）</strong></div><ul>

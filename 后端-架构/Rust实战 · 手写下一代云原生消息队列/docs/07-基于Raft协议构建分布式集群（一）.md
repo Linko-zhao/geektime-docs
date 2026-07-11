@@ -99,7 +99,7 @@ pub enum EntryType {
 ```plain
 pub trait Storage {
     fn initial_state(&self) -> Result<RaftState>;
-    
+
     fn entries(
         &self,
         low: u64,
@@ -134,7 +134,7 @@ pub trait Storage {
 pub struct HardState {
     // 当前 Raft 最新的 term
     pub term: u64,
-    // 选举出来的 Leader   
+    // 选举出来的 Leader
     pub vote: u64,
     // 最新提交的索引
     pub commit: u64,
@@ -182,7 +182,7 @@ pub struct ConfState {
 
 ```plain
 impl Storage for RaftRocksDBStorage {
-    
+
     fn initial_state(&self) -> RaftResult<RaftState> {
         let core = self.read_lock();
          // 数据是通过 RocksDB 持久化存储
@@ -234,12 +234,12 @@ impl Storage for RaftRocksDBStorage {
 
     fn term(&self, idx: u64) -> RaftResult<u64> {
         let core = self.read_lock();
-        
+
         // 判断索引是否在内存中，是的话，直接返回即可。
         if idx == core.snapshot_metadata.index {
             return Ok(core.snapshot_metadata.index);
         }
-        
+
         // 判断 index 是否在可用范围内
         if idx < core.first_index() {
             return Err(Error::Store(StorageError::Compacted));
@@ -275,7 +275,7 @@ impl Storage for RaftRocksDBStorage {
 
     fn last_index(&self) -> RaftResult<u64> {
         let core = self.read_lock();
-        
+
         // 从RocksDB 中获取持久化存储的最新的 index
         let li = core.last_index();
         Ok(li)
@@ -317,7 +317,7 @@ impl Storage for RaftRocksDBStorage {
  let storage = RaftRocksDBStorage::new(self.raft_storage.clone());
 
 
-// 初始化 Raft Node        
+// 初始化 Raft Node
 let node = RawNode::new(&conf, storage, &logger).unwrap();
 ```
 

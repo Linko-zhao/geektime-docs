@@ -167,7 +167,7 @@ BREAKING CHANGE: isolate scope bindings definition has changed and
 
 ```
  Change pause version value to a constant for image
-    
+
     Closes #1137
 ```
 

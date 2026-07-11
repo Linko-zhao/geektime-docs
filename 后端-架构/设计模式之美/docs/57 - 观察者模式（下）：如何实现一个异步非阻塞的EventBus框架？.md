@@ -183,10 +183,10 @@ EventBus通过@Subscribe注解来标明，某个函数能接收哪种类型的�
 ```
 public DObserver {
   //...省略其他属性和方法...
-  
+
   @Subscribe
   public void f1(PMsg event) { //... }
-  
+
   @Subscribe
   public void f2(QMsg event) { //... }
 }
@@ -398,41 +398,41 @@ XMsg xMsg = new XMsg();
 YMsg yMsg = new YMsg();
 如果XMsg是YMsg的父类的话，应该是
 post(xMsg); =&gt; AObserver接收到消息
-post(yMsg); =&gt; AObserver,BObserver接收到消息
-2. 和刚才的问题一样，对应着ObserverRegistry的代码。
+post(yMsg); =&gt; AObserver,BObserver接收到消息2. 和刚才的问题一样，对应着ObserverRegistry的代码。
 在getMatchedObserverAction函数中
-if (postedEventType.isAssignableFrom(eventType)) 
+if (postedEventType.isAssignableFrom(eventType))
 应该改成
 if (eventType.isAssignableFrom(postedEventType)) </p>2020-03-18</li><br/><li><span>辣么大</span> 👍（12） 💬（4）<p>重构使用代理模式，将非业务代码放到代理类中。
 另外试了争哥讲的EventBut类，在定义观察者的入参要修改成*Long*类型，如果使用long，这个方法是无法注册的，代码执行收不到通知。应该是ObserverRegistry类需要完善一下。
-  @Subscribe
-  public void handleRegSuccess(Long userId) {
-    System.out.println(&quot;handleRegSuccess...&quot;);
-    promotionService.issueNewUserExperienceCash(userId);
-  }
+@Subscribe
+public void handleRegSuccess(Long userId) {
+System.out.println(&quot;handleRegSuccess...&quot;);
+promotionService.issueNewUserExperienceCash(userId);
+}
 代码见：https:&#47;&#47;github.com&#47;gdhucoder&#47;Algorithms4&#47;tree&#47;master&#47;designpattern&#47;u57</p>2020-03-13</li><br/><li><span>小晏子</span> 👍（9） 💬（1）<p>我的想法比较直接，将UserController中的业务代码提出来放在接口的实现类中，这个UserController可以改名为EventController，然后这个接口实现类注入到这个EventController中，这样业务逻辑和控制逻辑就分离了，示例如下：
 interface iController {
-    object register()
+object register()
 }
 
 public class UserControllerService implement iController {
-    private string telphone;
-    private string password;
+private string telphone;
+private string password;
 
     public Long register() {
         long userId = userService.register(telephone, password);
         return userId;
-  }
+
+}
 }
 
 public class EventController {
-    private iController iService;
+private iController iService;
 
     private EventBus eventBus;
-    private static final int DEFAULT_EVENTBUS_THREAD_POOL_SIZE = 20; 
+    private static final int DEFAULT_EVENTBUS_THREAD_POOL_SIZE = 20;
 
     public EventController() {
-        eventBus = new AsyncEventBus(Executors.newFixedThreadPool(DEFAULT_EVENTBUS_THREAD_POOL_SIZE)); &#47;&#47; 异步非阻塞模式 
+        eventBus = new AsyncEventBus(Executors.newFixedThreadPool(DEFAULT_EVENTBUS_THREAD_POOL_SIZE)); &#47;&#47; 异步非阻塞模式
     }
 
     public void setRegObservers(List&lt;Object&gt; observers) {

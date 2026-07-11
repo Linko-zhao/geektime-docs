@@ -28,7 +28,7 @@ typedef struct clusterNode {
 
 ```plain
 typedef struct clusterState {
-   ...    
+   ...   
    clusterNode *migrating_slots_to[CLUSTER_SLOTS];
    clusterNode *importing_slots_from[CLUSTER_SLOTS];
    clusterNode *slots[CLUSTER_SLOTS];
@@ -177,7 +177,7 @@ for (j = 0; j < numkeys; j++) {
 这里，我以一次迁移多个key的MIGRATE命令为例，这个命令的选项中包含了目的节点的IP、端口号、数据库编号，以及要迁移的多个key、迁移超时时间，它的格式如下所示：
 
 ```plain
-MIGRATE host port "" dbid timeout [COPY | REPLACE] KEYS key1 key2 ... keyN 
+MIGRATE host port "" dbid timeout [COPY | REPLACE] KEYS key1 key2 ... keyN
 ```
 
 从这个命令中，你也可以看到，它还包括了COPY或REPLACE选项，这两个选项的含义如下。
@@ -340,7 +340,7 @@ CLUSTER SETSLOT <slot> NODE <node>
 
 ```plain
 void clusterCommand(client *c) {
-   ... 
+   ...
    //处理SETSLOT选项
    else if (!strcasecmp(c->argv[1]->ptr,"setslot") && c->argc >= 4) {
       ...
@@ -427,7 +427,7 @@ if (countKeysInSlot(slot) == 0 && server.cluster->migrating_slots_to[slot]) //�
 - slotToKeyFlush，清空 slots_to_keys 中的数据
 - getKeysInSlot：获取指定 slot 下的 keys
 - delKeysInSlot：删除指定 slot 下的 keys</p>2021-10-18</li><br/><li><span>曾轼麟</span> 👍（4） 💬（0）<p>回答老师的问题：
-clusterState 中的 slots_to_keys 在查阅git历史提交记录中发现，之前是使用跳跃表（zskiplist）在后来才替换成了-字典树，其最主要的目的是为了方便通过 slot 快速查找到solt下的keys，getKeysInSlot 函数正是使用这种方式来获取待迁出的 keys。
+  clusterState 中的 slots_to_keys 在查阅git历史提交记录中发现，之前是使用跳跃表（zskiplist）在后来才替换成了-字典树，其最主要的目的是为了方便通过 slot 快速查找到solt下的keys，getKeysInSlot 函数正是使用这种方式来获取待迁出的 keys。
 
         【获取key调用路径】:clusterCommand -&gt; getKeysInSlot -&gt; raxStart(迭代器)
         【插入key调用路径】:dbAdd -&gt; slotToKeyAdd -&gt; slotToKeyUpdateKey -&gt; raxInsert

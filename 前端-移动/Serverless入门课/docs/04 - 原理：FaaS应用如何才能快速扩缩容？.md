@@ -118,6 +118,7 @@ BaaS化的概念容易理解，但实际上要实践，将我们的网站后端�
 # 我来说说我昨天在阿里云上体验Faas时的采坑记录
 
 ## 1. `fun build` 命令无法做到幂等性
+
 相同的输入,经过相同的处理,得到的结果却具有不确定性.
 症状是:
 借助git命令,保证目录下的文件完全一致,但是执行`fun build`命令的结果却会具有不确定性.
@@ -129,6 +130,7 @@ BaaS化的概念容易理解，但实际上要实践，将我们的网站后端�
 这个问题给他们反馈了,也提供了视频和日志,不确定他们是否会重视这个问题.
 
 ## 2. 命令行工具`fun`与VSCode插件行为不太一致
+
 在命令行中使用fun deploy部署时,实际是优先使用的` .fun&#47;build&#47;artifacts&#47;template.yml`文件
 而VSCode插件中默认使用的是项目根目录下的`.&#47;template.yml`
 前者是使用`fun build`命令自动生成的.
@@ -140,15 +142,19 @@ BaaS化的概念容易理解，但实际上要实践，将我们的网站后端�
 使用`fun install`安装依赖的方式,再在VSCode上一键部署的服务就是可用的了.
 
 # 最近几天体验函数计算的感悟
+
 ## 看上去确实很方便
+
 只要你把服务调通了,几乎不用你操心剩下的运维等工作,现在还有免费额度用,个人肯定是用不完的.
 
 ## 排查问题会比较困难
+
 特别是跟服务提供方相关的,对于开发者来说,完全是黑盒操作.
 自身代码的调试,还可以借助本地调试功能来排查.
 但是一旦提交到了函数计算平台,想查问题就非常难了.
 
 例如:
+
 1. 服务在本地可以正常运行,为什么在远程会提示缺少依赖项?
    其实在执行`fun deploy`的过程中,它会帮你把本地目录打包成zip文件,上次到云上,使用zip包内的文件部署函数服务.
    而`fun deploy`打包了哪些文件,其实我们是很难知道的.
@@ -183,6 +189,7 @@ BaaS化的概念容易理解，但实际上要实践，将我们的网站后端�
 就是在初始化阶段,需要连各种数据库,会耽误点时间.
 
 # 对于并发访问的思考
+
 昨天晚上还在想,明天要抽时间用ab压测一下函数计算提供的接口.
 看看所谓的`并发度`到底是什么.
 之前在文档上看过,一个函数实例可以配置允许的同时并发度,如果不够了,就会冷启动新的实例.
@@ -194,16 +201,18 @@ BaaS化的概念容易理解，但实际上要实践，将我们的网站后端�
 这个需要用再实践一下.
 
 # 课后作业
+
 由于前几天已经配置了阿里云的fun本地环境,自己也有备案了域名,所以实践老师的作业只需要简单的几部.
 [我在老师的专栏开始之前完全未接触过node.js 现在也只是跟着老师部署了几个简单的node.js服务]
 
 1. 克隆代码
-	git clone https:&#47;&#47;github.com&#47;pusongyang&#47;todolist-backend
+   git clone https:&#47;&#47;github.com&#47;pusongyang&#47;todolist-backend
 2. 拷贝文件
-	cp index-faas.js index.js
+   cp index-faas.js index.js
 3. 安装依赖
-	npm install
+   npm install
 4. 创建template.yml文件
+
 ```
 ROSTemplateFormatVersion: &#39;2015-09-01&#39;
 Transform: &#39;Aliyun::Serverless-2018-04-03&#39;
@@ -227,14 +236,16 @@ Resources:
               - GET
               - POST
 ```
+
 5. 部署服务
-	fun deploy -y
+   fun deploy -y
 6. 绑定自定义域名
-	需要把路径&#47;*都绑定到该服务上
+   需要把路径&#47;*都绑定到该服务上
 7. 验证效果
-	可以重现老师的服务: http:&#47;&#47;todo.jike-serverless.online&#47;list
+   可以重现老师的服务: http:&#47;&#47;todo.jike-serverless.online&#47;list
 
 # 扩展思考
+
 如果只是测试,可以配合NAS服务来持久化部分数据.
 我之前写demo时,用这个功能,简单的记录我函数计算服务的访问日志和时间.
 
@@ -259,32 +270,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.all(&quot;&#47;*&quot;, async (req, res) =&gt; {
-  const { method, query, body, headers, _parsedUrl: { pathname } } = req;
-  
-  const targetHost = &#39;todolist-xxxxxxxxxxx.cn-hangzhou.fcapp.run&#39;;
-  const targetBaseURL = `https:&#47;&#47;${targetHost}`;
+const { method, query, body, headers, _parsedUrl: { pathname } } = req;
 
-  const tartgetRes = await axios({
-    baseURL: targetBaseURL,
-    url: pathname,
-    data: body,
-    params: query,
-    headers: {
-      ...headers,
-      host: targetHost,
-    },
-    method: method || &#39;get&#39;,
-    responseType: &#39;stream&#39;,
-  });
+const targetHost = &#39;todolist-xxxxxxxxxxx.cn-hangzhou.fcapp.run&#39;;
+const targetBaseURL = `https:&#47;&#47;${targetHost}`;
 
-  const { status } = tartgetRes;
-  if (status === 200) {
-    tartgetRes.data.pipe(res);
-  }
+const tartgetRes = await axios({
+baseURL: targetBaseURL,
+url: pathname,
+data: body,
+params: query,
+headers: {
+...headers,
+host: targetHost,
+},
+method: method || &#39;get&#39;,
+responseType: &#39;stream&#39;,
+});
+
+const { status } = tartgetRes;
+if (status === 200) {
+tartgetRes.data.pipe(res);
+}
 });
 
 app.listen(port, () =&gt; {
-  console.log(`Example app listening at http:&#47;&#47;localhost:${port}`);
+console.log(`Example app listening at http:&#47;&#47;localhost:${port}`);
 });
 </p>2023-08-24</li><br/><li><span>周科</span> 👍（0） 💬（2）<p>Node.js处理请求，并不是来一个请求就创建一个子进程去处理啊，应该说是来一个请求就创建一个context。4核机器跑egg.js应用，默认也是4个子进程吧，而且Node.js进程一直常驻内存的，不会根据请求动态创建或回收。</p>2021-03-04</li><br/><li><span>技术修行者</span> 👍（0） 💬（1）<p>问一个问题，后端存储变为BaaS后，传统的数据库事务怎么处理呀？</p>2020-10-16</li><br/><li><span>PP-CIPDS-GRC</span> 👍（0） 💬（1）<p>所以其实是每个调用阶段的管控颗粒度更细了，stateful 服务调用采用 BaaS 服务和数据持久化，费用单独算。前端的数据编排接口采用 FaaS 按次数调用，可以这么理解？静态的还是静态，动态的保持动态。整个调用 Pipeline 的各个动静部分解耦。</p>2020-09-06</li><br/><li><span>piboye</span> 👍（0） 💬（1）<p>BaaS 的数据库， 可以像FaaS 一样按使用量收费吗？</p>2020-06-08</li><br/><li><span>笨笨</span> 👍（0） 💬（1）<p>个人感悟：GraphQL就是BaaS的一种实践。</p>2020-05-29</li><br/><li><span>深黑色</span> 👍（0） 💬（1）<p>老师，请教一下在阿里云上貌似没有看见用完即毁型和常驻型的区分选项呢？</p>2020-05-03</li><br/>
 </ul>

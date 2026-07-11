@@ -53,7 +53,7 @@ BCC 和 bpftrace 作为使用最广泛的 eBPF 项目，自然也最容易碰到
     b.attach_kprobe(event="__blk_account_io_start", fn_name="trace_req_start")
   else:
     b.attach_kprobe(event="blk_account_io_start", fn_name="trace_req_start")
-  
+
   if BPF.get_kprobe_functions(b'__blk_account_io_done'):
       b.attach_kprobe(event="__blk_account_io_done", fn_name="trace_req_done")
   else:
@@ -125,6 +125,7 @@ $ ls -lh execsnoop.btf
 1. 通过前面一段时间课程的学习，你已经把 eBPF 应用到了哪些场景？又有哪些经验和收获？
 2. 在分发 eBPF 程序的过程中，你有没有碰到今天讲到的内核版本兼容性的问题？结合今天的内容，你是怎么解决这些问题的？  
    欢迎在留言区和我讨论，也欢迎把这节课分享给你的同事、朋友。我们一起在实战中演练，在交流中进步。
+
 <div><strong>精选留言（7）</strong></div><ul>
 <li><span>janey</span> 👍（0） 💬（1）<p>这里的一次编译，跟JIT即时编译是一个意思吗？如果不是，那有什么区别？</p>2022-12-05</li><br/><li><span>有识之士</span> 👍（3） 💬（0）<p>微信群在哪里？</p>2022-07-24</li><br/><li><span>鴻🍋</span> 👍（0） 💬（0）<p>”第一种，采用条件编译的方式，根据是否支持 CO-RE，生成两个不同的 eBPF 字节码文件。而到程序运行时，再根据内核是否支持 CO-RE 选择对应的字节码文件加载运行。“ 这个是如何实现</p>2024-10-10</li><br/><li><span>Geek_5ada4a</span> 👍（0） 💬（2）<p>第二，通过对 BPF 代码中的访问偏移量进行重写，解决了不同内核版本中数据结构偏移量不同的问题。第三，在 libbpf 中预定义不同内核版本中数据结构的修改，解决了不同内核中数据结构不兼容的问题。
 

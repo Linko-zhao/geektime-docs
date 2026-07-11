@@ -701,15 +701,15 @@ $ ./newApp2 -h
 A Fast and Flexible Static Site Generator built with
 love by spf13 and friends in Go.
 Complete documentation is available at http://hugo.spf13.com
- 
+
 Usage:
 hugo [flags]
 hugo [command]
- 
+
 Available Commands:
 help Help about any command
 version Print the version number of Hugo
- 
+
 Flags:
 -a, --author string Author name for copyright attribution (default "YOUR NAME")
 --config string config file (default is $HOME/.cobra.yaml)
@@ -717,7 +717,7 @@ Flags:
 -l, --license licensetext Name of license for the project (can provide licensetext in config)
 -b, --projectbase string base project directory eg. github.com/spf13/
 --viper Use Viper for configuration (default true)
- 
+
 Use "hugo [command] --help" for more information about a command.
 ```
 
@@ -856,25 +856,27 @@ ps 最终代码里没有pflag包的事</p>2022-01-27</li><br/><li><span>宙斯</
 os.Setenv(&quot;VIPER_USER_SECRET_ID&quot;, &quot;QLdywI2MrmDVjSSv6e95weNRvmteRjfKAuNV&quot;)
 os.Setenv(&quot;VIPER_USER_SECRET_KEY&quot;, &quot;bVix2WBv0VPfrDrvlLWrhEdzjLpPCNYb&quot;)
 
-viper.AutomaticEnv()                                             &#47;&#47; 读取环境变量
-viper.SetEnvPrefix(&quot;VIPER&quot;)                                      &#47;&#47; 设置环境变量前缀：VIPER_，如果是viper，将自动转变为大写。
+viper.AutomaticEnv() &#47;&#47; 读取环境变量
+viper.SetEnvPrefix(&quot;VIPER&quot;) &#47;&#47; 设置环境变量前缀：VIPER_，如果是viper，将自动转变为大写。
 viper.SetEnvKeyReplacer(strings.NewReplacer(&quot;.&quot;, &quot;_&quot;, &quot;-&quot;, &quot;_&quot;)) &#47;&#47; 将viper.Get(key) key字符串中&#39;.&#39;和&#39;-&#39;替换为&#39;_&#39;
 viper.BindEnv(&quot;user.secret-key&quot;)
 viper.BindEnv(&quot;user.secret-id&quot;, &quot;USER_SECRET_ID&quot;) &#47;&#47; 绑定环境变量名到key</p>2022-07-18</li><br/><li><span>Calvin</span> 👍（0） 💬（1）<p>孔老师，有几个问题想请求下：
 1、viper 有没有办法配置让它能区分大小写的配置 Key？
 2、如果有一长串的配置文件，例如以下 yml 配置，viper 有没有办法只反序列化我要关心的内层的那一部分配置（这样我不用定义其他配置项结构体和它的外层结构体）？
 aaa:
-  foo:
-    bar: 123
-    hhh: &quot;$%^&quot;
+foo:
+bar: 123
+hhh: &quot;$%^&quot;
 bbb:
-  bar: foo
-  hello:
-  - world
-  - hihihi
-只反序列化 aaa.foo 配置子项为以下结构体：
-type AFoo struct {
-    bar  int
-    hhh string
-}</p>2022-06-25</li><br/><li><span>Struggle~honor</span> 👍（0） 💬（1）<p>老师，大厂里面应用构建，一般都是用自己内部造的轮子，更符合业务要求对吗？ 之前在腾讯实习用rainbow配置中心来存放配置，用他的sdk来拉取配置</p>2021-12-22</li><br/><li><span>💎A</span> 👍（9） 💬（0）<p>Pflag + Cobra 不如直接用github.com&#47;urfave&#47;cli</p>2022-03-10</li><br/><li><span>Geek_d9ada3</span> 👍（6） 💬（0）<p>感觉cobra学的有点没有头绪，要么概念上没发理解到位，要么找不到实际例子可以看看效果。 建议这块可以完善丰富一下，把概念和例子都整详细点。谢谢大佬</p>2022-03-15</li><br/>
+bar: foo
+hello:
+
+- world
+- hihihi
+  只反序列化 aaa.foo 配置子项为以下结构体：
+  type AFoo struct {
+  bar int
+  hhh string
+  }</p>2022-06-25</li><br/><li><span>Struggle~honor</span> 👍（0） 💬（1）<p>老师，大厂里面应用构建，一般都是用自己内部造的轮子，更符合业务要求对吗？ 之前在腾讯实习用rainbow配置中心来存放配置，用他的sdk来拉取配置</p>2021-12-22</li><br/><li><span>💎A</span> 👍（9） 💬（0）<p>Pflag + Cobra 不如直接用github.com&#47;urfave&#47;cli</p>2022-03-10</li><br/><li><span>Geek_d9ada3</span> 👍（6） 💬（0）<p>感觉cobra学的有点没有头绪，要么概念上没发理解到位，要么找不到实际例子可以看看效果。 建议这块可以完善丰富一下，把概念和例子都整详细点。谢谢大佬</p>2022-03-15</li><br/>
+
 </ul>

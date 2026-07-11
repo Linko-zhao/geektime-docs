@@ -111,13 +111,13 @@ def make(n, level):
     if n == level:
         print(res)
         return
-        
+
     for i in range(1, n+1):
         if i not in res:
             res.append(i)
             make(n, level+1)
             res.pop()
-            
+
 make(3, 0)
 ```
 
@@ -335,29 +335,29 @@ void main() {
 ==========================&gt;
 请问栈增长多少是如何预估出来的？ </p>2021-12-25</li><br/><li><span>拭心</span> 👍（1） 💬（2）<p>看的有点晕，尤其是各个汇编指令和他们操作的寄存器的作用，不知道您是怎么记忆这些晦涩的内容呢？</p>2021-11-16</li><br/><li><span>杨军</span> 👍（1） 💬（1）<p>这个就是csapp 中 lab2 的内容，好亲切</p>2021-11-01</li><br/><li><span>威</span> 👍（1） 💬（1）<p>老师您好，缓冲区溢出的Segment Fault，是指一个栈桢里溢出，还是栈桢之间的溢出。我理解是按照文章说的保护机制，应该是溢出到了别的栈桢，才会出现Segment Fault。不知道这样的理解正不正确呢？</p>2021-11-01</li><br/><li><span>keepgoing</span> 👍（0） 💬（2）<p>老师想提个小建议，能不能把汇编代码也贴上来比较方便理解，n*(n-1)那个例子因为示例代码只有机器码，只能看着您的文字理解，我们这种刚开始入门的同学看着可能比较抽象，不过这一课又把栈更深入地理解了一遍，谢谢老师</p>2021-11-04</li><br/><li><span>柒</span> 👍（0） 💬（1）<p>老师，我觉得你一下用python，一下用c语言，不太好。</p>2021-11-03</li><br/><li><span>Rovebiy</span> 👍（0） 💬（1）<p>老师，是不是曾经在知乎写过专栏进击的Java新人？</p>2021-11-02</li><br/><li><span>linker</span> 👍（0） 💬（2）<p>思考题：反汇编结果显示传递的是地址
 000000000040052d &lt;swap&gt;:
-  40052d:	55                   	push   %rbp
-  40052e:	48 89 e5             	mov    %rsp,%rbp
-  400531:	48 89 7d e8          	mov    %rdi,-0x18(%rbp)
-  400535:	48 89 75 e0          	mov    %rsi,-0x20(%rbp)
-  400539:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-  40053d:	8b 00                	mov    (%rax),%eax
-  40053f:	89 45 fc             	mov    %eax,-0x4(%rbp)
-  400542:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-  400546:	8b 10                	mov    (%rax),%edx
-  400548:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-  40054c:	89 10                	mov    %edx,(%rax)
-  40054e:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-  400552:	8b 55 fc             	mov    -0x4(%rbp),%edx
-  400555:	89 10                	mov    %edx,(%rax)
-  400557:	5d                   	pop    %rbp
-  400558:	c3                   	retq   
+40052d: 55 push %rbp
+40052e: 48 89 e5 mov %rsp,%rbp
+400531: 48 89 7d e8 mov %rdi,-0x18(%rbp)
+400535: 48 89 75 e0 mov %rsi,-0x20(%rbp)
+400539: 48 8b 45 e8 mov -0x18(%rbp),%rax
+40053d: 8b 00 mov (%rax),%eax
+40053f: 89 45 fc mov %eax,-0x4(%rbp)
+400542: 48 8b 45 e0 mov -0x20(%rbp),%rax
+400546: 8b 10 mov (%rax),%edx
+400548: 48 8b 45 e8 mov -0x18(%rbp),%rax
+40054c: 89 10 mov %edx,(%rax)
+40054e: 48 8b 45 e0 mov -0x20(%rbp),%rax
+400552: 8b 55 fc mov -0x4(%rbp),%edx
+400555: 89 10 mov %edx,(%rax)
+400557: 5d pop %rbp
+400558: c3 retq
 
 0000000000400559 &lt;main&gt;:
-  400559:	55                   	push   %rbp
-  40055a:	48 89 e5             	mov    %rsp,%rbp
-  40055d:	48 83 ec 10          	sub    $0x10,%rsp
+400559: 55 push %rbp
+40055a: 48 89 e5 mov %rsp,%rbp
+40055d: 48 83 ec 10 sub $0x10,%rsp
   400561:	c7 45 fc 02 00 00 00 	movl   $0x2,-0x4(%rbp)
-  400568:	c7 45 f8 03 00 00 00 	movl   $0x3,-0x8(%rbp)
+400568: c7 45 f8 03 00 00 00 movl $0x3,-0x8(%rbp)
   40056f:	48 8d 55 f8          	lea    -0x8(%rbp),%rdx
   400573:	48 8d 45 fc          	lea    -0x4(%rbp),%rax
   400577:	48 89 d6             	mov    %rdx,%rsi
@@ -367,7 +367,7 @@ void main() {
   400585:	8b 45 fc             	mov    -0x4(%rbp),%eax
   400588:	89 c6                	mov    %eax,%esi
   40058a:	bf 30 06 40 00       	mov    $0x400630,%edi
-  40058f:	b8 00 00 00 00       	mov    $0x0,%eax
+40058f: b8 00 00 00 00 mov $0x0,%eax
 </p>2021-11-01</li><br/><li><span>会爆炸的小米Note</span> 👍（2） 💬（0）<p>由于main函数向swap函数传递的参数小于6个 只会使用用寄存器传参 不会在main函数的参数构建区存放a,b,&amp;a,&amp;b的值
 main函数调用swap(a,b)时会用mov把在main函数局部变量区存放的a，b的值复制到rdi，rsi
 main函数调用swap(&amp;a,&amp;b)时会用leaq把在main函数局部变量区存放的a，b的地址值复制到rdi，rsi
@@ -376,7 +376,6 @@ leaveq相当于 mov rbp,rsp
                    pop rbp
 retq相当于    pop rip
 都是AT&amp;T格式的
-
 
 </p>2022-03-05</li><br/><li><span>荷兰小猪8813</span> 👍（2） 💬（0）<p>copy 越界处理了数组，导致 copy 函数栈帧的返回地址变成了 bad 函数的地址，所以 bad 函数执行了～～</p>2022-01-15</li><br/><li><span>费城的二鹏</span> 👍（2） 💬（1）<p>吊打面试官的配图很清晰，点赞！</p>2021-11-02</li><br/>
 </ul>

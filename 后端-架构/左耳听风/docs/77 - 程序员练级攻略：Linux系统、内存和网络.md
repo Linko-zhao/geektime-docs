@@ -95,7 +95,7 @@
 - 还有一些网络工具能够帮上你的大忙，这里有一个网络工具的Awesome列表 [Awesome Pcap Tools](https://github.com/caesar0301/awesome-pcaptools) ，其中罗列了各种网络工具，能够让你更从容地调试网络相关的程序。
 - [Making Linux TCP Fast](https://netdevconf.org/1.2/papers/bbr-netdev-1.2.new.new.pdf) ，一篇非常不错的TCP调优的论文。
 - 下面是在PackageCloud上的两篇关于Linux网络栈相关的底层文章，非常值得一读。
-  
+
   - [Monitoring and Tuning the Linux Networking Stack: Receiving Data](https://blog.packagecloud.io/eng/2016/06/22/monitoring-tuning-linux-networking-stack-receiving-data/)
   - [Monitoring and Tuning the Linux Networking Stack: Sending Data](https://blog.packagecloud.io/eng/2017/02/06/monitoring-tuning-linux-networking-stack-sending-data/)
 
@@ -150,7 +150,7 @@ HTTP 1.1的原始RFC是1999年6月的 [RFC 2616](https://tools.ietf.org/html/rfc
 - [HTTP/2 for a Faster Web](https://cascadingmedia.com/insites/2015/03/http-2.html)
 - [Nginx HTTP/2 白皮书](https://www.nginx.com/wp-content/uploads/2015/09/NGINX_HTTP2_White_Paper_v4.pdf)
 - HTTP/2 的两个RFC：
-  
+
   - [RFC 7540 - Hypertext Transfer Protocol Version 2 (HTTP/2)](https://httpwg.org/specs/rfc7540.html) ，HTTP/2的协议本身
   - [RFC 7541 - HPACK: Header Compression for HTTP/2](https://httpwg.org/specs/rfc7541.html) ，HTTP/2的压缩算法
 
@@ -168,22 +168,26 @@ HTTP 1.1的原始RFC是1999年6月的 [RFC 2616](https://tools.ietf.org/html/rfc
 
 - [开篇词](https://time.geekbang.org/column/article/8136)
 - 入门篇
-  
+
   - [零基础启蒙](https://time.geekbang.org/column/article/8216)
   - [正式入门](https://time.geekbang.org/column/article/8217)
+
 - 修养篇
-  
+
   - [程序员修养](https://time.geekbang.org/column/article/8700)
+
 - 专业基础篇
-  
+
   - [编程语言](https://time.geekbang.org/column/article/8701)
   - [理论学科](https://time.geekbang.org/column/article/8887)
   - [系统知识](https://time.geekbang.org/column/article/8888)
+
 - 软件设计篇
-  
+
   - [软件设计](https://time.geekbang.org/column/article/9369)
+
 - 高手成长篇
-  
+
   - [Linux系统、内存和网络（系统底层知识）](https://time.geekbang.org/column/article/9759)
   - [异步I/O模型和Lock-Free编程（系统底层知识）](https://time.geekbang.org/column/article/9851)
   - [Java底层知识](https://time.geekbang.org/column/article/10216)
@@ -198,10 +202,11 @@ HTTP 1.1的原始RFC是1999年6月的 [RFC 2616](https://tools.ietf.org/html/rfc
   - [前端性能优化和框架（前端方向）](https://time.geekbang.org/column/article/12389)
   - [UI/UX设计（前端方向）](https://time.geekbang.org/column/article/12486)
   - [技术资源集散地](https://time.geekbang.org/column/article/12561)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>每日开箱测评</span> 👍（58） 💬（13）<p>你感觉写这么多有什么意义，一篇文章就让别人学四五年。四五年之后没公司需要，你管分配吗？</p>2018-06-26</li><br/><li><span>寻路之人</span> 👍（46） 💬（1）<p>耗哥，很期待你能介绍一下一些github上源码阅读的方法论和经验，对于想阅读源码的人有个指导方向。期待你的回复</p>2018-06-26</li><br/><li><span>iLeGeND</span> 👍（11） 💬（1）<p>走要这这补 也得小10年吧</p>2018-06-26</li><br/><li><span>。。。</span> 👍（8） 💬（2）<p>耗子叔，你的极客时间的专栏文章，会一直都在吗？还是过了今年这期就删除了呢？</p>2018-06-26</li><br/><li><span>Terence</span> 👍（8） 💬（1）<p>各篇文章的超链接，在iPhone上需要长按弹出“拷贝”消息后，再继续长按，才有真正的地址链接拷贝或用Safari打开。
 
 我想，大部分人按住链接，就是为了copy相对应的地址，以便在别的地方查阅。
 
-就这一点来讲，目前这个方面的产品体验非常糟糕。</p>2018-06-26</li><br/><li><span>唐朝首都</span> 👍（4） 💬（1）<p>早上读了几篇，醍醐灌顶呀！！将这么多知识勾连起来，还有丰富资料，感谢耗子叔，起码当我觉得哪些方面需要提高的时候有非常清晰的路径。</p>2018-06-28</li><br/><li><span>李康</span> 👍（1） 💬（1）<p>机器学习相关的推荐呢</p>2018-06-26</li><br/><li><span>每日开箱测评</span> 👍（1） 💬（3）<p>都看书名标题，我知乎上去搜就完了。不比你这全？</p>2018-06-26</li><br/><li><span>lion_fly</span> 👍（0） 💬（1）<p>文章中给出的链接，有的需要翻墙才能访问，手机有时候翻墙不是很方便，能不能给出具体的链接。</p>2018-06-28</li><br/><li><span>颇忒妥</span> 👍（106） 💬（6）<p>学无止境，33岁developer再出发！</p>2018-06-26</li><br/><li><span>yangwnaghoayu</span> 👍（35） 💬（3）<p>特地来感谢下耗子叔解答疑惑，顺便说一下有几个感觉“一篇文章得让人学四五年没啥用”的评论： 没必要花四五年学完一篇文章中提到的知识后才找工作，你学习的过程就在提高，能力高了现公司待遇不够了就跳啊，没有非得四五年学成再跳。   最重要的是，文章的意义在于指引方向，没人指引而自己视野不够宽和远的话 ，自己不知道接下来要干啥，会有些迷茫，甚至有些人停滞不前也不夸张。文章里面的成长框架可以让成长中的程序员思考自己，当你技术停滞不前的时候结合这个看一下，自己可以提高下哪块的技能点     </p>2018-06-26</li><br/><li><span>Abner</span> 👍（21） 💬（2）<p>突然觉得做了10年开发刚入门</p>2018-07-17</li><br/><li><span>落叶观禅</span> 👍（12） 💬（0）<p>最爽的一篇总结，用价值连城来形容一点不过！其中一部分已经学习使用过，一部分可以参考这个列表补充学习。耗哥真乃灯塔偶像！</p>2018-06-26</li><br/><li><span>昵称</span> 👍（10） 💬（0）<p>只能感叹刚上大学时没有遇到这个专栏</p>2018-09-23</li><br/><li><span>cc</span> 👍（8） 💬（0）<p>感觉看到这个专栏太晚了，要是上大学看到或者更早看到就好了，现在要继续从入门开始啃书</p>2019-09-02</li><br/>
+就这一点来讲，目前这个方面的产品体验非常糟糕。</p>2018-06-26</li><br/><li><span>唐朝首都</span> 👍（4） 💬（1）<p>早上读了几篇，醍醐灌顶呀！！将这么多知识勾连起来，还有丰富资料，感谢耗子叔，起码当我觉得哪些方面需要提高的时候有非常清晰的路径。</p>2018-06-28</li><br/><li><span>李康</span> 👍（1） 💬（1）<p>机器学习相关的推荐呢</p>2018-06-26</li><br/><li><span>每日开箱测评</span> 👍（1） 💬（3）<p>都看书名标题，我知乎上去搜就完了。不比你这全？</p>2018-06-26</li><br/><li><span>lion_fly</span> 👍（0） 💬（1）<p>文章中给出的链接，有的需要翻墙才能访问，手机有时候翻墙不是很方便，能不能给出具体的链接。</p>2018-06-28</li><br/><li><span>颇忒妥</span> 👍（106） 💬（6）<p>学无止境，33岁developer再出发！</p>2018-06-26</li><br/><li><span>yangwnaghoayu</span> 👍（35） 💬（3）<p>特地来感谢下耗子叔解答疑惑，顺便说一下有几个感觉“一篇文章得让人学四五年没啥用”的评论： 没必要花四五年学完一篇文章中提到的知识后才找工作，你学习的过程就在提高，能力高了现公司待遇不够了就跳啊，没有非得四五年学成再跳。 最重要的是，文章的意义在于指引方向，没人指引而自己视野不够宽和远的话 ，自己不知道接下来要干啥，会有些迷茫，甚至有些人停滞不前也不夸张。文章里面的成长框架可以让成长中的程序员思考自己，当你技术停滞不前的时候结合这个看一下，自己可以提高下哪块的技能点 </p>2018-06-26</li><br/><li><span>Abner</span> 👍（21） 💬（2）<p>突然觉得做了10年开发刚入门</p>2018-07-17</li><br/><li><span>落叶观禅</span> 👍（12） 💬（0）<p>最爽的一篇总结，用价值连城来形容一点不过！其中一部分已经学习使用过，一部分可以参考这个列表补充学习。耗哥真乃灯塔偶像！</p>2018-06-26</li><br/><li><span>昵称</span> 👍（10） 💬（0）<p>只能感叹刚上大学时没有遇到这个专栏</p>2018-09-23</li><br/><li><span>cc</span> 👍（8） 💬（0）<p>感觉看到这个专栏太晚了，要是上大学看到或者更早看到就好了，现在要继续从入门开始啃书</p>2019-09-02</li><br/>
 </ul>

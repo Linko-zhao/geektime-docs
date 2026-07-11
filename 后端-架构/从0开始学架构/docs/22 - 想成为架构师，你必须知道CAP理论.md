@@ -3,25 +3,25 @@ CAP定理（CAP theorem）又被称作布鲁尔定理（Brewer's theorem），�
 布鲁尔在提出CAP猜想的时候，并没有详细定义Consistency、Availability、Partition Tolerance三个单词的明确定义，因此如果初学者去查询CAP定义的时候会感到比较困惑，因为不同的资料对CAP的详细定义有一些细微的差别，例如：
 
 > **Consistency**: where all nodes see the same data at the same time.
-> 
+>
 > **Availability**: which guarantees that every request receives a response about whether it succeeded or failed.
-> 
+>
 > **Partition tolerance**: where the system continues to operate even if any one part of the system is lost or fails.
 
 ([https://console.bluemix.net/docs/services/Cloudant/guides/cap\_theorem.html#cap-](https://console.bluemix.net/docs/services/Cloudant/guides/cap_theorem.html#cap-))
 
 > **Consistency**: Every read receives the most recent write or an error.
-> 
+>
 > **Availability**: Every request receives a (non-error) response – without guarantee that it contains the most recent write.
-> 
+>
 > **Partition tolerance**: The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes.
 
 ([https://en.wikipedia.org/wiki/CAP\_theorem#cite\_note-Brewer2012-6](https://en.wikipedia.org/wiki/CAP_theorem#cite_note-Brewer2012-6))
 
 > **Consistency**: all nodes have access to the same data simultaneously.
-> 
+>
 > **Availability**: a promise that every request receives a response, at minimum whether the request succeeded or failed.
-> 
+>
 > **Partition tolerance**: the system will continue to work even if some arbitrary node goes offline or can’t communicate.
 
 ([https://www.teamsilverback.com/understanding-the-cap-theorem/](https://www.teamsilverback.com/understanding-the-cap-theorem/))
@@ -179,15 +179,15 @@ A要求返回及时，不需要等。
 要备份要同步，就得等;
 要备份不想等，就会不同步;
 要同步还不想等，就别备份</p>2018-07-06</li><br/><li><span>Geek_7vgqz2</span> 👍（22） 💬（1）<p>应该再补充哪些系统上ca，哪些是cp，哪些是ap，他们为什么这么设计，都有什么好处。</p>2018-06-16</li><br/><li><span>tim</span> 👍（21） 💬（2）<p>请问一下作者，在CP的选型中。 假如是查询一条并不存在的数据，文中还说得通。
-但如果出现更新数据不及时，由于n1和n2 出现分区错误，那么n2如何知道自己不是最新的数据并返回error呢？？ 
-假如就是简单的mysql主从， 从库并没有断连主库，只是数据在请求来是还没有更新到最新。 那么从库又从哪里得知这件事儿的呢？？</p>2018-07-22</li><br/><li><span>Geek_88604f</span> 👍（15） 💬（2）<p>        paxos的核心思想是少数服从多数，在节点数为2n+1的集群中，只要n+1节点上完成了写入就能保证接下来的读操作能够读到最新的值。从这一点来说它满足C（对某个指定的客户端来说，读操作保证能够返回最新的写操作结果);一个实现了paxos协议的集群最多可以容忍n个节点故障（n个节点同时故障的概率是比较小的），非故障节点组成的集群仍能正常提供服务，从这个角度来讲它满足A(非故障的节点在合理的时间内返回合理的响应，不是错误和超时的响应)；paxos集群发生分区肯能存在两种情况，第一种情况是发生分区后没有发生重新选举，这种情况下集群仍能正常工作，因此满足P(当出现网络分区后，系统能够继续“履行职责”)。另一种情况是发生分区后原来的集群达不到多数派，集群不在对外提供服务，因此不满足P，当发生这种情况的时候，一般会快速修复。总的来说在某种意义上来看paxos满足CAP。</p>2019-09-08</li><br/><li><span>aduan</span> 👍（15） 💬（2）<p>老师，你好，有个疑问，在cp架构中n1，n2通讯是中断的，n2根据设什么作为依据返回error？</p>2018-12-16</li><br/><li><span>发条橙子 。</span> 👍（11） 💬（1）<p>你好老师 ，这里讲的分区容错是指什么 ，是指发生分区现象时系统正常运行 。 但是分区现象具体指的是什么 可以详细讲一下么</p>2019-01-29</li><br/><li><span>Gaozy</span> 👍（10） 💬（2）<p>有个疑问，很多工程实现都是选择AP并保证最终一致性，但是选择了A不就意味着返回数据不是最新的吗，最终一致性是如何实现的</p>2019-02-13</li><br/><li><span>zj</span> 👍（9） 💬（1）<p>ZK出现分区，不能再履行职责了吧，因此ZK不满足P。老师这样理解对吗</p>2018-06-19</li><br/><li><span>亮点</span> 👍（8） 💬（4）<p>CAP讨论的是分布式系统，文中又说分布式系统必然选择P，感觉有矛盾，有点像鸡和蛋的问题。分区是分布式系统的一种异常现象，分区容忍应该是当发生分区问题时系统对外的功能特性，P到底是区别于C和A的一种特性，还是需要C和A配合才能完成，不是很理解，还请老师帮忙解答。</p>2019-12-01</li><br/><li><span>慎独明强</span> 👍（6） 💬（2）<p>就拿分布式注册中心zookeeper和eruka来举例吧。当zk集群出现故障时，为了满足节点数据一致性，节点是不可被访问的，那么满足的是CP理论。而eruka每个节点都带全部数据，当节点出现故障，不能保障数据的一致性，但是可用的。满足了AP理论。</p>2020-08-03</li><br/><li><span>卡莫拉内西</span> 👍（6） 💬（1）<p>paxos， zk的zab协议的理论基础，保证的是最终一致性，满足的是cp
+但如果出现更新数据不及时，由于n1和n2 出现分区错误，那么n2如何知道自己不是最新的数据并返回error呢？？
+假如就是简单的mysql主从， 从库并没有断连主库，只是数据在请求来是还没有更新到最新。 那么从库又从哪里得知这件事儿的呢？？</p>2018-07-22</li><br/><li><span>Geek_88604f</span> 👍（15） 💬（2）<p> paxos的核心思想是少数服从多数，在节点数为2n+1的集群中，只要n+1节点上完成了写入就能保证接下来的读操作能够读到最新的值。从这一点来说它满足C（对某个指定的客户端来说，读操作保证能够返回最新的写操作结果);一个实现了paxos协议的集群最多可以容忍n个节点故障（n个节点同时故障的概率是比较小的），非故障节点组成的集群仍能正常提供服务，从这个角度来讲它满足A(非故障的节点在合理的时间内返回合理的响应，不是错误和超时的响应)；paxos集群发生分区肯能存在两种情况，第一种情况是发生分区后没有发生重新选举，这种情况下集群仍能正常工作，因此满足P(当出现网络分区后，系统能够继续“履行职责”)。另一种情况是发生分区后原来的集群达不到多数派，集群不在对外提供服务，因此不满足P，当发生这种情况的时候，一般会快速修复。总的来说在某种意义上来看paxos满足CAP。</p>2019-09-08</li><br/><li><span>aduan</span> 👍（15） 💬（2）<p>老师，你好，有个疑问，在cp架构中n1，n2通讯是中断的，n2根据设什么作为依据返回error？</p>2018-12-16</li><br/><li><span>发条橙子 。</span> 👍（11） 💬（1）<p>你好老师 ，这里讲的分区容错是指什么 ，是指发生分区现象时系统正常运行 。 但是分区现象具体指的是什么 可以详细讲一下么</p>2019-01-29</li><br/><li><span>Gaozy</span> 👍（10） 💬（2）<p>有个疑问，很多工程实现都是选择AP并保证最终一致性，但是选择了A不就意味着返回数据不是最新的吗，最终一致性是如何实现的</p>2019-02-13</li><br/><li><span>zj</span> 👍（9） 💬（1）<p>ZK出现分区，不能再履行职责了吧，因此ZK不满足P。老师这样理解对吗</p>2018-06-19</li><br/><li><span>亮点</span> 👍（8） 💬（4）<p>CAP讨论的是分布式系统，文中又说分布式系统必然选择P，感觉有矛盾，有点像鸡和蛋的问题。分区是分布式系统的一种异常现象，分区容忍应该是当发生分区问题时系统对外的功能特性，P到底是区别于C和A的一种特性，还是需要C和A配合才能完成，不是很理解，还请老师帮忙解答。</p>2019-12-01</li><br/><li><span>慎独明强</span> 👍（6） 💬（2）<p>就拿分布式注册中心zookeeper和eruka来举例吧。当zk集群出现故障时，为了满足节点数据一致性，节点是不可被访问的，那么满足的是CP理论。而eruka每个节点都带全部数据，当节点出现故障，不能保障数据的一致性，但是可用的。满足了AP理论。</p>2020-08-03</li><br/><li><span>卡莫拉内西</span> 👍（6） 💬（1）<p>paxos， zk的zab协议的理论基础，保证的是最终一致性，满足的是cp
 </p>2018-06-17</li><br/><li><span>Leon Wong</span> 👍（6） 💬（3）<p>老师你好，有个问题想请教：
 
 最近正在研究 zookeeper，通读完本篇课程，心中存疑，还望解答。
 
 zookeeper 并不保证所有的 client 都能读到最新的数据，相较于线性一致性而言，zookeeper 采用的是顺序一致性（我理解一致性程度更弱）。
 
-那么对于这种情况，zookeeper 与最终一致性方案相比，结合本篇文章的解释，其本质上依然不能保证所有的  client 读到最新的数据，那是否可以理解为 zookeeper 就是 AP 系统？
+那么对于这种情况，zookeeper 与最终一致性方案相比，结合本篇文章的解释，其本质上依然不能保证所有的 client 读到最新的数据，那是否可以理解为 zookeeper 就是 AP 系统？
 
 抑或，根据本篇的解释，zookeeper 采用顺序一致性，能保证『指定』（而非所有）的 client 读到最新的数据，即可以称之为 CP 系统；而 AP 系统甚至可能不能保证任意一个 client 能读到最新数据。因此 zookeeper 属于 CP 系统的范畴？
 

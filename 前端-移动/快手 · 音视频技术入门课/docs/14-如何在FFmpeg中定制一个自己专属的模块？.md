@@ -403,22 +403,22 @@ Q1：查看FFmpeg源码，linux下一般用什么软件？ Win10下一般用什�
 Q2：添加文件封装格式之后，编译失败
 “添加文件封装格式”之前的操作都是成功的。
 从“添加文件封装格式”开始，我的操作是：
-1  打开kwaienc.c:  vi kwaienc.c
+1 打开kwaienc.c: vi kwaienc.c
 2 将“添加文件封装格式”下面五个小步骤中每一个小步骤的代码都
-  拷贝到kwaienc.c中（原样拷贝，没有修改），
+拷贝到kwaienc.c中（原样拷贝，没有修改），
 3 打开kwaidec.c，加入下面两句：
 #include &quot;avformat.h&quot;
-const AVInputFormat  ff_kwai_demuxer;
+const AVInputFormat ff_kwai_demuxer;
 
 然后编译： make -j4
 报错：&#47;usr&#47;bin&#47;ld: libavformat&#47;libavformat.a(allformats.o):(.data.rel.ro+0xa40): undefined reference to `ff_kwai_demuxer&#39;
 
 请问错误原因是什么？ 怎么修改？</p>2022-08-24</li><br/><li><span>青晨昊天</span> 👍（1） 💬（0）<p>请问老师，关于自定义filter的编写，有哪些教程</p>2022-11-04</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-01-01</li><br/><li><span>jcy</span> 👍（0） 💬（1）<p>写音视频数据 部分里的函数开头部分：
-static int kwai_write_packet(AVFormatContext *s, AVPacket *pkt) { 
-&#47;&#47; kwaiMuxContext *mov = s-&gt;priv_data; 
-uint32_t size = pkt-&gt;size; &#47;&#47; 获取数据大小 
-if (!pkt) { 
-    return 1; 
+static int kwai_write_packet(AVFormatContext *s, AVPacket *pkt) {
+&#47;&#47; kwaiMuxContext *mov = s-&gt;priv_data;
+uint32_t size = pkt-&gt;size; &#47;&#47; 获取数据大小
+if (!pkt) {
+return 1;
 }
 ...
 

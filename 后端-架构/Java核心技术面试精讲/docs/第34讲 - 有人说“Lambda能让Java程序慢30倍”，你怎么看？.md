@@ -7,7 +7,7 @@
 ```
 // 一个大的ArrayList，内部是随机的整形数据
 volatile List<Integer> integers = …
- 
+
 // 基准测试1
 public int forEachLoopMaxInteger() {
    int max = Integer.MIN_VALUE;
@@ -16,7 +16,7 @@ public int forEachLoopMaxInteger() {
    }
    return max;
 }
- 
+
 // 基准测试2
 public int lambdaMaxInteger() {
    return integers.stream().reduce(Integer.MIN_VALUE, (a, b) -> Integer.max(a, b));

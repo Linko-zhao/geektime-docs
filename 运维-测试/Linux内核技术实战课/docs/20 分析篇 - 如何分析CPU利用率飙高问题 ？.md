@@ -107,13 +107,13 @@ $ echo function_graph > /sys/kernel/debug/tracing/current_trace
 iterate_supers // 遍历super block
   iterate_pagecache_sb // 遍历superblock里的inode
       list_for_each_entry(inode, &sb->s_inodes, i_sb_list)
-        // 记录该inode的pagecache大小 
-        nrpages = inode->i_mapping->nrpages; 
+        // 记录该inode的pagecache大小
+        nrpages = inode->i_mapping->nrpages;
         /* 获取该inode对应的dentry，然后根据该dentry来查找文件路径；
          * 请注意inode可能没有对应的dentry，因为dentry可能被回收掉了，
          * 此时就无法查看该inode对应的文件名了。
          */
-        dentry = dentry_from_inode(inode); 
+        dentry = dentry_from_inode(inode);
         dentry_path_raw(dentry, filename, PATH_MAX);
 ```
 
@@ -159,50 +159,54 @@ procs_running 90
 grep procs_running &#47;proc&#47;stat
 procs_running 119
 
- perf top -U
-   4.41%  [kernel]          [k] system_call_after_swapgs
-   3.49%  [kernel]          [k] do_select
-   3.23%  [kernel]          [k] copy_user_enhanced_fast_string
-   2.98%  [kernel]          [k] sysret_check
-   2.78%  [kernel]          [k] __schedule
-   1.82%  [kernel]          [k] __check_object_size
-   1.67%  [kernel]          [k] fget_light
-   1.22%  [kernel]          [k] tcp_ack
-   1.21%  [kernel]          [k] __audit_syscall_exit
-   1.16%  [kernel]          [k] __x86_indirect_thunk_rax
-   1.15%  [kernel]          [k] tcp_poll
-   1.13%  [kernel]          [k] _raw_spin_lock_irqsave
-   1.12%  [kernel]          [k] __switch_to
- 
+perf top -U
+4.41% [kernel] [k] system_call_after_swapgs
+3.49% [kernel] [k] do_select
+3.23% [kernel] [k] copy_user_enhanced_fast_string
+2.98% [kernel] [k] sysret_check
+2.78% [kernel] [k] __schedule
+1.82% [kernel] [k] __check_object_size
+1.67% [kernel] [k] fget_light
+1.22% [kernel] [k] tcp_ack
+1.21% [kernel] [k] __audit_syscall_exit
+1.16% [kernel] [k] __x86_indirect_thunk_rax
+1.15% [kernel] [k] tcp_poll
+1.13% [kernel] [k] _raw_spin_lock_irqsave
+1.12% [kernel] [k] __switch_to
 
+perf stat
+Performance counter stats for &#39;system wide&#39;:
 
- perf stat
- Performance counter stats for &#39;system wide&#39;:
+     376801.028719      cpu-clock (msec)          #   31.997 CPUs utilized
+         7,323,807      context-switches          #    0.019 M&#47;sec
+           824,699      cpu-migrations            #    0.002 M&#47;sec
+           100,337      page-faults               #    0.266 K&#47;sec
 
-     376801.028719      cpu-clock (msec)          #   31.997 CPUs utilized          
-         7,323,807      context-switches          #    0.019 M&#47;sec                  
-           824,699      cpu-migrations            #    0.002 M&#47;sec                  
-           100,337      page-faults               #    0.266 K&#47;sec                  
-   808,730,622,944      cycles                    #    2.146 GHz                    
-   429,965,110,114      instructions              #    0.53  insn per cycle         
-    90,908,416,046      branches                  #  241.264 M&#47;sec                  
-     2,554,107,830      branch-misses             #    2.81% of all branches        
+808,730,622,944 cycles # 2.146 GHz  
+429,965,110,114 instructions # 0.53 insn per cycle  
+90,908,416,046 branches # 241.264 M&#47;sec  
+2,554,107,830 branch-misses # 2.81% of all branches
 
       11.776125779 seconds time elapsed
+
 </p>2020-11-06</li><br/><li><span>莫名</span> 👍（3） 💬（2）<p>推荐使用 ftrace 前端 trace-cmd，直接操作 tracefs 文件略显繁琐。</p>2020-10-21</li><br/><li><span>我来也</span> 👍（3） 💬（1）<p># 老师文中提到的`查看 Page Cache 的组成`这个功能,感觉很吸引人啊!
 
 # 根据老师的提示,也只找到了这两个方式:
-## [Is it possible to list the files that are cached?](https:&#47;&#47;serverfault.com&#47;a&#47;782640)
+
+## [Is it possible to list the files that are cached?](https://serverfault.com/a/782640)
+
 原理也比较简单:
 借助`ps`找出`rss`的top10进程,然后根据`lsof`找出进程引用的文件,最后借助`linux-fincore`查看这些文件在PageCache中的信息.
 
 感觉这个脚本也有局限性.
 由于`linux-fincore`只能查看列出的文件,所以是无法查看已经不被进程占用的`Page Cache`中的文件及大小的.
 
-## [pcstat](https:&#47;&#47;github.com&#47;tobert&#47;pcstat)
+## [pcstat](https://github.com/tobert/pcstat)
+
 这个工具是借助`mincore`来查看的Page Cache信息,但是也是需要列出具体的文件名.
 
 # 疑问
+
 还是老师的这个方法好,不需要提供文件列表,也可以查看内存中都有哪些文件以及这些文件的大小.
 请问,老师的这个工具有开源版本么?
 </p>2020-10-03</li><br/><li><span>会飞的鱼</span> 👍（2） 💬（1）<p>老师好，我的服务器内核空间的cpu使用率达到了100%，重启了几次依然没有解决，然后我用top查看，没有发现cpu占用很高的进程，用execsnoop也没发现异常，然后用pidstat -w查看，发现rcu_sched的上下文切换很频繁，而且是自愿上下文切换，然后我再用perf top -g -p 9追踪，发现有schedule,finish_task_switch等系统调用，但我还是不清楚是什么原因导致的内核空间cpu使用率高，服务器上也没跑什么程序，这种情况怎么进一步解决呢？ 可以加您微信进一步求教下吗？</p>2020-11-25</li><br/><li><span>Geek_9bf0b0</span> 👍（1） 💬（1）<p>邵老师，关于在 sysrq 里实现显示出系统中所有 R 和 D 状态的任务的功能，我的想法是将
@@ -213,33 +217,37 @@ show_state_filter()接口的state_filter参数改成指针类型，传递参数N
 -extern void show_state_filter(unsigned long state_filter);
 +extern void show_state_filter(unsigned long *state_filter);
 
- static inline void show_state(void)
- {
+static inline void show_state(void)
+{
+
 - show_state_filter(0);
-+ show_state_filter(NULL);
- }
 
- static void sysrq_handle_showstate_blocked(int key)
- {
+* show_state_filter(NULL);
+  }
+
+static void sysrq_handle_showstate_blocked(int key)
+{
+
 - show_state_filter(TASK_UNINTERRUPTIBLE);
-+ unsigned long filter = TASK_UNINTERRUPTIBLE;
-+
-+ show_state_filter(&amp;filter);
- }
 
+* unsigned long filter = TASK_UNINTERRUPTIBLE;
+*
+* show_state_filter(&amp;filter);
+  }
 
 然后调用unregister_sysrq_key()移除sysrq_showstate_blocked_op，
 接着register_sysrq_key()接口注册定制化的op，
 定制化的回调函数handle可以实现如下：
 static void sysrq_handle_showstate_load(int key)
 {
-    unsigned long filter;
+unsigned long filter;
 
     filter = TASK_RUNNING;
     show_state_filter(&amp;filter);
 
     filter = TASK_UNINTERRUPTIBLE;
     show_state_filter(&amp;filter);
+
 }
 
 关于注册定制化的sysrq，可以通过early_param或者模块的方式。

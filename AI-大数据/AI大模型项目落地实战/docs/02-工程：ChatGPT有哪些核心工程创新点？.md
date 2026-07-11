@@ -199,20 +199,20 @@ OpenAI在2023年的收入估计大概是10亿美元。从这个收入可以看�
 
 ```plain
 from dataclasses import dataclass
-from dataset.pt_dataset import PTDataset from transformers import ( 
+from dataset.pt_dataset import PTDataset from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     HfArgumentParser,
     TrainingArguments,
     Trainer,
 )
-from transformers.hf_argparser import HfArg 
+from transformers.hf_argparser import HfArg
 # 用户输入超参数
 @dataclass
-class Arguments(TrainingArguments): 
+class Arguments(TrainingArguments):
 # 模型结构
-model_name_or_path: str = HfArg( 
-    default=None, 
+model_name_or_path: str = HfArg(
+    default=None,
     ...
 ```
 
@@ -221,7 +221,7 @@ model_name_or_path: str = HfArg(
 ```plain
 import torch
 from dataclasses import dataclass
-from dataset.sft_dataset import SFTDataset from transformers import ( 
+from dataset.sft_dataset import SFTDataset from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     HfArgumentParser,
@@ -229,19 +229,19 @@ from dataset.sft_dataset import SFTDataset from transformers import (
     TrainingArguments,
     Trainer,
 )
-from transformers.hf_argparser import HfArg 
+from transformers.hf_argparser import HfArg
 IGNORE_INDEX = -100
 # 用户输入超参数
 @dataclass
-class Arguments(TrainingArguments): 
+class Arguments(TrainingArguments):
 # 模型结构
-model_name_or_path: str = HfArg( 
-default=None, 
+model_name_or_path: str = HfArg(
+default=None,
         help="The model name or path, e.g., `meta-llama/Llama-2-7b-hf`",
     )
 # 训练数据集
-dataset: str = HfArg( 
-default="", 
+dataset: str = HfArg(
+default="",
         help="Setting the names of data file.",
     )
 ...
@@ -253,16 +253,16 @@ default="",
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from transformers import LlamaForCausalLM, 
-class LlamaRewardModel(LlamaForCausalLM): def __init__(self, config): 
+from transformers import LlamaForCausalLM,
+class LlamaRewardModel(LlamaForCausalLM): def __init__(self, config):
 super().__init__(config)
-# 初始化线性变换层，将隐状态映射为标量，用于输出最终奖励 
-self.reward_head = nn.Linear(config.hidden_size, 1, bias=False) 
+# 初始化线性变换层，将隐状态映射为标量，用于输出最终奖励
+self.reward_head = nn.Linear(config.hidden_size, 1, bias=False)
 def _forward_rmloss(self, input_ids, attention_mask, **kargs): # input_ids:输入词元的标号序列。
-# attention_mask:与输入相对应的注意力掩码 
-# 将输入词元通过大语言模型进行编码，转化为隐状态 output = self.model.forward( 
-input_ids=input_ids, attention_mask=attention_mask, return_dict=True, use_cache=False 
-) 
+# attention_mask:与输入相对应的注意力掩码
+# 将输入词元通过大语言模型进行编码，转化为隐状态 output = self.model.forward(
+input_ids=input_ids, attention_mask=attention_mask, return_dict=True, use_cache=False
+)
 ....
 ```
 
@@ -334,6 +334,7 @@ ChatGPT有1750亿参数，往往写做175b，1b=10亿参数。
 专业解释：Transformer是一种基于自注意力机制的神经网络架构，最初由Google团队在2017年提出，用于自然语言处理任务。
 
 5W2H分析：
+
 - What：一种革命性的深度学习模型架构
 - Why：为了提高自然语言处理任务的性能
 - Who：由Google研究团队提出

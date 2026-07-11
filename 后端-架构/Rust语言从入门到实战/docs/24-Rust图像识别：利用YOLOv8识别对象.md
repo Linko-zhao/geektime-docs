@@ -194,7 +194,7 @@ pub fn report_detect(
     let pred = pred.to_device(&Device::Cpu)?;
     let (pred_size, npreds) = pred.dims2()?;
     let nclasses = pred_size - 4;
-    
+   
     let mut bboxes: Vec<Vec<Bbox<Vec<KeyPoint>>>> = (0..nclasses).map(|_| vec![]).collect();
     // 选出符合置信区间的结果
     for index in 0..npreds {
@@ -523,7 +523,7 @@ pub fn run<T: Task>(args: Args) -> anyhow::Result<()> {
             let h = original_image.height() as usize;
             if w < h {
                 let w = w * 640 / h;
-                // 
+                //
                 (w / 32 * 32, 640)
             } else {
                 let h = h * 640 / w;
@@ -650,13 +650,13 @@ candle-nn = {version= &quot;0.3.1&quot;,features=[&quot;cuda&quot;]}
 candle-transformers = {version= &quot;0.3.1&quot;,features=[&quot;cuda&quot;]}</p>2024-03-23</li><br/><li><span>Geek_118351</span> 👍（0） 💬（1）<p>老师你好，会考虑出一个针对视频流的目标识别课程吗。</p>2024-03-11</li><br/><li><span>Geek_e72251</span> 👍（0） 💬（2）<p>老师可以贴一段怎么从本地加载 yolo 模型的代码吗？实在下载不下来😮‍💨</p>2024-01-11</li><br/><li><span>Geek_e72251</span> 👍（0） 💬（5）<p>Error: request error: https:&#47;&#47;huggingface.co&#47;lmz&#47;candle-yolo-v8&#47;resolve&#47;main&#47;yolov8m.safetensors: Connection Failed: Connect error: connection timed out
 
 Caused by:
-    0: https:&#47;&#47;huggingface.co&#47;lmz&#47;candle-yolo-v8&#47;resolve&#47;main&#47;yolov8m.safetensors: Connection Failed: Connect error: connection timed out
-    1: connection timed out 一直下不来这个文件，可以提前下载下来然后放到项目里面吗？浏览器可以正常下载</p>2024-01-05</li><br/><li><span>凤  梨  🍍</span> 👍（0） 💬（2）<p>pytorch怎么转safetensors，没工具下载不了外面的模型</p>2023-12-30</li><br/><li><span>unistart</span> 👍（0） 💬（1）<p>老师，我有一个问题就是猫猫那张图执行姿势探测任务时无法正确识别，这是为什么啊？
+0: https:&#47;&#47;huggingface.co&#47;lmz&#47;candle-yolo-v8&#47;resolve&#47;main&#47;yolov8m.safetensors: Connection Failed: Connect error: connection timed out
+1: connection timed out 一直下不来这个文件，可以提前下载下来然后放到项目里面吗？浏览器可以正常下载</p>2024-01-05</li><br/><li><span>凤 梨 🍍</span> 👍（0） 💬（2）<p>pytorch怎么转safetensors，没工具下载不了外面的模型</p>2023-12-30</li><br/><li><span>unistart</span> 👍（0） 💬（1）<p>老师，我有一个问题就是猫猫那张图执行姿势探测任务时无法正确识别，这是为什么啊？
 
 cargo run --release -- assets&#47;cats.jpg --model candle-yolo-v8&#47;yolov8x-pose.safetensors --which x --task pose
-   Compiling candle_demo_yolov8 v0.1.0 (E:\Project\rust-jikeshijian\24-candle_yolov8)
-    Finished release [optimized] target(s) in 12.69s
-     Running `target\release\candle_demo_yolov8.exe assets&#47;cats.jpg --model candle-yolo-v8&#47;yolov8x-pose.safetensors --which x --task pose`
+Compiling candle_demo_yolov8 v0.1.0 (E:\Project\rust-jikeshijian\24-candle_yolov8)
+Finished release [optimized] target(s) in 12.69s
+Running `target\release\candle_demo_yolov8.exe assets&#47;cats.jpg --model candle-yolo-v8&#47;yolov8x-pose.safetensors --which x --task pose`
 Running on CPU, to run on GPU, build this example with `--features cuda`
 model loaded
 processing &quot;assets&#47;cats.jpg&quot;

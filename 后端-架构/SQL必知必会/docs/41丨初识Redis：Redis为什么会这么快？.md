@@ -152,7 +152,7 @@ r = redis.Redis(connection_pool=pool)
 Redis库提供了Redis和StrictRedis类，它们都可以实现Redis命令，不同之处在于Redis是StrictRedis的子类，可以对旧版本进行兼容。如果我们想要使用连接池机制，然后用StrictRedis进行实例化，可以写成下面这样：
 
 ```
-import redis 
+import redis
 pool = redis.ConnectionPool(host='localhost', port=6379)
 r = redis.StrictRedis(connection_pool=pool)
 ```
@@ -227,7 +227,6 @@ https:&#47;&#47;blog.csdn.net&#47;weixin_41013322&#47;article&#47;details&#47;10
 3.持久化方式有RDB,AOF , 一般开启aof </p>2022-09-23</li><br/><li><span>明月</span> 👍（0） 💬（0）<p>使用单线程，是不是原理就是类似JavaScript的线程模型，采用轮询一个队列的方式</p>2022-10-22</li><br/><li><span>小虾米</span> 👍（0） 💬（0）<p>1.0412158966064453
 1.049706220626831
 
-
 感谢老师，初识redis</p>2020-11-10</li><br/><li><span>凌空飞起的剪刀腿</span> 👍（0） 💬（1）<p>老师您好：
-      Redis用跳表来实现有序集合的，不是使用hash表来实现有序集合吧？</p>2020-04-14</li><br/><li><span>暮雨</span> 👍（0） 💬（0）<p>redis的单线程怎么理解？查看redis服务不至一个线程</p>2019-11-05</li><br/>
+Redis用跳表来实现有序集合的，不是使用hash表来实现有序集合吧？</p>2020-04-14</li><br/><li><span>暮雨</span> 👍（0） 💬（0）<p>redis的单线程怎么理解？查看redis服务不至一个线程</p>2019-11-05</li><br/>
 </ul>

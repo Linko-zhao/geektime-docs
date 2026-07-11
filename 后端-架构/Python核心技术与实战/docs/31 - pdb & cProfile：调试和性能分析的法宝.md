@@ -222,7 +222,7 @@ python3 -m cProfile xxx.py
 def memoize(f):
     memo = {}
     def helper(x):
-        if x not in memo:            
+        if x not in memo:
             memo[x] = f(x)
         return memo[x]
     return helper
@@ -275,33 +275,35 @@ def fibl(n):
     return (fibl(n-1) if n-1 not in dict1 else dict1[n-1]) + (fibl(n-2) if n-2 not in dict1 else dict1[n-2])
 
 def all_fib(n):
-    global dict1
-    res =[]
-    for i in range(n + 1):
-        req = fibl(i)
-        dict1[i] = req
-        res.append(req)
-    print(res)
+global dict1
+res =[]
+for i in range(n + 1):
+req = fibl(i)
+dict1[i] = req
+res.append(req)
+print(res)
 all_fib(100000)
 
-老师用的装饰器很高大上(看了好几遍才搞明白), 但是当数字大于995后会有超过递归深度报错, 所以过来皮一下&#47;狗头</p>2019-08-14</li><br/><li><span>JackLee</span> 👍（7） 💬（0）<p>还有一个ipdb是pdb的加强版，用法比较相近，不过需要pip安装一下</p>2019-07-19</li><br/><li><span>new</span> 👍（6） 💬（0）<p>老师应该在这里回顾一下装饰器的用法</p>2019-07-22</li><br/><li><span>泥土  </span> 👍（5） 💬（3）<p>看到memoize装饰器，想起装饰器那节中的LRU_CACHE，发现比memoize性能更高
+老师用的装饰器很高大上(看了好几遍才搞明白), 但是当数字大于995后会有超过递归深度报错, 所以过来皮一下&#47;狗头</p>2019-08-14</li><br/><li><span>JackLee</span> 👍（7） 💬（0）<p>还有一个ipdb是pdb的加强版，用法比较相近，不过需要pip安装一下</p>2019-07-19</li><br/><li><span>new</span> 👍（6） 💬（0）<p>老师应该在这里回顾一下装饰器的用法</p>2019-07-22</li><br/><li><span>泥土 </span> 👍（5） 💬（3）<p>看到memoize装饰器，想起装饰器那节中的LRU_CACHE，发现比memoize性能更高
 import functools
 
 @memoize
+
 # @functools.lru_cache(None)
+
 def fib(n):
-    ...</p>2020-03-24</li><br/><li><span>lipan</span> 👍（5） 💬（1）<p>最近在用js撸小程序，一个console.log()搞定所有调试。</p>2019-07-19</li><br/><li><span>未来已来</span> 👍（4） 💬（1）<p>被最后那个装饰器惊艳到了，以前只知道用循环，没想到 Python 还可以这么玩</p>2019-07-19</li><br/><li><span>向南</span> 👍（3） 💬（0）<p>有时候会用装饰器试一下
+...</p>2020-03-24</li><br/><li><span>lipan</span> 👍（5） 💬（1）<p>最近在用js撸小程序，一个console.log()搞定所有调试。</p>2019-07-19</li><br/><li><span>未来已来</span> 👍（4） 💬（1）<p>被最后那个装饰器惊艳到了，以前只知道用循环，没想到 Python 还可以这么玩</p>2019-07-19</li><br/><li><span>向南</span> 👍（3） 💬（0）<p>有时候会用装饰器试一下
 def timeit_wrapper(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
-        func_return_value = func(*args, **kwargs)
-        end_time = time.perf_counter()
-        print(&#39;{0:&lt;10}.{1:&lt;8} : {2:&lt;8}&#39;.format(func.__module__, func.__name__, end_time - start_time))
-        return func_return_value
-    return wrapper
+@wraps(func)
+def wrapper(*args, **kwargs):
+start_time = time.perf_counter()
+func_return_value = func(*args, **kwargs)
+end_time = time.perf_counter()
+print(&#39;{0:&lt;10}.{1:&lt;8} : {2:&lt;8}&#39;.format(func.**module**, func.**name**, end_time - start_time))
+return func_return_value
+return wrapper
 
 @timeit_wrapper
 def some_func():
-    ....</p>2020-03-11</li><br/><li><span>一一</span> 👍（3） 💬（0）<p>cProfile真的太好用了</p>2020-01-31</li><br/>
+....</p>2020-03-11</li><br/><li><span>一一</span> 👍（3） 💬（0）<p>cProfile真的太好用了</p>2020-01-31</li><br/>
 </ul>

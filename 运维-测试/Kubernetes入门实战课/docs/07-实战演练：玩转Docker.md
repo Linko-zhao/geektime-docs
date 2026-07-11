@@ -240,19 +240,20 @@ docker run -d --rm \
 看过中文互联网上面别人的一些教程，要么照本宣科，要么浅尝辄止。
 
 老师的课程虽然没有做到知识点的面面俱到，当然也不可能做到。但是，算是整体上帮我又重新梳理了一遍docker的整体架构，让我对其认识更加清晰了一些。</p>2022-07-06</li><br/><li><span>pyhhou</span> 👍（10） 💬（1）<p>思考题：
+
 1. 相较于之前只知道容器是用来环境隔离，看完入门篇后，对容器技术有了一个比较宏观和基本的了解，列出来如下：
- 1）知道了什么是镜像，以及镜像和容器的关系
- 2）知道了 DockerHub 这样的镜像仓库
- 3）明白了容器和虚拟机的不同
- 4）懂得如何通过 Dockerfile 来构建自己的镜像
- 5）理解了 Docker 的整体内部框架 docker client -&gt; docker daemon -&gt; registry
- 6) 知道了，也实际操作了一些常用的镜像以及容器相关的指令
-。。。
+   1）知道了什么是镜像，以及镜像和容器的关系
+   2）知道了 DockerHub 这样的镜像仓库
+   3）明白了容器和虚拟机的不同
+   4）懂得如何通过 Dockerfile 来构建自己的镜像
+   5）理解了 Docker 的整体内部框架 docker client -&gt; docker daemon -&gt; registry
+
+6)  知道了，也实际操作了一些常用的镜像以及容器相关的指令
+    。。。
 
 感觉学习到的这些东西可以覆盖工作中大多数的场景了，但是这些知识只能说是运用于小规模的东西。想要把容器技术玩的得心应手，还需了解一些容器应用的最佳实践，和一些工程化的理念和工具
 
 2. 感觉容器编排主要应用于大规模集成应用。可以类比分布式系统，入门篇中讲的知识用在单机应用上是没有问题的，但是规模一旦变大到系统层面，就会出现一些问题，比如如何保证数据一致性？如何保证负载均衡？如何尽可能减少网络故障所带来的影响？如何能保证数据（容器）的持久化等等。。。这些问题需要运用容器编排来解决
-
 
 另外想请教老师 2 个问题
 
@@ -268,81 +269,80 @@ q2： 容器编排解决的问题是：一些非自动化，而是需要强人�
 
 1、启动容器时加入了自定义的网络 my_network，类型是 bridge；其原理是容器之间的互联是通过 Docker DNS Server；代码如下
 docker run -d --rm --name db1 \
-    --network my_network \
-    --env MARIADB_DATABASE=db \
-    --env MARIADB_USER=wp \
-    --env MARIADB_PASSWORD=123 \
-    --env MARIADB_ROOT_PASSWORD=123 \
-    mariadb:10
+--network my_network \
+--env MARIADB_DATABASE=db \
+--env MARIADB_USER=wp \
+--env MARIADB_PASSWORD=123 \
+--env MARIADB_ROOT_PASSWORD=123 \
+mariadb:10
 
 docker run -d --rm --name wp1 \
-    --network my_network \
-    --env WORDPRESS_DB_HOST=db1 \
-    --env WORDPRESS_DB_USER=wp \
-    --env WORDPRESS_DB_PASSWORD=123 \
-    --env WORDPRESS_DB_NAME=db \
-    wordpress:5
+--network my_network \
+--env WORDPRESS_DB_HOST=db1 \
+--env WORDPRESS_DB_USER=wp \
+--env WORDPRESS_DB_PASSWORD=123 \
+--env WORDPRESS_DB_NAME=db \
+wordpress:5
 
 vi wp.conf
 server {
-  listen 80;
-  default_type text&#47;html;
+listen 80;
+default_type text&#47;html;
 
-  location &#47; {
-      proxy_http_version 1.1;
-      proxy_set_header Host $host;
-      proxy_pass http:&#47;&#47;wp1;
-  }
+location &#47; {
+proxy_http_version 1.1;
+proxy_set_header Host $host;
+proxy_pass http:&#47;&#47;wp1;
+}
 }
 
 docker run -d --rm --name ng1 \
-    --network my_network \
-    -p 80:80 \
-    -v `pwd`&#47;wp.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf \
-    nginx:alpine
+--network my_network \
+-p 80:80 \
+-v `pwd`&#47;wp.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf \
+nginx:alpine
 
-2、启动 WordPress wp1 时，link 到 db1，即--link db1:db1，  启动 Nginx ng1 时，link 到 wp1，即--link wp1:wp1；其原理是容器之间的互联是通过容器里的 &#47;etc&#47;hosts；代码如下
+2、启动 WordPress wp1 时，link 到 db1，即--link db1:db1， 启动 Nginx ng1 时，link 到 wp1，即--link wp1:wp1；其原理是容器之间的互联是通过容器里的 &#47;etc&#47;hosts；代码如下
 docker run -d --rm --name db1 \
-    --env MARIADB_DATABASE=db \
-    --env MARIADB_USER=wp \
-    --env MARIADB_PASSWORD=123 \
-    --env MARIADB_ROOT_PASSWORD=123 \
-    mariadb:10
+--env MARIADB_DATABASE=db \
+--env MARIADB_USER=wp \
+--env MARIADB_PASSWORD=123 \
+--env MARIADB_ROOT_PASSWORD=123 \
+mariadb:10
 
 docker run -d --rm --name wp1 \
-    --link db1:db1 \
-    --env WORDPRESS_DB_HOST=db1 \
-    --env WORDPRESS_DB_USER=wp \
-    --env WORDPRESS_DB_PASSWORD=123 \
-    --env WORDPRESS_DB_NAME=db \
-    wordpress:5
+--link db1:db1 \
+--env WORDPRESS_DB_HOST=db1 \
+--env WORDPRESS_DB_USER=wp \
+--env WORDPRESS_DB_PASSWORD=123 \
+--env WORDPRESS_DB_NAME=db \
+wordpress:5
 
 vi wp.conf
 server {
-  listen 80;
-  default_type text&#47;html;
+listen 80;
+default_type text&#47;html;
 
-  location &#47; {
-      proxy_http_version 1.1;
-      proxy_set_header Host $host;
-      proxy_pass http:&#47;&#47;wp1;
-  }
+location &#47; {
+proxy_http_version 1.1;
+proxy_set_header Host $host;
+proxy_pass http:&#47;&#47;wp1;
+}
 }
 
 docker run -d --rm --name ng1 \
-    --link wp1:wp1 \
-    -p 80:80 \
-    -v `pwd`&#47;wp.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf \
-    nginx:alpine</p>2022-09-17</li><br/><li><span>柳成荫</span> 👍（5） 💬（1）<p>1. 刚开始学容器的时候觉得容器就是一个小的虚拟机，部署一套应用应该可以把中间件和应用都部署到同一个容器中，每个容器都应该对外暴露端口才能被访问，现在觉得有些应用可以不用暴露端口，反而更加安全
-2. 容器编排应该会解决容器启动、维护的麻烦，应用集群等问题
+--link wp1:wp1 \
+-p 80:80 \
+-v `pwd`&#47;wp.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf \
+nginx:alpine</p>2022-09-17</li><br/><li><span>柳成荫</span> 👍（5） 💬（1）<p>1. 刚开始学容器的时候觉得容器就是一个小的虚拟机，部署一套应用应该可以把中间件和应用都部署到同一个容器中，每个容器都应该对外暴露端口才能被访问，现在觉得有些应用可以不用暴露端口，反而更加安全2. 容器编排应该会解决容器启动、维护的麻烦，应用集群等问题
 请教一个问题，部署一个java应用，jdk应该安装在宿主机还是应用的容器里面呢？</p>2022-07-06</li><br/><li><span>henry</span> 👍（4） 💬（1）<p>2022&#47;08&#47;16，docker pull mariadb:10，会有问题，docker run 时报错：[ERROR] [Entrypoint]: mariadbd failed while attempting to check config，Can&#39;t initialize timers.
 
-docker pull mariadb:10.8.2  解决问题，参考如下：
+docker pull mariadb:10.8.2 解决问题，参考如下：
 https:&#47;&#47;github.com&#47;MariaDB&#47;mariadb-docker&#47;issues&#47;434</p>2022-08-16</li><br/><li><span>A-Bot</span> 👍（4） 💬（2）<p>
 docker run -d --rm \
-    -p 80:80 \
-    -v `pwd`&#47;wp.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf \
-    nginx:alpine
+-p 80:80 \
+-v `pwd`&#47;wp.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf \
+nginx:alpine
 老师，这个命令中 -v 后面跟的 &#39;pwd&#39; 什么意思？</p>2022-07-25</li><br/><li><span>lesserror</span> 👍（4） 💬（1）<p>老师，有几个小问题：
 
 Q1：k8s应该算是容易编排技术吧？如果学会了k8s的日常操作，关于docker的使用是不是就可以减少了。了解一个大概就好了，很多操作应该逐渐偏向对k8s的操作？
@@ -357,8 +357,8 @@ Q2：用rmi删除镜像后，镜像不存在了，但其包含的层还存在宿
 这个问题和Q1有点关联，比如下载镜像A，其中含有层“M”，用rmi删除镜像后，镜像不存在了，其包含的层“M”不存在了，但宿主机上其实还有一份层“M”，对吗？
 Q3：wordpress例子中，为什么nginx可以访问WP？
 Wp没有对外暴露端口，而nginx对于WP来说就是外部访问者啊，应该不能访问才对啊。
-Q4：小贴士的第一项中，挂载用法问题： 
- --- 挂载方法：  -v   &#47;home&#47;zhangsan   &#47;var&#47;lib&#47;registry， 其中&#47;home&#47;zhangsan是宿主机上的目录，是这样用吗？  
+Q4：小贴士的第一项中，挂载用法问题：
+--- 挂载方法： -v &#47;home&#47;zhangsan &#47;var&#47;lib&#47;registry， 其中&#47;home&#47;zhangsan是宿主机上的目录，是这样用吗？  
 --- 挂载后，是把镜像本身放到&#47;home&#47;zhangsan下面吗？ 还是说，镜像不放在&#47;home&#47;zhangsan下面，但会把镜像用到的数据放到&#47;home&#47;zhangsan下面？</p>2022-07-06</li><br/><li><span>可可</span> 👍（1） 💬（1）<p>当我对wp.conf文件做了修改之后，执行nginx -t成功，但执行nginx -s reload却提示nginx 29#29: signal process started，发现修改并未生效。请问老师和其他同学遇到过这种情况吗？
 我的解决办法是只能删除nginx容器后重新创建，这时候wp.conf就是生效的。但总不可能每次修改配置文件都重新创建nginx容器吧，寻求答案中……</p>2022-10-19</li><br/><li><span>aoe</span> 👍（1） 💬（1）<p>小贴士总能带来惊喜</p>2022-07-13</li><br/><li><span>Geek_b537b2</span> 👍（1） 💬（1）<p>老师请问下使用Docker Registry搭建本地镜像仓库后用docker pull拉取镜像怎么不是去共有仓库拉取而是默认去本地私有仓库拉取，这中间是不是自动配置的镜像源地址</p>2022-07-10</li><br/><li><span>Geek_18dfaf</span> 👍（1） 💬（1）<p>什么时候更新下一课</p>2022-07-06</li><br/>
 </ul>

@@ -59,7 +59,7 @@ struct Point {
 ```plain
 fn main() {
     let s = "I am a superman.".to_string();
-    
+
     for _ in 1..10 {
         let tmp_s = s.clone();
         println!("s is {}", tmp_s);
@@ -361,20 +361,20 @@ fn main() {
 }
 
 impl Point&lt;String&gt; {
-    fn print(&amp;self) {
-        println!(&quot;NotDisplay: x: {}, y: {}&quot;, self.x, self.y);
-    }
+fn print(&amp;self) {
+println!(&quot;NotDisplay: x: {}, y: {}&quot;, self.x, self.y);
+}
 }
 
 这样还是不行：
 error[E0592]: duplicate definitions with name `print`
-  --&gt; src&#47;main.rs:13:5
-   |
-13 |     fn print(&amp;self) {
-   |     ^^^^^^^^^^^^^^^ duplicate definitions for `print`
+--&gt; src&#47;main.rs:13:5
+|
+13 | fn print(&amp;self) {
+| ^^^^^^^^^^^^^^^ duplicate definitions for `print`
 ...
-19 |     fn print(&amp;self) {
-   |     --------------- other definition for `print`
-   |
-   = note: upstream crates may add a new impl of trait `std::marker::Copy` for type `std::string::String` in future versions</p>2024-11-01</li><br/>
+19 | fn print(&amp;self) {
+| --------------- other definition for `print`
+|
+= note: upstream crates may add a new impl of trait `std::marker::Copy` for type `std::string::String` in future versions</p>2024-11-01</li><br/>
 </ul>

@@ -109,17 +109,17 @@ int __mac_execve(proc_t p, struct __mac_execve_args *uap, int32_t *retval)
     struct uthread  *uthread; // 线程
     task_t new_task = NULL;   // Mach Task
     ...
-    
+
     context.vc_thread = current_thread();
     context.vc_ucred = kauth_cred_proc_ref(p);
-    
+
     // 分配大块内存，不用堆栈是因为 Mach-O 结构很大。
     MALLOC(bufp, char *, (sizeof(*imgp) + sizeof(*vap) + sizeof(*origvap)), M_TEMP, M_WAITOK | M_ZERO);
     imgp = (struct image_params *) bufp;
-    
+
     // 初始化 imgp 结构里的公共数据
     ...
-    
+
     uthread = get_bsdthread_info(current_thread());
     if (uthread->uu_flag & UT_VFORK) {
         imgp->ip_flags |= IMGPF_VFORK_EXEC;
@@ -136,22 +136,22 @@ int __mac_execve(proc_t p, struct __mac_execve_args *uap, int32_t *retval)
         new_task = get_threadtask(imgp->ip_new_thread);
         context.vc_thread = imgp->ip_new_thread;
     }
-    
+
     // 加载解析 Mach-O
     error = exec_activate_image(imgp);
-    
+
     if (imgp->ip_new_thread != NULL) {
         new_task = get_threadtask(imgp->ip_new_thread);
     }
 
     if (!error && !in_vfexec) {
         p = proc_exec_switch_task(p, current_task(), new_task, imgp->ip_new_thread);
-    
+
         should_release_proc_ref = TRUE;
     }
 
     kauth_cred_unref(&context.vc_ucred);
-    
+
     if (!error) {
         task_bank_init(get_threadtask(imgp->ip_new_thread));
         proc_transend(p, 0);

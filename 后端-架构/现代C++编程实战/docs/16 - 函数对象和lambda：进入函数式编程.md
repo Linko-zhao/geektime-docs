@@ -6,7 +6,7 @@
 
 函数对象（function object）\[1] 自 C++98 开始就已经被标准化了。从概念上来说，函数对象是一个可以被当作函数来用的对象。它有时也会被叫做 functor，但这个术语在范畴论里有着完全不同的含义，还是不用为妙——否则玩函数式编程的人可能会朝着你大皱眉头的。
 
-下面的代码定义了一个简单的加 *n* 的函数对象类（根据一般的惯例，我们使用了 `struct` 关键字而不是 `class` 关键字）：
+下面的代码定义了一个简单的加 _n_ 的函数对象类（根据一般的惯例，我们使用了 `struct` 关键字而不是 `class` 关键字）：
 
 ```c++
 struct adder {
@@ -142,8 +142,8 @@ auto adder = [](int n) {
 
 纯粹为了满足你可能有的好奇心，上面的 `adder` 相当于这样一个 λ 表达式：
 
-$$  
-\\mathrm{adder} = \\lambda n.(\\lambda x.(+ \\ x \\ n))  
+$$
+\\mathrm{adder} = \\lambda n.(\\lambda x.(+ \\ x \\ n))
 $$
 
 如果你去学 Lisp 或 Scheme 的话，你就会发现这些语言和 λ 表达式几乎是一一映射了。在 C++ 里，表达虽然稍微啰嗦一点，但也比较接近了。用我上面的 `adder` ，就可以得到类似于函数式编程语言里的 currying \[4] 的效果——把一个操作（此处是加法）分成几步来完成。没见过函数式编程的，可能对下面的表达式感到奇怪吧：
@@ -476,31 +476,31 @@ lambda的定义对应一个匿名函数对象，捕获就是构造这个对象�
 
 在用LAMBDA表达式解决多重初始化路径的问题时，说到这样还可以提高性能，因为不需要默认构造和不需要拷贝&#47;移动。可是在第10讲中讲返回值优化的时候，不是说如果返回值时有条件判断，编译器都被会难倒，从而导致NRVO失效么（函数getA_duang）？</p>2020-02-14</li><br/><li><span>总统老唐</span> 👍（4） 💬（1）<p>2020第一课，吴老师新年好</p>2020-01-01</li><br/><li><span>Daniel</span> 👍（3） 💬（2）<p>class task {
 public:
-  task(int data) : data_(data) {}
-  auto lazy_launch()
-  {
-    return
-      [this, count = get_count()]()
-      mutable {
-        ostringstream oss;
-        oss &lt;&lt; &quot;Done work &quot; &lt;&lt; data_
-            &lt;&lt; &quot; (No. &quot; &lt;&lt; count
-            &lt;&lt; &quot;) in thread &quot;
-            &lt;&lt; this_thread::get_id()
-            &lt;&lt; &#39;\n&#39;;
-        msg_ = oss.str();
-        calculate();
-      };
-  }
-  void calculate()
-  {
-    this_thread::sleep_for(100ms);
-    cout &lt;&lt; msg_;
-  }
+task(int data) : data_(data) {}
+auto lazy_launch()
+{
+return
+[this, count = get_count()](<>)
+mutable {
+ostringstream oss;
+oss &lt;&lt; &quot;Done work &quot; &lt;&lt; data_
+&lt;&lt; &quot; (No. &quot; &lt;&lt; count
+&lt;&lt; &quot;) in thread &quot;
+&lt;&lt; this_thread::get_id()
+&lt;&lt; &#39;\n&#39;;
+msg_ = oss.str();
+calculate();
+};
+}
+void calculate()
+{
+this_thread::sleep_for(100ms);
+cout &lt;&lt; msg_;
+}
 
 private:
-  int data_;
-  string msg_;
+int data_;
+string msg_;
 };
 
 输出：
@@ -512,16 +512,16 @@ Done work 37 (No. 2) in thread 3
 &amp;本地变量名：这种写法不被允许么？</p>2022-06-11</li><br/><li><span>橙子888</span> 👍（2） 💬（2）<p>最近项目里使用到了libgo这个C++写的协程库，示例代码中用到了好多老师今天讲的知识点：
 void foo()
 {
-    printf(&quot;function pointer\n&quot;);
+printf(&quot;function pointer\n&quot;);
 }
 
 struct A {
-    void fA() { printf(&quot;std::bind\n&quot;); }
-    void fB() { printf(&quot;std::function\n&quot;); }
+void fA() { printf(&quot;std::bind\n&quot;); }
+void fB() { printf(&quot;std::function\n&quot;); }
 };
 int main()
 {
-    go foo;
+go foo;
 
     go []{
         printf(&quot;lambda\n&quot;);
@@ -531,6 +531,7 @@ int main()
 
     std::function&lt;void()&gt; fn(std::bind(&amp;A::fB, A()));
     go fn;
+
 }
 其中跟在&quot;go&quot;后面的内容总算能理解了，但是&quot;go&quot;的实现原理还是没搞懂，不知道后面协程这块的内容会不会有讲到。
 另外对老师今天讲的 ”一般而言，按值捕获是比较安全的做法。按引用捕获时则需要更小心些，必须能够确保被捕获的变量和 lambda 表达式的生命期至少一样长“ 这句话深有体会，我在项目里按值捕获指针给协程用，结果调试的时候就是各种随机的崩溃。。。</p>2020-01-04</li><br/><li><span>罗 乾 林</span> 👍（2） 💬（1）<p>编译器遇到lambda 表达式时，产生一个匿名的函数对象，各种捕获相当于按值或者按引用设置给匿名对象的成员字段。
@@ -540,8 +541,8 @@ int main()
 原文：虽然函数名字叫 accumulate——累加——但它的行为是通过第四个参数可修改的。我们把上面的加号 + 改成星号 *，上面的计算就从从 1 加到 5 变成了算 5 的阶乘了。
 
 实际上，还需要把第三个参数改成1，否则结果是0.</p>2022-11-17</li><br/><li><span>zhengfan</span> 👍（1） 💬（2）<p>吴老师您好，请教一下：
-对于形如[]() mutable {}的lamda表达式 还能够被认为是一个constexpr吗？</p>2020-06-30</li><br/><li><span>EncodedStar</span> 👍（1） 💬（1）<p>函数指针和引用这个模块中
-当我们拿 add_2 去调用这三个函数模板时，fn 的类型将分别被推导为 int (*)(int)、int (&amp;)(int) 和 int (*)(int)。
-第一个和第三个都是 int (*)(int) 第一个是不是  int (int)</p>2020-01-09</li><br/><li><span>空气</span> 👍（1） 💬（1）<p>吴老师，我在工作中很经常用到function。文中讲到function对象的创建比较耗资源，能否介绍一下原因，或者可以参考哪些资料？确实要使用的话，是否有必要使用共享指针管理来减轻复制和转移消耗？
+对于形如[](<>) mutable {}的lamda表达式 还能够被认为是一个constexpr吗？</p>2020-06-30</li><br/><li><span>EncodedStar</span> 👍（1） 💬（1）<p>函数指针和引用这个模块中
+当我们拿 add_2 去调用这三个函数模板时，fn 的类型将分别被推导为 int (_)(int)、int (&amp;)(int) 和 int (_)(int)。
+第一个和第三个都是 int (*)(int) 第一个是不是 int (int)</p>2020-01-09</li><br/><li><span>空气</span> 👍（1） 💬（1）<p>吴老师，我在工作中很经常用到function。文中讲到function对象的创建比较耗资源，能否介绍一下原因，或者可以参考哪些资料？确实要使用的话，是否有必要使用共享指针管理来减轻复制和转移消耗？
 如果lambda的推导类型不是function，那是什么类型呢？和function有什么区别？</p>2020-01-04</li><br/><li><span>viper</span> 👍（1） 💬（2）<p>老师，为什么上面会说用add_2去调用那三模版函数返回值都是2，不该是4吗？</p>2020-01-01</li><br/><li><span>你好梦梦</span> 👍（0） 💬（1）<p>老师，对于一个function类型，如果把他作为函数型参，是用引用好，还是直接传值好</p>2022-09-08</li><br/>
 </ul>

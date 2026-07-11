@@ -36,7 +36,7 @@
 其中，**描述线性空间已分配的内存区域的结构对于内存管理至关重要**，我们先来看一下这个结构。在Linux源码中，负责这个功能的结构是vm\_area\_struct，后面简称vma。内核将每一段具有相同属性的内存区域当作一个单独的内存对象进行管理。vma中比较重要的属性我列在下面：
 
 ```
-struct vm_area_struct { 
+struct vm_area_struct {
 	unsigned long vm_start;      // 区间首地址
 	unsigned long vm_end;        // 区间尾地址
     pgprot_t      vm_page_prot;  // 访问控制权限

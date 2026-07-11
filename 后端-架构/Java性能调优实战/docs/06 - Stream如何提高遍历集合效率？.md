@@ -45,13 +45,13 @@ Map<String, List<Student>> stuMap = new HashMap<String, List<Student>>();
 1.串行实现
 
 ```
-Map<String, List<Student>> stuMap = stuList.stream().filter((Student s) -> s.getHeight() > 160) .collect(Collectors.groupingBy(Student ::getSex)); 
+Map<String, List<Student>> stuMap = stuList.stream().filter((Student s) -> s.getHeight() > 160) .collect(Collectors.groupingBy(Student ::getSex));
 ```
 
 2.并行实现
 
 ```
-Map<String, List<Student>> stuMap = stuList.parallelStream().filter((Student s) -> s.getHeight() > 160) .collect(Collectors.groupingBy(Student ::getSex)); 
+Map<String, List<Student>> stuMap = stuList.parallelStream().filter((Student s) -> s.getHeight() > 160) .collect(Collectors.groupingBy(Student ::getSex));
 ```
 
 通过上面两个简单的例子，我们可以发现，Stream结合Lambda表达式实现遍历筛选功能非常得简洁和便捷。
@@ -190,7 +190,7 @@ new StatelessOp将会调用父类AbstractPipeline的构造函数，这个构造�
         previousStage.linkedOrConsumed = true;
         previousStage.nextStage = this;//将当前的stage的next指针指向之前的stage
 
-        this.previousStage = previousStage;//赋值当前stage当全局变量previousStage 
+        this.previousStage = previousStage;//赋值当前stage当全局变量previousStage
         this.sourceOrOpFlags = opFlags & StreamOpFlag.OP_MASK;
         this.combinedFlags = StreamOpFlag.combineOpFlags(opFlags, previousStage.combinedFlags);
         this.sourceStage = previousStage.sourceStage;
@@ -343,15 +343,15 @@ integerList.stream()
 
 思考题：Stream并行执行，无法确认每个元素的处理顺序，最后parallelList中的数字是无序的</p>2019-06-01</li><br/><li><span>一路看风景</span> 👍（13） 💬（2）<p>老师您好，在容器盛行的微服务环境下，以及大数据处理流行的潮流中，我觉得stream的应用空间多少有些尴尬呢，不知是不是我的理解有误。即：单核容器运行的环境下stream没了性能优势，大数据的处理又有大数据平台去完成使命，所以是不是意味着我们可以从stream得到的最大收益变成了流式编程和函数式编程带来的代码易读和易用性了呢？</p>2019-06-01</li><br/><li><span>阿厚</span> 👍（8） 💬（1）<p>老师，请教2个问题：
 1.有什么分表分库中间件推荐么？
-2.分表分库以后，查询分页怎么办呢？</p>2019-06-06</li><br/><li><span>辉煌码农</span> 👍（7） 💬（1）<p>allMatch为什么是短路呢，短路的如何定义的呢</p>2020-01-02</li><br/><li><span>圣西罗</span> 👍（6） 💬（2）<p>老师，现在网上有些说法做测试用lambda比普通for循环速度慢五倍，因此有人拒绝用。实际情况是什么样呢？如果我自己想测，应该怎么尽可能排除外因干扰，测一下他们的实际效率对比？</p>2019-06-01</li><br/><li><span>QQ怪</span> 👍（5） 💬（1）<p>是不是该把思考题中的arraylist换成线程安全的copyOnwriteList就可以解决线程不安全问题?</p>2019-06-03</li><br/><li><span>N</span> 👍（4） 💬（1）<p>老师有个问题请教一下，公司业务代码中有大量stream对集合遍历，过滤，聚合的用法，但都是串行的，因为大部分数据量不是很大，请问数据量多大的时候才有必要使用并行提高效率呢？</p>2019-07-14</li><br/><li><span>Loubobooo</span> 👍（4） 💬（1）<p>parallelList集合里呈现的是无序的数字，是这样吗？</p>2019-06-01</li><br/><li><span>Mr wind</span> 👍（3） 💬（1）<p>为什么聚合操作是线程安全的呢。</p>2019-12-08</li><br/><li><span>Andy</span> 👍（3） 💬（1）<p>感觉stream这种中间操作和终结操作 跟spark中转换操作和处理操作 思想很像，懒加载</p>2019-10-21</li><br/><li><span>一路奔跑</span> 👍（3） 💬（1）<p>ArraryList是非线性安全的，并行流处理会出现越界或者重复或者少元素的情况！这个坑我踩过！</p>2019-07-08</li><br/><li><span>better</span> 👍（2） 💬（1）<p>目前刚毕业，读起这篇文章觉得有点吃力，特别是到了Stream的源码开始那里，后面基本都看不懂了，老师，是因为现在的实战经验还不够吗</p>2019-09-24</li><br/><li><span>Allen</span> 👍（1） 💬（1）<p>对一个集合进行并行处理 我对比下来 使用显式的线程池进行多线程处理要快于使用 parallel stream  而且使用线程池应该能保证系统线程资源不被耗尽吧 </p>2020-04-13</li><br/><li><span>遇见</span> 👍（1） 💬（1）<p>&quot;这个例子的需求是查找出一个长度最长，并且以张为姓氏的名字&quot;
+2.分表分库以后，查询分页怎么办呢？</p>2019-06-06</li><br/><li><span>辉煌码农</span> 👍（7） 💬（1）<p>allMatch为什么是短路呢，短路的如何定义的呢</p>2020-01-02</li><br/><li><span>圣西罗</span> 👍（6） 💬（2）<p>老师，现在网上有些说法做测试用lambda比普通for循环速度慢五倍，因此有人拒绝用。实际情况是什么样呢？如果我自己想测，应该怎么尽可能排除外因干扰，测一下他们的实际效率对比？</p>2019-06-01</li><br/><li><span>QQ怪</span> 👍（5） 💬（1）<p>是不是该把思考题中的arraylist换成线程安全的copyOnwriteList就可以解决线程不安全问题?</p>2019-06-03</li><br/><li><span>N</span> 👍（4） 💬（1）<p>老师有个问题请教一下，公司业务代码中有大量stream对集合遍历，过滤，聚合的用法，但都是串行的，因为大部分数据量不是很大，请问数据量多大的时候才有必要使用并行提高效率呢？</p>2019-07-14</li><br/><li><span>Loubobooo</span> 👍（4） 💬（1）<p>parallelList集合里呈现的是无序的数字，是这样吗？</p>2019-06-01</li><br/><li><span>Mr wind</span> 👍（3） 💬（1）<p>为什么聚合操作是线程安全的呢。</p>2019-12-08</li><br/><li><span>Andy</span> 👍（3） 💬（1）<p>感觉stream这种中间操作和终结操作 跟spark中转换操作和处理操作 思想很像，懒加载</p>2019-10-21</li><br/><li><span>一路奔跑</span> 👍（3） 💬（1）<p>ArraryList是非线性安全的，并行流处理会出现越界或者重复或者少元素的情况！这个坑我踩过！</p>2019-07-08</li><br/><li><span>better</span> 👍（2） 💬（1）<p>目前刚毕业，读起这篇文章觉得有点吃力，特别是到了Stream的源码开始那里，后面基本都看不懂了，老师，是因为现在的实战经验还不够吗</p>2019-09-24</li><br/><li><span>Allen</span> 👍（1） 💬（1）<p>对一个集合进行并行处理 我对比下来 使用显式的线程池进行多线程处理要快于使用 parallel stream 而且使用线程池应该能保证系统线程资源不被耗尽吧 </p>2020-04-13</li><br/><li><span>遇见</span> 👍（1） 💬（1）<p>&quot;这个例子的需求是查找出一个长度最长，并且以张为姓氏的名字&quot;
 
 文稿中的代码只能获取到名字最长的长度吧? 是获取不到名字最长的名字的, 最后的toString只能得到 &quot;OptionalInt[4]&quot; 得不到 &quot;张五六七&quot;
 
 改成:
 
 &quot;names.stream()
-                .filter(name -&gt; name.startsWith(&quot;张&quot;)).max(Comparator.comparingInt(String::length))
-                .ifPresent(System.out::println);&quot;
+.filter(name -&gt; name.startsWith(&quot;张&quot;)).max(Comparator.comparingInt(String::length))
+.ifPresent(System.out::println);&quot;
 
 才可以打印出来名字</p>2019-12-17</li><br/><li><span>迎风劲草</span> 👍（1） 💬（1）<p>老师，为什么stream操作，就比自己循环的效率高呢，没看懂。</p>2019-06-05</li><br/>
 </ul>

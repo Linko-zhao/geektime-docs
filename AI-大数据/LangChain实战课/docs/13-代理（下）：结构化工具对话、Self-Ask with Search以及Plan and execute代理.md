@@ -49,17 +49,17 @@ def run():
     with sync_playwright() as p:
         # 使用Chromium，但你也可以选择firefox或webkit
         browser = p.chromium.launch()
-        
+       
         # 创建一个新的页面
         page = browser.new_page()
-        
+       
         # 导航到指定的URL
         page.goto('https://langchain.com/')
-        
+       
         # 获取并打印页面标题
         title = page.title()
         print(f"Page title is: {title}")
-        
+       
         # 关闭浏览器
         browser.close()
 
@@ -108,7 +108,7 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.chat_models import ChatAnthropic, ChatOpenAI
 
 # LLM不稳定，对于这个任务，可能要多跑几次才能得到正确结果
-llm = ChatOpenAI(temperature=0.5)  
+llm = ChatOpenAI(temperature=0.5)
 
 agent_chain = initialize_agent(
     tools,
@@ -184,7 +184,7 @@ loop.run_until_complete(main())
 
 > Thought:The headers on python.langchain.com are:  
 >  
-> 
+>
 > 1. Introduction  
 >    … …
 > 2. API reference
@@ -192,12 +192,17 @@ loop.run_until_complete(main())
 第三轮思考：模型已经找到了网页中的所有标题。
 
 > Action:
-> 
+>
 > ```
 > {
+> ```
+
   "action": "Final Answer",
   "action_input": "The headers on python.langchain.com are: 1. Introduction 2. Get started 3. Modules 4. Model I/O 5. Data connection 6. Chains 7. Agents 8. Memory 9. Callbacks 10. Examples, ecosystem, and resources 11. Use cases 12. Guides 13. Ecosystem 14. Additional resources 15. Support 16. API reference"
 }
+
+> ```
+>
 > ```
 
 行动：给出最终答案。
@@ -217,7 +222,7 @@ Self-Ask with Search 也是LangChain中的一个有用的代理类型（SELF\_AS
 这是什么意思？让我通过示例来给你演示一下，你就明白了。在这个示例中，我们使用SerpAPIWrapper作为工具，用OpenAI作为语言模型，创建Self-Ask with Search代理。
 
 ```plain
-from langchain import OpenAI, SerpAPIWrapper 
+from langchain import OpenAI, SerpAPIWrapper
 from langchain.agents import initialize_agent, Tool
 from langchain.agents import AgentType
 
@@ -225,7 +230,7 @@ llm = OpenAI(temperature=0)
 search = SerpAPIWrapper()
 tools = [
     Tool(
-        name="Intermediate Answer", 
+        name="Intermediate Answer",
         func=search.run,
         description="useful for when you need to ask with search",
     )
@@ -235,7 +240,7 @@ self_ask_with_search = initialize_agent(
     tools, llm, agent=AgentType.SELF_ASK_WITH_SEARCH, verbose=True
 )
 self_ask_with_search.run(
-    "使用玫瑰作为国花的国家的首都是哪里?"  
+    "使用玫瑰作为国花的国家的首都是哪里?"
 )
 ```
 
@@ -412,24 +417,25 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.chat_models import ChatOpenAI
 
 # LLM不稳定，异步方式总是得不到结果。尝试使用同步方式
+
 llm = ChatOpenAI(temperature=0.5)
 
 agent_chain = initialize_agent(
-    tools,
-    llm,
-    agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True,
+tools,
+llm,
+agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+verbose=True,
 )
 
-
 def main():
-    response = agent_chain.run(&quot;What are the headers on python.langchain.com?&quot;)
-    print(response)
+response = agent_chain.run(&quot;What are the headers on python.langchain.com?&quot;)
+print(response)
 
 main()
 </p>2024-01-09</li><br/><li><span>shatu</span> 👍（0） 💬（1）<p>Plan and execute受限于大模型的不稳定性，还是可能出错，而且一步错步步错，这对于复杂多步骤流程还是很有挑战性【Thought:To calculate the number of bouquets that can be purchased, you need to divide 100 by the average price of a bouquet of roses in New York.
 
 Action:
+
 ```
 {
   &quot;action&quot;: &quot;Calculator&quot;,
@@ -437,15 +443,15 @@ Action:
 }
 ```
 
-
 &gt; Entering new LLMMathChain chain...
 100 &#47; (63.98 + 56.99 + 18.70)```text
 100 &#47; (63.98 + 56.99 + 18.70)
+
 ```
 ...numexpr.evaluate(&quot;100 &#47; (63.98 + 56.99 + 18.70)&quot;)...
 
 Answer: 0.7159733657907926】</p>2023-11-17</li><br/><li><span>Geek_995b81</span> 👍（0） 💬（1）<p>老师，结构化工具那一个demo，比如模型决定使用 PlayWrightBrowserToolkit 中的 get_elements 工具。这里我们没有给他提示，他是怎么知道用get_elements工具的呢？另外，结构化工具还有其他工具吗？</p>2023-10-31</li><br/><li><span>Monin</span> 👍（0） 💬（3）<p>老师 请教下  Plan and execute和之前说的ReAct感觉很相似  都可以概括为推理+行动？  那两者的区别是啥？  我个人理解是
-①Plan and execute可以由两个LLM代理完成   ReAct一般由一个LLM完成整个推理+行动    
+①Plan and execute可以由两个LLM代理完成   ReAct一般由一个LLM完成整个推理+行动
 ②Plan and execute由多个LLM  可以让推理+行动并行操作   实现fork-join操作  缩短执行时间</p>2023-10-25</li><br/><li><span>旅梦开发团</span> 👍（0） 💬（2）<p>我这里执行 playwright install  报了以下错误：
 Downloading Chromium 117.0.5938.62 (playwright build v1080) from https:&#47;&#47;playwright.azureedge.net&#47;builds&#47;chromium&#47;1080&#47;chromium-win64.zip
 Error: read ECONNRESET  大家怎么解决的</p>2023-10-03</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p>***** 修订课程中“使用结构化工具对话代理”部分的代码，改为通义千问，将旧版 langchain的改为新版本
@@ -463,7 +469,7 @@ llm = ChatOpenAI(temperature=0.5)
 ## 新代码2：（用千问模型代替 OpenAI )
 llm = ChatOpenAI(
     api_key=&quot;KEY&quot;, # 用你的DASHSCOPE_API_KEY
-    base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;, 
+    base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;,
     model=&quot;qwen-plus&quot;
     )
 ----
@@ -474,7 +480,7 @@ response = await agent_chain.arun(&quot;What are the headers on python.langchain
 
 ****  修订课程中“使用 Self-Ask with Search 代理”部分的中代码，用通义千问 和Perplexity
 ## 旧代码4
-from langchain import OpenAI, SerpAPIWrapper 
+from langchain import OpenAI, SerpAPIWrapper
 ## 新代码4
 from langchain_openai import ChatOpenAI
 from langchain_community.chat_models import ChatPerplexity
@@ -482,16 +488,16 @@ from langchain_community.chat_models import ChatPerplexity
 ## 旧代码5
 llm = OpenAI(temperature=0)
 search = SerpAPIWrapper()
-## 新代码5 
-# 用千问大模型初始化 
-llm = ChatOpenAI(   
+## 新代码5
+# 用千问大模型初始化
+llm = ChatOpenAI(
     api_key= &quot;key&quot;,  # 你的DASHSCOPE_API_KEY
-    base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;,  
+    base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;,
     model=&quot;qwen-long&quot;)
 
 # 新用Perplexity 初始化网络搜索工具
-search = ChatPerplexity(    
-    temperature=0.3, 
+search = ChatPerplexity(
+    temperature=0.3,
     pplx_api_key= ”key“,  # 你的PPLX_API_KEY
     model=&quot;llama-3-sonar-small-32k-online&quot;)
 ---
@@ -499,6 +505,7 @@ search = ChatPerplexity(
 func=search.run,
 self_ask_with_search.run( &quot;使用玫瑰作为国花的国家的首都是哪里?&quot;  )
 ## 新代码6 ，将run方法改为invote
-func=search.invoke,  
+func=search.invoke,
 self_ask_with_search_agent.invoke(&quot;使用玫瑰作为国花的国家的首都是哪里?&quot;) </p>2024-08-10</li><br/>
 </ul>
+```

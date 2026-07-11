@@ -171,22 +171,22 @@ next-server 192.168.1.180;
 <li><span>袁沛</span> 👍（344） 💬（10）<p>20年前大学宿舍里绕了好多同轴电缆的10M以太网，上BBS用IP，玩星际争霸用IPX。那时候没有DHCP，每栋楼有个哥们负责分配IP。</p>2018-05-25</li><br/><li><span>Will王志翔(大象)</span> 👍（139） 💬（1）<p>以问答写笔记：
 
 1. 正确配置IP?
-	
+
 CIDR、子网掩码、广播地址和网关地址。
-	
+
 2. 在跨网段调用中，是如何获取目标IP的mac地址的？
-	
+
 从源IP网关获取所在网关mac,
 然后又替换为目标IP所在网段网关的mac,
 最后是目标IP的mac地址
-	
+
 3. 手动配置麻烦，怎么办？
-	
+
 DHCP！Dynamic Host Configuration Protocol！
 DHCP, 让你配置IP，如同自动房产中介。
-	
+
 4. 如果新来的，房子是空的(没有操作系统)，怎么办？
-	
+
 PXE， Pre-boot Execution Environment.
 &quot;装修队&quot;PXE，帮你安装操作系统。</p>2018-07-07</li><br/><li><span>ERIC</span> 👍（91） 💬（14）<p>刘老师你好，文章关于DHCP可能是有两处错误。DHCP Offer 和 DHCP ACK都不是广播包，而是直接发到客户机的网卡上的。这是wiki上的链接：
 https:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Dynamic_Host_Configuration_Protocol#DHCP_offer

@@ -43,7 +43,7 @@ React Native 的 ScrollView 组件在 Android 的底层实现用的是 ScrollVie
   <ScrollView>
     <Text>1</Text>
   <ScrollView/>
-</SafeAreaView>    
+</SafeAreaView>
 ```
 
 了解完 ScrollView 组件的基本使用方法后，我们再来看下 ScrollView 的性能，看看如果使用 ScrollView 来实现无限列表会怎么样。
@@ -53,7 +53,7 @@ React Native 的 ScrollView 组件在 Android 的底层实现用的是 ScrollVie
 ```plain
 // 10 个 item 就能填满整个屏幕，渲染很快
 // 1000 个 item 相当于 100+ 个屏幕的高度，渲染很慢
-const NUM_ITEMS = 1000; 
+const NUM_ITEMS = 1000;
 
 const makeContent = (nItems: number, styles: any) => {
   return Array(nItems)
@@ -115,7 +115,7 @@ FlatList30_39 = [$empty,$empty,{ },{👁}]// 浏览30~39条列表项
 
 在上面的示例中，同样是渲染 40 条列表。ScrollView 一次性渲染了 40 条列表，无论你滚动到哪儿，所有的列表项都是渲染好的。
 
-但FlatList 在你浏览 0~9 条列表项时，只渲染了0~19条列表，剩余的20~39条列表项是没有渲染的。在你浏览滚动到第 10~19 条时，FlatList 把 20~29 条列表项提前加载出来了，这就是按需渲染加载机制.当你继续滚动到 20~29 条列表项时，FlatList 会把第 0~9 条列表项回收，用空元素 $empty 代替，当你再滚动到 30~39 条列表项时，同理 10~19 条列表项也会被空元素 $empty，这就是内存回收。
+但FlatList 在你浏览 0~~9 条列表项时，只渲染了0~~19条列表，剩余的20~~39条列表项是没有渲染的。在你浏览滚动到第 10~~19 条时，FlatList 把 20~~29 条列表项提前加载出来了，这就是按需渲染加载机制.当你继续滚动到 20~~29 条列表项时，FlatList 会把第 0~9 条列表项回收，用空元素 $empty 代替，当你再滚动到 30~39 条列表项时，同理 10~19 条列表项也会被空元素 $empty，这就是内存回收。
 
 40 条列表只是一个假设的例子，实现 FlatList自动按需渲染的思路具体可以分为三步：
 
@@ -141,7 +141,7 @@ FlatList30_39 = [$empty,$empty,{ },{👁}]// 浏览30~39条列表项
 
 第三步，渲染需要按需渲染列表项。有了索引后，渲染列表项就变得很简单，用 setState 即可。
 
-假设 1 个屏幕高度的内容由 10 个列表项组成。在首次渲染的时候，按需渲染的列表项索引是 0~110，这时会渲染 11 个屏幕高度的内容。当用户滑到第 11 个屏幕时，索引就是 0~210，这时再在后面渲染 10 个屏幕高度的内容。当用户滑到第 21 个屏幕时，索引是 100~310，又会再在后面渲染 10 个屏幕高度的内容，同时把前面 10 个屏幕高的内容用空视图代替。当然这个过程是顺滑的，列表项是一个个渲染的，而不是 1 个屏幕或 10 个屏幕渲染的。
+假设 1 个屏幕高度的内容由 10 个列表项组成。在首次渲染的时候，按需渲染的列表项索引是 0~~110，这时会渲染 11 个屏幕高度的内容。当用户滑到第 11 个屏幕时，索引就是 0~~210，这时再在后面渲染 10 个屏幕高度的内容。当用户滑到第 21 个屏幕时，索引是 100~310，又会再在后面渲染 10 个屏幕高度的内容，同时把前面 10 个屏幕高的内容用空视图代替。当然这个过程是顺滑的，列表项是一个个渲染的，而不是 1 个屏幕或 10 个屏幕渲染的。
 
 ## RecyclerListView：可复用的列表组件
 
@@ -348,15 +348,16 @@ rowRenderer 的对应代码，我也放在了这里，你可以对照查看：
        return (
         &lt;View style={{height:100}}&gt;
              &lt;Text &gt;data&lt;&#47;Text&gt;
-          
+
         &lt;&#47;View&gt;
        )
     }
 
 但是在模拟显示的时候却报错：
-  LayoutException: RecyclerListView needs to have a bounded size. Currently height or, width is 0.Consider adding style={{flex:1}} or, fixed dimensions
+LayoutException: RecyclerListView needs to have a bounded size. Currently height or, width is 0.Consider adding style={{flex:1}} or, fixed dimensions
 
      我明明已经明确了每一个列表项的height，为什么还会报错？但是一旦我重新刷新之后，报错就消失了，但是控制台中并没有打印我在rowRenderer函数中中指定的信息，所以为什么rowRenderer函数没有被调用？
+
 </p>2022-06-29</li><br/><li><span>IRONMAN</span> 👍（0） 💬（0）<p>老师我用函数组件重新写了一下你的demo，为什么RecycleListView中的内容根本不显示，页面一篇空白。
 function  Scroll (props){
     const {width} = useContext(devInfoContext)
@@ -398,18 +399,19 @@ function  Scroll (props){
               dim.height = 0;
           }
     }))
+
 &#47;&#47; console.log(dataProvider)
-    const _rowRenderer = (type,data)=&gt;{
-        console.log(data,data.name)
-        &#47;&#47;编写如何渲染数据
-       return (
-        &lt;View style={{height:10}}&gt;
-           { [1,2,3].map(()=&gt;{
-               return  &lt;Text key={String(new Date().getUTCMilliseconds())}&gt;data&lt;&#47;Text&gt;
-            })}
-        &lt;&#47;View&gt;
-       )
-    }
+const _rowRenderer = (type,data)=&gt;{
+console.log(data,data.name)
+&#47;&#47;编写如何渲染数据
+return (
+&lt;View style={{height:10}}&gt;
+{ [1,2,3].map(()=&gt;{
+return &lt;Text key={String(new Date().getUTCMilliseconds())}&gt;data&lt;&#47;Text&gt;
+})}
+&lt;&#47;View&gt;
+)
+}
 
     return (
         &lt;RecyclerListView
@@ -418,7 +420,7 @@ function  Scroll (props){
             dataProvider={dataProvider}
             rowRenderer={_rowRenderer}
             style={{flex:1}}
-        
+
         &#47;&gt;
     )
 

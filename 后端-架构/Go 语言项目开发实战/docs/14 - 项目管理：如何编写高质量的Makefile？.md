@@ -280,13 +280,13 @@ BINS ?= $(foreach cmd,${COMMANDS},$(notdir ${cmd}))
 
 .PHONY: go.build
 go.build: go.build.verify $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS)))
-.PHONY: go.build.%               
+.PHONY: go.build.%
 
-go.build.%:             
+go.build.%:
   $(eval COMMAND := $(word 2,$(subst ., ,$*)))
   $(eval PLATFORM := $(word 1,$(subst ., ,$*)))
-  $(eval OS := $(word 1,$(subst _, ,$(PLATFORM))))           
-  $(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))                         
+  $(eval OS := $(word 1,$(subst _, ,$(PLATFORM))))
+  $(eval ARCH := $(word 2,$(subst _, ,$(PLATFORM))))
   @echo "===========> Building binary $(COMMAND) $(VERSION) for $(OS) $(ARCH)"
   @mkdir -p $(OUTPUT_DIR)/platforms/$(OS)/$(ARCH)
   @CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(ARCH) $(GO) build $(GO_BUILD_FLAGS) -o $(OUTPUT_DIR)/platforms/$(OS)/$(ARCH)/$(COMMAND)$(GO_OUT_EXT) $(ROOT_PACKAGE)/cmd/$(COMMAND)
@@ -352,11 +352,11 @@ gen.errcode.doc: tools.verify.codegen
 ```
 gen.errcode.code: tools.verify.codegen
 
-tools.verify.%:    
-  @if ! which $* &>/dev/null; then $(MAKE) tools.install.$*; fi  
+tools.verify.%:
+  @if ! which $* &>/dev/null; then $(MAKE) tools.install.$*; fi
 
 .PHONY: install.codegen
-install.codegen:              
+install.codegen:
   @$(GO) install ${ROOT_DIR}/tools/codegen/codegen.go
 ```
 
@@ -379,31 +379,31 @@ gen.errcode.code: install.codegen
 **首先，**在/Makefile中定义 `USAGE_OPTIONS` 。定义 `USAGE_OPTIONS` 可以使开发者在执行 `make help` 后感知到此OPTION，并根据需要进行设置。
 
 ```
-define USAGE_OPTIONS    
-                         
+define USAGE_OPTIONS
+
 Options:
   ...
   BINS         The binaries to build. Default is all of cmd.
                ...
   ...
-  V            Set to 1 enable verbose build. Default is 0.    
-endef    
-export USAGE_OPTIONS    
+  V            Set to 1 enable verbose build. Default is 0.
+endef
+export USAGE_OPTIONS
 ```
 
 **接着，**在[scripts/make-rules/common.mk](https://github.com/marmotedu/iam/blob/master/scripts/make-rules/common.mk#L70)文件中，我们通过判断有没有设置V选项，来选择不同的行为：
 
 ```
-ifndef V    
-MAKEFLAGS += --no-print-directory    
+ifndef V
+MAKEFLAGS += --no-print-directory
 endif
 ```
 
 当然，我们还可以通过下面的方法来使用 `V` ：
 
 ```
-ifeq ($(origin V), undefined)                                
-MAKEFLAGS += --no-print-directory              
+ifeq ($(origin V), undefined)
+MAKEFLAGS += --no-print-directory
 endif
 ```
 
@@ -422,20 +422,20 @@ go.build: go.build.verify $(addprefix go.build., $(addprefix $(PLATFORM)., $(BIN
 我们可以在Makefile中定义一些环境变量，例如：
 
 ```
-GO := go                                          
-GO_SUPPORTED_VERSIONS ?= 1.13|1.14|1.15|1.16|1.17    
-GO_LDFLAGS += -X $(VERSION_PACKAGE).GitVersion=$(VERSION) \    
-  -X $(VERSION_PACKAGE).GitCommit=$(GIT_COMMIT) \       
-  -X $(VERSION_PACKAGE).GitTreeState=$(GIT_TREE_STATE) \                          
-  -X $(VERSION_PACKAGE).BuildDate=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')    
-ifneq ($(DLV),)                                                                                                                              
-  GO_BUILD_FLAGS += -gcflags "all=-N -l"    
-  LDFLAGS = ""      
-endif                                                                                   
-GO_BUILD_FLAGS += -tags=jsoniter -ldflags "$(GO_LDFLAGS)" 
+GO := go
+GO_SUPPORTED_VERSIONS ?= 1.13|1.14|1.15|1.16|1.17
+GO_LDFLAGS += -X $(VERSION_PACKAGE).GitVersion=$(VERSION) \
+  -X $(VERSION_PACKAGE).GitCommit=$(GIT_COMMIT) \
+  -X $(VERSION_PACKAGE).GitTreeState=$(GIT_TREE_STATE) \
+  -X $(VERSION_PACKAGE).BuildDate=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
+ifneq ($(DLV),)
+  GO_BUILD_FLAGS += -gcflags "all=-N -l"
+  LDFLAGS = ""
+endif
+GO_BUILD_FLAGS += -tags=jsoniter -ldflags "$(GO_LDFLAGS)"
 ...
-FIND := find . ! -path './third_party/*' ! -path './vendor/*'    
-XARGS := xargs --no-run-if-empty 
+FIND := find . ! -path './third_party/*' ! -path './vendor/*'
+XARGS := xargs --no-run-if-empty
 ```
 
 这些环境变量和编程中使用宏定义的作用是一样的：只要修改一处，就可以使很多地方同时生效，避免了重复的工作。

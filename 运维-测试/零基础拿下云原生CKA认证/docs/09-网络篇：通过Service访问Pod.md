@@ -64,7 +64,7 @@ spec:
     app: my-deployment
   type: ClusterIP    # 用于将来自同一个 IP 地址的请求定向到同一个 Pod 中
   ports: # 端口信息
-  - name: 80-80 
+  - name: 80-80
     protocol: TCP    # 端口协议
     port: 80         # Service 自身端口
     targetPort: 80   # Pod 容器端口
@@ -77,7 +77,7 @@ spec:
 部署 Service 的 YAML 文件，然后我们查看部署好的 Service 与 Endpoints，可以看到名叫 my-service 的 Service，它的类型（TYPE）是 ClusterIP，自动分配的集群内部 IP（CLUSTER-IP）为 “10.98.2.207”。从 Endpoints 可以看出 my-service 代理的 Pod 的 IP 地址（ENDPOINTS）是 “10.244.126.22，10.244.126.23，10.244.194.87”，也就是 Deployment 部署的三个 Pod 的 IP 地址。
 
 ```bash
-[root@k8s-master ~]# kubectl apply -f my-service.yaml 
+[root@k8s-master ~]# kubectl apply -f my-service.yaml
 service/my-service created
 [root@k8s-master ~]# kubectl get svc   # svc 是 Service 的缩写
 NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
@@ -164,14 +164,15 @@ NodePort 是一种常用的 Service 类型，它允许我们在集群外部访�
 我们来动手实验一下，修改上一小节的 Service 的 YAML 文件（my-service.yaml），将 Service 类型改为 NodePort，同时通过 “nodePort” 属性指定节点端口为 30001，然后重新部署一下。如果不指定节点端口为 30001，K8s 会为 NodePort 类型的 Service 自动分配一个节点端口，映射的节点端口范围是 30000-32767。
 
 ```yaml
+
 ...
-  type: NodePort
-  ports: # 端口信息
-  - name: 80-80 
-    protocol: TCP    # 端口协议
-    port: 80         # service 自身端口
-    targetPort: 80   # pod 容器端口
-    nodePort: 30001  # 自定义的节点映射端口
+type: NodePort
+ports: # 端口信息
+  - name: 80-80
+    protocol: TCP # 端口协议
+    port: 80 # service 自身端口
+    targetPort: 80 # pod 容器端口
+    nodePort: 30001 # 自定义的节点映射端口
 ```
 
 查看部署好的 Service，可以看到 my-service 的类型（TYPE）是 NodePort，Service 的 80 端口映射到了节点的 30001 端口（PORTS）。虽然 NodePort 是用于外部访问的 Service 类型，但它也为我们生成了用于内部访问的集群内部 IP（CLUSTER-IP）。因此，集群内部访问仍然可以使用这个内部 IP 地址。
@@ -208,7 +209,7 @@ metadata:
   name: baidu-service
 spec:
   type: ExternalName # Service 类型
-  externalName: www.baidu.com  # 使用外部服务的 IP 地址也可以
+  externalName: www.baidu.com # 使用外部服务的 IP 地址也可以
 ```
 
 部署成功后，就可以在集群内部通过访问 “baidu-service” 这个 Service 来访问百度网站了。ExternalName 类型的 Service 不会生成集群内部 IP 地址，所以需要用 Service 的 DNS 域名访问。
@@ -226,17 +227,18 @@ baidu-service   ExternalName   <none>      www.baidu.com   <none>  42m
 以下是一个多端口 Service 的 YAML 文件，通过访问 443 端口也可以访问到 Pod 应用。随后，我们将学习 Ingress 资源对象，通过 Ingress 可以方便地配置 HTTPS 访问。
 
 ```yaml
+
 ...
-  type: NodePort    # 用于将来自同一个 IP 地址的请求定向到同一个 Pod 中
-  ports: # 端口信息
-  - name: 80-80 
-    protocol: TCP    # 端口协议
-    port: 80         # Service 自身端口
-    targetPort: 80   # Pod 容器端口
-  - name: 443-80 
-    protocol: TCP    # 端口协议
-    port: 443        # Service 自身端口
-    targetPort: 80   # Pod 容器端口
+type: NodePort # 用于将来自同一个 IP 地址的请求定向到同一个 Pod 中
+ports: # 端口信息
+  - name: 80-80
+    protocol: TCP # 端口协议
+    port: 80 # Service 自身端口
+    targetPort: 80 # Pod 容器端口
+  - name: 443-80
+    protocol: TCP # 端口协议
+    port: 443 # Service 自身端口
+    targetPort: 80 # Pod 容器端口
 ```
 
 部署成功后，可以看到 Service 生成了两个端口，并且都映射到节点的不同 NodePort 端口。

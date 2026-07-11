@@ -63,7 +63,7 @@ LimitLatch用来控制连接个数，当连接数到达最大时阻塞线程，�
 ```
 public class LimitLatch {
     private class Sync extends AbstractQueuedSynchronizer {
-     
+
         @Override
         protected int tryAcquireShared() {
             long newCount = count.incrementAndGet();
@@ -85,7 +85,7 @@ public class LimitLatch {
     private final Sync sync;
     private final AtomicLong count;
     private volatile long limit;
-    
+
     //线程调用这个方法来获得接收新连接的许可，线程可能被阻塞
     public void countUpOrAwait() throws InterruptedException {
       sync.acquireSharedInterruptibly(1);
@@ -189,26 +189,23 @@ server.tomcat.max-connections=1000
 
 其中3500多个Runnable状态的线程栈信息如下所示：
 &quot;I&#47;O dispatcher 1098713&quot; #1202019 prio=5 os_prio=0 tid=0x00007fdd24071000 nid=0x221f runnable [0x00007fdd28709000]
-   java.lang.Thread.State: RUNNABLE
-        at sun.nio.ch.EPollArrayWrapper.epollWait(Native Method)
-        at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
-        at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
-        at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
-        - locked &lt;0x00000007504d4020&gt; (a sun.nio.ch.Util$2)
-        - locked &lt;0x00000007504d4008&gt; (a java.util.Collections$UnmodifiableSet)
-        - locked &lt;0x0000000754258eb8&gt; (a sun.nio.ch.EPollSelectorImpl)
-        at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
-        at org.apache.http.impl.nio.reactor.AbstractIOReactor.execute(AbstractIOReactor.java:255)
-        at org.apache.http.impl.nio.reactor.BaseIOReactor.execute(BaseIOReactor.java:104)
-        at org.apache.http.impl.nio.reactor.AbstractMultiworkerIOReactor$Worker.run(AbstractMultiworkerIOReactor.java:588)
-        at java.lang.Thread.run(Thread.java:745)
+java.lang.Thread.State: RUNNABLE
+at sun.nio.ch.EPollArrayWrapper.epollWait(Native Method)
+at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86) - locked &lt;0x00000007504d4020&gt; (a sun.nio.ch.Util$2)
+        - locked &lt;0x00000007504d4008&gt; (a java.util.Collections$UnmodifiableSet) - locked &lt;0x0000000754258eb8&gt; (a sun.nio.ch.EPollSelectorImpl)
+at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+at org.apache.http.impl.nio.reactor.AbstractIOReactor.execute(AbstractIOReactor.java:255)
+at org.apache.http.impl.nio.reactor.BaseIOReactor.execute(BaseIOReactor.java:104)
+at org.apache.http.impl.nio.reactor.AbstractMultiworkerIOReactor$Worker.run(AbstractMultiworkerIOReactor.java:588)
+at java.lang.Thread.run(Thread.java:745)
 
 问题1：引起上述大量Runnable线程的原因，是因为tomcat最大连接数默认10000导致，放进来这么多待运行的线程吗？有疑惑，头一次遇到呢。
 问题2：有1000多个WAITING状态的，目前分析是因为使用了HttpClient连接池，httpclient版本是4.5.5，其中可能没有合理设置超时参数导致，需要增加connectionRequestTimeout，减少retry重试次数，包括defaultMaxPerRoute参数的合理设置。这里的HttpClient线程池的大小和路由池大小怎么设置更合理呢？（可能跟tomcat没有太直接关系，如果老师有这方面经验不吝赐教）
 问题3：上面提到部署方式是docker，其中一台docker压测接口比如qps是100，该接口就是调用了第三方接口聚合下返回结果，但是再在同一台物理机上部署一个docker，nginx负载到这两台docker上，qps还是100，并没有什么提升，这个应该从哪方面分析下原因呢？
 
 问题有点多哦，麻烦老师了~</p>2019-06-12</li><br/><li><span>飞翔</span> 👍（12） 💬（1）<p>，当你的程序通过 CPU 向外部设备发出一个读指令时，数据从...
-
 
 李老师想问一个问题， cpu发出读指令， 那么是什么东西负责读数据从硬盘到内存这个过程呢？ 不是cpu嘛？</p>2019-06-11</li><br/><li><span>AlfredLover</span> 👍（11） 💬（2）<p>有个疑问：内核数据从内核空间拷贝到用户空间？
 这个过程是从内核内存拷贝到用户内存吗？

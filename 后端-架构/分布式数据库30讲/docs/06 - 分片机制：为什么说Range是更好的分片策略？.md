@@ -150,13 +150,13 @@ Range分片的优势是动态调度，这就是说分片存储在哪个节点上
 
 ## 学习资料
 
-David Karge et al.: [*Consistent Hashing and Random Trees: Distributed Caching Protocols for Relieving Hot Spots on the World Wide Web*](http://cs.brown.edu/courses/cs296-2/papers/consistent.pdf)
+David Karge et al.: [_Consistent Hashing and Random Trees: Distributed Caching Protocols for Relieving Hot Spots on the World Wide Web_](http://cs.brown.edu/courses/cs296-2/papers/consistent.pdf)
 
-Fay Chang et al.: [*Bigtable: A Distributed Storage System for Structured Data*](https://www2.cs.duke.edu/courses/cps399.28/spring08/papers/osdi06-ChangDeanEtAl-bigtable.pdf)
+Fay Chang et al.: [_Bigtable: A Distributed Storage System for Structured Data_](https://www2.cs.duke.edu/courses/cps399.28/spring08/papers/osdi06-ChangDeanEtAl-bigtable.pdf)
 
-HBase: [*Apache HBase ™ Reference Guide*](https://hbase.apache.org/book.html#arch.overview)
+HBase: [_Apache HBase ™ Reference Guide_](https://hbase.apache.org/book.html#arch.overview)
 
-James C. Corbett et al.: [*Spanner: Google’s Globally-Distributed Database*](https://www.cs.princeton.edu/courses/archive/fall13/cos518/papers/spanner.pdf)
+James C. Corbett et al.: [_Spanner: Google’s Globally-Distributed Database_](https://www.cs.princeton.edu/courses/archive/fall13/cos518/papers/spanner.pdf)
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>扩散性百万咸面包</span> 👍（20） 💬（2）<p>思考题：
 大部分分布式系统都有这么一个存储元数据的东西，比如TiDB的PD，HBase里的ZK，k8s的etcd。也可以把他们看成存储小数据的KV存储系统，一般通过Raft或者Paxos来维持共识，就跟普通分布式系统一样</p>2020-09-09</li><br/><li><span>真名不叫黄金</span> 👍（9） 💬（4）<p>猜测一下，如果是TiDB的话，将元数据存在PD，而PD本身又可部署为多节点高可用的，不过数据最终是落在etcd的，PD只是交互节点。

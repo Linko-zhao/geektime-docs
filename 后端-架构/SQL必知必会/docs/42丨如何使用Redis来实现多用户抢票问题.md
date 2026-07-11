@@ -97,12 +97,12 @@ def sell(i):
             # 监视票数
             pipe.watch(KEY)
             # 查看票数
-            c = int(pipe.get(KEY))      
+            c = int(pipe.get(KEY))
             if c > 0:
                 # 开始事务
-                pipe.multi()            
+                pipe.multi()
                 c = c - 1
-                pipe.set(KEY, c)        
+                pipe.set(KEY, c)
                 pipe.execute()
                 print('用户 {} 抢票成功，当前票数 {}'.format(i, c))
                 break
@@ -117,7 +117,7 @@ def sell(i):
 
 if __name__ == "__main__":
     # 初始化5张票
-    r.set(KEY, 5)  
+    r.set(KEY, 5)
     # 设置8个人抢票
     for i in range(8):
         t = threading.Thread(target=sell, args=(i,))

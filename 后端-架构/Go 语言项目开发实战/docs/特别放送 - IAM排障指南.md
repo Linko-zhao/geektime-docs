@@ -140,15 +140,15 @@ lines 10-54/54 (END)
 
 ```yaml
 log:
-    name: apiserver # Logger的名字
-    development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
-    level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
-    format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
-    enable-color: true # 是否开启颜色输出，true:是，false:否
-    disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
-    disable-stacktrace: false # 是否在panic及以上级别禁止打印堆栈信息
-    output-paths: /var/log/iam/iam-apiserver.log,stdout # 支持输出到多个输出，逗号分开。支持输出到标准输出（stdout）和文件。
-    error-output-paths: /var/log/iam/iam-apiserver.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
+  name: apiserver # Logger的名字
+  development: true # 是否是开发模式。如果是开发模式，会对DPanicLevel进行堆栈跟踪。
+  level: debug # 日志级别，优先级从低到高依次为：debug, info, warn, error, dpanic, panic, fatal。
+  format: console # 支持的日志输出格式，目前支持console和json两种。console其实就是text格式。
+  enable-color: true # 是否开启颜色输出，true:是，false:否
+  disable-caller: false # 是否开启 caller，如果开启会在日志中显示调用日志所在的文件、函数和行号
+  disable-stacktrace: false # 是否在panic及以上级别禁止打印堆栈信息
+  output-paths: /var/log/iam/iam-apiserver.log,stdout # 支持输出到多个输出，逗号分开。支持输出到标准输出（stdout）和文件。
+  error-output-paths: /var/log/iam/iam-apiserver.error.log # zap内部(非业务)错误日志输出路径，多个输出，逗号分开
 ```
 
 可以看到，iam-apiserver将日志分别记录到了`/var/log/iam/iam-apiserver.log`和`stdout`中。所以，我们可以通过查看`/var/log/iam/iam-apiserver.log`日志文件，来查看报错信息：

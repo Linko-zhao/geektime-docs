@@ -101,14 +101,14 @@ PID    COMM               FD ERR PATH
 # softirqs-bpfcc -d
 Tracing soft irq event time... Hit Ctrl-C to end.
 ^C
- 
+
 softirq = block
      usecs               : count     distribution
          0 -> 1          : 2        |********************                    |
          2 -> 3          : 3        |******************************          |
          4 -> 7          : 2        |********************                    |
          8 -> 15         : 4        |****************************************|
- 
+
 softirq = rcu
      usecs               : count     distribution
          0 -> 1          : 189      |****************************************|
@@ -116,7 +116,7 @@ softirq = rcu
          4 -> 7          : 21       |****                                    |
          8 -> 15         : 5        |*                                       |
         16 -> 31         : 1        |                                        |
- 
+
 softirq = net_rx
      usecs               : count     distribution
          0 -> 1          : 1        |********************                    |
@@ -124,7 +124,7 @@ softirq = net_rx
          4 -> 7          : 2        |****************************************|
          8 -> 15         : 0        |                                        |
         16 -> 31         : 2        |****************************************|
- 
+
 softirq = timer
      usecs               : count     distribution
          0 -> 1          : 16       |*************                           |
@@ -133,7 +133,7 @@ softirq = timer
          8 -> 15         : 5        |****                                    |
         16 -> 31         : 13       |**********                              |
         32 -> 63         : 13       |**********                              |
- 
+
 softirq = sched
      usecs               : count     distribution
          0 -> 1          : 18       |******                                  |
@@ -165,17 +165,17 @@ bpf_text = """
 #include <uapi/linux/ptrace.h>
 #include <uapi/linux/limits.h>
 #include <linux/sched.h>
- 
+
 …
- 
+
 BPF_HASH(infotmp, u64, struct val_t);  //BPF_MAP_TYPE_HASH
 BPF_PERF_OUTPUT(events);                   // BPF_MAP_TYPE_PERF_EVENT_ARRAY
- 
+
 int trace_entry(struct pt_regs *ctx, int dfd, const char __user *filename, int flags)
 {
 …
 }
- 
+
 int trace_return(struct pt_regs *ctx)
 {
 …
@@ -253,18 +253,18 @@ make -C /root/bcc/src/cc/libbpf/src BUILD_STATIC_ONLY=1                         
                 INCLUDEDIR= LIBDIR= UAPIDIR=                                  \
                 Install
 …
- 
+
 ar rcs /root/bcc/libbpf-tools/.output//libbpf/libbpf.a …
- 
+
 …
- 
+
 clang -g -O2 -target bpf -D__TARGET_ARCH_x86                        \
                  -I.output -c opensnoop.bpf.c -o .output/opensnoop.bpf.o &&                      \
 llvm-strip -g .output/opensnoop.bpf.o
 bin/bpftool gen skeleton .output/opensnoop.bpf.o > .output/opensnoop.skel.h
 cc -g -O2 -Wall -I.output -c opensnoop.c -o .output/opensnoop.o
 cc -g -O2 -Wall .output/opensnoop.o /root/bcc/libbpf-tools/.output/libbpf.a .output/trace_helpers.o .output/syscall_helpers.o .output/errno_helpers.o -lelf -lz -o opensnoop
- 
+
 …
 ```
 
@@ -282,9 +282,9 @@ cc -g -O2 -Wall .output/opensnoop.o /root/bcc/libbpf-tools/.output/libbpf.a .out
 #include "vmlinux.h"
 #include <bpf/bpf_helpers.h>
 #include "opensnoop.h"
- 
+
 #define TASK_RUNNING 0
- 
+
 const volatile __u64 min_us = 0;
 ```
 

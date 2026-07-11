@@ -49,7 +49,7 @@ public class MyClass {
 在命令行终端敲入下面两行命令，生成文本格式的字节码文件：
 
 ```
-javac MyClass.java   
+javac MyClass.java
 javap -v MyClass > MyClass.bc
 ```
 
@@ -202,6 +202,7 @@ Java的动态代理技术，只支持某个类所实现的接口中的方法。�
 - MyClass.bc（文本格式的字节码）： [码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/32-bytecode/src/main/java/MyClass.bc) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/32-bytecode/src/main/java/MyClass.bc)
 - ByteCodeGen.java（基于AST生成字节码）： [码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/playscript-java/src/main/play/ByteCodeGen.java) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/main/play/ByteCodeGen.java)
 - bytecode.play（示例用的playscript脚本）： [码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/playscript-java/src/examples/bytecode.play) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/examples/bytecode.play)
+
 <div><strong>精选留言（8）</strong></div><ul>
 <li><span>风</span> 👍（14） 💬（3）<p>老师能不能为我们展望一下量子计算机的面世和普及，会给编译器、操作系统、网络等传统计算机技术带来什么样的冲击？会不会完全是另外一套技术栈？</p>2019-11-08</li><br/><li><span>孤星可</span> 👍（11） 💬（1）<p>我正在写一个简单的 解释型 jvm  有兴趣欢迎共建  github mini-jvm</p>2019-11-18</li><br/><li><span>树袋熊</span> 👍（2） 💬（1）<p>老师，为什么把dsl编译成字节码会提高性能呢？和用java程序来解析dsl，然后用jvm运行两者有什么不同呢？dsl编译成字节码比较快是相对什么情况比较快？</p>2020-06-26</li><br/><li><span>sugar</span> 👍（4） 💬（0）<p>补充一点：基于寄存器的虚拟机，google的js虚拟机v8目前也是了（以前是栈机）。</p>2020-05-03</li><br/><li><span>Geek_08d95a</span> 👍（1） 💬（0）<p>老师 你好 你说的你们正在使用dsl这块做规则引擎 可以分享一下吗</p>2022-11-27</li><br/><li><span>阿鼎</span> 👍（1） 💬（0）<p>像c++这种编译型语言，如何做到AOP、IOC？</p>2021-08-20</li><br/><li><span>dll</span> 👍（0） 💬（0）<p>栈机并不是不用寄存器，实际上，操作数栈是可以基于寄存器实现的，寄存器放不下的再溢出到内存里。只不过栈机的每条指令，只能操作栈顶部的几个操作数，所以也就没有办法访问其它寄存器，实现更多的优化
 -——————————————————————————————————

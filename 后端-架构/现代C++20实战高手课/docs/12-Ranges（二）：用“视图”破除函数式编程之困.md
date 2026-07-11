@@ -29,7 +29,7 @@ int main() {
     for (int32_t i : std::views::iota(1) | std::views::take(4)) {
         std::cout << i << " ";
     }
-    
+
     return 0;
 }
 ```
@@ -195,7 +195,7 @@ int main() {
                 3
             ),
             [](auto element) { return element.first + element.second; }
-        ), 
+        ),
         [](auto number) {
             std::cout << number << " ";
         }
@@ -293,13 +293,13 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(1, 10);
-    
+   
     ranges::for_each(
         views::iota(0, 10) |
         views::transform([&distrib, &gen](int index) { return std::make_pair(index, distrib(gen)); }) |
         views::filter([](const auto& element) { return element.second > 5;  }) |
         views::take(3) |
-        views::transform([](const auto& element) { return element.first + element.second; }), 
+        views::transform([](const auto& element) { return element.first + element.second; }),
         [](int number) {
             std::cout << number << " ";
         }
@@ -376,26 +376,27 @@ D(C)(R)
 <li><span>tang_ming_wu</span> 👍（5） 💬（1）<p>对比函数式编程实现和传统编程实现，我个人觉得函数式编程只是伪需求和一小部分人的自嗨：（1）不方便调试（2）不方便设计解耦（3）不方便维护（4）不方便阅读理解。</p>2023-03-14</li><br/><li><span>Family mission</span> 👍（0） 💬（1）<p>views::reverse和ranges::reverse_view的使用
 #include &lt;iostream&gt;
 #include &lt;ranges&gt;
- 
+
 int main()
 {
-    namespace ranges=std::ranges;
-    namespace views = std::views;
-    static constexpr auto il = {3, 1, 4, 1, 5, 9};
- 
+namespace ranges=std::ranges;
+namespace views = std::views;
+static constexpr auto il = {3, 1, 4, 1, 5, 9};
+
     ranges::reverse_view rv{il};
     for (int i : rv)
         std::cout &lt;&lt; i &lt;&lt; &#39; &#39;;
     std::cout &lt;&lt; &#39;\n&#39;;
- 
+
     for (int i : il | views::reverse)
         std::cout &lt;&lt; i &lt;&lt; &#39; &#39;;
     std::cout &lt;&lt; &#39;\n&#39;;
- 
+
     &#47;&#47; operator[] is inherited from std::view_interface
     for (auto i{0U}; i != rv.size(); ++i)
         std::cout &lt;&lt; rv[i] &lt;&lt; &#39; &#39;;
     std::cout &lt;&lt; &#39;\n&#39;;
+
 }</p>2023-12-13</li><br/><li><span>Family mission</span> 👍（0） 💬（1）<p>作者你好，感觉ranges作用以及功能性都不错，请教个问题
 template &lt;class Element, size_t Size&gt;
 class ArrayView : public std::ranges::view_interface&lt;ArrayView&lt;Element, Size&gt;&gt; {

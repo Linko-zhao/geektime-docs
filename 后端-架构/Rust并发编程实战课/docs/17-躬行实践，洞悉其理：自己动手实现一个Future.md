@@ -76,10 +76,11 @@ async fn main() {
 1. `Delay` 结构体：存储延迟时间和完成状态。
 2. `impl Future for Delay`：为 `Delay` 实现了 `Future` trait。
 3. `poll()` 方法：这是 Future 的核心。
-   
+
    1. 如果 `self.completed` 为 `true`，则返回 `Poll::Ready`，表示 Future 已完成。
    2. 否则，模拟一个耗时操作（这里使用 `thread::sleep()`），然后将 `self.completed` 设置为 `true`。
    3. 重点：`cx.waker().wake_by_ref();` 这行代码非常重要。它获取一个 `Waker`，并调用 `wake_by_ref()` 方法。`Waker` 的作用是通知执行器（Executor）Future 已经准备好再次被 `poll()`。如果没有这一步，执行器就不知道 Future 已经完成了模拟的耗时操作，Future 就永远不会完成。
+
 4. `main()` 函数：使用 `tokio` 运行 `main()` Future。
 
 ### 改造 Delay
@@ -483,14 +484,14 @@ assert_eq!(try_join!(a, b), Err(2));
 use futures::{pending, select, FutureExt};
 
 async fn pending_function() -> i32 {
-    pending!(); 
-    
+    pending!();
+
     42
 }
 
 async fn ready_function() -> i32 {
     tokio::time::sleep(std::time::Duration::from_secs(1)).await;
-    
+
     48
 }
 
@@ -563,7 +564,7 @@ fn main() {
 
     let mut pinned_value: Pin<&mut i32> = value;
     *pinned_value = 10;
-    
+
     println!("{}", *pinned_value); // 输出 10
 }
 ```
@@ -606,7 +607,7 @@ async fn main() {
         }
     }
 
-    
+
     // 等待足够的时间，重新轮询 future
     tokio::time::sleep(std::time::Duration::from_millis(1000)).await;
     let poll_result = poll!(&mut future);
@@ -667,7 +668,7 @@ async fn main() {
         a_res = async_identity_fn(62).fuse() => a_res + 1,
         b_res = async_identity_fn(13).fuse() => b_res,
     };
-    
+
     println!("Result: {}", res);
 }
 ```

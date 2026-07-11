@@ -22,7 +22,7 @@
 - 信号量
 - ……
 
-即使对于专家，并发编程都是困难的，上面列举的也只是部分难点而已。对于并发的基本挑战，Herb Sutter 在他的 Effective Concurrency 专栏给出了一个较为全面的概述 \[2]。要对 C++ 的并发编程有全面的了解，则可以阅读曼宁出版的 *C++ Concurrency in Action*（有中文版，但翻译口碑不好）\[3]。而我们今天主要要介绍的，则是并发编程的基本概念，包括传统的多线程开发，以及高层抽象 future（姑且译为未来量）的用法。
+即使对于专家，并发编程都是困难的，上面列举的也只是部分难点而已。对于并发的基本挑战，Herb Sutter 在他的 Effective Concurrency 专栏给出了一个较为全面的概述 \[2]。要对 C++ 的并发编程有全面的了解，则可以阅读曼宁出版的 _C++ Concurrency in Action_（有中文版，但翻译口碑不好）\[3]。而我们今天主要要介绍的，则是并发编程的基本概念，包括传统的多线程开发，以及高层抽象 future（姑且译为未来量）的用法。
 
 ## 基于 thread 的多线程开发
 
@@ -356,7 +356,7 @@ int main()
 
 \[2] Herb Sutter, “Effective concurrency”. [https://herbsutter.com/2010/09/24/effective-concurrency-know-when-to-use-an-active-object-instead-of-a-mutex/](https://herbsutter.com/2010/09/24/effective-concurrency-know-when-to-use-an-active-object-instead-of-a-mutex/)
 
-\[3] Anthony Williams, *C++ Concurrency in Action* (2nd ed.). Manning, 2019, [https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition](https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition)
+\[3] Anthony Williams, _C++ Concurrency in Action_ (2nd ed.). Manning, 2019, [https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition](https://www.manning.com/books/c-plus-plus-concurrency-in-action-second-edition)
 
 \[4] cppreference.com, “std::thread”. [https://en.cppreference.com/w/cpp/thread/thread](https://en.cppreference.com/w/cpp/thread/thread)
 
@@ -409,14 +409,14 @@ cpplint. py --verbose=5 my_cpp_file
 output : &lt;thread&gt; is an unapproved c++11 header
 
 我看了一下cpplint脚本，里面确实对mutex thread chrono等头文件做了限制。</p>2020-01-09</li><br/><li><span>当初莫相识</span> 👍（0） 💬（1）<p>每次看线程都有新的收获，也有新的疑问。scoped_thread在析构函数时join，析构函数会等join完毕后销毁thread成员变量，对吗？
-  scoped_thread th{work, ref(cv),
-                   ref(result)};
-  &#47;&#47; 干一些其他事
-  cout &lt;&lt; &quot;I am waiting now\n&quot;;
-  unique_lock lock{cv_mut};
-  cv.wait(lock);
-  cout &lt;&lt; &quot;Answer: &quot; &lt;&lt; result
-       &lt;&lt; &#39;\n&#39;;
+scoped_thread th{work, ref(cv),
+ref(result)};
+&#47;&#47; 干一些其他事
+cout &lt;&lt; &quot;I am waiting now\n&quot;;
+unique_lock lock{cv_mut};
+cv.wait(lock);
+cout &lt;&lt; &quot;Answer: &quot; &lt;&lt; result
+&lt;&lt; &#39;\n&#39;;
 }
 main()函数里，我理解为scoped_thread直到｝才会执行析构启动线程，而cv.wait又一直在阻塞，所以不会运行到｝。虽然知道程序能得到预期结果，但逻辑上不理解，希望老师能解答我的困惑</p>2022-09-01</li><br/><li><span>青鸟飞鱼</span> 👍（0） 💬（1）<p>老师，你好，关于条件变量应该如何退出呢？
 比如说:
@@ -433,8 +433,9 @@ void f()
     }
 }
 线程函数如上面所写，这个线程如何安全退出呢？</p>2020-08-05</li><br/><li><span>范闲</span> 👍（0） 💬（2）<p>老师，异步的例子都是基于async的。那如果不用这个特性，在cpp98上应该只有下面这个方法了吧
+
 1. Callback
-2.多线程+Callback
+   2.多线程+Callback
 
 但是这两个都有个问题，callback也是会阻塞的。如果有A B C D四个流程，B C D分别依赖于前一个的输出，这种callback就会调用栈太深，容易爆栈。
 

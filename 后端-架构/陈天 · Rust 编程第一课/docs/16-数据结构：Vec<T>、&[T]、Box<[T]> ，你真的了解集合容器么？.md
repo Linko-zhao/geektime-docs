@@ -118,10 +118,10 @@ where
 pub trait Iterator {
     type Item;
     fn next(&mut self) -> Option<Self::Item>;
-    // 大量缺省的方法，包括 size_hint, count, chain, zip, map, 
+    // 大量缺省的方法，包括 size_hint, count, chain, zip, map,
     // filter, for_each, skip, take_while, flat_map, flatten
     // collect, partition 等
-		... 
+		...
 }
 ```
 
@@ -383,9 +383,9 @@ where
 ```
 
 2. 看了下 rxjs 的定义，第二个参数如果小于第一个参数的话，得到的结果好像没啥意义（反正我个人是没看懂），
-所以只处理了第二个参数不小于第一个参数的情况。
+   所以只处理了第二个参数不小于第一个参数的情况。
 
-```rust
+````rust
 struct WindowCountIter&lt;T: Iterator&gt; {
     iter: T,
     window_size: usize,
@@ -456,25 +456,26 @@ https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;editio
 
 没有贴tests; 在link里面有
 
-```
+````
+
 struct WindowCount&lt;T&gt;
 where
-    T: Iterator,
+T: Iterator,
 {
-    window_size: usize,
-    start_window_every: usize,
-    iter: T,
+window_size: usize,
+start_window_every: usize,
+iter: T,
 }
 
 impl&lt;T&gt; Iterator for WindowCount&lt;T&gt;
 where
-    T: Iterator,
+T: Iterator,
 {
-    type Item = &lt;Vec&lt;&lt;T as Iterator&gt;::Item&gt; as IntoIterator&gt;::IntoIter;
-    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
-        if self.window_size == 0 {
-            return None;
-        }
+type Item = &lt;Vec&lt;&lt;T as Iterator&gt;::Item&gt; as IntoIterator&gt;::IntoIter;
+fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+if self.window_size == 0 {
+return None;
+}
 
         let mut v = Vec::with_capacity(self.window_size);
         for _ in 0..self.window_size {
@@ -497,23 +498,25 @@ where
             Some(v.into_iter())
         }
     }
+
 }
 trait IteratorExt: Iterator {
-    fn window_count(self, window_size: usize, start_window_every: usize) -&gt; WindowCount&lt;Self&gt;
-    where
-        Self::Item: std::fmt::Debug,
-        Self: Sized,
-    {
-        WindowCount {
-            window_size,
-            start_window_every,
-            iter: self,
-        }
-    }
+fn window_count(self, window_size: usize, start_window_every: usize) -&gt; WindowCount&lt;Self&gt;
+where
+Self::Item: std::fmt::Debug,
+Self: Sized,
+{
+WindowCount {
+window_size,
+start_window_every,
+iter: self,
+}
+}
 }
 
 impl&lt;T: Iterator&gt; IteratorExt for T {}
-```</p>2021-09-30</li><br/><li><span>给我点阳光就灿烂</span> 👍（1） 💬（1）<p>写了一个缓存库，想问一下老师如何优化hashmap的性能，目前为了算法上的O1，使用了box和raw指针，但是会box和rebox又让性能慢了一些。https:&#47;&#47;github.com&#47;al8n&#47;caches-rs</p>2021-09-29</li><br/><li><span>朱中喜</span> 👍（0） 💬（2）<p> let b1 = v1.into_boxed_slice();
+
+````</p>2021-09-30</li><br/><li><span>给我点阳光就灿烂</span> 👍（1） 💬（1）<p>写了一个缓存库，想问一下老师如何优化hashmap的性能，目前为了算法上的O1，使用了box和raw指针，但是会box和rebox又让性能慢了一些。https://github.com/al8n/caches-rs</p>2021-09-29</li><br/><li><span>朱中喜</span> 👍（0） 💬（2）<p> let b1 = v1.into_boxed_slice();
     let mut b2 = b1.clone();
     let v2 = b1.into_vec();
     println!(&quot;cap should be exactly 5: {}&quot;, v2.capacity());
@@ -606,7 +609,8 @@ impl&lt;I: Iterator&gt; IteratorExt for I {}
     let data = vec![1, 2, 3, 4, 5];
     let ret = data.as_slice().chunks(2).collect::&lt;Vec&lt;_&gt;&gt;();
     println!(&quot;{:?}&quot;, ret);
-```
+````
+
 不过这种解法可能脱离这题的初衷了</p>2024-06-28</li><br/><li><span>Geek_a6c6ce</span> 👍（0） 💬（0）<p>咔哒</p>2022-09-05</li><br/><li><span>沈畅</span> 👍（0） 💬（1）<p>官方文档 filter里面用了两个 **
 let a = [0, 1, 2];
 
@@ -617,9 +621,9 @@ assert_eq!(iter.next(), None);
 
 为啥 我们只用一个就行？
 let v = vec![1,2,3,4];
-    let ret = v.iter()
-               .map(|v| v*v)
-               .filter(|v| *v &lt; 16)
-               .take(5)
-               .collect::&lt;Vec&lt;_&gt;&gt;();</p>2022-07-25</li><br/>
+let ret = v.iter()
+.map(|v| v*v)
+.filter(|v| *v &lt; 16)
+.take(5)
+.collect::&lt;Vec&lt;_&gt;&gt;();</p>2022-07-25</li><br/>
 </ul>

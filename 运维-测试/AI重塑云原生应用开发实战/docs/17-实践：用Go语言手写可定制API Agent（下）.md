@@ -258,7 +258,7 @@ instruction: 你是一个精通多国语言的翻译专家，可以翻译任何�
 max_iteration_steps: 5
 apis:
   apiProvider:
-    apiKey: 
+    apiKey:
       name: DeepL-Auth-Key
       value: 7xxxxxxxxxxxxxxxxxxx
       in: header

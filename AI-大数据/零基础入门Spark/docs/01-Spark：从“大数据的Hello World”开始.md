@@ -70,13 +70,13 @@
 
 ```scala
 import org.apache.spark.rdd.RDD
- 
+
 // 这里的下划线"_"是占位符，代表数据文件的根目录
 val rootPath: String = _
 val file: String = s"${rootPath}/wikiOfSpark.txt"
- 
+
 // 读取文件内容
-val lineRDD: RDD[String] = spark.sparkContext.textFile(file) 
+val lineRDD: RDD[String] = spark.sparkContext.textFile(file)
 ```
 
 在这段代码中，你可能会发现3个新概念，分别是spark、sparkContext和RDD。
@@ -185,23 +185,23 @@ wordCounts.map{case (k, v) => (v, k)}.sortByKey(false).take(5)
 
 ```scala
 import org.apache.spark.rdd.RDD
- 
+
 // 这里的下划线"_"是占位符，代表数据文件的根目录
 val rootPath: String = _
 val file: String = s"${rootPath}/wikiOfSpark.txt"
- 
+
 // 读取文件内容
 val lineRDD: RDD[String] = spark.sparkContext.textFile(file)
- 
+
 // 以行为单位做分词
 val wordRDD: RDD[String] = lineRDD.flatMap(line => line.split(" "))
 val cleanWordRDD: RDD[String] = wordRDD.filter(word => !word.equals(""))
- 
+
 // 把RDD元素转换为（Key，Value）的形式
 val kvRDD: RDD[(String, Int)] = cleanWordRDD.map(word => (word, 1))
 // 按照单词做分组计数
 val wordCounts: RDD[(String, Int)] = kvRDD.reduceByKey((x, y) => x + y)
- 
+
 // 打印词频最高的5个词汇
 wordCounts.map{case (k, v) => (v, k)}.sortByKey(false).take(5)
 ```
@@ -246,16 +246,17 @@ from pyspark import SparkContext
 
 textFile = SparkContext().textFile(&quot;.&#47;wikiOfSpark.txt&quot;)
 wordCount = (
-    textFile.flatMap(lambda line: line.split(&quot; &quot;))
-    .filter(lambda word: word != &quot;&quot;)
-    .map(lambda word: (word, 1))
-    .reduceByKey(lambda x, y: x + y)
-    .sortBy(lambda x: x[1], False)
-    .take(5)
+textFile.flatMap(lambda line: line.split(&quot; &quot;))
+.filter(lambda word: word != &quot;&quot;)
+.map(lambda word: (word, 1))
+.reduceByKey(lambda x, y: x + y)
+.sortBy(lambda x: x[1], False)
+.take(5)
 )
 print(wordCount)
 #显示: [(&#39;the&#39;, 67), (&#39;Spark&#39;, 63), (&#39;a&#39;, 54), (&#39;and&#39;, 51), (&#39;of&#39;, 50)]
-``` 
+
+```
 </p>2021-09-20</li><br/><li><span>liugddx</span> 👍（44） 💬（4）<p>我是一个大数据小白，我想咨询下spark和hadoop在大数据体系下的关系？</p>2021-09-07</li><br/><li><span>Neo-dqy</span> 👍（26） 💬（5）<p>老师好！wordCounts.map{case (k, v) =&gt; (v, k)}.sortByKey(false).take(5)这行代码我还存在疑问，为什么这里的map函数使用了花括号{ }而不是上面一些算子的( )，同时这个case又是什么意思？这一行代码非常像我曾经在Python中使用字典数据结构，然后根据字典值的升序排序。最后，貌似Scala语言本身就可以实现wordcount案例，那么它本身的实现和spark实现相比，spark有什么优势呢？</p>2021-09-18</li><br/><li><span>Vic</span> 👍（8） 💬（9）<p>遇到这个问题
 scala&gt; val rootPath: String = _
 &lt;console&gt;:24: error: unbound placeholder parameter
@@ -343,7 +344,7 @@ hadoop3.2.1 逐步使用Dataset，报错类型转换异常；
 
 原理性的还没有搞懂，目前在第一阶段，读懂，简单改写为主；
 
-感谢吴磊老师的课</p>2022-02-05</li><br/><li><span>猫太太</span> 👍（2） 💬（1）<p>请问在本地部署spark环境不需要先安装hadoop么</p>2021-11-18</li><br/><li><span>巴普洛夫的</span> 👍（1） 💬（2）<p>wordCounts.map{case (k, v) =&gt; (v, k)}.sortByKey(false) 
+感谢吴磊老师的课</p>2022-02-05</li><br/><li><span>猫太太</span> 👍（2） 💬（1）<p>请问在本地部署spark环境不需要先安装hadoop么</p>2021-11-18</li><br/><li><span>巴普洛夫的</span> 👍（1） 💬（2）<p>wordCounts.map{case (k, v) =&gt; (v, k)}.sortByKey(false)
 这一步是做了什么呢，没有见过的语法</p>2021-09-12</li><br/><li><span>Z</span> 👍（1） 💬（1）<p>为啥我的结果是单个字母呢？</p>2021-09-08</li><br/><li><span>钱鹏 Allen</span> 👍（1） 💬（1）<p>注意空格“ ”，和空字符串“”，前者有空格，后者没有
 
 书写的时候，根据自己的文件所在目录来，比如我的是 &#47;input&#47;wikiOfSpark.txt
@@ -351,3 +352,4 @@ hadoop3.2.1 逐步使用Dataset，报错类型转换异常；
 
 学习的过程，需要给自己一些耐心和鼓励，一起加油把！</p>2021-09-07</li><br/><li><span>GAC·DU</span> 👍（1） 💬（1）<p>Spark RDD算子分为Transformation算子和Action算子，Transformation算子基本上都是延迟计算，需要通过调用Action算子进行触发。</p>2021-09-07</li><br/>
 </ul>
+```

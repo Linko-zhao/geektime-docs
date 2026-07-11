@@ -23,7 +23,7 @@
 ```javascript
 class Widget {
   appName = "核心微件";
-  getName () {
+  getName() {
     return this.appName;
   }
 }
@@ -34,7 +34,7 @@ var calendar = new Calendar();
 console.log(calendar.hasOwnProperty("appName")); // 返回 true
 console.log(calendar.getName()); // 返回 "核心微件"
 
-calendar.appName = "日历应用"
+calendar.appName = "日历应用";
 console.log(typeof calendar.getName); // 返回 function
 console.log(calendar.getName()); // 返回 “日历应用”
 ```
@@ -46,14 +46,14 @@ class Widget {
   constructor() {
     this.appName = "核心微件";
   }
-  
-  getName () {
+
+  getName() {
     return this.appName;
   }
 }
 
 class Calendar extends Widget {
-  constructor(){
+  constructor() {
     super();
     this.appName = "日历应用";
   }
@@ -92,8 +92,12 @@ class WelcomeMessage extends React.Component {
 
 ```javascript
 var Widget = {
-  setCity : function(City) {this.city = City; },
-  outputCity : function() {return this.city;}
+  setCity: function (City) {
+    this.city = City;
+  },
+  outputCity: function () {
+    return this.city;
+  },
 };
 
 var Weather = Object.create(Widget);
@@ -103,15 +107,15 @@ Weather.setWeather = function (City, Tempreture) {
   this.tempreture = Tempreture;
 };
 
-Weather.outputWeather = function() {
-  console.log(this.outputCity()+ ", " + this.tempreture);
-}
+Weather.outputWeather = function () {
+  console.log(this.outputCity() + ", " + this.tempreture);
+};
 
 var weatherApp1 = Object.create(Weather);
 var weatherApp2 = Object.create(Weather);
 
-weatherApp1.setWeather("北京","26度");
-weatherApp2.setWeather("南京","28度");
+weatherApp1.setWeather("北京", "26度");
+weatherApp2.setWeather("南京", "28度");
 
 weatherApp1.outputWeather(); // 北京, 26度
 weatherApp2.outputWeather(); // 南京, 28度
@@ -123,18 +127,34 @@ weatherApp2.outputWeather(); // 南京, 28度
 
 ```typescript
 class SetLikeMap {
-    // 初始化字典
-    constructor() { this.map = new Map(); }
-    // 自定义集合接口
-    count(key) { /*...*/ }
-    add(key) { /*...*/ }
-    delete(key) { /*...*/ }
-    // 迭代返回字典中的键
-    [Symbol.iterator]() { return this.map.keys(); }
-    // 部分功能授权给字典
-    keys() { return this.map.keys(); }
-    values() { return this.map.values(); }
-    entries() { return this.map.entries(); }
+  // 初始化字典
+  constructor() {
+    this.map = new Map();
+  }
+  // 自定义集合接口
+  count(key) {
+    /*...*/
+  }
+  add(key) {
+    /*...*/
+  }
+  delete(key) {
+    /*...*/
+  }
+  // 迭代返回字典中的键
+  [Symbol.iterator]() {
+    return this.map.keys();
+  }
+  // 部分功能授权给字典
+  keys() {
+    return this.map.keys();
+  }
+  values() {
+    return this.map.values();
+  }
+  entries() {
+    return this.map.entries();
+  }
 }
 ```
 
@@ -152,8 +172,8 @@ class SetLikeMap {
 
 ```javascript
 function argumentSlice() {
-    var args = [].slice.call(arguments, 1, 3);
-    return args;
+  var args = [].slice.call(arguments, 1, 3);
+  return args;
 }
 // example
 argumentSlice(1, 2, 3, 4, 5, 6); // returns [2,3]
@@ -171,12 +191,15 @@ argumentSlice(1, 2, 3, 4, 5, 6); // returns [2,3]
 
 ```javascript
 var widget = {
-  appName : "核心微件"
-}
+  appName: "核心微件",
+};
 
-var calendar = Object.assign({
-  appVersion: "1.0.9"
-}, widget);
+var calendar = Object.assign(
+  {
+    appVersion: "1.0.9",
+  },
+  widget,
+);
 
 console.log(calendar.hasOwnProperty("appName")); // 返回 true
 console.log(calendar.appName); // 返回 “核心微件”
@@ -192,21 +215,21 @@ console.log(calendar.appVersion); // 返回 “1.0.9”
 
 ```typescript
 // 数组浅拷贝
-var a = [ 1, 2 ];
-var b = [ ...a ];
-b.push( 3 );
-a;  // [1,2]
-b;  // [1,2,3]
+var a = [1, 2];
+var b = [...a];
+b.push(3);
+a; // [1,2]
+b; // [1,2,3]
 
 // 对象浅拷贝
 var o = {
-    x: 1,
-    y: 2
+  x: 1,
+  y: 2,
 };
 var p = { ...o };
-p.y = 3; 
-o.y;  // 2
-p.y;  // 3
+p.y = 3;
+o.y; // 2
+p.y; // 3
 ```
 
 而在延展操作符出现之前，人们大概可以通过这样一个for in循环做到类似的浅拷贝。
@@ -229,7 +252,9 @@ function shallowCopy(parent, child) {
 所以相对于深度拷贝，浅度拷贝的问题会少一些。但是在[第2讲](https://time.geekbang.org/column/article/573307)的留言互动区，我们也说过，如果我们想要保证一个对象的深度不可变，还是需要深度拷贝的。深度拷贝的一个相对简单的实现方案是用JSON.stringify。当然这个方案的前提是这个对象必须是JSON-safe的。
 
 ```typescript
-function deepCopy(o) { return JSON.parse(JSON.stringify(o)); }
+function deepCopy(o) {
+  return JSON.parse(JSON.stringify(o));
+}
 ```
 
 同时，在[第2讲](https://time.geekbang.org/column/article/573307)的留言区中，也有同学提到过另外一种递归的实现方式，所以我们也大致可以通过这样一个递归来实现：
@@ -237,20 +262,20 @@ function deepCopy(o) { return JSON.parse(JSON.stringify(o)); }
 ```javascript
 function deepCopy(parent, child) {
   var i,
-  toStr = Object.prototype.toString,
-  astr = "[object Array]";
+    toStr = Object.prototype.toString,
+    astr = "[object Array]";
   child = child || {};
-    for (i in parent) {
-      if (parent.hasOwnProperty(i)) {
-        if (typeof parent[i] === "object") {
-          child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-                deepCopy(parent[i], child[i]);
-        } else {
-          child[i] = parent[i];
-        }
-      }
-  }
-  return child;
+  for (i in parent) {
+    if (parent.hasOwnProperty(i)) {
+      if (typeof parent[i] === "object") {
+        child[i] = toStr.call(parent[i]) === astr ? [] : {};
+        deepCopy(parent[i], child[i]);
+      } else {
+        child[i] = parent[i];
+      }
+    }
+  }
+  return child;
 }
 ```
 
@@ -351,50 +376,51 @@ function WelcomeDialog() {
     this.appName = &quot;核心微件&quot;;
   }
 
-  Widget.prototype.getAppName = function () {
-    return this.appName;
-  };
+Widget.prototype.getAppName = function () {
+return this.appName;
+};
 
-  function Calendar() {
-    &#47;&#47; 调用super
-    let widget = new Widget();
-    this.__proto__.__proto__ = widget.__proto__; &#47;&#47; Calendar.prototype.__proto__ = Widget.prototype;
-    for (let key in widget) {
-      if (widget.hasOwnProperty(key)) {
-        this[key] = widget[key];
-      }
-    }
+function Calendar() {
+&#47;&#47; 调用super
+let widget = new Widget();
+this.**proto**.**proto** = widget.**proto**; &#47;&#47; Calendar.prototype.**proto** = Widget.prototype;
+for (let key in widget) {
+if (widget.hasOwnProperty(key)) {
+this[key] = widget[key];
+}
+}
 
     this.name = &quot;Calendar&quot;;
-  }
 
-  Calendar.prototype.getName = function () {
-    return this.name;
-  };
+}
 
-  &#47;**********Object.create************** *&#47;
-  function Person() {
-    this.name = &quot;Person&quot;;
-  }
+Calendar.prototype.getName = function () {
+return this.name;
+};
 
-  &#47;&#47; Object.Create
-  function ObjectCreate(o) {
-    let obj = {};
-    obj.__proto__ = o;
-    return obj;
-  }
+&#47;**********Object.create************** *&#47;
+function Person() {
+this.name = &quot;Person&quot;;
+}
 
-  let o = ObjectCreate(new Person());</p>2022-10-13</li><br/><li><span>褚琛</span> 👍（1） 💬（0）<p>&#47;&#47;js中的类和继承
+&#47;&#47; Object.Create
+function ObjectCreate(o) {
+let obj = {};
+obj.**proto** = o;
+return obj;
+}
+
+let o = ObjectCreate(new Person());</p>2022-10-13</li><br/><li><span>褚琛</span> 👍（1） 💬（0）<p>&#47;&#47;js中的类和继承
 function Widget (appName) {
-  this.appName = appName
+this.appName = appName
 }
 
 Widget.prototype.getName = function() {
-  return this.appName;
+return this.appName;
 }
 
 function Calendar (appName) {
-  Widget.call(this, appName);
+Widget.call(this, appName);
 }
 
 Calendar.prototype = { ...Widget.prototype };
@@ -407,9 +433,9 @@ console.log(calendar.getName()); &#47;&#47; 返回 “日历应用”
 
 &#47;&#47;Object.create()
 function create(o) {
-  let Cls = function() {};
-  let obj = new Cls();
-  obj.prototype = o;
-  return obj;
+let Cls = function() {};
+let obj = new Cls();
+obj.prototype = o;
+return obj;
 }</p>2022-10-10</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（0）<p>ES6 当中的 assign 来做到组合混入，我看下和 java 的组合有很大的区别，java 是通过持有其他对象的引用来实现组合，js 是直接拷贝属性，差异很大</p>2023-03-13</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>作为一个 Android 工程师，我怎么感觉授权就是继承呢？？就是基于原型链的继承？？</p>2023-03-13</li><br/>
 </ul>

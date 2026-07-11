@@ -149,7 +149,7 @@ dtr.fit(train_features, train_price)
 predict_price = dtr.predict(test_features)
 # 测试集的结果评价
 print('回归树二乘偏差均值:', mean_squared_error(test_price, predict_price))
-print('回归树绝对值偏差均值:', mean_absolute_error(test_price, predict_price)) 
+print('回归树绝对值偏差均值:', mean_absolute_error(test_price, predict_price))
 ```
 
 运行结果（每次运行结果可能会有不同）：
@@ -214,14 +214,18 @@ CART决策树的剪枝主要采用的是CCP方法，它是一种后剪枝的方�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>rainman</span> 👍（39） 💬（1）<p>对于 CART 回归树的可视化，可以先在电脑上安装 graphviz；然后 pip install graphviz，这是安装python的库，需要依赖前面安装的 graphviz。可视化代码如下：
 
-----
+---
+
 from sklearn.tree import export_graphviz
 import graphviz
 
 # 参数是回归树模型名称，不输出文件。
+
 dot_data = export_graphviz(dtr, out_file=None)
 graph = graphviz.Source(dot_data)
+
 # render 方法会在同级目录下生成 Boston PDF文件，内容就是回归树。
+
 graph.render(&#39;Boston&#39;)
 ----
 
@@ -229,31 +233,46 @@ graph.render(&#39;Boston&#39;)
 和 graphviz(https:&#47;&#47;graphviz.readthedocs.io&#47;en&#47;stable&#47;) 看看。</p>2019-02-15</li><br/><li><span>小熊猫</span> 👍（16） 💬（1）<p>ID3：以信息增益作为判断标准，计算每个特征的信息增益，选取信息增益最大的特征，但是容易选取到取值较多的特征
 C4.5：以信息增益比作为判断标准，计算每个特征的信息增益比，选取信息增益比最大的特征
 CART：分类树以基尼系数为标准，选取基尼系数小的的特征
-            回归树以均方误差或绝对值误差为标准，选取均方误差或绝对值误差最小的特征
+回归树以均方误差或绝对值误差为标准，选取均方误差或绝对值误差最小的特征
 
 练习题：
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 from sklearn.metrics import accuracy_score
-import graphviz 
+import graphviz
 
 # 准备手写数字数据集
+
 digits = datasets.load_digits()
+
 # 获取特征和标识
+
 features = digits.data
 labels = digits.target
+
 # 选取数据集的33%为测试集，其余为训练集
+
 train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size=0.33)
+
 # 创建CART分类树
+
 clf = tree.DecisionTreeClassifier()
+
 # 拟合构造CART分类树
+
 clf.fit(train_features, train_labels)
+
 # 预测测试集结果
+
 test_predict = clf.predict(test_features)
+
 # 测试集结果评价
+
 print(&#39;CART分类树准确率:&#39;, accuracy_score(test_labels, test_predict))
+
 # 画决策树
+
 dot_data = tree.export_graphviz(clf, out_file=None)
 graph = graphviz.Source(dot_data)
 graph.render(&#39;CART&#47;&#47;CART_practice_digits&#39;)
@@ -261,7 +280,6 @@ graph.render(&#39;CART&#47;&#47;CART_practice_digits&#39;)
 CART分类树准确率: 0.8636363636363636</p>2019-02-15</li><br/><li><span>jake</span> 👍（7） 💬（2）<p>
 首先想问一个问题 就是在讲到基尼系数那里 有一个图那里的例子 什么D: 9个打篮球 3个不打篮球那里
 那里的D的基尼系数用到了子节点归一化基尼系数之和这个方法求 请问D的基尼系数不能直接用 上面那个公式 也就是&quot;1 - [p(ck|t)]^2&quot;那个公式计算吗 我用这个公式计算出D的基尼系数为 1 - (9&#47;12 * 9&#47;12 + 3&#47;12 * 3&#47;12) = 6&#47;16。 我也想问一下上面那个同学提的这个问题</p>2019-02-24</li><br/><li><span>xfoolin</span> 👍（4） 💬（1）<p>ID3 是通过信息增益，选取信息增益最大的特征；C4.5 是通过信息增益率，选取，CART 是通过基尼系数，选取基尼系数最小的特征。
-
 
 from sklearn.model_selection import train_test_split#训练集和测试集
 from sklearn.metrics import mean_squared_error#二乘偏差均值
@@ -299,23 +317,37 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_digits
 
 # 准备数据集
+
 digits=load_digits()
+
 # 获取特征集和分类标识
+
 features = digits.data
 labels = digits.target
+
 # 随机抽取 33% 的数据作为测试集，其余为训练集
+
 train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size=0.33, random_state=0)
+
 # 创建 CART 分类树
+
 clf = DecisionTreeClassifier(criterion=&#39;gini&#39;)
+
 # 拟合构造 CART 分类树
+
 clf = clf.fit(train_features, train_labels)
+
 # 用 CART 分类树做预测
+
 test_predict = clf.predict(test_features)
+
 # 预测结果与测试集结果作比对
+
 score = accuracy_score(test_labels, test_predict)
 print(&quot;CART 分类树准确率 %.4lf&quot; % score)
 
 CART 分类树准确率 0.8620</p>2019-01-24</li><br/><li><span>雨先生的晴天</span> 👍（2） 💬（1）<p>scikit learn package 确实非常好用，很简洁。推荐大家也去官网看一看，请问一下怎样可以把decision tree 可视化呀？ </p>2019-01-27</li><br/><li><span>Mi compaero de armas</span> 👍（1） 💬（1）<p>老师您好，请问采用CART算法时，如果离散型属性的值不止两种还能使用CART算法吗</p>2019-11-19</li><br/><li><span>Ronnyz</span> 👍（1） 💬（1）<p>第二问
+
 ```
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -338,6 +370,7 @@ predict_labels=clf.predict(test_features)
 
 print(&#39;分类准确度：&#39;,accuracy_score(test_labels,predict_labels))
 ```
+
 分类准确度： 0.8619528619528619</p>2019-11-11</li><br/><li><span>许宇宝</span> 👍（1） 💬（1）<p>老师，看了两遍还是不明白分类的这个决策树是依据什么画出来的？</p>2019-07-18</li><br/><li><span>羊小看</span> 👍（1） 💬（1）<p>1、为什么CRAT的基尼系数比C4.5的信息增益率好呢？既然sklearn库默认用的基尼系数，应该是这个好一些吧？
 2、from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
@@ -346,22 +379,35 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_digits
 
 # 准备数据集
+
 #iris=load_iris()
 digits=load_digits()
+
 # 获取特征集和分类标识
+
 #features = iris.data
 #labels = iris.target
 features = digits.data
 labels = digits.target
+
 # 随机抽取 33% 的数据作为测试集，其余为训练集
+
 train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size=0.33, random_state=0)
+
 # 创建 CART 分类树
+
 clf = DecisionTreeClassifier(criterion=&#39;gini&#39;)
+
 # 拟合构造 CART 分类树
+
 clf = clf.fit(train_features, train_labels)
+
 # 用 CART 分类树做预测
+
 test_predict = clf.predict(test_features)
+
 # 预测结果与测试集结果作比对
+
 score = accuracy_score(test_labels, test_predict)
 print(&quot;CART 分类树准确率 %.4lf&quot; % score)
 
@@ -382,16 +428,21 @@ clf = DecisionTreeClassifier(criterion=&#39;gini&#39;)
 clf = clf.fit(train_features, train_labels)
 #用CART分类树做预测
 test_predict = clf.predict(test_features)
-#预测结果与测试集结果作对比 
+#预测结果与测试集结果作对比
 score = accuracy_score(test_labels, test_predict)
 print (&quot;CART分类树准确率%.4lf&quot;% score)</p>2019-02-02</li><br/><li><span>Chino</span> 👍（1） 💬（1）<p>首先想问一个问题 就是在讲到基尼系数那里 有一个图那里的例子 什么D: 9个打篮球 3个不打篮球那里
-那里的D的基尼系数用到了子节点归一化基尼系数之和这个方法求 请问D的基尼系数不能直接用 上面那个公式 也就是&quot;1 - [p(ck|t)]^2&quot;那个公式计算吗  我用这个公式计算出D的基尼系数为 1 - (9&#47;12 * 9&#47;12 + 3&#47;12 * 3&#47;12) = 6&#47;16
+那里的D的基尼系数用到了子节点归一化基尼系数之和这个方法求 请问D的基尼系数不能直接用 上面那个公式 也就是&quot;1 - [p(ck|t)]^2&quot;那个公式计算吗 我用这个公式计算出D的基尼系数为 1 - (9&#47;12 * 9&#47;12 + 3&#47;12 * 3&#47;12) = 6&#47;16
 
 # ID3,C4.5,CART在做节点划分的区别
+
 # 我认为是三者的共同之处就是得出每个类别的某个属性值 然后根据这个属性值
+
 # 来选取哪个类型当节点 因此不同之处就是这个属性值.
+
 # ID3 根据 信息增益 判断 哪个节点的信息增益最大就当节点
+
 # C4.5 根据 信息增益率 判断 跟ID3相似
+
 # CART分类树 根据 基尼系数 判断 越小代表越稳定
 
 from sklearn.datasets import load_digits
@@ -399,26 +450,31 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
-
 digit = load_digits()
 
 # 把数据集中的数据和结果拿出来
+
 features = digit.data
 target = digit.target
 
 # 把数据集中的数据分33%当作测试数据 其他用来训练
+
 train_features,test_features,train_target,test_target = train_test_split(features,target,test_size=0.33)
 
 # 定义CART分类树
+
 clf = DecisionTreeClassifier()
 
 # 把训练数据弄到分类数中 构造树
+
 clf = clf.fit(train_features,train_target)
 
 # 把测试数据放进树中得出预测结果
+
 predict_target = clf.predict(test_features)
 
 # 对比预测出来的数据和实际结果
+
 score = accuracy_score(predict_target,test_target)
 
 print(score)

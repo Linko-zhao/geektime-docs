@@ -124,24 +124,24 @@ public class UserController
 public void Changing_email_from_example_to_foodcome()
 {
     // Arrange
-    var db = new Database(ConnectionString);                          
-    User user = CreateUser(                                           
-        "a@example.com", UserType.customer, db);                                              
-    var messageBusMock = new Mock<IMessageBus>();                     
+    var db = new Database(ConnectionString);
+    User user = CreateUser(
+        "a@example.com", UserType.customer, db);
+    var messageBusMock = new Mock<IMessageBus>();
     var sut = new UserController(db, messageBusMock.Object);
     // 调用changeEmail方法
     string result = sut.ChangeEmail(user.UserId, "b@foodcome.com");
     // 校验返回
     Assert.Equal("OK", result);
     // 校验数据库里字段
-    object[] userData = db.GetUserById(user.UserId);                 
-    User userFromDb = UserFactory.Create(userData);                  
-    Assert.Equal("b@foodcome.com", userFromDb.Email);                 
-    Assert.Equal(UserType.Restaurant, userFromDb.Type);                
-        messageBusMock.Verify(                                           
-        x => x.SendEmailChangedMessage(                              
-            user.UserId, "b@foodcome.com"),                           
-        Times.Once);                                                 
+    object[] userData = db.GetUserById(user.UserId);
+    User userFromDb = UserFactory.Create(userData);
+    Assert.Equal("b@foodcome.com", userFromDb.Email);
+    Assert.Equal(UserType.Restaurant, userFromDb.Type);
+        messageBusMock.Verify(
+        x => x.SendEmailChangedMessage(
+            user.UserId, "b@foodcome.com"),
+        Times.Once);
 }
 ```
 

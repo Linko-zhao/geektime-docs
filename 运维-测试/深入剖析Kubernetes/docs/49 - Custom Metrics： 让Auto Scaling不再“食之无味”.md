@@ -17,7 +17,7 @@
 比如，现在我们要实现一个根据指定 Pod 收到的 HTTP 请求数量来进行 Auto Scaling 的 Custom Metrics，这个 Metrics 就可以通过访问如下所示的自定义监控 URL 获取到：
 
 ```
-https://<apiserver_ip>/apis/custom-metrics.metrics.k8s.io/v1beta1/namespaces/default/pods/sample-metrics-app/http_requests 
+https://<apiserver_ip>/apis/custom-metrics.metrics.k8s.io/v1beta1/namespaces/default/pods/sample-metrics-app/http_requests
 ```
 
 这里的工作原理是，当你访问这个 URL 的时候，Custom Metrics APIServer就会去 Prometheus 里查询名叫sample-metrics-app这个Pod 的http\_requests指标的值，然后按照固定的格式返回给访问者。
@@ -221,8 +221,8 @@ Prometheus 通过 ServiceMonitor object 配置需要监控的pod和endpoints，�
 
 很多 PaaS 项目中的Auto Scaling，即自动水平扩展的功能，只能依据某种指定的资源类型执行水平扩展，比如 CPU 或者 Memory 的使用值。凭借强大的 API 扩展机制，Custom Metrics 已经成为了 Kubernetes 的一项标准能力。并且，Kubernetes 的自动扩展器组件 Horizontal Pod Autoscaler （HPA）， 也可以直接使用 Custom Metrics 来执行用户指定的扩展策略，这里的整个过程都是非常灵活和可定制的。Kubernetes 里的 Custom Metrics 机制，也是借助 Aggregator APIServer 扩展机制来实现的。这里的具体原理是，当你把 Custom Metrics APIServer 启动之后，Kubernetes 里就会出现一个叫作custom.metrics.k8s.io的 API。而当你访问这个 URL 时，Aggregator 就会把你的请求转发给 Custom Metrics APIServer 。而 Custom Metrics APIServer 的实现，其实就是一个 Prometheus 项目的 Adaptor。</p>2021-11-08</li><br/><li><span>罗峰</span> 👍（0） 💬（0）<p>Hpa里面配置了对哪些deploy等进行水平伸缩、伸缩的范围，对应的指标的阈值。
 指标是普罗主动拉取的，需要个servicemonitor告诉普罗哪个指标拉取哪个pod。
-这样指标有了，需扩展的k8资源确定了，ha功能也就可以了。</p>2021-06-01</li><br/><li><span>饮水</span> 👍（0） 💬（0）<p>你好，老师，KubeBuilder还能用来做api么，那这个api和operator有啥区别？</p>2021-04-23</li><br/><li><span>小白</span> 👍（0） 💬（1）<p>HPA 定义时并没看到是访问custom.metrics.k8s.io接口的，Aggregator 怎么知道应该调用custom metrics API server?</p>2020-08-06</li><br/><li><span>单朋荣</span> 👍（0） 💬（0）<p>Warning  FailedGetObjectMetric         1m (x13 over 7m)  horizontal-pod-autoscaler  unable to get metric http_requests: Service on default sample-metrics-app&#47;unable to fetch metrics from custom metrics API: the server could not find the metric http_requests for services
-  Warning  FailedComputeMetricsReplicas  1m (x13 over 7m)  horizontal-pod-autoscaler  failed to get object metric value: unable to get metric http_requests: Service on default sample-metrics-app&#47;unable to fetch metrics from custom metrics API: the server could not find the metric http_requests for services
+这样指标有了，需扩展的k8资源确定了，ha功能也就可以了。</p>2021-06-01</li><br/><li><span>饮水</span> 👍（0） 💬（0）<p>你好，老师，KubeBuilder还能用来做api么，那这个api和operator有啥区别？</p>2021-04-23</li><br/><li><span>小白</span> 👍（0） 💬（1）<p>HPA 定义时并没看到是访问custom.metrics.k8s.io接口的，Aggregator 怎么知道应该调用custom metrics API server?</p>2020-08-06</li><br/><li><span>单朋荣</span> 👍（0） 💬（0）<p>Warning FailedGetObjectMetric 1m (x13 over 7m) horizontal-pod-autoscaler unable to get metric http_requests: Service on default sample-metrics-app&#47;unable to fetch metrics from custom metrics API: the server could not find the metric http_requests for services
+Warning FailedComputeMetricsReplicas 1m (x13 over 7m) horizontal-pod-autoscaler failed to get object metric value: unable to get metric http_requests: Service on default sample-metrics-app&#47;unable to fetch metrics from custom metrics API: the server could not find the metric http_requests for services
 遇到一个问题，求解决思路。。
 </p>2019-10-22</li><br/><li><span>yzw</span> 👍（0） 💬（0）<p>老师，对于没有证书的kubernetes集群，修改prometheus的什么参数可以保证访问采用的是不安全方式呢？我的kubernetes集群是v1.11.2，prometheus是kube-prometheus:v0.1.0，谢谢解答</p>2019-08-06</li><br/>
 </ul>

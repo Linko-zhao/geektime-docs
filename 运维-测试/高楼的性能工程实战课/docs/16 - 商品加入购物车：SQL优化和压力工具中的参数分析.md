@@ -86,7 +86,7 @@
 elasticsearch-data-1                        1/1     Running   1          11d     10.100.230.57    k8s-worker-1   <none>           <none>
 elasticsearch-master-0                      1/1     Running   0          3d11h   10.100.230.60    k8s-worker-1   <none>           <none>
 mysql-min-d564fc4df-vs7d6                   1/1     Running   0          22h     10.100.230.1     k8s-worker-1   <none>           <none>
-[root@k8s-master-2 ~]# 
+[root@k8s-master-2 ~]#
 ```
 
 你看，这个worker-1上不止有MySQL，还有ES data，这是一个吃网络的大户。不过，现在问题并没有指向它。
@@ -104,16 +104,16 @@ Tasks: 309 total,   1 running, 307 sleeping,   0 stopped,   1 zombie
 %Cpu4  : 87.9 us,  6.1 sy,  0.0 ni,  3.0 id,  0.0 wa,  0.0 hi,  0.0 si,  3.0 st
 %Cpu5  : 87.9 us,  9.1 sy,  0.0 ni,  0.0 id,  0.0 wa,  0.0 hi,  0.0 si,  3.0 st
 KiB Mem : 16265992 total,  1176564 free,  8436112 used,  6653316 buff/cache
-KiB Swap:        0 total,        0 free,        0 used.  7422832 avail Mem 
+KiB Swap:        0 total,        0 free,        0 used.  7422832 avail Mem
 
 
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                      
-21344 27        20   0 8222204 628452  12892 S 331.4  3.9 141:36.72 /opt/rh/rh-mysql57/root/usr/libexec/mysqld --defaults-file=/etc/my.cnf       
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+21344 27        20   0 8222204 628452  12892 S 331.4  3.9 141:36.72 /opt/rh/rh-mysql57/root/usr/libexec/mysqld --defaults-file=/etc/my.cnf
  5128 techstar  20   0 5917564   1.4g  21576 S 114.3  8.8 233:09.48 /usr/share/elasticsearch/jdk/bin/java -Xshare:auto -Des.networkaddress.cache+
  5127 techstar  20   0   14.1g   3.5g  25756 S  40.0 22.8   1647:28 /usr/share/elasticsearch/jdk/bin/java -Xshare:auto -Des.networkaddress.cache+
- 1091 root      20   0 1145528 108228  29420 S  25.7  0.7 263:51.49 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock       
+ 1091 root      20   0 1145528 108228  29420 S  25.7  0.7 263:51.49 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
  1078 root      20   0 2504364 106288  38808 S  14.3  0.7 429:13.57 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.co+
-17108 root      20   0  164472   2656   1712 R  14.3  0.0   0:00.66 top  
+17108 root      20   0  164472   2656   1712 R  14.3  0.0   0:00.66 top
 ```
 
 从上面的数据中，我们也能看到MySQL的进程消耗的CPU比较多，这说明我们现在走的证据链是正确的。既然走到了数据库，那我们主要看什么呢？当然是看MySQL的全局监控了。所以，我打印了MySQL Report，过滤掉一些没问题的数据之后得到如下结果（不然内容就太长了）：
@@ -381,7 +381,7 @@ ALTER TABLE oms_cart_item ADD INDEX mix_index (member_id,product_id,product_sku_
 而在我们的这个问题的分析中，其实不用那么麻烦，因为在前面看到压力数据的时候，已经看到了大量的报错了，要想分析错误，肯定得先知道错误在哪，所以，这里我们直接查日志相关的内容就可以。查到日志的时候，我们看到下面这些错误信息：
 
 ```
-2020-12-30 23:44:06.754 ERROR 1 --- [io-8086-exec-41] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DeadlockLoserDataAccessException: 
+2020-12-30 23:44:06.754 ERROR 1 --- [io-8086-exec-41] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.dao.DeadlockLoserDataAccessException:
 ### Error updating database.  Cause: com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction
 ### The error may involve com.dunshan.mall.mapper.OmsCartItemMapper.updateByPrimaryKey-Inline
 ### The error occurred while setting parameters
@@ -512,26 +512,28 @@ stopThread: true
 1、分析链路-推荐skywalking
 2、发现service-MySQL耗时较长
 3、确定慢SQL
-	方法1：MySQL Report-pt-query-digest（解析慢日志）
-	方法2：RDS→日志管理
-	注：一般伴随着DB CPU高
+方法1：MySQL Report-pt-query-digest（解析慢日志）
+方法2：RDS→日志管理
+注：一般伴随着DB CPU高
 4、”执行计划“分析慢SQL
-	（执行 explain 或 desc  + SQL）
+（执行 explain 或 desc + SQL）
 5、添加相关索引
-	无法通过索引解决的根据业务优化代码
+无法通过索引解决的根据业务优化代码
 6、问题解决
 
 二、报错&#47;错误率高
 1、查日志
 2、具体问题具体分析
-	譬如：
-	1）参数
-	2）主键冲突
-	3）超时
-	4）服务降级
-	~~~~</p>2021-04-27</li><br/><li><span>同心飞翔</span> 👍（3） 💬（3）<p>老师，是否可以推荐个有各种性能问题的开源系统，大家来练手。还是要自己实践</p>2021-04-26</li><br/><li><span>z-Amy</span> 👍（0） 💬（1）<p>老师你好，请问MySQL Report 是什么命令打印出来的？</p>2024-02-22</li><br/><li><span>姑射仙人</span> 👍（0） 💬（1）<p>为什么是Cart - MySQL影响最大，看图上才113ms。User - Gateway，Gateway - Cart平均响应时间也很大呀，这块是怎么回事？</p>2022-01-20</li><br/><li><span>安静。。。</span> 👍（0） 💬（1）<p>2. 你能画出在第二阶段分析中的逻辑吗？
+譬如：
+1）参数
+2）主键冲突
+3）超时
+4）服务降级
+
+```</p>2021-04-27</li><br/><li><span>同心飞翔</span> 👍（3） 💬（3）<p>老师，是否可以推荐个有各种性能问题的开源系统，大家来练手。还是要自己实践</p>2021-04-26</li><br/><li><span>z-Amy</span> 👍（0） 💬（1）<p>老师你好，请问MySQL Report 是什么命令打印出来的？</p>2024-02-22</li><br/><li><span>姑射仙人</span> 👍（0） 💬（1）<p>为什么是Cart - MySQL影响最大，看图上才113ms。User - Gateway，Gateway - Cart平均响应时间也很大呀，这块是怎么回事？</p>2022-01-20</li><br/><li><span>安静。。。</span> 👍（0） 💬（1）<p>2. 你能画出在第二阶段分析中的逻辑吗？
 因为错误数量随着请求数量的增加而增加
 查看错误的日志，确定代码是在add的时候报错
 那么同时请求add的场景，跟实际的场景有关系
 实际上可能不会有多个用户同时请求的场景，需要修改压测数据</p>2021-07-12</li><br/><li><span>公瑾</span> 👍（0） 💬（1）<p>老师，慢日志阈值一般设置成多少，100ms左右吗？</p>2021-06-17</li><br/>
 </ul>
+```

@@ -281,7 +281,7 @@ $ kubectl taint nodes --all node-role.kubernetes.io/master-
 在Kubernetes社区中，有一个很受欢迎的Dashboard项目，它可以给用户提供一个可视化的Web界面来查看当前集群的各种信息。毫不意外，它的部署也相当简单：
 
 ```
-$ kubectl apply -f 
+$ kubectl apply -f
 $ $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc6/aio/deploy/recommended.yaml
 ```
 

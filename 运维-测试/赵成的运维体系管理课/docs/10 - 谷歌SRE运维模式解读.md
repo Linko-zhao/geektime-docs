@@ -15,10 +15,10 @@ SRE这个概念，我应该是2014年下半年的时候听到的。当时可接�
 > Common to all SREs is the belief in and aptitude for developing  
 > software systems to solve complex problems.  
 > 所有的SRE团队成员都必须非常愿意，也非常相信用软件工程方法可以解决复杂的运维问题。
-> 
+>
 > By design, it is crucial that SRE teams are focused on engineering.  
 > SRE模型成功的关键在于对工程的关注。
-> 
+>
 > SRE is what happens when you ask a software engineer to design an  
 > operations team.  
 > SRE就是让软件工程师来设计一个新型运维团队的结果。

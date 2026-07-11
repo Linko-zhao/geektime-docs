@@ -123,7 +123,7 @@ def func(input):
     elif len(input) == 2:
         ...
     else:
-        ... 
+        ...
 ```
 
 这里函数func()里的所有操作，都是基于输入必须是list 这个前提。是不是很熟悉的需求呢？那我们就很有必要在开头加一句assert的检查，防止程序出错。
@@ -170,7 +170,7 @@ def delete_course(user, course_id):
         raise Exception('user must be admin')
     if not course_exist(course_id):
         raise Exception('coursde id must exist')
-    delete(course_id)  
+    delete(course_id)
 ```
 
 再来看一个例子，如果你想打开一个文件，进行数据读取、处理等一系列操作，那么下面这样的写法，显然也是不正确的：
@@ -190,7 +190,7 @@ def read_and_process(path):
         with open(path) as f:
             ...
     except Exception as e:
-            ...  
+            ...
 ```
 
 总的来说，assert并不适用run-time error 的检查。比如你试图打开一个文件，但文件不存在；再或者是你试图从网上下载一个东西，但中途断网了了等等，这些情况下，还是应该参照我们前面所讲的[错误与异常](https://time.geekbang.org/column/article/97462)的内容，进行正确处理。
@@ -219,9 +219,11 @@ assert a&gt;0, “a must &gt; 0”
 assert isinstance(a, list), “a should be list”
 
 注：
+
 1. assert 是可以使用-O关闭的；
 2. run-time error需要使用try-except异常处理；</p>2019-07-17</li><br/><li><span>丁丁历险记</span> 👍（3） 💬（0）<p>个人理解，assert 主要是做健壮性处理。</p>2019-10-07</li><br/><li><span>倾</span> 👍（3） 💬（0）<p>一般不怎么用，全部使用异常处理的。</p>2019-07-15</li><br/><li><span>Ray</span> 👍（2） 💬（0）<p>之前在一个C++程序中用过assert语句，记得好像是在一个FTP下载模块中。后来很长时间没啥问题后也忘了，然后有一阵程序偶尔异常退出，查了半天发现是assert条件原因，最后发现原来是交换机出问题了时好时坏。</p>2020-03-17</li><br/><li><span>自由民</span> 👍（2） 💬（2）<p>在c++里用过，用得不多。Python里没用过。</p>2019-10-20</li><br/><li><span>Eski</span> 👍（2） 💬（0）<p>经常在 try except 当中用 assert，比较方便在一些不需要程序继续执行下去的地方跳出来，比if else好用</p>2019-07-16</li><br/><li><span>D.mc</span> 👍（0） 💬（0）<p>读下来认为是这样：
-1.try-except, 用于处理可能有多种异常的情况
-2.if-else, 用于处理多种情况，但不同情况都可能合理的情况
-3.assert, 则只能用于处理一种特定的情况，当要特定地确认某个情况是否发生时；或者说，一般只用于增强健壮性</p>2025-01-22</li><br/>
+   1.try-except, 用于处理可能有多种异常的情况
+   2.if-else, 用于处理多种情况，但不同情况都可能合理的情况
+   3.assert, 则只能用于处理一种特定的情况，当要特定地确认某个情况是否发生时；或者说，一般只用于增强健壮性</p>2025-01-22</li><br/>
+
 </ul>

@@ -12,7 +12,7 @@
 
 ```
 package geektime.tdd.resources;
-    
+
 import geektime.tdd.model.Student;
 import geektime.tdd.model.StudentRepository;
 import jakarta.inject.Inject;
@@ -23,23 +23,23 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
- 
+
 @Path("/students")
 public class StudentsResource {
-  
+
     private StudentRepository repository;
-    
+
     @Inject
     public StudentsResource(StudentRepository repository) {
         this.repository = repository;
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Student> all() {
         return repository.all();
     }
-    
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -85,7 +85,7 @@ jakarata dependency injection 核心功能
 Q: 组件的构造，指的是什么？
 将该组件的实例注入到注入点中。
 注入点的常见配置方式有以下三种。
-1、构造器注入 
+1、构造器注入
 2、字段注入
 3、方法注入
 
@@ -180,7 +180,7 @@ Sad Path:
 - 根据 自定义 Annotation 找到对应的类，返回实例
 - 利用反射注入：Field 实例
 - 利用反射注入：方法参数实例
-  
+
 ### default path
 
 - @Named：默认去类名（首字母小写）
@@ -197,6 +197,7 @@ Sad Path:
 - 不支持第三方 jar 中类由容器统一管理
 
 单例模式下创建对象需要考虑内存消耗、线程安全的问题</p>2022-04-14</li><br/><li><span>于</span> 👍（2） 💬（0）<p>用一个一般复杂度的业务系统更有实用价值，更利于大家跟随、模仿</p>2022-07-02</li><br/><li><span>davix</span> 👍（2） 💬（0）<p>請老師指導下go programmer怎麼學、練習這個項目。</p>2022-05-03</li><br/><li><span>leesper</span> 👍（1） 💬（0）<p>思考题：因为暂时不存在架构愿景，因此可以把功能点当成功能上下文：组件构造、依赖选择、生命周期管理</p>2023-01-21</li><br/><li><span>霜期飞敛</span> 👍（1） 💬（0）<p>
+
 - 组件的构造
   - 扫描指定目录的所有类，识别出所有带有注解@Inject的类
     - sad path：不同包名下的同名class，通过加上包名区分
@@ -210,7 +211,7 @@ Sad Path:
       - sad path：指定多个同名实例，抛出异常
     - default value
       - 默认自动生成的方式：默认类名（首字母小写）的方式
-      - 如果有多个 class#1  class#2 这样的方式累加
+      - 如果有多个 class#1 class#2 这样的方式累加
   - injected constructor
     - 实例化
       - 查找已存在的依赖
@@ -246,5 +247,6 @@ Sad Path:
     - singleton 单例实现，多次获取Class的实例返回一个实例
     - prototype 和默认情况相同
     - default value： prototype
+
 </p>2022-04-30</li><br/><li><span>davix</span> 👍（1） 💬（1）<p>學這門課最遺憾的是身為go程序員，不知道Java 這些都是啥</p>2022-04-15</li><br/>
 </ul>

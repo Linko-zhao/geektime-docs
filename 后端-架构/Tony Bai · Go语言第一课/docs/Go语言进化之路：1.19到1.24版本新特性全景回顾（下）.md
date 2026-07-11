@@ -57,7 +57,7 @@ func main() {
 这个例子中go.mod中的go version为Go 1.20，我们用Go 1.21去编译运行该示例，得到如下结果：
 
 ```plain
-$go run panicnil.go 
+$go run panicnil.go
 panic is nil
 ```
 
@@ -172,7 +172,7 @@ $go env GOTELEMETRYDIR
 为了Go演进路线的精准，也希望你能多多支持，在下载Go 1.23版本后，简单地执行“go telemetry on”，你就可以为Go做贡献了。
 
 ```plain
-$go telemetry on 
+$go telemetry on
 Telemetry uploading is now enabled and data will be periodically sent to
 https://telemetry.go.dev/. Uploaded data is used to help improve the Go
 toolchain and related tools, and it will be published as part of a public
@@ -458,7 +458,7 @@ true
 将fmt.Errorf一行换为：
 
 ```plain
-e := errors.Join(e1, e2, e3, e4) 
+e := errors.Join(e1, e2, e3, e4)
 ```
 
 再运行一次的结果为：
@@ -744,7 +744,7 @@ func main() {
 运行上述代码，我们得到：
 
 ```plain
-$gotip run main.go 
+$gotip run main.go
 Error opening file with os.Root: openat ../passwd: path escapes from parent
 Successfully opened file with os.OpenFile
 ```

@@ -115,7 +115,7 @@ public class MappingValue {
 	public void setMethod(String method) {
 		this.method = method;
 	}
-	
+
 	public MappingValue(String uri, String clz, String method) {
 		this.uri = uri;
 		this.clz = clz;
@@ -150,7 +150,7 @@ public class ClassPathXmlResource implements Resource {
 	Document document;
 	Element rootElement;
 	Iterator<Element> elementIterator;
-	
+
 	public ClassPathXmlResource(URL xmlPath) {
         SAXReader saxReader=new SAXReader();
         try {
@@ -159,7 +159,7 @@ public class ClassPathXmlResource implements Resource {
 			this.elementIterator=this.rootElement.elementIterator();
 		} catch (DocumentException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 	@Override
 	public boolean hasNext() {
@@ -186,7 +186,7 @@ public class XmlConfigReader {
 	}
 	public Map<String,MappingValue> loadConfig(Resource res) {
 		Map<String,MappingValue> mappings = new HashMap<>();
-		
+
         while (res.hasNext()) { //读所有的节点，解析id, class和value
         	Element element = (Element)res.next();
             String beanID=element.attributeValue("id");
@@ -222,7 +222,7 @@ private Map<String, Object> mappingObjs = new HashMap<>();
 ```java
     public void init(ServletConfig config) throws ServletException {
     	super.init(config);
-    	
+   
         sContextConfigLocation = config.getInitParameter("contextConfigLocation");       
         URL xmlPath = null;
 		try {
@@ -427,7 +427,7 @@ protected void refresh() {
 ```java
 protected void initController() {
     //扫描包，获取所有类名       
-    this.controllerNames = scanPackages(this.packageNames);  
+    this.controllerNames = scanPackages(this.packageNames); 
     for (String controllerName : this.controllerNames) {
         Object obj = null;
         Class<?> clz = null;
@@ -583,19 +583,19 @@ response.setContentType(&quot;text&#47;html; charset=UTF-8&quot;);</p>2023-05-12
 Class&lt;?&gt; clazz = this.controllerClasses.get(controllerName);下面缺少了一行：
 Object obj = this.controllerObjs.get(controllerName);</p>2023-03-27</li><br/><li><span>Yangjing</span> 👍（0） 💬（2）<p>老师，扩展MVC前，启动 Tomcat，是要怎么配置 Tomcat、MiniS 配合启动的呢</p>2023-04-09</li><br/><li><span>睿智的仓鼠</span> 👍（0） 💬（1）<p>请问郭老师，最后DispatcherServlet中的controllerObjs和mappingObjs这两个map，存储的都是请求地址和处理请求的bean的映射关系，这里为什么要维护两份？我能理解它们的思想不同，但也想不出维护两份后期会有什么扩展。后期会体现出这样做的好处吗？</p>2023-03-28</li><br/><li><span>Ben Guo</span> 👍（5） 💬（1）<p>关于启动Tomcat，可以加入 embeded tomcat的依赖，然后用下面的代码 跑起来
 
-public class App 
+public class App
 {
-    public static void main( String[] args ) throws LifecycleException {
-        System.out.println( &quot;Hello World!&quot; );
-        Tomcat tomcat = new Tomcat();
-        String webappDirLocation = &quot;WebContent&quot;;
-        StandardContext context = (StandardContext) tomcat.addWebapp(&quot;&#47;&quot;, new File(webappDirLocation).getAbsolutePath());
-        Connector connector = new Connector();
-        connector.setPort(8080);
-        tomcat.setConnector(connector);
-        tomcat.start();
-        tomcat.getServer().await();
-    }
+public static void main( String[] args ) throws LifecycleException {
+System.out.println( &quot;Hello World!&quot; );
+Tomcat tomcat = new Tomcat();
+String webappDirLocation = &quot;WebContent&quot;;
+StandardContext context = (StandardContext) tomcat.addWebapp(&quot;&#47;&quot;, new File(webappDirLocation).getAbsolutePath());
+Connector connector = new Connector();
+connector.setPort(8080);
+tomcat.setConnector(connector);
+tomcat.start();
+tomcat.getServer().await();
+}
 }</p>2023-07-11</li><br/><li><span>adelyn</span> 👍（2） 💬（0）<p>感谢老师，之前没注意过requestMapping为什么是mapping，今天恍然大悟，原来是用url做key维护了一个mapping，</p>2023-04-09</li><br/><li><span>adelyn</span> 👍（1） 💬（0）<p>上条写错了，维护了三个mapping，三个mapping正好提供了反射的三个条件，看源码太爽了</p>2023-04-09</li><br/><li><span>马儿</span> 👍（1） 💬（0）<p>思考题：mvc中的bean只是项目中的一种bean，而ioc管理的是整个项目的bean。可以说mvc中的bean是整个ioc bean的子集</p>2023-03-28</li><br/><li><span>撇目双人聿</span> 👍（0） 💬（0）<p>Mac OS 上 Tomcat的启动参考：https:&#47;&#47;medium.com&#47;@raju6508&#47;a-beginners-guide-installing-apache-tomcat-on-your-mac-11fa0995f3c7 (一步
 一步照着做就可以正常启动，特别要注意的是去官网下载 tomcat 的 tar 文件不要下载错了!)
 </p>2024-11-09</li><br/><li><span>dirtychill</span> 👍（0） 💬（0）<p>MVC的bean指的是controller，是一种特殊的bean</p>2024-05-20</li><br/>

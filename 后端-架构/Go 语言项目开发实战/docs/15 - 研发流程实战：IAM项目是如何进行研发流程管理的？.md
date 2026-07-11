@@ -31,8 +31,8 @@ IAM项目通过pre-commit githooks来确保分支名是符合规范的。在IAM�
 这里还有一个地方需要你注意：git不会提交 `.git/hooks` 目录下的githooks脚本，所以我们需要通过以下手段，确保开发者clone仓库之后，仍然能安装我们指定的githooks脚本到 `.git/hooks` 目录：
 
 ```
-# Copy githook scripts when execute makefile    
-COPY_GITHOOK:=$(shell cp -f githooks/* .git/hooks/) 
+# Copy githook scripts when execute makefile
+COPY_GITHOOK:=$(shell cp -f githooks/* .git/hooks/)
 ```
 
 上述代码放在[scripts/make-rules/common.mk](https://github.com/marmotedu/iam/blob/master/scripts/make-rules/common.mk#L74)文件中，每次执行make命令时都会执行，可以确保githooks都安装到 `.git/hooks` 目录下。
@@ -98,13 +98,13 @@ $ make verify-copyright
 这里还有个Makefile编写技巧：如果Makefile的command需要某个命令，就可以使该目标依赖类似tools.verify.addlicense这种目标，tools.verify.addlicense会检查该工具是否已安装，如果没有就先安装。
 
 ```
-.PHONY: copyright.verify    
-copyright.verify: tools.verify.addlicense 
+.PHONY: copyright.verify
+copyright.verify: tools.verify.addlicense
   ...
-tools.verify.%:          
+tools.verify.%:
   @if ! which $* &>/dev/null; then $(MAKE) tools.install.$*; fi
-.PHONY: install.addlicense                              
-install.addlicense:        
+.PHONY: install.addlicense
+install.addlicense:
   @$(GO) get -u github.com/marmotedu/addlicense
 ```
 
@@ -248,7 +248,7 @@ IAM项目配置了GitHub Actions，当有代码被push后，会触发CI流水线
 ```
 name: IamCI
 
-on: 
+on:
   push:
     branchs:
     - '*'
@@ -367,12 +367,12 @@ $ git branch -d feature/helloworld
 因为随着项目的扩展，Makefile大概率会不断加入新的管理功能，这些管理功能也需要加入到 `make help` 输出中。但如果每添加一个目标，都要修改 `make help` 命令，就比较麻烦，还容易出错。所以这里，我通过自动解析的方式，来生成`make help`输出：
 
 ```
-## help: Show this help info.    
-.PHONY: help           
-help: Makefile               
-  @echo -e "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:"                         
-  @sed -n 's/^##//p' $< | column -t -s ':' | sed -e 's/^/ /'    
-  @echo "$$USAGE_OPTIONS"    
+## help: Show this help info.
+.PHONY: help
+help: Makefile
+  @echo -e "\nUsage: make <TARGETS> <OPTIONS> ...\n\nTargets:"
+  @sed -n 's/^##//p' $< | column -t -s ':' | sed -e 's/^/ /'
+  @echo "$$USAGE_OPTIONS"
 ```
 
 目标help的命令中，通过 `sed -n 's/^##//p' $< | column -t -s ':' | sed -e 's/^/ /'` 命令，自动解析Makefile中 `##` 开头的注释行，从而自动生成 `make help` 输出。
@@ -382,9 +382,9 @@ help: Makefile
 通过以下赋值方式，变量可以在Makefile options中被指定：
 
 ```
-ifeq ($(origin COVERAGE),undefined)    
-COVERAGE := 60    
-endif   
+ifeq ($(origin COVERAGE),undefined)
+COVERAGE := 60
+endif
 ```
 
 例如，如果我们执行`make` ，则COVERAGE设置为默认值60；如果我们执行`make COVERAGE=90` ，则COVERAGE值为90。通过这种方式，我们可以更灵活地控制Makefile的行为。
@@ -505,5 +505,5 @@ make: *** [Makefile:101: lint] Error 2
 go version go1.16.2 linux&#47;amd64
 [going@dev iam]$ golangci-lint version
 golangci-lint has version v1.28.4-0.20200719134607-6a689074bf17 built from (unknown, mod sum: &quot;h1:LlCfXb0ozr7UL4sgH7UbR2Rt2eSjQE&#47;1zcIeWTu7ypk=&quot;) on (unknown)</p>2021-07-31</li><br/><li><span>Geek_4c902b</span> 👍（1） 💬（1）<p>老师，您好：
-iamctl new helloworld  这个iamctl 命令哪来的呀</p>2021-06-29</li><br/><li><span>小达</span> 👍（0） 💬（1）<p>iamctl new helloworld -d internal&#47;iamctl&#47;cmd&#47;helloworld这个在哪个目录下执行呢</p>2022-04-25</li><br/><li><span>CSB22</span> 👍（0） 💬（1）<p>Mark一个知识点：Maintainer 处理 pull request 冲突合并。https:&#47;&#47;blog.csdn.net&#47;danchenziDCZ&#47;article&#47;details&#47;81061989</p>2022-03-04</li><br/>
+iamctl new helloworld 这个iamctl 命令哪来的呀</p>2021-06-29</li><br/><li><span>小达</span> 👍（0） 💬（1）<p>iamctl new helloworld -d internal&#47;iamctl&#47;cmd&#47;helloworld这个在哪个目录下执行呢</p>2022-04-25</li><br/><li><span>CSB22</span> 👍（0） 💬（1）<p>Mark一个知识点：Maintainer 处理 pull request 冲突合并。https:&#47;&#47;blog.csdn.net&#47;danchenziDCZ&#47;article&#47;details&#47;81061989</p>2022-03-04</li><br/>
 </ul>

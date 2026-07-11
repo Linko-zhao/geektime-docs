@@ -30,7 +30,7 @@
 
 ```plain
 # 用 cargo build 根据 release 标准将项目打包成一个可执行的二进制文件
-cargo build --release： 
+cargo build --release：
 
 
 # 运行名为 mqtt-broker 的这个模块里面的测试用例
@@ -515,7 +515,7 @@ mod tests {
         let topic_storage = MQTTTopicStorage::new(rs);
         let cluster_name = "test_cluster".to_string();
         let topic_name = "loboxu".to_string();
-        
+
         # 1. 保存数据
         let topic = MQTTTopic {
             topic_id: "xxx".to_string(),
@@ -523,13 +523,13 @@ mod tests {
             retain_message: None,
             retain_message_expired_at: None,
         };
-        
+
         topic_storage
             .save(&cluster_name, &topic_name, topic)
             .unwrap();
 
 
-        
+
         # 2. 保存数据
         let topic_name = "lobo1".to_string();
         let topic = MQTTTopic {

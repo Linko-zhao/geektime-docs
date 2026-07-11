@@ -94,7 +94,7 @@ image.setOnContextClickListener({ gotoPreview() })
 ```plain
 //View.kt
 //                     (View) -> Unit 就是「函数类型 」
-//                       ↑        ↑ 
+//                       ↑        ↑
 var mOnClickListener: ((View) -> Unit)? = null
 var mOnContextClickListener: ((View) -> Unit)? = null
 
@@ -323,7 +323,7 @@ image.setOnClickListener {
 
 ```plain
 fun <T, R> Collection<T>.fold(
-    initial: R, 
+    initial: R,
     combine: (acc: R, nextElement: T) -> R
 ): R {
     var accumulator: R = initial
@@ -405,10 +405,10 @@ user?.apply(self = user) { self: User ->
 
 ```plain
 //           改为this             改为this
-//               ↓                    ↓ 
+//               ↓                    ↓
 fun User.apply(this: User, block: (this: User) -> Unit): User{
 //    这里还要传参数
-//         ↓ 
+//         ↓
     block(this)
     return this
 }
@@ -416,7 +416,7 @@ fun User.apply(this: User, block: (this: User) -> Unit): User{
 user?.apply(this = user) { this: User ->
     ...
 //               this 可以省略
-//                   ↓ 
+//                   ↓
     username.text = this.name
     website.text = blog
     image.setOnClickListener { gotoImagePreviewActivity(this) }
@@ -432,10 +432,10 @@ user?.apply(this = user) { this: User ->
 
 ```plain
 //              带接收者的函数类型
-//                     ↓  
+//                     ↓
 fun User.apply(block: User.() -> Unit): User{
 //  不用再传this
-//       ↓ 
+//       ↓
     block()
     return this
 }
@@ -484,7 +484,7 @@ class User() {
 这里，让我们先回顾一下BaseSingleton的代码：
 
 ```plain
-                     
+
 abstract class BaseSingleton<in P, out T> {
     @Volatile
     private var instance: T? = null
@@ -536,7 +536,7 @@ abstract class BaseSingleton<in P, out T> {
 class PersonManager private constructor(name: String) {
     companion object : BaseSingleton<String, PersonManager>() {
     //             报错，类型不匹配
-    //                  ↓ 
+    //                  ↓
         override val creator = PersonManager(name)
     }
 }
@@ -550,7 +550,7 @@ class PersonManager private constructor(name: String) {
 class PersonManager private constructor(name: String) {
     companion object : BaseSingleton<String, PersonManager>() {
     //                             函数引用
-    //                                ↓ 
+    //                                ↓
         override val creator = ::PersonManager
     }
 }
@@ -686,19 +686,19 @@ repeat：参数为次数和函数，for循环执行函数
 private const val FRIEND_ID = &quot;friendId&quot;
 
 fun goto(mContext: Context, userId: Long) {
-    mContext.goto&lt;ChatActivity&gt; {
-		putExtra(FRIEND_ID, userId)
-    }
+mContext.goto&lt;ChatActivity&gt; {
+putExtra(FRIEND_ID, userId)
+}
 }
 
 inline fun &lt;reified T&gt; Context.goto(block: Intent.() -&gt; Unit) {
-    this.startActivity(intent&lt;T&gt;(this, block))
+this.startActivity(intent&lt;T&gt;(this, block))
 }
 
 inline fun &lt;reified T&gt; intent(mContext: Context, block: Intent.() -&gt; Unit): Intent {
-    val intent = Intent(mContext, T::class.java)
-    intent.block()
-    return intent
+val intent = Intent(mContext, T::class.java)
+intent.block()
+return intent
 }</p>2022-01-10</li><br/><li><span>H.ZWei</span> 👍（5） 💬（1）<p>带接收者的函数类型能不能理解成是这个类的扩展函数，只不过是一个匿名函数。</p>2022-03-21</li><br/><li><span>大顺子</span> 👍（2） 💬（1）<p>1.第一个 run ，返回值为函数体最后一行，或指定 return 表达式
 2.第二个 run ,在函数体中可以用 this 指代该对象，返回值为函数体最后一行，或指定 return 表达式
 3.with 是将对象作为参数，在函数体中可以用 this 指代该对象，返回值为函数体最后一行，或指定 return 表达式
@@ -706,7 +706,7 @@ inline fun &lt;reified T&gt; intent(mContext: Context, block: Intent.() -&gt; Un
 5.also 在函数体内可以用 it 指代该对象,返回值为对象本身
 6.let 在函数体内可以用 it 指代该对象,返回值为函数体最后一行，或指定 return 表达式
 理解了上面那些，剩下的 takeIf 、takeUnless、repeat 就很好理解了。</p>2022-01-13</li><br/><li><span>Geek_518c5c</span> 👍（1） 💬（3）<p>
-fun User.apply(block: User.() -&gt; Unit): User{   请教这里的 User.()中的（）代表什么意思。
+fun User.apply(block: User.() -&gt; Unit): User{ 请教这里的 User.()中的（）代表什么意思。
 </p>2022-04-28</li><br/><li><span>neo</span> 👍（1） 💬（1）<p>&#47;&#47; 函数引用 
 override val creator = ::PersonManager
 函数引用中需要怎么去理解参数呢，因为并没有传参的地方</p>2022-04-06</li><br/><li><span>白乾涛</span> 👍（1） 💬（1）<p>感觉带接收者函数类型讲的太复杂了，单独抽出来放到后面某个章节讲更好一点。</p>2022-02-13</li><br/><li><span>20220106</span> 👍（1） 💬（3）<p>apply和also这两个比较典型的，上下文对象作为【接收者】和作为【参数】，这两个的区别没太领会到</p>2022-01-12</li><br/><li><span>zeki</span> 👍（1） 💬（2）<p>“第4种写法 由于 Kotlin 支持类型推导，所以 View 可以被删掉：”大佬您好，这句话是否不太准确？我的理解是：正常情况下，Kotlin的参数类型是不可以省略的，这里的View可以被删掉的原因不是因为“Kotlin 支持类型推导，所以 View可以被删掉”，而是因为如下代码所示：
@@ -722,13 +722,13 @@ val test:(Int,Int)-&gt;Int={x,y-&gt;x+y}是正确的一样
 val plusTwo:(Int,Int)-&gt;Int={x,y-&gt;x+y}
 
 各位大佬，如何把a和b的入参传给plusTwo使用</p>2022-05-13</li><br/><li><span>Geek_518c5c</span> 👍（0） 💬（1）<p>老师，
-&#47;&#47;              带接收者的函数类型
-&#47;&#47;                     ↓  
-fun User.apply(block: User.() -&gt; Unit): User{    问1：User.()是什么意思 问2这一个行代表定义了一个User的扩展函数，对吗
-&#47;&#47;  不用再传this  
-&#47;&#47;       ↓ 
-    block()
-    return this ------问3，这个this指向的是什么
+&#47;&#47; 带接收者的函数类型
+&#47;&#47; ↓  
+fun User.apply(block: User.() -&gt; Unit): User{ 问1：User.()是什么意思 问2这一个行代表定义了一个User的扩展函数，对吗
+&#47;&#47; 不用再传this  
+&#47;&#47; ↓
+block()
+return this ------问3，这个this指向的是什么
 }
 </p>2022-04-28</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（1）<p>顶级扩展函数编译成字节码，是 static 方法，参数多了一个 this
 

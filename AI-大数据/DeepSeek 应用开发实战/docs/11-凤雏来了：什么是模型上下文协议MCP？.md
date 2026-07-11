@@ -148,17 +148,17 @@ INSERT INTO score (score, user_id) VALUES
 
 ```json
 {
-  "mcpServers": {
-    "postgres": {
-      "command": "node",
-      "args": [
-        "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://postgres:postgres@<你的postgres所在的服务器的IP>:5432/achievement"
-      ]
-    }
-  }
+  "mcpServers": {
+    "postgres": {
+      "command": "node",
+      "args": [
+        "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://postgres:postgres@<你的postgres所在的服务器的IP>:5432/achievement"
+      ]
+    }
+  }
 }
 ```
 
@@ -168,16 +168,16 @@ INSERT INTO score (score, user_id) VALUES
 
 ```json
 {
-  "mcpServers": {
-    "postgres": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://postgres:postgres@<你的postgres所在的服务器的IP>:5432/achievement"
-      ]
-    }
-  }
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://postgres:postgres@<你的postgres所在的服务器的IP>:5432/achievement"
+      ]
+    }
+  }
 }
 ```
 
@@ -239,20 +239,20 @@ INSERT INTO score (score, user_id) VALUES
 }
 
 - 1Panel 中MCP server 配置：
-{
+  {
   &quot;mcpServers&quot;: {
-    &quot;postgres&quot;: {
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [
-        &quot;-y&quot;,
-        &quot;@modelcontextprotocol&#47;server-postgres&quot;,
-        &quot;postgresql:&#47;&#47;user:password@1Panel-postgresql-XXXX(数据库名):5432&#47;XXXXX（1panel 本地数据库名）&quot;
-      ]
-    }
+  &quot;postgres&quot;: {
+  &quot;command&quot;: &quot;npx&quot;,
+  &quot;args&quot;: [
+  &quot;-y&quot;,
+  &quot;@modelcontextprotocol&#47;server-postgres&quot;,
+  &quot;postgresql:&#47;&#47;user:password@1Panel-postgresql-XXXX(数据库名):5432&#47;XXXXX（1panel 本地数据库名）&quot;
+  ]
   }
-}</p>2025-04-17</li><br/><li><span>ifelse</span> 👍（2） 💬（1）<p>学习打卡
-tool一样可以实现功能，写好prompt，调用工具</p>2025-04-11</li><br/><li><span>Xin </span> 👍（2） 💬（1）<p>按照例子也执行了一下pgsql的mcp，有个地方不太理解。 我原本的理解是MCP server就是一个代理的组件，会根据你的需求去找所需的模型，但是这个例子中，我配置了pgsql的mcp server，但我实际去连接的不还是deepseek吗，那这里的mcp server起到什么作用呢</p>2025-04-09</li><br/><li><span>jogholy</span> 👍（2） 💬（1）<p>roo code目前在vscode中是一个袋鼠图标，roo code Chinese是火箭图标。git的更新来看，袋鼠图标的才是更新频繁的版本。同时袋鼠图标目前才是检索cline排第二的。</p>2025-04-08</li><br/><li><span>李维</span> 👍（2） 💬（1）<p>请教一下老师，mcp协议跟目前主流的agent开发框架之间的区别是什么，比如metagpt\autogpt\langchain。是不是mcp这种协议比较容易接受，可以让各种tool能够串联起来，从而结合llm搭建更好用的agent？还是说metagpt等框架中也使用了类似mcp的这些思想，但是属于各个框架内部都有的，开发者需要了解每个框架的模式才能开发？
-另外后续能否结合实际，也介绍一下这些框架的落地。</p>2025-03-28</li><br/><li><span>Geek_fd9373</span> 👍（1） 💬（1）<p>MCP Server目前是只能由nodeJs和php实现吗？如果想使用java作为MCP Server的话，是只能基于php去调用java(譬如基于http请求)这种链路嘛？
+  }
+  }</p>2025-04-17</li><br/><li><span>ifelse</span> 👍（2） 💬（1）<p>学习打卡
+  tool一样可以实现功能，写好prompt，调用工具</p>2025-04-11</li><br/><li><span>Xin </span> 👍（2） 💬（1）<p>按照例子也执行了一下pgsql的mcp，有个地方不太理解。 我原本的理解是MCP server就是一个代理的组件，会根据你的需求去找所需的模型，但是这个例子中，我配置了pgsql的mcp server，但我实际去连接的不还是deepseek吗，那这里的mcp server起到什么作用呢</p>2025-04-09</li><br/><li><span>jogholy</span> 👍（2） 💬（1）<p>roo code目前在vscode中是一个袋鼠图标，roo code Chinese是火箭图标。git的更新来看，袋鼠图标的才是更新频繁的版本。同时袋鼠图标目前才是检索cline排第二的。</p>2025-04-08</li><br/><li><span>李维</span> 👍（2） 💬（1）<p>请教一下老师，mcp协议跟目前主流的agent开发框架之间的区别是什么，比如metagpt\autogpt\langchain。是不是mcp这种协议比较容易接受，可以让各种tool能够串联起来，从而结合llm搭建更好用的agent？还是说metagpt等框架中也使用了类似mcp的这些思想，但是属于各个框架内部都有的，开发者需要了解每个框架的模式才能开发？
+  另外后续能否结合实际，也介绍一下这些框架的落地。</p>2025-03-28</li><br/><li><span>Geek_fd9373</span> 👍（1） 💬（1）<p>MCP Server目前是只能由nodeJs和php实现吗？如果想使用java作为MCP Server的话，是只能基于php去调用java(譬如基于http请求)这种链路嘛？
 
 另外多问个问题，像spring ai也是继承了mcp，但整个架构看起来，mcp只是一个tools(实际业务工具)，spring ai支持自定义method或function作为tools调用，那对于java语言来说，是不是直接把本地的业务方法直接设置为tools，而没必要单独写MCP Server了？谢谢</p>2025-05-15</li><br/><li><span>CrazyCodes</span> 👍（1） 💬（1）<p>Agent Tool 的话，是不是需要服务端开发api，然后由agent tool 去调用api，以实现查询数据库</p>2025-04-28</li><br/>
 </ul>

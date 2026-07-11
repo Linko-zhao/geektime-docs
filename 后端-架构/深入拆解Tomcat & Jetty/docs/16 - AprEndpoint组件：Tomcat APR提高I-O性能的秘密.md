@@ -30,11 +30,11 @@ public class Socket {
   //用native修饰这个方法，表明这个函数是C语言实现
   public static native long create(int family, int type,
                                  int protocol, long cont)
-                                 
+
   public static native int bind(long sock, long sa);
-  
+
   public static native int listen(long sock, int backlog);
-  
+
   public static native long accept(long sock)
 }
 ```
@@ -43,13 +43,13 @@ public class Socket {
 
 ```
 //注意函数的名字要符合JNI规范的要求
-JNIEXPORT jint JNICALL 
+JNIEXPORT jint JNICALL
 Java_org_apache_tomcat_jni_Socket_bind(JNIEnv *e, jlong sock,jlong sa)
 	{
 	    jint rv = APR_SUCCESS;
 	    tcn_socket_t *s = (tcn_socket_t *）sock;
 	    apr_sockaddr_t *a = (apr_sockaddr_t *) sa;
-	
+
         //调用APR库自己实现的bind函数
 	    rv = (jint)apr_socket_bind(s->sock, a);
 	    return rv;

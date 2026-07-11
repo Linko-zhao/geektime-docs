@@ -32,11 +32,11 @@ public class HelloWorldController {
 
 ```
 public class HttpRequestHandler{
-    
+
     Map<RequestKey, Method> mapper = new HashMap<>();
-    
+
     public Object handle(HttpRequest httpRequest){
-         RequestKey requestKey = getRequestKey(httpRequest);         
+         RequestKey requestKey = getRequestKey(httpRequest);
          Method method = this.mapper.getValue(requestKey);
          Object[] args = resolveArgsAccordingToMethod(httpRequest, method);
          return method.invoke(controllerObject, args);
@@ -69,7 +69,7 @@ public class HttpRequestHandler{
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-tomcat</artifactId>
              </exclusion>
-        </exclusions>- 
+        </exclusions>-
     </dependency>
     <!-- Use Jetty instead -->
  <dependency>
@@ -108,7 +108,7 @@ class ServletWebServerFactoryConfiguration {
       }
 
    }
-   
+
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({ Servlet.class, Server.class, Loader.class, WebAppContext.class })
 @ConditionalOnMissingBean(value = ServletWebServerFactory.class, search = SearchStrategy.CURRENT)
@@ -145,22 +145,22 @@ public void run() {
                keyCount = selector.selectNow();
          } else {
                keyCount = selector.select(selectorTimeout);
- 
+
         //省略其他非关键代码
         Iterator<SelectionKey> iterator =
             keyCount > 0 ? selector.selectedKeys().iterator() : null;
 
         while (iterator != null && iterator.hasNext()) {
             SelectionKey sk = iterator.next();
-            NioSocketWrapper socketWrapper = (NioSocketWrapper)  
+            NioSocketWrapper socketWrapper = (NioSocketWrapper)
             //处理事件
             processKey(sk, socketWrapper);
             //省略其他非关键代码
-           
+
         }
        //省略其他非关键代码
     }
- 
+
 }
 ```
 
@@ -191,21 +191,21 @@ protected void doService(HttpServletRequest request, HttpServletResponse respons
 
 ```
 protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
-   
+
  // 省略其他非关键代码
  // 1. 分发：Determine handler for the current request.
   HandlerExecutionChain mappedHandler = getHandler(processedRequest);
- 
+
  // 省略其他非关键代码
  //Determine handler adapter for the current request.
   HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
- 
+
  // 省略其他非关键代码
  // 2. 执行：Actually invoke the handler.
   mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
-  
+
  // 省略其他非关键代码
-     
+
 }
 ```
 

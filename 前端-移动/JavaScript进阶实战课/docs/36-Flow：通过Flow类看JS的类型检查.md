@@ -67,10 +67,10 @@ Flow 会找到项目所在位置的所有 JavaScript 代码，但只会对头部
 ```javascript
 // @flow
 let i = { x: 0, y: 1 };
-for(i = 0; i < 10; i++) { 
+for (i = 0; i < 10; i++) {
   console.log(i);
 }
-i.x = 1;  
+i.x = 1;
 ```
 
 同样，下面的例子在没有注释的情况下也会报错。虽然 Flow 开始不知道 `msg` 参数的类型，但是看到了长度 `length` 这个属性后，就知道它不会是一个数字。但是后面在函数调用过程中传入的实参却是数字，明显会产生问题，所以就会报错。
@@ -136,7 +136,9 @@ console.log(msgSize(null));
 // @flow
 class MyClass {
   prop: number = 42;
-  method(value: string): number { /* ... */ }
+  method(value: string): number {
+    /* ... */
+  }
 }
 ```
 
@@ -167,7 +169,7 @@ method({
   bar: 42      // 通过
 });
 
-{| foo: string, bar: number |} 
+{| foo: string, bar: number |}
 ```
 
 对于过长的类型对象参数，我们可以通过**自定义类型名称**的方式将参数类抽象提炼出来。
@@ -180,7 +182,7 @@ export type MyObject = {
 };
 
 export default function method(val: MyObject) {
-  // ... 
+  // ...
 }
 ```
 
@@ -190,8 +192,8 @@ export default function method(val: MyObject) {
 
 ```javascript
 // @flow
-var cityLocations : {[string]: {long:number, lat:number}} = {
-    "上海": { long: 31.22222, lat: 121.45806 }
+var cityLocations: { [string]: { long: number, lat: number } } = {
+  上海: { long: 31.22222, lat: 121.45806 },
 };
 export default cityLocations;
 ```
@@ -208,18 +210,18 @@ export default cityLocations;
 // @flow
 
 function average(data: Array<number>) {
- // ...
+  // ...
 }
 
 let tuple: [number, boolean, string] = [1, true, "three"];
-let num  : number  = tuple[0]; // 通过
-let bool : boolean = tuple[1]; // 通过
-let str  : string  = tuple[2]; // 通过
+let num: number = tuple[0]; // 通过
+let bool: boolean = tuple[1]; // 通过
+let str: string = tuple[2]; // 通过
 
 function size(s: Array<mixed>): number {
-    return s.length;
+  return s.length;
 }
-console.log(size([1,true,"three"]));
+console.log(size([1, true, "three"]));
 ```
 
 如果我们的函数对数组中的元素进行检索和使用，Flow 检查会使用类型检查或其他测试来确定元素的类型。如果你愿意放弃类型检查，你也可以使用 any 而不是 mixed，它允许你对数组的值做任何处理，而**不需要确保这些值是期望的类型**。
@@ -234,7 +236,7 @@ console.log(size([1,true,"three"]));
 // @flow
 type FetchTextCallback = (?Error, ?number, ?string) => void;
 function fetchText(url: string, callback: FetchTextCallback) {
-  // ...  
+  // ...
 }
 ```
 

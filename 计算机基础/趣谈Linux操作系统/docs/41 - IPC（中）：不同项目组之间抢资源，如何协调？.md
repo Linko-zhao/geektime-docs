@@ -96,7 +96,7 @@ struct msg_queue {
 } __randomize_layout;
 
 struct shmid_kernel /* private to the kernel */
-{	
+{
 	struct kern_ipc_perm	shm_perm;
 	struct file		*shm_file;
 	unsigned long		shm_nattch;
@@ -284,7 +284,7 @@ static struct file_system_type shmem_fs_type = {
 
 ```
 /**
- * shmem_kernel_file_setup - get an unlinked file living in tmpfs which must be kernel internal.  
+ * shmem_kernel_file_setup - get an unlinked file living in tmpfs which must be kernel internal.
  * @name: name for dentry (to be seen in /proc/<pid>/maps
  * @size: size to be set for the file
  * @flags: VM_NORESERVE suppresses pre-accounting of the entire object size */
@@ -532,15 +532,15 @@ shmem\_fault会调用shmem\_getpage\_gfp在page cache和swap中找一个空闲�
 
 我们来总结一下共享内存的创建和映射过程。
 
-01. 调用shmget创建共享内存。
-02. 先通过ipc\_findkey在基数树中查找key对应的共享内存对象shmid\_kernel是否已经被创建过，如果已经被创建，就会被查询出来，例如producer创建过，在consumer中就会查询出来。
-03. 如果共享内存没有被创建过，则调用shm\_ops的newseg方法，创建一个共享内存对象shmid\_kernel。例如，在producer中就会新建。
-04. 在shmem文件系统里面创建一个文件，共享内存对象shmid\_kernel指向这个文件，这个文件用struct file表示，我们姑且称它为file1。
-05. 调用shmat，将共享内存映射到虚拟地址空间。
-06. shm\_obtain\_object\_check先从基数树里面找到shmid\_kernel对象。
-07. 创建用于内存映射到文件的file和shm\_file\_data，这里的struct file我们姑且称为file2。
-08. 关联内存区域vm\_area\_struct和用于内存映射到文件的file，也即file2，调用file2的mmap函数。
-09. file2的mmap函数shm\_mmap，会调用file1的mmap函数shmem\_mmap，设置shm\_file\_data和vm\_area\_struct的vm\_ops。
+1.  调用shmget创建共享内存。
+2.  先通过ipc\_findkey在基数树中查找key对应的共享内存对象shmid\_kernel是否已经被创建过，如果已经被创建，就会被查询出来，例如producer创建过，在consumer中就会查询出来。
+3.  如果共享内存没有被创建过，则调用shm\_ops的newseg方法，创建一个共享内存对象shmid\_kernel。例如，在producer中就会新建。
+4.  在shmem文件系统里面创建一个文件，共享内存对象shmid\_kernel指向这个文件，这个文件用struct file表示，我们姑且称它为file1。
+5.  调用shmat，将共享内存映射到虚拟地址空间。
+6.  shm\_obtain\_object\_check先从基数树里面找到shmid\_kernel对象。
+7.  创建用于内存映射到文件的file和shm\_file\_data，这里的struct file我们姑且称为file2。
+8.  关联内存区域vm\_area\_struct和用于内存映射到文件的file，也即file2，调用file2的mmap函数。
+9.  file2的mmap函数shm\_mmap，会调用file1的mmap函数shmem\_mmap，设置shm\_file\_data和vm\_area\_struct的vm\_ops。
 10. 内存映射完毕之后，其实并没有真的分配物理内存，当访问内存的时候，会触发缺页异常do\_page\_fault。
 11. vm\_area\_struct的vm\_ops的shm\_fault会调用shm\_file\_data的vm\_ops的shmem\_fault。
 12. 在page cache中找一个空闲页，或者创建一个空闲页。
@@ -560,6 +560,7 @@ shmem\_fault会调用shmem\_getpage\_gfp在page cache和swap中找一个空闲�
 1 通过共享内存的ip在 shm_ids基数树上找到该共享内存的结构体,然后取出内存文件系统里file并将其赋值给新创建的struct shm_file_data-&gt;file,这里我们已经有了可以共享的文件&quot;file&quot;,然后在用户进程虚拟空间的mmap映射区分配一个vm_area struct来做文件映射就可以了,将vm_area_struct里的vm_file的private_data指向shm_file_data,为什么不能直接用file呢?private_data貌似只有共享内存才有用,不太理解,可能因为vm_file有其独特的file_operation的问题吧,两个file&#39;虽然可以是同一类结构体,但差异还是很大.在创建vm_file的过程中应该可以找到答案,略过,映射内存时还会将vm_area的vm_ops先指向shmem_vm_ops,然后在指向shm_vm_ops, 将shm_file_data的vm_ops指向shmem_vm_ops即内存文件系统的文件的vm_ops,到这里就完成了.后面进程读或写数据时,如果对应的页表项没有建立会触发缺页异常,跟之前的缺页异常流程差不多,最终会调用内存文件系统的缺页异常函数来分配对应的物理页,并建立页表项.</p>2020-04-27</li><br/><li><span>Amark</span> 👍（2） 💬（1）<p>老师有没有什么通俗易懂的资料，您将的太专业了</p>2019-07-02</li><br/><li><span>不一样的烟火</span> 👍（0） 💬（1）<p>听完了 快点更新😁</p>2019-07-01</li><br/><li><span>Spring</span> 👍（20） 💬（1）<p>文章一遍看不懂但底下总结的图很好，终于明白了为什么需要两个file。file1是shmem内存文件系统里的文件，file2是进程虚拟内存里映射的文件，所以file1是属于共享内存的，file2是属于某个进程的。</p>2019-09-27</li><br/><li><span>小橙子</span> 👍（12） 💬（1）<p>工作了几年 ，业务代码写多了，框架与API调来调去的，遇到很多疑难杂症，还是不明所以。
 回过头再看下 操作系统真是核心，很多人说操作系统就是功夫里面的易筋经，内功章法。学习了操作系统，再看很多其他的技术，感觉更自然，理解的更深刻了。一直想读内核代码，但是啃起来很费劲，这个专栏一直再看，越看越喜欢，很多篇章都会反复的看。相信看完专栏后，再去看一些深入理解linux内核，会清晰很多。</p>2019-11-06</li><br/><li><span>珠闪闪</span> 👍（7） 💬（1）<p>文章两遍读下来蒙蒙的，最后对着总结图把共享内存的创建和在用户态映射的流程理顺了。关键就是因为共享内存刚开始申请的物理内存无法在进程中共享，所以先要把物理内存的shmid_kernel对应到shmem文件系统的一个文件，这样shmem中的文件可以再进程中共享；然后在shmat函数时，相当于将shm映射到shmem的file2，先映射到shmem文件系统的文件file1，然后再通过file1的mmap函数完成shm_file_data和vm_area_struct的ops设置。这样内存映射完毕后，并没有真的分配物理内存，当访问内存会触发缺页异常。然后vm_area_struct的vm_ops的shm_fault会调用shm_file_data的vm_ops的shmem_fault。最后在page cache中找一个空闲页，或者创建一个空闲页。</p>2020-03-08</li><br/><li><span>小鳄鱼</span> 👍（1） 💬（0）<p>为了统一操作入口：一切皆文件。构建了各种各样的“文件系统”。共享内存文件系统，硬盘文件系统（ext4等），设备文件系统，相信还有各种各样的文件系统！虽然感觉复杂了，但是实际的场景本来就不简单。反而统一入口之后，“上层建筑”的开发人员不再需要关系底层的具体实现，从而实现并行开发，独立维护。</p>2022-06-02</li><br/><li><span>NeverSeeYouAgainBUG</span> 👍（0） 💬（0）<p>哎呀超哥，深入浅出啊深入浅出啊。关键在 浅出，要好好总结，</p>2022-06-12</li><br/><li><span>Geek_2b44d4</span> 👍（0） 💬（0）<p>这个page cache 跟swap的选择时机是怎样的？</p>2022-05-09</li><br/><li><span>艾瑞克小霸王</span> 👍（0） 💬（0）<p>对于 sem_ids、msg_ids、shm_ids 各有一棵基数树
 ---------------------------------------------------
+
 应该是共享一个树吧？</p>2019-12-06</li><br/><li><span>Leosocy</span> 👍（0） 💬（0）<p>seq 和 next_id 用于一起生成 ipc 唯一的 id，因为信号量，共享内存，消息队列，它们三个的 id 也不能重复
 
 这句话不太明白，不同的ipc_ids不是有不同的idr吗？为什么要保证他们三个id不重复？</p>2019-11-14</li><br/><li><span>奔跑的码仔</span> 👍（0） 💬（0）<p>将本节所讲的共享内存实现流程与文件内存映那节所讲的流程对比着梳理一下，感觉明朗了好多</p>2019-09-30</li><br/><li><span>嘉木</span> 👍（0） 💬（0）<p>C的面向对象居然这么巧妙</p>2019-08-13</li><br/>

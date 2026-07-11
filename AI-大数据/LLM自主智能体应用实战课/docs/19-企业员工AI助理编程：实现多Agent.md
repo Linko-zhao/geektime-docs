@@ -177,7 +177,7 @@ class CollectionFacadeBlock(AIConversationBlock):
     请返回下面的内容:
     {collection_input}
     """
-    
+
     class Input(BlockSchema):
         collection_input: str = SchemaField(
             description="collection input"
@@ -199,7 +199,7 @@ class CollectionFacadeBlock(AIConversationBlock):
             description="collection output"
         )
         error: str = SchemaField(description="Error message if the API call failed.")
-    
+
     def __init__(self):
         Block.__init__(
             self,
@@ -257,7 +257,7 @@ class NotificationFacadeBlock(AIConversationBlock):
     请返回下面的内容:
     {notification_input}
     """
-    
+
     class Input(BlockSchema):
         notification_input: str = SchemaField(
             description="notification input"
@@ -279,7 +279,7 @@ class NotificationFacadeBlock(AIConversationBlock):
             description="notification output"
         )
         error: str = SchemaField(description="Error message if the API call failed.")
-    
+
     def __init__(self):
         Block.__init__(
             self,

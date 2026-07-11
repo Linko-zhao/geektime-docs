@@ -129,7 +129,7 @@ protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) 
       this.proxyTypes.put(cacheKey, proxy.getClass());
       return proxy;
    }
-   // 省略非关键代码 
+   // 省略非关键代码
 }
 
 ```
@@ -253,7 +253,7 @@ AdminUserService类，包含一个管理员用户（User），其付款编号为
 @Service
 public class AdminUserService {
     public final User adminUser = new User("202101166");
-    
+
     public void login() {
         System.out.println("admin user login...");
     }
@@ -376,7 +376,7 @@ protected Object createProxyClassAndInstance(Enhancer enhancer, Callback[] callb
           // 省略非关键代码
       }
    }
-       
+
     if (proxyInstance == null) {
        // 尝试普通反射方式创建实例
        try {
@@ -462,7 +462,7 @@ protected Object createProxyClassAndInstance(Enhancer enhancer, Callback[] callb
 public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
    // 省略非关键代码
     TargetSource targetSource = this.advised.getTargetSource();
-    // 省略非关键代码 
+    // 省略非关键代码
       if (chain.isEmpty() && Modifier.isPublic(method.getModifiers())) {
          Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);
          retVal = methodProxy.invoke(target, argsToUse);
@@ -520,24 +520,23 @@ public Object intercept(Object proxy, Method method, Object[] args, MethodProxy 
 
 ③ 我们一般不能直接从代理类中去拿被代理类的属性，这是因为除非我们显示设置 spring.objenesis.ignore 为 true，否则代理类的属性是不会被 Spring 初始化的，我们可以通过在被代理类中增加一个方法来间接获取其属性。
 
-
 总结：我觉得SpringAop生成的代理类是对被代理类的一个包装，代理类对象仅被代理对象方法执行前后进行增强，原始方法的调用还是由被代理对象自己执行；</p>2022-05-30</li><br/><li><span>小林桑</span> 👍（1） 💬（0）<p>这个课好像没见到老师来答疑？ </p>2024-01-14</li><br/><li><span>Geek_930ce1</span> 👍（1） 💬（4）<p>ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
-        Constructor&lt;AdminUserService&gt; constructor1  = AdminUserService.class.getConstructor();
-        Constructor constructor2 = reflectionFactory.newConstructorForSerialization(AdminUserService.class,constructor1);
-        AdminUserService adminUserService3 = (AdminUserService)constructor2.newInstance();
-        System.out.println(&quot;sun.reflect.ReflectionFactory.newConstructorForSerialization().newInstance()&quot;+adminUserService3);
+Constructor&lt;AdminUserService&gt; constructor1 = AdminUserService.class.getConstructor();
+Constructor constructor2 = reflectionFactory.newConstructorForSerialization(AdminUserService.class,constructor1);
+AdminUserService adminUserService3 = (AdminUserService)constructor2.newInstance();
+System.out.println(&quot;sun.reflect.ReflectionFactory.newConstructorForSerialization().newInstance()&quot;+adminUserService3);
 经过尝试，还是存在成员变量，是为什么</p>2022-06-10</li><br/><li><span>Bo</span> 👍（0） 💬（0）<p>关于思考题，不知道为什么用老师的AdminUserService就还是会初始化类属性，自定义的类就可以验证不会初始化，后面再关注。
 
 验证代码如下：（参考https:&#47;&#47;blog.csdn.net&#47;Zong_0915&#47;article&#47;details&#47;126512236）
 public class Test {
-    public final User user = new User(&quot;LJJ&quot;);
-    public User user2 = new User(&quot;LJJ&quot;);
-    public String name = &quot;Hello&quot;;
-    public final String str = &quot;ssss&quot;;
-    public Integer a = 12222;
-    public final Integer b = 12222;
-    public int aa = 1;
-    public final int bb = 2;
+public final User user = new User(&quot;LJJ&quot;);
+public User user2 = new User(&quot;LJJ&quot;);
+public String name = &quot;Hello&quot;;
+public final String str = &quot;ssss&quot;;
+public Integer a = 12222;
+public final Integer b = 12222;
+public int aa = 1;
+public final int bb = 2;
 
     public static void main(String[] args) throws Exception {
         ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
@@ -553,22 +552,24 @@ public class Test {
         System.out.println(&quot;final int: &quot; + t.bb);
         System.out.println(&quot;int: &quot; + t.aa);
     }
+
 }
 
 注意：
+
 - sun.reflect在Java 9以上才引入
-- 如果编译报错“package sun.reflect does not exist”，但是在代码里其实可以看到源码，则可以尝试在IDEA设置里搜索Java Compiler，取消勾选 `Use &#39;--release&#39; option for cross-compilation` 选项即可，亲试有效。参考[IntelliJ says the package does not exist, But I can access the package](https:&#47;&#47;stackoverflow.com&#47;questions&#47;40448203&#47;intellij-says-the-package-does-not-exist-but-i-can-access-the-package)——StackOverFlow</p>2023-03-01</li><br/><li><span>饮水偲源</span> 👍（0） 💬（0）<p>第3种构造方式，成员属性不会初始化的代码
-       
- ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
-        Constructor constructor = reflectionFactory.newConstructorForSerialization(AdminUserService.class);
-        AdminUserService adminUserService = (AdminUserService) constructor.newInstance();
-        System.out.println(adminUserService.adminUser.payNum);
+- 如果编译报错“package sun.reflect does not exist”，但是在代码里其实可以看到源码，则可以尝试在IDEA设置里搜索Java Compiler，取消勾选 `Use &#39;--release&#39; option for cross-compilation` 选项即可，亲试有效。参考[IntelliJ says the package does not exist, But I can access the package](https://stackoverflow.com/questions/40448203/intellij-says-the-package-does-not-exist-but-i-can-access-the-package)——StackOverFlow</p>2023-03-01</li><br/><li><span>饮水偲源</span> 👍（0） 💬（0）<p>第3种构造方式，成员属性不会初始化的代码
+
+ReflectionFactory reflectionFactory = ReflectionFactory.getReflectionFactory();
+Constructor constructor = reflectionFactory.newConstructorForSerialization(AdminUserService.class);
+AdminUserService adminUserService = (AdminUserService) constructor.newInstance();
+System.out.println(adminUserService.adminUser.payNum);
 
 但是
 reflectionFactory.newConstructorForSerialization这个方法还有种入参，传入指定构造方法时，其可以完成成员属性初始化。
-Constructor&lt;?&gt; newConstructorForSerialization(Class&lt;?&gt; var1, Constructor&lt;?&gt; var2)</p>2022-09-01</li><br/><li><span>蝴蝶</span> 👍（0） 💬（0）<p>        Constructor&lt;Object&gt; constructor = Object.class.getDeclaredConstructor();
-        Constructor&lt;?&gt; constructor1 = ReflectionFactory.getReflectionFactory()
-                .newConstructorForSerialization(Person.class, constructor);
+Constructor&lt;?&gt; newConstructorForSerialization(Class&lt;?&gt; var1, Constructor&lt;?&gt; var2)</p>2022-09-01</li><br/><li><span>蝴蝶</span> 👍（0） 💬（0）<p> Constructor&lt;Object&gt; constructor = Object.class.getDeclaredConstructor();
+Constructor&lt;?&gt; constructor1 = ReflectionFactory.getReflectionFactory()
+.newConstructorForSerialization(Person.class, constructor);
 
         constructor1.s        Constructor&lt;Object&gt; constructor = Object.class.getDeclaredConstructor();
         Constructor&lt;?&gt; constructor1 = ReflectionFactory.getReflectionFactory()
@@ -576,10 +577,10 @@ Constructor&lt;?&gt; newConstructorForSerialization(Class&lt;?&gt; var1, Constru
 
         constructor1.setAccessible(true);
         Person personByReflection = (Person) constructor1.newInstance();
-        
+
         System.out.println(personByReflection);etAccessible(true);
         Person personByReflection = (Person) constructor1.newInstance();
-        
+
         System.out.println(personByReflection);</p>2022-07-14</li><br/><li><span>蝴蝶</span> 👍（0） 💬（0）<p>        Constructor&lt;Object&gt; constructor = Object.class.getDeclaredConstructor();
         Constructor&lt;?&gt; constructor1 = ReflectionFactory.getReflectionFactory()
                 .newConstructorForSerialization(Person.class, constructor);
@@ -600,6 +601,7 @@ Constructor&lt;?&gt; newConstructorForSerialization(Class&lt;?&gt; var1, Constru
         11111
         System.out.println(personByReflectio11n);
         System.out.println(personByReflection);) constructor1.newInstance();
-        
+
         System.out.println(personByReflection);</p>2022-07-14</li><br/><li><span>胡同学</span> 👍（0） 💬（0）<p>@@Lookup 也可以实现案例一</p>2022-05-13</li><br/><li><span>安迪密恩</span> 👍（0） 💬（1）<p>hi 傅哥， 那是不是说 private 方法无法被AOP 增强？</p>2022-03-09</li><br/>
+
 </ul>

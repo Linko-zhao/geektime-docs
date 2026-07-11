@@ -220,26 +220,25 @@ Flutter提供了基本路由和命名路由两种方式，来管理页面间的�
 1、在传入 runApp 里面的 widget 里面做路由跳转的时候所使用的的 BuildContext 不能是 App 的，必须得是 widget 的，否则会报 Navigator operation requested with a context that does not include a Navigator 这样子的错。
 
 2、使用命名路由或者注册表的方式，最好是在传入 runApp 里面的 widget 的MaterialApp 里面做 routes 的配置，为的是 APP 一启动的时候就注册上，否则可能会存在要使用命名，可是还没注册的情况，就会报 Could not find a generator for route RouteSettings(&quot;second_page&quot;, null) in the _WidgetsAppState 这样的错误。</p>2019-09-24</li><br/><li><span>高超</span> 👍（6） 💬（1）<p>问：对于基本路由，如何传递页面参数？
-答：1.  使用构造函数传参
-      2.  MaterialPageRoute 加入参数 setting: RouteSettings 。第二个页面获取逻辑和命令路由就一样了。</p>2019-09-03</li><br/><li><span>入魔的冬瓜</span> 👍（2） 💬（1）<p>自己手动push一个route的话，可以通过构造函数进行传参数。
+答：1. 使用构造函数传参 2. MaterialPageRoute 加入参数 setting: RouteSettings 。第二个页面获取逻辑和命令路由就一样了。</p>2019-09-03</li><br/><li><span>入魔的冬瓜</span> 👍（2） 💬（1）<p>自己手动push一个route的话，可以通过构造函数进行传参数。
 使用命名路由的话，参数的读取通过ModalRoute.of(context).settings.arguments，这个操作要放在build里面操作。这种情况，有没有什么办法也是通过构造函数传参数，在build之前就可以拿到参数。（类似第三方fluro框架）</p>2019-10-18</li><br/><li><span>巫</span> 👍（1） 💬（1）<p>把所有命名路由都定义在一起会很多，也不利于模块化，能否在模块中定义路由呢？另外，有没有子路由的概念呢？</p>2019-10-22</li><br/><li><span>肖</span> 👍（1） 💬（1）<p>老师你好，showdialog也是进行了路由跳转，为什么会出现在当前界面上面，而普通的都是跳到另外一个新的界面</p>2019-10-21</li><br/><li><span>巫山老妖</span> 👍（1） 💬（1）<p>第二道思考题：
 传参：
 RaisedButton(
-            child: Text(&#39;命名路由（参数&amp;回调）&#39;),
-            onPressed: () =&gt;
-                Navigator.pushNamed(context, &quot;third_page&quot;, arguments: [1, 2])
-                    .then((msg) {
-              setState(() {
-                _msg = msg;
-              });
-            })
+child: Text(&#39;命名路由（参数&amp;回调）&#39;),
+onPressed: () =&gt;
+Navigator.pushNamed(context, &quot;third_page&quot;, arguments: [1, 2])
+.then((msg) {
+setState(() {
+_msg = msg;
+});
+})
 
 计算并返回：
 
 class ThirdPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var args = ModalRoute.of(context).settings.arguments as List&lt;int&gt;;
+@override
+Widget build(BuildContext context) {
+var args = ModalRoute.of(context).settings.arguments as List&lt;int&gt;;
 
     int sum = args[0] + args[1];
     print(sum);
@@ -258,46 +257,47 @@ class ThirdPage extends StatelessWidget {
         ],
       ),
     );
-  }
+
+}
 }
 </p>2019-10-07</li><br/><li><span>严旭珺</span> 👍（1） 💬（2）<p>老师好，请问一下，如果是类似于Android中打开页面 A-&gt;B-&gt;A，标准的启动模式，栈中有2个A页面该怎么办呢？我试了试B页面Navigator.pushName(context,A),会黑屏</p>2019-10-05</li><br/><li><span>和小胖</span> 👍（1） 💬（1）<p>第二个问题：可以构造一个 list 传递过去，然后对 list 中数据的两个数字求和再把结果带回上个页面。
 
 另外老师通过 arguments 是不是只能传递一个参数呀？</p>2019-09-24</li><br/><li><span>YJ</span> 👍（0） 💬（3）<p>陈老师请问？
 使用的是Navigator.push
- A-&gt;B-&gt;C-&gt;D,
+A-&gt;B-&gt;C-&gt;D,
 如何 让D页面 pop 到 B 呢?</p>2019-08-20</li><br/><li><span>汪帅</span> 👍（0） 💬（1）<p>其实我一直想知道这个课程的样例代码在哪里？之前见过有人留言中问过但是也没看到有回复具体地址。现在找那条留言也找不到了，其它课程都有对应的样例代码在github上面，如果有在每篇下面附加上代码地址不可以么？</p>2019-08-18</li><br/><li><span>竹之同学</span> 👍（0） 💬（1）<p>对于基本路由，其实路由返回的就是那个新页面初始化的实例，所以可以在页面 Widget 定义变量，然后在路由返回，也就是实例化的时候传值进去。</p>2019-08-16</li><br/><li><span>Mr.J</span> 👍（0） 💬（1）<p>在新建页面的时候通过构造函数传的参数</p>2019-08-15</li><br/><li><span>亡命之徒</span> 👍（0） 💬（1）<p>class MySecondPage extends StatelessWidget {
-  String msg;
-  MySecondPage({
-    Key key,
-    this.msg
-  }):super(key:key);
-  @override
-  Widget build(BuildContext context) {
-    &#47;&#47; TODO: implement build
-    MyThreePage tsp = new MyThreePage();
-    &#47;&#47;基本路由传递参数
-    tsp.msg = &quot;我来自第二个页面&quot;;
-    return Scaffold(
-      appBar: AppBar(title: Text(&quot;SecondPage&quot;),),
-      body: RaisedButton(
-        child: Text(&quot;MyEvent Bus$msg&quot;),
-        onPressed: () {
-          myEventBus.fire(MyCustomEvent(&quot;Hello World&quot;));
-          Navigator.pop(context);
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.pages),
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=&gt;tsp));
-        },
-      ),
-    );
-  }
+String msg;
+MySecondPage({
+Key key,
+this.msg
+}):super(key:key);
+@override
+Widget build(BuildContext context) {
+&#47;&#47; TODO: implement build
+MyThreePage tsp = new MyThreePage();
+&#47;&#47;基本路由传递参数
+tsp.msg = &quot;我来自第二个页面&quot;;
+return Scaffold(
+appBar: AppBar(title: Text(&quot;SecondPage&quot;),),
+body: RaisedButton(
+child: Text(&quot;MyEvent Bus$msg&quot;),
+onPressed: () {
+myEventBus.fire(MyCustomEvent(&quot;Hello World&quot;));
+Navigator.pop(context);
+},
+),
+floatingActionButton: FloatingActionButton(
+child: Icon(Icons.pages),
+onPressed: (){
+Navigator.push(context, MaterialPageRoute(builder: (context)=&gt;tsp));
+},
+),
+);
+}
 }
 
 MySecondPage sp = new MySecondPage();
-    sp.msg = &quot;我传给你了哈哈哈&quot;;
+sp.msg = &quot;我传给你了哈哈哈&quot;;
 onPressed: ()=&gt;Navigator.push(context,MaterialPageRoute(builder: (context)=&gt;sp)),
 可以通过这种方式传递</p>2019-08-15</li><br/><li><span>colin</span> 👍（0） 💬（1）<p>context 会细讲吗？ 感觉不是很懂</p>2019-08-15</li><br/>
 </ul>

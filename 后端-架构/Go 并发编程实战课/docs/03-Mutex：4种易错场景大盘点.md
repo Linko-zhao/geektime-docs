@@ -83,7 +83,7 @@ func foo(c Counter) {
 
 ```
 var lockerType *types.Interface
-	
+
 	// Construct a sync.Locker interface type.
 	func init() {
 		nullary := types.NewSignature(nil, nil, nil, false) // func()
@@ -462,15 +462,14 @@ Go死锁探测工具只能探测整个程序是否因为死锁而冻结了，不
 	m.Mutex.Lock()
 	atomic.StoreInt64(&amp;m.owner, gid)
 这个地方有必要 使用atomic吗？
-      
 
-其次，如果有必要，为什么  m.recursion = 1  不用了呢
+其次，如果有必要，为什么 m.recursion = 1 不用了呢
 我个人认为，在锁里面，好像是没必要使用的吧</p>2021-01-04</li><br/><li><span>gitxuzan</span> 👍（2） 💬（3）<p>有个地方不明白， 为什么源码里面需要用atomic 原子操作和直接赋值有什么区别</p>2020-10-21</li><br/><li><span>校歌</span> 👍（1） 💬（1）<p>Tidb在用mutex的时候特意改成了defer 这种方式，https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;pull&#47;19072，
 不过找了个比较老的issue，https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;pull&#47;5171 ，lock和unlock还是没有统一用defer的方式，这个以后可能成为隐患吧。</p>2021-01-29</li><br/><li><span>Fan</span> 👍（1） 💬（2）<p>看了前三节，这门课写的太棒了。继续打卡。</p>2020-12-23</li><br/><li><span>Geek_fa7924</span> 👍（0） 💬（1）<p>老师您好，看到第三节课了。这里我有个疑问，课程中遇到重入锁导致死锁的问，老师都是说提供一个不加锁的方法，这里我不太明白，不加锁的方法的含义？</p>2024-06-23</li><br/><li><span>菠萝吹雪—Code</span> 👍（0） 💬（1）<p>打卡
 
 作业：
 
-https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;issues&#47;27725  
+https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;issues&#47;27725
 </p>2022-08-13</li><br/><li><span>niceshot</span> 👍（0） 💬（2）<p>func (m *TokenRecursiveMutex) Lock(token int64)  {
 	if atomic.LoadInt64(&amp;m.token)==token{
 		m.recursion++
@@ -482,7 +481,7 @@ https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;issues&#47;27725
 }
 这里如果调用者提供前后两次两个不同的token Mutex.Lock()不就调用两次了吗</p>2020-10-30</li><br/><li><span>橙子888</span> 👍（0） 💬（1）<p>更新地好快，上一讲的源码还没消化完，新的一讲又出了……</p>2020-10-16</li><br/><li><span>Junes</span> 👍（64） 💬（0）<p>分享一个我觉得很有项目借鉴意义的PR吧：
 
-https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;pull&#47;20381&#47;files 
+https:&#47;&#47;github.com&#47;pingcap&#47;tidb&#47;pull&#47;20381&#47;files
 
 这个问题是在当前的函数中Lock，然后在调用的函数中Unlock。这种方式会导致，如果运行子函数时panic了，而外部又有recover机制不希望程序崩溃，就触发不到Unlock，引起死锁。
 

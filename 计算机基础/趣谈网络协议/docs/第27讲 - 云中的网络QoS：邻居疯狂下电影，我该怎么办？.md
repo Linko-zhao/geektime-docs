@@ -156,5 +156,6 @@ ovs-ofctl add-flow br0 &quot;in_port=7 nw_src=192.168.100.101 actions=enqueue:5:
 ovs-ofctl add-flow br0 &quot;in_port=8 nw_src=192.168.100.102 actions=enqueue:5:2&quot;
 
 1. 这几个命令里面的in_port=6,7,8怎么和上面的queue对应起来的？
+
 </p>2020-06-01</li><br/><li><span>Hurt</span> 👍（37） 💬（8）<p>云里雾里 不是科班 感觉要补的东西太多了</p>2018-07-18</li><br/><li><span>yungoo</span> 👍（22） 💬（1）<p>通过ingress qdisc策略将入口流量重定向到虚拟网卡ifb，然后对ifb的egress进行出口限速，从而变通实现入口流控。</p>2018-07-18</li><br/><li><span>zcpromising</span> 👍（13） 💬（0）<p>前面15讲以前的内容，在学校是可以接触到的，后面每讲的内容，在学校是体会不到的，每天听老师您的课程，感觉就像发现了新大陆一样，惊喜万分。要是学校老师能够按照您这样的方式讲，那该多好。</p>2018-07-18</li><br/><li><span>iron_man</span> 👍（6） 💬（0）<p>虚拟机的流量都通过openv switch控制，机器数量多了，openvswitch会不会成为一个瓶颈</p>2018-08-08</li><br/><li><span>Fisher</span> 👍（6） 💬（0）<p>这篇文章控制的出口流量是控制网卡层面的，那么像标题里面的，如果是在局域网中别人疯狂下载，这种控制网速的是在哪个层面控制的，路由器本身控制速度的原理又是什么呢，只是控制转发速度吗</p>2018-07-21</li><br/><li><span>Gabriel</span> 👍（3） 💬（1）<p>嗯 什么就硬着头皮也要看 我现在就是</p>2021-03-12</li><br/><li><span>三景页</span> 👍（1） 💬（2）<p>从刘超老师的 刘超的通俗云计算博客 追到极客时间来了</p>2021-04-24</li><br/><li><span>King-ZJ</span> 👍（1） 💬（0）<p>QOS服务质量在业务运行中做一个按需的配置，更好调节网络的运行流畅度，带给客户更好的体验。</p>2020-03-25</li><br/><li><span>被过去推开</span> 👍（1） 💬（0）<p>很多网关都提供了基于令牌桶模式的限流，比如spring cloud gateway</p>2019-10-15</li><br/><li><span>haha</span> 👍（1） 💬（0）<p>几种队列的控制策略，放到哪合适的场景适用，借鉴与启发，原理都是如此。</p>2019-01-03</li><br/>
 </ul>

@@ -209,7 +209,7 @@ int main() {
 我们使用这条编译命令：
 
 ```
-gcc -o test-numa test-numa.c -lnuma 
+gcc -o test-numa test-numa.c -lnuma
 ```
 
 然后就可以运行程序查看当前系统是否支持NUMA，以及系统中NUMA节点个数。
@@ -238,7 +238,7 @@ gcc -o test-numa test-numa.c -lnuma
 int main() {
   uint64_t num_nodes = numa_num_configured_nodes();
   uint64_t all_nodes_mask = (1 << numa_num_configured_nodes()) - 1;
-  uint64_t my_nodes_mask = all_nodes_mask ^ 0b0110; 
+  uint64_t my_nodes_mask = all_nodes_mask ^ 0b0110;
 
   set_mempolicy(MPOL_BIND, &my_nodes_mask, 1);
 

@@ -62,12 +62,13 @@ ChatGPT 在 [GPT-3.5 系列](https://platform.openai.com/docs/model-index-for-re
 > **回答**：我很抱歉，但是截至我最后一次更新（2021年9月）时，Linux 内核的版本还没有达到6.1.0。我无法获取此之后的信息。在我最后一次更新时，Linux 内核版本为 5.x，所以我无法准确回答您关于6.1.0版本的问题。  
 >    
 > 然而，我可以告诉你一般性的原因，为什么某个函数在新的内核版本中可能不存在：  
->    
-> 1. **函数被重命名或重新实现**：为了改善代码的可读性或者执行效率，开发人员可能会更改函数的名称或者重写其实现方式。  
-> 2. **函数被废弃**：如果一个函数的功能被其它的函数或者模块取代，或者这个函数存在安全性问题，那么开发人员可能会选择废弃这个函数。  
+>  
+>
+> 1. **函数被重命名或重新实现**：为了改善代码的可读性或者执行效率，开发人员可能会更改函数的名称或者重写其实现方式。
+> 2. **函数被废弃**：如果一个函数的功能被其它的函数或者模块取代，或者这个函数存在安全性问题，那么开发人员可能会选择废弃这个函数。
 > 3. **代码重构**：在大型软件项目中，经常会进行代码重构，以改进代码结构，提高可维护性，或者增加新的功能。在这个过程中，一些函数可能会被移除，或者与其他函数合并。  
->    
-> 对于 `kfree_skb` 这个特定的函数，如果在新的内核版本中你找不到它，我推荐你查看近期的 Linux 内核的更新日志、commit 记录或者相关的开发者邮件列表，这些都可能包含你需要的信息。这些信息可以帮助你了解这个函数是否被重命名，或者它的功能是否被移至其它函数中。
+>       
+>    对于 `kfree_skb` 这个特定的函数，如果在新的内核版本中你找不到它，我推荐你查看近期的 Linux 内核的更新日志、commit 记录或者相关的开发者邮件列表，这些都可能包含你需要的信息。这些信息可以帮助你了解这个函数是否被重命名，或者它的功能是否被移至其它函数中。
 
 可以看到，ChatGPT 并不能直接回答，而只是提供了一些一般性的原因。这时，我们可以去查一下 6.1.0 内核的[源码](https://elixir.bootlin.com/linux/v6.1/source/include/linux/skbuff.h#L1214)，把 `kfree_skb` 的定义一同发给 ChatGPT，比如像下面这样去提问：
 
@@ -139,7 +140,7 @@ static inline void kfree_skb(struct sk_buff *skb)
   embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
   llm = ChatOpenAI(model="gpt-4", temperature=0)
 
-  
+
   # 1. 文档加载、分割及向量化
   documents = DirectoryLoader("./doc/",
                             glob="**/*.md",
@@ -172,12 +173,13 @@ print(chain.run(msg))
 > `bash bpftrace -e 'tracepoint:raw_syscalls:sys_enter { @[comm] = count(); }'`  
 >    
 > 这个命令的工作原理如下：  
->    
-> 1. `tracepoint:raw_syscalls:sys_enter` 是一个探针，它在每次进入系统调用时触发。  
-> 2. `@[comm] = count();` 是一个动作，它在每次触发探针时执行。这个动作将当前进程的名字（`comm`）作为键，将系统调用的数量作为值，存储在一个名为 `@` 的 map 中。`count()` 函数用于计数，每次调用都会增加计数器的值。  
+>  
+>
+> 1. `tracepoint:raw_syscalls:sys_enter` 是一个探针，它在每次进入系统调用时触发。
+> 2. `@[comm] = count();` 是一个动作，它在每次触发探针时执行。这个动作将当前进程的名字（`comm`）作为键，将系统调用的数量作为值，存储在一个名为 `@` 的 map 中。`count()` 函数用于计数，每次调用都会增加计数器的值。
 > 3. 当你按 Ctrl-C 结束 bpftrace 程序时，它会自动打印出 map 的内容，即每个进程的系统调用数量。  
->    
-> 此外，你还可以使用更复杂的 bpftrace 脚本来跟踪更多的信息，例如调用栈、调度器事件、块级 I/O 事件以及内核结构。你可以查阅 bpftrace 的[参考手册](https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md)以获取更多信息。
+>       
+>    此外，你还可以使用更复杂的 bpftrace 脚本来跟踪更多的信息，例如调用栈、调度器事件、块级 I/O 事件以及内核结构。你可以查阅 bpftrace 的[参考手册](https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md)以获取更多信息。
 
 根据输出你可以发现，它的输出实际上就来源于提供的参考文档，并加入了详细的解释和更多的参考链接。
 

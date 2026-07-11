@@ -171,6 +171,7 @@ transactionManager.doCommit();
 	}
 }
 ```
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>__@Wong</span> 👍（3） 💬（2）<p>这个课程终于学完了，讲实话收获很多。上班偷着看课程到周末写代码，前前后后花了一个多月的时间。之前也有看过spring的源码，但是看后基本忘记了。感谢本课程作者，将Spring庞大的体系进行了拆解剥离出主干，大大降低了spring学习起来的困难程度，学完对spring的体系也有了深层次的认识。一方面对spring的流程加深了理解，另一方面学习spring的优秀的架构体系设计。  git地址贴这里了，喜欢的点个小星星，建议一开始使用maven来构建项目方便很多 期待后续miniTomcat课程。
 https:&#47;&#47;github.com&#47;hhhhhzj&#47;mini-spring&#47;tree&#47;master</p>2023-06-24</li><br/><li><span>1184507801</span> 👍（0） 💬（1）<p>老师你发的源码地址失效了啊</p>2024-01-09</li><br/><li><span>风轻扬</span> 👍（0） 💬（1）<p>期待miniTomcat课程</p>2023-06-07</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>PatternMatchUtils是SDK提供的，怎么增加方法？派生一个类吗？</p>2023-04-29</li><br/><li><span>dll</span> 👍（0） 💬（0）<p>终于花了一个礼拜摸鱼学完了，我的代码在https:&#47;&#47;github.com&#47;dll02&#47;mini_spring ，环境搭建最大的难度是idea启动tomcat那里，主要需要确认编译后的代码处在out目录里生成的文件结构是否是预期的，启动以后打开tomcat对应的manager页面，检查加载进tomcat的模块名字，最后还需要注意tomcat和使用http serverlet包的匹配，其他的网上都有资料，对照检查。

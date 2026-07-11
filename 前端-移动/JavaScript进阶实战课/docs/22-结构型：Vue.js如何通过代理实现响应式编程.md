@@ -40,20 +40,27 @@
 
 ```javascript
 class Calculator {
-  constructor () {
-    /*...*/
-  }
-  plus () { /*...*/ }
-  minus () { /*...*/ }
+  constructor() {
+    /*...*/
+  }
+  plus() {
+    /*...*/
+  }
+  minus() {
+    /*...*/
+  }
 }
 
 class ProxyCalculator {
-  constructor (calculator) {
-    this.calculator = calculator
-  }
-  // 代理的方法
-  plus () { return this.calculator.divide() }
-  minus () { return this.calculator.multiply() }
+  constructor(calculator) {
+    this.calculator = calculator;
+  } // 代理的方法
+  plus() {
+    return this.calculator.divide();
+  }
+  minus() {
+    return this.calculator.multiply();
+  }
 }
 
 var calculator = new Calculator();
@@ -63,12 +70,16 @@ var proxyCalculator = new ProxyCalculator(calculator);
 除了上述的方式外，我们也可以基于组合的思路用工厂函数来做代理创建。
 
 ```javascript
-function factoryProxyCalculator (calculator) {
-  return {
-    // 代理的方法
-    plus () { return calculator.divide() },
-    minus () { return calculator.multiply() }
-  }
+function factoryProxyCalculator(calculator) {
+  return {
+    // 代理的方法
+    plus() {
+      return calculator.divide();
+    },
+    minus() {
+      return calculator.multiply();
+    },
+  };
 }
 
 var calculator = new Calculator();
@@ -80,14 +91,14 @@ var proxyCalculator = new factoryProxyCalculator(calculator);
 再来说第二种模式对象增强（Object Augmentation），对象增强还有一个名字叫猴子补丁（Monkey Patching）。对于对象增强来说，它的优点就是不需要 delegate 所有方法。但是它最大的问题是改变了主体对象。用这种方式确实是简化了代理创建的工作，但弊端是会造成函数式编程思想中的“副作用”，因为在这里，主体不再具有不可变性。
 
 ```javascript
-function patchingCalculator (calculator) {
-  var plusOrig = calculator.plus
-  calculator.plus = () => {
-    // 额外的逻辑
-    // 委托给主体
-    return plusOrig.apply(calculator)
-  }
-  return calculator
+function patchingCalculator(calculator) {
+  var plusOrig = calculator.plus;
+  calculator.plus = () => {
+    // 额外的逻辑
+    // 委托给主体
+    return plusOrig.apply(calculator);
+  };
+  return calculator;
 }
 var calculator = new Calculator();
 var safeCalculator = patchingCalculator(calculator);
@@ -99,19 +110,18 @@ var safeCalculator = patchingCalculator(calculator);
 
 ```javascript
 var ProxyCalculatorHandler = {
-  get: (target, property) => {
-    if (property === 'plus') {
-      // 代理的方法
-      return function () {
-        // 额外的逻辑
-        // 委托给主体
-        return target.divide();
-      }
-    }
-    // 委托的方法和属性
-    return target[property]
-  }
-}
+  get: (target, property) => {
+    if (property === "plus") {
+      // 代理的方法
+      return function () {
+        // 额外的逻辑
+        // 委托给主体
+        return target.divide();
+      };
+    } // 委托的方法和属性
+    return target[property];
+  },
+};
 var calculator = new Calculator();
 var proxyCalculator = new Proxy(calculator, ProxyCalculatorHandler);
 ```
@@ -130,9 +140,9 @@ Vue.js 最显着的特点之一是**无侵入的反应系统（unobtrusive react
 var A0 = 1;
 var A1 = 2;
 var A2 = A0 + A1;
-console.log(A2) // 返回是 3
+console.log(A2); // 返回是 3
 A0 = 2;
-console.log(A2) // 返回仍然是 3
+console.log(A2); // 返回仍然是 3
 ```
 
 但响应式编程（Reactive Programming）是一种基于声明式编程的范式。如果要做到响应式编程，我们就会需要下面示例中这样一个 update 的更新功能。这个功能会使得每次当 A0 或 A1 发生变化时，更新 A2 的值。这样做，其实就产生了副作用，update 就是这个副作用。A0 和 A1 被称为这个副作用的依赖。这个副作用是依赖状态变化的订阅者。whenDepsChange 在这里是个伪代码的订阅功能。
@@ -140,7 +150,7 @@ console.log(A2) // 返回仍然是 3
 ```javascript
 var A2;
 function update() {
-  A2 = A0 + A1;
+  A2 = A0 + A1;
 }
 whenDepsChange(update);
 ```
@@ -149,23 +159,23 @@ whenDepsChange(update);
 
 ```javascript
 function reactive(obj) {
-  return new Proxy(obj, {
-    get(target, key) {
-      track(target, key)
-     return target[key]
-    },
-    set(target, key, value) {
-      target[key] = value
-      trigger(target, key)
-    }
-  })
+  return new Proxy(obj, {
+    get(target, key) {
+      track(target, key);
+      return target[key];
+    },
+    set(target, key, value) {
+      target[key] = value;
+      trigger(target, key);
+    },
+  });
 }
 ```
 
 你可能会想，上面对set和get的拦截和自定义，怎么就能做到对变化的观察呢？这就要说到 handler 里包含一系列具有预定义名称的可选方法了，称为**陷阱方法**（trap methods），例如：apply、get、set 和 has，在代理实例上执行相应操作时会自动调用这些方法。所以我们在拦截和自定义后，它们会在对象发生相关变化时被自动调用。所以假设我们可以订阅A0和A1的值的话，那么在这两个值有改动的情况下，就可以自动计算A2的更新。
 
 ```javascript
-import { reactive, computed } from 'vue'
+import { reactive, computed } from "vue";
 var A0 = reactive(0);
 var A1 = reactive(1);
 var A2 = computed(() => A0.value + A1.value);
@@ -182,14 +192,14 @@ JavaScript内置的Proxy除了作为代理以外，还有很多作用。基于�
 
 ```javascript
 const oddNumArr = new Proxy([], {
-  get: (target, index) => index % 2 === 1 ? index : Number(index)+1,
-  has: (target, number) => number % 2 === 1
-})
+  get: (target, index) => (index % 2 === 1 ? index : Number(index) + 1),
+  has: (target, number) => number % 2 === 1,
+});
 
-console.log(4 in oddNumArr) // false
-console.log(7 in oddNumArr) // true
-console.log(oddNumArr[15])   // 15
-console.log(oddNumArr[16])   // 17
+console.log(4 in oddNumArr); // false
+console.log(7 in oddNumArr); // true
+console.log(oddNumArr[15]); // 15
+console.log(oddNumArr[16]); // 17
 ```
 
 ### 运算符重载
@@ -197,19 +207,22 @@ console.log(oddNumArr[16])   // 17
 运算符重载就是对已有的运算符重新进行定义，赋予其另一种功能，以适应不同的数据类型。比如在下面的例子中，我们就是通过重载“.”这个符号，所以在执行obj.count时，我们看到它同时返回了拦截get和set自定义的方法，以及返回了计数的结果。
 
 ```javascript
-var obj = new Proxy({}, {
-  get: function (target, key, receiver) {
-    console.log(`获取 ${key}!`);
-    return Reflect.get(target, key, receiver);
+var obj = new Proxy(
+  {},
+  {
+    get: function (target, key, receiver) {
+      console.log(`获取 ${key}!`);
+      return Reflect.get(target, key, receiver);
+    },
+    set: function (target, key, value, receiver) {
+      console.log(`设置 ${key}!`);
+      return Reflect.set(target, key, value, receiver);
+    },
   },
-  set: function (target, key, value, receiver) {
-    console.log(`设置 ${key}!`);
-    return Reflect.set(target, key, value, receiver);
-  }
-});
+);
 
 obj.count = 1; // 返回：设置 count!
-obj.count; 
+obj.count;
 // 返回：获取 count!
 // 返回：设置 count!
 // 返回：1
@@ -232,7 +245,6 @@ var A0 = reactive(0);
 var A1 = reactive(1);
 var A2 = computed(() =&gt; A0.value + A1.value);
 A0.value = 2;
-
 
 这段代码应该是用 ref</p>2022-11-08</li><br/>
 </ul>

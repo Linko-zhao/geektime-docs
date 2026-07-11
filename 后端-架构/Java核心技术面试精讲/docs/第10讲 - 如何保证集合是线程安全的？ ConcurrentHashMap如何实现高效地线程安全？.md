@@ -46,7 +46,7 @@ private static class SynchronizedMap<K,V>
     public int size() {
         synchronized (mutex) {return m.size();}
     }
- // … 
+ // …
 }
 
 ```
@@ -167,7 +167,7 @@ final V put(K key, int hash, V value, boolean onlyIfAbsent) {
         final K key;
         volatile V val;
         volatile Node<K,V> next;
-        // … 
+        // …
     }
 ```
 
@@ -184,7 +184,7 @@ final V putVal(K key, V value, boolean onlyIfAbsent) { if (key == null || value 
         else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
             // 利用CAS去进行无锁线程安全操作，如果bin是空的
             if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value)))
-                break; 
+                break;
         }
         else if ((fh = f.hash) == MOVED)
             tab = helpTransfer(tab, f);
@@ -196,7 +196,7 @@ final V putVal(K key, V value, boolean onlyIfAbsent) { if (key == null || value 
         else {
             V oldVal = null;
             synchronized (f) {
-                   // 细粒度的同步修改操作... 
+                   // 细粒度的同步修改操作...
                 }
             }
             // Bin超过阈值，进行树化
@@ -225,7 +225,7 @@ private final Node<K,V>[] initTable() {
     while ((tab = table) == null || tab.length == 0) {
         // 如果发现冲突，进行spin等待
         if ((sc = sizeCtl) < 0)
-            Thread.yield(); 
+            Thread.yield();
         // CAS成功返回true，则进入真正的初始化逻辑
         else if (U.compareAndSetInt(this, SIZECTL, sc, -1)) {
             try {

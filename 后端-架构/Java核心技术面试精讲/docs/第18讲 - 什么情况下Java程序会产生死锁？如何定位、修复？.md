@@ -230,13 +230,11 @@ if (lock.tryLock() || lock.tryLock(timeout, unit)) {
 二：解决方法：
 1.确保按照一定顺序获取锁，比如两个类似lockA, lockB的hash值比较，如果相等（概率很低），再添加一把另外的锁tieLock ，具体示例 参加 JCIP 10-3
 2.开放调用 不要同时获取多把锁 具体示例 参见JCIP 10-6
-3.使用定时的锁 ，tryLock() 或者tryLock(timeout) 
+3.使用定时的锁 ，tryLock() 或者tryLock(timeout)
 
 三：死锁检测：
 3.1 jstack pid &gt; app.dump 然后在文件中查找线程状态（比如搜索Blocking) -&gt; 查看等待目标 -&gt; 对比 Monitor...
-3.2 ThreadMXBean   
-
-
+3.2 ThreadMXBean
 
 </p>2019-09-18</li><br/>
 </ul>

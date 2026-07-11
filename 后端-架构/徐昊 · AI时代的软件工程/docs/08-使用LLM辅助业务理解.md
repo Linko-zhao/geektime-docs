@@ -12,17 +12,17 @@
 
 ```plain
 classDiagram
-  Department "1" -- "*" Program 
-  Department "1" -- "*" Offer 
+  Department "1" -- "*" Program
+  Department "1" -- "*" Offer
   Offer  "1" -- "1" Program
-  Program "1" -- "1" Curriculum 
-  Curriculum "1" -- "*" Course 
+  Program "1" -- "1" Curriculum
+  Curriculum "1" -- "*" Course
   Student "1" -- "1" ProgramEnrollment
   ProgramEnrollment "1" -- "*" CourseEnrollment
   Student "1" -- "1" Offer
   ProgramEnrollment "1" -- "1" Program
-  CourseEnrollment "1" -- "1" Course 
-  
+  CourseEnrollment "1" -- "1" Course
+
   class Department {
   }
   class Program {
@@ -105,7 +105,7 @@ classDiagram
   ProgramEnrollment "1" --> "1" Program: 录取通知中指定的教学计划 >
   CourseEnrollment "1" --> "1" Course: 选定的课程 >
   %% ProgramEnrollment根据Offer生成，表示学生已经到校注册
-  
+
   ...
 ```
 
@@ -220,7 +220,7 @@ classDiagram
 
 对于比较庞大的领域模型，画图的方式和顺序有什么经验嘛？比如，应该采用以下哪种方式呢？
 
-1、先用draw.io等类似工具画图，再让gpt生成 mermaid.  (可能gpt看不懂？）
+1、先用draw.io等类似工具画图，再让gpt生成 mermaid. (可能gpt看不懂？）
 
 2、一开始就用mermaid来画图（可能有些没法用mermaid表达？或者不太灵活？）
 

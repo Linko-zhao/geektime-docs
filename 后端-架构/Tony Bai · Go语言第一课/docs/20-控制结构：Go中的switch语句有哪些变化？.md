@@ -72,7 +72,7 @@ switch initStmt; expr {
     ... ...
     case exprN:
         // 执行分支N
-    default: 
+    default:
         // 执行默认分支
 }
 ```
@@ -95,11 +95,11 @@ func case1() int {
 
 func case2_1() int {
     println("eval case2_1 expr")
-    return 0 
+    return 0
 }
 func case2_2() int {
     println("eval case2_2 expr")
-    return 2 
+    return 2
 }
 
 func case3() int {
@@ -229,7 +229,7 @@ void check_work_day(int a) {
 }
 ```
 
-在上面这段C代码中，case 1~case 5匹配成功后，执行的都是case 5中的代码逻辑，case 6~case 7匹配成功后，执行的都是case 7中的代码逻辑。
+在上面这段C代码中，case 1~~case 5匹配成功后，执行的都是case 5中的代码逻辑，case 6~~case 7匹配成功后，执行的都是case 7中的代码逻辑。
 
 之所以可以实现这样的逻辑，是因为当C语言中的switch语句匹配到某个case后，如果这个case对应的代码逻辑中没有break语句，那么代码将继续执行下一个case。比如当a = 3时，case 3后面的代码为空逻辑，并且没有break语句，那么C会继续向下执行case4、case5，直到在case 5中调用了break，代码执行流才离开switch语句。
 
@@ -382,13 +382,13 @@ the type of v is int, v = 13
   type I interface {
       M()
   }
-  
+
   type T struct {
   }
-  
+
  func (T) M() {
  }
- 
+
  func main() {
      var t T
      var i I = t
@@ -429,9 +429,9 @@ func main() {
             break
         case 1:
             // do nothing
-        }        
-    }         
-    println(firstEven) 
+        }
+    }
+    println(firstEven)
 }
 ```
 
@@ -501,15 +501,16 @@ x.(SomeType)， 则是判段x是否遵守SomeType接口，并转化为具体类�
 
 想问一下老师，文中的内容基本都能理解，但是过一段时间就遗忘比较多了，尤其是后面的内容涉及到前面的知识时。希望老师在这门课中搞个小型的实战项目，能把前面的知识串在一起就好了。
 
-这样，不会觉得纸上得来终觉浅......</p>2021-11-26</li><br/><li><span>十年一劫</span> 👍（2） 💬（1）<p>老师，现在go支持泛型了，type switch语句中传入的类型可以用泛型么</p>2023-11-29</li><br/><li><span>plh</span> 👍（1） 💬（1）<p> switch 太灵活,即使有经验的go开发者也容易犯错. 看过好几篇文章,这个地方是讲的最全面,最清晰的. </p>2023-05-28</li><br/><li><span>qiutian</span> 👍（1） 💬（2）<p>哪来的case2呢</p>2022-06-01</li><br/><li><span>peison</span> 👍（1） 💬（1）<p>我想请教一下，文中type switch中的  v:=x.(type)后面，为什么switch中的case分支，不是和x.(type)的返回值v做比较？那实际上case分支是和什么值做比较</p>2022-04-09</li><br/><li><span>人言有力</span> 👍（0） 💬（1）<p>本节讲述了switch语句的使用
+这样，不会觉得纸上得来终觉浅......</p>2021-11-26</li><br/><li><span>十年一劫</span> 👍（2） 💬（1）<p>老师，现在go支持泛型了，type switch语句中传入的类型可以用泛型么</p>2023-11-29</li><br/><li><span>plh</span> 👍（1） 💬（1）<p> switch 太灵活,即使有经验的go开发者也容易犯错. 看过好几篇文章,这个地方是讲的最全面,最清晰的. </p>2023-05-28</li><br/><li><span>qiutian</span> 👍（1） 💬（2）<p>哪来的case2呢</p>2022-06-01</li><br/><li><span>peison</span> 👍（1） 💬（1）<p>我想请教一下，文中type switch中的 v:=x.(type)后面，为什么switch中的case分支，不是和x.(type)的返回值v做比较？那实际上case分支是和什么值做比较</p>2022-04-09</li><br/><li><span>人言有力</span> 👍（0） 💬（1）<p>本节讲述了switch语句的使用
+
 1. switch是一个选择语句，对于多分支场景比if更加直观
-2.go的switch相比c语言，改进了break机制，默认break，除非fallthrough
-3.创新了一个type switch，可以用switch x.(type) 的方式，限定x需要是接口类型；并且如果x指定了类型，那么case语句需要是该接口类型的实现。
-4. 思考题：if和switch其实if还是更常用，case用在分支特别多的场景多一些</p>2024-05-14</li><br/><li><span>ps Sensking</span> 👍（0） 💬（1）<p>我们要注意的是只有接口类型变量才能使用 type switch，并且所有 case 语句中的类型必须实现 switch 关键字后面变量的接口类型。 
-您好这个例子用interface 里面只要实现一个 int  或者 string 就可以正常启动吗？ 如果是type 自定义的类型 T 就需要制定一个int 或者 string吗？</p>2022-01-22</li><br/><li><span>文经</span> 👍（0） 💬（1）<p>白老师，switch v := x.(type)，有点不太好理解。
-这个语句编译器是不是转化为类型这样的代码：
-v := x.(type)
-switch x.(type)
+   2.go的switch相比c语言，改进了break机制，默认break，除非fallthrough
+   3.创新了一个type switch，可以用switch x.(type) 的方式，限定x需要是接口类型；并且如果x指定了类型，那么case语句需要是该接口类型的实现。
+2. 思考题：if和switch其实if还是更常用，case用在分支特别多的场景多一些</p>2024-05-14</li><br/><li><span>ps Sensking</span> 👍（0） 💬（1）<p>我们要注意的是只有接口类型变量才能使用 type switch，并且所有 case 语句中的类型必须实现 switch 关键字后面变量的接口类型。
+   您好这个例子用interface 里面只要实现一个 int 或者 string 就可以正常启动吗？ 如果是type 自定义的类型 T 就需要制定一个int 或者 string吗？</p>2022-01-22</li><br/><li><span>文经</span> 👍（0） 💬（1）<p>白老师，switch v := x.(type)，有点不太好理解。
+   这个语句编译器是不是转化为类型这样的代码：
+   v := x.(type)
+   switch x.(type)
 
 我直观上会理解成：
 v := x.(type)
@@ -525,7 +526,6 @@ switch v
 - Java17 居然可以比 Go 简洁！
 - 但然综合能力 Go 的更灵活
 
-
 Java17 switch
 
 ```java
@@ -540,7 +540,7 @@ String checkWorkday(int day) {
 
 Go switch
 
-```go
+````go
 func checkWorkday(day int) string {
 	switch day {
 	case 1, 2, 3, 4, 5:
@@ -553,3 +553,4 @@ func checkWorkday(day int) string {
 }
 ```</p>2021-11-26</li><br/><li><span>进化菌</span> 👍（5） 💬（0）<p>所以，switch 不需要 break 是出于大多数情况 switch 只需要走一条分支的缘故吗？</p>2021-11-26</li><br/><li><span>木木</span> 👍（1） 💬（1）<p>C语言的switch是为了模拟跳转表，所以如果目的是根据值执行一小段的话，需要每个条件的执行语句最后都加break，go的switch已经不再是为了模拟跳转表了，就是按着人们常用的方法设计的，所以不用加break，但是break的作用依旧留着</p>2021-12-14</li><br/>
 </ul>
+````

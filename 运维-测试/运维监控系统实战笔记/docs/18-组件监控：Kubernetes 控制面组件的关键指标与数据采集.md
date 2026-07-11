@@ -55,9 +55,9 @@ roleRef:
   kind: ClusterRole
   name: categraf
 subjects:
-- kind: ServiceAccount
-  name: categraf
-  namespace: flashcat
+  - kind: ServiceAccount
+    name: categraf
+    namespace: flashcat
 ```
 
 使用 `kubectl apply` 一下这个YAML 文件即可。有了认证信息，后面就是选型并部署采集器了。
@@ -85,7 +85,7 @@ data:
       evaluation_interval: 15s
 
     scrape_configs:
-      - job_name: 'apiserver'
+      - job_name: "apiserver"
         kubernetes_sd_configs:
         - role: endpoints
         scheme: https
@@ -94,11 +94,16 @@ data:
         authorization:
           credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
         relabel_configs:
-        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        - source_labels:
+  [
+    __meta_kubernetes_namespace,
+    __meta_kubernetes_service_name,
+    __meta_kubernetes_endpoint_port_name,
+  ]
           action: keep
           regex: default;kubernetes;https
 
-      - job_name: 'controller-manager'
+      - job_name: "controller-manager"
         kubernetes_sd_configs:
         - role: endpoints
         scheme: https
@@ -107,11 +112,16 @@ data:
         authorization:
           credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
         relabel_configs:
-        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        - source_labels:
+  [
+    __meta_kubernetes_namespace,
+    __meta_kubernetes_service_name,
+    __meta_kubernetes_endpoint_port_name,
+  ]
           action: keep
           regex: kube-system;kube-controller-manager;https
 
-      - job_name: 'scheduler'
+      - job_name: "scheduler"
         kubernetes_sd_configs:
         - role: endpoints
         scheme: https
@@ -120,30 +130,45 @@ data:
         authorization:
           credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
         relabel_configs:
-        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        - source_labels:
+  [
+    __meta_kubernetes_namespace,
+    __meta_kubernetes_service_name,
+    __meta_kubernetes_endpoint_port_name,
+  ]
           action: keep
           regex: kube-system;kube-scheduler;https
 
-      - job_name: 'etcd'
+      - job_name: "etcd"
         kubernetes_sd_configs:
         - role: endpoints
         scheme: http
         relabel_configs:
-        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        - source_labels:
+  [
+    __meta_kubernetes_namespace,
+    __meta_kubernetes_service_name,
+    __meta_kubernetes_endpoint_port_name,
+  ]
           action: keep
           regex: kube-system;etcd;http
 
-      - job_name: 'kube-state-metrics'
+      - job_name: "kube-state-metrics"
         kubernetes_sd_configs:
         - role: endpoints
         scheme: http
         relabel_configs:
-        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        - source_labels:
+  [
+    __meta_kubernetes_namespace,
+    __meta_kubernetes_service_name,
+    __meta_kubernetes_endpoint_port_name,
+  ]
           action: keep
           regex: kube-system;kube-state-metrics;http-metrics
 
     remote_write:
-    - url: 'http://10.206.0.16:19000/prometheus/v1/write'
+    - url: "http://10.206.0.16:19000/prometheus/v1/write"
 ```
 
 我来简单介绍一下，这段代码中包含了 5 个抓取 job，分别是 APIServer、Controller-manager、Scheduler、ectd、KSM。前面 3 个走的是 HTTPS ，后面两个走的是 HTTP，重点关注 relabel 规则。keep 的规则实际就是在做过滤，只过滤自己 job 感兴趣的那些 endpoint。最后两行配置了 remote write 地址，采集到的数据通过 remote write 协议推给远端，我这里是推给了 n9e-server，n9e-server 后面是 VictoriaMetrics 集群。
@@ -254,17 +279,17 @@ spec:
   template:
     spec:
       containers:
-      - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:IMAGE_TAG
-        name: kube-state-metrics
-        args:
-        - --resource=pods
-        - --node=$(NODE_NAME)
-        env:
-        - name: NODE_NAME
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: spec.nodeName
+        - image: registry.k8s.io/kube-state-metrics/kube-state-metrics:IMAGE_TAG
+          name: kube-state-metrics
+          args:
+            - --resource=pods
+            - --node=$(NODE_NAME)
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
 ```
 
 另外，KSM 提供了两种方式来过滤要 watch 的对象类型，一个是通过白名单的方式指定具体要 watch 哪类对象，通过命令行启动参数中的 `--resources=daemonsets,deployments`，表示只 watch daemonsets 和 deployments。虽然已经限制了对象资源类型，但如果采集的某些指标仍然不想要，可以采用黑名单的方式来过滤指标：`--metric-denylist=kube_deployment_spec_.*`。这个过滤规则支持正则写法，多个正则之间可以使用逗号分隔。
@@ -379,9 +404,9 @@ Kubernetes 控制面的组件全部都要认证鉴权，相比之前演示的 Ku
 
 可以为prometheus增加global.external_labels配置，增加cluster的标识以区分不同的集群：
 global:
-  external_labels:
-    cluster:  prod-bigdata-sh
-    ....
+external_labels:
+cluster: prod-bigdata-sh
+....
 
 另外，请教老师一个问题，ksm的分片，官网上有statefulset、daemonset的分片方式，它们各自的适用场景是什么，在生产环境下，更推荐哪种方式？
 

@@ -20,7 +20,7 @@ public int atLeastTen(int a){
     if (a < 10)
         return 10;
     else
-        return a;    
+        return a;
 }
 ```
 
@@ -156,7 +156,7 @@ public class Foo{
     static int m = 3;
     public static int addMemory(int a){
         return m + a;
-    } 
+    }
     ...
 }
 ```

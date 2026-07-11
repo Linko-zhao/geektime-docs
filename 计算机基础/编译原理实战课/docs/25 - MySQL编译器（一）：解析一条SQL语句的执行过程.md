@@ -157,7 +157,7 @@ query_specification:
 
 ```
 opt_from_clause:
-          /* Empty. */ 
+          /* Empty. */
         | from_clause
         ;
 
@@ -174,7 +174,7 @@ opt_from_clause:
 你可以看一下bit\_expr的产生式，它其实完全把加减乘数等运算符并列就行了。
 
 ```
-bit_expr : 
+bit_expr :
          ...
          | bit_expr '+' bit_expr %prec '+'
          | bit_expr '-' bit_expr %prec '-'
@@ -210,7 +210,7 @@ query_expression_body:
             $$ = $1;   /*直接返回query_primary的节点*/
           }
         | ...
-        
+
 query_primary:
           query_specification
           {
@@ -360,13 +360,14 @@ query_specification:
 
 1. MySQL的内行手册（[MySQL Internals Manual](https://dev.mysql.com/doc/internals/en/)）能提供一些重要的信息。但我发现文档内容经常跟源代码的版本不同步，比如介绍源代码的目录结构的信息就过时了，你要注意这点。
 2. bison的[手册](http://www.gnu.org/software/bison/manual/)。
+
 <div><strong>精选留言（4）</strong></div><ul>
 <li><span>Fan</span> 👍（2） 💬（2）<p>宫老师，按照这篇文章https:&#47;&#47;www.codeleading.com&#47;article&#47;90351944418&#47; 用xcode build mysqld这个项目时，报下面的错误。请问老师知道是哪里出现了问题。
 dyld: Symbol not found: __ZN20wireless_diagnostics6google8protobuf2io16CodedInputStream24default_recursion_limit_E
   Referenced from: &#47;System&#47;Library&#47;PrivateFrameworks&#47;WirelessDiagnostics.framework&#47;Versions&#47;A&#47;Libraries&#47;libAWDSupport.dylib。
 
-  Expected in: &#47;Users&#47;xxx&#47;Documents&#47;mysql-server&#47;bld_debug&#47;library_output_directory&#47;Debug&#47;libprotobuf-lite.dylib
- in &#47;System&#47;Library&#47;PrivateFrameworks&#47;WirelessDiagnostics.framework&#47;Versions&#47;A&#47;Libraries&#47;libAWDSupport.dylib
+Expected in: &#47;Users&#47;xxx&#47;Documents&#47;mysql-server&#47;bld_debug&#47;library_output_directory&#47;Debug&#47;libprotobuf-lite.dylib
+in &#47;System&#47;Library&#47;PrivateFrameworks&#47;WirelessDiagnostics.framework&#47;Versions&#47;A&#47;Libraries&#47;libAWDSupport.dylib
 
 </p>2020-08-20</li><br/><li><span>myrfy</span> 👍（2） 💬（2）<p>没有自己开发过dsl，但是经常会用json作为配置文件，通过json格式的结构来描述一个类似于AST的结构，然后写一个解释器按照自己定义的规则去执行操作。
 相当于人肉做了前端工作吧，等有时间了，可以自己去试着写一个前端部分，自己编写一套语法规则</p>2020-07-31</li><br/><li><span>日就月将</span> 👍（0） 💬（1）<p>老师 mysql root用户缺省的密码 在哪里查看</p>2021-07-28</li><br/><li><span>吃饭</span> 👍（0） 💬（0）<p>老师，尝试可很久去debug mysql,还是不知道怎么搞，c++&#47;c之类的的确不怎么熟，能详细描述一下吗？</p>2021-07-25</li><br/>

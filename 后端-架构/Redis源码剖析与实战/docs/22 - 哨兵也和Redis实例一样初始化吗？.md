@@ -191,7 +191,7 @@ void sentinelGenerateInitialMonitorEvents(void) {
 **sentinelEvent函数**的原型定义如下，它的参数level表示当前的日志级别，type表示发送事件信息所用的订阅频道，ri表示对应交互的主节点，fmt则表示发送的消息内容。
 
 ```plain
-void sentinelEvent(int level, char *type, sentinelRedisInstance *ri, const char *fmt, ...) 
+void sentinelEvent(int level, char *type, sentinelRedisInstance *ri, const char *fmt, ...)
 ```
 
 那么，sentinelEvent函数会先**判断传入的消息内容开头的两个字符，是否为“%”和“@”**，如果是的话，它就会判断监听实例的类型是否为主节点。然后如果是主节点，sentinelEvent函数会把监听实例的名称、IP和端口号加入到待发送的消息中，如下所示：
@@ -267,12 +267,12 @@ Redis 启动时，会在 main 函数中调用 loadServerConfig 加载配置文�
 loadServerConfigFromString 函数中，其中有一个分支，对哨兵模式进行了判断，如果是哨兵模式，则调用 sentinelHandleConfiguration 函数解析哨兵配置项。
 
 所以，函数调用链为 main -&gt; loadServerConfig（读出配置文件内容） -&gt; loadServerConfigFromString（解析配置项） -&gt; sentinelHandleConfiguration（解析哨兵配置项）。</p>2021-09-24</li><br/><li><span>曾轼麟</span> 👍（3） 💬（0）<p>回答老师的问题：sentinel.conf 是在哪读取的？
-    答:redis应该是实现了一套通用的配置文件读取方法loadServerConfig，可以解析文件，也可以直接解析字符串
+答:redis应该是实现了一套通用的配置文件读取方法loadServerConfig，可以解析文件，也可以直接解析字符串
 
 主要步骤如下所示：
-    1、哨兵启动的两种方式都显示，配置文件会根据参数传入，而解析后应该是赋值给configfile
-        redis-sentinel sentinel.conf[文件路径]
-        redis-server sentinel.conf[文件路径] —sentinel
+1、哨兵启动的两种方式都显示，配置文件会根据参数传入，而解析后应该是赋值给configfile
+redis-sentinel sentinel.conf[文件路径]
+redis-server sentinel.conf[文件路径] —sentinel
 
     2、在loadServerConfig方法上方有一个判断，当前模式如果是哨兵，那么如果发现没有配置文件就会直接退出。
         if (server.sentinel_mode &amp;&amp; configfile &amp;&amp; *configfile == &#39;-&#39;) {
@@ -308,9 +308,10 @@ loadServerConfigFromString 函数中，其中有一个分支，对哨兵模式�
             config = sdscat(config,buf);
         if (fp != stdin) fclose(fp);
     }
-        
+
 
     5、调用loadServerConfigFromString去解析读取出来的文件字符串
         调用路径 loadServerConfig -&gt; loadServerConfigFromString</p>2021-09-23</li><br/><li><span>Milittle</span> 👍（2） 💬（0）<p>在main函数中：loadServerConfig这个函数用来load sentinel.conf。
+
 loadSentinelConfigFromQueue 在哨兵模式下的特殊load函数。</p>2021-09-23</li><br/>
 </ul>

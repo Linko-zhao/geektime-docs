@@ -134,6 +134,7 @@ FaaS服务编排被云服务商特别关注正是因为它具备的这种开放�
 我还发现,介于冷启动和热启动之间,还有一个状态,接口的响应耗时也是介于两者之间.
 
 # 对服务编排的个人感悟
+
 感觉函数服务配合服务编排,就像是在linux上使用shell组合各种命令,实现复杂的功能.
 虽然每个命令都很简单,但是组合后的功能就很强大了.
 现在的云服务都会有很多现成的sdk,确实如老师所说,需要用到某个云服务时临时把官方的文档拿出来,几乎只需要做很少的变动,就可以马上投入使用.
@@ -154,7 +155,6 @@ Function Logs
 FC Invoke Start RequestId: 2607ad8c-02c9-41b0-b062-16f2ac5507c5
 
 InvalidAccessKeyId.NotFoundSpecified access key is not found.FC Invoke End RequestId: 2607ad8c-02c9-41b0-b062-16f2ac5507c5
-
 
 Duration: 116.70 ms, Billed Duration: 200 ms, Memory Size: 512 MB, Max Memory Used: 9.97 MB
 

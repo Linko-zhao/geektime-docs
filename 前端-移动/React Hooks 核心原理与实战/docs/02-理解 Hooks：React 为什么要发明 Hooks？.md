@@ -88,7 +88,7 @@ const withWindowSize = Component => {
       };
     }
     componentDidMount() {
-      window.addEventListener("resize", this.handleResize); 
+      window.addEventListener("resize", this.handleResize);
     }
     componentWillUnmount() {
       window.removeEventListener("resize", this.handleResize);
@@ -122,7 +122,7 @@ class MyComponent extends React.Component{
   }
 }
 // 使用 withWindowSize 产生高阶组件，用于产生 size 属性传递给真正的业务组件
-export default withWindowSize(MyComponent); 
+export default withWindowSize(MyComponent);
 ```
 
 在这里，我们可以看到，为了传递一个外部的状态，我们不得不定义一个没有UI 的外层组件，而这个组件只是为了封装一段可重用的逻辑。更为糟糕的是，高阶组件几乎是 Class 组件中实现代码逻辑复用的唯一方式，其缺点其实比较显然：
@@ -147,7 +147,7 @@ const useWindowSize = () => {
       window.removeEventListener('resize', handler);
     };
   }, []);
-	
+
   return size;
 };
 ```
@@ -190,12 +190,12 @@ Hooks 作为 React 自诞生以来最大的一个新功能，可以说得到了�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>开开之之</span> 👍（28） 💬（13）<p>老师，为什么说react组件不会相互继承？我之前做过一个项目，就是通过继承来实现代码复用的</p>2021-05-30</li><br/><li><span>闲闲</span> 👍（15） 💬（5）<p>老师我有个疑问，麻烦看到帮忙解答一下：
 
-上面的例子里面说是窗口大小发生变化，组件就会更新，对于这一点我不太理解，class封装的还可以理解为，state发生改变了，导致重新render了，但是hook感觉这么理解不通顺，hook哪里写的就类似一个纯函数调用，是怎么驱动组件重新更新的呢？</p>2021-05-31</li><br/><li><span>凡凡</span> 👍（9） 💬（1）<p>路由变化可以作为数据源吗</p>2021-05-27</li><br/><li><span>Geek_d221bc</span> 👍（5） 💬（1）<p>王老师，你好，想请教hooks是如何让函数组件具备随状态变化触发组件重新执行返回更新的呢？这是要去读hooks相关源码？</p>2021-07-12</li><br/><li><span>刘洋</span> 👍（4） 💬（1）<p>多久更新完啊</p>2021-05-27</li><br/><li><span>Geek_9878c1</span> 👍（3） 💬（2）<p>最喜欢的React地方就是  “在其他前端框架发生翻天覆地变化的同时，React 的 API 则非常稳定，几乎从来没有出现过重大的向后兼容的问题，而且每一次版本的升级也都非常顺滑。“ ， 隔多久都没有隔阂</p>2021-06-06</li><br/><li><span>独白</span> 👍（3） 💬（1）<p>思考题：首先想到的是官方的一个api  useReducer。还有的话，就是监听滚动条向上向下呀。
+上面的例子里面说是窗口大小发生变化，组件就会更新，对于这一点我不太理解，class封装的还可以理解为，state发生改变了，导致重新render了，但是hook感觉这么理解不通顺，hook哪里写的就类似一个纯函数调用，是怎么驱动组件重新更新的呢？</p>2021-05-31</li><br/><li><span>凡凡</span> 👍（9） 💬（1）<p>路由变化可以作为数据源吗</p>2021-05-27</li><br/><li><span>Geek_d221bc</span> 👍（5） 💬（1）<p>王老师，你好，想请教hooks是如何让函数组件具备随状态变化触发组件重新执行返回更新的呢？这是要去读hooks相关源码？</p>2021-07-12</li><br/><li><span>刘洋</span> 👍（4） 💬（1）<p>多久更新完啊</p>2021-05-27</li><br/><li><span>Geek_9878c1</span> 👍（3） 💬（2）<p>最喜欢的React地方就是 “在其他前端框架发生翻天覆地变化的同时，React 的 API 则非常稳定，几乎从来没有出现过重大的向后兼容的问题，而且每一次版本的升级也都非常顺滑。“ ， 隔多久都没有隔阂</p>2021-06-06</li><br/><li><span>独白</span> 👍（3） 💬（1）<p>思考题：首先想到的是官方的一个api useReducer。还有的话，就是监听滚动条向上向下呀。
 看了老师这节课，才弄清除hooks真正重要的东西是啥。</p>2021-05-27</li><br/><li><span>小馋猫</span> 👍（2） 💬（2）<p>hooks没有出现之前如果想实现逻辑复用只能通过高阶组件的方式来实现</p>2021-06-01</li><br/><li><span>哈哈哈[吃瓜]</span> 👍（1） 💬（1）<p>求教 我还是对hook的想法有一些疑问 主要是开发思想上 之前一直用jq 最近才看react 总是感觉有点别扭。
 
 用hook的时候总是想 setState了之后 函数再运行一遍会有什么结果 总是在脑补函数组件内部的运行顺序 感觉一直在函数组件内部打转。
 
-蓝黄对比那个图 useEffect为什么要写两个 
+蓝黄对比那个图 useEffect为什么要写两个
 
 另外怎么能更好的从jq这种可以很细的去操作dmo的开发思想上转变到react上来呢？</p>2021-07-21</li><br/><li><span>寇云</span> 👍（1） 💬（1）<p>定时器，监听滚动，键盘事件，复用Fetch。</p>2021-06-04</li><br/><li><span>小馋猫</span> 👍（1） 💬（1）<p>函数组件没有自己的state及生命周期方法，hooks使react在函数组件中可以使用state和生命周期方法称为可能，hooks的最大的优点是逻辑可复用，</p>2021-06-01</li><br/><li><span>陶佳佳</span> 👍（0） 💬（1）<p>您好，老师，我想咨询一下，组合和继承的区别是什么？</p>2021-06-05</li><br/><li><span>Ada</span> 👍（0） 💬（1）<p>数据源，父组件传递下来的也是吧？</p>2021-06-02</li><br/><li><span>L</span> 👍（0） 💬（1）<p>组合大于继承，特别是对组件这种大部分都是组合而成的内容来说就更是这个样子了</p>2021-05-30</li><br/><li><span>长林啊</span> 👍（0） 💬（1）<p>逻辑复用应该是hook的最大优点吧</p>2021-05-27</li><br/>
 </ul>

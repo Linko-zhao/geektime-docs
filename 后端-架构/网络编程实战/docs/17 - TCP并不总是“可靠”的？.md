@@ -242,8 +242,8 @@ $send: Connection reset by peer
 我在Max OS 10.13.6上尝试这个程序，得到的结果确实如此。你可以看到屏幕显示和时序图。
 
 ```
-#send into buffer 19 
-#send into buffer -1 
+#send into buffer 19
+#send into buffer -1
 #send error: Broken pipe (32)
 ```
 
@@ -268,7 +268,7 @@ $send: Connection reset by peer
 对上面这段话不理解，TCP 的 ACK不是带着序号的吗？发送端根据这个序号能计算出是哪次发送的ACK。
 哪位大牛能解释一下吗？</p>2019-10-09</li><br/><li><span>geraltlaush</span> 👍（3） 💬（2）<p>老师，你文章的案例默认fd都是阻塞的吧，如果是非阻塞的话，返回的n &lt; 0 不一定是错误啊</p>2019-10-13</li><br/><li><span>Jason</span> 👍（2） 💬（1）<p>error(1, 0, &quot;usage: reliable_client01 &lt;IPaddress&gt;&quot;);这个error函数，具体是什么作用？</p>2020-07-06</li><br/><li><span>yang</span> 👍（2） 💬（1）<p>老师 我提一个read直接感知FIN包的疑问哈:
 
-我停留在 stdin这里 等我输入完之后，就能调用read感知到对端已经关闭了呀？ 是因为等到stdin之后，再感知是不是太晚了呀？</p>2019-09-16</li><br/><li><span>徐凯</span> 👍（1） 💬（2）<p>第二题  客户端--------服务器
+我停留在 stdin这里 等我输入完之后，就能调用read感知到对端已经关闭了呀？ 是因为等到stdin之后，再感知是不是太晚了呀？</p>2019-09-16</li><br/><li><span>徐凯</span> 👍（1） 💬（2）<p>第二题 客户端--------服务器
 
 1.  客户端发送FIN包，处于发送缓冲区的数据会逐一发送（可能通过一次或多次write操作发送），FIN包处于这段数据的末尾，当数据到达接收端的接收缓冲区时，FIN起到了一个结束符的作用，当接收端接收数据时遇到FIN包，read操作返回EOF通知应用层。然后接收端返回一个ACK表示对这次发送的确认。（此时客户端进入FIN_WAIT1，服务端进入CLOSE_WAIT状态）
 
@@ -281,25 +281,33 @@ $send: Connection reset by peer
 4. 客户端等待2MSL的时间，在此期间向服务器发送ACK。如果丢包进行重传。如果服务器收到ACK后 服务器进入CLOSED状态 客户端也进入CLOSED状态。
 
 5. 连接关闭
-我想问一下  如果最后一次挥手一直丢包  在2MSL的时间内都没到  TCP会咋办  会重置计时器么 还是就不管了直接关闭呢</p>2019-09-11</li><br/><li><span>yusuf</span> 👍（1） 💬（1）<p># uname -a
-Linux tst 3.10.0-957.21.3.el7.x86_64 #1 SMP Tue Jun 18 16:35:19 UTC 2019 x86_64 x86_64 x86_64 GNU&#47;Linux
-# 
+   我想问一下 如果最后一次挥手一直丢包 在2MSL的时间内都没到 TCP会咋办 会重置计时器么 还是就不管了直接关闭呢</p>2019-09-11</li><br/><li><span>yusuf</span> 👍（1） 💬（1）<p># uname -a
+   Linux tst 3.10.0-957.21.3.el7.x86_64 #1 SMP Tue Jun 18 16:35:19 UTC 2019 x86_64 x86_64 x86_64 GNU&#47;Linux
+
+#
+
 # .&#47;reliable_client01 127.0.0.1
+
 good
 peer connection closed
-# 
+
+#
+
 # .&#47;reliable_client01 127.0.0.1
+
 bad
 bad
 bad2
 peer connection closed
-# 
+
+#
+
 # .&#47;reliable_client02 127.0.0.1
-send into buffer 19 
-send into buffer -1 
+
+send into buffer 19
+send into buffer -1
 send error: Connection reset by peer (104)
 </p>2019-09-09</li><br/><li><span>Bin Watson</span> 👍（0） 💬（1）<p>在内核4.15.0-158-generic版本中，在服务器关闭后，客户端是返SIGPIPE错误。</p>2022-01-07</li><br/><li><span>林林</span> 👍（0） 💬（1）<p>当对应的数据发送给接收端，接收端回应 ACK，存储在发送缓冲区的这部分数据就可以删除了，但是，发送端并无法获取对应数据流的 ACK 情况，也就是说，发送端没有办法判断对端的接收方是否已经接收发送的数据流，如果需要知道这部分信息，就必须在应用层自己添加处理逻辑，例如显式的报文确认机制
 
-
-不是很明白，为什么发送端无法获取对应数据流的ACK情况？  不是收到对方回的ACK包了吗？</p>2021-07-23</li><br/><li><span>highfly029</span> 👍（0） 💬（1）<p>老师好，请教个问题，对于网络中断导致的故障，我们的处理是服务端因为timeout而主动close连接，在timeout之前的这段时间内，服务端会不断的发送消息，如果保证这段时间的消息不丢失？</p>2021-06-09</li><br/><li><span>James</span> 👍（0） 💬（1）<p>想问下接收端为什么接受不到ACK,你说从应用层的角度看，网络层保证可靠性就可以了，应用层还需要再次保证吗</p>2021-03-16</li><br/><li><span>Steiner</span> 👍（0） 💬（1）<p>write触发SIGPIPE后，程序会自动退出，还是继续执行？？</p>2021-01-29</li><br/>
+不是很明白，为什么发送端无法获取对应数据流的ACK情况？ 不是收到对方回的ACK包了吗？</p>2021-07-23</li><br/><li><span>highfly029</span> 👍（0） 💬（1）<p>老师好，请教个问题，对于网络中断导致的故障，我们的处理是服务端因为timeout而主动close连接，在timeout之前的这段时间内，服务端会不断的发送消息，如果保证这段时间的消息不丢失？</p>2021-06-09</li><br/><li><span>James</span> 👍（0） 💬（1）<p>想问下接收端为什么接受不到ACK,你说从应用层的角度看，网络层保证可靠性就可以了，应用层还需要再次保证吗</p>2021-03-16</li><br/><li><span>Steiner</span> 👍（0） 💬（1）<p>write触发SIGPIPE后，程序会自动退出，还是继续执行？？</p>2021-01-29</li><br/>
 </ul>

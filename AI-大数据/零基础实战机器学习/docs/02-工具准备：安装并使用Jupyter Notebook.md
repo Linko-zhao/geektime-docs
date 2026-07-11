@@ -206,10 +206,10 @@ pio.renderers.default=&#39;svg&#39;
 详细解释需要看：https:&#47;&#47;stackoverflow.com&#47;questions&#47;35315726&#47;plotly-how-to-display-charts-in-spyder</p>2021-09-12</li><br/><li><span>u</span> 👍（2） 💬（1）<p>import plotly.express as px
 import pandas as pd
 
-if __name__ == &#39;__main__&#39; :
-    stages = [&quot;访问数&quot;, &quot;下载数&quot;, &quot;注册数&quot;, &quot;搜索数&quot;, &quot;付款数&quot;]
-    dataMale = dict(number=[59, 32, 18, 9, 2],stage=stages)
-    dataFemale = dict(number=[29,17,8,3,1],stage=stages)
+if **name** == &#39;**main**&#39; :
+stages = [&quot;访问数&quot;, &quot;下载数&quot;, &quot;注册数&quot;, &quot;搜索数&quot;, &quot;付款数&quot;]
+dataMale = dict(number=[59, 32, 18, 9, 2],stage=stages)
+dataFemale = dict(number=[29,17,8,3,1],stage=stages)
 
     df_male = pd.DataFrame(dataMale)
     df_male[&#39;性别&#39;] = &#39;男&#39;
@@ -219,13 +219,14 @@ if __name__ == &#39;__main__&#39; :
     df_total = pd.concat(objs=[df_male,df_female],axis=0)
     fig = px.funnel(df_total,x=&quot;number&quot;,y=&quot;stage&quot;,color=&quot;性别&quot;)
     fig.show()</p>2021-09-06</li><br/><li><span>茜茜</span> 👍（3） 💬（1）<p>import plotly.express as px
+
 import pandas as pd
 stages = [&quot;访问数&quot;, &quot;下载数&quot;, &quot;注册数&quot;, &quot;搜索数&quot;, &quot;付款数&quot;]
 df_male = pd.DataFrame(dict(number = [59,32,18,9,2], stage = stages, gender = &#39;男性&#39;))
 df_female = pd.DataFrame(dict(number = [66,34,20,12,4], stage = stages, gender = &#39;女性&#39;))
 df = pd.concat([df_male, df_female], axis = 0)
 fig = px.funnel(df, x = &#39;number&#39;, y = &#39;stage&#39;, color = &#39;gender&#39;)
-fig.show()</p>2021-09-03</li><br/><li><span>阿文</span> 👍（0） 💬（2）<p>我这漏斗图出不来，出现了一块空白区域。这是啥情况啊</p>2021-09-03</li><br/><li><span>在路上</span> 👍（7） 💬（1）<p>AIK同学已经给出了正确答案，不过在实验的过程中，可以输出df_male和df数据集，看看pandas是如何合并数据集df_male和df_female，plotly.express是将什么样的数据集绘制成图形的。</p>2021-09-01</li><br/><li><span>GAC·DU</span> 👍（9） 💬（1）<p>import pandas as pd 
+fig.show()</p>2021-09-03</li><br/><li><span>阿文</span> 👍（0） 💬（2）<p>我这漏斗图出不来，出现了一块空白区域。这是啥情况啊</p>2021-09-03</li><br/><li><span>在路上</span> 👍（7） 💬（1）<p>AIK同学已经给出了正确答案，不过在实验的过程中，可以输出df_male和df数据集，看看pandas是如何合并数据集df_male和df_female，plotly.express是将什么样的数据集绘制成图形的。</p>2021-09-01</li><br/><li><span>GAC·DU</span> 👍（9） 💬（1）<p>import pandas as pd
 
 stages = [&quot;访问数&quot;, &quot;下载数&quot;, &quot;注册数&quot;, &quot;搜索数&quot;, &quot;付款数&quot;]
 
@@ -235,13 +236,13 @@ df_male[&#39;性别&#39;] = &#39;男&#39;
 df_female = pd.DataFrame(dict(number=[29, 17, 8, 3, 1], stage=stages))
 df_female[&#39;性别&#39;] = &#39;女&#39;
 
-df = pd.concat([df_male, df_female], axis=0) 
+df = pd.concat([df_male, df_female], axis=0)
 fig = px.funnel(df, x=&#39;number&#39;, y=&#39;stage&#39;, color=&#39;性别&#39;)
 
 fig.show()</p>2021-09-01</li><br/><li><span>黄佳</span> 👍（0） 💬（1）<p>如果大家在安装Plotly包的时候遇到障碍，也可以尝试用这个语句pip install plotly==5.3.1，安装它当前的最新版本。</p>2021-09-01</li><br/><li><span>青松</span> 👍（2） 💬（5）<p>坐等更新！</p>2021-09-01</li><br/><li><span>TWJ</span> 👍（1） 💬（1）<p>分享一下。安装pip install plotly过程中报了一堆错，最后显示“ValueError: check_hostname requires server_hostname”，关掉类似VPN的软件，重新执行安装就可以了。</p>2022-01-01</li><br/><li><span>抓白兔的大猪文</span> 👍（1） 💬（2）<p>黄老师 在Jupyter中运行代码 pip install plotly 安装模块显示如下报错，是什么原因？
 File &quot;C:\Users\APPLE\AppData\Local\Temp&#47;ipykernel_1520&#47;347750890.py&quot;, line 2
-    pip install plotly
-        ^
+pip install plotly
+^
 SyntaxError: invalid syntax</p>2021-10-20</li><br/><li><span>Null</span> 👍（1） 💬（1）<p>不显示绘图的解决：
 pip install cufflinks
 import cufflinks as cf
@@ -249,13 +250,17 @@ import cufflinks as cf
 cf.go_offline()
 cf.set_config_file(offline=True, world_readable=True)</p>2021-10-10</li><br/><li><span>刘东君</span> 👍（0） 💬（1）<p>请教老师，能否直接用vs code内置的jupyter notebook呢？</p>2024-03-31</li><br/><li><span>贝贝</span> 👍（0） 💬（1）<p> import pandas as pd # 导入Pandas
 stages = [&quot;访问数&quot;, &quot;下载数&quot;, &quot;注册数&quot;, &quot;搜索数&quot;, &quot;付款数&quot;] # 漏斗的阶段
+
 # 漏斗的数据
+
 df_male = pd.DataFrame(dict(number=[30, 15, 10, 6, 1], stage=stages))
 df_male[&#39;性别&#39;] = &#39;男&#39;
 df_female = pd.DataFrame(dict(number=[29,17,8,3,1], stage=stages))
 df_female[&#39;性别&#39;] = &#39;女&#39;
 df = pd.concat([df_male, df_female], axis=0) # 把男生女生的数据连接至一个新的Dataframe对象df
+
 # print(df)
+
 fig = px.funnel(df, x=&#39;number&#39;, y=&#39;stage&#39;, color=&#39;性别&#39;) # 把df中的数据传进漏斗
 fig.show()
 

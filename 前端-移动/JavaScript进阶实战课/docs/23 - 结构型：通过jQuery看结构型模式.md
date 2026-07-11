@@ -27,11 +27,11 @@
 ```javascript
 // 储存车型的独立对象
 class Car {
-  constructor(model, maker, vin) {
-    this.model = model;
-    this.maker = maker;
-    this.vin = vin;
-  }
+  constructor(model, maker, vin) {
+    this.model = model;
+    this.maker = maker;
+    this.vin = vin;
+  }
 }
 
 // 储存具体车型对象的容器
@@ -39,16 +39,16 @@ var cars = new Map();
 
 // 如果车型已知，就返回vin；未知就创建
 var createCar = (model, maker, isbn) => {
-  var existingCar = cars.has(vin);
+  var existingCar = cars.has(vin);
 
-  if (existingCar) {
-    return cars.get(vin);
-  }
+  if (existingCar) {
+    return cars.get(vin);
+  }
 
-  var car = new Car(model, maker, vin);
-  cars.set(vin, car);
+  var car = new Car(model, maker, vin);
+  cars.set(vin, car);
 
-  return car;
+  return car;
 };
 
 // 存储租赁车的容器
@@ -56,15 +56,15 @@ var carList = [];
 
 // 登记租赁车到列表
 var addCar = (model, maker, vin, availability, sales) => {
-  var car = {
-    ...createCar(model, maker, vin),
-    sales,
-    availability,
-    vin
-  };
+  var car = {
+    ...createCar(model, maker, vin),
+    sales,
+    availability,
+    vin,
+  };
 
-  carList.push(car);
-  return car;
+  carList.push(car);
+  return car;
 };
 
 addCar("911", "Porsche", "FR345", true, 2300);
@@ -86,37 +86,32 @@ addCar("C-Class", "Mercedes-Benz", "AS356", true, 1100);
 
 ```javascript
 var stateManager = {
-  flyweight() {
-    var self = this;
-    $('#container')
-        .unbind()
-        .on('click', 'div.toggle', ({
-            target
-        }) => {
-            self.handleClick(target);
-        });
-  }
+  flyweight() {
+    var self = this;
+    $("#container")
+      .unbind()
+      .on("click", "div.toggle", ({ target }) => {
+        self.handleClick(target);
+      });
+  },
 };
 ```
 
 Facebook的詹姆斯·帕德奥尔西（James Padolsey）提出过另外一个jQuery中用到享元的概念。他说到在用jQuery的一些工具方法时，最好使用内部的jQuery.methodName底层方法，例如jQuery.text；而不是用对外暴露的jQuery.fn.methodName外部方法，例如jQuery.fn.text。jQuery.methodName是jQuery库本身在内部用来支持 jQuery.fn.methodName的底层方法。使用它，也就是等于在函数方法调用时，减少一层抽象或避免创建新的jQuery对象。因此詹姆斯提出了一个jQuery.single的想法，每次调用jQuery.single ，意味着多个对象的数据被整合到一个中心化共享的数据结构中，所以它也算是一种享元。
 
 ```javascript
-jQuery.single = (o => {
-var collection = jQuery([1]);
-    return element => {
-        // Give collection the element:
-        collection[0] = element;
-        // Return the collection:
-        return collection;
-    };
+jQuery.single = ((o) => {
+  var collection = jQuery([1]);
+  return (element) => {
+    // Give collection the element:
+    collection[0] = element;
+    // Return the collection:
+    return collection;
+  };
 })();
 
-$('div').on('click', function() {
-  var html = jQuery
-    .single(this)
-    .next()
-    .html();
+$("div").on("click", function () {
+  var html = jQuery.single(this).next().html();
   console.log(html);
 });
 ```
@@ -136,20 +131,20 @@ $('div').on('click', function() {
 下面我们可以看一个 $(document).ready(…) 的例子，在背后，它是基于一个bindReady的函数来实现的。
 
 ```javascript
-function bindReady() { 
-	// ... 
-	if (document.addEventListener) { 
-		// Use the handy event callback 
-		document.addEventListener('DOMContentLoaded', DOMContentLoaded, false); 
-		// A fallback to window.onload, that will always work 
-		window.addEventListener('load', jQuery.ready, false); 
-		// If IE event model is used 
-	} else if (document.attachEvent) { 
-		document.attachEvent('onreadystatechange', DOMContentLoaded); 
-		// A fallback to window.onload, that will always work 
-		window.attachEvent('onload', jQuery.ready); 
-	} 
-} 
+function bindReady() {
+  // ...
+  if (document.addEventListener) {
+    // Use the handy event callback
+    document.addEventListener("DOMContentLoaded", DOMContentLoaded, false);
+    // A fallback to window.onload, that will always work
+    window.addEventListener("load", jQuery.ready, false);
+    // If IE event model is used
+  } else if (document.attachEvent) {
+    document.attachEvent("onreadystatechange", DOMContentLoaded);
+    // A fallback to window.onload, that will always work
+    window.attachEvent("onload", jQuery.ready);
+  }
+}
 ```
 
 门面模式对于jQuery的使用者来说提供了很多方便，但这也不是没有代价的。它虽然降低了开发成本，但在一定程度上牺牲了性能。对于一些简单的页面开发，很多开发者还是会选择使用它，原因呢就是因为这些应用中页面开发的要求远不到工业级，但是通过jQuery能节省的开发成本确是指数级的，这也从一个侧面体现了为什么jQuery还这么流行的原因。所以在开发的时候，我们除了要关注设计模式能带来什么好处以外，更要注意使用的场景，在开发效率和性能之间做出平衡。
@@ -164,11 +159,11 @@ function bindReady() { 
 
 ```javascript
 // 单个元素
-$( "#specialNote" ).addClass( "show" );
-$( "#mainContainer" ).addClass( "show" );
+$("#specialNote").addClass("show");
+$("#mainContainer").addClass("show");
 // 一组元素
-$( "div" ).addClass( "show" );
-$( ".item" ).addClass( "show" );
+$("div").addClass("show");
+$(".item").addClass("show");
 ```
 
 ## 延伸：什么是包装器模式
@@ -185,41 +180,41 @@ $( ".item" ).addClass( "show" );
 
 ```javascript
 class Car {
-  constructor(model, maker, price) {
-    this.model = model;
-    this.maker = maker;
-    this.price = price;
-  }
+  constructor(model, maker, price) {
+    this.model = model;
+    this.maker = maker;
+    this.price = price;
+  }
 
-  getDetails() {
-    return `${this.model} by ${this.maker}`;
-  }
+  getDetails() {
+    return `${this.model} by ${this.maker}`;
+  }
 }
 
 // decorator 1
 function specialEdition(car) {
-  car.isSpecial = false;
-  car.specialEdition = function() {
-    return `special edition ${car.getDetails()}`;
-  };
+  car.isSpecial = false;
+  car.specialEdition = function () {
+    return `special edition ${car.getDetails()}`;
+  };
 
-  return car;
+  return car;
 }
 
 // decorator 2
 function upgrade(car) {
-  car.isUpgraded = true;
-  car.price += 5000;
-  return car;
+  car.isUpgraded = true;
+  car.price += 5000;
+  return car;
 }
 
 // usage
-var car1 = specialEdition(new Car('Camry', 'Toyota', 10000));
+var car1 = specialEdition(new Car("Camry", "Toyota", 10000));
 
 console.log(car1.isSpecial); // false
 console.log(car1.specialEdition()); // 'special edition Camry by Toyota'
 
-var car2 = upgrade(new Car('Crown', 'Toyota', 15000));
+var car2 = upgrade(new Car("Crown", "Toyota", 15000));
 
 console.log(car2.isUpgraded); // true
 console.log(car2.price); // 20000
@@ -230,17 +225,13 @@ console.log(car2.price); // 20000
 ```javascript
 // define the objects we're going to use
 vehicleOS = {
-    defaults: {},
-    options: {},
-    settings: {},
+  defaults: {},
+  options: {},
+  settings: {},
 };
 
 // merge defaults and options, without modifying defaults explicitly
-vehicleOS.settings = $.extend(
-    {},
-    decoratorApp.defaults,
-    decoratorApp.options
-);
+vehicleOS.settings = $.extend({}, decoratorApp.defaults, decoratorApp.options);
 ```
 
 ### 适配器（adaptor）
@@ -256,9 +247,9 @@ vehicleOS.settings = $.extend(
 // opacity: 0.9; Chrome 4+, FF2+, Saf3.1+, Opera 9+, IE9, iOS 3.2+, Android 2.1+
 // filter: alpha(opacity=90); IE6-IE8
 // Setting opacity
-$( ".container" ).css( { opacity: .5 } );
+$(".container").css({ opacity: 0.5 });
 // Getting opacity
-var currentOpacity = $( ".container" ).css('opacity');
+var currentOpacity = $(".container").css("opacity");
 ```
 
 但其实在背后，jQuery做了很多的工作。

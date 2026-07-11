@@ -78,7 +78,7 @@ Linux提供了I/O复用函数select/poll/epoll，进程将一个或多个读操�
           void FD_ZERO(fd_set *fdset);           //清空集合
           void FD_SET(int fd, fd_set *fdset);   //将一个给定的文件描述符加入集合之中
           void FD_CLR(int fd, fd_set *fdset);   //将一个给定的文件描述符从集合中删除
-          int FD_ISSET(int fd, fd_set *fdset);   // 检查集合中指定的文件描述符是否可以读写 
+          int FD_ISSET(int fd, fd_set *fdset);   // 检查集合中指定的文件描述符是否可以读写
 ```
 
 ![](https://static001.geekbang.org/resource/image/d8/dd/d8f4a9cfb8d37d08487a68fc10e31fdd.png?wh=1142%2A640)

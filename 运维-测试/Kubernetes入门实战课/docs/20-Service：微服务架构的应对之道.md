@@ -335,10 +335,7 @@ kubectl get svc
 
 Q2: 负载均衡技术分为DNS、四层和七层，dns也是一种简单的负载均衡只是算法很简单随机；四层负载均衡主要有nat、IP隧道等，主要是做一些IP和端口的变换，算法也不多比如rr，七层负载均衡则是基于http header来做负载算法很多，可以做一些流量控制；其次还有在客户端做负载均衡比如nacos、istio等</p>2022-08-08</li><br/><li><span>dao</span> 👍（18） 💬（5）<p>前几节课多节点集群看起来一切正常，但本节的 dns 测试一直无法通过。周末搞了两天，最终发现是 virtualbox 两张网卡的坑。首先是集群节点的 kubelet 配置需要分别指定 `KUBELET_EXTRA_ARGS=&quot;--node-ip=192.168.56.x&quot;`；然后时安装 flannel 需要指定 `--iface=enp0s3`，这张网卡应该时前面的 node-ip 对应的网卡。</p>2022-08-14</li><br/><li><span>YueShi</span> 👍（11） 💬（1）<p>各位大佬们，如果有用虚拟机的，使用挂起再恢复的，建议每次遇到问题先重启虚拟机，踩了很多次这种挂起再恢复导致的网络问题的坑了</p>2022-08-05</li><br/><li><span>ppd0705</span> 👍（10） 💬（7）<p>不知道有没有同样遇到 dns 无法解析域名的同学，重启coredns试试：
 kubectl -n kube-system rollout restart deployment coredns</p>2022-08-06</li><br/><li><span>zero</span> 👍（6） 💬（2）<p>不知道有没有同样遇到 dns 无法解析域名的同学，可能你不能访问的原因是你网络插件Flannel的问题，我自己的虚拟机双网卡，需要在kube-flannel.yml上面指定你的网卡
-        args:
-        - --ip-masq
-        - --kube-subnet-mgr
-        - --iface=enp0s3  &#47;&#47; 这里替换成自己的网卡</p>2023-01-08</li><br/><li><span>大毛</span> 👍（5） 💬（2）<p>对于使用 virtualBox 搭建环境，无法使用 DNS 和 exec 进入容器内部的同学，这里有我解决问题的方法，可以尝试参考一下。
+args: - --ip-masq - --kube-subnet-mgr - --iface=enp0s3 &#47;&#47; 这里替换成自己的网卡</p>2023-01-08</li><br/><li><span>大毛</span> 👍（5） 💬（2）<p>对于使用 virtualBox 搭建环境，无法使用 DNS 和 exec 进入容器内部的同学，这里有我解决问题的方法，可以尝试参考一下。
 问题的原因是，virtualBox 给每个虚拟机默认一个 NAT 的网口，这个网口的 IP 是 virtualBox 自动分配的，且所有的地址都是 10.0.2.15，这个所有节点都相同的 IP 显然会对 kubernetes 造成困扰。解决问题的办法很简单，只要指定 kubelet 使用其他网口即可（网口通常使用的是 192.168 开头的你的路由器的 IP），具体方法是在 &#47;etc&#47;systemd&#47;system&#47;kubelet.service.d&#47;10-kubeadm.conf（我使用的是 ubuntu 系统，其他系统可能是其他路径）文件中添加如下代码 Environment=&quot;KUBELET_EXTRA_ARGS=--node-ip=xxx.xxx.xxx.xxx&quot; ，其中 xxx 就是你虚拟机分配的 IP 地址。修改完成后使用 sudo systemctl daemon-reload 和 sudo systemctl restart kubelet.service 重启 kubelet。然后使用 kubectl get nodes -o wide 查看节点的 IP 是否变更
 
 通常到这里问题就可以解决了，如果你发现依然有问题（使用 kubectl get pod -n kube-system -o wide 看是否有 pod 没有 running），可能要重新安装 flannel 插件。具体情况请问 GPT。
@@ -349,28 +346,32 @@ kubectl -n kube-system rollout restart deployment coredns
 https:&#47;&#47;stackoverflow.com&#47;questions&#47;45805483&#47;kubernetes-pods-cant-resolve-hostnames</p>2022-08-24</li><br/><li><span>朱雯</span> 👍（5） 💬（1）<p>nginx负载均衡是可以设置策略的，权重之类的，svc和nodeport是怎么设置这方面的信息呢</p>2022-08-18</li><br/><li><span>alexgreenbar</span> 👍（3） 💬（5）<p>NodePort 设置后，得注意可以通过curl集群的节点来访问服务，但这里面不包括master节点</p>2022-09-26</li><br/><li><span>叶峥瑶</span> 👍（2） 💬（1）<p>ping不通可能是配置问题。 可以参考这篇配置成ipvs https:&#47;&#47;blog.csdn.net&#47;Urms_handsomeyu&#47;article&#47;details&#47;106294085</p>2022-12-07</li><br/><li><span>安石</span> 👍（2） 💬（1）<p>curl ngx-svc我也运行不通，直接在pod里面访问ip可以，域名就不行。
 也设置了网卡之类（虚拟机）还是不行，按照k8s官方文档操作可以了
 https:&#47;&#47;kubernetes.io&#47;zh-cn&#47;docs&#47;tasks&#47;administer-cluster&#47;dns-debugging-resolution&#47;</p>2022-10-31</li><br/><li><span>哇哈哈</span> 👍（2） 💬（1）<p>看到这里有点懵，各种 ip 地址不懂怎么来的也不懂为什么要这么搞</p>2022-10-21</li><br/><li><span>$侯</span> 👍（2） 💬（4）<p>虚拟机 curl ngx-svc 产生 Could not resolve 问题解决办法：
-1. kube-flannel.yml 文件中加入  --iface=enp0s3，位置如下
-  containers:
-  - name: kube-flannel
-    image: xxx
-    command:
-    - &#47;opt&#47;bin&#47;flanneld
+
+1. kube-flannel.yml 文件中加入 --iface=enp0s3，位置如下
+   containers:
+
+- name: kube-flannel
+  image: xxx
+  command:
+  - &#47;opt&#47;bin&#47;flanneld
     args:
-    - --ip-masq
-    - --kube-subnet-mgr
-    - --iface=enp0s3 # 这里新增这条
+  - --ip-masq
+  - --kube-subnet-mgr
+  - --iface=enp0s3 # 这里新增这条
+
 2. 修改kubelet配置
-sudo mkdir &#47;etc&#47;sysconfig
-sudo vim &#47;etc&#47;sysconfig&#47;kubelet
-加入：
-KUBELET_EXTRA_ARGS=&quot;--node-ip=192.168.56.208&quot;
-保存
-重启kubelet：
-systemctl restart kubelet</p>2022-09-02</li><br/><li><span>wcy</span> 👍（2） 💬（1）<p>负载均衡 算法 5种：轮询、随机、最小连接、地址hash、加权
-轮询：将所有请求依次分配到每台服务器上
-随机：将请求随机分配到各个服务器
-最小连接：将请求分配到连接最少的服务器上
-hash：将地址hash，同一来源地址的请求分配到同一服务器上
-加权：在前面4种方法基础上，按权重分配请求到服务器
+   sudo mkdir &#47;etc&#47;sysconfig
+   sudo vim &#47;etc&#47;sysconfig&#47;kubelet
+   加入：
+   KUBELET_EXTRA_ARGS=&quot;--node-ip=192.168.56.208&quot;
+   保存
+   重启kubelet：
+   systemctl restart kubelet</p>2022-09-02</li><br/><li><span>wcy</span> 👍（2） 💬（1）<p>负载均衡 算法 5种：轮询、随机、最小连接、地址hash、加权
+   轮询：将所有请求依次分配到每台服务器上
+   随机：将请求随机分配到各个服务器
+   最小连接：将请求分配到连接最少的服务器上
+   hash：将地址hash，同一来源地址的请求分配到同一服务器上
+   加权：在前面4种方法基础上，按权重分配请求到服务器
+
 </p>2022-08-21</li><br/>
 </ul>

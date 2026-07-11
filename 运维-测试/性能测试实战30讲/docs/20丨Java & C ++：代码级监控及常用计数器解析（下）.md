@@ -198,7 +198,7 @@ ProfilerStop();//停止性能分析
 然后执行命令：
 
 ```
-pprof --pdf a.out test.prof >test.pdf 
+pprof --pdf a.out test.prof >test.pdf
 ```
 
 打开这个PDF就可以看到如下图：
@@ -251,13 +251,13 @@ valgrind能实现这些功能：
 编译运行之后，我们可以看到如下结果。
 
 ```
-[root@7dgroup Sample10]# gcc -Wall -o test5 test5.c 
+[root@7dgroup Sample10]# gcc -Wall -o test5 test5.c
 [root@7dgroup Sample10]# valgrind --tool=memcheck --leak-check=full ./test5
 ==318== Memcheck, a memory error detector
 ==318== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
 ==318== Using Valgrind-3.10.0 and LibVEX; rerun with -h for copyright info
 ==318== Command: ./test5
-==318== 
+==318==
 ==318== Invalid write of size 4
 ==318==    at 0x40054E: f (in /root/GDB/Sample10/test5)
 ==318==    by 0x40055E: main (in /root/GDB/Sample10/test5)
@@ -265,27 +265,27 @@ valgrind能实现这些功能：
 ==318==    at 0x4C29BFD: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
 ==318==    by 0x400541: f (in /root/GDB/Sample10/test5)
 ==318==    by 0x40055E: main (in /root/GDB/Sample10/test5)
-==318== 
-==318== 
+==318==
+==318==
 ==318== HEAP SUMMARY:
 ==318==     in use at exit: 40 bytes in 1 blocks
 ==318==   total heap usage: 1 allocs, 0 frees, 40 bytes allocated
-==318== 
+==318==
 ==318== 40 bytes in 1 blocks are definitely lost in loss record 1 of 1
 ==318==    at 0x4C29BFD: malloc (in /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
 ==318==    by 0x400541: f (in /root/GDB/Sample10/test5)
 ==318==    by 0x40055E: main (in /root/GDB/Sample10/test5)
-==318== 
+==318==
 ==318== LEAK SUMMARY:
 ==318==    definitely lost: 40 bytes in 1 blocks
 ==318==    indirectly lost: 0 bytes in 0 blocks
 ==318==      possibly lost: 0 bytes in 0 blocks
 ==318==    still reachable: 0 bytes in 0 blocks
 ==318==         suppressed: 0 bytes in 0 blocks
-==318== 
+==318==
 ==318== For counts of detected and suppressed errors, rerun with: -v
 ==318== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 1 from 1)
-[root@7dgroup Sample10]# 
+[root@7dgroup Sample10]#
 ```
 
 主要看一下这行。
@@ -326,5 +326,5 @@ valgrind能实现这些功能：
 占用内存分析链路
 响应时间长-&gt;分段拆分时间-&gt;操作系统-&gt;进程-&gt;线程-&gt;对象或变量内存使用情况</p>2021-05-29</li><br/><li><span>小老鼠</span> 👍（2） 💬（2）<p>代码级的性能分析应该由开发人员作还是测试人员作？我个人观点是测试人员测试是否存在性能问题，比如内存泄漏，再由开发人员去定位，当然有全栈工程师更好。</p>2020-02-25</li><br/><li><span>王顺</span> 👍（0） 💬（1）<p>时间和空间</p>2021-11-22</li><br/><li><span>jy</span> 👍（0） 💬（1）<p>原文内容：“实际上，这张图说明以下四点：年轻代（第三列）、年老代（第四列）全满了，持久代在不断增加，并且也没有释放过。两个保留区（第一列、第二列）都是空的。Yonug GC（第六列）已经不做了。Full GC（第八列）一直都在尝试做回收的动作，但是一直也没成功，因为年轻代、年老代都没回收下来，持久代也在不停涨。如果出现了 1 和 2 的话，不用看什么具体对象内存的消耗，只要像网上那些只玩 JVM 参数的人一样，调调参数就行了。“
 
-问题：具体是如何调参数呢？</p>2021-06-25</li><br/><li><span>alley</span> 👍（0） 💬（1）<p>老师，我在平时测试性能基线中发现有缓慢的性能泄露问题，开发说不用管，触发FullGC来回收内存；那FullGC的时候，是不是系统业务不可用？</p>2021-01-04</li><br/><li><span>chailyn</span> 👍（0） 💬（1）<p>卡在分析了，windows系统如何监控分析c&#47;c++语言程序的CPU，感觉还是很懵呀</p>2020-10-19</li><br/><li><span>月亮和六便士</span> 👍（0） 💬（3）<p>高老师，1. gc， FGC 多久一次算正常？我经常看到书籍上说什么频繁的Fgc ，不知道怎么样算频繁，2.  jvm设置多大 与总内存有比例关系么，比如我有120G内存，我设置3G xmx  这个要怎么确定？</p>2020-04-08</li><br/><li><span>安排</span> 👍（0） 💬（1）<p>valgrind分析大型程序比较慢，有没有其他好用的快的工具呢？</p>2020-04-01</li><br/><li><span>吴小喵</span> 👍（0） 💬（1）<p>老师，为什么我的jvisualvm没有Deltas </p>2020-02-28</li><br/>
+问题：具体是如何调参数呢？</p>2021-06-25</li><br/><li><span>alley</span> 👍（0） 💬（1）<p>老师，我在平时测试性能基线中发现有缓慢的性能泄露问题，开发说不用管，触发FullGC来回收内存；那FullGC的时候，是不是系统业务不可用？</p>2021-01-04</li><br/><li><span>chailyn</span> 👍（0） 💬（1）<p>卡在分析了，windows系统如何监控分析c&#47;c++语言程序的CPU，感觉还是很懵呀</p>2020-10-19</li><br/><li><span>月亮和六便士</span> 👍（0） 💬（3）<p>高老师，1. gc， FGC 多久一次算正常？我经常看到书籍上说什么频繁的Fgc ，不知道怎么样算频繁，2. jvm设置多大 与总内存有比例关系么，比如我有120G内存，我设置3G xmx 这个要怎么确定？</p>2020-04-08</li><br/><li><span>安排</span> 👍（0） 💬（1）<p>valgrind分析大型程序比较慢，有没有其他好用的快的工具呢？</p>2020-04-01</li><br/><li><span>吴小喵</span> 👍（0） 💬（1）<p>老师，为什么我的jvisualvm没有Deltas </p>2020-02-28</li><br/>
 </ul>

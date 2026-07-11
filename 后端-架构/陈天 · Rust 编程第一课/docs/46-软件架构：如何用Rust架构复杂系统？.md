@@ -279,14 +279,14 @@ impl<Ctx> Pipeline<Ctx> {
 或者在 if ... else 语句中有类似的情况，如何实现比较好？是不是只能clone？
 
 pub fn set&lt;T: Any + Send + Sync, K: Into&lt;String&gt;&gt;(&amp;self, key: K, val: T) {
-        self.map.entry(key.into())
-        .and_modify(|o| {
-            *o.value = val;
-            &#47;&#47; ...一些其它相关的处理
-        })
-        .or_insert(Value {
-            count: 0,
-            value: val,
-        });
-}</p>2022-01-07</li><br/><li><span>0@1</span> 👍（0） 💬（4）<p>老师，有没有出Rust高级课程的计划</p>2021-12-18</li><br/><li><span>幻境之桥</span> 👍（0） 💬（1）<p>插件化设计主要是把系统的核心能力提炼出来，供插件开发者使用，让他们的奇思妙想壮大系统生态</p>2021-12-16</li><br/><li><span>乌龙猹</span> 👍（0） 💬（1）<p>今天这篇更新不仅属于干货 还非常硬  实在是不想结束这段学习之旅  虽然rust 只是刚入门  但老师深入浅出地规划了 rust 的roadmap  日后定当反复研读 以求融会贯通。最后 非常期待老师未来能推出elixir 编程第一课  到时候一定支持  也该有人来向国内开发者推荐推荐 elixir 这门语言了  </p>2021-12-15</li><br/><li><span>overheat</span> 👍（0） 💬（1）<p>Rhai看描述不错哦，类javascript，有人深度使用过吗？</p>2021-12-15</li><br/><li><span>阳阳</span> 👍（4） 💬（0）<p>强烈要求老师出新课程，架构课程和Rust高级。</p>2022-06-05</li><br/><li><span>光华路小霸王</span> 👍（0） 💬（0）<p>敏捷很大程度上降低了质量，对 client 端开发确实很痛苦</p>2021-12-15</li><br/><li><span>罗杰</span> 👍（0） 💬（0）<p>你只有有了足够的替代方案，才谈得上权衡。</p>2021-12-15</li><br/><li><span>彭亚伦</span> 👍（0） 💬（0）<p>茅塞顿开了属于是~</p>2021-12-15</li><br/>
+self.map.entry(key.into())
+.and_modify(|o| {
+*o.value = val;
+&#47;&#47; ...一些其它相关的处理
+})
+.or_insert(Value {
+count: 0,
+value: val,
+});
+}</p>2022-01-07</li><br/><li><span>0@1</span> 👍（0） 💬（4）<p>老师，有没有出Rust高级课程的计划</p>2021-12-18</li><br/><li><span>幻境之桥</span> 👍（0） 💬（1）<p>插件化设计主要是把系统的核心能力提炼出来，供插件开发者使用，让他们的奇思妙想壮大系统生态</p>2021-12-16</li><br/><li><span>乌龙猹</span> 👍（0） 💬（1）<p>今天这篇更新不仅属于干货 还非常硬 实在是不想结束这段学习之旅 虽然rust 只是刚入门 但老师深入浅出地规划了 rust 的roadmap 日后定当反复研读 以求融会贯通。最后 非常期待老师未来能推出elixir 编程第一课 到时候一定支持 也该有人来向国内开发者推荐推荐 elixir 这门语言了 </p>2021-12-15</li><br/><li><span>overheat</span> 👍（0） 💬（1）<p>Rhai看描述不错哦，类javascript，有人深度使用过吗？</p>2021-12-15</li><br/><li><span>阳阳</span> 👍（4） 💬（0）<p>强烈要求老师出新课程，架构课程和Rust高级。</p>2022-06-05</li><br/><li><span>光华路小霸王</span> 👍（0） 💬（0）<p>敏捷很大程度上降低了质量，对 client 端开发确实很痛苦</p>2021-12-15</li><br/><li><span>罗杰</span> 👍（0） 💬（0）<p>你只有有了足够的替代方案，才谈得上权衡。</p>2021-12-15</li><br/><li><span>彭亚伦</span> 👍（0） 💬（0）<p>茅塞顿开了属于是~</p>2021-12-15</li><br/>
 </ul>

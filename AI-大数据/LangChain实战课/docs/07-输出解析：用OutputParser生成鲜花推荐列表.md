@@ -156,8 +156,8 @@ prompt_template = """您是一位专业的鲜花店文案撰写员。
 {format_instructions}"""
 
 # 根据模板创建提示，同时在提示中加入输出解析器的说明
-prompt = PromptTemplate.from_template(prompt_template, 
-       partial_variables={"format_instructions": format_instructions}) 
+prompt = PromptTemplate.from_template(prompt_template,
+       partial_variables={"format_instructions": format_instructions})
 
 # 打印提示
 print("提示：", prompt)
@@ -166,30 +166,30 @@ print("提示：", prompt)
 输出：
 
 ````plain
-提示： 
-input_variables=['flower', 'price'] 
+提示：
+input_variables=['flower', 'price']
 
-output_parser=None 
+output_parser=None
 
 partial_variables={'format_instructions': 'The output should be formatted as a JSON instance that conforms to the JSON schema below.\n\n
 As an example, for the schema {
-"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}}, 
+"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}},
 "required": ["foo"]}}\n
-the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. 
+the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema.
 The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.\n\n
 Here is the output schema:\n```\n
 {"properties": {
-"flower_type": {"title": "Flower Type", "description": "\\u9c9c\\u82b1\\u7684\\u79cd\\u7c7b", "type": "string"}, 
-"price": {"title": "Price", "description": "\\u9c9c\\u82b1\\u7684\\u4ef7\\u683c", "type": "integer"}, 
-"description": {"title": "Description", "description": "\\u9c9c\\u82b1\\u7684\\u63cf\\u8ff0\\u6587\\u6848", "type": "string"}, 
-"reason": {"title": "Reason", "description": "\\u4e3a\\u4ec0\\u4e48\\u8981\\u8fd9\\u6837\\u5199\\u8fd9\\u4e2a\\u6587\\u6848", "type": "string"}}, 
-"required": ["flower_type", "price", "description", "reason"]}\n```'} 
+"flower_type": {"title": "Flower Type", "description": "\\u9c9c\\u82b1\\u7684\\u79cd\\u7c7b", "type": "string"},
+"price": {"title": "Price", "description": "\\u9c9c\\u82b1\\u7684\\u4ef7\\u683c", "type": "integer"},
+"description": {"title": "Description", "description": "\\u9c9c\\u82b1\\u7684\\u63cf\\u8ff0\\u6587\\u6848", "type": "string"},
+"reason": {"title": "Reason", "description": "\\u4e3a\\u4ec0\\u4e48\\u8981\\u8fd9\\u6837\\u5199\\u8fd9\\u4e2a\\u6587\\u6848", "type": "string"}},
+"required": ["flower_type", "price", "description", "reason"]}\n```'}
 
 template='您是一位专业的鲜花店文案撰写员。
 \n对于售价为 {price} 元的 {flower} ，您能提供一个吸引人的简短中文描述吗？\n
-{format_instructions}' 
+{format_instructions}'
 
-template_format='f-string' 
+template_format='f-string'
 
 validate_template=True
 ````
@@ -246,7 +246,7 @@ print("输出的数据：", df.to_dict(orient='records'))
 > the object {“foo”: \[“bar”, “baz”]} is a well-formatted instance of the schema. The object {“properties”: {“foo”: \[“bar”, “baz”]}} is not well-formatted.  
 >    
 > Here is the output schema:
-> 
+>
 > ```
 > {"properties": {"flower_type": {"title": "Flower Type", "description": "\u9c9c\u82b1\u7684\u79cd\u7c7b", "type": "string"}, "price": {"title": "Price", "description": "\u9c9c\u82b1\u7684\u4ef7\u683c", "type": "integer"}, "description": {"title": "Description", "description": "\u9c9c\u82b1\u7684\u63cf\u8ff0\u6587\u6848", "type": "string"}, "reason": {"title": "Reason", "description": "\u4e3a\u4ec0\u4e48\u8981\u8fd9\u6837\u5199\u8fd9\u4e2a\u6587\u6848", "type": "string"}}, "required": ["flower_type", "price", "description", "reason"]}
 > ```
@@ -258,9 +258,9 @@ print("输出的数据：", df.to_dict(orient='records'))
 模型的最后输出如下：
 
 ```plain
-输出的数据： 
-[{'flower_type': 'Rose', 'price': 50, 'description': '玫瑰是最浪漫的花，它具有柔和的粉红色，有着浓浓的爱意，价格实惠，50元就可以拥有一束玫瑰。', 'reason': '玫瑰代表着爱情，是最浪漫的礼物，以实惠的价格，可以让您尽情体验爱的浪漫。'}, 
-{'flower_type': '百合', 'price': 30, 'description': '这支百合，柔美的花蕾，在你的手中摇曳，仿佛在与你深情的交谈', 'reason': '营造浪漫氛围'}, 
+输出的数据：
+[{'flower_type': 'Rose', 'price': 50, 'description': '玫瑰是最浪漫的花，它具有柔和的粉红色，有着浓浓的爱意，价格实惠，50元就可以拥有一束玫瑰。', 'reason': '玫瑰代表着爱情，是最浪漫的礼物，以实惠的价格，可以让您尽情体验爱的浪漫。'},
+{'flower_type': '百合', 'price': 30, 'description': '这支百合，柔美的花蕾，在你的手中摇曳，仿佛在与你深情的交谈', 'reason': '营造浪漫氛围'},
 {'flower_type': 'Carnation', 'price': 20, 'description': '艳丽缤纷的康乃馨，带给你温馨、浪漫的气氛，是最佳的礼物选择！', 'reason': '康乃馨是一种颜色鲜艳、芬芳淡雅、具有浪漫寓意的鲜花，非常适合作为礼物，而且20元的价格比较实惠。'}]
 ```
 
@@ -449,6 +449,7 @@ RetryWithErrorOutputParser的parse结果：`action='search' action_input='colors
 
 1. 工具：[Pydantic](https://docs.pydantic.dev/latest/) 是一个Python库，用于数据验证，可以确保数据符合特定的格式
 2. 文档：LangChain中的各种 [Output Parsers](https://python.langchain.com/docs/modules/model_io/output_parsers/)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>在路上</span> 👍（23） 💬（1）<p>从源码上看，OutputFixingParser和RetryWithErrorOutputParser的本质是相同的，都是当PydanticOutputParser.parse(input)解析失败，通过语言模型分析抛出的异常，修正input。
 不同之处在于，OutputFixingParser利用input schema、input、exception来修正input，RetryWithErrorOutputParser除了利用input schema、input、exception，还利用一个额外的prompt来修正input，有了额外的prompt，自然就能够既修正input格式，又补全input内容。</p>2023-09-20</li><br/><li><span>高源</span> 👍（10） 💬（2）<p>老师有个问题请教，例如目前大模型比较多，我的理解如果满足企业内部自己使用，是需要对大模型微调吧才能完全满足定制，例如输出企业自己相关数据，文档，代码等，而不是简单把提示写好弄个差不多开源大模型上去。我的理解是需要微调吧，针对自己企业数据进行训练对模型，但这块听老师课我理解需要对模型层次熟悉才能下手进行微调吧，我自己理解目前从效果上还是gpt其它模型还是比较弱，百度说他的2.0已经超过gpt3.5，比gpt4差点，我觉得没那么快吧，另外训练模型机器硬件人员等各种因素叠加，不是说都能做好了吧，企业自己落地自己模型这块现实吗，自己做需要那些条件，例如人员要求等，谢谢</p>2023-11-01</li><br/><li><span>棟</span> 👍（1） 💬（4）<p>老师，请教一个问题，
@@ -457,27 +458,26 @@ action_input
   Field required [type=missing, input_value={&#39;action&#39;: &#39;search&#39;}, input_type=dict]
     For further information visit https:&#47;&#47;errors.pydantic.dev&#47;2.3&#47;v&#47;missing
 
-我是将错误bad_response = &#39;{&quot;action&quot;: &quot;search&quot;}&#39;  --&gt; 更改为bad_response = &quot;{&#39;action&#39;: &#39;search&#39;}&quot;才能正常调用模型，这个要怎么修复。
-知道的朋友也请指点，感谢！</p>2023-10-07</li><br/><li><span>曹胖子</span> 👍（0） 💬（1）<p>parsed_output = output_parser.parse(output.content)   会报异常， 目前我尝试打印了 output的数据类型和结构，感觉是返回的数据结构出现的变动，最终我调整为 parsed_output = output_parser.parse(output.content) 后代码可执行。</p>2024-06-03</li><br/><li><span>风隼[咖啡]</span> 👍（0） 💬（1）<p>    # parsed_output_dict = parsed_output.dict()  # 将Pydantic格式转化位字典
-    # Pydantic 格式转化为字典,Pydantic V2dict 方法已经被废弃，推荐使用 model_dump 方法来代替
-    parsed_output_dict = parsed_output.model_dump()</p>2023-12-15</li><br/><li><span>rick009</span> 👍（0） 💬（1）<p>老师您好，有个问题请教一下，我想要从给定的一段文本中抽离一些FAQ，然后想返回JSON数组的格式，以下是prompt：
+我是将错误bad_response = &#39;{&quot;action&quot;: &quot;search&quot;}&#39; --&gt; 更改为bad_response = &quot;{&#39;action&#39;: &#39;search&#39;}&quot;才能正常调用模型，这个要怎么修复。
+知道的朋友也请指点，感谢！</p>2023-10-07</li><br/><li><span>曹胖子</span> 👍（0） 💬（1）<p>parsed_output = output_parser.parse(output.content) 会报异常， 目前我尝试打印了 output的数据类型和结构，感觉是返回的数据结构出现的变动，最终我调整为 parsed_output = output_parser.parse(output.content) 后代码可执行。</p>2024-06-03</li><br/><li><span>风隼[咖啡]</span> 👍（0） 💬（1）<p> # parsed_output_dict = parsed_output.dict() # 将Pydantic格式转化位字典 # Pydantic 格式转化为字典,Pydantic V2dict 方法已经被废弃，推荐使用 model_dump 方法来代替
+parsed_output_dict = parsed_output.model_dump()</p>2023-12-15</li><br/><li><span>rick009</span> 👍（0） 💬（1）<p>老师您好，有个问题请教一下，我想要从给定的一段文本中抽离一些FAQ，然后想返回JSON数组的格式，以下是prompt：
 template = &quot;&quot;&quot;你是一名知识库管理员，需将以下内容拆分成 {nums} 个问答对，确保准确无误且只从文献中获取，不得扩散。你的算法或流程应该能够准确抽取关键信息，并生成准确的问答对，以充分利用文献。
-    {doc_content}
-    {format_instructions}  
-    &quot;&quot;&quot;
+{doc_content}
+{format_instructions}  
+&quot;&quot;&quot;
 想要返回的格式为
-The output should be formatted as a JSON instance that conforms to the JSON schema below.\n\nAs an example, for the schema {&quot;properties&quot;: {&quot;foo&quot;: {&quot;title&quot;: &quot;Foo&quot;, &quot;description&quot;: &quot;a list of strings&quot;, &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}}}, &quot;required&quot;: [&quot;foo&quot;]}\nthe object {&quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;]} is a well-formatted instance of the schema. The object {&quot;properties&quot;: {&quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;]}} is not well-formatted.\n\nHere is the output schema:\n```\n{&quot;$defs&quot;: {&quot;QA&quot;: {&quot;properties&quot;: {&quot;Q&quot;: {&quot;description&quot;: &quot;\\u95ee\\u9898&quot;, &quot;title&quot;: &quot;Q&quot;, &quot;type&quot;: &quot;string&quot;}, &quot;A&quot;: {&quot;description&quot;: &quot;\\u7b54\\u6848&quot;, &quot;title&quot;: &quot;A&quot;, &quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;Q&quot;, &quot;A&quot;], &quot;title&quot;: &quot;QA&quot;, &quot;type&quot;: &quot;object&quot;}}, &quot;items&quot;: {&quot;$ref&quot;: &quot;#&#47;$defs&#47;QA&quot;}}\n```
+The output should be formatted as a JSON instance that conforms to the JSON schema below.\n\nAs an example, for the schema {&quot;properties&quot;: {&quot;foo&quot;: {&quot;title&quot;: &quot;Foo&quot;, &quot;description&quot;: &quot;a list of strings&quot;, &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}}}, &quot;required&quot;: [&quot;foo&quot;]}\nthe object {&quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;]} is a well-formatted instance of the schema. The object {&quot;properties&quot;: {&quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;]}} is not well-formatted.\n\nHere is the output schema:\n`\n{&quot;$defs&quot;: {&quot;QA&quot;: {&quot;properties&quot;: {&quot;Q&quot;: {&quot;description&quot;: &quot;\\u95ee\\u9898&quot;, &quot;title&quot;: &quot;Q&quot;, &quot;type&quot;: &quot;string&quot;}, &quot;A&quot;: {&quot;description&quot;: &quot;\\u7b54\\u6848&quot;, &quot;title&quot;: &quot;A&quot;, &quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;Q&quot;, &quot;A&quot;], &quot;title&quot;: &quot;QA&quot;, &quot;type&quot;: &quot;object&quot;}}, &quot;items&quot;: {&quot;$ref&quot;: &quot;#&#47;$defs&#47;QA&quot;}}\n`
 class QA(BaseModel):
-    Q: str = Field(description=&quot;问题&quot;)
-    A: str = Field(description=&quot;答案&quot;)
+Q: str = Field(description=&quot;问题&quot;)
+A: str = Field(description=&quot;答案&quot;)
 
 class QAList(RootModel):
-    root: List[QA] = Field(description=&quot;FAQ问答对列表&quot;)
+root: List[QA] = Field(description=&quot;FAQ问答对列表&quot;)
 但是返回的格式总是不停的在变，都无法返回希望的数据结构</p>2023-12-06</li><br/><li><span>鲸鱼</span> 👍（0） 💬（1）<p>我遇到一个问题，目前的langchain必须使用v1版本的pydantic，如果使用了v2版本抛出的异常类型不对，会导致PydanticOutputParser无法捕获正常的ValidationError异常，从而不会去请求openAI修复response。
 PydanticOutputParser的具体捕获代码是这里
 
 class PydanticOutputParser(BaseOutputParser[T]):
-    &quot;&quot;&quot;Parse an output using a pydantic model.&quot;&quot;&quot;
+&quot;&quot;&quot;Parse an output using a pydantic model.&quot;&quot;&quot;
 
     pydantic_object: Type[T]
     &quot;&quot;&quot;The pydantic model to parse.&quot;&quot;&quot;
@@ -498,6 +498,7 @@ class PydanticOutputParser(BaseOutputParser[T]):
             name = self.pydantic_object.__name__
             msg = f&quot;Failed to parse {name} from completion {text}. Got: {e}&quot;
             raise OutputParserException(msg, llm_output=text)
+
 </p>2023-10-25</li><br/><li><span>在路上</span> 👍（0） 💬（1）<p>佳哥好，我发现在OutputFixingParser示例中，如果做如下修改：
 new_parser = OutputFixingParser.from_llm(parser=parser, llm=ChatOpenAI(temperature=0))
 或者

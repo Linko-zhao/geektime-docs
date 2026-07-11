@@ -195,6 +195,6 @@ swappiness参数除了在proc文件系统下有个全局的值外，在每个Mem
 1.3 值为0，也不能完全禁止 Swap 分区的使用，就是当系统中空闲内存低于一个临界值的时候，仍然会通过swap回收匿名内存（释放匿名内存并把页面写入 Swap 空间）。
 
 2、Memroy Cgroup 控制组中的memory.swappiness参数
-    如果设置memory.swappiness参数，此容器中的全局swappiness参数失效，那么此容器里就不能使用swap了</p>2021-07-05</li><br/><li><span>Yann彦</span> 👍（0） 💬（0）<p>k8s集群中是否建议打开swap呢？打开过关闭有什么优缺点呢？</p>2022-08-21</li><br/><li><span>册书一幕</span> 👍（0） 💬（2）<p>“不过，这里有一点不同，需要你留意：当 memory.swappiness = 0 的时候，对匿名页的回收是始终禁止的，也就是始终都不会使用 Swap 空间。”
+如果设置memory.swappiness参数，此容器中的全局swappiness参数失效，那么此容器里就不能使用swap了</p>2021-07-05</li><br/><li><span>Yann彦</span> 👍（0） 💬（0）<p>k8s集群中是否建议打开swap呢？打开过关闭有什么优缺点呢？</p>2022-08-21</li><br/><li><span>册书一幕</span> 👍（0） 💬（2）<p>“不过，这里有一点不同，需要你留意：当 memory.swappiness = 0 的时候，对匿名页的回收是始终禁止的，也就是始终都不会使用 Swap 空间。”
 这句话是指的仅在cgroup情况下吗？在主机下，memory.swappiness = 0是不会分配swap但是会回收</p>2022-04-04</li><br/><li><span>册书一幕</span> 👍（0） 💬（0）<p>不过，这里有一点不同，需要你留意：当 memory.swappiness = 0 的时候，对匿名页的回收是始终禁止的，也就是始终都不会使用 Swap 空间。</p>2022-04-04</li><br/><li><span>景b</span> 👍（0） 💬（0）<p>如果有分布式存储的能力且能做到按卷级别做限速，每个容器都是单独挂一个卷进去，是不是开swap就利大于弊。可以这么理解不</p>2021-11-07</li><br/>
 </ul>

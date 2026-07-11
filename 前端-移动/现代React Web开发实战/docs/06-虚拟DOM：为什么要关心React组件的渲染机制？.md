@@ -117,13 +117,16 @@ Diffing的结果最终会被转换成DOM API调用，我们只修改需要修改
 
 ```javascript
 const KanbanCard = (props) => {
-  props.justWantToSetNewProp = '尝试修改props对象';
-  return (
-    <li className="kanban-card">
-      <div className="card-title">{props.title}</div>
-      <div className="card-status">{props.justWantToSetNewProp} {props.status}</div>
-    </li>
-  );
+  props.justWantToSetNewProp = "尝试修改props对象";
+  return (
+    <li className="kanban-card">
+            <div className="card-title">{props.title}</div>     {" "}
+      <div className="card-status">
+        {props.justWantToSetNewProp} {props.status}
+      </div>
+         {" "}
+    </li>
+  );
 };
 ```
 
@@ -199,5 +202,5 @@ Parent-child - child - sibling，即父子关系是单向的，通过sibling完�
 
 不会 block 浏览器中的其他工作。“
 这里引用了文档中描述fiber 简要做了四件事情，但是好像都不太理解他是怎么操作的。</p>2022-09-17</li><br/><li><span>01</span> 👍（0） 💬（1）<p>html元素 主要是判断 props 是否相等， 简单粗暴</p>2022-09-16</li><br/><li><span>Pioneer</span> 👍（0） 💬（1）<p>想学习下react fiber</p>2022-09-11</li><br/><li><span>船长</span> 👍（0） 💬（1）<p>思考题 1：以我目前后端的水平我能想到的是：React 先判断属性的类型变没变，如果变了，则直接触发渲染。否则再进行值的对比</p>2022-09-07</li><br/><li><span>杨永安</span> 👍（0） 💬（2）<p>开销一般会在DOM操作和大数据数组等操作上发生吧</p>2022-09-03</li><br/><li><span>阳宝</span> 👍（1） 💬（0）<p>打卡</p>2022-09-04</li><br/><li><span>Geek_24d08b</span> 👍（0） 💬（0）<p>思考题1：使用Object.is()判断属性是否修改
-思考题2：如果render开销很大可能会造成页面卡顿情况，会在造成大开销的代码场景： 1）多余的setState，引起页面重复渲染  2）文章中提到的直接对DOM元素进行操作  </p>2024-03-06</li><br/>
+思考题2：如果render开销很大可能会造成页面卡顿情况，会在造成大开销的代码场景： 1）多余的setState，引起页面重复渲染 2）文章中提到的直接对DOM元素进行操作 </p>2024-03-06</li><br/>
 </ul>

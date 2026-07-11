@@ -290,13 +290,14 @@ TIME(s)            COMM             PID    FILE
 systemctl stop multipathd
 systemctl stop snapd
 systemctl stop irqbalance </p>2022-01-25</li><br/><li><span>Geek_5aa343</span> 👍（5） 💬（3）<p>老师，您好，有几个问题请教下：
+
 1. &quot;do_sys_openat2() 是系统调用 openat() 在内核中的实现&quot; 怎么去找到一个系统调用在内核中的实现呢？
 2. 使用BPF map获取openat的打开文件名这里，&#47;&#47; 定义数据结构struct data_t { u32 pid; u64 ts; char comm[TASK_COMM_LEN]; char fname[NAME_MAX];}; 这个的格式为啥是这样呢，就是有具体每个探针的map说明文档嘛
-多谢老师</p>2022-01-21</li><br/><li><span>Geek_b85295</span> 👍（4） 💬（5）<p>老师，我的环境是ubuntu20.04，内核5.4.0-92-generic，把环境依赖都正常安装好后，执行python3 hello.py 出现错误 Failed to attach BPF program b&#39;hello_world&#39; to kprobe b&#39;do_sys_openat2&#39;，网上没找到解决方法，可以帮忙看看嘛</p>2022-02-08</li><br/><li><span>写点啥呢</span> 👍（3） 💬（2）<p>有几个问题想请教老师：
-1. perf_buffer_poll方法是非阻塞的么
-2. bpf_probe_read(&amp;data.fname, sizeof(data.fname), (void *)filename); 这里filename指针的内存大小是否也是NAME_MAX，不然读取应该会导致非法访问
-3. hello_world方法的几个形参是什么含义，感觉ctx是bpf固定的，后面dfd, filename和open_how是openat2的参数，请问是否编写bpf函数都是可以在ctx后面加入对应系统调用接口的入参，然后bpf会在执行时候自动进行参数绑定？
-4. perf_submit函数传入的c struct在bcc脚本中看上去可以通过event方法自动转化为python对象？
+   多谢老师</p>2022-01-21</li><br/><li><span>Geek_b85295</span> 👍（4） 💬（5）<p>老师，我的环境是ubuntu20.04，内核5.4.0-92-generic，把环境依赖都正常安装好后，执行python3 hello.py 出现错误 Failed to attach BPF program b&#39;hello_world&#39; to kprobe b&#39;do_sys_openat2&#39;，网上没找到解决方法，可以帮忙看看嘛</p>2022-02-08</li><br/><li><span>写点啥呢</span> 👍（3） 💬（2）<p>有几个问题想请教老师：
+3. perf_buffer_poll方法是非阻塞的么
+4. bpf_probe_read(&amp;data.fname, sizeof(data.fname), (void *)filename); 这里filename指针的内存大小是否也是NAME_MAX，不然读取应该会导致非法访问
+5. hello_world方法的几个形参是什么含义，感觉ctx是bpf固定的，后面dfd, filename和open_how是openat2的参数，请问是否编写bpf函数都是可以在ctx后面加入对应系统调用接口的入参，然后bpf会在执行时候自动进行参数绑定？
+6. perf_submit函数传入的c struct在bcc脚本中看上去可以通过event方法自动转化为python对象？
 
 谢谢老师
 </p>2022-01-28</li><br/><li><span>waterjiao</span> 👍（2） 💬（1）<p>还有几个问题咨询下老师
@@ -308,16 +309,16 @@ systemctl stop irqbalance </p>2022-01-25</li><br/><li><span>Geek_5aa343</span> �
 root@ubuntu-linux-20-04-desktop:~&#47;project&#47;ebpf&#47;study# sudo python3 hello.py
 cannot attach kprobe, probe entry may not exist
 Traceback (most recent call last):
-  File &quot;hello.py&quot;, line 8, in &lt;module&gt;
-    b.attach_kprobe(event=&quot;do_sys_openat2&quot;, fn_name=&quot;hello_world&quot;)
-  File &quot;&#47;usr&#47;lib&#47;python3&#47;dist-packages&#47;bcc&#47;__init__.py&quot;, line 658, in attach_kprobe
-    raise Exception(&quot;Failed to attach BPF program %s to kprobe %s&quot; %
+File &quot;hello.py&quot;, line 8, in &lt;module&gt;
+b.attach_kprobe(event=&quot;do_sys_openat2&quot;, fn_name=&quot;hello_world&quot;)
+File &quot;&#47;usr&#47;lib&#47;python3&#47;dist-packages&#47;bcc&#47;**init**.py&quot;, line 658, in attach_kprobe
+raise Exception(&quot;Failed to attach BPF program %s to kprobe %s&quot; %
 Exception: Failed to attach BPF program b&#39;hello_world&#39; to kprobe b&#39;do_sys_openat2
 
 我的系统内核是：
 Linux ubuntu-linux-20-04-desktop 5.4.0-80-generic #90-Ubuntu SMP Fri Jul 9 17:43:26 UTC 2021 aarch64 aarch64 aarch64 GNU&#47;Linux
 
-重点是这句报错：cannot attach kprobe, probe entry may not exist  是说我的kprobe不存在么
+重点是这句报错：cannot attach kprobe, probe entry may not exist 是说我的kprobe不存在么
 </p>2022-02-11</li><br/><li><span>Y</span> 👍（2） 💬（3）<p>E: 无法定位软件包 libbpf-dev
 提示这个报错怎么办？更新了源好像也不行</p>2022-02-08</li><br/><li><span>一位不愿透露姓名的王先生</span> 👍（2） 💬（1）<p>BPF_PERF_OUTPUT(events);
 这个 events 是在哪定义的？ </p>2022-01-24</li><br/><li><span>草根</span> 👍（2） 💬（1）<p>请问老师，hello_world的入参是要和系统调用的入参设置一致吗？</p>2022-01-21</li><br/><li><span>加油加油</span> 👍（1） 💬（2）<p>老师问下，为什么我的ubuntu:20 里面只有设置 __x64_sys_openat  才有用  按照文章里的就不行呢 ？</p>2022-02-24</li><br/>

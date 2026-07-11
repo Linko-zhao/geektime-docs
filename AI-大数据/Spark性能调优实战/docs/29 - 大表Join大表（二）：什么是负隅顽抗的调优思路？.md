@@ -109,13 +109,13 @@ Join过程中的自动倾斜处理如上图所示，当AQE检测到外表存在�
 //统计订单交易额的代码实现
 val txFile: String = _
 val orderFile: String = _
- 
+
 val transactions: DataFrame = spark.read.parquent(txFile)
 val orders: DataFrame = spark.read.parquent(orderFile)
- 
+
 transactions.createOrReplaceTempView(“transactions”)
 orders.createOrReplaceTempView(“orders”)
- 
+
 val query: String = “
 select sum(tx.price * tx.quantity) as revenue, o.orderId
 from transactions as tx inner join orders as o
@@ -124,7 +124,7 @@ where o.status = ‘COMPLETE’
 and o.date between ‘2020-01-01’ and ‘2020-03-31’
 group by o.orderId
 ”
- 
+
 val outFile: String = _
 spark.sql(query).save.parquet(outFile)
 
@@ -135,14 +135,14 @@ spark.sql(query).save.parquet(outFile)
 ```
 //根据Join Keys是否倾斜、将内外表分别拆分为两部分
 import org.apache.spark.sql.functions.array_contains
- 
+
 //将Join Keys分为两组，存在倾斜的、和分布均匀的
 val skewOrderIds: Array[Int] = _
 val evenOrderIds: Array[Int] = _
- 
+
 val skewTx: DataFrame = transactions.filter(array_contains(lit(skewOrderIds),$"orderId"))
 val evenTx: DataFrame = transactions.filter(array_contains(lit(evenOrderIds),$"orderId"))
- 
+
 val skewOrders: DataFrame = orders.filter(array_contains(lit(skewOrderIds),$"orderId"))
 val evenOrders: DataFrame = orders.filter(array_contains(lit(evenOrderIds),$"orderId"))
 ```
@@ -153,7 +153,7 @@ val evenOrders: DataFrame = orders.filter(array_contains(lit(evenOrderIds),$"ord
 //将分布均匀的数据分别注册为临时表
 evenTx.createOrReplaceTempView(“evenTx”)
 evenOrders.createOrReplaceTempView(“evenOrders”)
- 
+
 val evenQuery: String = “
 select /*+ shuffle_hash(orders) */ sum(tx.price * tx.quantity) as revenue, o.orderId
 from evenTx as tx inner join evenOrders as o
@@ -169,17 +169,17 @@ val evenResults: DataFrame = spark.sql(evenQuery)
 
 ```
 import org.apache.spark.sql.functions.udf
- 
+
 //定义获取随机盐粒的UDF
 val numExecutors: Int = _
 val rand = () => scala.util.Random.nextInt(numExecutors)
 val randUdf = udf(rand)
- 
+
 //第一阶段的加盐操作。注意：保留orderId字段，用于后期第二阶段的去盐化
- 
+
 //外表随机加盐
 val saltedSkewTx = skewTx.withColumn(“joinKey”, concat($“orderId”, lit(“_”), randUdf()))
- 
+
 //内表复制加盐
 var saltedskewOrders = skewOrders.withColumn(“joinKey”, concat($“orderId”, lit(“_”), lit(1)))
 for (i <- 2 to numExecutors) {
@@ -193,7 +193,7 @@ saltedskewOrders = saltedskewOrders union skewOrders.withColumn(“joinKey”, c
 //将加盐后的数据分别注册为临时表
 saltedSkewTx.createOrReplaceTempView(“saltedSkewTx”)
 saltedskewOrders.createOrReplaceTempView(“saltedskewOrders”)
- 
+
 val skewQuery: String = “
 select /*+ shuffle_hash(orders) */ sum(tx.price * tx.quantity) as initialRevenue, o.orderId, o.joinKey
 from saltedSkewTx as tx inner join saltedskewOrders as o
@@ -252,7 +252,7 @@ evenResults union skewResults
 
 第二题：老师，我觉得加盐的操作好像根本没啥用，加盐的场景适合聚合操作，但是吧，一旦有了aggregator，sortShuffule的时候已经在map端提前聚合了，也不会发生倾斜了。比如，本文的例子，解决这个倾斜的问题，我理解是不是可以事先对交易表作group然后求其sum值等，这个阶段因为会在map阶段事先聚合，所以并不会倾斜，然后再将聚合的结果和orders做join</p>2021-05-26</li><br/><li><span>ulysses</span> 👍（3） 💬（2）<p>老师想问下面一段代码，怎么能够筛选去哪些是skew的数据，哪些是even的 数据，对scala语法不太熟悉。
 val skewOrderIds: Array[Int] = _
-val evenOrderIds: Array[Int] = _ 
+val evenOrderIds: Array[Int] = _
 val skewTx: DataFrame = transactions.filter(array_contains(lit(skewOrderIds),$&quot;orderId&quot;))
 val evenTx: DataFrame = transactions.filter(array_contains(lit(evenOrderIds),$&quot;orderId&quot;))</p>2021-08-03</li><br/><li><span>子兮</span> 👍（2） 💬（1）<p>老师，“两阶段 Shuffle”指的是，通过“加盐、Shuffle、关联、聚合”与“去盐化、Shuffle、聚合”这两个阶段的计算过程，第二阶段去盐后进行shuffle，不是仍然会把一个key 的所有值拉到一起吗？这和直接join最后的结果一样的呀？应该是去盐后不再进行shuffle类的操作这种加盐的操作才有意义，如理解有误，还请老师解答，谢谢</p>2021-11-25</li><br/><li><span>西南偏北</span> 👍（1） 💬（5）<p>第一题：一般来讲，我们不会在代码一出现Join的地方就进行Key数量的统计，一般是执行任务的过程中，结合Spark WebUI上查看某个Stage中的Tasks的耗时排行，比如某个Task或某些Task的耗时是其他Task耗时的两倍以上，那我们就知道出现了数据倾斜，然后我们可以根据stage对应的代码位置来排查是哪些key出现了倾斜
 第二题：如果是对数据进行分组排序这种情况，某个Key对应组的数据比较多，如果进行加盐的话，是无法保证整个组内的数据是有序的。加盐之后一组分为N组，每个组是有序的，但是最后去盐合并的时候，需要进行归并排序。</p>2021-05-22</li><br/><li><span>王天雨</span> 👍（1） 💬（2）<p>2、比如聚合操作是取平均数 ，就不适合二次聚合了吧</p>2021-05-21</li><br/><li><span>Unknown element</span> 👍（0） 💬（1）<p>老师您好 这两讲介绍的优化方法好像只适用于用spark原生API开发的情况？如果是hive SQL是不是就只能通过调参来优化了？谢谢老师~</p>2022-01-21</li><br/><li><span>Monster</span> 👍（0） 💬（1）<p>&#47;&#47;内表复制加盐

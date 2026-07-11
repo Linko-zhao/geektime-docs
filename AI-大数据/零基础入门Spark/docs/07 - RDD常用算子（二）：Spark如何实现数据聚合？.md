@@ -229,24 +229,29 @@ serializer是指出数据如何序列化的，序列化就先不说了，不然�
 最后总结下，reduceByKey和aggregateByKey底层实现完全相同，都是combineByKeyWithClassTag，只不过reduceByKey调用
 combineByKeyWithClassTag的入参mergeValue和mergeCombiners是相等的，aggregateByKey是用户指定可以不等的，也就是说
 reduceByKey是一种特殊的aggregateByKey。</p>2021-09-26</li><br/><li><span>Geek_2a0deb</span> 👍（2） 💬（1）<p>reduceByKey 和 aggregateByKey的区别在于reduceByKey在map端和reduce时的聚合函数一致，而aggregateByKey在map端和reduce端聚合函数可以不一致，联系就是reduceByKey可以认为是一种特殊的aggregateByKey（map和reduce是同一个函数）如果用算子来描述:reduceByKey(f)=aggregateByKey(初始值) (f,f)</p>2022-01-11</li><br/><li><span>Botanic</span> 👍（0） 💬（1）<p>```
+
 # 使用 aggregateByKey 来实现 reduceByKey
-def f1(x, y):
-    # 显示定义Map阶段聚合函数f1，求加和
-    return x+y
+
+def f1(x, y): # 显示定义Map阶段聚合函数f1，求加和
+return x+y
 
 import random
+
 # 实验3：aggregateByKey 使用说明
+
 textFile = SparkContext().textFile(&quot;..&#47;wikiOfSpark.txt&quot;)
 wordCount = (
-            textFile.flatMap(lambda line: line.split(&quot; &quot;))
-                .filter(lambda word: word != &quot;&quot;)
-                    .map(lambda word: (word, 1))
-                        .aggregateByKey(0, f1, f1)
-                            .sortBy(lambda x: x[1], False)
-                                .take(5))
+textFile.flatMap(lambda line: line.split(&quot; &quot;))
+.filter(lambda word: word != &quot;&quot;)
+.map(lambda word: (word, 1))
+.aggregateByKey(0, f1, f1)
+.sortBy(lambda x: x[1], False)
+.take(5))
 print(wordCount)
+
 ```</p>2021-12-22</li><br/><li><span>pythonbug</span> 👍（0） 💬（1）<p>我感觉aggregateByKey直接作用在刚刚读取数据的RDD上的情况很少，因为刚刚从数据源读取出来的数据分区大多数时候是没啥业务含义的，所以Map阶段的聚合也没有太大意义。所以猜测，aggregateByKey可能大多数情况是跟在reduceByKey之后，那个时候已经对数据按照业务分区好了。那个时候Map阶段的聚合才有一些意义，不知道猜的对不对</p>2021-11-14</li><br/><li><span>十年</span> 👍（0） 💬（2）<p>请问老师，aggregateByKey的初始值有什么作用？</p>2021-10-07</li><br/><li><span>钱鹏 Allen</span> 👍（0） 💬（1）<p>reduceByKey 和 aggregateByKey的联系：将相同的key值进行聚合。不同点：reduceByKey()采用的是相同的func，在map阶段使用sum操作，reduce阶段采用max操作就不满足。
 aggregateByKey可以看做是更一般的reduceByKey，
 </p>2021-09-28</li><br/><li><span>J</span> 👍（1） 💬（0）<p>讲解aggregateByKey计算过程时，图例错写成了“reduceByKey计算过程”</p>2022-08-07</li><br/><li><span>jasonde</span> 👍（0） 💬（0）<p>能否帮忙举个例子，什么情况可以用reduce by key， 什么情况只能用aggregate by key ，用python 代码，劳烦了</p>2024-06-04</li><br/><li><span>睿晞</span> 👍（0） 💬（0）<p>aggregateByKey算子中第一个默认参数的使用方法是什么啊？是直接参与到第二个聚合函数（reduce端）里面运算吗？比如，默认参数是0，然后如果第二个聚合函数是max求最大值，初始默认参数是参与比较的，用0和每个字段中的值比较，是这个意思吗？</p>2022-04-27</li><br/><li><span>Spoon</span> 👍（0） 💬（1）<p>Java实现代码
 https:&#47;&#47;github.com&#47;Spoon94&#47;spark-practice&#47;blob&#47;master&#47;src&#47;main&#47;java&#47;com&#47;spoon&#47;spark&#47;core&#47;AggOpJob.java</p>2022-03-27</li><br/>
 </ul>
+```

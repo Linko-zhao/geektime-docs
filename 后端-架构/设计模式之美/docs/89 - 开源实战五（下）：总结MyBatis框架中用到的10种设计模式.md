@@ -84,7 +84,7 @@ public class SqlSessionFactoryBuilder {
       }
     }
   }
-    
+
   public SqlSessionFactory build(Configuration config) {
     return new DefaultSqlSessionFactory(config);
   }
@@ -99,13 +99,13 @@ public class SqlSessionFactoryBuilder {
   public SqlSessionFactory build(Reader reader, String environment);
   public SqlSessionFactory build(Reader reader, Properties properties);
   public SqlSessionFactory build(Reader reader, String environment, Properties properties);
-  
+
   public SqlSessionFactory build(InputStream inputStream);
   public SqlSessionFactory build(InputStream inputStream, String environment);
   public SqlSessionFactory build(InputStream inputStream, Properties properties);
   public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties);
 
-  // 上面所有的方法最终都调用这个方法    
+  // 上面所有的方法最终都调用这个方法
   public SqlSessionFactory build(Configuration config);
 }
 ```
@@ -215,7 +215,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
         // Failover to true, as most poor drivers
         // or databases won't support transactions
         autoCommit = true;
-      }      
+      }
       final Environment environment = configuration.getEnvironment();
       final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
       final Transaction tx = transactionFactory.newTransaction(connection);
@@ -246,7 +246,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
 ```
 public abstract class BaseExecutor implements Executor {
   //...省略其他无关代码...
-  
+
   @Override
   public int update(MappedStatement ms, Object parameter) throws SQLException {
     ErrorContext.instance().resource(ms.getResource()).activity("executing an update").object(ms.getId());
@@ -667,26 +667,26 @@ public class Log4jImpl implements Log {
 
 修改前：
 public class MyBatisDemo {
-  public static void main(String[] args) throws IOException {
-    Reader reader = Resources.getResourceAsReader(&quot;mybatis.xml&quot;);
-    SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader);
-    SqlSession session = sessionFactory.openSession();
-    UserMapper userMapper = session.getMapper(UserMapper.class);
-    UserDo userDo = userMapper.selectById(8);
-    &#47;&#47;...
-  }
+public static void main(String[] args) throws IOException {
+Reader reader = Resources.getResourceAsReader(&quot;mybatis.xml&quot;);
+SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader);
+SqlSession session = sessionFactory.openSession();
+UserMapper userMapper = session.getMapper(UserMapper.class);
+UserDo userDo = userMapper.selectById(8);
+&#47;&#47;...
+}
 
 }
 
 修改后：
 public class MyBatisDemo {
-  public static void main(String[] args) throws IOException {
-    ApplicationContext applicationContext = new ApplicationContext(&quot;test-config.xml&quot;);
-    SqlSession session = applicationContext.openSession();
-    UserMapper userMapper = session.getMapper(UserMapper.class);
-    UserDo userDo = userMapper.selectById(8);
-    &#47;&#47;...
-  }
+public static void main(String[] args) throws IOException {
+ApplicationContext applicationContext = new ApplicationContext(&quot;test-config.xml&quot;);
+SqlSession session = applicationContext.openSession();
+UserMapper userMapper = session.getMapper(UserMapper.class);
+UserDo userDo = userMapper.selectById(8);
+&#47;&#47;...
+}
 
 }
 
@@ -711,6 +711,7 @@ public class ApplicationContext {
         SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(reader);
         return sessionFactory.openSession();
     }
+
 }
 </p>2020-05-27</li><br/><li><span>jiangjing</span> 👍（4） 💬（0）<p>软件开发是个迭代的过程，一开始是足够好用，设计没有求全求美；后面则不断优化和增强功能。 然后就是大家都熟悉怎么用了，有点小瑕疵但无关大局的代码就这么保留着吧，提供确定性</p>2020-05-28</li><br/><li><span>辣么大</span> 👍（3） 💬（0）<p>这两个源码倒是很容易读。在github上看了他们10年前的这两个类的代码，重载了一些函数，但结构是一样的。我想应该是命名的习惯吧。当时也没考虑那么多。</p>2020-05-29</li><br/><li><span>Mq</span> 👍（2） 💬（0）<p>理解设计模式适用范围跟使用方式的也能理解这个代码，不理解的，也能通过名称理解代码的意图，思想到位就行了，也不一定每个人都理解得那么多规则</p>2020-05-28</li><br/><li><span>Yeyw</span> 👍（1） 💬（0）<p>感觉是历史代码，在很多项目都有应用，不好做变更</p>2021-04-22</li><br/><li><span>笨鸟</span> 👍（1） 💬（0）<p>思想正确,过程可以稍加不同</p>2021-02-04</li><br/><li><span>Geek_7e0e83</span> 👍（0） 💬（0）<p>命名不统一，这个看作者的想法了。因人而异 无关对错。重要的是 符合 设计原则和设计思想，这样就能写出高质量代码。而设计模式，只是实现的一个方式。可以不用太抠实现是否标准</p>2022-11-19</li><br/><li><span>我是曾经那个少年</span> 👍（0） 💬（0）<p>我们写在所学的设计模式，只不过是上个世纪90年代由Erich Gamma、Richard Helm、Raplh Johnson和Jonhn Vlissides四个人总结提炼出来的。
 

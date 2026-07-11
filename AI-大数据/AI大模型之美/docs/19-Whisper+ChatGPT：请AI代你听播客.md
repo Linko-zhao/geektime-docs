@@ -36,7 +36,7 @@ print(transcript['text'])
 
 ```python
 audio_file= open("./data/podcast_clip.mp3", "rb")
-transcript = openai.Audio.transcribe("whisper-1", audio_file, 
+transcript = openai.Audio.transcribe("whisper-1", audio_file,
                                      prompt="这是一段中文播客内容。")
 print(transcript['text'])
 ```
@@ -53,7 +53,7 @@ print(transcript['text'])
 
 ```python
 audio_file= open("./data/podcast_clip.mp3", "rb")
-transcript = openai.Audio.transcribe("whisper-1", audio_file, 
+transcript = openai.Audio.transcribe("whisper-1", audio_file,
                                      prompt="这是一段Onboard播客的内容。")
 print(transcript['text'])
 ```
@@ -68,7 +68,7 @@ print(transcript['text'])
 
 ```python
 audio_file= open("./data/podcast_clip.mp3", "rb")
-transcript = openai.Audio.transcribe("whisper-1", audio_file, 
+transcript = openai.Audio.transcribe("whisper-1", audio_file,
                                      prompt="这是一段Onboard播客，里面会聊到ChatGPT以及PALM这个大语言模型。这个模型也叫做Pathways Language Model。")
 print(transcript['text'])
 ```
@@ -128,9 +128,9 @@ print(transcript)
 
 ```python
 audio_file= open("./data/podcast_clip.mp3", "rb")
-translated_prompt="""This is a podcast discussing ChatGPT and PaLM model. 
+translated_prompt="""This is a podcast discussing ChatGPT and PaLM model.
 The full name of PaLM is Pathways Language Model."""
-transcript = openai.Audio.translate("whisper-1", audio_file, 
+transcript = openai.Audio.translate("whisper-1", audio_file,
                                     prompt=translated_prompt)
 print(transcript['text'])
 ```
@@ -194,7 +194,7 @@ prompt = "这是一段Onboard播客，里面会聊到ChatGPT以及PALM这个大�
 for i in range(index):
     clip = f"./data/podcast_clip_{i}.mp3"
     audio_file= open(clip, "rb")
-    transcript = openai.Audio.transcribe("whisper-1", audio_file, 
+    transcript = openai.Audio.transcribe("whisper-1", audio_file,
                                      prompt=prompt)
     # mkdir ./data/transcripts if not exists
     if not os.path.exists("./data/transcripts"):
@@ -229,7 +229,7 @@ import whisper
 
 model = whisper.load_model("large")
 index = 11 # number of fi
-  
+
 def transcript(clip, prompt, output):
     result = model.transcribe(clip, initial_prompt=prompt)
     with open(output, "w") as f:
@@ -313,22 +313,22 @@ OpenAI的Whisper模型，使用起来非常简单方便。无论是通过API还�
 下面是一种思路:
 
 1.  从计划切割的位置上取出一小片。比如音频文件长约2小时，初步计划分成四个文件，每份约长30分钟，将30分到30分10秒的音频切出来。实现方法
-extract = audio_long[StartTime:EndTime]
-extract.export(&quot;cutat30mins.mp3&quot;, format=&quot;mp3&quot;)
+    extract = audio_long[StartTime:EndTime]
+    extract.export(&quot;cutat30mins.mp3&quot;, format=&quot;mp3&quot;)
 
-2. 找出这个10秒切片中的断句位置，实现方法
-from pydub.silence import detect_silence
-piece = AudioSegment.from_mp3(&quot;cutat30mins.mp3&quot;)
-silent_ranges = detect_silence(piece, min_silence_len=500, silence_thresh=-40)
-参数代表静音时长和分贝
+2.  找出这个10秒切片中的断句位置，实现方法
+    from pydub.silence import detect_silence
+    piece = AudioSegment.from_mp3(&quot;cutat30mins.mp3&quot;)
+    silent_ranges = detect_silence(piece, min_silence_len=500, silence_thresh=-40)
+    参数代表静音时长和分贝
 
-3. 选上面断句位置中的第一个的起点作为第一段半小时音频文件的结尾。这样就得到 1. 中的EndTime 准确值，而不是在一句话的中间。
+3.  选上面断句位置中的第一个的起点作为第一段半小时音频文件的结尾。这样就得到 1. 中的EndTime 准确值，而不是在一句话的中间。
 
 测试: 选 podcast_clip.mp3 作为测试文件，时长3分钟。初选2分钟处分割。
 
 取 2 分钟到 2 分钟10秒 的一个小片段，得出静音数列 [[793, 1803], [4991, 5813]]
 
-file =  = AudioSegment.from_mp3(&quot;podcast_clip.mp3&quot;)
+file = = AudioSegment.from_mp3(&quot;podcast_clip.mp3&quot;)
 EndTime = 2*60*1000 + 793 = 120793
 part_1 = file[:EndTime]
 StartTime = 2*60*1000 + 1803 = 121803
@@ -365,12 +365,12 @@ llm = OpenAI(temperature=0)
 prompt_template = &quot;&quot;&quot;Answer in Chinese. Summarize this conversation {text}. Do NOT write sentences that has no sense.&quot;&quot;&quot;
 prompt_template2 = &quot;&quot;&quot;Answer in Chinese. Choose the more relevant phrases of the following text and summarize them {text}.&quot;&quot;&quot;
 PROMPT = PromptTemplate(
-    template=prompt_template,
-    input_variables=[&quot;text&quot;]       
+template=prompt_template,
+input_variables=[&quot;text&quot;]  
 )
 PROMPT2 = PromptTemplate(
-    template=prompt_template2,
-    input_variables=[&quot;text&quot;]       
+template=prompt_template2,
+input_variables=[&quot;text&quot;]  
 )
 overall_bi = load_summarize_chain(llm, chain_type=&quot;map_reduce&quot;, map_prompt=PROMPT, combine_prompt=PROMPT2, return_intermediate_steps=True, verbose=True)
 
@@ -385,31 +385,32 @@ summarize_bi = overall_bi( {&quot;input_documents&quot;: texts_bi},return_only_o
 这次讨论的主要内容是Whisper这个模型的使用，它在中文语谅上的表现不是很好，但是在带有英文词汇的视频中，它的识别能力还是很强的， ...
 
 ---
+
 上面提供了一种提取视频核心思想的方法，还会有更好的。</p>2023-04-23</li><br/><li><span>詹杰</span> 👍（1） 💬（1）<p>老师，whisper开源模型本地部署支持批量推理不？怎么批量推理呢？目前就是需要完成很多很多的语言识别任务，效率跟不上，想请教老师怎么解决呢</p>2023-04-25</li><br/><li><span>Geek_00eb03</span> 👍（1） 💬（2）<p>老师，运行代码报错， 能帮忙看看什么原因吗？
---&gt; 157     raise ValueError(
-    158         &quot;A single term is larger than the allowed chunk size.\n&quot;
-    159         f&quot;Term size: {num_cur_tokens}\n&quot;
-    160         f&quot;Chunk size: {self._chunk_size}&quot;
-    161         f&quot;Effective chunk size: {effective_chunk_size}&quot;
-    162     )
-    163 # If adding token to current_doc would exceed the chunk size:
-    164 # 1. First verify with tokenizer that current_doc
-    165 # 1. Update the docs list
-    166 if cur_total + num_cur_tokens &gt; effective_chunk_size:
-    167     # NOTE: since we use a proxy for counting tokens, we want to
-    168     # run tokenizer across all of current_doc first. If
-    169     # the chunk is too big, then we will reduce text in pieces
+--&gt; 157 raise ValueError(
+158 &quot;A single term is larger than the allowed chunk size.\n&quot;
+159 f&quot;Term size: {num_cur_tokens}\n&quot;
+160 f&quot;Chunk size: {self._chunk_size}&quot;
+161 f&quot;Effective chunk size: {effective_chunk_size}&quot;
+162 )
+163 # If adding token to current_doc would exceed the chunk size:
+164 # 1. First verify with tokenizer that current_doc
+165 # 1. Update the docs list
+166 if cur_total + num_cur_tokens &gt; effective_chunk_size:
+167 # NOTE: since we use a proxy for counting tokens, we want to
+168 # run tokenizer across all of current_doc first. If
+169 # the chunk is too big, then we will reduce text in pieces
 
 ValueError: A single term is larger than the allowed chunk size.
 Term size: 414
 Chunk size: 357Effective chunk size: 357</p>2023-04-20</li><br/><li><span>胡萝卜</span> 👍（1） 💬（1）<p>能做成流式的音转文吗？</p>2023-04-19</li><br/><li><span>子辰</span> 👍（0） 💬（2）<p>默认就是跑GPU的吗？我用 mac 看活动监视器好像是跑在 CPU 上的。。。</p>2023-04-27</li><br/><li><span>詹杰</span> 👍（0） 💬（1）<p>徐老师，我想问一个提高开源whisper模型计算效率的问题，我用多线程去调度解析会报错，请问如何提高效率呢，我只能再买显卡，多部署几台服务嘛？</p>2023-04-25</li><br/><li><span>Geek_00eb03</span> 👍（0） 💬（1）<p>普通服务器的CPU 能不能跑起来whisper 开源模型？</p>2023-04-20</li><br/><li><span>安菲尔德</span> 👍（0） 💬（1）<p>老师，请教一个非技术问题，peo.com这个网站是收费的么，如果不收费的话，他们里面chatgpt功能调用的是openai的接口实现的么，如果是的话，那岂不是很费钱，他们怎么赚钱呢？</p>2023-04-20</li><br/><li><span>张弛</span> 👍（0） 💬（2）<p>自己尝试转录了一个播客，成功用Colab进行了语音转文字，一共生成了4个12kb的文本文件，建索引也没问题，但是到最后调模型总结就会出错。用GPT和google查了半天，也尝试自己对比转录的文本和您之前的案例中使用的朝花夕拾的文本，确实没看出差别，最终也没能解决，只好来求助老师了，谢谢！
 
 &#47;usr&#47;local&#47;lib&#47;python3.9&#47;dist-packages&#47;llama_index&#47;langchain_helpers&#47;text_splitter.py in split_text_with_overlaps(self, text, extra_info_str)
-    155             num_cur_tokens = max(len(self.tokenizer(cur_token)), 1)
-    156             if num_cur_tokens &gt; effective_chunk_size:
---&gt; 157                 raise ValueError(
-    158                     &quot;A single term is larger than the allowed chunk size.\n&quot;
-    159                     f&quot;Term size: {num_cur_tokens}\n&quot;
+155 num_cur_tokens = max(len(self.tokenizer(cur_token)), 1)
+156 if num_cur_tokens &gt; effective_chunk_size:
+--&gt; 157 raise ValueError(
+158 &quot;A single term is larger than the allowed chunk size.\n&quot;
+159 f&quot;Term size: {num_cur_tokens}\n&quot;
 
 ValueError: A single term is larger than the allowed chunk size.
 Term size: 683

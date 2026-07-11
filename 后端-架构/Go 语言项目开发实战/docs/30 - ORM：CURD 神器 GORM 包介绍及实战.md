@@ -846,7 +846,7 @@ commit
 ```
 
 用 gorm 的 transaction 就要用他的 tx 来操作数据，那封装好的 dao 是不是就没法用了？</p>2021-12-14</li><br/><li><span>liaomars</span> 👍（1） 💬（1）<p>老师：
-sqlDB.SetMaxIdleConns(10)              &#47;&#47; 设置MySQL的最大空闲连接数（推荐100）
+sqlDB.SetMaxIdleConns(10) &#47;&#47; 设置MySQL的最大空闲连接数（推荐100）
 这个最大空闲连接数是10还是100？代码写的是10，注释写的是100</p>2021-12-03</li><br/><li><span>刘世杰</span> 👍（1） 💬（1）<p>老师您好，
 我在使用 github.com&#47;go-xorm&#47;xorm 这个包连接 mycat 的时候
 当我执行带 ? 号的 sql 语句时出现 {&quot;Number&quot;:1047,&quot;Message&quot;:&quot;Prepare unsupported!&quot;} 报错
@@ -860,10 +860,10 @@ var list []model.User
 res1 := engine.SQL(&quot;select * from tr_user where id = ?&quot;, uid).Find(&amp;list)
 res := engine.SQL(&quot;select * from tr_user where id = 1&quot;).Find(&amp;list)
 data := map[string]interface{}{
-	&quot;userid&quot;: con.Uid,
-	&quot;res&quot;: res,
-	&quot;res1&quot;: res1,
-	&quot;list&quot;: list,
+&quot;userid&quot;: con.Uid,
+&quot;res&quot;: res,
+&quot;res1&quot;: res1,
+&quot;list&quot;: list,
 }
 以上 res1 打印的信息是 &quot;res1&quot;:{&quot;Number&quot;:1047,&quot;Message&quot;:&quot;Prepare unsupported!&quot;}
 res 运行的 sql 能够正常运行

@@ -365,15 +365,15 @@ Result 这个枚举有两个类型T，E，当查询出错时，通过 E 给出�
 我很好奇这个泛型如何实现的？CommandResponse这个类型上下文没用到，有啥用呢？
 
 tokio::spawn(async move {
-            let mut stream =
-                AsyncProstStream::&lt;_, CommandRequest, CommandResponse, _&gt;::from(stream).for_async();
-            while let Some(Ok(cmd)) = stream.next().await {
-                info!(&quot;Got a new command: {:?}&quot;, cmd);
-                let res = svc.execute(cmd);
-                stream.send(res).await.unwrap();
-            }
-            info!(&quot;Client {:?} disconnected&quot;, addr);
-        });</p>2023-04-03</li><br/><li><span>周杨</span> 👍（0） 💬（0）<p>&gt; 想一想，对于 Storage trait，为什么返回值都用了 Result？在实现 MemTable 的时候，似乎所有返回都是 Ok(T) 啊？
+let mut stream =
+AsyncProstStream::&lt;_, CommandRequest, CommandResponse, _&gt;::from(stream).for_async();
+while let Some(Ok(cmd)) = stream.next().await {
+info!(&quot;Got a new command: {:?}&quot;, cmd);
+let res = svc.execute(cmd);
+stream.send(res).await.unwrap();
+}
+info!(&quot;Client {:?} disconnected&quot;, addr);
+});</p>2023-04-03</li><br/><li><span>周杨</span> 👍（0） 💬（0）<p>&gt; 想一想，对于 Storage trait，为什么返回值都用了 Result？在实现 MemTable 的时候，似乎所有返回都是 Ok(T) 啊？
 
 这个问题不明所以，因为我还不知道 MemTable 是什么东西。是之前的内容我忘记了吗？</p>2022-11-18</li><br/><li><span>小强</span> 👍（0） 💬（0）<p>为什么使用oneof，不使用union？</p>2022-03-10</li><br/>
 </ul>

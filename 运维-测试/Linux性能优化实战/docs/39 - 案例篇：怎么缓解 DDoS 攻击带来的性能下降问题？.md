@@ -310,33 +310,38 @@ DDoS攻击可以理解为撞车，提升汽车本身的安全系数会有用。
 </p>2019-02-20</li><br/><li><span>dancer</span> 👍（8） 💬（1）<p>重新开追，前两天着重看了cpu调优，正好线上压测发现了cpu.user飙高的问题，通过perf和pprof查明了是一个复杂json结构解析导致的，学以致用下来印象更深了！这两天开始看网络，后面再看io和内存相关，感谢！</p>2019-03-06</li><br/><li><span>forever</span> 👍（7） 💬（1）<p>我之前在生产环境中遇到过多次ddos攻击，最好的被打到55G.最初的时候遇到攻击束手无策，还被人勒索过，说给钱就不攻击！哈哈😄因为没经验，后来就打游击战，那时候攻击的是我们负载均衡的ip，当攻击发生时我就换ip这样能暂时缓解，当然提前要把ip给准备好，比如白名单添加等！后来业务壮大，换ip的时间成本比网站不能访问的成本要高，最后我们用了阿里云的高防，就这样攻击就告一段落了！虽然高防很贵，但是比起被攻击的损失，还是值得的！</p>2019-02-25</li><br/><li><span>Standly</span> 👍（6） 💬（1）<p>请问老师今天讲的三个tcp内核参数调优能否作为通用的提高服务器抗并发能力的优化手段？</p>2019-04-09</li><br/><li><span>青石</span> 👍（6） 💬（1）<p>REJECT攻击IP所有报文，接口响应没什么变化，还是127秒，DROP报文后响应时间才恢复正常，查了REJECT和DROP的区别，REJECT会返回个ICMP包给源IP，有点不太理解为什么一个ICMP包导致这么大的差异。
 
 # hping3命令, u10效果不明显，所以改成了u1测试
-$ hping3 -S -p 80  172.30.81.136 -I eno1 -i u1
+
+$ hping3 -S -p 80 172.30.81.136 -I eno1 -i u1
 
 # 调整内核参数测试结果，接口响应时间为127秒
-$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47; 
+
+$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47;
 Http code: 000
 Total time:127.109s
 
 # 调整内核参数、iptables限制syn并发的测试结果，接口响应时间为127秒
-$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47; 
+
+$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47;
 Http code: 000
 Total time:127.106s
 
 # 调整内核参数、iptables限制syn并发、单IP连接数的测试结果，接口响应时间为127秒
-$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47; 
+
+$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47;
 Http code: 000
 Total time:127.097s
 
 # 调整内核参数、iptables限制syn并发、单IP连接数、DROP攻击IP所有报文的测试结果，接口响应时间为127秒
-$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47; 
+
+$ curl -s -w &#39;Http code: %{http_code}\nTotal time:%{time_total}s\n&#39; -o &#47;dev&#47;null http:&#47;&#47;172.30.81.136&#47;
 Http code: 200
 Total time:0.001s</p>2019-03-17</li><br/><li><span>ninuxer</span> 👍（4） 💬（1）<p>打卡day42
-真正的ddos要靠运营商的流量清洗之类的了</p>2019-02-25</li><br/><li><span>且听风吟</span> 👍（3） 💬（1）<p>net.ipv4.tcp_max_tw_buckets 
-net.ipv4.tcp_tw_reuse 
+真正的ddos要靠运营商的流量清洗之类的了</p>2019-02-25</li><br/><li><span>且听风吟</span> 👍（3） 💬（1）<p>net.ipv4.tcp_max_tw_buckets
+net.ipv4.tcp_tw_reuse
 net.ipv4.tcp_tw_recycle
-net.ipv4.tcp_keepalive_time 
+net.ipv4.tcp_keepalive_time
 net.ipv4.tcp_timestamps
-期待结合生产环境对这几个内核参数的讲解。目前生产环境下php服务器time_wait特别多，网络包的流程：  NGINX代理&lt;——&gt;PHP服务器——&gt;redis&#47;mysql.. 
+期待结合生产环境对这几个内核参数的讲解。目前生产环境下php服务器time_wait特别多，网络包的流程： NGINX代理&lt;——&gt;PHP服务器——&gt;redis&#47;mysql..
 高峰时期php服务器一共50k+的连接。49k+的time_wait.， 主要来源是php作为客户端的角色时连接redis、mysql、给代理NGINX回包、php服务器内部调用。希望老师能给解决问题的思路。
 </p>2019-02-20</li><br/><li><span>zshanjun</span> 👍（2） 💬（2）<p>我这里dos攻击没有什么效果，我查看了一下被攻击主机的tcp连接状态发现根本就没有多少SYN_REC的状态。
 然后通过抓包发现，是攻击主机主动发了【R】，导致被攻击主机的tcp的SYN_REC没有堆积起来：

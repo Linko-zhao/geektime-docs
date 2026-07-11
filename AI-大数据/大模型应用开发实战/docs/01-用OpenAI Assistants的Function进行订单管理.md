@@ -430,12 +430,12 @@ print(assistant)
 
 ```plain
 
-Assistant(id='asst_123abc', created_at=1711126020, description=None, file_ids=[], 
-instructions='您是一个订单助手。请使用提供的函数来计算订单总价并回答问题。', metadata={}, model='gpt-4-1106-preview', 
-name=None, object='assistant', tools=[ToolFunction(function=FunctionDefinition(name='calculate_order_total', 
-description='根据多个商品类型和数量计算订单总价', parameters={'type': 'object', 'properties': {'items': {'type': 'array', 
-'items': {'type': 'object', 'properties': {'item_type': {'type': 'string', 'description': '商品类型,例如:书籍,文具,电子产品'}, 
-'quantity': {'type': 'integer', 'description': '商品数量'}}, 'required': ['item_type', 'quantity']}}}, 
+Assistant(id='asst_123abc', created_at=1711126020, description=None, file_ids=[],
+instructions='您是一个订单助手。请使用提供的函数来计算订单总价并回答问题。', metadata={}, model='gpt-4-1106-preview',
+name=None, object='assistant', tools=[ToolFunction(function=FunctionDefinition(name='calculate_order_total',
+description='根据多个商品类型和数量计算订单总价', parameters={'type': 'object', 'properties': {'items': {'type': 'array',
+'items': {'type': 'object', 'properties': {'item_type': {'type': 'string', 'description': '商品类型,例如:书籍,文具,电子产品'},
+'quantity': {'type': 'integer', 'description': '商品数量'}}, 'required': ['item_type', 'quantity']}}},
 'required': ['items']}), type='function')])
 ```
 
@@ -489,11 +489,12 @@ def calculate_shipping_cost(order_weight, shipping_rate):
 
 通过这两个新的函数，可以更全面地处理网上商店的订单相关功能。在具体对话中，根据用户的需求，我会自动选择调用合适的函数来满足用户的要求。</p>2024-05-21</li><br/><li><span>在路上</span> 👍（0） 💬（1）<p>佳哥好，让大模型从一组函数中选择一个，并精确地指定每个参数，是否有适用的边界？什么时候该选择大模型模糊调用，什么时候该选择传统编程实现精确调用？如果大模型调用函数失败，除了给定一个默认函数，有什么方法能调优调用函数的手段吗，让不成功变得成功。</p>2024-06-06</li><br/><li><span>良记</span> 👍（0） 💬（1）<p>Assistant 是怎么知道要调用服务的地址的？一开始的function就定义了函数的元数据，那么实现这个function的服务位置又应该在哪里配置？</p>2024-06-01</li><br/><li><span>Geek_zbvt62</span> 👍（0） 💬（3）<p>1. 请问完整的代码在哪里？
 我在执行时，有一定几率出现异常：
-    function_name = run.required_action.submit_tool_outputs.tool_calls[0].function.name
-    AttributeError: &#39;NoneType&#39; object has no attribute &#39;submit_tool_outputs&#39;
+function_name = run.required_action.submit_tool_outputs.tool_calls[0].function.name
+AttributeError: &#39;NoneType&#39; object has no attribute &#39;submit_tool_outputs&#39;
 通过 print(run.status) 打印状态，发现是complete而不是required_action...
 这和api的limit有关系么(我没有调用很频繁)？亦或者和网络有关？在什么情况下会直接得到一个complete的状态？
 
 2. 想找python sdk的详细文档请问哪里有？官网上大篇幅的都是restful api的文档</p>2024-05-29</li><br/><li><span>熊出没</span> 👍（0） 💬（1）<p>创建Assistants时模型选择只有gpt-3.5-turbo-16k、gpt-3.5-turbo-0125、gpt-3.5-turbo、CHAT这几个选择 和老师的不一样 为什么
+
 </p>2024-05-28</li><br/><li><span>yision97</span> 👍（0） 💬（2）<p>各位使用的什么支付方案啊，我的卡被封了</p>2024-05-22</li><br/><li><span>界元</span> 👍（0） 💬（4）<p>学习完了，对于order_total = globals()[function_name](**arguments_dict)的function_name怎么来的不太理解，为什么不是calculate_order_total？</p>2024-05-22</li><br/><li><span>Geek_7593a0</span> 👍（0） 💬（8）<p>问，这样的场景用ai对比传统方案的优势在哪里</p>2024-05-20</li><br/><li><span>qinsi</span> 👍（0） 💬（3）<p>感觉提示不写清楚的话，chatgpt在选择是否调用tools、以及调用哪个tool上还有点随缘。所以才会有强制使用某个tool或function的选项来兜底</p>2024-05-20</li><br/><li><span>Family mission</span> 👍（0） 💬（0）<p>如何进入交流群啊，分享下链接或二维码</p>2025-01-02</li><br/><li><span>Sandy</span> 👍（0） 💬（0）<p>在run Cart_Price_Finally.py 脚本中 出现items的中文名称乱码 这样结果也就不正确。怎么解决？</p>2024-07-16</li><br/>
 </ul>

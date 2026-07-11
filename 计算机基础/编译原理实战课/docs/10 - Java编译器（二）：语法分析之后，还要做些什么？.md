@@ -29,7 +29,7 @@ comp应该是Compile的缩写。这里面有一个com.sun.tools.javac.comp.Compi
 ```
 public enum CompileState {
     INIT(0),          //初始化
-    PARSE(1),         //词法和语法分析 
+    PARSE(1),         //词法和语法分析
     ENTER(2),         //建立符号表
     PROCESS(3),       //处理注解
     ATTR(4),          //属性计算
@@ -48,7 +48,7 @@ public enum CompileState {
 ```
 processAnnotations(                             //3：处理注解
   enterTrees(stopIfError(CompileState.PARSE,    //2：建立符号表
-    initModules(stopIfError(CompileState.PARSE, 
+    initModules(stopIfError(CompileState.PARSE,
       parseFiles(sourceFileObjects))            //1：词法和语法分析
     ))
   ),classnames);
@@ -56,9 +56,9 @@ processAnnotations(                             //3：处理注解
 ...
 case SIMPLE:
   generate(                                       //10：生成字节码
-    desugar(                                      //6~9：去除语法糖 
+    desugar(                                      //6~9：去除语法糖
       flow(                                       //5：数据流分析
-        attribute(todo))));                       //4：属性计算  
+        attribute(todo))));                       //4：属性计算
 ```
 
 其中，PARSE阶段的成果就是生成一个AST，后续的语义分析阶段会基于它做进一步的处理：
@@ -121,7 +121,7 @@ public class MyClass {
 ```
 ...
 //创建Symbol
-VarSymbol v = new VarSymbol(0, tree.name, vartype, enclScope.owner); 
+VarSymbol v = new VarSymbol(0, tree.name, vartype, enclScope.owner);
 ...
 tree.sym = v;       //关联到AST节点
 ...
@@ -192,7 +192,7 @@ enclScope.enter(v); //添加到Scope中
 
 ```
 public class MyClass1{
-   MyClass2 a;  
+   MyClass2 a;
 }
 class MyClass2{
 }
@@ -255,7 +255,7 @@ public class Foo {
     //HelloFoo类是处理完注解后才生成的。
     static HelloFoo helloFoo = new HelloFoo();
     public static void main(String args[]){
-        helloFoo.sayHello(); 
+        helloFoo.sayHello();
     }
 }
 ```
@@ -263,7 +263,7 @@ public class Foo {
 你可以在命令行编译这三个程序。其中编译Foo的时候，要用-processor选项指定所采用的注解处理器。
 
 ```
-javac HelloWorld.java    
+javac HelloWorld.java
 javac HelloWorldProcessor.java
 javac -processor HelloWorldProcessor Foo.java
 ```
@@ -303,7 +303,7 @@ public class ScopeTest{
     public int foo(int a){
         if(a>0){
           //一些代码
-        } 
+        }
         else{
           //另一些代码
         }
@@ -340,7 +340,7 @@ public class MyClass5{
 public class MyClass3{
     public MyClass3(){
         super();
-    }  
+    }
 }
 ```
 
@@ -369,7 +369,7 @@ public class MyClass4 extends MyClass3{
     public MyClass4(int a){
         super(a);   //这句可以省略，编译器可以自动生成
         ...
-    }  
+    }
 }
 ```
 

@@ -66,13 +66,13 @@ sort\_buffer\_size，就是MySQL为排序开辟的内存（sort\_buffer）的大
 
 ```
 /* 打开optimizer_trace，只对本线程有效 */
-SET optimizer_trace='enabled=on'; 
+SET optimizer_trace='enabled=on';
 
 /* @a保存Innodb_rows_read的初始值 */
 select VARIABLE_VALUE into @a from  performance_schema.session_status where variable_name = 'Innodb_rows_read';
 
 /* 执行语句 */
-select city, name,age from t where city='杭州' order by name limit 1000; 
+select city, name,age from t where city='杭州' order by name limit 1000;
 
 /* 查看 OPTIMIZER_TRACE 输出 */
 SELECT * FROM `information_schema`.`OPTIMIZER_TRACE`\G
@@ -340,6 +340,7 @@ session A的第二个select 语句是一致性读（快照读)，它是不能看
 > @郭江伟 同学提到了两个点，都非常好，有去实际验证。结论是这样的：  
 > 第一，hexdump看出来没改应该是WAL机制生效了，要过一会儿，或者把库shutdown看看。  
 > 第二，binlog没写是MySQL Server层知道行的值没变，所以故意不写的，这个是在row格式下的策略。你可以把binlog\_format 改成statement再验证下。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>XD</span> 👍（159） 💬（7）<p>老师，基于早上知道的sort_buffer是在server层，我重新理解了下rowid排序的过程，
 1，执行器查看表定义，发现name、city、age字段的长度之和超过max_length_for_sort_data，所以初始化sort_buffer的时候只放入id和name字段。
@@ -366,8 +367,8 @@ session A的第二个select 语句是一致性读（快照读)，它是不能看
 如果是group by a,a上不能使用索引的情况,是走rowid排序。
 如果是group by limit,不能使用索引的情况,是走堆排序
 如果是只有group by a,a上有索引的情况,又根据选取值不同,索引的扫描方式又有不同
-select * from t group by a  --走的是索引全扫描,至于这里为什么选择走索引全扫描,还需要老师解惑下
-select a from t group by a  --走的是索引松散扫描,也就说只需要扫描每组的第一行数据即可,不用扫描每一行的值
+select * from t group by a --走的是索引全扫描,至于这里为什么选择走索引全扫描,还需要老师解惑下
+select a from t group by a --走的是索引松散扫描,也就说只需要扫描每组的第一行数据即可,不用扫描每一行的值
 
 问题三:
 bigint和int加数字都不影响能存储的值。
@@ -385,51 +386,47 @@ mysql&gt; select * from t where city in (&#39;杭州&#39;,&quot; 苏州 &quot;) 
 2）如果不想mysql排序
 方案a
 可以执行两条语句
-select * from t where city = &#39;杭州&#39;  limit 100;
-select * from t where city = &#39;苏州&#39;  limit 100;
+select * from t where city = &#39;杭州&#39; limit 100;
+select * from t where city = &#39;苏州&#39; limit 100;
 然后把200条记录在java中排序。
 方案b
 分别取前100，然后在数据端对200条数据进行排序。可以sort buffer就可以完成排序了。
 少了一次应用程序与数据库的网络交互
 select * from (
-	select * from t where city = &#39;杭州&#39;  limit 100
-	union all
-  select * from t where city = &#39;苏州&#39;  limit 100
+select * from t where city = &#39;杭州&#39; limit 100
+union all
+select * from t where city = &#39;苏州&#39; limit 100
 ) as tt order by name limit 100
 
-
 3）对分页的优化。
-  没有特别好的办法。如果业务允许不提供排序功能，不提供查询最后一页，只能一页一页的翻，基本上前几页的数据已经满足客户需求。
-  为了意义不大的功能优化，可能会得不偿失。
-  如果一定要优化可以 select id from t where city in (&#39;杭州&#39;,&quot; 苏州 &quot;) order by name limit 10000,100
-  因为有city\name索引，上面的语句走覆盖索引就可以完成，不用回表。
-  最后使用 select * from t where id in (); 取得结果
-  对于这个优化方法，我不好确定的是临界点，前几页直接查询就可以，最后几页使用这个优化方法。
-  但是中间的页码应该怎么选择不太清楚
+没有特别好的办法。如果业务允许不提供排序功能，不提供查询最后一页，只能一页一页的翻，基本上前几页的数据已经满足客户需求。
+为了意义不大的功能优化，可能会得不偿失。
+如果一定要优化可以 select id from t where city in (&#39;杭州&#39;,&quot; 苏州 &quot;) order by name limit 10000,100
+因为有city\name索引，上面的语句走覆盖索引就可以完成，不用回表。
+最后使用 select * from t where id in (); 取得结果
+对于这个优化方法，我不好确定的是临界点，前几页直接查询就可以，最后几页使用这个优化方法。
+但是中间的页码应该怎么选择不太清楚
   </p>2018-12-19</li><br/><li><span>波波</span> 👍（78） 💬（1）<p>笔记:
 1.MySQL会为每个线程分配一个内存（sort_buffer）用于排序该内存大小为sort_buffer_size
   1&gt;如果排序的数据量小于sort_buffer_size，排序将会在内存中完成
   2&gt;如果排序数据量很大，内存中无法存下这么多数据，则会使用磁盘临时文件来辅助排序，也称外部排序
   3&gt;在使用外部排序时，MySQL会分成好几份单独的临时文件用来存放排序后的数据，然后在将这些文件合并成一个大文件
 
-
 2.mysql会通过遍历索引将满足条件的数据读取到sort_buffer，并且按照排序字段进行快速排序
-	1&gt;如果查询的字段不包含在辅助索引中，需要按照辅助索引记录的主键返回聚集索引取出所需字段
-  	2&gt;该方式会造成随机IO，在MySQL5.6提供了MRR的机制，会将辅助索引匹配记录的主键取出来在内存中进行排序，然后在回表
- 	3&gt;按照情况建立联合索引来避免排序所带来的性能损耗，允许的情况下也可以建立覆盖索引来避免回表
+1&gt;如果查询的字段不包含在辅助索引中，需要按照辅助索引记录的主键返回聚集索引取出所需字段
+2&gt;该方式会造成随机IO，在MySQL5.6提供了MRR的机制，会将辅助索引匹配记录的主键取出来在内存中进行排序，然后在回表
+3&gt;按照情况建立联合索引来避免排序所带来的性能损耗，允许的情况下也可以建立覆盖索引来避免回表
 
 全字段排序
 1.通过索引将所需的字段全部读取到sort_buffer中
 2.按照排序字段进行排序
 3.将结果集返回给客户端
 
-
 缺点：
 1.造成sort_buffer中存放不下很多数据，因为除了排序字段还存放其他字段，对sort_buffer的利用效率不高
 2.当所需排序数据量很大时，会有很多的临时文件，排序性能也会很差
 
 优点：MySQL认为内存足够大时会优先选择全字段排序，因为这种方式比rowid 排序避免了一次回表操作
-
 
 rowid排序
 1.通过控制排序的行数据的长度来让sort_buffer中尽可能多的存放数据，max_length_for_sort_data
@@ -441,7 +438,6 @@ rowid排序
 
 缺点：回表的操作是随机IO，会造成大量的随机读，不一定就比全字段排序减少对磁盘的访问
 
-
 3.按照排序的结果返回客户所取行数</p>2018-12-19</li><br/><li><span>看不到de颜色</span> 👍（38） 💬（9）<p>关于上期问题里的最后一个例子不太明白，还请老师指点一下。按说在更新操作的时候应该是当前读，那么应该能读到id=1 and a = 3的记录并修改。那么为什么再select还会查到a = 2。难道是即便update但是where条件也是快照读？但是如果这样那么幻读的问题不就不会存在了吗？（B insert了一条记录，此时A范围update后再select会把B insert的语句查出来）</p>2019-02-02</li><br/><li><span>胡楚坚</span> 👍（33） 💬（9）<p>不好意思，上个留言没打完。
 问题一，在跟max_length_for_sort_data坐比较时，mysql是怎么判断一行数据的大小的？是直接根据表定义字段的大小吗？
 
@@ -449,59 +445,61 @@ rowid排序
 
 麻烦老师有空解答下，谢谢哈</p>2019-02-21</li><br/><li><span>发条橙子 。</span> 👍（27） 💬（3）<p>老师 ， 接前面 create_time的回答 。 语句确实是 select * from t order by create_time desc ;
 
-老师是指 优化器会根据 order by create_time 来选择使用 create_time 索引么 
+老师是指 优化器会根据 order by create_time 来选择使用 create_time 索引么
 
 我之前误以为优化器是根据 where 后面的字段条件来选择索引 ，所以上面那条语句没有where 的时候我就想当然地以为不会走索引 。 看来是自己跳进了一个大坑里面 😅
 
-另 ： 我之前在本地建了张表加了20w数据 ，用explain 查了一次 ，发现走的是全表没有走索引， 老师说会走索引。我想了一下， 可能是统计的数据有误的缘故，用 analyze table重新统计 ，再次查询果然走了索引  。😁</p>2018-12-20</li><br/><li><span>didiren</span> 👍（24） 💬（1）<p>感谢！针对我之前提出的疑问，我又详细的做了实验，发现一个新的问题，我感觉是个bug，希望解答
+另 ： 我之前在本地建了张表加了20w数据 ，用explain 查了一次 ，发现走的是全表没有走索引， 老师说会走索引。我想了一下， 可能是统计的数据有误的缘故，用 analyze table重新统计 ，再次查询果然走了索引 。😁</p>2018-12-20</li><br/><li><span>didiren</span> 👍（24） 💬（1）<p>感谢！针对我之前提出的疑问，我又详细的做了实验，发现一个新的问题，我感觉是个bug，希望解答
+
 # SessionA
+
 mysql&gt; show variables like &#39;%binlog_row_image%&#39;;
-| Variable_name    | Value |
-| binlog_row_image | FULL  |
+| Variable_name | Value |
+| binlog_row_image | FULL |
 mysql&gt; create table t (id int not null primary key auto_increment,
-    -&gt; a int default null)
-    -&gt; engine=innodb;
+-&gt; a int default null)
+-&gt; engine=innodb;
 mysql&gt; insert into t values(1,2);
 mysql&gt; set tx_isolation = &#39;repeatable-read&#39;;
 mysql&gt; begin;
 mysql&gt; select * from t where id = 1;
-| id | a    |
-|  1 |    2 |
+| id | a |
+| 1 | 2 |
 此时在另一个SessionB执行update t set a=3 where id = 1;成功更新一条记录。通过show engine innodb status看，Log sequence number 2573458
 然后在SessionA继续。。
 mysql&gt; update t set a=3 where id = 1;
-Rows matched: 1  Changed: 0  Warnings: 0
+Rows matched: 1 Changed: 0 Warnings: 0
 Log sequence number 2573467
 mysql&gt; select * from t where id = 1;
-| id | a    |
-|  1 |    2 |
+| id | a |
+| 1 | 2 |
 
 这里与你给出的答案里的实验结果不同
 可以看到redolog是记录了第二次的update的，但是select却没有看到更新后的值，于是我又换了一个平时测试用的实例，同样的步骤却得到了与你的答案相同的结果
 然后我对比了2个实例的参数，发现当binlog-row-image=minimal时第二次查询结果a=3，当binlog-row-image=full时第二次查询结果a=2，而且不论哪个参数，redolog都会因为SessionA的update增长，说明redolog都做了记录，update是发生了的，但是binlog-row-image参数会影响查询结果，难以理解，我用的mysql版本是官方的5.7.13
 
 下面是binlog-row-image = minimal的实验结果
-mysql&gt; set  binlog_row_image=MINIMAL;
+mysql&gt; set binlog_row_image=MINIMAL;
 mysql&gt; drop table t;
 mysql&gt; create table t (id int not null primary key auto_increment,
-    -&gt; a int default null)
-    -&gt; engine=innodb;
+-&gt; a int default null)
+-&gt; engine=innodb;
 insert into t values(1,2);
 mysql&gt; insert into t values(1,2);
 mysql&gt; set tx_isolation = &#39;repeatable-read&#39;;
 mysql&gt; begin;
 mysql&gt; select * from t where id = 1;
-| id | a    |
-|  1 |    2 |
+| id | a |
+| 1 | 2 |
 此时在另一个SessionB执行update t set a=3 where id = 1;成功更新一条记录。
 mysql&gt; update t set a=3 where id = 1;
-Rows matched: 1  Changed: 0  Warnings: 0
-mysql&gt; select * from t where id = 1; 
-| id | a    |
-|  1 |    3 |</p>2018-12-19</li><br/><li><span>发条橙子 。</span> 👍（12） 💬（2）<p>
-正好有个 order by 使用场景 ， 有个页面，需要按数据插入时间倒序来查看一张记录表的信息 ，因为除了分页的参数 ， 没有其他 where 的条件 ，所以除了主键外没有其他索引 。 
+Rows matched: 1 Changed: 0 Warnings: 0
+mysql&gt; select * from t where id = 1;
+| id | a |
+| 1 | 3 |</p>2018-12-19</li><br/><li><span>发条橙子 。</span> 👍（12） 💬（2）<p>
+正好有个 order by 使用场景 ， 有个页面，需要按数据插入时间倒序来查看一张记录表的信息 ，因为除了分页的参数 ， 没有其他 where 的条件 ，所以除了主键外没有其他索引 。
 
-这时候 DBA 让我给 create_time 创建索引， 说是按照顺序排列 ，查询会增快 。这篇文章看完后 ， 让我感觉实际上创建 create_time 索引是没用的 。 
+这时候 DBA 让我给 create_time 创建索引， 说是按照顺序排列 ，查询会增快 。这篇文章看完后 ， 让我感觉实际上创建 create_time 索引是没用的 。
 
 因为查询本身并没有用到 create_time 索引 ，实际上查询的步骤是 ：
 
@@ -509,40 +507,38 @@ mysql&gt; select * from t where id = 1;
 
 2. 因为没索引 ， 所以扫出全表的数据到 sort_buffer 中
 
-2. 如果内存够则直接内存按时间排序 
+3. 如果内存够则直接内存按时间排序
 
-3. 如果内存不够则按数据量分成不同文件分别按时间排序后整合
+4. 如果内存不够则按数据量分成不同文件分别按时间排序后整合
 
-4. 根据数量分页查询数量 回聚集索引中用 ID 查询数据
+5. 根据数量分页查询数量 回聚集索引中用 ID 查询数据
 
-5. 返回
+6. 返回
 
 所以我分析create_time索引应该不需要创建。反而增加了维护成本
-
 
 问题一 ：这种无条件查列表页除了全表扫还有其他建立索引的办法么
 
 问题二 : 如果加入 group by ， 数据该如何走
 
-问题三 ：老师之后的文章会有讲解 bigInt(20)  、 tinyint(2) 、varchar(32) 这种后面带数字与不带数字有何区别的文章么 。 每次建字段都会考虑长度 ，但实际却不知道他有何作用 
-
+问题三 ：老师之后的文章会有讲解 bigInt(20) 、 tinyint(2) 、varchar(32) 这种后面带数字与不带数字有何区别的文章么 。 每次建字段都会考虑长度 ，但实际却不知道他有何作用
 
 </p>2018-12-20</li><br/><li><span>coderbee</span> 👍（11） 💬（1）<p>请教下林老师：
 以文章中的 t 表，索引 city(city) 其实等价于 city(city, id) ，第2条语句加了 order by id，Extra 列多了 Using where ，为啥还要这个？？两个都是用到了覆盖索引。
 
 mysql&gt; explain select id from t where city = &#39;city102&#39; limit 1, 10;
 +----+-------------+-------+------------+------+---------------+------+---------+-------+------+----------+-------------+
-| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref   | rows | filtered | Extra       |
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
 +----+-------------+-------+------------+------+---------------+------+---------+-------+------+----------+-------------+
-|  1 | SIMPLE      | t     | NULL       | ref  | city          | city | 66      | const |    2 |   100.00 | Using index |
+| 1 | SIMPLE | t | NULL | ref | city | city | 66 | const | 2 | 100.00 | Using index |
 +----+-------------+-------+------------+------+---------------+------+---------+-------+------+----------+-------------+
 1 row in set, 1 warning (0.00 sec)
 
 mysql&gt; explain select id from t where city = &#39;city102&#39; order by id limit 1, 10;
 +----+-------------+-------+------------+------+---------------+------+---------+-------+------+----------+--------------------------+
-| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref   | rows | filtered | Extra                    |
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
 +----+-------------+-------+------------+------+---------------+------+---------+-------+------+----------+--------------------------+
-|  1 | SIMPLE      | t     | NULL       | ref  | city          | city | 66      | const |    2 |   100.00 | Using where; Using index |
+| 1 | SIMPLE | t | NULL | ref | city | city | 66 | const | 2 | 100.00 | Using where; Using index |
 +----+-------------+-------+------------+------+---------------+------+---------+-------+------+----------+--------------------------+
 1 row in set, 1 warning (0.00 sec)
 

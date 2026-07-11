@@ -107,13 +107,13 @@ JMeter+InfluxDB+Grafana的结构如下：
                         .append(" ") //$NON-NLS-1$
                         .append(metric.field)
                         .append(" ")
-                        .append(metric.timestamp+"000000") 
+                        .append(metric.timestamp+"000000")
                         .append("\n"); //$NON-NLS-1$
                 }
 
 
                 StringEntity entity = new StringEntity(sb.toString(), StandardCharsets.UTF_8);
-                
+
                 httpRequest.setEntity(entity);
                 lastRequest = httpClient.execute(httpRequest, new FutureCallback<HttpResponse>() {
                     @Override
@@ -128,7 +128,7 @@ JMeter+InfluxDB+Grafana的结构如下：
                         if (MetricUtils.isSuccessCode(code)) {
                             if(log.isDebugEnabled()) {
                                 log.debug("Success, number of metrics written: {}", copyMetrics.size());
-                            } 
+                            }
                         } else {
                             log.error("Error writing metrics to influxDB Url: {}, responseCode: {}, responseBody: {}", url, code, getBody(response));
                         }
@@ -141,7 +141,7 @@ JMeter+InfluxDB+Grafana的结构如下：
                     public void cancelled() {
                         log.warn("Request to influxDB server was cancelled");
                     }
-                });               
+                });
  ........
             }
         }
@@ -411,11 +411,9 @@ avg(irate(node_cpu_seconds_total{instance=~"$node",mode="iowait"}[30m])) by (ins
 （1）在Grafana 中配置InfluxDB 数据源
 （2）添加 JMeter dashboard，导入模板，选择对应的数据源即可看到界面
 
-
 问题2：同样是监控操作系统的计数器，监控平台中的数据和监控命令中的数据有什么区别？
 就数据的值来说，没有区别；
 就数据量来说，监控平台的数据通常比监控命令中查到的数据会少一些。
-
 
 今日感悟：
 高老师的专栏，音频总会比文章多讲一些，知道这一点之后，我就调整了学习方式，我先听音频，再细读文章（以前我的习惯是先看文章，再听音频）。这节内容，不适用了，不知道是因为我太弱，还是老师语速变快了，边听边看文章，听的真是一脸懵。
@@ -427,7 +425,7 @@ avg(irate(node_cpu_seconds_total{instance=~"$node",mode="iowait"}[30m])) by (ins
 其实归根结底还是自己手头没有实际的性能项目来练习，边学边练其实才是最好的。
 
 最最后：文中“通过 writeAndSendMetrics，就将所有保存的 metrix 都发给了 InfluxDB。” 老师单词是不是拼错啦，应该是metric吧（或者是metrics?）</p>2020-03-30</li><br/><li><span>bettynie</span> 👍（7） 💬（1）<p>老师，按照你讲的原理，其实我们需要搭建 jmeter+influxdb+grafana 和 prometheus+exports+grafana 2套系统来分别监控我们需要的性能指标，是么？
- jmeter+influxdb+grafana用来监控jmeter中的线程数，响应时间和吞吐量，prometheus+exports+grafana 用来监控系统资源或者数据库以及其他资源, 对么？
+jmeter+influxdb+grafana用来监控jmeter中的线程数，响应时间和吞吐量，prometheus+exports+grafana 用来监控系统资源或者数据库以及其他资源, 对么？
 并且prometheus+exports+grafana 只能监控linux和uinx系统，无法监控windows,并且只能监控mysql数据库，感觉好像就是为监控docker之内的容器而生的~</p>2020-02-29</li><br/><li><span>SeaYang</span> 👍（6） 💬（1）<p>老师您好，backend listener本身没有问题，可能我描述的不够清楚，我再描述一次我的问题：
 1、背景
 我们基于jmeter做了个压测平台，在平台的前端页面上编写接口、场景等，点击压测，后端会调度多台压力机，每台压力机会将接口、场景数据使用jmeter的api生成jmx文件，然后调用jmeter的命令行启动压测。生成jmx文件的过程中会创建一个backend listener元件，每台压力机backend listener元件的application字段设置为了同一个值，这样子我们可以通过这个application值调用InfluxDB的http接口，获得所有压力机的tps总和
@@ -446,10 +444,11 @@ avg(irate(node_cpu_seconds_total{instance=~"$node",mode="iowait"}[30m])) by (ins
 influxdbUrl：http:&#47;&#47;192.168.1.196:9999&#47;api&#47;v2&#47;write?bucket=test&amp;org=dao
 influxdbToken：好长的一串 base64 编码的 token</p>2021-05-04</li><br/><li><span>蔚来懿</span> 👍（3） 💬（1）<p>老师，有一个疑问，我的情况是这样的，我们公司环境有很多（测试环境，开发环境，预发布环境，开发环境），很多个项目，每个项目结构复杂，机器有很多，如果按照这样的部署的话，需要安装很多软件，还有防火墙的问题，请问是否有轻量级的监控方式，比如说，直接在服务器上装工具（类似nmon，但是直观），</p>2021-01-13</li><br/><li><span>涓涓</span> 👍（3） 💬（1）<p>高老师，好。
 你看这样配置行不行:
+
 1. 要监控的每台服务器都配置一个node_exporter
-2.  然后再找台服务器安装prometheus，在prometheus.yml中添加每个node_exporter的配置
+2. 然后再找台服务器安装prometheus，在prometheus.yml中添加每个node_exporter的配置
 3. 最后在grafana中配置prometheus，查看采集的各台服务器数据。</p>2021-01-08</li><br/><li><span>SeaYang</span> 👍（3） 💬（1）<p>1、JMeter 是如何把数据推送到 Grafana 中呢？
-JMeter实际上是将数据推送到Influxdb中，Influxdb本身对外提供了HTTP接口，Grafana通过HTTP接口轮询性能指标，若自己去画前端页面图表的话，也可以不用Grafana，直接调用Influxdb的HTTP接口
+   JMeter实际上是将数据推送到Influxdb中，Influxdb本身对外提供了HTTP接口，Grafana通过HTTP接口轮询性能指标，若自己去画前端页面图表的话，也可以不用Grafana，直接调用Influxdb的HTTP接口
 
 2、另外，同样是监控操作系统的计数器，监控平台中的数据和监控命令中的数据有什么区别？
 没有区别，只是命令可能能看到更多的值

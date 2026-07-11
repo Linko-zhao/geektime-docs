@@ -45,6 +45,7 @@
 **参考文献**
 
 1. Deepak Agarwal, Bo Long, Jonathan Traupman, Doris Xin, and Liang Zhang. LASER: a scalable response prediction platform for online advertising. Proceedings of the 7th ACM international conference on Web search and data mining (WSDM '14). ACM, New York, NY, USA, 173-182, 2014.
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>艾熊</span> 👍（12） 💬（0）<p>洪博士，通过一篇论文的简单导读来探讨业界应用的话，希望能够听到更深层次更多角度的东西。毕竟，这篇论文所是pr还是内部真的在应用了，应用效果是什么，现在是否还在用，真正应用中卡主的可能是一些没有在论文里写出来的东西…这些都不得而知。论文表层的东西确实给了题目大家去一看也就是这样，那么希望洪博士多提供一些发散的和批判性的分析，甚至遗留的问题也是比较好的点。感觉每一次留下来思考的点几乎没有反馈和交互…就比如小时候留了作业不需要检查和上交，那大家也就失去了互动的动力了。</p>2018-06-20</li><br/><li><span>Ad</span> 👍（5） 💬（0）<p>請問如何達成個人化的係數，在實作上有點無法想像</p>2018-06-18</li><br/>
 </ul>

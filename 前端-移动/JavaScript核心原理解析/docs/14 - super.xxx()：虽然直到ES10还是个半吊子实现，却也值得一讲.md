@@ -209,19 +209,19 @@ console.log(b.y);&#47;&#47;NAN</p>2020-03-20</li><br/><li><span>行问</span> �
 老师，我的测试问题在哪呢？
 
 function F1(){
-	this.a1=&#39;aaa&#39;;
-	this.b1=&#39;bbb&#39;; 
-	this.f1=function(){
-		console.log(&#39;f1f1&#39;)
-		}
-	}
-	
+this.a1=&#39;aaa&#39;;
+this.b1=&#39;bbb&#39;;
+this.f1=function(){
+console.log(&#39;f1f1&#39;)
+}
+}
+
 class S1 extends F1{
-	k1(){
-		super.f1();  &#47;&#47;调用父类了f1()方法
-		}
-	}
-	
+k1(){
+super.f1(); &#47;&#47;调用父类了f1()方法
+}
+}
+
 new S1().f1(); &#47;&#47; f1f1
 new S1().k1(); &#47;&#47; Uncaught TypeError: (intermediate value).f1 is not a function</p>2020-11-17</li><br/><li><span>海绵薇薇</span> 👍（1） 💬（1）<p>老师好，我理解的基于类构造对象的过程如下：
 
@@ -243,6 +243,7 @@ class A {
     b = this.c.bind(this)
 }
 ```
+
 这个 = 是一个表达式用于创建实例的属性，是需要执行来计算属性值的，那么这个 b = this.c.bind(this)的执行环境是什么？？？
 
 合理的猜想是constructor 中super调用之后，因为这个环境中有this。
@@ -254,7 +255,7 @@ class A {
     constructor () {
         var e = 1
     }
-    
+
     c = e
 }
 ```
@@ -263,36 +264,38 @@ class A {
 
 除了在constructor中执行 c = e 找不到肉眼可见的作用域可以执行这个表达式了
 
-------------------------------------------------------------------------
+---
 
 探索过程如下：
 
 class E {
-    constructor () {
-        console.log(222) &#47;&#47; 2
-    }
+constructor () {
+console.log(222) &#47;&#47; 2
+}
 }
 
 class E1 extends E {
-    constructor () {
-           console.log(111)  &#47;&#47; 1
-           super()
-           console.log(this.c) &#47;&#47; 4
-           var e = 1
-           console.log(555) &#47;&#47; 5
-    }
-    
+constructor () {
+console.log(111) &#47;&#47; 1
+super()
+console.log(this.c) &#47;&#47; 4
+var e = 1
+console.log(555) &#47;&#47; 5
+}
+
     c = (function() {
             console.log(333) &#47;&#47; 3
             return &#39;this.c&#39;
           })()
+
 }
 
 c = …. 这个表达式是在super()之后调用的，但却不是在constructor中调用的，
 
 感觉这其中隐藏了什么，望老师指点。
 
-------------------------------------------------------------------------
+---
+
 感谢老师的时间
 ------------------------------------------------------------------------
 
@@ -314,22 +317,23 @@ javascript语编3中描述 = 是运算，并不能理解 = 是运算（表达式
 
 另：java中也可以打印出 a = 1的结果。 Number a = 0; System.out.println(a = 1);
 
-------------------------------------------------------------------------
+---
+
 再次感谢老师的时间
-------------------------------------------------------------------------</p>2020-09-19</li><br/><li><span>zy</span> 👍（0） 💬（2）<p>最近看到一段代码：
+\------------------------------------------------------------------------</p>2020-09-19</li><br/><li><span>zy</span> 👍（0） 💬（2）<p>最近看到一段代码：
 {
-    function foo(){}
-    foo = 1
-    foo = 2
-    foo = 3
-    foo = 4
-    foo = 5
-    function foo(){}
-    foo = 6
-    foo = 7
-    foo = 8
-    foo = 9
-    foo = 10
+function foo(){}
+foo = 1
+foo = 2
+foo = 3
+foo = 4
+foo = 5
+function foo(){}
+foo = 6
+foo = 7
+foo = 8
+foo = 9
+foo = 10
 }
 console.log(foo)
 打印出来是5，分析了半天没搞明白为什么，能不能请老师帮忙分析一下</p>2021-03-24</li><br/><li><span>HoSalt</span> 👍（0） 💬（1）<p>「ECMAScript 约定了优先取 Super 引用中的 thisValue 值，然后再取函数上下文中的」
@@ -364,12 +368,12 @@ Son.getObj(); &#47;&#47; true
 感悟：
 
 constructor() {
-	super()
+super()
 }
 为什么不能写成
 
 constructor() {
-	super.constructor()
+super.constructor()
 }
 这种形式呢？之后过了好一会转念一想super.constructor是需要this的但是上面super调用之前是拿不到this的。
 
@@ -379,5 +383,5 @@ a.b()方法中this是动态获取的，是作为this传入的a。
 super.b 中的this是super.b这个引用的thisValue（执行环境的this），引用的thisValue优先级高于作为this传入的super。
 通过测试发现bind绑定的this优先级高于super.a这个引用的thisValue。
 
-但是bind，call，apply这些方法绑定的this是存在哪里的呢？bind的mixin底层也是调用的apply。</p>2019-12-29</li><br/><li><span>小童</span> 👍（0） 💬（1）<p>https:&#47;&#47;github.com&#47;aimingoo&#47;prepack-core 我克隆下来了  我不理解在如何引擎级别打断点？ 不知道怎么搞 看到一个scripts文件夹里面有 test262-runner.js文件  然后运行了脚本没运行成功。</p>2019-12-27</li><br/><li><span>小童</span> 👍（0） 💬（1）<p>我在浏览器中输出的方法中没有看到 [[HomeObject]]插槽，老师这个能在哪里找到吗？</p>2019-12-27</li><br/>
+但是bind，call，apply这些方法绑定的this是存在哪里的呢？bind的mixin底层也是调用的apply。</p>2019-12-29</li><br/><li><span>小童</span> 👍（0） 💬（1）<p>https:&#47;&#47;github.com&#47;aimingoo&#47;prepack-core 我克隆下来了 我不理解在如何引擎级别打断点？ 不知道怎么搞 看到一个scripts文件夹里面有 test262-runner.js文件 然后运行了脚本没运行成功。</p>2019-12-27</li><br/><li><span>小童</span> 👍（0） 💬（1）<p>我在浏览器中输出的方法中没有看到 [[HomeObject]]插槽，老师这个能在哪里找到吗？</p>2019-12-27</li><br/>
 </ul>

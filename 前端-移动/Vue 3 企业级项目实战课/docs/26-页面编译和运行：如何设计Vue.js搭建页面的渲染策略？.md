@@ -56,15 +56,15 @@ const code1 = `const a = 1`;
 const code2 = `const b = 2`;
 const code3 = `function add(num1, num2) {
 	return num1 + num2;
-}`
-const code4 = `const c = add(a, b)`
+}`;
+const code4 = `const c = add(a, b)`;
 const code = `
   ${code0}
   ${code1}
   ${code2}
   ${code3}
   ${code4}
-`
+`;
 // 最后用Node.js的fs API生成文件
 ```
 
@@ -84,26 +84,26 @@ ESTree是JavaScript社区讨论出来的一种抽象语法树（AST），简单�
 // 代码片段  const a = 1
 // 变成ESTree如下所示
 const estree1 = {
-  type: 'VariableDeclaration',
-  declarations: [
-    {
-      type: 'VariableDeclarator',
-      id: {
-        type: 'Identifier',
-        name: 'a'
-      },
-      init: {
-        type: 'NumericLiteral',
-        value: 1
-      }
-    }
-  ],
-  kind: 'const'
+  type: "VariableDeclaration",
+  declarations: [
+    {
+      type: "VariableDeclarator",
+      id: {
+        type: "Identifier",
+        name: "a",
+      },
+      init: {
+        type: "NumericLiteral",
+        value: 1,
+      },
+    },
+  ],
+  kind: "const",
 };
 ```
 
 ```typescript
-// 代码片段  
+// 代码片段
 /*
 function add(num1, num2) {
 	return num1 + num2;
@@ -111,44 +111,44 @@ function add(num1, num2) {
 */
 // 变成ESTree如下所示
 const estree3 = {
-  type: 'FunctionDeclaration',
-  id: {
-    type: 'Identifier',
-    name: 'add'
-  },
-  generator: false,
-  async: false,
-  params: [
-    {
-      type: 'Identifier',
-      name: 'num1'
-    },
-    {
-      type: 'Identifier',
-      name: 'num2'
-    }
-  ],
-  body: {
-    type: 'BlockStatement',
-    body: [
-      {
-        type: 'ReturnStatement',
-        argument: {
-          type: 'BinaryExpression',
-          left: {
-            type: 'Identifier',
-            name: 'num1'
-          },
-          operator: '+',
-          right: {
-            type: 'Identifier',
-            name: 'num2'
-          }
-        }
-      }
-    ],
-    directives: []
-  }
+  type: "FunctionDeclaration",
+  id: {
+    type: "Identifier",
+    name: "add",
+  },
+  generator: false,
+  async: false,
+  params: [
+    {
+      type: "Identifier",
+      name: "num1",
+    },
+    {
+      type: "Identifier",
+      name: "num2",
+    },
+  ],
+  body: {
+    type: "BlockStatement",
+    body: [
+      {
+        type: "ReturnStatement",
+        argument: {
+          type: "BinaryExpression",
+          left: {
+            type: "Identifier",
+            name: "num1",
+          },
+          operator: "+",
+          right: {
+            type: "Identifier",
+            name: "num2",
+          },
+        },
+      },
+    ],
+    directives: [],
+  },
 };
 ```
 
@@ -161,36 +161,36 @@ const estree3 = {
 你可以直接使用Babel的工具 ，就是@babel/generator这个npm模块，进行语法树的转换，具体操作就像这段代码。
 
 ```typescript
-import generator from '@babel/generator';
+import generator from "@babel/generator";
 const estree1 = {
-  type: 'VariableDeclaration',
-  declarations: [
-    {
-      type: 'VariableDeclarator',
-      id: {
-        type: 'Identifier',
-        name: 'a'
-      },
-      init: {
-        type: 'NumericLiteral',
-        value: 1
-      }
-    }
-  ],
-  kind: 'const'
+  type: "VariableDeclaration",
+  declarations: [
+    {
+      type: "VariableDeclarator",
+      id: {
+        type: "Identifier",
+        name: "a",
+      },
+      init: {
+        type: "NumericLiteral",
+        value: 1,
+      },
+    },
+  ],
+  kind: "const",
 };
 
 const estreeProgram: any = {
-  type: 'File',
-  errors: [],
-  program: {
-    type: 'Program',
-    sourceType: 'module',
-    interpreter: null,
-    body: [],
-    directives: [estree1]
-  },
-  comments: []
+  type: "File",
+  errors: [],
+  program: {
+    type: "Program",
+    sourceType: "module",
+    interpreter: null,
+    body: [],
+    directives: [estree1],
+  },
+  comments: [],
 };
 const result = generator(estreeProgram);
 console.log(result.code); // 输出代码 const a = 1;
@@ -217,37 +217,37 @@ console.log(result.code); // 输出代码 const a = 1;
 最后，就是执行编译操作了，可以直接使用Vite的Node.js API，进行动态编译入口文件，大致代码就像这样。
 
 ```typescript
-import path from 'node:path';
-import { build } from 'vite';
-import type { InlineConfig } from 'vite';
+import path from "node:path";
+import { build } from "vite";
+import type { InlineConfig } from "vite";
 
 // 动态编译入口文件的方法
 async function buildEntryFile(fullEntryFilePath: string) {
-  const config: InlineConfig = {
-    build: {
-      emptyOutDir: false,
-      outDir: path.dirname(fullEntryFilePath),
-      lib: {
-        name: 'MyBundle',
-        entry: fullEntryFilePath,
-        formats: ['iife'],
-        fileName: () => {
-          return 'bundle.js';
-        }
-      },
-      rollupOptions: {
-        preserveEntrySignatures: 'strict',
-        external: ['vue'],
-        output: {
-          globals: {
-            vue: 'Vue'
-          },
-          assetFileNames: 'bundle[extname]'
-        }
-      }
-    }
-  };
-  await build(config);
+  const config: InlineConfig = {
+    build: {
+      emptyOutDir: false,
+      outDir: path.dirname(fullEntryFilePath),
+      lib: {
+        name: "MyBundle",
+        entry: fullEntryFilePath,
+        formats: ["iife"],
+        fileName: () => {
+          return "bundle.js";
+        },
+      },
+      rollupOptions: {
+        preserveEntrySignatures: "strict",
+        external: ["vue"],
+        output: {
+          globals: {
+            vue: "Vue",
+          },
+          assetFileNames: "bundle[extname]",
+        },
+      },
+    },
+  };
+  await build(config);
 }
 ```
 
@@ -320,64 +320,71 @@ async function buildEntryFile(fullEntryFilePath: string) {
 import Vue from "vue";
 import MyMaterialBannerSlides from "../../../material/@my/material-banner-slides/0.9.0/index.esm.js";
 import MyMaterialProductList from "../../../material/@my/material-product-list/0.9.0/index.esm.js";
-const {
-  h,
-  createApp,
-  defineComponent
-} = Vue;
+const { h, createApp, defineComponent } = Vue;
 const materialDeps = {
   "@my/material-banner-slides": MyMaterialBannerSlides,
-  "@my/material-product-list": MyMaterialProductList
+  "@my/material-product-list": MyMaterialProductList,
 };
 const pageLayoutData = {
-  "layout": {
-    "rows": [{
-      "uuid": "4890074a-09f7-4b95-bd34-fecbe6e066db",
-      "columns": [{
-        "name": "首屏广告",
-        "uuid": "fc90dcbf-d70b-40f4-aa14-b64be2632092",
-        "width": 1000
-      }]
-    }, {
-      "uuid": "c248318f-ffd1-42d7-9f27-56533f7c4453",
-      "columns": [{
-        "name": "其它广告位1",
-        "uuid": "ac873013-d448-4ca8-b4bb-729b844ee262",
-        "width": 600
-      }, {
-        "uuid": "079c3fe5-f8af-475a-82ed-feb01b5730ee",
-        "width": 400
-      }]
-    }, {
-      "uuid": "8d0bb922-5d8c-4a67-80b0-4babaf3e2f97",
-      "columns": [{
-        "name": "促销商品",
-        "uuid": "e9b94120-ebe8-4418-9b13-7ea10095676d",
-        "width": 1000
-      }]
-    }],
-    "width": 1000
+  layout: {
+    rows: [
+      {
+        uuid: "4890074a-09f7-4b95-bd34-fecbe6e066db",
+        columns: [
+          {
+            name: "首屏广告",
+            uuid: "fc90dcbf-d70b-40f4-aa14-b64be2632092",
+            width: 1000,
+          },
+        ],
+      },
+      {
+        uuid: "c248318f-ffd1-42d7-9f27-56533f7c4453",
+        columns: [
+          {
+            name: "其它广告位1",
+            uuid: "ac873013-d448-4ca8-b4bb-729b844ee262",
+            width: 600,
+          },
+          {
+            uuid: "079c3fe5-f8af-475a-82ed-feb01b5730ee",
+            width: 400,
+          },
+        ],
+      },
+      {
+        uuid: "8d0bb922-5d8c-4a67-80b0-4babaf3e2f97",
+        columns: [
+          {
+            name: "促销商品",
+            uuid: "e9b94120-ebe8-4418-9b13-7ea10095676d",
+            width: 1000,
+          },
+        ],
+      },
+    ],
+    width: 1000,
   },
-  "moduleMap": {
+  moduleMap: {
     "ac873013-d448-4ca8-b4bb-729b844ee262": {
-      "materialData": {},
-      "materialName": "@my/material-banner-slides",
-      "materialVersion": "0.9.0"
+      materialData: {},
+      materialName: "@my/material-banner-slides",
+      materialVersion: "0.9.0",
     },
     "e9b94120-ebe8-4418-9b13-7ea10095676d": {
-      "materialData": {},
-      "materialName": "@my/material-product-list",
-      "materialVersion": "0.9.0"
+      materialData: {},
+      materialName: "@my/material-product-list",
+      materialVersion: "0.9.0",
     },
     "fc90dcbf-d70b-40f4-aa14-b64be2632092": {
-      "materialData": {},
-      "materialName": "@my/material-banner-slides",
-      "materialVersion": "0.9.0"
-    }
-  }
+      materialData: {},
+      materialName: "@my/material-banner-slides",
+      materialVersion: "0.9.0",
+    },
+  },
 };
 const moduleComponentMap = {};
-Object.keys(pageLayoutData.moduleMap).forEach(uuid => {
+Object.keys(pageLayoutData.moduleMap).forEach((uuid) => {
   const materialName = pageLayoutData.moduleMap[uuid].materialName;
   moduleComponentMap[uuid] = materialDeps[materialName];
 });
@@ -387,37 +394,49 @@ const App = defineComponent({
       const Columns = row.columns.map((col, colIndex) => {
         const Material = moduleComponentMap[col.uuid];
         const props = pageLayoutData.moduleMap[col.uuid]?.materialData || {};
-        const Mod = h(Material || 'div', props);
-        return h('div', {
-          style: {
-            width: col.width,
-            display: 'flex'
+        const Mod = h(Material || "div", props);
+        return h(
+          "div",
+          {
+            style: {
+              width: col.width,
+              display: "flex",
+            },
+            "data-col": colIndex,
           },
-          'data-col': colIndex
-        }, Mod);
+          Mod,
+        );
       });
-      return h('div', {
-        style: {
-          width: row.width,
-          margin: '10px 0',
-          display: 'flex',
-          flexDirection: 'row'
+      return h(
+        "div",
+        {
+          style: {
+            width: row.width,
+            margin: "10px 0",
+            display: "flex",
+            flexDirection: "row",
+          },
+          "data-row": rowIndex,
         },
-        'data-row': rowIndex
-      }, Columns);
+        Columns,
+      );
     });
     return () => {
-      return h('div', {
-        style: {
-          width: pageLayoutData.layout.width,
-          margin: '0 auto'
-        }
-      }, Rows);
+      return h(
+        "div",
+        {
+          style: {
+            width: pageLayoutData.layout.width,
+            margin: "0 auto",
+          },
+        },
+        Rows,
+      );
     };
-  }
+  },
 });
 const app = createApp(App);
-app.mount('#app');
+app.mount("#app");
 ```
 
 页面编译的技术实现流程，就是这样的三步，我们简单总结一下。
@@ -487,6 +506,7 @@ app.mount('#app');
 期待看到你的思考。希望通过今天的学习，你能掌握动态拼接页面代码的技术知识，同时，也能理解如何做好页面渲染策略的设计。下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/26)
+
 <div><strong>精选留言（7）</strong></div><ul>
 <li><span>庄周梦蝶</span> 👍（1） 💬（1）<p>有没有demo源码，能跑出效果的源码</p>2023-03-07</li><br/><li><span>庄周梦蝶</span> 👍（1） 💬（2）<p>有点不太懂</p>2023-03-07</li><br/><li><span>戡玉</span> 👍（1） 💬（0）<p>这个低码雏形很棒，老师的代码真是不错，质量过硬，能学到东西！</p>2023-09-14</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-28</li><br/><li><span>Geek_12e8fd</span> 👍（0） 💬（0）<p>页面渲染策略中，Bundle 文件渲染确实在某些情况下可能无法同时兼顾“用户体验”和“技术稳定性”。然而，这并不意味着渲染策略必须总是做降级处理，牺牲用户体验来变成物料独立加载渲染。以下是对这个问题的详细分析：
 

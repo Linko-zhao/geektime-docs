@@ -40,9 +40,9 @@ pfunc(3);                       // 也可以直接调用函数指针
 
 ```
 auto func = [](int x)          // 定义一个lambda表达式
-{   
+{
     cout << x*x << endl;      // lambda表达式的具体内容
-};  
+};
 
 func(3);                      // 调用lambda表达式
 ```
@@ -84,7 +84,7 @@ func(3);                    // 调用lambda表达式
 
 ```
 auto a = [](int x)      // a函数执行一个功能
-            {...} 
+            {...}
 auto b = [](double x)    // b函数执行一个功能
             {...}
 auto c = [](string str)  // c函数执行一个功能
@@ -149,7 +149,7 @@ vector<int> v = {3, 1, 8, 5, 0};     // 标准容器
 cout << *find_if(begin(v), end(v),   // 标准库里的查找算法
             [](int x)                // 匿名lambda表达式，不需要auto赋值
             {
-                return x >= 5;        // 用做算法的谓词判断条件 
+                return x >= 5;        // 用做算法的谓词判断条件
             }                        // lambda表达式结束
         )
      << endl;                        // 语句执行完，lambda表达式就不存在了
@@ -261,8 +261,8 @@ cout << f(str) << endl;          // 参数类型是string
 <li><span>罗剑锋</span> 👍（23） 💬（2）<p>我在GitHub的lambd.cpp里写了一小段代码，示范了function + lambda实现成员函数的方法，算是对课下作业2的一个参考，同学们可以看看。</p>2020-05-29</li><br/><li><span>冻冻</span> 👍（66） 💬（6）<p>老师，用“map+lambda”的方式来替换难以维护的 if&#47;else&#47;switch，能举个例子吗？</p>2020-05-28</li><br/><li><span>被讨厌的勇气</span> 👍（24） 💬（2）<p>采用lambda表达式替换类的成员函数，成员变量通过 &#39;[this]&#39;可以捕获（相当于成员函数中的this参数），参数、返回值、函数体，lambda表达式都可以实现，所以理论上，是可以替换的。
 
 试了一下，报错：在类内部无法定义auto。之前老师提到过的。</p>2020-05-28</li><br/><li><span>xGdl</span> 👍（18） 💬（2）<p>lambda由类的operator重载而来，最大的特征是携带私货（闭包），我一般使用闭包最多的就是将任务打包Task推送线程池或下一个流程。这一过程在没有闭包之前，实现起来有些麻烦。</p>2020-06-04</li><br/><li><span>海怪哥哥</span> 👍（9） 💬（1）<p>关于lambda对于外部变量的捕获。大家可以这样理解更容易，如果把lambda表达式看成一个常规的变量，那么相同作用域（比如同一个函数）内的变量跟常量对它都是可见的。</p>2020-06-12</li><br/><li><span>sp0917</span> 👍（7） 💬（1）<p>罗老师，
-auto pfunc = &amp;my_square;    【1】
-auto pfunc = my_square;       【2】
+auto pfunc = &amp;my_square; 【1】
+auto pfunc = my_square; 【2】
 这两种表示有什么区别？
 我一直认为函数名和函数指针是对等的，所以我直觉就是使用【2】，但发现这两个在使用pfunc进行操作时效果一样。</p>2020-07-28</li><br/><li><span>robonix</span> 👍（5） 💬（1）<p>老师，lambda表达式是不是没有常量引用呢？如果怕修改被捕获的变量只能用值传递，那么就有拷贝发生了？</p>2020-06-09</li><br/><li><span>张JL</span> 👍（5） 💬（1）<p>我常用lambda替换函数中的小段重复代码。
 相同代码重复写几遍感觉很蠢，拿出来做成函数又没有必要，因为没有其他的调用需求，这时候用lambda就简洁多了</p>2020-05-28</li><br/><li><span>Charles</span> 👍（4） 💬（1）<p>感觉lambda和函数指针的差别好像不是太大，可能是我还没有真正理解吧，我觉得lambda的捕获功能，普通函数也可以用传引用的方式实现？然后将函数打包到别的地方，是不是也可以把普通函数的函数指针打包到别的地方？</p>2020-07-24</li><br/><li><span>Bluebuger</span> 👍（3） 💬（1）<p>Map + lambda是个好东西 想起了以前做 虚拟机时候指令操作码处理时候的一堆case(switch语句)</p>2020-06-25</li><br/><li><span>笨蛋小孩</span> 👍（3） 💬（1）<p>老师早啊!</p>2020-05-28</li><br/><li><span>Stephen</span> 👍（2） 💬（2）<p>普通函数所不具备的特殊本领，就是可以“捕获”外部变量，在内部的代码里直接操作.如果外部变量n定义最外层,且在普通函数前面,也是可以在函数中使用到的.此时应该和lambda没有区别了吧?</p>2021-01-05</li><br/><li><span>ripple</span> 👍（2） 💬（2）<p>罗老师，lamda不能传到外界去么？我发现不捕获变量就可以传，捕获了就传不了，不清楚哪条语法可以解决
@@ -270,11 +270,11 @@ testB(void (*func)(std::string)) {
 }
 
 test() {
-    std::string result = &quot;&quot;;
-    auto func = [&amp;result] (std::string params) mutable{
-        result = params;
-    };
+std::string result = &quot;&quot;;
+auto func = [&amp;result] (std::string params) mutable{
+result = params;
+};
 
-   testB(func);
+testB(func);
 }</p>2020-09-01</li><br/><li><span>Tedeer</span> 👍（2） 💬（1）<p>我看到老师文章中说到每个lambda表达式都有个全局唯一类型，只有编译器知道；lambda表达式只能通过auto声明，且auto变量必须在定义时初始化，而在类声明时，成员并未被赋值，就不知道lambda表达式类型，无法推导出具体类型，编译器会报错，所以无法使用lambda表达式作成员函数，请问老师我这样理解对吗？</p>2020-05-29</li><br/><li><span>泰伦卢</span> 👍（2） 💬（6）<p>个人认为lambda表达式还有个重要的用途是它可以自定义stl函数谓词规则(pred)，例如自定义排序规则，而无需使用传统的仿函数那种麻烦的方法。</p>2020-05-28</li><br/>
 </ul>

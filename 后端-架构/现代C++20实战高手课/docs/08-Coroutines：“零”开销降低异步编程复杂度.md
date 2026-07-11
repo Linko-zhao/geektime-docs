@@ -64,7 +64,7 @@ Promise其实是异步编程领域（比如JavaScript）中常见的概念和关
 ```c++
 template<class, class...>
 struct coroutine_traits {};
- 
+
 template<class R, class... Args>
 requires requires { typename R::promise_type; }
 struct coroutine_traits<R, Args...> {
@@ -176,7 +176,7 @@ struct coroutine_handle {
   Promise& promise() const;
 
 private:
-  void* ptr;  // exposition only 
+  void* ptr;  // exposition only
 };
 
 template<>
@@ -378,7 +378,7 @@ concept Promise = requires(PromiseType promise) {
   { promise.get_return_object() } -> Coroutine<PromiseType>;
   { promise.initial_suspend() } -> Awaiter;
   { promise.final_suspend() } -> Awaiter;
-  
+
   requires (requires(ValueType value) { promise.return_value(value); } || { promise.return_void(); })
   { promise.unhandled_exception() };
 };

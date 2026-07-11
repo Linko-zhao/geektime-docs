@@ -37,7 +37,7 @@ fn main() {
     let p = Point {x: 10.2, y: 20.4};
     print(p);
 }
-// 输出 
+// 输出
 Point 10, 20
 Point 10.2, 20.4
 ```
@@ -346,7 +346,7 @@ impl TraitA for A {
 fn main() {
     let a = Foo {
         x: A,
-    };   
+    };
 }
 ```
 
@@ -373,7 +373,7 @@ impl TraitA for A {
 fn main() {
     let a = Foo {
         x: A,  // 报错
-    };   
+    };
 }
 ```
 
@@ -421,7 +421,7 @@ impl TraitA for B {
 fn doit<T>()    // 定义类型参数T
 where
     T: TraitA,  // 使用where语句将T的约束表达放在后面来
-    T::Item: Debug + PartialEq  // 注意这一句，直接对TraitA的关联类型Item添加了更多一个约束 PartialEq  
+    T::Item: Debug + PartialEq  // 注意这一句，直接对TraitA的关联类型Item添加了更多一个约束 PartialEq
 {
 }
 ```
@@ -494,7 +494,7 @@ fn doit<T: TraitA + TraitB + TraitC + TraitD + TraitE>(t: T) -> i32 {}
 
 ```plain
 fn doit<T>(t: T) -> i32
-where 
+where
     T: TraitA + TraitB + TraitC + TraitD + TraitE
 {}
 ```
@@ -528,7 +528,7 @@ trait Circle where Self: Shape { fn radius(&self) -> f64; }
 你也可以看一下使用时的约束表示。
 
 ```plain
-T: Circle 
+T: Circle
 实际上表示：
 T: Circle + Shape
 ```
@@ -742,7 +742,7 @@ fn main() {
     doit4(B);
     doit6(B);
     doit7(B);  // B的实例只能用在3个函数版本中
-    
+
     doit7(C);  // C的实例只能用在1个函数版本中
 }
 ```
@@ -759,13 +759,13 @@ struct Pair<T> {
     y: T,
 }
 
-impl<T> Pair<T> {    // 第一次 impl 
+impl<T> Pair<T> {    // 第一次 impl
     fn new(x: T, y: T) -> Self {
         Self { x, y }
     }
 }
 
-impl<T: Display + PartialOrd> Pair<T> {  // 第二次 impl 
+impl<T: Display + PartialOrd> Pair<T> {  // 第二次 impl
     fn cmp_display(&self) {
         if self.x >= self.y {
             println!("The largest member is x = {}", self.x);
@@ -927,15 +927,11 @@ Java、C++等OOP语言中的继承个人感觉更多是在强调is-a这个概念
 
 得在 impl trait for typeA 的时候写清楚
 
-
-
 一般说 A 有 trait bound， 意思就是这个 A 必须实现某个 trait
 
 我们不仅可以搞 trait bound, 有 trait bound 之后在 where clause 里还可以搞 trait type bound：
 
 `T: trait A, T::typeB: Debug + PartialEq`
-
-
 
 为啥调用 trait 方法还需要 use trait?
 
@@ -946,31 +942,31 @@ pub trait Sport {
     type SportType;
 
     fn play(&amp;self, st: SportType);
+
 }
 
 fn main() {}
 
-
 error[E0412]: cannot find type `SportType` in this scope
- --&gt; src\main.rs:4:24
-  |
-4 |     fn play(&amp;self, st: SportType);
-  |                        ^^^^^^^^^ help: you might have meant to use the associated type: `Self::SportType`
+--&gt; src\main.rs:4:24
+|
+4 | fn play(&amp;self, st: SportType);
+| ^^^^^^^^^ help: you might have meant to use the associated type: `Self::SportType`
 </p>2023-11-17</li><br/><li><span>duwoodly</span> 👍（1） 💬（1）<p>CPP的继承，子类会继承父类的属性和方法，子类可以重写父类的方法。 继承引起的耦合性很强。 所以新产生的语言都不再支持继承，像go和rust使用组合，降低了耦合性。
 Rust 的trait 是一种约束，也是一种能力，避免了继承的强耦合，又提供了灵活性。</p>2023-11-08</li><br/><li><span>王晓宇</span> 👍（0） 💬（1）<p>老师，在T上使用关联类型那个示例编译不通过
 trait TraitA {
   type Mytype;
 }
 
-fn doit&lt;T: TraitA&gt;(a: T::Mytype) {}  &#47;&#47; 这里在函数中使用了关联类型
+fn doit&lt;T: TraitA&gt;(a: T::Mytype) {} &#47;&#47; 这里在函数中使用了关联类型
 
 struct TypeA;
 impl TraitA for TypeA {
-  type Mytype = String;  &#47;&#47; 具化关联类型为String
+type Mytype = String; &#47;&#47; 具化关联类型为String
 }
 
 fn main() {
-  doit::&lt;TypeA&gt;(&quot;abc&quot;.to_string());  &#47;&#47; 给Rustc小助手喂信息：T具化为TypeA
+doit::&lt;TypeA&gt;(&quot;abc&quot;.to_string()); &#47;&#47; 给Rustc小助手喂信息：T具化为TypeA
 }</p>2024-03-28</li><br/><li><span>啊良梓是我</span> 👍（0） 💬（1）<p>有没有入门项目来练练手，
 看完就忘了，不上手的话</p>2024-03-06</li><br/><li><span>飞了的鸭子被煮了</span> 👍（0） 💬（1）<p>trait 不需要考虑层级关系，感觉类型的约束更加原子化了，被消费时不需要考虑那么多的耦合。</p>2024-01-22</li><br/><li><span>千回百转无劫山</span> 👍（0） 💬（1）<p>从python过来的，只能说打开了新世界的大门</p>2023-12-27</li><br/><li><span>superggn</span> 👍（0） 💬（1）<p>思考题（我从 python 来的， cpp 和 java 没学过）
 
@@ -982,8 +978,6 @@ class 里有各种方法， 搞个子类就可以对基类进行各种修改
 
 大部分情况是一个树形结构
 
-
-
 面向 trait bound 编程
 
 trait 类似于 OOP 里搞一个标准基类， 然后来回继承， 不同点在于更灵活
@@ -992,10 +986,9 @@ trait 类似于 OOP 里搞一个标准基类， 然后来回继承， 不同点�
 
 引用来引用去， 飞来飞去~
 
-
-
 这种思考题没啥感觉， 反正我也不会写， 随便叨叨， 等全都刷一遍之后可能会有别的感想</p>2023-12-15</li><br/><li><span>superggn</span> 👍（0） 💬（2）<p>我记得 trait 底下定义的函数里， 有 self 参数的叫方法（method, called on instance）， 没 self 参数的才叫 关联函数（associated function, called on type)?
 =================
+
 刚才查了下， duckduckgo 搜出来的 rust associated function 跟我记得一样， 区分 method 和 associated function， 但 Rust By Practice (RBP) 和 Rust By Example (RBE) 说的不一样...
 
 RBP
@@ -1006,14 +999,11 @@ RBE
 https:&#47;&#47;doc.rust-lang.org&#47;rust-by-example&#47;fn&#47;methods.html
 =&gt; &quot;Some functions are connected to a particular type. These come in two forms: associated functions, and methods.&quot;
 </p>2023-12-15</li><br/><li><span>plh</span> 👍（0） 💬（1）<p>老师你好: 原文 [因为同一个 trait 只能实现一次到某个类型上。]  这个 &quot;某个类型&quot; 怎么理解? 
-比如: 标准库上有 Option 上面 就有这么3个方法: 感觉这个有点迷惑?  
+比如: 标准库上有 Option 上面 就有这么3个方法: 感觉这个有点迷惑?
 
 impl&lt;T&gt; IntoIterator for Option&lt;T&gt;
 impl&lt;&#39;a, T&gt; IntoIterator for &amp;&#39;a Option&lt;T&gt;
 impl&lt;&#39;a, T&gt; IntoIterator for &amp;&#39;a mut Option&lt;T&gt;
-
-
-
 
 </p>2023-11-29</li><br/>
 </ul>

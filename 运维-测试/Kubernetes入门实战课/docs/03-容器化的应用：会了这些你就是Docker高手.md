@@ -11,7 +11,7 @@
 之前我们运行容器的时候，显然不是从零开始的，而是要先拉取一个“镜像”（image），再从这个“镜像”来启动容器，像[第一节课](https://time.geekbang.org/column/article/528619)这样：
 
 ```plain
-docker pull busybox      
+docker pull busybox
 docker run busybox echo hello world
 ```
 
@@ -82,7 +82,7 @@ IMAGE ID还有一个好处，因为它是十六进制形式且唯一，Docker特
 下面我们就来试验一下，使用名字和IMAGE ID来删除镜像：
 
 ```plain
-docker rmi redis    
+docker rmi redis
 docker rmi d4c
 ```
 
@@ -165,9 +165,9 @@ docker rm ed d6 45
 我们还是用刚才的Nginx、Redis和Ubuntu这三个容器来试验一下，加上 `--rm` 参数（省略了name参数）：
 
 ```plain
-docker run -d --rm nginx:alpine 
+docker run -d --rm nginx:alpine
 docker run -d --rm redis
-docker run -it --rm 2e6 sh 
+docker run -it --rm 2e6 sh
 ```
 
 然后我们用 `docker stop` 停止容器，再用 `docker ps -a` ，就会发现不需要我们再手动执行 `docker rm` ，Docker已经自动删除了这三个容器。
@@ -219,7 +219,6 @@ run是针对容器本身启动，而exec是进入了容器内部去跑命令，�
 docker镜像中包含了完整的应用依赖和系统环境，而rpm包则没有
 镜像比较能节约磁盘空间，如果镜像的部分层已经在本地中有了，就可以直接复用，rpm包不行
 
-
 docker的run和exec的区别
 
 run是从镜像创建运行一个容器的必备命令，exec则是在已经运行的容器中执行另外一个程序，他们的优先级是先run后exec。</p>2022-08-16</li><br/><li><span>朱雯</span> 👍（3） 💬（1）<p>老师好，想问一个问题，那就是k8s的container和docker容器有什么区别吗，我使用dockerfile打包一个镜像，在docker环境中是可以打包成功，但是放到使用k8s的jenkins流水线上，就无法打包成功，云平台相关工程师告诉我可能是k8s和docker的不兼容导致的，想请问一下这个问题</p>2022-06-27</li><br/><li><span>YueShi</span> 👍（2） 💬（1）<p>之前一直以为IMAGE ID是随机的，又学到了，原来是跟镜像文件相关的，特意去看了一下，不同的机器上的同一个image的同一个tag，IMAGE ID确实是一样的</p>2022-07-22</li><br/><li><span>Jarvis Chan</span> 👍（1） 💬（1）<p>chrono真的太牛了，真的是小白都能快速上手，沉淀多年才有这么深入浅出的能力</p>2023-05-16</li><br/><li><span>小马哥</span> 👍（1） 💬（1）<p>问题1: 说一说你对容器镜像的理解，它与 rpm、deb 安装包有哪些不同和优缺点。
@@ -229,5 +228,5 @@ run是从镜像创建运行一个容器的必备命令，exec则是在已经运�
 
 如果要解决的问题是移植性, 打包部署的方便, 当然选择容器技术. </p>2023-05-15</li><br/><li><span>极客酱酱</span> 👍（1） 💬（1）<p>补充一下：
 一次停止所有容器：docker stop `docker ps -a -q`
-一次删除所有容器：docker rm    `docker ps -a -q`</p>2023-01-15</li><br/><li><span>ReCharge</span> 👍（1） 💬（1）<p>买了老师很多的专栏了，每次都受益匪浅，老师能分享下学习新知识的方法么？如何能够做到这么深入浅出的。。</p>2022-11-09</li><br/>
+一次删除所有容器：docker rm `docker ps -a -q`</p>2023-01-15</li><br/><li><span>ReCharge</span> 👍（1） 💬（1）<p>买了老师很多的专栏了，每次都受益匪浅，老师能分享下学习新知识的方法么？如何能够做到这么深入浅出的。。</p>2022-11-09</li><br/>
 </ul>

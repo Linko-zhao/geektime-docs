@@ -94,7 +94,7 @@ public class ReactorLoadBalancerClientAutoConfiguration {
          LoadBalancerRetryPolicy retryPolicy) {
       return new RetryableLoadBalancerExchangeFilterFunction(retryPolicy, loadBalancerFactory, properties);
    }
-   
+
     // 如果关闭了Loadbalancer的重试功能
     // 则初始化ReactorLoadBalancerExchangeFilterFunction对象
     @ConditionalOnMissingBean
@@ -119,7 +119,7 @@ public class LoadBalancerBeanPostProcessorAutoConfiguration {
    @Configuration(proxyBeanMethods = false)
    @ConditionalOnBean(ReactiveLoadBalancer.Factory.class)
    protected static class ReactorDeferringLoadBalancerFilterConfig {
-      
+
       // 将第一步中创建的ExchangeFilterFunction实例封装到另一个名为
       // DeferringLoadBalancerExchangeFilterFunction的过滤器中
       @Bean
@@ -129,7 +129,7 @@ public class LoadBalancerBeanPostProcessorAutoConfiguration {
          return new DeferringLoadBalancerExchangeFilterFunction<>(exchangeFilterFunctionProvider);
       }
    }
-   
+
    // 将过滤器打包到后置处理器中
    @Bean
    public LoadBalancerWebClientBuilderBeanPostProcessor loadBalancerWebClientBuilderBeanPostProcessor(
@@ -144,7 +144,7 @@ public class LoadBalancerBeanPostProcessorAutoConfiguration {
 ```
 public class LoadBalancerWebClientBuilderBeanPostProcessor implements BeanPostProcessor {
    // ... 省略部分代码
-   
+
    // 对过滤器动手脚
    @Override
    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -215,9 +215,9 @@ public class CanaryRule implements ReactorServiceInstanceLoadBalancer {
     private String serviceId;
     // 定义一个轮询策略的种子
     final AtomicInteger position;
-    
+
     // ...省略构造器代码
-    
+
     // 这个服务是Loadbalancer的标准接口，也是负载均衡策略选择服务器的入口方法
     @Override
     public Mono<Response<ServiceInstance>> choose(Request request) {
@@ -226,11 +226,11 @@ public class CanaryRule implements ReactorServiceInstanceLoadBalancer {
         return supplier.get(request).next()
                 .map(serviceInstances -> processInstanceResponse(supplier, serviceInstances, request));
     }
-    
+
     // 省略该方法内容，本方法主要完成了对getInstanceResponse的调用
     private Response<ServiceInstance> processInstanceResponse(
     }
-    
+
     // 根据金丝雀的规则返回目标节点
     Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances, Request request) {
         // 注册中心无可用实例 返回空
@@ -245,7 +245,7 @@ public class CanaryRule implements ReactorServiceInstanceLoadBalancer {
         HttpHeaders headers = requestData.getHeaders();
         // 获取到header中的流量标记
         String trafficVersion = headers.getFirst(TRAFFIC_VERSION);
-        
+
         // 如果没有找到打标标记，或者标记为空，则使用RoundRobin规则进行查找
         if (StringUtils.isBlank(trafficVersion)) {
             // 过滤掉所有金丝雀测试的节点，即Nacos Metadaba中包含流量标记的节点
@@ -255,7 +255,7 @@ public class CanaryRule implements ReactorServiceInstanceLoadBalancer {
                     .collect(Collectors.toList());
             return getRoundRobinInstance(noneCanaryInstances);
         }
-        
+
         // 如果WelClient的Header里包含流量标记
         // 循环每个Nacos服务节点，过滤出metadata值相同的instance，再使用RoundRobin查找
         List<ServiceInstance> canaryInstances = instances.stream().filter(e -> {
@@ -264,7 +264,7 @@ public class CanaryRule implements ReactorServiceInstanceLoadBalancer {
         }).collect(Collectors.toList());
         return getRoundRobinInstance(canaryInstances);
     }
-    
+
     // 使用RoundRobin机制获取节点
     private Response<ServiceInstance> getRoundRobinInstance(List<ServiceInstance> instances) {
         // 如果没有可用节点，则返回空
@@ -272,7 +272,7 @@ public class CanaryRule implements ReactorServiceInstanceLoadBalancer {
             log.warn("No servers available for service: " + serviceId);
             return new EmptyResponse();
         }
-        
+
         // 每一次计数器都自动+1，实现轮询的效果
         int pos = Math.abs(this.position.incrementAndGet());
         ServiceInstance instance = instances.get(pos % instances.size());
@@ -340,8 +340,8 @@ public Coupon requestCoupon(RequestCoupon request) {
             .retrieve()
             .bodyToMono(CouponTemplateInfo.class)
             .block();
- 
-    // xxx 省略以下代码           
+
+    // xxx 省略以下代码
 }
 ```
 
@@ -401,12 +401,14 @@ public Coupon requestCoupon(RequestCoupon request) {
             return getRoundRobinInstance(instances);
         }
     }</p>2022-05-31</li><br/><li><span>与路同飞</span> 👍（10） 💬（2）<p>现在公司所有api服务都是注册到api网关上去了。api网关替我们做了负载均衡和路由规则。那业务团队是不是就不需要引用负载均衡组件了</p>2022-01-20</li><br/><li><span>何衍其</span> 👍（9） 💬（2）<p>&#47;&#47; 当前服务的集群名称
- String clusterName = environment.resolvePlaceholders(&quot;${spring.cloud.nacos.discovery.cluster-name:}&quot;);
+
+String clusterName = environment.resolvePlaceholders(&quot;${spring.cloud.nacos.discovery.cluster-name:}&quot;);
 
 &#47;&#47; 服务实列所属集群名称
 serviceInstance.getMetadata().get(&quot;nacos.cluster&quot;);</p>2022-04-13</li><br/><li><span>~</span> 👍（5） 💬（3）<p>说一下思考题我的思路：
 从 CanaryRule 就可以看出来了，其实实现负载均衡的逻辑就在getRoundRobinInstance中，我们只需要改造这里就可以了。我的想法是设置一个缓存（map 也好，其他的也好），存放上次选择出的 serverInstance，如果是第一次选择，那么使用老逻辑选出一个，如果上次选择的服务已经不可用了，就从缓存中清除，重新选一个就可以了。
 补充2点：
+
 1. 怎么判断一个服务是否可用？其实在这里的代码中，传入的 List&lt;ServiceInstance&gt; 参数就是从 nacos 中获取到的可用服务的列表。那么只需要判断缓存中存放的 serviceInstance 是否也在 list 中就可以了。具体怎么获取到可用服务列表的，需要进一步查看源码才能了解。
 2. 仅做一个猜想，不具有实际意义，老师如果能解答也再好不过了：能否直接在获取可用服务列表那步就直接确定一个服务？其他的逻辑也是如此。就算可行其实设计上也是不合理的，因为获取可用服务的代码就应该只负责相关逻辑，负载均衡代码就应该只管负载均衡。提出这个猜想只不过是想对源码有进一步了解，设计上还是各司其职更合理。
 

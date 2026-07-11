@@ -47,7 +47,7 @@ private T createAdaptiveExtension() {
     try {
         // 这一行从 newInstance 这个关键字便知道这行代码就是创建扩展点的核心代码
         T instance = (T) getAdaptiveExtensionClass().newInstance();
-        
+
         // 这里针对创建出来的实例对象做的一些类似 Spring 的前置后置的方式处理
         instance = postProcessBeforeInitialization(instance, null);
         instance = injectExtension(instance);
@@ -72,7 +72,7 @@ private Class<?> getAdaptiveExtensionClass() {
     return cachedAdaptiveClass = createAdaptiveExtensionClass();
 }
                   ↓
-// 创建自适应扩展点类对象                  
+// 创建自适应扩展点类对象
 private Class<?> createAdaptiveExtensionClass() {
     // Adaptive Classes' ClassLoader should be the same with Real SPI interface classes' ClassLoader
     ClassLoader classLoader = type.getClassLoader();
@@ -199,7 +199,7 @@ private void loadDirectory(Map<String, Class<?>> extensionClasses, String dir, S
     String fileName = dir + type;
     try {
         // 这里省略了其他部分代码
-        
+
         Map<ClassLoader, Set<java.net.URL>> resources = ClassLoaderResourceLoader.loadResources(fileName, classLoadersToLoad);
         // 这里通过 SPI 文件目录找到了多个文件
         // 于是循环每个文件进行挨个读取内容
@@ -212,7 +212,7 @@ private void loadDirectory(Map<String, Class<?>> extensionClasses, String dir, S
     }
 }
                   ↓
-// 循环 SPI 文件的多个路径，然后想办法读取资源路径的内容                  
+// 循环 SPI 文件的多个路径，然后想办法读取资源路径的内容
 private void loadFromClass(Map<String, Class<?>> extensionClasses, boolean overridden, Set<java.net.URL> urls, ClassLoader classLoader,
                            String[] includedPackages, String[] excludedPackages, String[] onlyExtensionClassLoaderPackages) {
     if (CollectionUtils.isNotEmpty(urls)) {
@@ -253,7 +253,7 @@ private void loadClass(Map<String, Class<?>> extensionClasses, java.net.URL reso
     // 如果该接口的实现类上有 Adaptive 注解的话，则给 cachedAdaptiveClass 字段进行了赋值
     if (clazz.isAnnotationPresent(Adaptive.class)) {
         cacheAdaptiveClass(clazz, overridden);
-    } 
+    }
     // 如果该接口的实现类有个构造方法的参数是该接口的话，又怎么怎么滴
     else if (isWrapperClass(clazz)) {
         cacheWrapperClass(clazz);
@@ -381,7 +381,7 @@ public static void main(String[] args) {
     ApplicationModel applicationModel = ApplicationModel.defaultModel();
     // 通过 Geek 接口获取指定像 扩展点加载器
     ExtensionLoader<Geek> extensionLoader = applicationModel.getExtensionLoader(Geek.class);
-    
+
     Geek geek = extensionLoader.getAdaptiveExtension();
     System.out.println("【指定的 geek=springcloud 的情况】动态获取结果为: "
             + geek.getCourse(URL.valueOf("xyz://127.0.0.1/?geek=springcloud")));

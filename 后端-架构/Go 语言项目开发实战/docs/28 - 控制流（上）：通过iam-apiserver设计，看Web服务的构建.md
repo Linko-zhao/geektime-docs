@@ -106,14 +106,14 @@ $ curl -v -XPOST -H "Content-Type: application/json" -H"Authorization: Bearer ${
 > Content-Type: application/json
 > Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
 > Content-Length: 72
-> 
+>
 * upload completely sent off: 72 out of 72 bytes
 < HTTP/1.1 200 OK
 < Content-Type: application/json; charset=utf-8
 < X-Request-Id: ff825bea-53de-4020-8e68-4e87574bd1ba
 < Date: Mon, 26 Jul 2021 07:20:26 GMT
 < Content-Length: 313
-< 
+<
 * Connection #0 to host iam.api.marmotedu.com left intact
 {"metadata":{"id":60,"instanceID":"secret-jedr3e","name":"secret0","createdAt":"2021-07-26T15:20:26.885+08:00","updatedAt":"2021-07-26T15:20:26.907+08:00"},"username":"admin","secretID":"U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD","secretKey":"fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf","expires":0,"description":"admin secret"}
 ```
@@ -205,7 +205,7 @@ iam-apiserver根据Options配置来构建命令行参数和应用配置。
 			for _, f := range namedFlagSets.FlagSets {
 				fs.AddFlagSet(f)
 			}
-	
+
             ...
 		}
 ```
@@ -213,9 +213,9 @@ iam-apiserver根据Options配置来构建命令行参数和应用配置。
 通过[CreateConfigFromOptions](https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/config/config.go#L16)函数来构建应用配置：
 
 ```
-        cfg, err := config.CreateConfigFromOptions(opts)                      
-        if err != nil {                                               
-            return err                                                
+        cfg, err := config.CreateConfigFromOptions(opts)
+        if err != nil {
+            return err
         }  
 ```
 
@@ -494,14 +494,14 @@ type Service interface {
     Policies() PolicySrv
 }
 
-type SecretSrv interface {                                                             
-    Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error    
-    Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error            
-    Delete(ctx context.Context, username, secretID string, opts metav1.DeleteOptions) error                        
-    DeleteCollection(ctx context.Context, username string, secretIDs []string, opts metav1.DeleteOptions) error    
-    Get(ctx context.Context, username, secretID string, opts metav1.GetOptions) (*v1.Secret, error)    
-    List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error)    
-} 
+type SecretSrv interface {
+    Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error
+    Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error
+    Delete(ctx context.Context, username, secretID string, opts metav1.DeleteOptions) error
+    DeleteCollection(ctx context.Context, username string, secretIDs []string, opts metav1.DeleteOptions) error
+    Get(ctx context.Context, username, secretID string, opts metav1.GetOptions) (*v1.Secret, error)
+    List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error)
+}
 ```
 
 可以看到，控制层通过业务层提供的`Service`接口类型，剥离了业务层的具体实现。业务层的Service接口类型提供了`Secrets()`方法，该方法返回了一个实现了`SecretSrv`接口的实例。在控制层中，通过调用该实例的`Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error`方法来完成密钥的创建。至于业务层是如何创建密钥的，控制层不需要知道，也就是说创建密钥可以有多种实现。
@@ -656,23 +656,25 @@ iam-apiserver采用了简洁架构，整个应用分为4层：模型层、控制
 4. controller、service、store 三个层次，controller 负责参数解析、校验；service 层负责业务逻辑；store负责数据库操作。
 
 4层模型，模型层、控制层、业务层、存储层。层级之间如何解耦？
+
 1. 通过 interface 实现解耦；
 2. service层和store层的实例，是在请求执行过程中动态创建，它们都依赖一个工厂对象，作为实例化的输入。
 3. 工厂对象 store store.Factory 不与具体的表、具体的操作绑定，通过store对象，你可以执行数据库的任何操作。类似的，srv srvv1.Service 工厂也不与具体的业务绑定，通过srv对象，你可以执行任何业务逻辑。
 
 服务启动流程分为三个阶段：配置阶段、PreRun阶段、Run阶段。配置相关的对象有：Options、Config、HTTP&#47;GRPC 相关的配置对象。</p>2021-12-02</li><br/><li><span>Sch0ng</span> 👍（7） 💬（1）<p>结合前面章节的铺垫，介绍iam-apiserver的使用方法、架构和代码实现，前后连贯，逻辑清晰，简洁易懂。
-顺便一提，跟郑晔老师的《软件设计之美》中讲到的：快速了解一个项目时，要了解项目的模型、接口、实现，核心思想如出一辙。软件设计的路上，殊途同归。</p>2021-08-15</li><br/><li><span>Jasper</span> 👍（6） 💬（3）<p>var _ UserSrv = (*userService)(nil)  我是go初学者，这种语法表示没看明白</p>2021-08-23</li><br/><li><span>徐海浪</span> 👍（4） 💬（1）<p>练习1：通过component-base共享 REST API 相关代码</p>2021-08-27</li><br/><li><span>Geek_cede76</span> 👍（2） 💬（1）<p>这里使用到了设计模式中的工厂方法模式。Service是工厂接口，里面包含了一系列创建具体业务层对象的工厂函数：Users()、Secrets()、Policies()。通过工厂方法模式，不仅隐藏了业务层对象的创建细节，而且还可以很方便地在Service工厂接口实现方法中添加新的业务层对象</p>2022-11-18</li><br/><li><span>hiDaLao</span> 👍（2） 💬（1）<p>老师，请问下context作为参数一直传下去的目的是什么呢</p>2022-08-30</li><br/><li><span>左耳朵东</span> 👍（2） 💬（2）<p>业务层和仓库层那里都做了两层抽象，比如仓库层有 Factory 和 SecretStore 两类接口，业务层调用的时候要这样写 s.store.Secrets().Create()。我的疑问是 Factory 这层抽象是不是可以省掉，业务层调用直接这样写 store.Secrets(dbIns).Create() 貌似也可以，这样有什么缺点吗？</p>2022-03-08</li><br/><li><span>Summer  空城</span> 👍（2） 💬（2）<p>老师，您好，在app&#47;app.go 中 func NewApp(name string, basename string, opts ...Option) *App内部执行Option的方法，其实就是给App设置参数。为什么不来个set方法直接设置，现在这种设置方法感觉绕了一圈。。。。。</p>2021-09-02</li><br/><li><span>Geek_cede76</span> 👍（1） 💬（1）<p>这里使用到了设计模式中的工厂方法模式。Service是工厂接口，里面包含了一系列创建具体业务层对象的工厂函数：Users()、Secrets()、Policies()。通过工厂方法模式，不仅隐藏了业务层对象的创建细节，而且还可以很方便地在Service工厂接口实现方法中添加新的业务层对象
+顺便一提，跟郑晔老师的《软件设计之美》中讲到的：快速了解一个项目时，要了解项目的模型、接口、实现，核心思想如出一辙。软件设计的路上，殊途同归。</p>2021-08-15</li><br/><li><span>Jasper</span> 👍（6） 💬（3）<p>var _ UserSrv = (*userService)(nil) 我是go初学者，这种语法表示没看明白</p>2021-08-23</li><br/><li><span>徐海浪</span> 👍（4） 💬（1）<p>练习1：通过component-base共享 REST API 相关代码</p>2021-08-27</li><br/><li><span>Geek_cede76</span> 👍（2） 💬（1）<p>这里使用到了设计模式中的工厂方法模式。Service是工厂接口，里面包含了一系列创建具体业务层对象的工厂函数：Users()、Secrets()、Policies()。通过工厂方法模式，不仅隐藏了业务层对象的创建细节，而且还可以很方便地在Service工厂接口实现方法中添加新的业务层对象</p>2022-11-18</li><br/><li><span>hiDaLao</span> 👍（2） 💬（1）<p>老师，请问下context作为参数一直传下去的目的是什么呢</p>2022-08-30</li><br/><li><span>左耳朵东</span> 👍（2） 💬（2）<p>业务层和仓库层那里都做了两层抽象，比如仓库层有 Factory 和 SecretStore 两类接口，业务层调用的时候要这样写 s.store.Secrets().Create()。我的疑问是 Factory 这层抽象是不是可以省掉，业务层调用直接这样写 store.Secrets(dbIns).Create() 貌似也可以，这样有什么缺点吗？</p>2022-03-08</li><br/><li><span>Summer 空城</span> 👍（2） 💬（2）<p>老师，您好，在app&#47;app.go 中 func NewApp(name string, basename string, opts ...Option) *App内部执行Option的方法，其实就是给App设置参数。为什么不来个set方法直接设置，现在这种设置方法感觉绕了一圈。。。。。</p>2021-09-02</li><br/><li><span>Geek_cede76</span> 👍（1） 💬（1）<p>这里使用到了设计模式中的工厂方法模式。Service是工厂接口，里面包含了一系列创建具体业务层对象的工厂函数：Users()、Secrets()、Policies()。通过工厂方法模式，不仅隐藏了业务层对象的创建细节，而且还可以很方便地在Service工厂接口实现方法中添加新的业务层对象
 
 老师，我感觉这里更像是抽象工厂方法模式</p>2022-11-18</li><br/><li><span>3608375821</span> 👍（1） 💬（1）<p>api接口是在哪里注册到router上面的啊，没找到，比如&#47;v1&#47;secrets&#47;</p>2022-10-06</li><br/><li><span>呆呆</span> 👍（1） 💬（1）<p>func initRouter(g *gin.Engine) {
-	installMiddleware(g)
-	installController(g)
+installMiddleware(g)
+installController(g)
 }
 如上apiserver&#47;router.go的函数参数都为gin.Engine，是不是不太对？apiserver应该只与genericapiserver有关系，genericapiserver中集成了gin.Engine， genericapiserver中提供路由注册接口会不会更好些。
 </p>2022-08-29</li><br/><li><span>Jone_乔泓恺</span> 👍（1） 💬（1）<p>请教：在仓库层如果不在想使用 mysql ，而是换成 etcd ，应该如何修改代码呢？</p>2022-08-10</li><br/><li><span>船长</span> 👍（1） 💬（2）<p>大佬，在模型层中依赖gorm，这种设计好吗？个人感觉模型层中是尽量不要依赖第三方跟某种实现强相关的东西，不知道大佬这么设计是出于什么样的考虑。
 func (u *User) AfterCreate(tx *gorm.DB) error {
 	u.InstanceID = idutil.GetInstanceID(u.ID, &quot;user-&quot;)
 
-	return tx.Save(u).Error
+    return tx.Save(u).Error
+
 }</p>2022-04-05</li><br/><li><span>Dragon Frog</span> 👍（1） 💬（2）<p>老师好，有个问题，想麻烦老师解惑一下。
 
 在前面的课程谈到 “go 的设计哲学是模块划分而不鼓励 mvc 分层结构”，但是实际上我们这个项目的模型仍然是 MVC 划分的，想问问老师为什么最后决定这么设计。

@@ -309,11 +309,11 @@ concept Histogram = requires(T h1, T h2) {
 
     typename T::type;        // 要求存在类型成员type
     typename std::vector<T>; // 要求能够模板实例化并与std::vector组合使用
-    
+
     { h1.getSubHistogram() } -> same_as<T>;    // 要求接口返回类型与T一致
     { h1.getUnit() } -> convertible_to<float>; // 要求接口返回类型能转换成float，本质上接口返回类型可能是double
     { h1 = std::move(h2) } noexcept;          // 要求表达式不能抛出异常
-    
+
     requires sizeof(T) > 4;
 };
 ```

@@ -159,7 +159,7 @@ func toolsCall(ctx wrapper.HttpContext, llmClient wrapper.HttpClient, llmInfo LL
     }
 
     ...
-    
+
     if apiClient != nil {
         err := apiClient.Call(
             method,

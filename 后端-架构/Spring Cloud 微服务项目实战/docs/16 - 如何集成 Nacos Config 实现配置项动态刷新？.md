@@ -67,7 +67,7 @@ spring:
         # 从Nacos读取配置项的超时时间
         timeout: 5000
         # 长轮询超时时间
-        config-long-poll-timeout: 10000        
+        config-long-poll-timeout: 10000
         # 轮询的重试时间
         config-retry-time: 2000
         # 长轮询最大重试次数

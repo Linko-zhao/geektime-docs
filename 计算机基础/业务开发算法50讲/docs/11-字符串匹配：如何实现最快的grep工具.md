@@ -207,7 +207,7 @@ def get_gs(pattern):
 ```python
 def bm(string, pattern, bc, gs):
     # i 用于标记当前模式串和主串哪个位置左对齐。
-    i = 0 
+    i = 0
     # j 用于标记当前模式串匹配到哪个位置；从右往左遍历匹配。
     j = len(pattern)
 
@@ -225,9 +225,9 @@ def bm(string, pattern, bc, gs):
                 return i
     # 匹配失败返回 None
     return -1
-    
+
 if __name__ == '__main__':
-    string = 'here is a simple example ' 
+    string = 'here is a simple example '
     pattern = 'example'
 
     bc = get_bc(pattern)  # 坏字符表

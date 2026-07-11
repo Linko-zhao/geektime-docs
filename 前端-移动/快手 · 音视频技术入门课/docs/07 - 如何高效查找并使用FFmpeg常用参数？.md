@@ -387,4 +387,5 @@ ffmpeg -f lavfi -i testsrc=s=176x144 -metadata title=&quot;This Is A Test&quot; 
 2. 用如下命令生成新的视频文件 out.mkv，其在原来 test.mkv 视频文件上会叠加一个 logo，播放时，按照视频进度比例从左下角向右下角移动
 
     ffmpeg -re -i test.mkv -vf &quot;movie=logo.PNG[test];[in][test]overlay=x=&#39;if(gte(t,0), t*(W-w)&#47;20.47, NAN)&#39;:y=H-h [out]&quot; out.mkv</p>2022-08-23</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-12-25</li><br/>
+
 </ul>

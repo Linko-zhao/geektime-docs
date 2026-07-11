@@ -441,7 +441,7 @@ func doTxnXfer(etcd *v3.Client, from, to string, amount uint) (bool, error) {
     txn = txn.Then(
         OpPut(from, fromUint64(fromV - amount)),
         OpPut(to, fromUint64(toV + amount))
-    //提交事务 
+    //提交事务
     putresp, err := txn.Commit()
     // 检查事务的执行结果
     if err != nil {

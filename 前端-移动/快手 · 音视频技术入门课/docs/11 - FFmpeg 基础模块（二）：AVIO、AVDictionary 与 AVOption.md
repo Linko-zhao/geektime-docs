@@ -23,7 +23,7 @@ AVIOContext *avio_alloc_context(
                   int (*read_packet)(void *opaque, uint8_t *buf, int buf_size),
                   int (*write_packet)(void *opaque, uint8_t *buf, int buf_size),
                   int64_t (*seek)(void *opaque, int64_t offset, int whence));
-                  
+
 void avio_context_free(AVIOContext **s);
 ```
 

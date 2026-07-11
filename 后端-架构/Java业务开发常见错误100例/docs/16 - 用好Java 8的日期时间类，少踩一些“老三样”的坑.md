@@ -266,7 +266,7 @@ class CalendarBuilder {
 	Calendar establish(Calendar cal) {
        	...
         cal.clear();//清空
-        
+
         for (int stamp = MINIMUM_USER_STAMP; stamp < nextStamp; stamp++) {
             for (int index = 0; index <= maxFieldIndex; index++) {
                 if (field[index] == stamp) {
@@ -556,15 +556,16 @@ Date的toString()方法处理的，同String中有BaseCalendar.Date date = norma
 	自动更新指的是如果修改了其它字段，则该字段的值将自动更新为当前系统时间。
 	它与“explicit_defaults_for_timestamp”参数有关。
 
-	By default, the first TIMESTAMP column has both DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP if neither is specified explicitly。
-	很多时候，这并不是我们想要的，如何禁用呢？
-		1. 将“explicit_defaults_for_timestamp”的值设置为ON。
-		2. “explicit_defaults_for_timestamp”的值依旧是OFF，也有两种方法可以禁用
+    By default, the first TIMESTAMP column has both DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP if neither is specified explicitly。
+    很多时候，这并不是我们想要的，如何禁用呢？
+    	1. 将“explicit_defaults_for_timestamp”的值设置为ON。
+    	2. “explicit_defaults_for_timestamp”的值依旧是OFF，也有两种方法可以禁用
      		1&gt; 用DEFAULT子句该该列指定一个默认值
      		2&gt; 为该列指定NULL属性。
 
 
     在MySQL 5.6.5版本之前，Automatic Initialization and Updating只适用于TIMESTAMP，而且一张表中，最多允许一个TIMESTAMP字段采用该特性。从MySQL 5.6.5开始，Automatic Initialization and Updating同时适用于TIMESTAMP和DATETIME，且不限制数量。</p>2020-04-16</li><br/><li><span>👽</span> 👍（20） 💬（3）<p>对于时间，我个人的理解和目前的使用经验是——能用时间戳就用时间戳。
+
 时间戳有几个优势：
 1，便于比较和排序，无论数据库还是后台业务中都是如此。
 2，也比较便于计算，虽然文中提到了Long的问题，但是，我认为L的问题的根本在于Long类型的理解，不是时间戳这个业务的问题。对Long的基础比较好了之后，也就足以应对计算中的问题了。
@@ -593,17 +594,14 @@ Date#toString方法中，会将当前时间转化为BaseCalendar.Date类，这�
 datetime占用8字节，不受时区影响，表示范围&#39;1000-01-01 00:00:00&#39; to &#39;9999-12-31 23:59:59&#39;
 timestamp占用4字节，受时区影响，表示范围&#39;1970-01-01 00:00:01&#39; to &#39;2038-01-19 03:14:07&#39;，若插入null会自动转化为当前时间</p>2020-04-16</li><br/><li><span>pedro</span> 👍（2） 💬（1）<p>第二个问题，timestamp 会把传入的时间转化为 UTC 即时间戳进行存储，而 datetime 也直接将传入的时间存储。</p>2020-04-16</li><br/><li><span>VIC</span> 👍（1） 💬（1）<p>threadlocal simpledateformat，有完整例子吗</p>2020-08-21</li><br/><li><span>Michael</span> 👍（1） 💬（3）<p>private static final DateTimeFormatter df = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;);
 
-**
-     * 获取本周一开始时间
-     * @return
-     *&#47;
-    public static String getFirstTimeByWeek() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime weekStartTime = currentTime.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).plusDays(1).truncatedTo(ChronoUnit.DAYS);
-        &#47;&#47;求出这个日期所在周的星期一
-        return weekStartTime.format(df);
-    }
-
+** * 获取本周一开始时间 * @return
+*&#47;
+public static String getFirstTimeByWeek() {
+LocalDateTime currentTime = LocalDateTime.now();
+LocalDateTime weekStartTime = currentTime.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).plusDays(1).truncatedTo(ChronoUnit.DAYS);
+&#47;&#47;求出这个日期所在周的星期一
+return weekStartTime.format(df);
+}
 
     &#47;**
      * 获取本周一截止时间

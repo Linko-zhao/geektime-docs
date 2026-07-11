@@ -64,28 +64,28 @@ CLIP通过巧妙的设计利用了图像模态和文本模态的对应关系。C
 
 ```python
 # image_encoder - 图像编码器可以使用ResNet或者Vision Transformer结构
-# text_encoder - 文本编码器可以使用CBOW或者Text Transformer结构 
-# I[n, h, w, c] - 一个训练批次的图像 
-# T[n, l] - 一个训练批次的对应文本图像 
-# W_i[d_i, d_e] - 可学习的图像特征投影层权重  
+# text_encoder - 文本编码器可以使用CBOW或者Text Transformer结构
+# I[n, h, w, c] - 一个训练批次的图像
+# T[n, l] - 一个训练批次的对应文本图像
+# W_i[d_i, d_e] - 可学习的图像特征投影层权重
 # W_t[d_t, d_e] - 可学习的文本特征投影层权重
 # t - 一个可学习的温度系数
- 
+
 # 第一步，提取图像和文本模态的表征
-I_f = image_encoder(I) #[n, d_i] 
-T_f = text_encoder(T) #[n, d_t] 
+I_f = image_encoder(I) #[n, d_i]
+T_f = text_encoder(T) #[n, d_t]
 
-# 图像表征和文本表征分别映射到共同的多模态空间 [n, d_e] 
-I_e = l2_normalize(np.dot(I_f, W_i), axis=1) 
-T_e = l2_normalize(np.dot(T_f, W_t), axis=1) 
+# 图像表征和文本表征分别映射到共同的多模态空间 [n, d_e]
+I_e = l2_normalize(np.dot(I_f, W_i), axis=1)
+T_e = l2_normalize(np.dot(T_f, W_t), axis=1)
 
-# 计算余弦相似度 [n, n] 
-logits = np.dot(I_e, T_e.T) * np.exp(t) 
+# 计算余弦相似度 [n, n]
+logits = np.dot(I_e, T_e.T) * np.exp(t)
 
-# 计算损失值 
-labels = np.arange(n) 
-loss_i = cross_entropy_loss(logits, labels, axis=0) 
-loss_t = cross_entropy_loss(logits, labels, axis=1) 
+# 计算损失值
+labels = np.arange(n)
+loss_i = cross_entropy_loss(logits, labels, axis=0)
+loss_t = cross_entropy_loss(logits, labels, axis=1)
 loss = (loss_i + loss_t)/2
 ```
 
@@ -192,7 +192,7 @@ EVA-CLIP是2023年3月由北京智源研究院提出的模型，通过提高训�
 接着在新建好的笔记本页面，输入后面的指令安装OpenAI的CLIP工具包。
 
 ```bash
-!pip install git+https://github.com/openai/CLIP.git 
+!pip install git+https://github.com/openai/CLIP.git
 # 参考教程：https://github.com/openai/CLIP
 ```
 
@@ -230,12 +230,12 @@ image_input = preprocess(image).unsqueeze(0).to(device)
 # Encode the image
 with torch.no_grad():
     image_features = model.encode_image(image_input)
-    
+
 # Encode the target classes
 text_inputs = clip.tokenize(target_classes).to(device)
 with torch.no_grad():
     text_features = model.encode_text(text_inputs)
-    
+
 # Compute the similarity scores
 similarity_scores = (100.0 * image_features @ text_features.T).softmax(dim=-1)
 
@@ -346,10 +346,12 @@ import urllib.request
 import matplotlib.pyplot as plt
 
 # Load the CLIP model
+
 device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;
 model, preprocess = clip.load(&quot;ViT-B&#47;32&quot;, device=device)
 
 # Define the target classes
+
 target_classes = [&quot;cat&quot;, &quot;dog&quot;, &quot;owl&quot;]
 
 # Load and preprocess the image
@@ -361,22 +363,27 @@ image = Image.open(image_path).convert(&quot;RGB&quot;)
 image_input = preprocess(image).unsqueeze(0).to(device)
 
 # Encode the image
+
 with torch.no_grad():
-    image_features = model.encode_image(image_input)
-    
+image_features = model.encode_image(image_input)
+
 # Encode the target classes
+
 text_inputs = clip.tokenize(target_classes).to(device)
 with torch.no_grad():
-    text_features = model.encode_text(text_inputs)
-    
+text_features = model.encode_text(text_inputs)
+
 # Compute the similarity scores
+
 similarity_scores = (100.0 * image_features @ text_features.T).softmax(dim=-1)
 
 # Get the predicted class
+
 _, predicted_class = similarity_scores.max(dim=-1)
 predicted_class = predicted_class.item()
 
 # Print the predicted class
+
 predicted_label = target_classes[predicted_class]
 
 plt.imshow(image)

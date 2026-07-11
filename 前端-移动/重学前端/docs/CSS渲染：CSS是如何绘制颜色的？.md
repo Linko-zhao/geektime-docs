@@ -99,7 +99,7 @@ color-stop是一个颜色和一个区段，例如：
 <style>
 #grad1 {
     height: 200px;
-    background: linear-gradient(45deg, gold 10%, yellow 50%, gold 90%); 
+    background: linear-gradient(45deg, gold 10%, yellow 50%, gold 90%);
 }
 </style>
 <div id="grad1"></div>
@@ -178,28 +178,28 @@ CSS中的很多属性还会产生形状，比如我们常见的属性：
 &lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot;&gt;
-  &lt;title&gt;Document&lt;&#47;title&gt;
-  &lt;style type=&quot;text&#47;css&quot;&gt;
-    .bird {
-      width: 400px;
-      height: calc(1440 * 400 &#47; 1920 * 1px);
-    }
-    canvas.bird {
-      background: #ccc;
-    }
-  &lt;&#47;style&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Document&lt;&#47;title&gt;
+&lt;style type=&quot;text&#47;css&quot;&gt;
+.bird {
+width: 400px;
+height: calc(1440 * 400 &#47; 1920 * 1px);
+}
+canvas.bird {
+background: #ccc;
+}
+&lt;&#47;style&gt;
 &lt;&#47;head&gt;
 &lt;body&gt;
-  &lt;img id=&quot;img&quot; class=&quot;bird&quot; src=&quot;.&#47;bird.jpg&quot;&gt;
-  &lt;canvas id=&quot;canvas&quot; width=&quot;1920&quot; height=&quot;1440&quot; class=&quot;bird&quot;&gt;&lt;&#47;canvas&gt;
+&lt;img id=&quot;img&quot; class=&quot;bird&quot; src=&quot;.&#47;bird.jpg&quot;&gt;
+&lt;canvas id=&quot;canvas&quot; width=&quot;1920&quot; height=&quot;1440&quot; class=&quot;bird&quot;&gt;&lt;&#47;canvas&gt;
 
-  &lt;script type=&quot;text&#47;javascript&quot;&gt;
-    let canvas = document.getElementById(&#39;canvas&#39;)
-    let ctx = canvas.getContext(&#39;2d&#39;)
-    let img = document.getElementById(&#39;img&#39;)
-    img.addEventListener(&#39;load&#39;, () =&gt; {
-      ctx.drawImage(img, 0, 0)
+&lt;script type=&quot;text&#47;javascript&quot;&gt;
+let canvas = document.getElementById(&#39;canvas&#39;)
+let ctx = canvas.getContext(&#39;2d&#39;)
+let img = document.getElementById(&#39;img&#39;)
+img.addEventListener(&#39;load&#39;, () =&gt; {
+ctx.drawImage(img, 0, 0)
 
       let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
       let data = imageData.data
@@ -256,7 +256,8 @@ CSS中的很多属性还会产生形状，比如我们常见的属性：
 
       return [h, s, l]
     }
-  &lt;&#47;script&gt;
+
+&lt;&#47;script&gt;
 &lt;&#47;body&gt;
 &lt;&#47;html&gt;
 </p>2019-04-28</li><br/><li><span>Peter</span> 👍（24） 💬（2）<p>一步到位：filter: hue-rotate(240deg);
@@ -268,7 +269,7 @@ CSS中的很多属性还会产生形状，比如我们常见的属性：
     	function loadImg() {
            let img = new Image
            img.src = &quot;yingwu.jpg&quot;
-           
+
            img.onload = function () {
            	  drawCanvas(img)
            }
@@ -281,7 +282,7 @@ CSS中的很多属性还会产生形状，比如我们常见的属性：
           let context = canvas.getContext(&#39;2d&#39;)
 
           context.drawImage(img, 0, 0);
-          
+
          &#47;&#47;context.clearRect(200,432, 1110, 670);
           let sectionImg = context.getImageData(200, 432, 1110, 75	0);
           let imgData = sectionImg.data;
@@ -292,7 +293,7 @@ CSS中的很多属性还会产生形状，比如我们常见的属性：
                  imgData[i - 1] = imgData[i]
                  imgData[i] = temp
           	  }
-          	
+
           }
 
           context.putImageData(sectionImg, 200, 432); &#47;&#47; 复制代码
@@ -301,58 +302,60 @@ CSS中的很多属性还会产生形状，比如我们常见的属性：
     	document.addEventListener(&#39;DOMContentLoaded&#39;, function(){
           loadImg()
     	})
-    	
+
     &lt;&#47;script&gt;
-  &lt;&#47;head&gt;
-  &lt;body&gt;
-    &lt;canvas id=&quot;canvas&quot;&gt;&lt;&#47;canvas&gt;
-  &lt;&#47;body&gt;
+
+&lt;&#47;head&gt;
+&lt;body&gt;
+&lt;canvas id=&quot;canvas&quot;&gt;&lt;&#47;canvas&gt;
+&lt;&#47;body&gt;
 &lt;&#47;html&gt;</p>2020-03-01</li><br/><li><span>一路向北</span> 👍（2） 💬（4）<p>老师在末尾提到了border、box-shadow、border-radius可以产生一些CSS黑魔法，而不是只定义边框、阴影和圆角，这里我很想知道，除了基本用途，他们可以产生什么样的黑魔法呢？有没有一些推荐的资料呢？</p>2020-01-03</li><br/><li><span>猫总</span> 👍（1） 💬（0）<p>原本实现控制RGB范围来手动抠图，不过在使用的时候发现并不直观，调整起来很随缘，回看了一遍课程才发现重点是HSL调色，改进之后还是能比较精准（主要是直观）的把鹦鹉给单独替换颜色了</p>2019-07-12</li><br/><li><span>Geek_0bb537</span> 👍（1） 💬（0）<p>winter老师给我讲一下那个presentational attributes 看不懂</p>2019-04-28</li><br/><li><span>Izayoizuki</span> 👍（1） 💬（0）<p>HSL感觉还是绘画游戏原画之类用得多，编程领域反而挺少，无论h5游戏还是客户端游戏理解一般都是rgb&#47;rgba</p>2019-04-28</li><br/><li><span>Aaaaaaaaaaayou</span> 👍（1） 💬（0）<p>canvas可以得到每个像素的rgb分量，是不是把蓝色和红色的值换一下就可以了？</p>2019-04-28</li><br/><li><span>你好，阳光</span> 👍（0） 💬（0）<p>老师，datauri+svg产生形状能举个例子吗？</p>2021-05-07</li><br/><li><span>Corazon</span> 👍（0） 💬（0）<p>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 
 &lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;text&lt;&#47;title&gt;
-    &lt;style&gt;
-        &#47;* #canvas {
-            width: 200px;
-            height: 100px;
-        } *&#47;
-    &lt;&#47;style&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;text&lt;&#47;title&gt;
+&lt;style&gt;
+&#47;* #canvas {
+width: 200px;
+height: 100px;
+} *&#47;
+&lt;&#47;style&gt;
 &lt;&#47;head&gt;
 
 &lt;body&gt;
-    &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;400&quot;&gt;&lt;&#47;canvas&gt;
-    &lt;button onclick=&quot;changeColor()&quot;&gt;Change Color&lt;&#47;button&gt;
-    &lt;script&gt;
-        let canvas = document.getElementById(&quot;canvas&quot;);
-        let ctx = canvas.getContext(&quot;2d&quot;);
-        let img = new Image();
-        img.crossOrigin = &#39;anonymous&#39;;
-        img.src = &quot;https:&#47;&#47;static001.geekbang.org&#47;resource&#47;image&#47;0f&#47;ac&#47;0f6f4cc6d564df9986e0108cb8a427ac.jpg&quot;;
-        img.onload = function () {
-            console.log(canvas.clientWidth);
-            console.log(canvas.clientWidth &#47; img.width * img.height);
-            ctx.drawImage(img, 0, 0, canvas.clientWidth, canvas.clientWidth &#47; img.width * img.height);
-        }
-        function changeColor() {
-            let imgData = ctx.getImageData(0, 0, canvas.clientWidth, canvas.clientWidth &#47; img.width * img.height);
-            let data = imgData.data;
-            for (let i = 0; i &lt; data.length; i = i + 4) {
-                if (data[i + 1] - data[i] &gt; 40 || data[i] + data[i + 1] + data[i + 2] &lt; 110) {
-                    let temp = data[i]
-                    data[i] = data[i + 1];
-                    data[i + 1] = temp;
-                }
-            }
-            ctx.putImageData(imgData, 0, 0);
-        }
+&lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;400&quot;&gt;&lt;&#47;canvas&gt;
+&lt;button onclick=&quot;changeColor()&quot;&gt;Change Color&lt;&#47;button&gt;
+&lt;script&gt;
+let canvas = document.getElementById(&quot;canvas&quot;);
+let ctx = canvas.getContext(&quot;2d&quot;);
+let img = new Image();
+img.crossOrigin = &#39;anonymous&#39;;
+img.src = &quot;https:&#47;&#47;static001.geekbang.org&#47;resource&#47;image&#47;0f&#47;ac&#47;0f6f4cc6d564df9986e0108cb8a427ac.jpg&quot;;
+img.onload = function () {
+console.log(canvas.clientWidth);
+console.log(canvas.clientWidth &#47; img.width * img.height);
+ctx.drawImage(img, 0, 0, canvas.clientWidth, canvas.clientWidth &#47; img.width * img.height);
+}
+function changeColor() {
+let imgData = ctx.getImageData(0, 0, canvas.clientWidth, canvas.clientWidth &#47; img.width * img.height);
+let data = imgData.data;
+for (let i = 0; i &lt; data.length; i = i + 4) {
+if (data[i + 1] - data[i] &gt; 40 || data[i] + data[i + 1] + data[i + 2] &lt; 110) {
+let temp = data[i]
+data[i] = data[i + 1];
+data[i + 1] = temp;
+}
+}
+ctx.putImageData(imgData, 0, 0);
+}
 
     &lt;&#47;script&gt;
+
 &lt;&#47;body&gt;
 
 &lt;&#47;html&gt;</p>2020-12-18</li><br/><li><span>无双</span> 👍（0） 💬（0）<p>请问老师，我后台用的是Tomcat服务器，前端用ajax请求静态资源时会间隔会报412，也就是一次成功进入后台，一次报412，这该怎么解决呢？</p>2019-04-29</li><br/><li><span>Mupernb</span> 👍（0） 💬（0）<p>for(var i=0;i&lt;imgData.data.length;i++){
-                [imgData.data[4*i+0],imgData.data[4*i+1]]=[imgData.data[4*i+1],imgData.data[4*i+0]]
-            }</p>2019-04-28</li><br/>
+[imgData.data[4*i+0],imgData.data[4*i+1]]=[imgData.data[4*i+1],imgData.data[4*i+0]]
+}</p>2019-04-28</li><br/>
 </ul>

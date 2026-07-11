@@ -289,7 +289,7 @@ public void visitMethodDef(JCMethodDecl tree) {
     alive = Liveness.ALIVE;  //设置为ALIVE
     scanStat(tree.body);     //扫描所有的语句
 
-    //如果仍然是ALIVE，但返回值不是void，那么说明缺少Return语句  
+    //如果仍然是ALIVE，但返回值不是void，那么说明缺少Return语句
     if (alive == Liveness.ALIVE && !tree.sym.type.getReturnType().hasTag(VOID))
         log.error(TreeInfo.diagEndPos(tree.body), Errors.MissingRetStmt);
    ...
@@ -302,13 +302,13 @@ public void visitMethodDef(JCMethodDecl tree) {
 public void visitIf(JCIf tree) {
     scan(tree.cond);         //扫描if语句的条件部分
     //扫描then部分。如果这里面有return语句，alive会变成DEAD
-    scanStat(tree.thenpart); 
+    scanStat(tree.thenpart);
     if (tree.elsepart != null) {
         Liveness aliveAfterThen = alive;
         alive = Liveness.ALIVE;
         scanStat(tree.elsepart);
         //只有then和else部分都有return语句，alive才会变成DEAD
-        alive = alive.or(aliveAfterThen); 
+        alive = alive.or(aliveAfterThen);
     } else {  //如果没有else部分，那么把alive重新置为ALIVE
         alive = Liveness.ALIVE;
     }
@@ -366,7 +366,7 @@ public void visitWhileLoop(JCWhileLoop tree) {
     scan(tree.cond);        //扫描条件
     alive = Liveness.from(!tree.cond.type.isFalse());  //如果条件值为false,那么alive为DEAD
     scanStat(tree.body);    //扫描while循环体
-    alive = alive.or(resolveContinues(tree));  
+    alive = alive.or(resolveContinues(tree));
     alive = resolveBreaks(tree, prevPendingExits).or(
         !tree.cond.type.isTrue());
 }
@@ -419,6 +419,7 @@ void scanStat(JCTree tree) { //扫描语句
 
 1. 关于数据流分析的理论性内容，可以参考龙书（Compilers Principles, Techniques and Tools）第二版的9.2和9.3节。你也可以参考《编译原理之美》 的第[27](https://time.geekbang.org/column/article/155338)、[28](https://time.geekbang.org/column/article/156878)讲，那里进行了比较直观的讲述。
 2. 关于半格这个数学工具，你可以参考龙书第二版的9.3.1部分，也同样可以参考《编译原理之美》的[第28讲](https://time.geekbang.org/column/article/156878)。
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>宫文学Richard</span> 👍（8） 💬（0）<p>上一讲思考题的参考解答：
 针对示例程序，Java会形成5个词法作用域：

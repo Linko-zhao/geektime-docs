@@ -29,7 +29,7 @@
 事实上，Twitter内部有一个叫做 **Oink** 的程序，会按照层级每天自动运行，统计出各个层级Schema下的事件数量。而这些数据，会直接展现在内部的Dashboard里，方便我们一眼就能看到系统的整体数据。我把对应统计的层级Schema放在了下面，你可以去看一下。
 
 ```java
-(client, page, section, component, element, action) 
+(client, page, section, component, element, action)
 (client, page, section, component, *, action)
 (client, page, section, *, *, action)
 (client, page, *, *, *, action)
@@ -87,8 +87,8 @@ define Funnel ClientEventsFunnel(‘$EVENT1’ ‘$EVENT2’, ...);
 > 你可以通过一个UDF定义一个你想要分析的漏斗。
 
 ```java
-(0, 490123) 
-(1, 297071) 
+(0, 490123)
+(1, 297071)
 ...
 ```
 

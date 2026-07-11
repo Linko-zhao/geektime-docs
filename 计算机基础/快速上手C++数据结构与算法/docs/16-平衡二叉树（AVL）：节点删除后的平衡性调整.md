@@ -82,18 +82,18 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 {
 	AVLNode<T>* ptmp = tNode; //要删除的节点
 	AVLNode<T>* parent = nullptr;  //保存父亲节点，根节点的父节点肯定先为nullptr
-	
+
 	//借助栈保存删除的节点路径信息
 	LinkStack< AVLNode<T>* > slinkobj;
-	
+
 	while (ptmp != nullptr) //通过while循环尝试让ptmp指向要被删除的节点
 	{
 		if (ptmp->data == e)
 			break;
-		
+
 		parent = ptmp; //记录父节点
 		slinkobj.Push(parent); //入栈
-			
+
 		if (ptmp->data > e)
 			ptmp = ptmp->leftChild;
 		else
@@ -101,7 +101,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 	} //end while
 	if (ptmp == nullptr)//没有找到要删除的节点
 		return; 
-		
+
 	//找到了要删除的节点，前面二叉查找树删除节点分几种情况：
 	AVLNode<T>* q = nullptr;         //临时指针变量
 	if (ptmp->leftChild == nullptr && ptmp->rightChild == nullptr) 
@@ -137,7 +137,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 		}
 		ptmp->data = q->data;
 		ptmp = q; //让ptmp指向真正删除的节点，也就是把删除一个既有左子树又有右子树的节点转化为删除一个叶子节点。
-		
+
 		//上面找到这个节点肯定没有右子树，因为找的是左子树的最右下节点嘛！
 		if (parent != nullptr)
 		{
@@ -154,7 +154,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 			q = ptmp->leftChild; 
 		else
 			q = ptmp->rightChild;
-		
+
 		if (parent != nullptr)
 		{
 			//把被删除的节点的子节点链接到被删除节点的父节点上去
@@ -164,11 +164,11 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 				parent->rightChild = q;
 		}
 	}
-	
+
 	//--------------------------------------------------------------
 	//parent不为空的情况上面都处理了，这里处理parent为空的情况,parent为空删除的肯定是根节点
 	if (parent == nullptr) //有些代码可以合并，但为了方便理解，笔者并没有合并，读者可以自行合并
-	{				
+	{
 		if (ptmp->leftChild == nullptr && ptmp->rightChild == nullptr)//这棵树就一个根节点并且删除的就是这个根节点
 			tNode = nullptr;
 		else if(ptmp->leftChild == nullptr || ptmp->rightChild == nullptr) //要删除这棵树的根节点并且这棵树根的左子树为空或者右子树为空
@@ -176,10 +176,10 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 		else
 		{
 			//这个else条件应该一直不会成立
-			assert(false);//记得#include <cassert>,assert(false);意味着代码不可能执行到这条语句，若执行到了，会报告异常	
+			assert(false);//记得#include <cassert>,assert(false);意味着代码不可能执行到这条语句，若执行到了，会报告异常
 		}
 	}
-		
+
 	//--------------------------------------------------------------
 	//处理平衡因子的改变（平衡性调整）
 	while (slinkobj.Empty() != true)
@@ -193,7 +193,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 				parent->balfac--; //平衡因子减少1
 			else //删除右树
 				parent->balfac++; //平衡因子增加
-			
+
 			if (parent->balfac == -1 || parent->balfac == 1)
 			{
 				//说明parent节点原来的平衡因子为0，也就是原来左右孩子都有，那么删除任意一个孩子，除parent节点平衡因子发生变化外，任何其他的parent的父亲等节点的平衡因子不会发生变化，这里可以直接退出
@@ -204,21 +204,21 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 				//说明parent节点原来的平衡因子为-1或者1，得继续回溯向上尝试调整其他父节点平衡因子
 				q = parent;  
 				continue;
-			}		
-			
+			}
+
 			//根据规则来
 			if (parent->balfac == -2)
 			{
 				//平衡因子为-2，所以能确定的是，一定有右孩子
 				if(parent->rightChild->balfac == -1) //左旋转
 					RotateLeft(parent);
-				
+
 				else if (parent->rightChild->balfac == 1) //先右后左旋转
 					RotateRightLeft(parent);
-				
+
 				else //if (parent->rightChild->balfac == 0) //左旋转，可以和上面合并，读者自己合并代码吧
 				{
-					RotateLeft(parent);	
+					RotateLeft(parent);
 					parent->balfac = 1;
 					parent->leftChild->balfac = -1;
 				}
@@ -228,10 +228,10 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 				//平衡因子为2，所以能确定的是，一定有左孩子
 				if (parent->leftChild->balfac == -1) //先左后右旋转
 					RotateLeftRight(parent);
-					
+
 				else if (parent->leftChild->balfac == 1) //右旋转
 					RotateRight(parent);
-				
+
 				else //if (parent->rightChild->balfac == 0)
 				{
 					RotateRight(parent);
@@ -239,7 +239,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 					parent->rightChild->balfac = 1;
 				}
 			} //end if (parent->balfac == -2)
-				
+
 			//根相关指针的调整
 			if (slinkobj.Empty() == true)
 			{
@@ -251,7 +251,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 				//本次平衡性调整并没有调整到整个树最上面的根节点，但因为平衡性调整会使树根节点发生改变，所以老根节点的孩子指针应该指向新根节点
 				AVLNode<T>* pParentPoint = nullptr;
 				slinkobj.GetTop(pParentPoint);  //拿到老根的父节点，一定会取得成功，因为栈不为空
-					
+
 				//判断让老根父节点（pParentPoint）的左孩子指针还是右孩子指针指向新根（parent）
 				if (pParentPoint->data > parent->data)
 					pParentPoint->leftChild = parent;
@@ -269,7 +269,7 @@ void DeleteElem(AVLNode<T>*& tNode, const T& e)  //注意第一个参数类型
 
 ```plain
 AVLTree<int> mybtr;
-int array[] = { 60,31,65,15,42,62,75,12,25,37,50,63,69,85,2,32,38,48,56,82,34 };	
+int array[] = { 60,31,65,15,42,62,75,12,25,37,50,63,69,85,2,32,38,48,56,82,34 };
 int acount = sizeof(array) / sizeof(int);
 for (int i = 0; i < acount; ++i)
 	mybtr.InsertElem(array[i]);
@@ -297,26 +297,26 @@ mybtr.DeleteElem(65);
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>Geek_845395</span> 👍（0） 💬（0）<p>老师您好，您的67——73行的代码
 
-if (parent != nullptr) { 
-if (parent-&gt;leftChild == ptmp) 
-     parent-&gt;leftChild = ptmp-&gt;leftChild; 
-else 
-    parent-&gt;rightChild = ptmp-&gt;leftChild; }
+if (parent != nullptr) {
+if (parent-&gt;leftChild == ptmp)
+parent-&gt;leftChild = ptmp-&gt;leftChild;
+else
+parent-&gt;rightChild = ptmp-&gt;leftChild; }
 
-我有点疑惑，while循环里，parent = q, q = q-&gt;rightChild, 那么q一定是parent节点的右孩子呀，把q赋值给ptmp后， 为什么会出现parent-&gt;leftChild == ptmp的情况呢？  我觉得应该直接改成if (parent != nullptr) {
-	parent-&gt;rightChild = ptmp-&gt;leftChild;
+我有点疑惑，while循环里，parent = q, q = q-&gt;rightChild, 那么q一定是parent节点的右孩子呀，把q赋值给ptmp后， 为什么会出现parent-&gt;leftChild == ptmp的情况呢？ 我觉得应该直接改成if (parent != nullptr) {
+parent-&gt;rightChild = ptmp-&gt;leftChild;
 }</p>2024-07-30</li><br/><li><span>Tiger</span> 👍（0） 💬（0）<p>老师您好，在处理被删除节点既有左子树又有右子树的情况时，您的代码的第67至第73行的ifelse语句是不是应该改为
 if(parent != nullptr)
 {
-         if(parent-&gt;leftChild == ptmp)
-         {
-                 q = ptmp-&gt;leftChild;
-                 parent-&gt;leftChild = q;
-         }
-         else
-         {
-                 q = ptmp-&gt;leftChild;
-                 parent-&gt;rightChild = q;
-         }
+if(parent-&gt;leftChild == ptmp)
+{
+q = ptmp-&gt;leftChild;
+parent-&gt;leftChild = q;
+}
+else
+{
+q = ptmp-&gt;leftChild;
+parent-&gt;rightChild = q;
+}
 }</p>2023-07-23</li><br/>
 </ul>

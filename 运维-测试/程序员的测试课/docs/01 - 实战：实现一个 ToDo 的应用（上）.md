@@ -15,33 +15,33 @@
 - 添加 Todo 项。
 
 ```
-todo add <item>  
+todo add <item>
 
-1. <item>  
+1. <item>
 Item <itemIndex> added
 ```
 
 - 完成 Todo 项。
 
 ```
-todo done <itemIndex>  
+todo done <itemIndex>
 Item <itemIndex> done.
 ```
 
 - 查看 Todo 列表，缺省情况下，只列出未完成的 Todo 项。
 
 ```
-todo list  1. <item1> 2. <item2>  
+todo list  1. <item1> 2. <item2>
 Total: 2 items
 ```
 
 - 使用 all 参数，查看所有的 Todo 项。
 
 ```
-todo list --all  
-1. <item1> 
-2. <item2> 
-3. [Done] <item3>  
+todo list --all
+1. <item1>
+2. <item2>
+3. [Done] <item3>
 Total: 3 items, 1 item done
 ```
 
@@ -167,9 +167,9 @@ public void should_add_todo_item() {
     TodoItemRepository repository = mock(TodoItemRepository.class);
     when(repository.save(any())).then(returnsFirstArg());
     TodoItemService service = new TodoItemService(repository);
-    
+
     TodoItem item = service.addTodoItem(new TodoParameter("foo"));
-    
+
     assertThat(item.getContent()).isEqualTo("foo");
 }
 ```
@@ -199,7 +199,7 @@ public TodoItem addTodoItem(final TodoParameter todoParameter) {
 @Getter
 public class TodoItem {
     private final String content;
-    
+
     public TodoItem(final String content) {
         this.content = content;
     }
@@ -272,9 +272,9 @@ public void setUp() {
 public void should_mark_todo_item_as_done() {
     when(repository.findAll()).thenReturn(ImmutableList.of(new TodoItem("foo")));
     when(repository.save(any())).then(returnsFirstArg());
-    
+
     final Optional<TodoItem> todoItem = service.markTodoItemDone(TodoIndexParameter.of(1));
-    
+
     assertThat(todoItem).isPresent();
     final TodoItem actual = todoItem.get();
     assertThat(actual.isDone()).isTrue();
@@ -292,12 +292,12 @@ public void should_mark_todo_item_as_done() {
 public class TodoItem {
     private final String content;
     private boolean done;
-    
+
     public TodoItem(final String content) {
         this.content = content;
         this.done = false;
     }
-    
+
     public void markDone() {
         this.done = true;
     }
@@ -322,16 +322,16 @@ public class TodoItem {
     private long index;
     private final String content;
     private boolean done;
-    
+
     public TodoItem(final String content) {
         this.content = content;
         this.done = false;
     }
-    
+
     public void assignIndex(final long index) {
         this.index = index;
     }
-    
+
     public void markDone() {
         this.done = true;
     }
@@ -406,7 +406,7 @@ public class TodoItem {
 
 再补充，就算自己写了测试用例，也不要完全的依赖测试来发现所有的问题，代码思维、设计风格、编码习惯，这些预防问题发生的手段，才是最有效的。
 
-以上，期待后续的精彩内容。</p>2021-08-12</li><br/><li><span>李威</span> 👍（6） 💬（1）<p>文中是从sevice层入手写第一个测试，可否以整洁架构图中最内层的entity入手写第一个测试，代码实现也是按先实现内层，再逐步实现外层的代码？</p>2021-08-06</li><br/><li><span>asusual</span> 👍（4） 💬（1）<p>相比Junit,Spock框架测试起来要省事很多~</p>2021-08-22</li><br/><li><span>Geek_3b1096</span> 👍（3） 💬（1）<p>谢谢老师一步一步的说明添加TodoItem字段: content -&gt; done -&gt; index</p>2021-08-25</li><br/><li><span>小凯</span> 👍（3） 💬（1）<p>项目运行不起来 能贴一下具体的gradle版本信息吗？</p>2021-08-22</li><br/><li><span>Summer  空城</span> 👍（3） 💬（1）<p>List list(final boolean all);  这个接口不符合单一职责原则吧</p>2021-08-05</li><br/><li><span>Geek_jct58r</span> 👍（2） 💬（2）<p>我在实现例如 TodoItemService 之前, 通常都会先测试它的 输入和输出, 两个类被测试完成后, 我才去开始用测试实现TodoItemService. 但看了您的实现手法, 一个测试集就已经能够覆盖到了输入输出.感觉您这样更简单些. 不知道我想的对不对, 还是应该一个模块对应一个测试集呢?</p>2021-08-05</li><br/><li><span>Kevin</span> 👍（1） 💬（1）<p>老师好，我是从10x程序员开始关注老师的课程，目前该课程已经学习完毕，受益匪浅。然后就开始继续学习软件设计之美，目前还在学习中。后来又看到代码之丑的ToDo项目，当时就在想也要参与一下。然后就思考怎么样才能写得出彩，第一点想到的就是要实践一下tdd。现在看到程序员的测试课这门课程，果然是英雄所见略同，哈哈哈！
+以上，期待后续的精彩内容。</p>2021-08-12</li><br/><li><span>李威</span> 👍（6） 💬（1）<p>文中是从sevice层入手写第一个测试，可否以整洁架构图中最内层的entity入手写第一个测试，代码实现也是按先实现内层，再逐步实现外层的代码？</p>2021-08-06</li><br/><li><span>asusual</span> 👍（4） 💬（1）<p>相比Junit,Spock框架测试起来要省事很多~</p>2021-08-22</li><br/><li><span>Geek_3b1096</span> 👍（3） 💬（1）<p>谢谢老师一步一步的说明添加TodoItem字段: content -&gt; done -&gt; index</p>2021-08-25</li><br/><li><span>小凯</span> 👍（3） 💬（1）<p>项目运行不起来 能贴一下具体的gradle版本信息吗？</p>2021-08-22</li><br/><li><span>Summer 空城</span> 👍（3） 💬（1）<p>List list(final boolean all); 这个接口不符合单一职责原则吧</p>2021-08-05</li><br/><li><span>Geek_jct58r</span> 👍（2） 💬（2）<p>我在实现例如 TodoItemService 之前, 通常都会先测试它的 输入和输出, 两个类被测试完成后, 我才去开始用测试实现TodoItemService. 但看了您的实现手法, 一个测试集就已经能够覆盖到了输入输出.感觉您这样更简单些. 不知道我想的对不对, 还是应该一个模块对应一个测试集呢?</p>2021-08-05</li><br/><li><span>Kevin</span> 👍（1） 💬（1）<p>老师好，我是从10x程序员开始关注老师的课程，目前该课程已经学习完毕，受益匪浅。然后就开始继续学习软件设计之美，目前还在学习中。后来又看到代码之丑的ToDo项目，当时就在想也要参与一下。然后就思考怎么样才能写得出彩，第一点想到的就是要实践一下tdd。现在看到程序员的测试课这门课程，果然是英雄所见略同，哈哈哈！
 
 因为我刚换了一个工作，主要会用C++来开发。所以这里先立个flag，使用C++来实践这个课程，采用tdd来实现这个ToDo的小项目。到时把GitHub工程发出来，请老师点评。
 

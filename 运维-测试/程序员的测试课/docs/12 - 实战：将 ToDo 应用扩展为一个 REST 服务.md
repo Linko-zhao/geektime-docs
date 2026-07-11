@@ -51,10 +51,10 @@ public class TodoItem {
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long index;
-  
+
   @Column
   private String content;
-  
+
   @Column
   private boolean done;
   ...
@@ -85,7 +85,7 @@ public class TodoItem {
 public class TodoItemRepositoryTest {
     @Autowired
     private TodoItemRepository repository;
-    
+
     @Test
     public void should_find_nothing_for_empty_repository() {
         final Iterable<TodoItem> items = repository.findAll();
@@ -185,10 +185,10 @@ public class TodoItemResourceTest {
     private MockMvc mockMvc;
     @Autowired
     private TodoItemRepository repository;
-    
+
     ...
-    
-.    
+
+.
     @Test
     public void should_add_item() throws Exception {
         String todoItem = "{ " +
@@ -200,7 +200,7 @@ public class TodoItemResourceTest {
                 .andExpect(status().isCreated());
         assertThat(repository.findAll()).anyMatch(item -> item.getContent().equals("foo"));
     }
-    
+
     ...
 }
 ```

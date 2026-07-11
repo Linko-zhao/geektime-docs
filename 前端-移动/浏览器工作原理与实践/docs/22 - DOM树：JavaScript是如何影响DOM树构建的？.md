@@ -238,11 +238,12 @@ defer：脚本并行加载，等待HTML解析完成之后，按照加载顺序�
 会两行显示，一行是time.geekbang 另外一行是test。原因是script脚本执行的时候获取想不到第二个div，所以不会对后来的div有影响。
 
 今日总结：
+
 1. 首先介绍了什么是DOM（表述渲染引擎内部数据结构，它将Web页面和JavaScript脚本连接起来，并过滤不安全内容）、DOM树如何生成（网络进程和渲染进程建立一个流式管道，HTML解析器直接解析，不需要等待text&#47;html类型的接口 接受完毕再进行解析），第一步：通过分词器将字节流转换为Token；第二步：将Token解析为DOM节点；第三步：将DOM节点添加到DOM树中。
 2. JavaScript是如何影响DOM生成的？暂停html解析，下载解析执行完毕js之后再进行html解析（如果这期间使用到了cssDom，需要等待相应css过程）。预解析线程的优化（提前加载相应js css文件）
 3. 渲染引擎还有一个安全检查模块XSSAuditor用来检测词法安全的</p>2019-09-24</li><br/><li><span>HoSalt</span> 👍（4） 💬（3）<p>老师，CSSOM的生成依赖于DOM吗？</p>2020-04-11</li><br/><li><span>sky</span> 👍（3） 💬（2）<p>有个问题，网络传输过程中，传输包有可能是乱序的，如果index.html没有加载完，怎么保证传输回来的index.html字节流不是乱序的呢。这样边加载边解析不会有问题吗？</p>2021-06-01</li><br/><li><span>余熙</span> 👍（3） 💬（0）<p>这是需求本身要求的: DOM 生成依赖 JS加载和执行，JS 依赖 CSS加载和解析。
 
-DOM 生成等待 JS: 
+DOM 生成等待 JS:
 解析到&lt;script&gt;标签时，渲染引擎判断这是一段脚本，此时 HTML 解析器就会暂停 DOM 的解析，因为接下来的 JavaScript 可能要修改当前已经生成的 DOM 结构。
 
 JS 等待 CSS加载和解析：

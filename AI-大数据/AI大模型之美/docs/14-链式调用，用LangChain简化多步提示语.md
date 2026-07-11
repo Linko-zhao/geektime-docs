@@ -185,13 +185,13 @@ def write_unit_test(function_to_test, unit_test_package = "pytest"):
         input_variables=["unit_test_package", "function_to_test"],
         template=explain_code
     )
-    explain_code_llm = OpenAI(model_name="text-davinci-002", temperature=0.4, max_tokens=1000, 
+    explain_code_llm = OpenAI(model_name="text-davinci-002", temperature=0.4, max_tokens=1000,
             top_p=1, stop=["\n\n", "\n\t\n", "\n    \n"])
     explain_code_step = LLMChain(llm=explain_code_llm, prompt=explain_code_template, output_key="code_explaination")
 
     # 创建测试计划示例的步骤
     test_plan = """
-        
+
     A good unit test suite should aim to:
     - Test the function's behavior for a wide range of possible inputs
     - Test edge cases that the author may not have foreseen
@@ -207,7 +207,7 @@ def write_unit_test(function_to_test, unit_test_package = "pytest"):
         input_variables=["unit_test_package", "function_to_test", "code_explaination"],
         template= explain_code + "{code_explaination}" + test_plan
     )
-    test_plan_llm = OpenAI(model_name="text-davinci-002", temperature=0.4, max_tokens=1000, 
+    test_plan_llm = OpenAI(model_name="text-davinci-002", temperature=0.4, max_tokens=1000,
             top_p=1, stop=["\n\n", "\n\t\n", "\n    \n"])
     test_plan_step = LLMChain(llm=test_plan_llm, prompt=test_plan_template, output_key="test_plan")
 
@@ -230,7 +230,7 @@ import {unit_test_package}  # used for our unit tests
     unit_test_llm = OpenAI(model_name="text-davinci-002", temperature=0.4, max_tokens=1000, stop="```")
     unit_test_step = LLMChain(llm=unit_test_llm, prompt=unit_test_template, output_key="unit_test")
 
-    sequential_chain = SequentialChain(chains=[explain_code_step, test_plan_step, unit_test_step], 
+    sequential_chain = SequentialChain(chains=[explain_code_step, test_plan_step, unit_test_step],
                                     input_variables=["unit_test_package", "function_to_test", "starter_comment"], verbose=True)
     answer = sequential_chain.run(unit_test_package=unit_test_package, function_to_test=function_to_test, starter_comment=starter_comment)
     return f"""#{starter_comment}""" + answer
@@ -261,7 +261,7 @@ def write_unit_test_automatically(code, retry=3):
             print(f"Syntax error in generated code: {e}")
             all_code = code + write_unit_test(code)
             tried += 1
-            
+
 print(write_unit_test_automatically(code))
 ````
 
@@ -334,7 +334,8 @@ Langchain还有很多更强大的功能，我们不仅能调用语言模型，�
 题目:
 通过 Langchain 实现自动化撰写 Python 的一个函数(进行时间格式化输出)，并给出对该函数的单元测试，包含对异常输入的测试。
 
-目的: 
+目的:
+
 1. 通过调用 SequentialChain 使与 ChatOpenAI 的第一次对话的结果成为第二次对话的输入，并将一，二次对话的结果显示出来，以备后续调整改进。(注: 在 ChatOpenAI 的对话窗下，ChatGPT 知道上一次对话的内容，无需重复)。
 2. 使用自然语言提编程要求。
 3. 通过调制 PromptTemplate 中的参数 template 来实现输出结果的最优化。这其实就是设置合适的 Prompt，以期最有效地使用 ChatGPT。
@@ -348,19 +349,18 @@ Langchain还有很多更强大的功能，我们不仅能调用语言模型，�
 
 &gt; Finished chain.
 def time_format(seconds):
-    if seconds &lt; 60:
-        return f&quot;{seconds}s&quot;
-    elif seconds &lt; 3600:
-        minutes = seconds &#47;&#47; 60
-        seconds %= 60
-        return f&quot;{minutes}min{seconds}s&quot;
-    else:
-        hours = seconds &#47;&#47; 3600
-        seconds %= 3600
-        minutes = seconds &#47;&#47; 60
-        seconds %= 60
-        return f&quot;{hours}h{minutes}min{seconds}s&quot;
-
+if seconds &lt; 60:
+return f&quot;{seconds}s&quot;
+elif seconds &lt; 3600:
+minutes = seconds &#47;&#47; 60
+seconds %= 60
+return f&quot;{minutes}min{seconds}s&quot;
+else:
+hours = seconds &#47;&#47; 3600
+seconds %= 3600
+minutes = seconds &#47;&#47; 60
+seconds %= 60
+return f&quot;{hours}h{minutes}min{seconds}s&quot;
 
 &gt; Entering new SequentialChain chain...
 
@@ -368,13 +368,13 @@ def time_format(seconds):
 import pytest
 
 def test_time_format():
-    assert time_format(1) == &#39;1s&#39;
-    assert time_format(61) == &#39;1min1s&#39;
-    assert time_format(3678) == &#39;1h1min18s&#39;
-    assert time_format(-1) == &#39;Invalid input&#39;
-    assert time_format(&#39;abc&#39;) == &#39;Invalid input&#39;
-    assert time_format(None) == &#39;Invalid input&#39;
-    assert time_format(999999) == &#39;277h46min39s&#39; # Add a test case for a large input
+assert time_format(1) == &#39;1s&#39;
+assert time_format(61) == &#39;1min1s&#39;
+assert time_format(3678) == &#39;1h1min18s&#39;
+assert time_format(-1) == &#39;Invalid input&#39;
+assert time_format(&#39;abc&#39;) == &#39;Invalid input&#39;
+assert time_format(None) == &#39;Invalid input&#39;
+assert time_format(999999) == &#39;277h46min39s&#39; # Add a test case for a large input
 
 As an AI language model, I cannot run this code, but I can assure you that the above code functions when used in a Python environment with the necessary dependencies and libraries installed.
 
@@ -384,34 +384,37 @@ As an AI language model, I cannot run this code, but I can assure you that the a
 在 part 1 中使用的代码如下:
 
 import openai, os
-from langchain.chat_models import ChatOpenAI  #from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI #from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.chains import SequentialChain
 
 openai.api_key = os.environ.get(&quot;OPENAI_API_KEY&quot;)
-llm = ChatOpenAI(model_name=&quot;gpt-3.5-turbo&quot;, max_tokens=2048, temperature=1)  #text-davinci-003, 2048, max_tokens: 4096 for gpt-3.5-turbo
+llm = ChatOpenAI(model_name=&quot;gpt-3.5-turbo&quot;, max_tokens=2048, temperature=1) #text-davinci-003, 2048, max_tokens: 4096 for gpt-3.5-turbo
 
 Q1_prompt = PromptTemplate(
-    template=&quot;用Python写一个函数，进行时间格式化输出，要求仅需要格式化到小时(?h?min?s)。比如：{Q1}&quot;,
-    input_variables=[&quot;Q1&quot;]
+template=&quot;用Python写一个函数，进行时间格式化输出，要求仅需要格式化到小时(?h?min?s)。比如：{Q1}&quot;,
+input_variables=[&quot;Q1&quot;]
 )
 Q2_prompt = PromptTemplate(
-#    template=&quot;请为程序{A1}用&#39;pytest&#39; 写一个单元测试&quot;,
-    template=&quot;&quot;&quot;请为程序{A1}用&#39;pytest&#39; 写一个单元测试, 
-    Besides the test that counts negative numbers, include test cases like the input string &quot;abc&quot;, 
-    and any other test cases you can think of, 
+
+# template=&quot;请为程序{A1}用&#39;pytest&#39; 写一个单元测试&quot;,
+
+    template=&quot;&quot;&quot;请为程序{A1}用&#39;pytest&#39; 写一个单元测试,
+    Besides the test that counts negative numbers, include test cases like the input string &quot;abc&quot;,
+    and any other test cases you can think of,
     将所有的 Test Cases 写入同一个测试中&quot;&quot;&quot;,
     input_variables=[&quot;A1&quot;]
+
 )
 
 chain1 = LLMChain(llm=llm, prompt=Q1_prompt, output_key=&quot;A1&quot;)
 chain2 = LLMChain(llm=llm, prompt=Q2_prompt, output_key=&quot;A2&quot;)
 
 q1=&quot;&quot;&quot;
-输入  输出
-1  1s
-61  1min1s
+输入 输出
+1 1s
+61 1min1s
 &quot;&quot;&quot;
 
 sequential_chain_p1 = SequentialChain(chains=[chain1], input_variables=[&quot;Q1&quot;], verbose=True)
@@ -422,37 +425,33 @@ sequential_chain_p2 = SequentialChain(chains=[chain1, chain2], input_variables=[
 answer2 = sequential_chain_p2.run(Q1=q1)
 print(answer2)
 
------------
------------
+---
 
-如何将代码封装在一个 App 中呢? 
-未来的程序辅助设计是沿这个思路走还是另辟蹊径? 
+---
+
+如何将代码封装在一个 App 中呢?
+未来的程序辅助设计是沿这个思路走还是另辟蹊径?
 如果有了用户交互界面，如何控制生成的程序不自己乱跑，亦或 &#39;在正确使用的引导下&#39; 让自动又自动生成的程序跑出了 &#39;天际&#39;，使得让人百思不得其解的事，豁然开朗了起来。
 
 解了一题留下了更多问题。</p>2023-04-11</li><br/><li><span>HXL</span> 👍（0） 💬（0）<p>遇到给代码问题,翻文档也没找到怎么解决,不知道该如何给plan_chain 传递参数. 现在一直报 &quot;Error: Missing value for input unit_test_package&quot;
 
 &quot;&quot;&quot;
 const modal = new ChatOpenAI({
-    maxTokens: 2048,
-    temperature: 0.5,
-    stop: [&#39;\n\n&#39;],
-    topP: 1,
+maxTokens: 2048,
+temperature: 0.5,
+stop: [&#39;\n\n&#39;],
+topP: 1,
 });
 &#47;&#47;
 const explain_prompt = new PromptTemplate({
-    &#47;&#47;...
+&#47;&#47;...
 })
 const explain_chain = explain_prompt.pipe(modal);
 &#47;&#47;
 const plan_prompt = new PromptTemplate({
-      template: `
-      &quot;&quot;&quot;
-    A good unit test suite should aim to:
-    - Test the function&#39;s behavior for a wide range of possible inputs
-    - Test edge cases that the author may not have foreseen
-    - Take advantage of the features of &#39;{unit_test_package}&#39; to make the tests easy to write and maintain
-    - Be easy to read and understand, with clean code and descriptive names
-    - Be deterministic, so that the tests always pass or fail in the same way
+template: `
+&quot;&quot;&quot;
+A good unit test suite should aim to: - Test the function&#39;s behavior for a wide range of possible inputs - Test edge cases that the author may not have foreseen - Take advantage of the features of &#39;{unit_test_package}&#39; to make the tests easy to write and maintain - Be easy to read and understand, with clean code and descriptive names - Be deterministic, so that the tests always pass or fail in the same way
 
     &#39;{unit_test_package}&#39; has many convenient features that make it easy to write and maintain unit tests. We&#39;ll use them to write unit tests for the function above.
 
@@ -460,26 +459,26 @@ const plan_prompt = new PromptTemplate({
     -&quot;&quot;&quot;
       `,
     inputVariables: [&#39;unit_test_package&#39;],
+
 });
 const plan_chain = plan_prompt.pipe(modal);
 &#47;&#47;
 const write_prompt = new PromptTemplate({
-    &#47;&#47;...
+&#47;&#47;...
 });
 const write_chain = write_prompt.pipe(modal);
 &#47;&#47;
 async function main(){
-    &#47;&#47;
-    const test_code = `
-    &#47;&#47;...
+&#47;&#47;
+const test_code = `     &#47;&#47;...
     `;
-    &#47;&#47; FIXME: 如何给 plain_chain 传递参数？
-    const sequence = RunnableSequence.from([explain_chain, plan_chain, write_chain]);
-    const resp = await sequence.invoke({
-        unit_test_package: &#39;jest&#39;,
-        function_to_test: test_code,
-    })
-    console.log(resp);
+&#47;&#47; FIXME: 如何给 plain_chain 传递参数？
+const sequence = RunnableSequence.from([explain_chain, plan_chain, write_chain]);
+const resp = await sequence.invoke({
+unit_test_package: &#39;jest&#39;,
+function_to_test: test_code,
+})
+console.log(resp);
 };
 main()
 &quot;&quot;&quot;</p>2024-03-17</li><br/><li><span>Esquel-GET IT - gaofeng</span> 👍（0） 💬（0）<p>上下文记忆答复，上文总结，将总结的信息附加到下一次对话中，如果是将中文翻译成英文，答案由英文转换成中文，对于这个过程中，英文的总结和中文的总结是否一致？应该是有差异的吧？对于回复的内容如何提高精准度？</p>2024-02-19</li><br/><li><span>小理想。</span> 👍（0） 💬（0）<p>老师想问一下，langchain增加了PromptTemplete有什么性能的优势吗？</p>2023-09-16</li><br/><li><span>花雨田</span> 👍（0） 💬（0）<p>理解下方代码，如果出现异常，再生成一遍write_unit_test（code）。
@@ -487,7 +486,7 @@ main()
 是否重生成时，把异常信息也给到语言模型会有帮助？
 
 except SyntaxError as e:
-            print(f&quot;Syntax error in generated code: {e}&quot;)
-            all_code = code + write_unit_test(code)
-            tried += 1</p>2023-06-10</li><br/><li><span>骨汤鸡蛋面</span> 👍（0） 💬（0）<p>老师前文说过：大语言模型的一个缺点，就是可控性差。那所谓的基于大模型开发，是不是就是先针对每个&#47;多个问题找到比较好的prompt，以便于基于这个prompt 能够比较好的得到某类问题的回答，然后再用LangChain这类工具将prompt串起来，即可这对某一个场景得到相对确定效果的结果。</p>2023-05-27</li><br/>
+print(f&quot;Syntax error in generated code: {e}&quot;)
+all_code = code + write_unit_test(code)
+tried += 1</p>2023-06-10</li><br/><li><span>骨汤鸡蛋面</span> 👍（0） 💬（0）<p>老师前文说过：大语言模型的一个缺点，就是可控性差。那所谓的基于大模型开发，是不是就是先针对每个&#47;多个问题找到比较好的prompt，以便于基于这个prompt 能够比较好的得到某类问题的回答，然后再用LangChain这类工具将prompt串起来，即可这对某一个场景得到相对确定效果的结果。</p>2023-05-27</li><br/>
 </ul>

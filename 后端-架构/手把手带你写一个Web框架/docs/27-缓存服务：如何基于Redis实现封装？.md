@@ -52,14 +52,14 @@ type Options struct {
    Network string
    // host:port 格式的地址
    Addr string
-   
+
    // redis的用户名
    Username string
    // redis密码
    Password string
    // redis的database
    DB int
-   
+
    // 连接超时
    // Default is 5 seconds.
    DialTimeout time.Duration
@@ -69,12 +69,12 @@ type Options struct {
    // 写超时
    // Default is ReadTimeout.
    WriteTimeout time.Duration
-   
+
    // 最小空闲连接数
    MinIdleConns int
    // 最大连接时长
    MaxConnAge time.Duration
-   
+
    // 空闲连接时长
    // Default is 5 minutes. -1 disables idle timeout check.
    IdleTimeout time.Duration
@@ -148,18 +148,18 @@ read_timeout: 2s # 读超时
 write_timeout: 2s # 写超时
 
 write:
-    host: localhost # ip地址
-    port: 3306 # 端口
-    db: 0 #db
-    username: jianfengye # 用户名
-    password: "123456789" # 密码
-    timeout: 10s # 连接超时
-    read_timeout: 2s # 读超时
-    write_timeout: 2s # 写超时
-    conn_min_idle: 10 # 连接池最小空闲连接数
-    conn_max_open: 20 # 连接池最大连接数
-    conn_max_lifetime: 1h # 连接数最大生命周期
-    conn_max_idletime: 1h # 连接数空闲时长
+  host: localhost # ip地址
+  port: 3306 # 端口
+  db: 0 #db
+  username: jianfengye # 用户名
+  password: "123456789" # 密码
+  timeout: 10s # 连接超时
+  read_timeout: 2s # 读超时
+  write_timeout: 2s # 写超时
+  conn_min_idle: 10 # 连接池最小空闲连接数
+  conn_max_open: 20 # 连接池最大连接数
+  conn_max_lifetime: 1h # 连接数最大生命周期
+  conn_max_idletime: 1h # 连接数空闲时长
 ```
 
 和database.yaml的配置一样，根级别的作为默认配置，二级配置作为单个Redis的配置，并且二级配置会覆盖默认配置。这里还有一个小心思，特意将这些配置项都和database.yaml保持一致了，这样使用者在配置的时候能减少学习成本。

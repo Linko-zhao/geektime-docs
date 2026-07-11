@@ -30,7 +30,7 @@ public interface TemplateService {
     // 读取优惠券
     @GetMapping("/getTemplate")
     CouponTemplateInfo getTemplate(@RequestParam("id") Long id);
-    
+
     // 批量获取
     @GetMapping("/getBatch")
     Map<Long, CouponTemplateInfo> getTemplateInBatch(@RequestParam("ids") Collection<Long> ids);
@@ -65,7 +65,7 @@ webClientBuilder.build().get()
     .uri("http://coupon-template-serv/template/getTemplate?id=" + templateId)
     .retrieve()
     .bodyToMono(CouponTemplateInfo.class)
-    .block();        
+    .block();
 ```
 
 从上面的代码中你可以看出，我们写了一大长串的代码，只为了发起一次服务请求。如果使用**OpenFeign接口**来替换，那画风就不一样了，我们看一下改造后的服务调用过程。
@@ -150,7 +150,7 @@ public class Application {
 如果你忘记声明EnableFeignClients注解了呢？那么启动项目的时候，你就会收到一段异常，告诉你目标服务在Spring上下文中未找到。我把具体的报错信息贴在了这里，你可以参考一下。如果碰到这类启动异常，你就可以先去查看启动类上有没有定义EnableFeignClients注解。
 
 ```
-Field templateService in com.geekbang.coupon.customer.service.CouponCustomerServiceImpl 
+Field templateService in com.geekbang.coupon.customer.service.CouponCustomerServiceImpl
 required a bean of type 'com.geekbang.coupon.customer.feign.TemplateService' that could not be found.
 ```
 
@@ -187,7 +187,6 @@ required a bean of type 'com.geekbang.coupon.customer.feign.TemplateService' tha
 </p>2022-01-10</li><br/><li><span>so long</span> 👍（15） 💬（2）<p>每个服务提供方单独添加一个openfeign的模块，服务调用方添加对应的openfeign模块即可</p>2022-01-10</li><br/><li><span>so long</span> 👍（8） 💬（1）<p>老师，我用spring cloud alibaba搭建了公司的一个项目，服务启动后，接口的首次请求需要2-3秒钟，后续请求都在100ms左右，请问有哪些优化措施可以提高首次接口请求速度？之前使用ribbon可是设置为饿汉式加载，但是spring cloud loadbalancer好像没有饿汉式加载的配置。</p>2022-01-10</li><br/><li><span>ᯤ⁵ᴳ</span> 👍（6） 💬（1）<p>请求异常，多次重试等使用Webclient会比较方便，@FeignClient 如何处理呢</p>2022-01-11</li><br/><li><span>Geek_e93c48</span> 👍（6） 💬（1）<p>关于老师的思考题：
 做成将提供方的OpenFeign做成中间件抽离出来。
 个人建议：老师是否可以在后边的文章中不仅仅讲技术落地，加入一些使用该技术在生产上的遇到的问题和排查思路，这些才是我们需要的（手动滑稽）</p>2022-01-10</li><br/><li><span>欢沁</span> 👍（4） 💬（1）<p>老师你好，微服务的数据库分库后，如果A服务要展示的数据需要和B数据库的表关联，微服务划分后，数据库层面就没法做join操作，企业现在通用的方式是怎么处理的。我目前的解决方法是通过feign来调用其他服务获取数据，再插到A服务的对象中，如果遇到关联的表多，就需要feign调用多次，我不认为这是一个好的解决方法，这样的话代码量会堆积非常多，如果没有划分数据库的话，只要通过join就解决问题了。
-
 
 所以概括就是，我需要关联到其他服务的数据库的表，没法join，我应该怎么做，谢谢老师。</p>2022-02-25</li><br/><li><span>mars</span> 👍（4） 💬（3）<p>老师，能问下微服务下调用其他服务，其他服务是其他厂商的web接口，只提供过输入输出和请求地址这种，注册中心也不在一个，这种常规的http请求在微服务架构下的最佳调用实践是咋样的呢？还是继续open feign做url吗？</p>2022-02-07</li><br/><li><span>梁中华</span> 👍（3） 💬（1）<p>要加自定义的header头怎么办？</p>2022-02-09</li><br/><li><span>Geek_a5c816</span> 👍（2） 💬（1）<p>这种原始openFegin的实现消费者调用提供者的时候,无法传递headers中的参数,怎么处理呢?</p>2022-03-18</li><br/><li><span>寥若晨星</span> 👍（1） 💬（1）<p>为啥不可以直接在服务实现的接口上加@FeignClient注解呢</p>2022-03-11</li><br/><li><span>Geek_f76b23</span> 👍（1） 💬（1）<p>cusmter服务通过openFeign调用template提供的服务，@FeignClient(value = &quot;coupon-template-serv&quot;), @FeignClient的value指定了调用服务的名称？
 

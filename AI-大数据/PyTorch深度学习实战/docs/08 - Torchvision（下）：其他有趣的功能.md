@@ -219,17 +219,21 @@ import torch
 import torchvision.models as models
 
 # 加载预训练模型
+
 googlenet = models.googlenet(pretrained=True)
 
 # 提取分类层的输入参数
+
 fc_in_features = googlenet.fc.in_features
 print(&quot;fc_in_features:&quot;, fc_in_features)
 
 # 查看分类层的输出参数
+
 fc_out_features = googlenet.fc.out_features
 print(&quot;fc_out_features:&quot;, fc_out_features)
 
 # 修改预训练模型的输出分类数(在图像分类原理中会具体介绍torch.nn.Linear)
+
 googlenet.fc = torch.nn.Linear(fc_in_features, 10)
 &#39;&#39;&#39;
 输出：
@@ -256,17 +260,19 @@ print(&quot;fc_out_features:&quot;, fc_out_features)
 老师，我更改后得到的输出特征数还是 fc_out_features: 1000 这个结果。请赐教！</p>2021-11-16</li><br/><li><span>clee</span> 👍（1） 💬（1）<p>vgg16 = models.vgg16(pretrained=True)</p>2021-11-07</li><br/><li><span>夏阳</span> 👍（1） 💬（4）<p>老师，这段段代码会报错
 torchvision.utils.save_image(grid_tensor, &#39;grid.jpg&#39;)
 
-ValueError: unknown file extension: 
+ValueError: unknown file extension:
 
 搞不清楚什么状况，请帮忙指教</p>2021-10-30</li><br/><li><span>勿更改任何信息</span> 👍（1） 💬（1）<p>老师，代码太分散了，后期是否可以在github上统一存储呢？</p>2021-10-27</li><br/><li><span>超人不会飞</span> 👍（1） 💬（1）<p>vgg16net=torchvision.models.vgg16(pretrained=True)</p>2021-10-27</li><br/><li><span>方华Elton</span> 👍（0） 💬（1）<p>import torch
 import torchvision.models as models
 
 # 加载预训练模型
+
 vgg16 = models.vgg16(pretrained=True)</p>2023-12-18</li><br/><li><span>逍遥思</span> 👍（0） 💬（1）<p>img_tensor, label_tensor = data_iter.next()会遇到这样一个问题：
 AttributeError: &#39;_SingleProcessDataLoaderIter&#39; object has no attribute &#39;next&#39;
 改为以下可解决：
 img_tensor, label_tensor = next(data_iter)</p>2023-07-14</li><br/><li><span>dao</span> 👍（0） 💬（1）<p>思考题，也不懂 VGG 是什么，直接找文档 https:&#47;&#47;pytorch.org&#47;vision&#47;stable&#47;models&#47;generated&#47;torchvision.models.vgg16.html#torchvision.models.vgg16
 ---
+
 from torchvision.models import VGG16_Weights
 vgg16 = models.vgg16(weights=VGG16_Weights.DEFAULT)
 ---

@@ -86,7 +86,7 @@ def main():
     asyncio.run(download_all(sites))
     end_time = time.perf_counter()
     print('Download {} sites in {} seconds'.format(len(sites), end_time - start_time))
-    
+
 if __name__ == '__main__':
     main()
 
@@ -194,12 +194,12 @@ def calculate_sums(numbers):
         cpu_bound(number)
 
 def main():
-    start_time = time.perf_counter()  
+    start_time = time.perf_counter()
     numbers = [10000000 + x for x in range(20)]
     calculate_sums(numbers)
     end_time = time.perf_counter()
     print('Calculation takes {} seconds'.format(end_time - start_time))
-    
+
 if __name__ == '__main__':
     main()
 ```
@@ -210,32 +210,30 @@ if __name__ == '__main__':
 import multiprocessing
 import time
 
-
 def cpu_bound(number):
-    return sum(i * i for i in range(number))
-
+return sum(i * i for i in range(number))
 
 def find_sums(numbers):
-    with multiprocessing.Pool() as pool:
-        pool.map(cpu_bound, numbers)
+with multiprocessing.Pool() as pool:
+pool.map(cpu_bound, numbers)
 
-
-if __name__ == &quot;__main__&quot;:
-    numbers = [10000000 + x for x in range(20)]
+if **name** == &quot;**main**&quot;:
+numbers = [10000000 + x for x in range(20)]
 
     start_time = time.time()
     find_sums(numbers)
     duration = time.time() - start_time
     print(f&quot;Duration {duration} seconds&quot;)</p>2019-07-02</li><br/><li><span>建强</span> 👍（6） 💬（2）<p>上网查询资料后，初步了解了多进程的一些知识，按照资料中的方法简单改写了一下程序，由于多进程方式时，不知什么原因，cpu_bound函数不能实时输出，所以就把cpu_bound改为返回字符串形式的结果，等所有的数计算完成后，再一并输出结果 ，程序中常规执行和多进程两种方式都有，并作了对比后发现，常规执行用时约23秒，多进程用时约6秒，两者相差4倍，程序如下，不足处请老师指正：
+
 #多进程演示
 import multiprocessing
 import time
 
 def cpu_bound(number):
-    return &#39;sum({}^2)={}&#39;.format(number,sum(i * i for i in range(number)))
+return &#39;sum({}^2)={}&#39;.format(number,sum(i * i for i in range(number)))
 
 def calculate_sums(numbers):
-    
+
     results = []
 
     print(&#39;-&#39;*10+&#39;串行执行开始：&#39;+&#39;-&#39;*10)
@@ -266,25 +264,25 @@ def multicalculate_sums(numbers):
     print(&#39;-&#39;*10+&#39;多进程执行结束，结果如下：&#39;+&#39;-&#39;*10)
     for res in results:
         print(res.get())
-    
+
 def main():
 
     numbers = [10000000 + x for x in range(20)]
 
     #串行执行方式
-    start_time = time.perf_counter()  
+    start_time = time.perf_counter()
     calculate_sums(numbers)
     end_time = time.perf_counter()
     print(&#39;串行执行用时：Calculation takes {} seconds&#39;.format(end_time - start_time))
 
     #多进程执行方式
-    start_time = time.perf_counter()  
+    start_time = time.perf_counter()
     multicalculate_sums(numbers)
     end_time = time.perf_counter()
     print(&#39;多进程执行用时：Calculation takes {} seconds&#39;.format(end_time - start_time))
-    
-if __name__ == &#39;__main__&#39;:
-    main()
+
+if **name** == &#39;**main**&#39;:
+main()
 </p>2019-10-21</li><br/><li><span>szc</span> 👍（1） 💬（1）<p>能否举一些例子，哪些场景是IO密集型中的IOheavy， 那些是IO很快</p>2019-06-29</li><br/><li><span>阿卡牛</span> 👍（0） 💬（2）<p>常听到阻塞，同步是不是就是阻塞地意思</p>2019-11-01</li><br/><li><span>helloworld</span> 👍（60） 💬（3）<p>总结多线程和协程之间的共同点和区别：
 共同点：
 都是并发操作，多线程同一时间点只能有一个线程在执行，协程同一时间点只能有一个任务在执行；
@@ -317,37 +315,32 @@ if __name__ == &#39;__main__&#39;:
 PS:想问一下，完成之后为什么还要放队列里？难道不应该从队列里移除吗？</p>2019-06-28</li><br/><li><span>transformation</span> 👍（8） 💬（5）<p>import time
 from concurrent import futures
 
-
 def cpu_bound(number):
-    return sum(i * i for i in range(number))
-
+return sum(i * i for i in range(number))
 
 def calculate_sums(numbers):
-    for number in numbers:
-        print(cpu_bound(number))
-
+for number in numbers:
+print(cpu_bound(number))
 
 def main():
-    start_time = time.perf_counter()
-    numbers = [10000000 + x for x in range(20)]
-    calculate_sums(numbers)
-    end_time = time.perf_counter()
-    print(&#39;Calculation takes {} seconds&#39;.format(end_time - start_time))
-
+start_time = time.perf_counter()
+numbers = [10000000 + x for x in range(20)]
+calculate_sums(numbers)
+end_time = time.perf_counter()
+print(&#39;Calculation takes {} seconds&#39;.format(end_time - start_time))
 
 def main_process():
-    start_time = time.perf_counter()
-    numbers = [10000000 + x for x in range(20)]
-    with futures.ProcessPoolExecutor() as pe:
-        result = pe.map(cpu_bound, numbers)
-        print(f&quot;result: {list(result)}&quot;)
-    end_time = time.perf_counter()
-    print(&#39;multiprocessing Calculation takes {} seconds&#39;.format(end_time - start_time))
+start_time = time.perf_counter()
+numbers = [10000000 + x for x in range(20)]
+with futures.ProcessPoolExecutor() as pe:
+result = pe.map(cpu_bound, numbers)
+print(f&quot;result: {list(result)}&quot;)
+end_time = time.perf_counter()
+print(&#39;multiprocessing Calculation takes {} seconds&#39;.format(end_time - start_time))
 
-
-if __name__ == &#39;__main__&#39;:
-    main()
-    main_process()
+if **name** == &#39;**main**&#39;:
+main()
+main_process()
 ————————
 输出：
 333333283333335000000
@@ -379,32 +372,28 @@ async是穿插执行，之所以要穿插，代码需要的资源不同，有的
 具体到关键字 async 是表示函数是异步的，也就是来回穿插的起点（进入预备队列），await是表示调用需要IO，也就是进入等待队列的入口（函数开始调用）和出口（函数调用结束，重新进入预备队列）。</p>2019-11-21</li><br/><li><span>唐哥</span> 👍（3） 💬（2）<p>老师好，对于 Asyncio 来说，它的任务在运行时不会被外部的一些因素打断。不被打断是如何保证的？还有event loop是每次取出一个任务运行，当这个任务运行期间它就是只等待任务结束吗？不干其他事了吗？</p>2019-07-01</li><br/><li><span>Geek_59f23e</span> 👍（3） 💬（0）<p>import time
 from multiprocessing import Pool
 
-
 def square(number):
-    return sum(i * i for i in range(number))
-
+return sum(i * i for i in range(number))
 
 def single_process(numbers):
-    res = []
-    for number in numbers:
-        res.append(square(number))
-    return res
-
+res = []
+for number in numbers:
+res.append(square(number))
+return res
 
 def multi_process(numbers):
-    with Pool() as pool:
-        res = pool.map(square, numbers)
-    return res
+with Pool() as pool:
+res = pool.map(square, numbers)
+return res
 
-
-if __name__ == &#39;__main__&#39;:
-    numbers = [10000000 + x for x in range(20)]
-    start1 = time.perf_counter()
-    single_process(numbers)
-    print(&#39;单进程用时：%f 秒&#39; % (time.perf_counter() - start1))
-    start2 = time.perf_counter()
-    multi_process(numbers)
-    print(&#39;多进程用时：%f 秒&#39; % (time.perf_counter() - start2))
+if **name** == &#39;**main**&#39;:
+numbers = [10000000 + x for x in range(20)]
+start1 = time.perf_counter()
+single_process(numbers)
+print(&#39;单进程用时：%f 秒&#39; % (time.perf_counter() - start1))
+start2 = time.perf_counter()
+multi_process(numbers)
+print(&#39;多进程用时：%f 秒&#39; % (time.perf_counter() - start2))
 
 ————————
 输出：
@@ -419,16 +408,16 @@ def cpu_bound(number):
     return sum(i * i for i in range(number))
 
 def calculate_sums(numbers):
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        executor.map(cpu_bound, numbers)
+with concurrent.futures.ProcessPoolExecutor() as executor:
+executor.map(cpu_bound, numbers)
 
 def main():
-    start_time = time.perf_counter()  
-    numbers = [10000000 + x for x in range(20)]
-    calculate_sums(numbers)
-    end_time = time.perf_counter()
-    print(&#39;Calculation takes {} seconds&#39;.format(end_time - start_time))
-    
-if __name__ == &#39;__main__&#39;:
-    main()</p>2020-10-04</li><br/>
+start_time = time.perf_counter()  
+numbers = [10000000 + x for x in range(20)]
+calculate_sums(numbers)
+end_time = time.perf_counter()
+print(&#39;Calculation takes {} seconds&#39;.format(end_time - start_time))
+
+if **name** == &#39;**main**&#39;:
+main()</p>2020-10-04</li><br/>
 </ul>

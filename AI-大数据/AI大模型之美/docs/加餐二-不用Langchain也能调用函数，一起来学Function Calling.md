@@ -156,7 +156,7 @@ messages.append(
         "name": function_name,
         "content": str(function_response),
     }
-)  
+)
 
 final_response = client.chat.completions.create(
     model="gpt-3.5-turbo-0125",
@@ -204,7 +204,7 @@ def chat_using_function_call(content, tools = tools, available_functions = avail
         tool_choice="auto",  # auto is default, but we'll be explicit
     )
     response_message = response.choices[0].message
-    messages.append(response_message)    
+    messages.append(response_message)
     tool_calls = response_message.tool_calls
     for tool_call in tool_calls:
         function_name = tool_call.function.name
@@ -380,7 +380,7 @@ def chat_using_function_call(content, tools = tools, available_functions = avail
         tool_choice="auto",  # auto is default, but we'll be explicit
     )
     response_message = response.choices[0].message
-    messages.append(response_message)    
+    messages.append(response_message)
     tool_calls = response_message.tool_calls
     for tool_call in tool_calls:
         function_name = tool_call.function.name
@@ -403,7 +403,7 @@ def chat_using_function_call(content, tools = tools, available_functions = avail
         messages=messages,
     )
     print(final_response.choices[0].message.content)
- 
+
 ```
 
 这里的代码和前面加减乘除的代码基本一样，我们只是修改了对应的函数 name、description、parameters 这些配置参数。并且在 Function Call 的调用链路中，通过 print 函数，打印出了什么样的 function 被调用了。

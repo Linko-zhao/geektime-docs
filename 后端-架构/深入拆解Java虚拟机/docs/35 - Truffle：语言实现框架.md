@@ -195,7 +195,7 @@ Truffle背后所依赖的技术是Partial Evaluation以及节点重写。Partial
 
 Truffle的Polyglot特性支持在一段代码中混用多种不同的语言。与其他Polyglot框架相比，它支持在不同的Truffle语言中复用内存中存储的同一个对象。
 
-* * *
+---
 
 今天的实践环节，请你试用GraalVM中附带的各项语言实现。你可以运行我们官网上的各个[示例程序](https://www.graalvm.org/docs/examples/)。
 <div><strong>精选留言（4）</strong></div><ul>

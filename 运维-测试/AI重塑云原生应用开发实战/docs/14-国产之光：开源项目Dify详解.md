@@ -150,8 +150,8 @@ chat_client = ChatClient(api_key)
 chat_client.base_url = base_url
 
 # Create Chat Message using ChatClient
-chat_response = chat_client.create_chat_message(inputs={}, 
-                                                query="济南市恒隆广场附近有什么电影院？", 
+chat_response = chat_client.create_chat_message(inputs={},
+                                                query="济南市恒隆广场附近有什么电影院？",
                                                 user="user_id", response_mode="streaming")
 chat_response.raise_for_status()
 

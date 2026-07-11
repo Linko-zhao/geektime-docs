@@ -119,7 +119,7 @@ anotherTiger.say();
     var f = new Function;
     var arr = new Array;
     var e = new Error;
-    console.log([o, n, s, b, d, arg, r, f, arr, e].map(v => Object.prototype.toString.call(v))); 
+    console.log([o, n, s, b, d, arg, r, f, arr, e].map(v => Object.prototype.toString.call(v)));
 ```
 
 因此，在ES3和之前的版本，JS中类的概念是相当弱的，它仅仅是运行时的一个字符串属性。
@@ -154,7 +154,7 @@ function c1(){
     this.p2 = function(){
         console.log(this.p1);
     }
-} 
+}
 var o1 = new c1;
 o1.p2();
 
@@ -223,11 +223,11 @@ class Rectangle {
 此外，最重要的是，类提供了继承能力。我们来看一下下面的代码。
 
 ```
-class Animal { 
+class Animal {
   constructor(name) {
     this.name = name;
   }
-  
+
   speak() {
     console.log(this.name + ' makes a noise.');
   }
@@ -271,14 +271,14 @@ class 猫{
          this.skin = skin;
     }
     ......
-}; 
+};
 
 class 花斑虎 extends 猫 {
-    constroct(config){
-        config.skin = 花斑;
-        super(config);
-    }
-     ......
+constroct(config){
+config.skin = 花斑;
+super(config);
+}
+......
 }
 </p>2019-02-22</li><br/><li><span>Ewet</span> 👍（0） 💬（1）<p>想问下操作原型有什么作用，感觉看得不是很明白，来自小白的提问，哈哈哈</p>2019-02-13</li><br/><li><span>Youngwell</span> 👍（169） 💬（13）<p>感觉是像在听天书，前端工作快三年了，悲催了</p>2019-01-31</li><br/><li><span>ashen1129</span> 👍（120） 💬（1）<p>本篇厘清了一些我对面向对象的理解误区，说明了“基于类”和“基于原型”作为两种编程范式的区别，感谢。
 

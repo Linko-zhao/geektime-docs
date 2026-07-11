@@ -170,7 +170,7 @@ public class FlutterPluginNetworkPlugin implements MethodCallHandler {
           }
         });
       }
-      
+
       @Override
       public void onResponse(Call call, final Response response) throws IOException {
         //取出响应数据
@@ -280,7 +280,7 @@ end
     //初始化插件
     [FlutterPluginNetworkPlugin registerWithRegistrar:[vc registrarForPlugin:@"FlutterPluginNetworkPlugin"]];
     //设置路由标识符
-    [vc setInitialRoute:@"defaultRoute"]; 
+    [vc setInitialRoute:@"defaultRoute"];
     self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
     return YES;
@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View FlutterView = Flutter.createView(this, getLifecycle(), "defaultRoute"); 
+        View FlutterView = Flutter.createView(this, getLifecycle(), "defaultRoute");
         setContentView(FlutterView);
     }
 }
@@ -403,7 +403,7 @@ class FlutterPluginDemo {
     print('args:$args');
     return methodTemplate(methodName, args);
   }
-  
+
   //某未实现的方法
   Future<dynamic> someMethodNotImplemented();
   //某未实现的带参数方法

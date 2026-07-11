@@ -71,7 +71,7 @@ val flowers = spark.sparkContext.textFile("flowers.txt")
 //黄老师给5个小同学分发花朵
 val flowersForKids = flowers.coalesce(5)
 val flowersKV = flowersForKids.map((_, 1))
-//黄小乙的两个步骤：大家先各自按颜色归类，然后再把归类后的花朵放到相应的课桌上 
+//黄小乙的两个步骤：大家先各自按颜色归类，然后再把归类后的花朵放到相应的课桌上
 flowersKV.groupByKey.collect
 
 ```
@@ -130,7 +130,7 @@ val flowers = spark.sparkContext.textFile("flowers.txt")
 //黄老师给5个小同学分发花朵
 val flowersForKids = flowers.coalesce(5)
 val flowersKV = flowersForKids.map((_, 1))
-//黄小乙的两个步骤：大家先各自按颜色计数，然后再按照课桌统一计数 
+//黄小乙的两个步骤：大家先各自按颜色计数，然后再按照课桌统一计数
 flowersKV.reduceByKey(_ + _).collect
 
 ```
@@ -202,7 +202,7 @@ Reduce Task将拉取到的数据块填充到读缓冲区，然后按照任务的
 <li><span>RespectM</span> 👍（24） 💬（6）<p>老师，如何加快netty堆外内存的回收啊？snappy+parquet格式数据会导致，netty堆外内存增长太快，导致netty使用过多direct memory，然后报错。</p>2021-06-20</li><br/><li><span>对方正在输入。。。</span> 👍（14） 💬（3）<p>老师我补充一下，采用sortShuffle的方式时，只有满足在shuffleDependency里面aggeragator或者sort这两个字段有效时，才会根据partitionid和key排序，否则只根据partitionid排序。如不会按照key排序的算子有repartition</p>2021-04-13</li><br/><li><span>快跑</span> 👍（13） 💬（1）<p>老师你好，针对参数配置有几个疑问，辛苦帮忙解答下疑问
 
 SELECT
-	userid, pvid
+userid, pvid
 FROM table
 GROUP BY user,pvid
 
@@ -213,7 +213,6 @@ Stage-0_0，就是读取文件的过程，Task数据根据数据块决定的。
 我想改变Stage-1_0阶段的Task并发数量。
 通过设置spark.default.parallelism=2000和spark.sql.shuffle.partitions=3000都没有生效。倒是mapreduce.job.reduces=1500配置项生效了。
 日志：Stage-0_0: 0(+1)&#47;1294 Stage-1_0: 0&#47;1500
-
 
 疑问2：这种sql执行计划中的groupByKey，属于spark.sql.shuffle.partitions所描述的聚合类操作的场景么？
 疑问3：spark.sql.shuffle.partitions 和 mapreduce.job.reduces 怎么理解这两个参数的使用场景</p>2021-05-21</li><br/><li><span>慢慢卢</span> 👍（8） 💬（2）<p>建议老师以同样的思路弄一个flink的专栏</p>2021-06-14</li><br/><li><span>空</span> 👍（6） 💬（1）<p>老师，您好，学习了您的专栏受益匪浅，对于您评论里说的每个task处理的数据分片200M左右最佳，那如果我两个5Ｔ的大表做join，那我的shuffle reduce 的task数量岂不是要26215，那这个磁盘和网络开销不是大的惊人？</p>2021-06-12</li><br/><li><span>CycleGAN</span> 👍（6） 💬（2）<p>老师的这一节讲得真棒，我也看了一些博客和书，但总是乱糟糟的，专栏质量很高，兼顾了深度+清晰度+新，已推荐同事中，好好看一起跳槽。。
@@ -232,10 +231,10 @@ Stage-0_0，就是读取文件的过程，Task数据根据数据块决定的。
 想就“千女散花”的过程详细了解下spark.shuffle.sort.bypassMergeThreshold
 1、“千女散花”过程中的groupByKey和reduceByKey是否都不需要引入排序操作？ 目前我觉得是不需要
 
-2、如果满足spark.shuffle.sort.bypassMergeThreshold阈值情况下，由这个参数引入排序具体发生在哪阶段？ 
-	map写临时文件阶段
-	临时文件归并merge阶段
-	reduce拉取数据merge
+2、如果满足spark.shuffle.sort.bypassMergeThreshold阈值情况下，由这个参数引入排序具体发生在哪阶段？
+map写临时文件阶段
+临时文件归并merge阶段
+reduce拉取数据merge
 这些过程都会有影响么
 
 3、spark.shuffle.sort.bypassMergeThreshold生效的场景会区分spark rdd， spark sql，还是hive on spark么
@@ -250,12 +249,11 @@ partitionedAppendOnlyMap里面的数据
 
 疑问：
 map端做归并排序再写文件的目的是为了每一个分区的数据连续，从而让reduce端在读文件的时候读连续的记录速度更快吗？</p>2021-04-08</li><br/><li><span>福</span> 👍（3） 💬（1）<p>真的是希望老师出个flink的，写的好nice呀</p>2021-11-09</li><br/><li><span>果子</span> 👍（2） 💬（1）<p>索引文件正是用于帮助判定哪部分数据属于哪个 Reduce Task。老师，（1）每个Reduce Task怎么知道自己的要读哪个索引部分，这个信息谁提供给他的，（2）他知道了后怎么定位自己的索引，二分吗？（3）索引文件记录的是reduce阶段的起始索引，每个redcue task要读取分区数据的话，是从起始索引一直读到下一个起始索引吗？这样确定一个partition?</p>2021-10-18</li><br/><li><span>黄宪坤</span> 👍（2） 💬（1）<p>老师您好，有个疑问， PartitionedPairBuffer、PartitionedAppendOnlyMap 这些内存数据结构，与缓冲区内存有什么关系？</p>2021-08-30</li><br/><li><span>猿鸽君</span> 👍（2） 💬（2）<p>老师好，请问下为什么需要计算partitionid，直接根据key来排序不行吗？相同key计算的partitionid不是一样的吗，为什么需要根据（partitionid， key）来排？不懂这里计算partitionid的用意</p>2021-08-08</li><br/><li><span>Fendora范东_</span> 👍（2） 💬（3）<p>Map端配置
-spark.shuffle.file.buffer  适当调大可以降低落盘次数，以及降低归并排序路数
+spark.shuffle.file.buffer 适当调大可以降低落盘次数，以及降低归并排序路数
 reduce端配置
-spark.reducer.maxSizeInFlight   可以适当调大减少网络io次数
+spark.reducer.maxSizeInFlight 可以适当调大减少网络io次数
 
-
-spark.shuffle.sortBypassMergeThreshold  map端不进行排序的阈值。因为目前shuffle操作由sortshufflemanager管理，默认在map操作时会进行排序，例子中groupbykey，reducebykey并不需要排序
+spark.shuffle.sortBypassMergeThreshold map端不进行排序的阈值。因为目前shuffle操作由sortshufflemanager管理，默认在map操作时会进行排序，例子中groupbykey，reducebykey并不需要排序
 
 请问磊哥，缓存大小调整有啥技巧么，应该不是越大越好吧</p>2021-04-07</li><br/><li><span>Unknown element</span> 👍（1） 💬（1）<p>第一题：
 每个 map task 遍历本地分片中的数据，为每条数据计算目标分区，假设 PartitionedAppendOnlyMap 的容量还是4，那么第一次溢出前它的内容应该是：
@@ -268,16 +266,16 @@ index文件：0 1 2 3 4
 它和groupByKey的中间文件显然是不一样的，因为reduceByKey在map端做了聚合，所以溢出次数和文件体积都会更小
 第二题：
 map阶段：（1）map task数量：spark.default.parallelism
-               （2）计算数据的目标分区：(spark.executor.memory-300)*spark.memory.fraction*(1-spark.memory.storageFraction)
-               （3）是否排序：spark.shuffle.sort.bypassMergeThreshold
-               （4）写入临时文件、中间文件的位置：spark.local.dir
-               （5）map输出端写入缓冲区大小：spark.shuffle.file.buffer
+（2）计算数据的目标分区：(spark.executor.memory-300)_spark.memory.fraction_(1-spark.memory.storageFraction)
+（3）是否排序：spark.shuffle.sort.bypassMergeThreshold
+（4）写入临时文件、中间文件的位置：spark.local.dir
+（5）map输出端写入缓冲区大小：spark.shuffle.file.buffer
 reduce阶段：（1）reduce task数量：spark.sql.shuffle.partitions
-                   （2）reduce输入端缓冲区大小：spark.reducer.maxSizeInFlight
+（2）reduce输入端缓冲区大小：spark.reducer.maxSizeInFlight
 
 另外我有几个问题，（1）map task 和 reduce task 用到的 executor 是在所有可用资源里根据配置项指定的数目随机选出来的吗？如果是的话那么他们有可能有交集（就是某个map task完成计算后接着变成reduce task开始执行reduce的计算）？
-                             （2）reduce 阶段每个 executor 怎么知道自己的编号从而知道自己应该拉取哪个分区的数据呢？
-                             （3）您在回答评论区的问题 “在使用partitionedAppendOnlyMap时，多个溢出的文件需要归并排序，归并排序的过程中是不是对同一个key也做了一次combine操作？” 时说 “并不会，归并排序这个说法，可能有些迷惑性。他实际上就是把多份临时文件“拼接”在一起，” ，这里我不太明白，假如 shuffle 是由 reduceByKey 引入的，而map阶段溢出的两份临时文件中都包含某个key的记录，那么在对溢出文件做归并排序时不是应该把这两条数据的value再加一次吗？如果归并排序阶段只是简单的拼接临时文件感觉计数会出问题？
-                             （4）老师方便讲一下各个概念之间数量上的对应关系以及它们和物理实体的对应关系吗？比如节点和 executor 是一对多，executor 和 task 也是一对多，task 和 partition 是一对一？一个节点对应一台计算机，一个executor是若干CPU和存储资源的集合，一个task是独占一个cpu的任务？
+（2）reduce 阶段每个 executor 怎么知道自己的编号从而知道自己应该拉取哪个分区的数据呢？
+（3）您在回答评论区的问题 “在使用partitionedAppendOnlyMap时，多个溢出的文件需要归并排序，归并排序的过程中是不是对同一个key也做了一次combine操作？” 时说 “并不会，归并排序这个说法，可能有些迷惑性。他实际上就是把多份临时文件“拼接”在一起，” ，这里我不太明白，假如 shuffle 是由 reduceByKey 引入的，而map阶段溢出的两份临时文件中都包含某个key的记录，那么在对溢出文件做归并排序时不是应该把这两条数据的value再加一次吗？如果归并排序阶段只是简单的拼接临时文件感觉计数会出问题？
+（4）老师方便讲一下各个概念之间数量上的对应关系以及它们和物理实体的对应关系吗？比如节点和 executor 是一对多，executor 和 task 也是一对多，task 和 partition 是一对一？一个节点对应一台计算机，一个executor是若干CPU和存储资源的集合，一个task是独占一个cpu的任务？
 字比较多，希望老师不要介意，谢谢老师~~~</p>2021-12-15</li><br/>
 </ul>

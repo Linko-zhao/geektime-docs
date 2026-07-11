@@ -166,10 +166,10 @@ void Interpreter::eval_frame() {
         ...
         switch (op_code) {
         } // end of switch
-  
+
 		// handle EXCEPTION with loop stack is not empty
 		...
-  
+
         // has pending exception and no handler found, unwind stack.
         if (_int_status == IS_EXCEPTION && _frame->blocks()->length() == 0) {
             _trace_back->as<Traceback>()->record_frame(_frame);

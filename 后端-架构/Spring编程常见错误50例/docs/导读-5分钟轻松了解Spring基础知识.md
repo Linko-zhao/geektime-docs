@@ -40,21 +40,21 @@ public class Service {
 下面是一段用“双重检验锁”实现的CompoentA类：
 
 ```
-public class ComponentA{  
-    private volatile static ComponentA INSTANCE;  
-     
-    private ComponentA() {}  
-     
-    public static ComponentA getInstance(){  
-        if (INSTANCE== null) {  
-            synchronized (ComponentA.class) {  
-                if (INSTANCE== null) {  
-                    INSTANCE= new ComponentA();  
-                }  
-            }  
-        }  
-        return INSTANCE;  
-    }  
+public class ComponentA{
+    private volatile static ComponentA INSTANCE;
+
+    private ComponentA() {}
+
+    public static ComponentA getInstance(){
+        if (INSTANCE== null) {
+            synchronized (ComponentA.class) {
+                if (INSTANCE== null) {
+                    INSTANCE= new ComponentA();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }
 ```
 
@@ -78,7 +78,7 @@ Spring就是这个思路，它就像一个“中介”公司。当你需要一�
 public class BeanFactory {
 
     private Map<String, Bean> beanMap = new HashMap<>();
-    
+
     public Bean getBean(String key){
       return beanMap.get(key) ;
     }
@@ -96,7 +96,7 @@ public class BeanFactory {
 
 ```
 public class AnnotationScan {
-    
+
     //通过扫描包名来找到Bean
     void scan(String packages) {
          //
@@ -123,7 +123,7 @@ public class AnnotationScan {
 public class BeanFactory {
 
     private Map<String, Bean> beanMap = new HashMap<>();
-    
+
     public Bean getBean(String key){
        //查找是否创建过
        Bean bean = beanMap.get(key);

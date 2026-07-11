@@ -74,7 +74,7 @@ def compute_pca(data):
 现在，我们保存这段编写好的代码，并通过下面的命令来执行：
 
 ```
-python3 testPCAPurePython.py 
+python3 testPCAPurePython.py
 ```
 
 ## 准备SWIG
@@ -110,7 +110,7 @@ int fact(int n) {
 int my_mod(int x, int y) {
     return (x%y);
 }
-       
+
 char *get_time()
 {
     time_t ltime;
@@ -527,7 +527,7 @@ void pca::load(const std::string& basename) {
 
 ```
 #pragma once
- 
+
 #include <armadillo>
 #include <sstream>
 

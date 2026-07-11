@@ -72,15 +72,15 @@ StackOverflow 问题数量：Rust 相关问题一共有 `24924` 个，平均每�
 
 Rust的应用场景基本可以同时覆盖 `C/Cpp/Java/Go/Python` 的应用领域。大致可以分成十大领域：
 
-01. 数据处理与服务。 代表产品和项目包括：[`TiKV`](https://github.com/tikv/tikv) / `Timely Dataflow` / `Vector` / `tantivy` / `tremor-rs` / `databend`等
-02. 云原生。代表产品和项目包括： `StratoVirt` / `Firecracker` / `Krustlet` / [`linkerd2-proxy`](https://github.com/linkerd/linkerd2-proxy) / `Lucet` / `WasmCloud` / `Habitat` 等
-03. 操作系统： `Rust for Linux` / `Coreutils` / `Occulum` / `Redox` / `Tock` / `Theseus` 等
-04. 工具类： `rustdesk` / `ripgrep` / [`NuShell`](https://github.com/nushell/nushell) / `Alacritty` 等
-05. 机器学习： `Linfa` / `tokenizers` /`tch-rs` / `ndarray` /`Neuronika` / `tvm-rs` / `TensorFlow-rs`
-06. 游戏：`Veloren` / `A / B Street` / `rust-gpu` / `Bevy` / [rg3d](https://github.com/rg3dengine/rg3d)
-07. 客户端开发： 飞书 `App` 跨平台组件 / `flutter_rust_bridge` / `Iced` / `Tauri` / `egui` 等
-08. 区块链/元宇宙： `Diem` / `Substrate` /`Nervos CKB` / [`Near`](https://github.com/near)/ `Solana` / `nannou` / `makepad` / `makepad` 等
-09. 安全：`rustscan` / `feroxbuster` / `rusty-tor` /`sn0int` / `sniffglue` 等
+1.  数据处理与服务。 代表产品和项目包括：[`TiKV`](https://github.com/tikv/tikv) / `Timely Dataflow` / `Vector` / `tantivy` / `tremor-rs` / `databend`等
+2.  云原生。代表产品和项目包括： `StratoVirt` / `Firecracker` / `Krustlet` / [`linkerd2-proxy`](https://github.com/linkerd/linkerd2-proxy) / `Lucet` / `WasmCloud` / `Habitat` 等
+3.  操作系统： `Rust for Linux` / `Coreutils` / `Occulum` / `Redox` / `Tock` / `Theseus` 等
+4.  工具类： `rustdesk` / `ripgrep` / [`NuShell`](https://github.com/nushell/nushell) / `Alacritty` 等
+5.  机器学习： `Linfa` / `tokenizers` /`tch-rs` / `ndarray` /`Neuronika` / `tvm-rs` / `TensorFlow-rs`
+6.  游戏：`Veloren` / `A / B Street` / `rust-gpu` / `Bevy` / [rg3d](https://github.com/rg3dengine/rg3d)
+7.  客户端开发： 飞书 `App` 跨平台组件 / `flutter_rust_bridge` / `Iced` / `Tauri` / `egui` 等
+8.  区块链/元宇宙： `Diem` / `Substrate` /`Nervos CKB` / [`Near`](https://github.com/near)/ `Solana` / `nannou` / `makepad` / `makepad` 等
+9.  安全：`rustscan` / `feroxbuster` / `rusty-tor` /`sn0int` / `sniffglue` 等
 10. 其他语言生态基础设施：比如 [swc](https://github.com/swc-project/swc) / [deno](https://github.com/denoland/deno) / [rome](https://github.com/rome/tools) 等前端基础设施工具，WebAssembly 技术等。
 
 ### 可持续发展能力

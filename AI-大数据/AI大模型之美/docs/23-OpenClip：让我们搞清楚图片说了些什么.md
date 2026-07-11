@@ -153,7 +153,7 @@ inputs = processor(text=categories_text, images=image, return_tensors="pt", padd
 
 outputs = model(**inputs)
 logits_per_image = outputs.logits_per_image
-probs = logits_per_image.softmax(dim=1) 
+probs = logits_per_image.softmax(dim=1)
 
 for i in range(len(categories)):
     print(f"{categories[i]}\t{probs[0][i].item():.2%}")
@@ -234,7 +234,7 @@ for detection in detected:
     box = detection['box']
     label = detection['label']
     score = detection['score']
-    
+
     # Draw the bounding box and label on the image
     xmin, ymin, xmax, ymax = box['xmin'], box['ymin'], box['xmax'], box['ymax']
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
@@ -417,7 +417,7 @@ display_search_results(results)
 def get_image_features(image_path):
     # Load the image from the file
     image = Image.open(image_path).convert("RGB")
-    
+
     with torch.no_grad():
         inputs = processor(images=[image], return_tensors="pt", padding=True)
         inputs.to(device)
@@ -487,11 +487,11 @@ detected = detector(&quot;.&#47;data&#47;cat.jpg&quot;,
 
 下面是各个模型运算的结果:
 
-model             cat          dog         truck        couch       remote
-1              15.03%      0.02%      0.01%      78.11%      6.82% 
-2              15.04%      0.00%      0.00%      84.95%      0.01%
-3              13.22%     11.75%    18.13%      36.99%     19.90%
-4              18.52%     16.02%    13.60%      24.22%     27.64%
+model cat dog truck couch remote
+1 15.03% 0.02% 0.01% 78.11% 6.82%
+2 15.04% 0.00% 0.00% 84.95% 0.01%
+3 13.22% 11.75% 18.13% 36.99% 19.90%
+4 18.52% 16.02% 13.60% 24.22% 27.64%
 
 这几个模型的结果都不如 task=&quot;zero-shot-object-detection&quot;, model=&quot;google&#47;owlvit-base-patch32&quot;
 谷歌这个模型的优点是从图中分辨出两只猫和两个遥控器。
@@ -499,22 +499,22 @@ model             cat          dog         truck        couch       remote
 最后是一个中文模型，model_id=&quot;lyua1225&#47;clip-huge-zh-75k-steps-bs4096&quot;
 https:&#47;&#47;huggingface.co&#47;models?pipeline_tag=zero-shot-image-classification&amp;language=zh&amp;sort=downloads
 
-[&quot;猫&quot;,    &quot;狗&quot;,   &quot;拖车&quot;,   &quot;长沙发&quot;,  &quot;遥控器&quot;]
-[0.996     0.       0.          0.004          0.   ]
+[&quot;猫&quot;, &quot;狗&quot;, &quot;拖车&quot;, &quot;长沙发&quot;, &quot;遥控器&quot;]
+[0.996 0. 0. 0.004 0. ]
 
 没有识别出遥控器。</p>2023-04-29</li><br/><li><span>小理想。</span> 👍（1） 💬（0）<p>老师，文本向量搜素图片那里下面这段代码是报错的
 results = [ {&quot;image&quot;: training_split[i][&quot;image&quot;], &quot;distance&quot;: distances[0][j]} for j, i in enumerate(indices[0]) ]
 
 我试了图片搜素图片结果发现可以就把那段代码拿过来发现文本搜素图片产品对了
- results = [  
-      {&quot;image&quot;: training_split[i.item()][&quot;image&quot;], &quot;distance&quot;: distances[0][j]} 
-        for j, i in enumerate(indices[0])
-    ]
+results = [  
+{&quot;image&quot;: training_split[i.item()][&quot;image&quot;], &quot;distance&quot;: distances[0][j]}
+for j, i in enumerate(indices[0])
+]
 这段代码就可以了</p>2023-11-21</li><br/><li><span>小理想。</span> 👍（0） 💬（0）<p>文本向量搜素商品时
- results = [  
-      {&quot;image&quot;: training_split[i][&quot;image&quot;], &quot;distance&quot;: distances[0][int(j)]} 
-        for j, i in enumerate(indices[0])
-    ]
+results = [  
+{&quot;image&quot;: training_split[i][&quot;image&quot;], &quot;distance&quot;: distances[0][int(j)]}
+for j, i in enumerate(indices[0])
+]
 这段代码报错：
 TypeError: Wrong key type: &#39;1461&#39; of type &#39;&lt;class &#39;numpy.int64&#39;&gt;&#39;. Expected one of int, slice, range, str or Iterable.
 请问大家有什么方案吗，搜了gpt也没有给解决方案

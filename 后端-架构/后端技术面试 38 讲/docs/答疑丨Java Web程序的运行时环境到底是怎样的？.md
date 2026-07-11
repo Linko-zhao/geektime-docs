@@ -14,7 +14,7 @@
 首先，我们是通过执行Tomcat的Shell脚本启动Tomcat的，而在Shell脚本里，其实启动的是Java虚拟机，大概是这样一个Shell命令：
 
 ```
-java org.apache.catalina.startup.Bootstrap "$@" start 
+java org.apache.catalina.startup.Bootstrap "$@" start
 ```
 
 所以我们在Linux操作系统执行Tomcat的Shell启动脚本，Tomcat启动以后，其实在操作系统里看到的是一个**JVM虚拟机进程**。这个虚拟机进程启动以后，加载class进来执行，首先加载的就这个`org.apache.catalina.startup.Bootstrap`类，这个类里面有一个`main()`函数，是整个Tomcat的入口函数，JVM虚拟机会启动一个**主线程**从这个入口函数开始执行。

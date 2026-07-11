@@ -14,19 +14,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
     xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
- 
+
     <!-- 提供方应用信息，用于计算依赖关系 -->
     <dubbo:application name="hello-world-app"  />
- 
+
     <!-- 使用multicast广播注册中心暴露服务地址 -->
     <dubbo:registry address="multicast://224.5.6.7:1234" />
- 
+
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20880" />
- 
+
     <!-- 声明需要暴露的服务接口 -->
     <dubbo:service interface="com.alibaba.dubbo.demo.DemoService" ref="demoService" />
- 
+
     <!-- 和本地bean一样实现服务 -->
     <bean id="demoService" class="com.alibaba.dubbo.demo.provider.DemoServiceImpl" />
 </beans>
@@ -50,13 +50,13 @@ dubbo://host-ip:20880/com.alibaba.dubbo.demo.DemoService
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
     xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
- 
+
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
     <dubbo:application name="consumer-of-helloworld-app"  />
- 
+
     <!-- 使用multicast广播注册中心暴露发现服务地址 -->
     <dubbo:registry address="multicast://224.5.6.7:1234" />
- 
+
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
     <dubbo:reference id="demoService" interface="com.alibaba.dubbo.demo.DemoService" />
 </beans>

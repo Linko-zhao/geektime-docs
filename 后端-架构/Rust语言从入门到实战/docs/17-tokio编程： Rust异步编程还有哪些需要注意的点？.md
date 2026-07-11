@@ -127,7 +127,7 @@ fn foo() {
     let rt = tokio::runtime::Builder::new_current_thread()
           .enable_all()
           .build().unwrap();
-  
+
     let num = rt.block_on(foo1());  // 注意这一句的 foo1()，调用了此异步函数
     // 或者像下面这样写
     //let num = rt.block_on(async {
@@ -139,7 +139,7 @@ fn foo() {
 fn main() {
     foo();
 }
-// 输出 
+// 输出
 10
 ```
 
@@ -191,7 +191,7 @@ error[E0706]: trait fns cannot be declared `async`
  --> src/main.rs:4:5
   |
 4 |     async fn f() {}
-  |     
+  |
 ```
 
 为了解决这个问题，我们可以引入 `async_trait crate` 的 `async_trait` 宏来暂时过渡。

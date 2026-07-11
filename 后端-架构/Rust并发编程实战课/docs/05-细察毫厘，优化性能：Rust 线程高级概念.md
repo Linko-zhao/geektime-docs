@@ -36,9 +36,9 @@ fn main() {
     let handle = thread::spawn(move || {
         println!("spawned thread has id {}", thread_id::get());
     });
-    
+
     println!("main thread has id {}", thread_id::get());
-    
+
     handle.join().unwrap();
 }
 ```
@@ -151,7 +151,7 @@ fn main() {
 ![图片](https://static001.geekbang.org/resource/image/c2/ba/c252fd28d36034e93f88976884f2b5ba.png?wh=784x386)
 
 > 你可能深有感触的是到银行去办理业务，即使是当前的2025年，你也会遇到取到排队号后漫长的等待时间。貌似你的号码马上就排到了，可能不断有其他vip号码插入到你的前面。
-> 
+>
 > 明明感觉半个小时就可以搞定的银行业务，你可能需要被迫花上半天的时间才能办理，这个时候，你就深切感受到优先级的威力了。
 
 在大多数系统中，**线程优先级用数字表示，通常范围从1到10或1到100。数字越大，优先级越高。**当你创建线程时，可以设定它的初始优先级。但要小心，给太多线程高优先级就像告诉所有服务员“这桌最重要”一样，最终可能适得其反。
@@ -302,7 +302,7 @@ use thread_priority::*;
 fn main() {
     // 使用 get_current_thread_priority
     let handle1 = thread::spawn(|| {
-        let priority = get_current_thread_priority().unwrap(); // ① 
+        let priority = get_current_thread_priority().unwrap(); // ①
         println!("Thread1 priority: {:?}", priority);
     });
 
@@ -458,19 +458,21 @@ fn main() {
 
 1. **当前线程信息：**使用 `thread::current()` 获取当前线程的实例，通过 `name()` 和 `id()` 方法获取线程名称和 ID，用于日志记录和跟踪。
 2. **并发度：**`thread::available_parallelism()` 获取系统并发度（可同时运行的线程数）。
-   
+
    1. `num_cpus` crate 获取逻辑 CPU 核心数。
    2. `num_threads` crate 获取当前进程的线程数（推荐）。
+
 3. **线程数：**获得当前进程的线程数
 4. **线程优先级：**影响线程获得 CPU 时间的频率。高优先级线程获得更多 CPU 时间。
-   
+
    1. 过度使用可能导致优先级反转（低优先级线程阻塞高优先级线程），如“火星探测器探路者号”事件。
    2. Linux 使用 nice 值控制优先级（值越低优先级越高），使用 `nice` 和 `renice` 命令调整进程优先级。
    3. Rust 使用 `thread-priority` crate 设置和获取优先级，推荐使用 `ThreadPriority::Crossplatform(ThreadPriorityValue)`。
    4. `get_current_thread_priority()` 获取当前线程优先级，`get_thread_priority()` 获取指定线程优先级。
    5. `thread-priority` crate 提供了 `ThreadBuilder`、`ThreadBuilderExt` 和 `ThreadScopeExt` 方便设置线程优先级。
+
 5. **CPU 亲和性：**控制线程运行在哪些 CPU 核心上，减少上下文切换、均衡负载、提高实时性。
-   
+
    1. Linux 使用 `taskset` 命令。
    2. Rust 使用 `affinity` crate，提供 `get_core_num()`、`set_thread_affinity()` 和 `get_thread_affinity()`。
    3. 不建议频繁手动干预调度。

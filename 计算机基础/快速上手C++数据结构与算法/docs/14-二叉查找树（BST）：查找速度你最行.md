@@ -27,7 +27,7 @@ struct BinaryTreeNode
 	BinaryTreeNode* leftChild,   //左子节点指针
 				  * rightChild;  //右子节点指针
 };
-	
+
 //二叉查找树的定义
 template <typename T>
 class BinarySearchTree
@@ -41,7 +41,7 @@ public:
 	{
 		ReleaseNode(root);
 	}
-		
+
 	//二叉树中序遍历代码（排序），方便测试时显示节点数据
 	void inOrder()
 	{
@@ -61,7 +61,7 @@ private:
 	void ReleaseNode(BinaryTreeNode<T>* pnode)
 	{
 		if (pnode != nullptr)
-		{				
+		{
 			ReleaseNode(pnode->leftChild); 
 			ReleaseNode(pnode->rightChild);
 		}
@@ -69,8 +69,8 @@ private:
 	}
 
 private:
-	BinaryTreeNode<T>* root; //树根指针	
-};	
+	BinaryTreeNode<T>* root; //树根指针
+};
 ```
 
 ## 二叉查找树的常见操作
@@ -89,7 +89,7 @@ void InsertElem(const T& e)  //不可以指定插入位置，程序内部会自
 }
 
 void InsertElem(BinaryTreeNode<T>*& tNode, const T& e) //注意第一个参数类型
-{	
+{
 	if (tNode == nullptr) //空树
 	{
 		tNode = new BinaryTreeNode<T>;
@@ -98,7 +98,7 @@ void InsertElem(BinaryTreeNode<T>*& tNode, const T& e) //注意第一个参数�
 		tNode->rightChild = nullptr;
 		return;
 	}
-	
+
 	if (e > tNode->data)
 	{
 		InsertElem(tNode->rightChild,e);
@@ -144,10 +144,10 @@ BinaryTreeNode<T>* SearchElem(BinaryTreeNode<T>* tNode, const T& e)
 {
 	if (tNode == nullptr)
 		return nullptr;
-	
+
 	if (tNode->data == e)  
 		return tNode;
-		
+
 	if (e < tNode->data)
 		return SearchElem(tNode->leftChild,e); //在左子树上做查找
 	else
@@ -182,7 +182,7 @@ BinaryTreeNode<T>* SearchElem(BinaryTreeNode<T>* tNode, const T& e)
 {
 	if (tNode == nullptr)
 		return nullptr;
-		
+
 	BinaryTreeNode<T>* tmpnode = tNode;
 	while (tmpnode)
 	{
@@ -229,7 +229,7 @@ void DeleteElem(BinaryTreeNode<T>*& tNode, const T& e)  //注意第一个参数
 {
 	if (tNode == nullptr)
 		return;
-	
+
 	if (e > tNode->data)
 	{
 		DeleteElem(tNode->rightChild,e);
@@ -274,8 +274,8 @@ void DeleteElem(BinaryTreeNode<T>*& tNode, const T& e)  //注意第一个参数
 				tmpnode = tmpnode->rightChild;
 			} //end while
 			tNode->data = tmpnode->data;
-			
-			//此时，tmpnode指向要删除节点左子树的最右下节点（也就是真正要删除的节点），tmpparentnode指向真正要删除的节点的父节点。	
+
+			//此时，tmpnode指向要删除节点左子树的最右下节点（也就是真正要删除的节点），tmpparentnode指向真正要删除的节点的父节点。
 			//(2)删除tmpnode所指向的节点（该节点是真正要删除的节点）
 			if (tmpparentnode == tNode)
 			{
@@ -336,7 +336,7 @@ void DeleteElem(BinaryTreeNode<T>*& tNode, const T& e)  //注意第一个参数
 {
 	if (tNode == nullptr)
 		return;
-	
+
 	if (e > tNode->data)
 	{
 		DeleteElem(tNode->rightChild, e);
@@ -394,9 +394,9 @@ BinaryTreeNode<T>* SearchMaxValuePoint(BinaryTreeNode<T>* tNode)
 {
 	if (tNode == nullptr) //空树
 		return nullptr;
-	
+
 	//从根节点开始往右侧找即可
-	BinaryTreeNode<T>* tmpnode = tNode;	
+	BinaryTreeNode<T>* tmpnode = tNode;
 	while (tmpnode->rightChild != nullptr)
 		tmpnode = tmpnode->rightChild;
 	return tmpnode;
@@ -411,7 +411,7 @@ BinaryTreeNode<T>* SearchMinValuePoint(BinaryTreeNode<T>* tNode)
 {
 	if (tNode == nullptr) //空树
 		return nullptr;
-	
+
 	//从根节点开始往左侧找即可
 	BinaryTreeNode<T>* tmpnode = tNode;
 	while (tmpnode->leftChild != nullptr)
@@ -443,7 +443,7 @@ BinaryTreeNode<T>* GetPriorPoint_IO(BinaryTreeNode<T>* findnode)
 	if (findnode->leftChild != nullptr)
 		return SearchMaxValuePoint(findnode->leftChild);
 	*/
-	
+
 	BinaryTreeNode<T>* prevnode = nullptr;
 	BinaryTreeNode<T>* currnode = root;  //当前节点，从根开始找
 	while (currnode != nullptr)
@@ -459,30 +459,30 @@ BinaryTreeNode<T>* GetPriorPoint_IO(BinaryTreeNode<T>* findnode)
 			}
 			else //prevnode不为空
 			{
-			
+
 				//既然是找前趋，那自然是找到比要找的值小的 一系列节点中 值最大的
 				if(prevnode->data < currnode->data)
 				{
 					prevnode = currnode; //前趋自然是找一堆 比当前值小的 值中 最大的一个。
-				}							
+				}
 			}
 			//(2)继续逼近要找的节点，一直到找到要找的节点，找到要找的节点后，要找的节点的左节点仍旧可能是前趋
 			currnode = currnode->rightChild;  //当前节点小，所以往当前节点的右子树转
 		}
-		
+
 		else if(currnode->data > findnode->data) //当前节点值比要找的值大，所以当前节点肯定不会是要找的值的前趋
 		{ 
 			//当前节点大，所以往当前节点的左子树转
 			currnode = currnode->leftChild;
 		}
-		
+
 		else //(currnode->data == findnode->data) ，这个else其实可以和上个else合并，但为了清晰，就不合并了
 		{
 			//当前节点值  就是要找的节点值，那么 前趋也可能在当前节点的左子树中，所以往左子树转继续找看有没有更合适的前趋
 			currnode = currnode->leftChild; 
 		}
 	} //end while
-	
+
 	return prevnode;
 }
 
@@ -494,7 +494,7 @@ BinaryTreeNode<T>* GetNextPoint_IO(BinaryTreeNode<T>* findnode)
 {
 	if (findnode == nullptr)
 		return nullptr;
-	
+
 	BinaryTreeNode<T>* nextnode = nullptr;
 	BinaryTreeNode<T>* currnode = root;  //当前节点，从根开始找
 	while (currnode != nullptr)
@@ -525,7 +525,7 @@ BinaryTreeNode<T>* GetNextPoint_IO(BinaryTreeNode<T>* findnode)
 			//当前节点小，所以往当前节点的右子树转
 			currnode = currnode->rightChild;
 		}
-			
+
 		else //(currnode->data == findnode->data) 
 		{
 			//当前节点值  就是要找的节点值，那么 后继也可能在当前节点的右子树中，所以往右子树转继续找看有没有更合适的后继

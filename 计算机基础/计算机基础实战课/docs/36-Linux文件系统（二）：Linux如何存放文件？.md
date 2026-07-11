@@ -32,7 +32,7 @@ int init_in_hdfile()
 	len = filestat.st_size;
 	// 映射整个文件到进程的虚拟内存中
 	buf = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-	if(buf == NULL) 
+	if(buf == NULL)
 	{
 		printf("映射文件失败\n");
 		return -2;
@@ -136,7 +136,7 @@ struct ext3_dir_entry* get_rootdir()
 	// 获取根目录的inode
 	struct ext3_inode* inp = get_rootinode();
 	// 返回根目录的inode中第一个数据块的地址，就是根目录的数据
-	return (struct ext3_dir_entry*)block_to_addr(inp->i_block[0]); 
+	return (struct ext3_dir_entry*)block_to_addr(inp->i_block[0]);
 }
 ```
 
@@ -184,7 +184,7 @@ struct ext3_dir_entry* find_dirs_on_block(void* blk, size_t size, __u8 type, cha
 			return dire;
 		}
 		// 获取下一个目录项地址
-		dir = get_next_dir_addr((struct ext3_dir_entry*)dir); 
+		dir = get_next_dir_addr((struct ext3_dir_entry*)dir);
 	}
 	return NULL;
 }

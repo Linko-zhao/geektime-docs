@@ -34,7 +34,7 @@
   在了解完它的参数使用之后，**我们选用谜团中的XSS跨站脚本攻击作为靶场进行测试**。它是一个Python脚本，所以兼容性很好，我们使用XSStrike的代码为：
 
 ```bash
-sudo python3 xsstrike.py -u 'http://b6b7183d85ac4d36bb9449cb938ef977.app.mituan.zone/level1.php?name=test' 
+sudo python3 xsstrike.py -u 'http://b6b7183d85ac4d36bb9449cb938ef977.app.mituan.zone/level1.php?name=test'
 ```
 
 这段代码就是用参数u配置了一个目标地址，其中在请求中通过get方式上传了参数name，这样XSStrike可以识别到这个通过get方式上传的参数，可以看到应用有如下输出：

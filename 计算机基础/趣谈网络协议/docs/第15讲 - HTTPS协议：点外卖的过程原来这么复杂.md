@@ -81,7 +81,7 @@ openssl x509 -req -in cliu8sitecertificate.req -CA cacertificate.pem -CAkey capr
 我们来查看这个证书的内容。
 
 ```
-openssl x509 -in cliu8sitecertificate.pem -noout -text 
+openssl x509 -in cliu8sitecertificate.pem -noout -text
 ```
 
 这里面有个Issuer，也即证书是谁颁发的；Subject，就是证书颁发给谁；Validity是证书期限；Public-key是公钥内容；Signature Algorithm是签名算法。

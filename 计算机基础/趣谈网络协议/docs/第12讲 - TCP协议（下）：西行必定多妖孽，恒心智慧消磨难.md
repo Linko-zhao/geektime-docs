@@ -207,22 +207,22 @@ AdvertisedWindow其实是MaxRcvBuffer减去A。
 1. TCP可靠的连接会不会影响到业务层，比如超时重传导致了服务端函数调用2次，那岂不是业务都要考虑幂等性了，我很懵逼，果然是懂得越多越白痴。
 2. 拥塞控制的窗口跟流量控制的窗口一回事吗，还是流量控制的窗口的出来后就会进入拥塞控制窗口？</p>2018-11-01</li><br/><li><span>茫农</span> 👍（10） 💬（2）<p>有一个值 ssthresh 为 65535 个字节，，这个是什么意思？</p>2018-10-23</li><br/><li><span>Magic</span> 👍（8） 💬（1）<p>祝刘超老师教师节快乐，专栏很棒，受益良多</p>2019-09-10</li><br/><li><span>Yangjing</span> 👍（6） 💬（1）<p>对于发送端，为什么会保存着“已发送并已确认”的数据呢？已确认的不是已经没用了吗？</p>2019-06-22</li><br/><li><span>黑猫紧张</span> 👍（6） 💬（2）<p>内核是将从网络接收的tcp数据 都接收完成再一次发给应用层呢 还是在tcp接收的过程中就已经开始发给应用层了 求回复</p>2019-05-29</li><br/><li><span>产品助理</span> 👍（5） 💬（2）<p>问题：
 
-1、如下公式的 -1  到底是为什么？
+1、如下公式的 -1 到底是为什么？
 
-	AdvertisedWindow=MaxRcvBuffer-((NextByteExpected-1)-LastByteRead)
+    AdvertisedWindow=MaxRcvBuffer-((NextByteExpected-1)-LastByteRead)
 
-   图例中的LastByteRead是0还是1？NextByteExpected是6还是5？MaxRcvBuffer是14吗？
+图例中的LastByteRead是0还是1？NextByteExpected是6还是5？MaxRcvBuffer是14吗？
 
 2、如果按照上述公式，那下面又是为了什么？
 
-	NextByteExpected 加 AdvertisedWindow 就是第二部分和第三部分的分界线，其实也就是 LastByteRead 加上 MaxRcvBuffer。
+    NextByteExpected 加 AdvertisedWindow 就是第二部分和第三部分的分界线，其实也就是 LastByteRead 加上 MaxRcvBuffer。
 
-	按照第一条的公式，NextByteExpected + AdvertisedWindow = NextByteExpected + （MaxRcvBuffer-((NextByteExpected-1)-LastByteRead))
-	= MaxRcvBuffer + 1 + LastByteRead
+    按照第一条的公式，NextByteExpected + AdvertisedWindow = NextByteExpected + （MaxRcvBuffer-((NextByteExpected-1)-LastByteRead))
+    = MaxRcvBuffer + 1 + LastByteRead
 
-	应该有个+1啊。。
+    应该有个+1啊。。
 
-多谢老师！	</p>2018-11-22</li><br/><li><span>旭风</span> 👍（4） 💬（1）<p>在传统算法和快速算法的对比描述中，对于快速算法中提到 cwnd减半为cwnd&#47;2，sshthresh=cwnd ，后面cwnd=sshthresh+3，转折点是20变为13，这里的cwnd为10吗？
+多谢老师！ </p>2018-11-22</li><br/><li><span>旭风</span> 👍（4） 💬（1）<p>在传统算法和快速算法的对比描述中，对于快速算法中提到 cwnd减半为cwnd&#47;2，sshthresh=cwnd ，后面cwnd=sshthresh+3，转折点是20变为13，这里的cwnd为10吗？
 
 2018-06-15
 
@@ -235,6 +235,8 @@ cwnd先是为10，后面变为13
 看了一些资料，还是没有最终弄明白，只知道了Cubic是基于丢包的，BBR是基于测量的。
 
 关于UDP与TCP的程序，它们的选型以及“坑”都与特点密切相关。
+
 - UDP特点是快，不可靠。所以在需要无法容忍高时延的场景要选择它，当然，这个时候，一些必要校验和重发逻辑就留给了应用层，这里应该是最大的“坑”。
 - TCP特点是可靠，慢。在我开发过的程序中，“坑”比较多地存在于长连接的keepalive阶段，需要在资源消耗与稳定性之间取得平衡。</p>2019-08-07</li><br/>
+
 </ul>

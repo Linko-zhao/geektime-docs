@@ -63,7 +63,7 @@
 在确定了初始化状态、状态参数和决策后，我们就可以开始尝试写状态转移方程了。由于这是我们第一次正式面对动归问题，我会先把递归形式的状态转移过程描述出来，代码如下：
 
 ```
-/* 
+/*
  * tn: traversed n，即已经遍历过的物品；
  * rw: reserved w，即背包还能容量的重量。
  */
@@ -71,11 +71,11 @@ DP(int tn, int rw) {
   // 当遍历完所有物品时，就该返回 0 了，因为没有物品也就没有价值了
   if tn < 0
     return 0
-  
+
   // 当背包还能容纳的重量已经小于当前物品的重量时，显然这个物品不能放入背包
   if rw < w[tn]
     return DP(tn - 1, rw)
-  
+
   // 作出决策，该不该放入物品：
   //   1. 放入：那么价值是 DP(tn - 1, rw - w[tn])；
   //   2. 不放入：那么价值是 DP(tn - 1, rw)。
@@ -85,11 +85,11 @@ DP(int tn, int rw) {
 
 顺着这个思路，我把状态转移方程给写出来，它是这样的：
 
-$$DP(tn, rw)=\\left\\{\\begin{array}{c}  
-0, tn&lt;=0\\\\\\  
-0, rw&lt;=0\\\\\\  
-DP(tn-1,rw), rw&lt;w\[tn]\\\\\\  
-max(DP(tn-1,rw), DP(tn-1,rw-w\[tn])+v\[tn])),rw&gt;=w\[tn]  
+$$ DP(tn, rw)=\left{\begin{array}{c}
+0, tn&lt;=0\\\\\\
+0, rw&lt;=0\\\\\\
+DP(tn-1,rw), rw&lt;w\[tn]\\\\\\
+max(DP(tn-1,rw), DP(tn-1,rw-w\[tn])+v\[tn])),rw&gt;=w\[tn]
 \\end{array}\\right.$$
 
 现在，我们有了针对0-1背包问题的完整状态转移方程，可以开始编写代码了。
@@ -110,11 +110,11 @@ Java 实现：
 int dp(int[] w, int[] v, int N, int W) {
     // 创建备忘录
     int[][] dp = new int[N+1][W+1];
-  
+
     // 初始化状态
     for (int i = 0; i < N + 1; i++) { dp[i][0] = 0; }
     for (int j = 0; j < W + 1; j++) { dp[0][j] = 0; }
-  
+
     for (int tn = 1; tn < N + 1; tn++) { // 遍历每一件物品
 		for (int rw = 1; rw < W + 1; rw++) { // 背包容量有多大就还要计算多少次
     		if (rw < w[tn]) {
@@ -126,7 +126,7 @@ int dp(int[] w, int[] v, int N, int W) {
     		}
     	}
     }
-  
+
   return dp[N][W];
 }
 
@@ -134,7 +134,7 @@ int solveDP() {
   int N = 3, W = 5; // 物品的总数，背包能容纳的总重量
   int[] w = {0, 3, 2, 1}; // 物品的重量
   int[] v = {0, 5, 2, 3}; // 物品的价值
-  
+
   return dp(w, v, N, W); // 输出答案
 }
 ```
@@ -144,11 +144,11 @@ C++ 实现：
 ```
 int DP(const std::vector<int>& w, const std::vector<int>& v, int N, int W) {
   int dp[N+1][W+1]; memset(dp, 0, sizeof(dp)); // 创建备忘录
-  
+
   // 初始化状态
   for (int i = 0; i < N + 1; i++) { dp[i][0] = 0; }
   for (int j = 0; j < W + 1; j++) { dp[0][j] = 0; }
-  
+
   for (int tn = 1; tn < N + 1; tn++) { // 遍历每一件物品
     for (int rw = 1; rw < W + 1; rw++) { // 背包容量有多大就还要计算多少次
       if (rw < w[tn]) {
@@ -160,7 +160,7 @@ int DP(const std::vector<int>& w, const std::vector<int>& v, int N, int W) {
       }
     }
   }
-  
+
   return dp[N][W];
 }
 
@@ -168,7 +168,7 @@ int DPSol() {
   int N = 3, W = 5; // 物品的总数，背包能容纳的总重量
   std::vector<int> w = {0, 3, 2, 1}; // 物品的重量
   std::vector<int> v = {0, 5, 2, 3}; // 物品的价值
-  
+
   return DP(w, v, N, W); // 输出答案
 }
 ```
@@ -188,7 +188,7 @@ int DPSol() {
 2. 如果背包容量小于当前物品价值，那么这个时候最大价值也就是当前容量不变，使用上一个物品的最大价值即可；
 3. 如果背包容量大于当前物品价值，那么这个时候最大价值也就是从以下两个决策中挑选：
 
-> a. 放入这个物品前的最大价值 + 当前物品价值和作为答案；  
+> a. 放入这个物品前的最大价值 + 当前物品价值和作为答案；
 > b. 不放入这个物品时，当前容量的最大价值作为答案。
 
 我在下面的表格中，用箭头画出了容量为 5 时的求解路径。你可以参照这个求解路径来加深对代码的理解。
@@ -257,11 +257,11 @@ $$1 + 2 + 9 - 1 - 4 - 7$$
 
 那么，动态规划部分的状态转移方程就和0-1背包问题中的一样，如下所示：
 
-$$DP(tn, rw)=\\left\\{\\begin{array}{c}  
-0, tn&lt;=0\\\\\\  
-0, rw&lt;=0\\\\\\  
-DP(tn-1,rw), rw&lt;w\[tn]\\\\\\  
-max=(DP(tn-1,rw), DP(tn-1,rw-w\[tn])+v\[tn])),rw&gt;=w\[tn]  
+$$DP(tn, rw)=\\left\\{\\begin{array}{c}
+0, tn&lt;=0\\\\\\
+0, rw&lt;=0\\\\\\
+DP(tn-1,rw), rw&lt;w\[tn]\\\\\\
+max=(DP(tn-1,rw), DP(tn-1,rw-w\[tn])+v\[tn])),rw&gt;=w\[tn]
 \\end{array}\\right.$$
 
 看到了吧！我们巧妙地把这个看似让人蒙圈的问题成功转化成了一个标准的0-1背包问题，而且能够直接复用我们所学的内容。
@@ -276,9 +276,9 @@ max=(DP(tn-1,rw), DP(tn-1,rw-w\[tn])+v\[tn])),rw&gt;=w\[tn]
 
 现在，我们准备对动态规划问题进行泛化统一建模，如果用数学语言描述就如下公式所示：
 
-$$f(x)=\\left\\{\\begin{array}{c}  
-d(x), x \\in V\_{I}\\\\\\  
-g(\\{v(f(s(x,c)),c)\\}),c \\in values(x)  
+$$f(x)=\\left\\{\\begin{array}{c}
+d(x), x \\in V\_{I}\\\\\\
+g(\\{v(f(s(x,c)),c)\\}),c \\in values(x)
 \\end{array}\\right.$$
 
 我们该怎么理解这个公式呢？首先，我们需要考虑一些边界情况，如果输入向量 $x$，那么在边界组合 $V\_{I}$ 中，用一个边界函数 $d(x)$ 直接返回 $f(x)$ 的值，就不需要再划分子问题了。比如在0-1背包问题中，当 $tn$ 或 $rw$ 小于等于 0 时，这个值就是 0。
@@ -427,7 +427,7 @@ public int lastStoneWeightII(int[] stones) {
         &#47;&#47; 否则        dp[tn][rw] =  max(dp[tn-1][rw],dp[tn-1][rw-w[tn]+v[tn]])
         &#47;&#47;初始状态
         &#47;&#47; dp[tn][0] = 0 dp[0][rw] = 0;
-        
+
         int[][] dp = new int[N][W];
 
         for (int i = 0; i &lt; N; i++) {
@@ -486,14 +486,14 @@ int main() {
   vector&lt;int&gt; v = {0,1,2,1,7,9,4};
   &#47;&#47;计算当前所有石头的重量和
   int sum = std::accumulate(w.begin(),w.end(),0);
-  
+
   &#47;&#47;转换为0-1背包问题，在背包容量为sum&#47;2的情况下，尽量让价值最大（重量最大）接近sum&#47;2,因此part2-part1绝对值越小
   int part1 = DP(w, v, N, sum &#47; 2);
   int part2 = sum - part1;
   cout &lt;&lt; &quot;part1:&quot;&lt;&lt;part1&lt;&lt;&quot;,part2:&quot;&lt;&lt;part2&lt;&lt;&quot;,abs:&quot;&lt;&lt;abs(part1 - part2) &lt;&lt; endl;
 
   return 0;
-}</p>2023-03-05</li><br/><li><span>小灰</span> 👍（0） 💬（1）<p>       根据老师的代码，我用了 C#实现，请老师赐教，代码如下:  
+}</p>2023-03-05</li><br/><li><span>小灰</span> 👍（0） 💬（1）<p>       根据老师的代码，我用了 C#实现，请老师赐教，代码如下:
        &#47;&#47;&#47; &lt;summary&gt;
         &#47;&#47;&#47; 0-1 背包问题（针对当前物品，是放入背包，还是不放入背包时的价值最大）
         &#47;&#47;&#47; &lt;&#47;summary&gt;
@@ -543,3 +543,4 @@ int main() {
 
 应该是“小于当前物品重量”或者“小于当前物品体积”吧？</p>2021-12-21</li><br/><li><span>放飞风筝</span> 👍（0） 💬（1）<p>主要抓住状态参数（构建备忘录）和转移方程</p>2021-08-29</li><br/><li><span>Alvin</span> 👍（0） 💬（1）<p>看到这里一直觉得这个思路很奇怪，为什么是先初始化状态参数，再确定状态参数。不先确定状态参数，怎么初始化？每次看老师的思路说先初始化xxx，感觉其实就已经确定了xxx是状态参数。</p>2021-07-06</li><br/>
 </ul>
+$$

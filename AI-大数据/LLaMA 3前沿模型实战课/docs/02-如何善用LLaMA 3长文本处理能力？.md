@@ -142,15 +142,16 @@ print(translate_code_to_js(python_code))
 
 ```javascript
 function* fibonacci(n) {
-  let a = 0, b = 1;
-  for (let i = 0; i < n; i++) {
-    yield a;
-    [a, b] = [b, a + b];
-  }
+  let a = 0,
+    b = 1;
+  for (let i = 0; i < n; i++) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
 }
 
 for (const number of fibonacci(5)) {
-  console.log(number);
+  console.log(number);
 }
 ```
 
@@ -400,15 +401,16 @@ print(response['message']['content'])  # 输出生成的回答
 1. 付款义务
 2. 商品交付义务
 3. 相关服务的提供
-Exception ignored in: &lt;function AbsEmbedder.__del__ at 0x00000174DDF64540&gt;
-Traceback (most recent call last):
-  File &quot;C:\Users\xxx\miniconda3\Lib\site-packages\FlagEmbedding\abc\inference\AbsEmbedder.py&quot;, line 270, in __del__
-  File &quot;C:\Users\xxx\miniconda3\Lib\site-packages\FlagEmbedding\abc\inference\AbsEmbedder.py&quot;, line 89, in stop_self_pool
-TypeError: &#39;NoneType&#39; object is not callable
+   Exception ignored in: &lt;function AbsEmbedder.**del** at 0x00000174DDF64540&gt;
+   Traceback (most recent call last):
+   File &quot;C:\Users\xxx\miniconda3\Lib\site-packages\FlagEmbedding\abc\inference\AbsEmbedder.py&quot;, line 270, in **del**
+   File &quot;C:\Users\xxx\miniconda3\Lib\site-packages\FlagEmbedding\abc\inference\AbsEmbedder.py&quot;, line 89, in stop_self_pool
+   TypeError: &#39;NoneType&#39; object is not callable
 
 这里报错了。
-flagembedding             1.3.3                   </p>2024-12-17</li><br/><li><span>江慧明</span> 👍（0） 💬（0）<p>具备长文本处理能力，也意味着需要更多资源，显存资源，CPU资源，也意味着回答用户问题需要更长时间，所以具备长文本处理能力模型，在具体实践中也不能毫无节制使用，而是充分有理由使用，为取得速度、资源、上下文的平衡，我们需要充分设计，利用langchain工具，可以把问题拆分多个聚焦点，然后用LLM快速获得答案，然后再讲问题组合</p>2024-11-30</li><br/><li><span>旅梦开发团</span> 👍（0） 💬（0）<p>在合同RAG的案例中 我安装FlagEmbedding报错了，可能是python版本的问题。 我使用nomic-embed-text:latest 嵌入模型代替， 大家也可以试试。 我的完整代码如下
-```python
+flagembedding 1.3.3 </p>2024-12-17</li><br/><li><span>江慧明</span> 👍（0） 💬（0）<p>具备长文本处理能力，也意味着需要更多资源，显存资源，CPU资源，也意味着回答用户问题需要更长时间，所以具备长文本处理能力模型，在具体实践中也不能毫无节制使用，而是充分有理由使用，为取得速度、资源、上下文的平衡，我们需要充分设计，利用langchain工具，可以把问题拆分多个聚焦点，然后用LLM快速获得答案，然后再讲问题组合</p>2024-11-30</li><br/><li><span>旅梦开发团</span> 👍（0） 💬（0）<p>在合同RAG的案例中 我安装FlagEmbedding报错了，可能是python版本的问题。 我使用nomic-embed-text:latest 嵌入模型代替， 大家也可以试试。 我的完整代码如下
+
+````python
 # 向量数据库
 import chromadb
 # Settings 配置
@@ -437,7 +439,7 @@ for doc in documents:
 
 query = &quot;合同是什么？&quot;
 query_embedding = ollama.embeddings(model=&#39;nomic-embed-text:latest&#39;, prompt=query)
-query_embedding = query_embedding.get(&#39;embedding&#39;)[:384] 
+query_embedding = query_embedding.get(&#39;embedding&#39;)[:384]
 # print(query_embedding.get())
 # # # 根据embedding 查询
 results = documentation_collection.query(
@@ -460,3 +462,4 @@ output = ollama.chat(model=&#39;qwen2.5:latest&#39;, messages=[
 print(&quot;生成的结果：&quot;, output[&#39;message&#39;][&#39;content&#39;])
 ```</p>2024-10-29</li><br/><li><span>willmyc</span> 👍（0） 💬（0）<p>超长文本是否应该考虑跟llama3多轮对话的情况，llama3如何处理，可否介绍一下，谢谢！</p>2024-10-22</li><br/>
 </ul>
+````

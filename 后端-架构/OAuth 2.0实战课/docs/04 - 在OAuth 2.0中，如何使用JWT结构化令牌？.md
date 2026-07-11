@@ -78,7 +78,7 @@ Jwts.builder().setHeaderParams(headerMap).setClaims(payloadMap).signWith(key,Sig
 //解析JWT令牌
 Jws<Claims> claimsJws =Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwts);
 JwsHeader header = claimsJws.getHeader();
-Claims body = claimsJws.getBody();  
+Claims body = claimsJws.getBody();
 ```
 
 使用JJWT解析JWT令牌时包含了验证签名的动作，如果签名不正确就会抛出异常信息。我们可以借助这一点来对签名做校验，从而判断是否是一个没有被伪造过的、合法的JWT令牌。

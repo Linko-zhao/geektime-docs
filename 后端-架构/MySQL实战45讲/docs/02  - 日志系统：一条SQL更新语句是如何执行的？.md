@@ -160,7 +160,7 @@ binlog几大模式，一般采用row，因为遇到时间，从库可能会出�
 
 其核心就是， redo log 记录的，即使异常重启，都会刷新到磁盘，而 bin log 记录的， 则主要用于备份。
 
-我可以这样理解吗？还有就是如何保证 redo log 和 bin log 操作的一致性啊？</p>2018-11-16</li><br/><li><span>lfn</span> 👍（537） 💬（76）<p>老师,今天MYSQL第二讲中提到binlog和redo log, 我感觉binlog很多余，按理是不是只要redo log就够了?[费解] 
+我可以这样理解吗？还有就是如何保证 redo log 和 bin log 操作的一致性啊？</p>2018-11-16</li><br/><li><span>lfn</span> 👍（537） 💬（76）<p>老师,今天MYSQL第二讲中提到binlog和redo log, 我感觉binlog很多余，按理是不是只要redo log就够了?[费解]
 您讲的时候说redo log是InnoDB的要求，因为以plugin的形式加入到MySQL中，此时binlog作为Server层的日志已然存在，所以便有了两者共存的现状。但我觉得这并不能解释我们在只用InonoDB引擎的时候还保留Binlog这种设计的原因.</p>2018-11-16</li><br/><li><span>ricktian</span> 👍（84） 💬（29）<p>redo log的机制看起来和ring buffer一样的；
 另外有个和高枕、思雨一样的疑问，如果在重启后，需要通过检查binlog来确认redo log中处于prepare的事务是否需要commit，那是否不需要二阶段提交，直接以binlog的为准，如果binlog中不存在的，就认为是需要回滚的。这个地方，是不是我漏了什么，拉不通。。。 麻烦老师解下疑，多谢～ </p>2018-11-16</li><br/><li><span>DanielAnton</span> 👍（44） 💬（17）<p>有个问题请教老师，既然write pos和checkout都是往后推移并循环的，而且当write pos赶上checkout的时候要停下来，将checkout往后推进，那么是不是意味着write pos的位置始终在checkout后面，最多在一起，而这和老师画的图有些出入，不知道我的理解是不是有些错误，请老师指教。</p>2018-11-16</li><br/><li><span>super blue cat</span> 👍（1231） 💬（87）<p>我可以认为redo log 记录的是这个行在这个页更新之后的状态，binlog 记录的是sql吗？</p>2018-11-16</li><br/><li><span>高枕</span> 👍（1085） 💬（95）<p>我再来说下自己的理解 。
 1 prepare阶段 2 写binlog 3 commit

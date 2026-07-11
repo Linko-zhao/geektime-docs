@@ -122,7 +122,7 @@ openai.api_key = '你的Open API Key'
 所以更好的方法是在操作系统中定义环境变量，比如在Linux系统的命令行中使用：
 
 ```plain
-export OPENAI_API_KEY='你的Open API Key' 
+export OPENAI_API_KEY='你的Open API Key'
 ```
 
 或者，你也可以考虑把环境变量保存在.env文件中，使用python-dotenv库从文件中读取它，这样也可以降低API密钥暴露在代码中的风险。
@@ -182,7 +182,7 @@ choices字段是一个列表，因为在某些情况下，你可以要求模型�
 示例代码如下：
 
 ```plain
-response = client.chat.completions.create(  
+response = client.chat.completions.create(
   model="gpt-4",
   messages=[
         {"role": "system", "content": "You are a creative AI."},
@@ -304,7 +304,7 @@ print(response)
 输出：
 
 ```plain
-content='当然可以，叫做"花语秘境"怎么样？' 
+content='当然可以，叫做"花语秘境"怎么样？'
 additional_kwargs={} example=False
 ```
 
@@ -348,10 +348,12 @@ llm = HuggingFaceHub(model_id="bigscience/bloom-1b7")
 1. LangChain官方文档（[Python版](https://python.langchain.com/docs/get_started/introduction.html)）（[JavaScript版](https://js.langchain.com/docs/get_started/introduction.html)），这是你学习专栏的过程中，有任何疑惑都可以随时去探索的知识大本营。我个人觉得，目前LangChain的文档还不够体系化，有些杂乱，讲解也不大清楚。但是，这是官方文档，会维护得越来越好。
 2. [OpenAI API 官方文档](https://platform.openai.com/docs/introduction)，深入学习OpenAI API的地方。
 3. [HuggingFace 官方网站](https://huggingface.co/)，玩开源大模型的好地方。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>黄佳</span> 👍（9） 💬（4）<p>OpenAI，最近戏比较多，旧代码是0.28版本，任何以上的版本，都需要比较大的改动，记录如下。
 
 旧代码
+
 # import openai
 
 新代码
@@ -359,51 +361,68 @@ from openai import OpenAI
 client = OpenAI()
 
 旧代码
+
 # response = openai.Completion.create(
-#   model=&quot;text-davinci-003&quot;,
-#   temperature=0.5,
-#   max_tokens=100,
-#   prompt=&quot;请给我的花店起个名&quot;)
+
+# model=&quot;text-davinci-003&quot;,
+
+# temperature=0.5,
+
+# max_tokens=100,
+
+# prompt=&quot;请给我的花店起个名&quot;)
 
 新代码
 response = client.completions.create(
-  model=&quot;gpt-3.5-turbo-instruct&quot;,
-  temperature=0.5,
-  max_tokens=100,
-  prompt=&quot;请给我的花店起个名&quot;)
+model=&quot;gpt-3.5-turbo-instruct&quot;,
+temperature=0.5,
+max_tokens=100,
+prompt=&quot;请给我的花店起个名&quot;)
 
 旧代码
+
 # response = openai.ChatCompletion.create(
-#   model=&quot;gpt-4&quot;,
-#   messages=[
-#         {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a creative AI.&quot;},
-#         {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;请给我的花店起个名&quot;},
-#     ],
-#   temperature=0.8,
-#   max_tokens=60
+
+# model=&quot;gpt-4&quot;,
+
+# messages=[
+
+# {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a creative AI.&quot;},
+
+# {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;请给我的花店起个名&quot;},
+
+# ],
+
+# temperature=0.8,
+
+# max_tokens=60
+
 # )
 
 # print(response[&#39;choices&#39;][0][&#39;message&#39;][&#39;content&#39;])
 
 新代码
-response = client.completions.create(  model=&quot;gpt-4&quot;,
-  messages=[
-        {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a creative AI.&quot;},
-        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;请给我的花店起个名&quot;},
-    ],
-  temperature=0.8,
-  max_tokens=60
+response = client.completions.create( model=&quot;gpt-4&quot;,
+messages=[
+{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a creative AI.&quot;},
+{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;请给我的花店起个名&quot;},
+],
+temperature=0.8,
+max_tokens=60
 )
 
 print(response.choices[0].message.content)</p>2024-01-19</li><br/><li><span>吴曦</span> 👍（12） 💬（1）<p>搭建了基础的langchain问答机器人，怎样评估回答质量？有适合的指标吗？</p>2023-09-12</li><br/><li><span>黄振宇</span> 👍（11） 💬（1）<p>最近在死磕langchain 终于有中文的详细课程啦</p>2023-09-11</li><br/><li><span>在路上</span> 👍（6） 💬（5）<p>1.我认为LangChain的核心价值在于功能模块化和模块链接化，这意味着AI应用开发被提炼成了很多个标准步骤，每个步骤有标准的参数和接口，便于灵活的替换和组合。这就像Java中Spring，封装了各种组件，并通过控制反转将它们组合在一起。
 
 2.HuggingFace模型：
 import os
+
 # 设置网络代理
+
 os.environ[&quot;http_proxy&quot;] = &quot;http:&#47;&#47;127.0.0.1:7890&quot;
 os.environ[&quot;https_proxy&quot;] = &quot;http:&#47;&#47;127.0.0.1:7890&quot;
 
 # 通过.env管理huggingfacehub_api_token
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -417,9 +436,11 @@ print(resp)
 
 #我让他给我返回三个店名供我挑选，格式是list。
 Sure! Here are three name suggestions for your flower shop:
+
 1. Blossom Boutique
 2. Petal Paradise
 3. Floral Haven
+
 </p>2023-11-21</li><br/><li><span>卓丁</span> 👍（1） 💬（1）<p>老师好，请教一下关于assistant的讲解：
 
 assistant：助手消息是模型的回复。例如，在你使用 API 发送多轮对话中新的对话请求时，可以通过助手消息提供先前对话的上下文。然而，请注意在对话的最后一条消息应始终为用户消息，因为模型总是要回应最后这条用户消息。
@@ -431,9 +452,9 @@ assistant：助手消息是模型的回复。例如，在你使用 API 发送多
 os.environ[&quot;OPENAI_API_KEY&quot;] = &#39;你的Open API Key&#39;
 from langchain.llms import OpenAI
 llm = OpenAI(  
-    model=&quot;gpt-3.5-turbo-instruct&quot;,
-    temperature=0.8,
-    max_tokens=60,)
+model=&quot;gpt-3.5-turbo-instruct&quot;,
+temperature=0.8,
+max_tokens=60,)
 response = llm.predict(&quot;请给我的花店起个名&quot;)
-print(response)  这个代码 在目前这个时间段已经运行不了啦，老师</p>2024-05-11</li><br/><li><span>Coding</span> 👍（0） 💬（1）<p>老师，调用聊天模型，我理解应该是client.chat.completions.create，代码示例是不是少了个chat</p>2024-05-06</li><br/><li><span>saltedfish</span> 👍（0） 💬（1）<p>gpt-3.5-turbo-instruct是chat模型不是text模型（可能是后来改的）</p>2024-04-19</li><br/>
+print(response) 这个代码 在目前这个时间段已经运行不了啦，老师</p>2024-05-11</li><br/><li><span>Coding</span> 👍（0） 💬（1）<p>老师，调用聊天模型，我理解应该是client.chat.completions.create，代码示例是不是少了个chat</p>2024-05-06</li><br/><li><span>saltedfish</span> 👍（0） 💬（1）<p>gpt-3.5-turbo-instruct是chat模型不是text模型（可能是后来改的）</p>2024-04-19</li><br/>
 </ul>

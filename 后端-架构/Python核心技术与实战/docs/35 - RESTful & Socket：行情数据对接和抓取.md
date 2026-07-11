@@ -96,7 +96,7 @@ import thread
 def on_message(ws, message):
     print('Received: ' + message)
 
-# 在和服务器建立完成连接时调用   
+# 在和服务器建立完成连接时调用
 def on_open(ws):
     # 线程运行函数
     def gao():
@@ -108,11 +108,11 @@ def on_open(ws):
             print('Sent: ' + msg)
         # 休息1秒用于接收服务器回复的消息
         time.sleep(1)
-        
+
         # 关闭Websocket的连接
         ws.close()
         print("Websocket closed")
-    
+
     # 在另一个线程运行gao()函数
     thread.start_new_thread(gao, ())
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     ws = websocket.WebSocketApp("ws://echo.websocket.org/",
                               on_message = on_message,
                               on_open = on_open)
-    
+
     ws.run_forever()
 
 #### 输出 #####
@@ -336,15 +336,15 @@ https:&#47;&#47;pypi.org&#47;project&#47;websocket_client&#47;</p>2019-07-29</li
 pip -m install websocket_client安装。
 
 pip -m install websocket会安装另外一个完全不同的包</p>2019-07-29</li><br/><li><span>tux</span> 👍（16） 💬（0）<p>干布球和tt 的提示，解决了报错。
-import websocket     #pip install websocket-client
+import websocket #pip install websocket-client
 import _thread as thread
 
 在查找资料时，看到了：
 import websocket
 try:
-    import thread
+import thread
 except ImportError:
-    import _thread as thread
+import _thread as thread
 </p>2019-07-29</li><br/><li><span>干布球</span> 👍（8） 💬（1）<p>第二段代码少了个import time，python3里面thread用import _thread，不知是不是这样？</p>2019-07-29</li><br/><li><span>Claywoow</span> 👍（7） 💬（1）<p>老师，请教个问题，为什么我把这两个类分成两个模块来测试的时候，程序会进入无响应的状态，好像一直在运行，这会是什么原因呢？</p>2019-08-04</li><br/><li><span>SCAR</span> 👍（7） 💬（3）<p>尝试回答下Destroy的问题：
 查看WebsocketApp函数：
 on_message: callable object which is called when received data.

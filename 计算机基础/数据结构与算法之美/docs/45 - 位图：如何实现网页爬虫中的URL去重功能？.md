@@ -48,7 +48,7 @@
 public class BitMap { // Java中char类型占16bit，也即是2个字节
   private char[] bytes;
   private int nbits;
-  
+
   public BitMap(int nbits) {
     this.nbits = nbits;
     this.bytes = new char[nbits/16+1];

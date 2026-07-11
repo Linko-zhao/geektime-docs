@@ -29,7 +29,9 @@
 `useEffect` 这个Hook有几种用法。首先最简单的用法，只传入一个没有返回值的**副作用回调函数**（Effect Callback）：
 
 ```javascript
-useEffect(() => {/* 省略 */});
+useEffect(() => {
+  /* 省略 */
+});
 //        -----------------
 //                ^
 //                |
@@ -45,7 +47,9 @@ useEffect(() => {/* 省略 */});
 接下来就是最常用的用法：**副作用的条件执行**。在上面用法的基础上，传入一个**依赖值数组**（Dependencies）作为第二个参数：
 
 ```javascript
-useEffect(() => {/* 省略 */}, [var1, var2]);
+useEffect(() => {
+  /* 省略 */
+}, [var1, var2]);
 //        -----------------   -----------
 //                ^                ^
 //                |                |
@@ -66,9 +70,9 @@ React在渲染组件时，会记录下当时的依赖值数组，下次渲染时
 const [province, setProvince] = useState(null);
 const [cities, setCities] = useState([]);
 useEffect(() => {
-  if (province === '山东') {
+  if (province === "山东") {
     // 这些数据可以是本地数据，也可以现从服务器端读取
-    setCities(['济南', '青岛', '淄博']);
+    setCities(["济南", "青岛", "淄博"]);
   }
 }, [province]);
 ```
@@ -80,24 +84,24 @@ useEffect(() => {
 在 `src/App.js` 的 `App` 组件代码中加入一个只在挂载时执行一次的 `useEffect` ，在副作用回调函数中读取数据，为了模拟远程服务的耗时，我们加上一个1秒钟的计时器：
 
 ```javascript
-const DATA_STORE_KEY = 'kanban-data-store';
+const DATA_STORE_KEY = "kanban-data-store";
 
 function App() {
-  const [showAdd, setShowAdd] = useState(false);
-  const [todoList, setTodoList] = useState([/*...省略*/]);
-  const [ongoingList, setOngoingList ] = useState([/*...省略*/]);
-  const [doneList, setDoneList ] = useState([/*...省略*/]);
-  useEffect(() => {
-    const data = window.localStorage.getItem(DATA_STORE_KEY);
-    setTimeout(() => {
-      if (data) {
-        const kanbanColumnData = JSON.parse(data);
-        setTodoList(kanbanColumnData.todoList);
-        setOngoingList(kanbanColumnData.ongoingList);
-        setDoneList(kanbanColumnData.doneList);
-      }
-    }, 1000);
-  },[]);
+  const [showAdd, setShowAdd] = useState(false);
+  const [todoList, setTodoList] = useState([/*...省略*/]);
+  const [ongoingList, setOngoingList] = useState([/*...省略*/]);
+  const [doneList, setDoneList] = useState([/*...省略*/]);
+  useEffect(() => {
+    const data = window.localStorage.getItem(DATA_STORE_KEY);
+    setTimeout(() => {
+      if (data) {
+        const kanbanColumnData = JSON.parse(data);
+        setTodoList(kanbanColumnData.todoList);
+        setOngoingList(kanbanColumnData.ongoingList);
+        setDoneList(kanbanColumnData.doneList);
+      }
+    }, 1000);
+  }, []);
   // ...省略
 }
 ```
@@ -105,25 +109,29 @@ function App() {
 有了读取，还需要有存储。在实际业务中，因为涉及到本地数据和远程数据的同步，这部分逻辑可能会非常复杂，而我们这里用一个偷懒的方法：加入一个“保存所有卡片”的按钮，由用户来决定什么时候存储。
 
 ```javascript
-const DATA_STORE_KEY = 'kanban-data-store';
+const DATA_STORE_KEY = "kanban-data-store";
 
 function App() {
   // ...省略
   const handleSaveAll = () => {
-    const data = JSON.stringify({
-      todoList,
-      ongoingList,
-      doneList
-    });
-    window.localStorage.setItem(DATA_STORE_KEY, data);
-  };
+    const data = JSON.stringify({
+      todoList,
+      ongoingList,
+      doneList,
+    });
+    window.localStorage.setItem(DATA_STORE_KEY, data);
+  };
   // ...省略
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>我的看板 <button onClick={handleSaveAll}>保存所有卡片</button></h1>
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+  return (
+    <div className="App">
+           {" "}
+      <header className="App-header">
+               {" "}
+        <h1>
+          我的看板 <button onClick={handleSaveAll}>保存所有卡片</button>
+        </h1>
+                <img src={logo} className="App-logo" alt="logo" />     {" "}
+      </header>
       {/* ...省略 */}
     </div>
   );
@@ -172,7 +180,11 @@ const KanbanCard = ({ title, status }) => {
 同时定义副作用回调函数、清除函数和依赖值数组，这是 `useEffect` 最完整的一种用法。
 
 ```javascript
-useEffect(() => {/* 省略 */; return () => {/* 省略 */};}, [status]);
+useEffect(() => {
+  /* 省略 */ return () => {
+    /* 省略 */
+  };
+}, [status]);
 //        ------------------------------------------     -------
 //                       ^         -----------------        ^
 //                       |                 ^                |
@@ -212,7 +224,7 @@ const memoized = useMemo(() => createByHeavyComputing(a, b), [a, b]);
 `useMemo` 最重要的使用场景，是将执行成本较高的计算结果存入缓存，通过减少重复计算来提升组件性能。我们依旧用上节课的斐波那契数列递归函数来举例，从state中获取`num` ，转换成整数`n` 后传递给函数 ，即计算第 `n` 个斐波那契数：
 
 ```javascript
-const [num, setNum] = useState('0');
+const [num, setNum] = useState("0");
 const sum = useMemo(() => {
   const n = parseInt(num, 10);
   return fibonacci(n);
@@ -224,7 +236,9 @@ const sum = useMemo(() => {
 然后是 `useCallback` ，它会把作为第一个参数的回调函数返回给组件，只要第二个参数依赖值数组的依赖项不改变，它就会保证一直返回同一个回调函数（引用），而不是新建一个函数，这也保证了回调函数的闭包也是不变的；相反，当依赖项改变时， `useCallback` 才会更新回调函数及其闭包。
 
 ```javascript
-const memoizedFunc = useCallback(() => {/*省略*/}, [a, b]);
+const memoizedFunc = useCallback(() => {
+  /*省略*/
+}, [a, b]);
 //    ------------               ---------------   -----
 //         ^                            ^            ^
 //         |                            |            |
@@ -234,7 +248,12 @@ const memoizedFunc = useCallback(() => {/*省略*/}, [a, b]);
 其实 `useCallback` 是 `useMemo` 的一个马甲，相当于：
 
 ```javascript
-const memoizedFunc = useMemo(() => () => {/*省略*/}, [a, b]);
+const memoizedFunc = useMemo(
+  () => () => {
+    /*省略*/
+  },
+  [a, b],
+);
 //    ------------           ---------------------   -----
 //       ^                      ^  ---------------      ^
 //       |                      |         ^             |
@@ -339,7 +358,8 @@ const KanbanCard = ({ title, status }) =&gt; {
     return function cleanup() {
       clearInterval(intervalId);
     };
-  }, [status]);
+
+}, [status]);
 可以看到，useEffect 接收了副作用回调函数和依赖值数组两个参数，其中副作用回调函数的返回值也是一个函数，这个返回的函数叫做清除函数。组件在下一次提交阶段执行同一个副作用回调函数之前，或者是组件即将被卸载之前，会调用这个清除函数。
 
 没有看懂，上面的哪有两个参数啊？
@@ -349,13 +369,14 @@ const KanbanCard = ({ title, status }) =&gt; {
 useLayoutEffect 是在真实dom更新后，浏览器渲染dom内容前执行的，即在render函数执行后，接着同步马上执行回调函数内容；</p>2022-11-15</li><br/><li><span>Geek_9y01z7</span> 👍（0） 💬（0）<p>我试图在 handleSubmit 里调用 handleSaveAll()，希望每次新增“待处理” 后自动保存，但失败了。调用 handleSaveAll 的时候 todoList 还没有被更新，第二次新增后才会把第一次新增的保存进去，这是为什么呢 ？
 
 const handleSubmit = (title) =&gt; {
-    const d = new Date()
-    const n = d.toLocaleDateString().replace(&#39;&#47;&#39;, &#39;-&#39;) + &#39; &#39; + d.toLocaleTimeString();
-    setTodoList(currentTodoList =&gt; [
-      { title, dt: n},
-      ...currentTodoList
-    ]);
-    
+const d = new Date()
+const n = d.toLocaleDateString().replace(&#39;&#47;&#39;, &#39;-&#39;) + &#39; &#39; + d.toLocaleTimeString();
+setTodoList(currentTodoList =&gt; [
+{ title, dt: n},
+...currentTodoList
+]);
+
     handleSaveAll()
-  };</p>2023-07-12</li><br/><li><span>Geeker</span> 👍（0） 💬（1）<p>个人觉得框架不应该把“负担” 甩给用户</p>2022-11-04</li><br/>
+
+};</p>2023-07-12</li><br/><li><span>Geeker</span> 👍（0） 💬（1）<p>个人觉得框架不应该把“负担” 甩给用户</p>2022-11-04</li><br/>
 </ul>

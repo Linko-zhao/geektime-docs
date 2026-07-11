@@ -130,12 +130,18 @@
 
 ```markdown
 让我们套用“Golden Circle”思维，用Markdown的方式来谈谈Markdown ：
+
 ## Why
+
 为什么使用ChatGPT要用markdown，用表格解释
+
 ## How
+
 写prompt的过程中，怎么让markdown的使用变简单？
 列出输出，重点加粗：
+
 ## What
+
 Talk is cheap，show me your code.
 ```
 
@@ -162,7 +168,6 @@ Bard有联网配图的可视化能力，迁移GPT的方法就能直接拿到图�
 
 #3 使用"沉浸式翻译"插件，点击三次空格，完成转译
 Output an image of the "Golden Circle" and provide a clear and easily understandable explanation
-
 ```
 
 🤖️ Google Bard
@@ -246,6 +251,7 @@ Output an image of the "Golden Circle" and provide a clear and easily understand
 Emoji、色彩、Markdown、GIF、数据图表、甘特图、流程图
 
 ---
+
 应用场景是“产品设计的需求复盘”，请用1-5分对它们的作用做评估，然后输出 User Journey Diagram 代码
 ```
 

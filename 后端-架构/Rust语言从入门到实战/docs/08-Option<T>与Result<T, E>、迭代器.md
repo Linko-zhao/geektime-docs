@@ -516,7 +516,7 @@ Rust中也考虑到了这种需求，提供了配套的辅助语法。
 fn main() {
     let mut a = ["1".to_string(), "2".to_string(), "3".to_string()];
     
-    for item in &a {  
+    for item in &a {
         println!("{}", item);
     }
     
@@ -554,7 +554,7 @@ fn main() {
     let s2 = String::from("bbb");
     let s3 = String::from("ccc");
     let s4 = String::from("ddd");
-    
+
     let v = vec![s1, s2, s3, s4];
     let a = v[0];    // 这里，我们想访问 s1 的内容
 }
@@ -566,12 +566,12 @@ fn main() {
 error[E0507]: cannot move out of index of `Vec<String>`
   --> src/main.rs:11:13
    |
-11 |     let a = v[0];  
+11 |     let a = v[0];
    |             ^^^^ move occurs because value has type `String`, which does not implement the `Copy` trait
    |
 help: consider borrowing here
    |
-11 |     let a = &v[0]; 
+11 |     let a = &v[0];
    |             +
 ```
 
@@ -583,7 +583,7 @@ fn main() {
     let s2 = String::from("bbb");
     let s3 = String::from("ccc");
     let s4 = String::from("ddd");
-    
+
     let v = vec![s1, s2, s3, s4];
     let a = &v[0];  // 明确a只获得v中第一个元素的引用
 }
@@ -599,7 +599,7 @@ fn main() {
     let s2 = String::from("bbb");
     let s3 = String::from("ccc");
     let s4 = String::from("ddd");
-    
+
     let v = vec![s1, s2, s3, s4];
     for s in v {      // 这里，s拿到了集合元素的所有权
         println!("{}", s);
@@ -647,5 +647,6 @@ Vec实现了Index trait的index方法，该方法返回一个引用。然后使�
 println!(&quot;{:?}&quot;, myhash); &#47;&#47;value borrowed here after move</p>2023-11-06</li><br/><li><span>-</span> 👍（1） 💬（1）<p> 定义了类型以后，let a: Vec&lt;u32&gt; = [1, 2, 3, 4, 5];语法错误
 修改为let a= [1, 2, 3, 4, 5];</p>2023-11-06</li><br/><li><span>Calvin</span> 👍（0） 💬（1）<p>请教下老师，文章中“不解包的情况下如何操作？”小节部分说到 Result&lt;T, E&gt; 的常用方法 map() 时，里面示例代码的模式匹配的 Err(..) 分支是什么意思？我试了 Err(_) 也是可以执行通过的，_ 忽略元组枚举变体 Err 的负载，（和 .. 相比）它们两个有什么区别？分别什么时候使用哪个呢？</p>2024-03-28</li><br/><li><span>wcf</span> 👍（0） 💬（2）<p>为什么会有这个差异呢？你可以从我们第 2 讲所有权相关知识中找到答案。
 ============
+
 没看出来为什么?</p>2024-01-24</li><br/><li><span>当初莫相识</span> 👍（0） 💬（0）<p>C++ 现在有Option，但是没有Result，可以如何设计自行设计一个Result呢</p>2024-11-26</li><br/><li><span>落星野</span> 👍（0） 💬（0）<p>上面对Go语言返回值的说法有一点小问题，Go语言不限制返回值的数量与类型，最后一个返回的 err 只是一种编码习惯，一般用于返回实现了 Error 接口的实例，亦即只要实现了 error.Error() 方法的实例返回都皆可。如果用户为了简便起见，在最后返回string类型（字符串），则返回的 err 就是一个字符串。</p>2024-10-21</li><br/><li><span>Geek_93cb91</span> 👍（0） 💬（0）<p>买过好几本书了&#xff0c;反复入门再入门&#xff0c;感觉唐老师的内容比书全面多了&#xff0c;再入门一遍&#xff0c;最后一遍&#xff01;</p>2024-08-11</li><br/><li><span>wbytts</span> 👍（0） 💬（0）<p>unwrap_or_default 的配图，Result那一列写错文字了</p>2024-05-19</li><br/><li><span>Massdama</span> 👍（0） 💬（0）<p>持有使用权的数据需要所有时要考虑借 也就是引用</p>2024-05-15</li><br/><li><span>独钓寒江</span> 👍（0） 💬（0）<p>第三次刷基础篇，之前不知道Some(T)是什么，具体来说是不知道Some是什么类型，因为枚举内可以包含多种类型，那么Some是什么类型？看得好懵，心里慌得一批。这次搜索了一下，大多只是说Some是Option类型，只看到Rust By Example里说了一句Some(value)是元组结构体，噢， 终于没那么懵了</p>2024-04-30</li><br/>
 </ul>

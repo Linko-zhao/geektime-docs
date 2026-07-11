@@ -23,7 +23,7 @@ Dart提供了包管理工具Pub，用来管理代码和资源。从本质上说�
 ```
 name: flutter_app_example #应用名称
 description: A new Flutter application. #应用描述
-version: 1.0.0 
+version: 1.0.0
 #Dart运行环境区间
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -78,7 +78,7 @@ dependencies:
 在下面的例子中，我们的应用程序依赖了一个名为package4的包，而它的目录结构是这样的：
 
 ```
-pubspec.yaml    
+pubspec.yaml
 └──assets
     ├──2.0x
     │   └── placeholder.png
@@ -162,7 +162,7 @@ pubspec.lock是把依赖锁死的文件
 
 .packages 与 pubspec.lock 是否需要做代码版本管理呢？为什么？
 pubspec.lock需要做版本管理，因为lock文件把版本锁定，统一工程环境
-.packages不需要版本管理，因为跟本地环境有关，无法做到统一</p>2019-08-08</li><br/><li><span>哗啦啦</span> 👍（12） 💬（2）<p>想问下老师 。我在ROW 中有3个widget ,想实现 3个widget 的高度填充整个ROW （即3个子widget 中高度最大的那个的高度 ）  ，请问有什么好办法能实现 ，我更换了交叉轴对齐方式为 CrossAxisAlignment.stretch 也不行 。感谢 卡了很久这个问题 </p>2019-08-12</li><br/><li><span>和小胖</span> 👍（6） 💬（3）<p>老师请问下，^0.1.2 这个版本号中的 ^ 是什么意思呢？</p>2019-09-05</li><br/><li><span>和小胖</span> 👍（5） 💬（1）<p>1、pubspec.yaml 算是对 flutter 项目配置的管理，类似于 Android 中的 gradle，这些配置包括：项目名称(但是如果桌面的应用名称还得去具体平台的项目里面修改)、项目描述 、各种资源(资源包括图片、文件、字体等)，图片文件等资源需要在 yaml 文件中的 assets 标签下配置，字体需要在 fonts 标签下配置；
+.packages不需要版本管理，因为跟本地环境有关，无法做到统一</p>2019-08-08</li><br/><li><span>哗啦啦</span> 👍（12） 💬（2）<p>想问下老师 。我在ROW 中有3个widget ,想实现 3个widget 的高度填充整个ROW （即3个子widget 中高度最大的那个的高度 ） ，请问有什么好办法能实现 ，我更换了交叉轴对齐方式为 CrossAxisAlignment.stretch 也不行 。感谢 卡了很久这个问题 </p>2019-08-12</li><br/><li><span>和小胖</span> 👍（6） 💬（3）<p>老师请问下，^0.1.2 这个版本号中的 ^ 是什么意思呢？</p>2019-09-05</li><br/><li><span>和小胖</span> 👍（5） 💬（1）<p>1、pubspec.yaml 算是对 flutter 项目配置的管理，类似于 Android 中的 gradle，这些配置包括：项目名称(但是如果桌面的应用名称还得去具体平台的项目里面修改)、项目描述 、各种资源(资源包括图片、文件、字体等)，图片文件等资源需要在 yaml 文件中的 assets 标签下配置，字体需要在 fonts 标签下配置；
 
 当然也有项目依赖 dart sdk 的版本配置，项目所依赖的第三方库的配置，而这些第三方库可以是远程 pub 仓库(类似于 jcenter&#47;maven)，也可以是 git 仓库，还可以是 本地的依赖库。
 
@@ -171,6 +171,7 @@ pubspec.lock需要做版本管理，因为lock文件把版本锁定，统一工�
 pubspec.lock 文件里面则是配置了远程依赖库的具体信息，包括依赖库名称、版本号以及依赖地址。里面也有 dart sdk 的版本号。
 
 2、.packages 是不需要版本管理，也不需要提交至远程仓库，应当对它添加忽略，因为它是与本地的映射，每个人的本地目录是不同的；pubspec.lock 则是需要版本管理的，因为他里面记录了具体的依赖信息。</p>2019-09-05</li><br/><li><span>汪帅</span> 👍（3） 💬（3）<p>我一直比较关心的还是关于第三方官方库支持情况，例如地图，即时通讯，音视频等等！安卓我倒是可以解决就是iOS我不会还是需要纯flutter的</p>2019-08-08</li><br/><li><span>davidzhou</span> 👍（2） 💬（3）<p>只是不太明白image.asset使用的是一个完整的uri，如果项目内图片资源比较多，我希望图片资源进行目录分类，那个路径就相对较长，如果是iOS的话，统一在一个地方创建xx.imageset就可以直接使用这个图片标识符了</p>2019-08-08</li><br/><li><span>Carlo</span> 👍（1） 💬（1）<p>依赖管理中的版本冲突很麻烦。pub每个包只下载一个版本。这就造成了如果第三方库很旧，依赖了A包很老的版本。如果我在自己的工程中用了A包最新版本。那就会造成冲突。请问这种情况怎么解决？</p>2019-10-14</li><br/><li><span>巫山老妖</span> 👍（1） 💬（1）<p>思考题1 ：
+
 - pubspec.yaml（设置包的元数据（比如，包的名称和版本）、运行环境（比如Dart SDK与Flutter SDK版本）、外部依赖和内部配置）
 - .packages（将依赖包名与系统缓存中的包文件路径进行映射，方便后续维护）
 - pubspec.lock（用于记录当前状态下实际安装的各个直接依赖、间接依赖的包的具体来源和版本号）
@@ -180,7 +181,7 @@ pubspec.lock 文件里面则是配置了远程依赖库的具体信息，包括�
 pubspec.lock需要托管，每次变更版本都会更新这个文件，我们也能知道实际安装版本。</p>2019-10-06</li><br/><li><span>毛哥来了</span> 👍（0） 💬（1）<p>是否跟package.json一样也支持 ~1.2.3 这样的格式</p>2019-10-25</li><br/><li><span>kkliu</span> 👍（0） 💬（1）<p>pubspec.yaml设定引用第三方SDK的版本范围，如果要指定对应版本可以直接在pubspec.lock 文件里指定sdk的版本号？</p>2019-09-29</li><br/><li><span>andy</span> 👍（0） 💬（3）<p>随着课程的节数增加，每节课的评论人数越来越少了，是不是好多放弃的</p>2019-09-05</li><br/><li><span>无名</span> 👍（0） 💬（0）<p>最近看到这样的：
 
 dev_dependencies:
-  build_runner:
+build_runner:
 
 build_runner冒号后面不带任何版本信息，这样是否表示取库的最新版本？</p>2020-12-04</li><br/><li><span>outman</span> 👍（0） 💬（0）<p>请教个混合开发遇到的问题，资源，比如图片，文字，或尺寸，这些在app中都是通用的。那么flutter和android，ios能共用一个资源库吗？</p>2020-05-21</li><br/><li><span>鸡蛋石头</span> 👍（0） 💬（0）<p>能使用iconfont吗？怎么使用？</p>2020-03-21</li><br/><li><span>颜为晨</span> 👍（0） 💬（0）<p>Git 依赖的例子中，package2 写成了 date_format</p>2020-02-02</li><br/>
 </ul>

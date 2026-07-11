@@ -28,7 +28,7 @@ class LongEvent {
 int bufferSize = 1024;
 
 //构建Disruptor
-Disruptor<LongEvent> disruptor 
+Disruptor<LongEvent> disruptor
   = new Disruptor<>(
     LongEvent::new,
     bufferSize,
@@ -43,7 +43,7 @@ disruptor.handleEventsWith(
 disruptor.start();
 
 //获取RingBuffer
-RingBuffer<LongEvent> ringBuffer 
+RingBuffer<LongEvent> ringBuffer
   = disruptor.getRingBuffer();
 //生产Event
 ByteBuffer bb = ByteBuffer.allocate(8);
@@ -51,7 +51,7 @@ for (long l = 0; true; l++){
   bb.putLong(0, l);
   //生产者生产消息
   ringBuffer.publishEvent(
-    (event, sequence, buffer) -> 
+    (event, sequence, buffer) ->
       event.set(buffer.getLong(0)), bb);
   Thread.sleep(1000);
 }
@@ -77,7 +77,7 @@ ArrayBlockingQueue内部结构图
 for (int i=0; i<bufferSize; i++){
   //entries[]就是RingBuffer内部的数组
   //eventFactory就是前面示例代码中传入的LongEvent::new
-  entries[BUFFER_PAD + i] 
+  entries[BUFFER_PAD + i]
     = eventFactory.newInstance();
 }
 ```
@@ -205,6 +205,6 @@ CPU: 
 2.关于ArrayBlockQueue 添加的对象是不连续的还是不太明白，数组初始化 不是在内存种开辟出一段连续的内存空间吗？ 还是按照有的同学留言所说的，如果是引用对象不一定是连续的。</p>2020-12-29</li><br/><li><span>荷兰小猪8813</span> 👍（2） 💬（2）<p>ArrayBlockingQueue 的入队和出队操作是用锁来保证互斥的，所以入队和出队不会同时发生。如果允许入队和出队同时发生，那就会导致线程 A 和线程 B 争用同一个缓存行，这样也会导致性能问题。
 
 想问下加锁了就没有缓存干扰了吗！为啥？</p>2019-11-26</li><br/><li><span>码农Kevin亮</span> 👍（1） 💬（1）<p>老师，避免伪共享的逻辑有点困惑：
-伪共享逻辑上就是没实现共享，而disruptor用行填充也是没实现共享。那么为什么避免伪共享就能提升性能呢？</p>2019-06-02</li><br/><li><span>全麦小面包</span> 👍（0） 💬（1）<p>老师，有个问题哈。Disruptor创建的event不是业务数据类，里面set的东西才是业务需要的。但set对象的创建还是离散的，难道set对象的引用，能和event一起缓存？？java有这种机制吗？</p>2022-07-26</li><br/><li><span>Geek_8593e5</span> 👍（0） 💬（1）<p>请问下老师，这个队列可以用于替换ArrayBlockingQueue的场景对吧？还有一些什么场景可以用呢？</p>2022-02-08</li><br/><li><span>于是</span> 👍（0） 💬（1）<p>disruptor中的数组结构，如果我放入一个引用对象，这个被引用对象的内存地址已经确定了。是需要拷贝到他创建的那段连续内存中吗？</p>2020-04-11</li><br/><li><span>空知</span> 👍（0） 💬（1）<p>老师问下 
-缓存行填充之后，缓存行里加载的不是真实需要的数据 是填充数据  程序局部性会不会不适用了? </p>2019-06-09</li><br/><li><span>QQ怪</span> 👍（0） 💬（1）<p>厉害了我的哥，尽然看懂了，又学到了谢谢老师</p>2019-05-30</li><br/><li><span>LW</span> 👍（12） 💬（0）<p>RingBuffer是一个环形队列？</p>2019-05-30</li><br/>
+伪共享逻辑上就是没实现共享，而disruptor用行填充也是没实现共享。那么为什么避免伪共享就能提升性能呢？</p>2019-06-02</li><br/><li><span>全麦小面包</span> 👍（0） 💬（1）<p>老师，有个问题哈。Disruptor创建的event不是业务数据类，里面set的东西才是业务需要的。但set对象的创建还是离散的，难道set对象的引用，能和event一起缓存？？java有这种机制吗？</p>2022-07-26</li><br/><li><span>Geek_8593e5</span> 👍（0） 💬（1）<p>请问下老师，这个队列可以用于替换ArrayBlockingQueue的场景对吧？还有一些什么场景可以用呢？</p>2022-02-08</li><br/><li><span>于是</span> 👍（0） 💬（1）<p>disruptor中的数组结构，如果我放入一个引用对象，这个被引用对象的内存地址已经确定了。是需要拷贝到他创建的那段连续内存中吗？</p>2020-04-11</li><br/><li><span>空知</span> 👍（0） 💬（1）<p>老师问下
+缓存行填充之后，缓存行里加载的不是真实需要的数据 是填充数据 程序局部性会不会不适用了? </p>2019-06-09</li><br/><li><span>QQ怪</span> 👍（0） 💬（1）<p>厉害了我的哥，尽然看懂了，又学到了谢谢老师</p>2019-05-30</li><br/><li><span>LW</span> 👍（12） 💬（0）<p>RingBuffer是一个环形队列？</p>2019-05-30</li><br/>
 </ul>

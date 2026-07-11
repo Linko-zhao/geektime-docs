@@ -113,13 +113,13 @@ def embeddingLSH(spark:SparkSession, movieEmbMap:Map[String, Array[Float]]): Uni
   val bucketModel = bucketProjectionLSH.fit(movieEmbDF)
   //进行分桶
   val embBucketResult = bucketModel.transform(movieEmbDF)
-  
+
   //打印分桶结果
   println("movieId, emb, bucketId schema:")
   embBucketResult.printSchema()
   println("movieId, emb, bucketId data result:")
   embBucketResult.show(10, truncate = false)
-  
+
   //尝试对一个示例Embedding查找最近邻
   println("Approximately searching for 5 nearest neighbors of the sample embedding:")
   val sampleEmb = Vectors.dense(0.795,0.583,1.120,0.850,0.174,-0.839,-0.0633,0.249,0.673,-0.237)

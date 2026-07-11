@@ -55,7 +55,7 @@ poetry source add --priority=primary mirrors https://mirror.sjtu.edu.cn/pypi/web
 然后安装一些常用的 Python 库：
 
 ```plain
-poetry add pysocks socksio 
+poetry add pysocks socksio
 ```
 
 DSPy的开发团队负责人是 [Omar Khattab](https://twitter.com/lateinteraction)，DSPy 项目的[源代码](https://github.com/stanfordnlp/dspy)和[官方文档](https://dspy.ai)你可以点击链接查看。

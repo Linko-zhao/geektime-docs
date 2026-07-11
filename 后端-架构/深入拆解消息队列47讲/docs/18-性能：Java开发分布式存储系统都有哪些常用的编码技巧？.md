@@ -74,10 +74,10 @@ byte[] data = new byte[1024];
 int position = 10;
 
 // 从当前位置写入1kb的数据
-mappedByteBuffer.put(data); 
+mappedByteBuffer.put(data);
 
 // 从指定位置写入1kb的数据
-MappedByteBuffer subBuffer = mappedByteBuffer.slice(); 
+MappedByteBuffer subBuffer = mappedByteBuffer.slice();
 subBuffer.position(position);
 subBuffer.put(data);
 ```
@@ -105,7 +105,7 @@ mmap 是一个把文件映射到内存的操作，因此可以像读写内存一
 下面是一个预分配文件的代码示例：
 
 ```plain
-public void allocate(FileChannel fileChannel, 
+public void allocate(FileChannel fileChannel,
 long preFileSize) throw IOException{
     int bufferSize = 1024;
     ByteBuffer byteBuffer = ByteBuffer.allocateDirect(bufferSize);

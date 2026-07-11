@@ -65,13 +65,13 @@ skywalking-client-js库的性能追踪采用了 `window.performance` 的原生�
 使用SkyWalking的第一步，就是引入skywalking-client-js库，然后使用 `register` 方法注册监控对象。你可以参考如下代码。
 
 ```typescript
-import ClientMonitor from 'skywalking-client-js';
+import ClientMonitor from "skywalking-client-js";
 
 ClientMonitor.register({
-  collector: 'http://127.0.0.1:12800', 
-  service: 'geekbang-h5',
-  pagePath: '/column/intro/100759401',
-  serviceVersion: 'v1.0.0',
+  collector: "http://127.0.0.1:12800",
+  service: "geekbang-h5",
+  pagePath: "/column/intro/100759401",
+  serviceVersion: "v1.0.0",
 });
 ```
 
@@ -94,22 +94,21 @@ ClientMonitor.register({
 很简单，我们只要把 `register` 方法的执行放在init函数里，通过运行 `init` 函数，就能注册监控对象ClientMonitor。参考的代码如下。
 
 ```typescript
-import ClientMonitor from 'skywalking-client-js';
+import ClientMonitor from "skywalking-client-js";
 
 export class BaseTrace implements BaseTraceInterface {
-
-	public static init(options: TraceOptions): BaseTrace {
-		// 其它业务逻辑
-    ClientMonitor.register({
-		  collector: 'http://127.0.0.1:12800', 
-		  service: 'geekbang-h5',
-		  pagePath: '/column/intro/100759401',
-		  serviceVersion: 'v1.0.0',
-		  jsErrors: false,
-		  resourceErrors: false,
-		});
-		// 其它业务逻辑
-  }
+  public static init(options: TraceOptions): BaseTrace {
+    // 其它业务逻辑
+    ClientMonitor.register({
+      collector: "http://127.0.0.1:12800",
+      service: "geekbang-h5",
+      pagePath: "/column/intro/100759401",
+      serviceVersion: "v1.0.0",
+      jsErrors: false,
+      resourceErrors: false,
+    });
+    // 其它业务逻辑
+  }
 }
 ```
 
@@ -127,15 +126,15 @@ export class BaseTrace implements BaseTraceInterface {
 
 ```typescript
 export default function windowFetch(
-	options: CustomOptionsType, 
-	segments: SegmentFields[]
+  options: CustomOptionsType,
+  segments: SegmentFields[],
 ) {
-  const originFetch: any = window.fetch;
-  setFetchOptions(options);
+  const originFetch: any = window.fetch;
+  setFetchOptions(options);
 
-  window.fetch = async (...args: any) => {
-	  // 具体实现逻辑
-  };
+  window.fetch = async (...args: any) => {
+    // 具体实现逻辑
+  };
 }
 ```
 
@@ -145,42 +144,37 @@ export default function windowFetch(
 
 ```typescript
 window.fetch = async (...args: any) => {
-	const startTime = new Date().getTime();
-  const traceId = uuid();
-  const traceSegmentId = uuid();
-  let segment = {
-    traceId: '',
-    service: customConfig.service,
-    spans: [],
-    serviceInstance: customConfig.serviceVersion,
-    traceSegmentId: '',
-  } as SegmentFields;
-  
-  // 中间省略部分源码
-  
-  if (hasTrace) {
-    const traceIdStr = String(encode(traceId));
-    const segmentId = String(encode(traceSegmentId));
-    const service = String(encode(segment.service));
-    const instance = String(encode(segment.serviceInstance));
-    const endpoint = String(encode(customConfig.pagePath));
-    const peer = String(encode(url.host));
-    const index = segment.spans.length;
-    const values = `${1}-${traceIdStr}-${segmentId}-${index}-${service}-${instance}-${endpoint}-${peer}`;
+  const startTime = new Date().getTime();
+  const traceId = uuid();
+  const traceSegmentId = uuid();
+  let segment = {
+    traceId: "",
+    service: customConfig.service,
+    spans: [],
+    serviceInstance: customConfig.serviceVersion,
+    traceSegmentId: "",
+  } as SegmentFields; // 中间省略部分源码
+  if (hasTrace) {
+    const traceIdStr = String(encode(traceId));
+    const segmentId = String(encode(traceSegmentId));
+    const service = String(encode(segment.service));
+    const instance = String(encode(segment.serviceInstance));
+    const endpoint = String(encode(customConfig.pagePath));
+    const peer = String(encode(url.host));
+    const index = segment.spans.length;
+    const values = `${1}-${traceIdStr}-${segmentId}-${index}-${service}-${instance}-${endpoint}-${peer}`;
 
-    if (!args[1]) {
-      args[1] = {};
-    }
-    if (!args[1].headers) {
-      args[1].headers = {};
-    }
-    args[1].headers['sw8'] = values;
-  }
+    if (!args[1]) {
+      args[1] = {};
+    }
+    if (!args[1].headers) {
+      args[1].headers = {};
+    }
+    args[1].headers["sw8"] = values;
+  }
 
-  const response = await originFetch(...args);
-    
-  // 省略后面的逻辑
-}
+  const response = await originFetch(...args); // 省略后面的逻辑
+};
 ```
 
 从源码可以看出，`sw8` 属性值是由8个字段值组成的，每个字段都代表着不同的含义。我们来一个个的看下实现逻辑。
@@ -209,23 +203,23 @@ window.fetch = async (...args: any) => {
 const traceId = uuid();
 const traceSegmentId = uuid();
 const appId = uuid();
-const appVersion = 'v1.0.0'
+const appVersion = "v1.0.0";
 ```
 
 接着，参考SkyWalking官方逻辑，优化当前页面URL地址，参考代码如下。
 
 ```typescript
-if (Object.prototype.toString.call(args[0]) === '[object Request]') {
-	url = new URL(url.url);
+if (Object.prototype.toString.call(args[0]) === "[object Request]") {
+  url = new URL(url.url);
 } else {
-	if (args[0].startsWith('http://') || args[0].startsWith('https://')) {
-	  url = new URL(args[0]);
-	} else if (args[0].startsWith('//')) {
-    url = new URL(`${window.location.protocol}${args[0]}`);
-	} else {
-		url = new URL(window.location.href);
-    url.pathname = args[0];
-	}
+  if (args[0].startsWith("http://") || args[0].startsWith("https://")) {
+    url = new URL(args[0]);
+  } else if (args[0].startsWith("//")) {
+    url = new URL(`${window.location.protocol}${args[0]}`);
+  } else {
+    url = new URL(window.location.href);
+    url.pathname = args[0];
+  }
 }
 ```
 
@@ -233,57 +227,52 @@ if (Object.prototype.toString.call(args[0]) === '[object Request]') {
 
 ```typescript
 export type InterceptFetchType = {
-  pagePath: string
-  onError: (error: OnFetchError) => void;
-  onBefore?: (props: OnBeforeProps) => void;
-  onAfter?: (result: any) => void;
-}
+  pagePath: string;
+  onError: (error: OnFetchError) => void;
+  onBefore?: (props: OnBeforeProps) => void;
+  onAfter?: (result: any) => void;
+};
 
 const interceptFetch = ({
-  pagePath,
-  onError,
-  onBefore,
-  onAfter
+  pagePath,
+  onError,
+  onBefore,
+  onAfter,
 }: InterceptFetchType) => {
-	// 省略代码
-}
+  // 省略代码
+};
 ```
 
 好了，依赖的变量一切准备就绪后，我们就可以生成 `traceId` 了，参考如下代码。
 
 ```typescript
 const interceptFetch = ({
-  pagePath,
-  onError,
-  onBefore,
-  onAfter
+  pagePath,
+  onError,
+  onBefore,
+  onAfter,
 }: InterceptFetchType) => {
-	// 省略代码
-	return async (...args: any) => {
-    let [url, options] = args;
-    
-    // 省略代码
-    
-    const traceIdStr = String(encode(traceId));
-    const segmentId = String(encode(traceSegmentId));
-    const service = String(encode(appId));
-    const instance = String(encode(appVersion));
-    const endpoint = String(encode(pagePath));
-    const peer = String(encode(url.host));
-    const index = 1;
-    const values = `${1}-${traceIdStr}-${segmentId}-${index}-${service}-${instance}-${endpoint}-${peer}`;
+  // 省略代码
+  return async (...args: any) => {
+    let [url, options] = args; // 省略代码
+    const traceIdStr = String(encode(traceId));
+    const segmentId = String(encode(traceSegmentId));
+    const service = String(encode(appId));
+    const instance = String(encode(appVersion));
+    const endpoint = String(encode(pagePath));
+    const peer = String(encode(url.host));
+    const index = 1;
+    const values = `${1}-${traceIdStr}-${segmentId}-${index}-${service}-${instance}-${endpoint}-${peer}`;
 
-    if (!options) {
-      options = {};
-    }
-    if (!options.headers) {
-      options.headers = {};
-    }
-    options.headers['sw8'] = values;
-    
-    // 省略代码
-  }
-}
+    if (!options) {
+      options = {};
+    }
+    if (!options.headers) {
+      options.headers = {};
+    }
+    options.headers["sw8"] = values; // 省略代码
+  };
+};
 ```
 
 通过参考官方的逻辑实现后，我们终于实现了具有sw8请求头功能的自定义Fetch函数。

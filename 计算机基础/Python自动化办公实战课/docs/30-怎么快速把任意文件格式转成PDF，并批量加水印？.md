@@ -55,7 +55,7 @@ def word2pdf(filepath, wordname, pdfname):
     file.ExportAsFixedFormat(f"{worddir}\{pdfname}", FileFormat=17， Item=7, CreateBookmarks=0)
     # 关闭文件
     file.Close()
-    # 结束word应用程序进程   
+    # 结束word应用程序进程
     word.Quit()
 ```
 
@@ -88,7 +88,7 @@ def excel2pdf(filepath, excelname, pdfname):
     file.ExportAsFixedFormat(0, f"{excel}dir}\{pdfname}")
     # 关闭文件
     file.Close()
-    # 结束excel应用程序进程   
+    # 结束excel应用程序进程
     excel.Quit()
 ```
 
@@ -114,7 +114,7 @@ def ppt2pdf(filepath, pptname, pdfname):
     file.ExportAsFixedFormat(f"{pptdir}\{pdfname}")
     # 关闭文件
     file.Close()
-    # 结束excel应用程序进程   
+    # 结束excel应用程序进程
     excel.Quit()
 ```
 
@@ -155,7 +155,7 @@ def watermark(pdfWithoutWatermark, watermarkfile, pdfWithWatermark):
 
     # 打开水印文件
     with open(watermarkfile, 'rb') as f:
-        watermarkpage = PdfFileReader(f, strict=False)   
+        watermarkpage = PdfFileReader(f, strict=False)
 
         # 打开需要增加水印的文件
         with open(pdfWithoutWatermark, 'rb') as f:
@@ -213,15 +213,15 @@ pdf合并后会出现乱码，可以通过更换pyPDF4这个库解决这个问�
     file.SaveAs(pdf_path, FileFomat = 17)
     # 关闭文件
     file.Close()
-    # 结束word应用程序进程   
+    # 结束word应用程序进程
     word.Quit()
 
-请问老师，这段代码运行时会卡在    # 使用Word软件打开a.doc
-    file = word.Documents.Open(word_path, ReadOnly=1) 不动 ，请问怎么解决？</p>2021-08-17</li><br/><li><span>Wang</span> 👍（0） 💬（2）<p>中文会出现，合并后会出现乱码</p>2021-07-09</li><br/><li><span>鏡墨山人</span> 👍（0） 💬（1）<p>自己的电脑从Microsoft Office换用WPS Office之后转换会出错，请问有什么解决的方法嘛？</p>2021-05-04</li><br/><li><span>innovator琳</span> 👍（0） 💬（2）<p>Mac os 上怎么操作？</p>2021-04-25</li><br/><li><span>somenzz</span> 👍（2） 💬（0）<p>代码里面有中文逗号，这种经过测试吗？</p>2021-08-17</li><br/><li><span>天国之影</span> 👍（1） 💬（0）<p>“将PowerPoint 幻灯片转换为PDF”这一节中
+请问老师，这段代码运行时会卡在 # 使用Word软件打开a.doc
+file = word.Documents.Open(word_path, ReadOnly=1) 不动 ，请问怎么解决？</p>2021-08-17</li><br/><li><span>Wang</span> 👍（0） 💬（2）<p>中文会出现，合并后会出现乱码</p>2021-07-09</li><br/><li><span>鏡墨山人</span> 👍（0） 💬（1）<p>自己的电脑从Microsoft Office换用WPS Office之后转换会出错，请问有什么解决的方法嘛？</p>2021-05-04</li><br/><li><span>innovator琳</span> 👍（0） 💬（2）<p>Mac os 上怎么操作？</p>2021-04-25</li><br/><li><span>somenzz</span> 👍（2） 💬（0）<p>代码里面有中文逗号，这种经过测试吗？</p>2021-08-17</li><br/><li><span>天国之影</span> 👍（1） 💬（0）<p>“将PowerPoint 幻灯片转换为PDF”这一节中
 会遇到报错&quot;TypeError: The Python instance can not be converted to a COM object&quot;
 在文件另存为当前目录下的pdf文件，请改为下面代码
-file.ExportAsFixedFormat(&#39;\\&#39;.join([pptdir, pdfname]), FixedFormatType=2, 
-                             PrintRange=None)</p>2021-12-11</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-27</li><br/><li><span>阿牛</span> 👍（0） 💬（0）<p>文章源代码 写入新的pdf文件出错
+file.ExportAsFixedFormat(&#39;\\&#39;.join([pptdir, pdfname]), FixedFormatType=2,
+PrintRange=None)</p>2021-12-11</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-27</li><br/><li><span>阿牛</span> 👍（0） 💬（0）<p>文章源代码 写入新的pdf文件出错
 错误提示`ValueError: I&#47;O operation on closed file: test.pdf`
 
 解决办法：

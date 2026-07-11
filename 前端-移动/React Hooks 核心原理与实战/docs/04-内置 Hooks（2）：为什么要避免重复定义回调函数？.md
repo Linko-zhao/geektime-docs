@@ -264,7 +264,7 @@ const ThemeContext = React.createContext(themes.light);
 function App() {
   // 整个应用使用 ThemeContext.Provider 作为根组件
   return (
-    // 使用 themes.dark 作为当前 Context 
+    // 使用 themes.dark 作为当前 Context
     <ThemeContext.Provider value={themes.dark}>
       <Toolbar />
     </ThemeContext.Provider>
@@ -365,31 +365,31 @@ useState 其实也是能够在组件的多次渲染之间共享数据的，那�
 import React, { useState, useCallback, useRef } from &#39;react&#39;
 
 export default function Timer() {
-  const [time, setTime] = useState(0)
-  const timer = useRef(null)
+const [time, setTime] = useState(0)
+const timer = useRef(null)
 
-  let timer2 = null
+let timer2 = null
 
-  const handleStart = useCallback(() =&gt; {
-    timer2 = window.setInterval(() =&gt; {
-      &#47;&#47; 这里是个闭包，每次拿到的time值是0，所以要这样写手动去更新time的值
-      setTime((time) =&gt; time + 1)
-    }, 1000)
-  }, [time])
+const handleStart = useCallback(() =&gt; {
+timer2 = window.setInterval(() =&gt; {
+&#47;&#47; 这里是个闭包，每次拿到的time值是0，所以要这样写手动去更新time的值
+setTime((time) =&gt; time + 1)
+}, 1000)
+}, [time])
 
-  const handleStop = useCallback(() =&gt; {
-    window.clearInterval(timer2)
-    timer2 = null
-  }, [])
+const handleStop = useCallback(() =&gt; {
+window.clearInterval(timer2)
+timer2 = null
+}, [])
 
-  return (
-    &lt;div&gt;
-      {time &#47; 10} seconds.
-      &lt;br&#47;&gt;
-      &lt;button onClick={handleStart}&gt;start&lt;&#47;button&gt;
-      &lt;button onClick={handleStop}&gt;stop&lt;&#47;button&gt;
-    &lt;&#47;div&gt;
-  )
+return (
+&lt;div&gt;
+{time &#47; 10} seconds.
+&lt;br&#47;&gt;
+&lt;button onClick={handleStart}&gt;start&lt;&#47;button&gt;
+&lt;button onClick={handleStop}&gt;stop&lt;&#47;button&gt;
+&lt;&#47;div&gt;
+)
 }</p>2021-06-06</li><br/><li><span>琼斯基亚</span> 👍（1） 💬（4）<p>老师，请问：
 const handleIncrement = useCallback(() =&gt; setCount(count + 1), [count]);
 const handleIncrement = useCallback(() =&gt; setCount(q =&gt; q + 1), []);
@@ -402,67 +402,67 @@ const handleIncrement = useCallback(() =&gt; setCount(q =&gt; q + 1), []);
 老师，上面这种写法，直接将箭头函数作为 props 传递给 button，是不是每次 render 的时候，也会生成一个新的箭头函数？
 
 如果是的话，怎么避免呢？</p>2021-06-03</li><br/><li><span>Sunny</span> 👍（1） 💬（4）<p>import React, {
-  useCallback,
-  useRef,
-  useReducer,
+useCallback,
+useRef,
+useReducer,
 } from &#39;react&#39;;
 
 const initialState = {time: 0};
 function reducer(state, action) {
-  switch (action.type) {
-    case &#39;increment&#39;:
-      return {time: state.time + 1};
-    default:
-      throw new Error();
-  }
+switch (action.type) {
+case &#39;increment&#39;:
+return {time: state.time + 1};
+default:
+throw new Error();
+}
 }
 
 export default function Timer() {
-  console.log(&#39;--render--&#39;)
+console.log(&#39;--render--&#39;)
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-  
-  const timer = useRef(null);
+const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setIntervalCallback = useCallback( () =&gt; {
-    dispatch({type: &#39;increment&#39;});
-    console.log(&#39;setinterval time:&#39;, state.time)  &#47;&#47;为什么这里的state.time不变？
-  }, [state.time]);&#47;&#47;这里的state.time变化被监听到了
+const timer = useRef(null);
 
-  const handleStart = useCallback(() =&gt; {
-    console.log(&#39;handlestart&#39;)
-    timer.current = window.setInterval(setIntervalCallback, 1000);
-  }, [timer, setIntervalCallback]);
-  
-  const handlePause = useCallback(() =&gt; {
-    console.log(&#39;handlePause&#39;)
-    window.clearInterval(timer.current);
-    timer.current = null;    
-  }, [timer]);
-  
-  return(
-    &lt;div&gt;
-      {state.time} seconds.
-      &lt;MyStartBtn handleStart={handleStart}&#47;&gt;
-      &lt;MyPauseBtn handlePause={handlePause}&#47;&gt;
-    &lt;&#47;div&gt;
-  );
+const setIntervalCallback = useCallback( () =&gt; {
+dispatch({type: &#39;increment&#39;});
+console.log(&#39;setinterval time:&#39;, state.time) &#47;&#47;为什么这里的state.time不变？
+}, [state.time]);&#47;&#47;这里的state.time变化被监听到了
+
+const handleStart = useCallback(() =&gt; {
+console.log(&#39;handlestart&#39;)
+timer.current = window.setInterval(setIntervalCallback, 1000);
+}, [timer, setIntervalCallback]);
+
+const handlePause = useCallback(() =&gt; {
+console.log(&#39;handlePause&#39;)
+window.clearInterval(timer.current);
+timer.current = null;  
+}, [timer]);
+
+return(
+&lt;div&gt;
+{state.time} seconds.
+&lt;MyStartBtn handleStart={handleStart}&#47;&gt;
+&lt;MyPauseBtn handlePause={handlePause}&#47;&gt;
+&lt;&#47;div&gt;
+);
 }
 
 function StartButton({handleStart}){
-  console.log(&#39;startButton render --&#39;)
-  return &lt;button onClick={handleStart}&gt;Start&lt;&#47;button&gt;;
+console.log(&#39;startButton render --&#39;)
+return &lt;button onClick={handleStart}&gt;Start&lt;&#47;button&gt;;
 }
 const MyStartBtn = React.memo(StartButton, (prevProps, nextProps) =&gt; {
-  return prevProps.handleStart === nextProps.handleStart;
+return prevProps.handleStart === nextProps.handleStart;
 });
 
 function PauseButton({handlePause}){
-  console.log(&#39;pauseButton render --&#39;)
-  return &lt;button onClick={handlePause}&gt;Pause&lt;&#47;button&gt;;
+console.log(&#39;pauseButton render --&#39;)
+return &lt;button onClick={handlePause}&gt;Pause&lt;&#47;button&gt;;
 }
 const MyPauseBtn = React.memo( PauseButton, (prev, next) =&gt; {
-  return prev.handlePause === next.handlePause;
+return prev.handlePause === next.handlePause;
 })
 
 &#47;*
@@ -472,13 +472,12 @@ startButton render --
 setinterval time: 0
 每秒循环打印上面3行...
 
-
 疑问：
 const setIntervalCallback = useCallback( () =&gt; {
-    dispatch({type: &#39;increment&#39;});
-    console.log(&#39;setinterval time:&#39;, state.time)  &#47;&#47;为什么这里的state.time不变？
-  }, [state.time]);&#47;&#47;这里的state.time变化被监听到了
-*&#47;</p>2021-06-01</li><br/><li><span>快扶我起来学习</span> 👍（0） 💬（1）<p>const ThemeContext = React.createContext(themes.light);  这里的themes. Light参数有什么作用呢？我传null也正常work了
+dispatch({type: &#39;increment&#39;});
+console.log(&#39;setinterval time:&#39;, state.time) &#47;&#47;为什么这里的state.time不变？
+}, [state.time]);&#47;&#47;这里的state.time变化被监听到了
+*&#47;</p>2021-06-01</li><br/><li><span>快扶我起来学习</span> 👍（0） 💬（1）<p>const ThemeContext = React.createContext(themes.light); 这里的themes. Light参数有什么作用呢？我传null也正常work了
 </p>2021-08-05</li><br/><li><span>花儿与少年</span> 👍（0） 💬（2）<p>useContext的官方例子中，子组件中 const theme = useContext(ThemeContext);  那是需要子组件 引用ThemeContext 这个变量吗， 实际开发中这个子组件可能是单独的一个jsx文件，需要每个用到的子组件 import 这个变量？</p>2021-08-01</li><br/><li><span>rookielink</span> 👍（0） 💬（1）<p>useRef示例中替换这个有什么区别呢？ 
 const timer = useRef(null);  =&gt;  const timer = {}; </p>2021-07-30</li><br/>
 </ul>

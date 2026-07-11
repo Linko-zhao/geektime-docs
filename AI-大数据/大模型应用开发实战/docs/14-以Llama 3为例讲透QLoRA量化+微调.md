@@ -130,7 +130,7 @@ tokenizer.pad_token = tokenizer.eos_token
 # 使用 BitsAndBytesConfig 进行量化配置
 quantization_config = BitsAndBytesConfig(load_in_4bit=True,
                                          llm_int4_threshold=200.0)
-model = AutoModelForCausalLM.from_pretrained(MODEL, 
+model = AutoModelForCausalLM.from_pretrained(MODEL,
                                              trust_remote_code=True,
                                              device_map="auto",
                                              torch_dtype=torch.float16)
@@ -179,13 +179,13 @@ class CustomDataset(Dataset):
         )
         inputs['labels'] = labels['input_ids']
         result = {key: val.squeeze().to(self.device) for key, val in inputs.items()}
-        
+       
         # 打印输入数据和形状
         print(f"Sample {idx}:")
         print(f"Context: {formatted_example['context']}")
         print(f"Target: {formatted_example['target']}")
         print({key: val.shape for key, val in result.items()})
-        
+       
         return result
 
     def format_example(self, example: dict) -> dict:

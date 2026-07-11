@@ -28,7 +28,7 @@ $ pstree -g
 systemd(1)-+-accounts-daemon(1984)-+-{gdbus}(1984)
            | `-{gmain}(1984)
            |-acpid(2044)
-          ...      
+          ...
            |-lxcfs(1936)-+-{lxcfs}(1936)
            | `-{lxcfs}(1936)
            |-mdadm(2135)
@@ -151,7 +151,7 @@ spec:
   restartPolicy: Never
   volumes:
   - name: shared-data
-    hostPath:      
+    hostPath:
       path: /data
   containers:
   - name: nginx-container
@@ -211,7 +211,7 @@ spec:
       name: app-volume
     ports:
     - containerPort: 8080
-      hostPort: 8001 
+      hostPort: 8001
   volumes:
   - name: app-volume
     emptyDir: {}
@@ -305,18 +305,18 @@ volumeMounts：
 这里是说将app-volume挂载到&#47;app上，但是app是个目录，那我想问的是app-volume是个目录还是设备？
 同样下面：
 volumeMounts:
-    -mountpath:&#47;root&#47;apache-tomcat-7.0.42-v2&#47;webapps
-       name:app-volume
+-mountpath:&#47;root&#47;apache-tomcat-7.0.42-v2&#47;webapps
+name:app-volume
 ---Tomecat容器同样声明了挂载app-volume到自己的webapps目录下
 
 这里又说把app-volume挂载到webapps下，webapps明显是个目录，那app-volume是个目录吗？
 
 但是我清楚记得在Linux下。如果要挂载一个分区设备到一个目录或者一个目录到另外一个主机目录下应该是：
-mount  -t xxfs  src_dir   dest_dir
-比如： mount  -t xfs &#47;dev&#47;sda   &#47;opt&#47;app
-           mount -t nfs &#47;share&#47;data  192.168.0.100:&#47;data
+mount -t xxfs src_dir dest_dir
+比如： mount -t xfs &#47;dev&#47;sda &#47;opt&#47;app
+mount -t nfs &#47;share&#47;data 192.168.0.100:&#47;data
 上面的挂载的app-volume到底是设备还是文件，或者是去的一个别名？</p>2018-09-22</li><br/><li><span>fldhmily63319</span> 👍（18） 💬（2）<p>重问： 关于升级war和tomcat那块，也是先修改yml？然后kubenertes执行升级命令，pod会重新启动，生产也是按照这种方式吗？
 
 所以这种情况下面，如果只是升级个war包，或者加一个新的war包，tomcat也要重新启动？这就不是完全松耦合了？</p>2018-09-21</li><br/><li><span>骨汤鸡蛋面</span> 👍（16） 💬（2）<p>张老师，我们公司一直有一个问题： 我们用docker 管理测试环境，对于springboot 项目，一向是java -jar xx.jar 的方式启动，但因为是测试环境，经常代码本身有问题导致java（也就是容器主进程）启动不起来，进而触发健康检查重新调度该服务，然后开发总是抱怨看不到事故现场。我打算自己实现一个程序（我们称为nile），容器启动时先启动nile确保容器可以启动起来，再由nile启动java进程。这时还可以让nile 读取用户配置 自定义设置jvm 参数、nile向zk汇报一些应用情况等。这个做法呢，nile可以算是java 的sidecar，按您文章的说法，nile和java 是拓扑关系而不是对等关系，这个时候我一个pod里分别是nile和java容器是否可能呢？</p>2018-11-04</li><br/><li><span>巩夫建</span> 👍（15） 💬（8）<p>非常棒，释义了pod的理念。有个小问题，像我之前一个docker中跑tomcat和nginx两个进程，共用同一个文件，如果拆成三部分，第一init container 文件镜像，第二 tomcat镜像，第三 nginx镜像，如何保证init container 启动后启动tomcat，最后启动nginx，还有这种优点有什么?目前只想到镜像高复用，谢谢作者。</p>2018-09-21</li><br/><li><span>姜子牙</span> 👍（14） 💬（1）<p>容器的“单进程模型”，并不是指容器里只能运行“...
-这一段里说容器的单进程模型。我在跑一个web后端服务，springboot实现。 entrypoint 是java -jar xxxx.jar  .这条命令产生的进程就是PID=1的吗？ 容器只能管理PID=1的。我理解的就是这个进程执行不成功，容器户退出。但是如果我的springboot程序有问题，没跑成功，容器依然跑着呢，为啥?</p>2019-02-22</li><br/><li><span>Pixar</span> 👍（11） 💬（4）<p>war包的例子并没有解决频发打包的问题吧? wa包变动后, geektime&#47;sample:v2包仍然需要重新打吧. 这和东西一股脑装在tomcat中后, 重新打tomcat 并没有差太多吧?</p>2018-10-05</li><br/><li><span>extraterrestrial！！</span> 👍（10） 💬（2）<p>容器不能管理多进程那块，能不能每个容器都默认搬一套系统的init过去，而不要让普通应用进程做进程1，这样是不是就可以支持容器里面管理多进程了？</p>2018-09-21</li><br/><li><span>魏颖琪</span> 👍（9） 💬（1）<p>写得很清晰，但是rsyslogd例子有问题。在ptree中rsyslogd给出的in:imklog，in:imuxsock，rs:main Q:Reg是线程不是进程。在ps -ef中是看不到的，但是在ps -efL中可以看到（When used with -L, the NLWP (number of threads) and LWP (thread ID) columns will be added. -- man ps)。而ptree的-P除了显示进程号，也会显示线程号（Child threads of a process are found under the parent process and are shown with the process name in curly braces.  -- man pstree)）。如果出书的话，建议老师选择另外的例子。</p>2019-01-03</li><br/><li><span>Eddie LAU</span> 👍（8） 💬（1）<p>此专栏追到现在，老师用通俗的语言阐述了k8s的原理的同时也极力推崇k8s。我在学习使用的过程中也确实体会到了其各种优势。但是反过来想，老师是否可以简单举两个例子说下k8s目前为止依然存在的一些缺陷和不足呢？方便我们在应用过程中加以注意。</p>2018-09-23</li><br/><li><span>silverhawk</span> 👍（8） 💬（1）<p>非常好，请教一个问题，你之前说比如PHP和MySQL最好分在不同的pod，很可能就是不同的node上了，那么对于latency非常敏感的比如cache，像redis和一个web server是不是做成不同的container部署在一个pod里面合适呢？</p>2018-09-21</li><br/><li><span>王亚南</span> 👍（5） 💬（1）<p>不得不说，真是良心之作。</p>2018-10-09</li><br/><li><span>lggl</span> 👍（5） 💬（1）<p>关于升级war和tomcat那块，也是先修改yml？然后kubenertes执行升级命令，pod会重新启动，生产也是按照这种方式吗？</p>2018-09-21</li><br/>
+这一段里说容器的单进程模型。我在跑一个web后端服务，springboot实现。 entrypoint 是java -jar xxxx.jar .这条命令产生的进程就是PID=1的吗？ 容器只能管理PID=1的。我理解的就是这个进程执行不成功，容器户退出。但是如果我的springboot程序有问题，没跑成功，容器依然跑着呢，为啥?</p>2019-02-22</li><br/><li><span>Pixar</span> 👍（11） 💬（4）<p>war包的例子并没有解决频发打包的问题吧? wa包变动后, geektime&#47;sample:v2包仍然需要重新打吧. 这和东西一股脑装在tomcat中后, 重新打tomcat 并没有差太多吧?</p>2018-10-05</li><br/><li><span>extraterrestrial！！</span> 👍（10） 💬（2）<p>容器不能管理多进程那块，能不能每个容器都默认搬一套系统的init过去，而不要让普通应用进程做进程1，这样是不是就可以支持容器里面管理多进程了？</p>2018-09-21</li><br/><li><span>魏颖琪</span> 👍（9） 💬（1）<p>写得很清晰，但是rsyslogd例子有问题。在ptree中rsyslogd给出的in:imklog，in:imuxsock，rs:main Q:Reg是线程不是进程。在ps -ef中是看不到的，但是在ps -efL中可以看到（When used with -L, the NLWP (number of threads) and LWP (thread ID) columns will be added. -- man ps)。而ptree的-P除了显示进程号，也会显示线程号（Child threads of a process are found under the parent process and are shown with the process name in curly braces. -- man pstree)）。如果出书的话，建议老师选择另外的例子。</p>2019-01-03</li><br/><li><span>Eddie LAU</span> 👍（8） 💬（1）<p>此专栏追到现在，老师用通俗的语言阐述了k8s的原理的同时也极力推崇k8s。我在学习使用的过程中也确实体会到了其各种优势。但是反过来想，老师是否可以简单举两个例子说下k8s目前为止依然存在的一些缺陷和不足呢？方便我们在应用过程中加以注意。</p>2018-09-23</li><br/><li><span>silverhawk</span> 👍（8） 💬（1）<p>非常好，请教一个问题，你之前说比如PHP和MySQL最好分在不同的pod，很可能就是不同的node上了，那么对于latency非常敏感的比如cache，像redis和一个web server是不是做成不同的container部署在一个pod里面合适呢？</p>2018-09-21</li><br/><li><span>王亚南</span> 👍（5） 💬（1）<p>不得不说，真是良心之作。</p>2018-10-09</li><br/><li><span>lggl</span> 👍（5） 💬（1）<p>关于升级war和tomcat那块，也是先修改yml？然后kubenertes执行升级命令，pod会重新启动，生产也是按照这种方式吗？</p>2018-09-21</li><br/>
 </ul>

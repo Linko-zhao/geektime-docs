@@ -425,42 +425,42 @@ eBPF 不仅诞生于网络过滤，它在网络方面的应用也是最为广泛
 输出示例（sshd 发送数据包关键路径，涉及 tracepoint:net:net_dev_queue、tracepoint:net:net_dev_xmit 等追踪点，可以借助这些追踪点可进一步计算数据包排队时间等）：
 
 sshd(219966): tracepoint:net:net_dev_queue
-        __dev_queue_xmit+1524
-        dev_queue_xmit+16
-        ip_finish_output2+718
-        __ip_finish_output+191
-        ip_finish_output+54
-        ip_output+112
-        ip_local_out+53
-        __ip_queue_xmit+354
-        ip_queue_xmit+16
-        __tcp_transmit_skb+1407
-        tcp_write_xmit+982
-        __tcp_push_pending_frames+57
-        tcp_push+219
-        tcp_sendmsg_locked+2415
-        tcp_sendmsg+44
-        inet_sendmsg+59
-        sock_write_iter+156
-        new_sync_write+287
-        __vfs_write+38
-        vfs_write+171
-        ksys_write+97
-        __x64_sys_write+26
-        do_syscall_64+71
-        entry_SYSCALL_64_after_hwframe+68
+__dev_queue_xmit+1524
+dev_queue_xmit+16
+ip_finish_output2+718
+__ip_finish_output+191
+ip_finish_output+54
+ip_output+112
+ip_local_out+53
+__ip_queue_xmit+354
+ip_queue_xmit+16
+__tcp_transmit_skb+1407
+tcp_write_xmit+982
+__tcp_push_pending_frames+57
+tcp_push+219
+tcp_sendmsg_locked+2415
+tcp_sendmsg+44
+inet_sendmsg+59
+sock_write_iter+156
+new_sync_write+287
+__vfs_write+38
+vfs_write+171
+ksys_write+97
+__x64_sys_write+26
+do_syscall_64+71
+entry_SYSCALL_64_after_hwframe+68
 
 sshd(219966): tracepoint:net:net_dev_xmit
-        dev_hard_start_xmit+368
-        dev_hard_start_xmit+368
-        sch_direct_xmit+278
-        __dev_queue_xmit+1713
-        dev_queue_xmit+16
-        ip_finish_output2+718
-        ...
-        __x64_sys_write+26
-        do_syscall_64+71
-        entry_SYSCALL_64_after_hwframe+68
+dev_hard_start_xmit+368
+dev_hard_start_xmit+368
+sch_direct_xmit+278
+__dev_queue_xmit+1713
+dev_queue_xmit+16
+ip_finish_output2+718
+...
+__x64_sys_write+26
+do_syscall_64+71
+entry_SYSCALL_64_after_hwframe+68
 
 &gt; 例 2：使用 perf trace 也比较方便：
 
@@ -487,62 +487,62 @@ sshd(219966): tracepoint:net:net_dev_xmit
 
 思考题直接用 bpftrace 内置变量 comm、pid 即可。</p>2022-02-07</li><br/><li><span>janey</span> 👍（1） 💬（1）<p>第二图里怎么没有tracepoint?应该是跟kprobe在同一个层面吧</p>2022-11-25</li><br/><li><span>Geek_9e1ece</span> 👍（0） 💬（1）<p>老师 ntop这个函数返回的是字符串么？为什么我用$sip或$dip去做if判断时候提示我两端的数据类不正确呢。
 
-另外我翻了一下内核的源码，好像没有直接找到ntop（）这个名字的函数，请问还有pton（）这样的函数可以将字符串转成inet数据类型么，以便我在if判断中作为过滤条件。</p>2023-02-03</li><br/><li><span>k8svip</span> 👍（0） 💬（1）<p>老师 如何跟踪下PHP-fpm线程，去处理MySQL 域名解析的过程呢？偶现连不通的情况，回出现udp receive error 包数量增加，tcpdump又捕获不到</p>2022-03-16</li><br/><li><span>从远方过来</span> 👍（0） 💬（1）<p>老师，看了你举的查找SKB的例子，我很好奇要怎么才能快速地从内核相关文档中找到相关的函数呢？  例如：找出关于内存分配的函数，  这个有什么好窍门么？</p>2022-02-24</li><br/><li><span>阿斌斯基</span> 👍（0） 💬（1）<p>ubuntu 18.04 ,snap安装的bpftrace,kernel symbol解析失败
-➜  ~ bpftrace -V
+另外我翻了一下内核的源码，好像没有直接找到ntop（）这个名字的函数，请问还有pton（）这样的函数可以将字符串转成inet数据类型么，以便我在if判断中作为过滤条件。</p>2023-02-03</li><br/><li><span>k8svip</span> 👍（0） 💬（1）<p>老师 如何跟踪下PHP-fpm线程，去处理MySQL 域名解析的过程呢？偶现连不通的情况，回出现udp receive error 包数量增加，tcpdump又捕获不到</p>2022-03-16</li><br/><li><span>从远方过来</span> 👍（0） 💬（1）<p>老师，看了你举的查找SKB的例子，我很好奇要怎么才能快速地从内核相关文档中找到相关的函数呢？ 例如：找出关于内存分配的函数， 这个有什么好窍门么？</p>2022-02-24</li><br/><li><span>阿斌斯基</span> 👍（0） 💬（1）<p>ubuntu 18.04 ,snap安装的bpftrace,kernel symbol解析失败
+➜ ~ bpftrace -V
 bpftrace v0.13.0
-➜  ~ echo $BPFTRACE_VMLINUX
+➜ ~ echo $BPFTRACE_VMLINUX
 &#47;usr&#47;lib&#47;debug&#47;boot&#47;vmlinux-5.4.0-96-generic
-➜  ~ uname -a              
+➜ ~ uname -a  
 Linux max-machine 5.4.0-96-generic #109~18.04.1-Ubuntu SMP Thu Jan 13 15:06:26 UTC 2022 x86_64 x86_64 x86_64 GNU&#47;Linux
-➜  ~                       
+➜ ~  
 sudo bpftrace -e &#39;kprobe:kfree_skb &#47;comm==&quot;curl&quot;&#47; {printf(&quot;kstack: %s\n&quot;, kstack);}&#39;
-[sudo] password for max: 
+[sudo] password for max:
 Attaching 1 probe...
-kstack: 
-        0xffffffff9091b941
-        0xffffffff90a5f5f7
-        0xffffffff90914e41
-        0xffffffff90a5eae9
-        0xffffffff909f4009
-        0xffffffff90a351c0
-        0xffffffff9090b8e2
-        0xffffffff9090b975
-        0xffffffff902e0276
-        0xffffffff902e047e
-        0xffffffff900c493d
-        0xffffffff90003ec9
-        0xffffffff90004320
-        0xffffffff90c0008c
+kstack:
+0xffffffff9091b941
+0xffffffff90a5f5f7
+0xffffffff90914e41
+0xffffffff90a5eae9
+0xffffffff909f4009
+0xffffffff90a351c0
+0xffffffff9090b8e2
+0xffffffff9090b975
+0xffffffff902e0276
+0xffffffff902e047e
+0xffffffff900c493d
+0xffffffff90003ec9
+0xffffffff90004320
+0xffffffff90c0008c
 
-kstack: 
-        0xffffffff9091b941
-        0xffffffff90a5f5f7
-        0xffffffff90914e41
-        0xffffffff90a5eae9
-        0xffffffff909f4009
-        0xffffffff90a351c0
-        0xffffffff9090b8e2
-        0xffffffff9090b975
-        0xffffffff902e0276
-        0xffffffff902e047e
-        0xffffffff900c493d
-        0xffffffff90003ec9
-        0xffffffff90004320
-        0xffffffff90c0008c
+kstack:
+0xffffffff9091b941
+0xffffffff90a5f5f7
+0xffffffff90914e41
+0xffffffff90a5eae9
+0xffffffff909f4009
+0xffffffff90a351c0
+0xffffffff9090b8e2
+0xffffffff9090b975
+0xffffffff902e0276
+0xffffffff902e047e
+0xffffffff900c493d
+0xffffffff90003ec9
+0xffffffff90004320
+0xffffffff90c0008c
 
-kstack: 
-        0xffffffff9091b941
-        0xffffffff9090fad3
-        0xffffffff9090fb6a
-        0xffffffff90004207
-        0xffffffff90c0008c
+kstack:
+0xffffffff9091b941
+0xffffffff9090fad3
+0xffffffff9090fb6a
+0xffffffff90004207
+0xffffffff90c0008c
 
-kstack: 
-        0xffffffff9091b941
-        0xffffffff9090fad3
-        0xffffffff9090fb6a
-        0xffffffff90004207
-        0xffffffff90c0008c
+kstack:
+0xffffffff9091b941
+0xffffffff9090fad3
+0xffffffff9090fb6a
+0xffffffff90004207
+0xffffffff90c0008c
 
 </p>2022-02-07</li><br/><li><span>为了维护世界和平</span> 👍（3） 💬（0）<p>github上的程序 执行 段错误
 #bpftrace dropwatch.bt
@@ -580,18 +580,18 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 binutils-x86-64-linux-gnu&#47;jammy-updates,jammy-security,now 2.38-4ubuntu2.1 amd64 [installed,automatic]
 linux-base&#47;jammy,now 4.5ubuntu9 all [installed,automatic]
-linux-buildinfo-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 amd64 [installed]
+linux-buildinfo-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 amd64 [installed]
 linux-firmware&#47;jammy-security,now 20220329.git681281e4-0ubuntu3.9 all [installed,upgradable to: 20220329.git681281e4-0ubuntu3.10]
-linux-headers-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 amd64 [installed]
-linux-hwe-5.19-headers-5.19.0-35&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 all [installed,automatic]
-linux-hwe-5.19-tools-5.19.0-35&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 amd64 [installed,automatic]
-linux-image-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 amd64 [installed]
+linux-headers-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 amd64 [installed]
+linux-hwe-5.19-headers-5.19.0-35&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 all [installed,automatic]
+linux-hwe-5.19-tools-5.19.0-35&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 amd64 [installed,automatic]
+linux-image-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 amd64 [installed]
 linux-libc-dev&#47;jammy-updates,jammy-security,now 5.15.0-67.74 amd64 [installed,automatic]
-linux-modules-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 amd64 [installed,automatic]
+linux-modules-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 amd64 [installed,automatic]
 linux-sound-base&#47;jammy,now 1.0.25+dfsg-0ubuntu7 all [installed,automatic]
-linux-source-5.19.0&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 all [installed]
-linux-tools-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~22.04.1 amd64 [installed]
-linux-tools-common&#47;jammy-updates,jammy-security,now 5.15.0-67.74 all [installed,automatic]</p>2023-03-13</li><br/><li><span>linker</span> 👍（0） 💬（0）<p>$ cat &#47;etc&#47;os-release               
+linux-source-5.19.0&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 all [installed]
+linux-tools-5.19.0-35-generic&#47;jammy-updates,jammy-security,now 5.19.0-35.36~~22.04.1 amd64 [installed]
+linux-tools-common&#47;jammy-updates,jammy-security,now 5.15.0-67.74 all [installed,automatic]</p>2023-03-13</li><br/><li><span>linker</span> 👍（0） 💬（0）<p>$ cat &#47;etc&#47;os-release  
 PRETTY_NAME=&quot;Ubuntu 22.04.1 LTS&quot;
 NAME=&quot;Ubuntu&quot;
 VERSION_ID=&quot;22.04&quot;

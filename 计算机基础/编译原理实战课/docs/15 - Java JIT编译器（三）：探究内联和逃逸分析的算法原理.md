@@ -64,7 +64,7 @@ public int atLeastTen(int a){
     if (a < 10)
         return 10;
     else
-        return a;    
+        return a;
 }
 ```
 
@@ -117,7 +117,7 @@ public class Person{
     private float weight;
 
     public Person(int age){
-       this.age = age;     
+       this.age = age;
     }
 
     //返回年龄段
@@ -125,8 +125,8 @@ public class Person{
         if (age < 20)
             return 1;
         else
-            return 2;        
-    } 
+            return 2;
+    }
 
     public void setWeight(float weight){
         this.weight = weight;
@@ -268,6 +268,7 @@ while(true){
 1. 多态内联：[Inlining of Virtual Methods](http://extras.springer.com/2000/978-3-540-67660-7/papers/1628/16280258.pdf)。
 2. 逃逸分析：[Escape Analysis for Java](https://www.cc.gatech.edu/~harrold/6340/cs6340_fall2009/Readings/choi99escape.pdf)。
 3. 部分逃逸分析：[Partial Escape Analysis and Scalar Replacement for Java](http://www.ssw.uni-linz.ac.at/Research/Papers/Stadler14/Stadler2014-CGO-PEA.pdf)。
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>😐饲养员小张😐</span> 👍（5） 💬（2）<p>老师，能讲讲不同语言混编的时候，编译器到底会怎么做么？ 最近在做swift和objc的混编的事情，有点没搞明白，如果主工程是objc引入swift文件，和主工程是swift引入objc文件有什么区别么？ 还有两种语言是怎么做到识别对方的呢？像编辑器的代码补全和报错都是怎么识别的呢？毕竟这时候还没有真正的编译啊！ 感谢老师</p>2020-07-07</li><br/><li><span>chris</span> 👍（2） 💬（1）<p>请教老师图1图2中的黑线和绿线是什么意思</p>2020-07-08</li><br/><li><span>易昊</span> 👍（0） 💬（1）<p>“它的具体做法是，在运行时，编译器会统计在调用多态方法的时候，到底用了哪几个实现。”这个是否有一定程度限制条件，比如我的程序运行在别人的虚拟机上，应该就统计不到了吧？</p>2020-07-07</li><br/><li><span>lion_fly</span> 👍（1） 💬（0）<p>多态内联：Inlining of Virtual Methods。
 老师这篇论文的连接失效了</p>2021-03-12</li><br/><li><span>jack123</span> 👍（0） 💬（2）<p>内联的第二个代码

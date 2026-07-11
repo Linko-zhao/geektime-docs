@@ -51,17 +51,17 @@ type Bird struct{}
 
 func (Bird) Quack() {
     println("bird quack!")
-}                         
-                          
+}
+
 func AnimalQuackInForest(a QuackableAnimal) {
-    a.Quack()             
-}                         
-                          
-func main() {             
+    a.Quack()
+}
+
+func main() {
     animals := []QuackableAnimal{new(Duck), new(Dog), new(Bird)}
     for _, animal := range animals {
         AnimalQuackInForest(animal)
-    }  
+    }
 }
 ```
 
@@ -210,7 +210,7 @@ func main() {
         n: 17,
         s: "hello, interface",
     }
-    
+
     var ei interface{} = t // Go运行时使用eface结构表示ei
 }
 ```
@@ -317,19 +317,19 @@ i = err: true
       var eif1 interface{} // 空接口类型
       var eif2 interface{} // 空接口类型
       var n, m int = 17, 18
-  
+
       eif1 = n
       eif2 = m
 
       println("eif1:", eif1)
       println("eif2:", eif2)
       println("eif1 = eif2:", eif1 == eif2) // false
-  
+
       eif2 = 17
       println("eif1:", eif1)
       println("eif2:", eif2)
       println("eif1 = eif2:", eif1 == eif2) // true
- 
+
       eif2 = int64(17)
       println("eif1:", eif1)
       println("eif2:", eif2)
@@ -368,11 +368,11 @@ eif1 = eif2: false
 ```plain
 type T int
 
-func (t T) Error() string { 
+func (t T) Error() string {
     return "bad error"
 }
 
-func printNonEmptyInterface() { 
+func printNonEmptyInterface() {
     var err1 error // 非空接口类型
     var err2 error // 非空接口类型
     err1 = (*T)(nil)
@@ -389,7 +389,7 @@ func printNonEmptyInterface() {
     println("err1:", err1)
     println("err2:", err2)
     println("err1 = err2:", err1 == err2)
-}   
+}
 ```
 
 这个例子的运行输出结果如下：
@@ -462,7 +462,7 @@ eif = err: false
 不过，这里要注意，由于runtime中的eface、iface，或者它们的组成可能会随着Go版本的变化发生变化，因此这个方法不具备跨版本兼容性。也就是说，基于Go 1.17版本复制的代码，可能仅适用于使用Go 1.17版本编译。这里我们就以Go 1.17版本为例看看：
 
 ```plain
-// dumpinterface.go 
+// dumpinterface.go
 type eface struct {
     _type *_type
     data  unsafe.Pointer
@@ -615,7 +615,7 @@ func main() {
     println("eif:", eif)
     println("err:", err)
     println("eif = err:", eif == err)
-    
+
     dumpEface(eif)
     dumpItabOfIface(unsafe.Pointer(&err))
     dumpDataOfIface(err)
@@ -661,15 +661,15 @@ iface: {tab:0x10eb690 data:0x10e9b30}
       n int
       s string
   }
-  
+
   func (T) M1() {}
   func (T) M2() {}
-  
+
   type NonEmptyInterface interface {
       M1()
       M2()
   }
-  
+
   func main() {
       var t = T{
           n: 17,
@@ -677,7 +677,7 @@ iface: {tab:0x10eb690 data:0x10e9b30}
       }
       var ei interface{}
       ei = t
- 
+
       var i NonEmptyInterface
       i = t
       fmt.Println(ei)
@@ -820,20 +820,21 @@ if e, ok := err.(*MyError); ok &amp;&amp; e != nil {
     return
 }
 
-PS：Go 的“接口”在编程中需要特别注意，必须搞清楚接口类型变量在运行时的表示，以避免踩坑！！！</p>2022-01-05</li><br/><li><span>return</span> 👍（18） 💬（1）<p>老师讲的太好， 这一篇 知识密度相当大啊， 
+PS：Go 的“接口”在编程中需要特别注意，必须搞清楚接口类型变量在运行时的表示，以避免踩坑！！！</p>2022-01-05</li><br/><li><span>return</span> 👍（18） 💬（1）<p>老师讲的太好， 这一篇 知识密度相当大啊，
 就这一篇就值专栏的价格了。
 感谢老师如此用心的输出。</p>2021-12-29</li><br/><li><span>Geralt</span> 👍（16） 💬（3）<p>修改方法:
-1. 把returnsError()里面p的类型改为error
-2. 删除p，直接return &amp;ErrBad或者nil</p>2021-12-29</li><br/><li><span>Slowdive</span> 👍（12） 💬（1）<p>老师， 请问这里发生装箱了吗？ 返回类型是error， 是一个接口， p是*MyError， p的方法列表覆盖了error这个接口， 所以是可以赋值给error类型的变量。 
-这个过程发生了隐式转换，赋值给接口类型，做装箱创建iface， 
-p != nil就成了 (&amp;tab, 0x0) != (0x0, 0x0)
 
-func returnsError() error {    
-    var p *MyError = nil    
-    if bad() {
-        p = &amp;ErrBad
-    }
-    return p
+1. 把returnsError()里面p的类型改为error
+2. 删除p，直接return &amp;ErrBad或者nil</p>2021-12-29</li><br/><li><span>Slowdive</span> 👍（12） 💬（1）<p>老师， 请问这里发生装箱了吗？ 返回类型是error， 是一个接口， p是*MyError， p的方法列表覆盖了error这个接口， 所以是可以赋值给error类型的变量。
+   这个过程发生了隐式转换，赋值给接口类型，做装箱创建iface，
+   p != nil就成了 (&amp;tab, 0x0) != (0x0, 0x0)
+
+func returnsError() error {  
+var p *MyError = nil  
+if bad() {
+p = &amp;ErrBad
+}
+return p
 }
 
 这样理解对吗？</p>2022-04-20</li><br/><li><span>aoe</span> 👍（10） 💬（2）<p>原来装箱是这样：将任意类型赋值给一个接口类型变量就是装箱操作。
@@ -841,40 +842,40 @@ func returnsError() error {
 err: (0x10eb690,0x10e9b30)
 eif = err: true
 eface: {_type:0x10b38c0 data:0x10e9b30}
-   _type: {size:8 ptrdata:0 hash:1156555957 tflag:15 align:8 fieldAlign:8 kind:2 equal:0x10032e0 gcdata:0x10e9a60 str:4946 ptrToThis:58496}
-   data: bad error
+_type: {size:8 ptrdata:0 hash:1156555957 tflag:15 align:8 fieldAlign:8 kind:2 equal:0x10032e0 gcdata:0x10e9a60 str:4946 ptrToThis:58496}
+data: bad error
 
 iface: {tab:0x10eb690 data:0x10e9b30}
-   itab: {inter:0x10b5e20 _type:0x10b38c0 hash:1156555957 _:[0 0 0 0] fun:[17454976]}
-     inter: {typ:{size:16 ptrdata:16 hash:235953867 tflag:7 align:8 fieldAlign:8 kind:20 equal:0x10034c0 gcdata:0x10d2418 str:3666 ptrToThis:26848} pkgpath:{bytes:&lt;nil&gt;} mhdr:[{name:2592 ityp:43520}]}
-     _type: {size:8 ptrdata:0 hash:1156555957 tflag:15 align:8 fieldAlign:8 kind:2 equal:0x10032e0 gcdata:0x10e9a60 str:4946 ptrToThis:58496}
-     fun: [0x10a5780(17454976),]
-   data: bad error 请问为什么data会是bad error不应该是5吗</p>2022-07-04</li><br/><li><span>Calvin</span> 👍（6） 💬（1）<p>Go 指针这块，感觉可以单独抽出一讲来讲下，并且结合unsafe 讲解，不知道大白老师能否满足大家的愿望呢？😂</p>2022-01-05</li><br/><li><span>郑泽洲</span> 👍（5） 💬（3）<p>请教老师，接口类型装箱过程为什么普遍要把原来的值复制一份到data？（除了staticuint64s等特例）直接用原来的值不行吗，还能提升点性能</p>2022-02-26</li><br/><li><span>在下宝龙、</span> 👍（5） 💬（3）<p>老师您好，在   eif2 = 17 这个操作后，输出后的data  ,0xc00007ef48 和0x10eb3d0 不相等呀，为甚么说他们是一样的
+itab: {inter:0x10b5e20 _type:0x10b38c0 hash:1156555957 _:[0 0 0 0] fun:[17454976]}
+inter: {typ:{size:16 ptrdata:16 hash:235953867 tflag:7 align:8 fieldAlign:8 kind:20 equal:0x10034c0 gcdata:0x10d2418 str:3666 ptrToThis:26848} pkgpath:{bytes:&lt;nil&gt;} mhdr:[{name:2592 ityp:43520}]}
+_type: {size:8 ptrdata:0 hash:1156555957 tflag:15 align:8 fieldAlign:8 kind:2 equal:0x10032e0 gcdata:0x10e9a60 str:4946 ptrToThis:58496}
+fun: [0x10a5780(17454976),]
+data: bad error 请问为什么data会是bad error不应该是5吗</p>2022-07-04</li><br/><li><span>Calvin</span> 👍（6） 💬（1）<p>Go 指针这块，感觉可以单独抽出一讲来讲下，并且结合unsafe 讲解，不知道大白老师能否满足大家的愿望呢？😂</p>2022-01-05</li><br/><li><span>郑泽洲</span> 👍（5） 💬（3）<p>请教老师，接口类型装箱过程为什么普遍要把原来的值复制一份到data？（除了staticuint64s等特例）直接用原来的值不行吗，还能提升点性能</p>2022-02-26</li><br/><li><span>在下宝龙、</span> 👍（5） 💬（3）<p>老师您好，在 eif2 = 17 这个操作后，输出后的data ,0xc00007ef48 和0x10eb3d0 不相等呀，为甚么说他们是一样的
 eif1: (0x10ac580,0xc00007ef48)
 eif2: (0x10ac580,0x10eb3d0)</p>2021-12-29</li><br/><li><span>lesserror</span> 👍（3） 💬（2）<p>大白老师的这一节干货很多，读的意犹未尽。有几个疑惑点，麻烦老师解忧。
 
 1. 文中类似：“_type” 这种命名，前面加下划线，这种有什么含义呢？
 
-2. 文中关于打印两类接口内部详细信息的代码中，运用了大量的 * 还有 &amp; 再加上  unsafe.Pointer 的使用，看起来会非常困惑，希望老师后面能讲一讲Go的指针吧。刚从动态语言转过来，确实应该好好理解一下。不然后面写出来的代码一定会有很多潜在的风险。</p>2021-12-31</li><br/><li><span>lesserror</span> 👍（2） 💬（1）<p>tony bai 老师，翻看评论留言中，发现有一处你是这样写的：
+2. 文中关于打印两类接口内部详细信息的代码中，运用了大量的 * 还有 &amp; 再加上 unsafe.Pointer 的使用，看起来会非常困惑，希望老师后面能讲一讲Go的指针吧。刚从动态语言转过来，确实应该好好理解一下。不然后面写出来的代码一定会有很多潜在的风险。</p>2021-12-31</li><br/><li><span>lesserror</span> 👍（2） 💬（1）<p>tony bai 老师，翻看评论留言中，发现有一处你是这样写的：
 
 var a int = 6
 var i interface{} = a
 i.(int) = 7
 
-通过前面的知识，i.(int)  是类型断言，通常是 v，ok := i.(int)，这里的 i.(int) = 7 该怎么理解呢？</p>2023-06-22</li><br/><li><span>wu526</span> 👍（2） 💬（2）<p>白老师我将 returnsErro()改为如下的方式,
+通过前面的知识，i.(int) 是类型断言，通常是 v，ok := i.(int)，这里的 i.(int) = 7 该怎么理解呢？</p>2023-06-22</li><br/><li><span>wu526</span> 👍（2） 💬（2）<p>白老师我将 returnsErro()改为如下的方式,
 func returnsError() error {
-	var p MyError
-	return p
+var p MyError
+return p
 }
 然后在main()中使用
 err := returnsError()
 if err != nil {
-	fmt.Printf(&quot;error :%+v\n&quot;, err)  &#47;&#47; 输出: error :%!v(PANIC=Error method: runtime error: invalid memory address or nil pointer dereferenc
+fmt.Printf(&quot;error :%+v\n&quot;, err) &#47;&#47; 输出: error :%!v(PANIC=Error method: runtime error: invalid memory address or nil pointer dereferenc
 }
 
 如果在MyError 显式实现 error的Error()函数, 就不会报错了, 即:
 func (MyError) Error() string {
-	return &quot;bad things happend&quot;
+return &quot;bad things happend&quot;
 }
 
 我用 dumpItabOfIface(unsafe.Pointer(&amp;err)) 查看一下输出, 发现不管是否显式实现 MyError 中的 Error(),

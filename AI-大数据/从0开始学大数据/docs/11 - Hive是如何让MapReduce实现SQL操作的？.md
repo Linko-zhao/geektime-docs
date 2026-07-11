@@ -111,40 +111,39 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.{SparkConf, SparkContext}
 
 &#47;**
-  * 使用Spark Core的算子实现简单的join操作
+
+- 使用Spark Core的算子实现简单的join操作
   *&#47;
-object JoinBySpark {
+  object JoinBySpark {
   def main(args: Array[String]): Unit = {
-    val conf = new SparkConf()
-      .setAppName(JoinBySpark.getClass.getSimpleName)
-      .setMaster(&quot;local&quot;)
-    Logger.getLogger(&quot;org.apache.spark&quot;).setLevel(Level.OFF)
-    Logger.getLogger(&quot;org.apache.hadoop&quot;).setLevel(Level.OFF)
+  val conf = new SparkConf()
+  .setAppName(JoinBySpark.getClass.getSimpleName)
+  .setMaster(&quot;local&quot;)
+  Logger.getLogger(&quot;org.apache.spark&quot;).setLevel(Level.OFF)
+  Logger.getLogger(&quot;org.apache.hadoop&quot;).setLevel(Level.OFF)
 
-    val sc = new SparkContext(conf)
-    &#47;&#47;通过文本文件创建RDD
-    val page_viewRDD = sc.textFile(&quot;file:&#47;&#47;&#47;e:&#47;page_view.txt&quot;)
-    val pv_usersRDD = sc.textFile(&quot;file:&#47;&#47;&#47;e:&#47;pv_users.txt&quot;)
-    &#47;&#47;提取需要的字段，组合成形如（userid,pageid）的RDD
-    val userid_pageidRDD = page_viewRDD.map(_.split(&quot;,&quot;)).map(viewData =&gt; (viewData(1), viewData(0)))
-    &#47;&#47;提取需要的字段，组合成形如（userid,age）的RDD
-    val userid_ageRDD = pv_usersRDD.map(_.split(&quot;,&quot;)).map(userData =&gt; (userData(0), userData(1)))
-    &#47;&#47;对上述的两个RDD执行Join操作，形成形如(userid,(pageid,age))的RDD
-    val userid_pageid_ageRDD = userid_pageidRDD.join(userid_ageRDD)
-    userid_pageid_ageRDD.collect().foreach(println)
-    &#47;&#47;对join操作形成的RDD提取pageid、age字段
-    val joinRes = userid_pageid_ageRDD.map(upaData =&gt; (upaData._2._1, upaData._2._2))
-    &#47;&#47;打印输出结果
-    &#47;&#47;    (1,32)
-    &#47;&#47;    (1,25)
-    &#47;&#47;    (2,25)
-    joinRes.collect().foreach(println)
+  val sc = new SparkContext(conf)
+  &#47;&#47;通过文本文件创建RDD
+  val page_viewRDD = sc.textFile(&quot;file:&#47;&#47;&#47;e:&#47;page_view.txt&quot;)
+  val pv_usersRDD = sc.textFile(&quot;file:&#47;&#47;&#47;e:&#47;pv_users.txt&quot;)
+  &#47;&#47;提取需要的字段，组合成形如（userid,pageid）的RDD
+  val userid_pageidRDD = page_viewRDD.map(_.split(&quot;,&quot;)).map(viewData =&gt; (viewData(1), viewData(0)))
+  &#47;&#47;提取需要的字段，组合成形如（userid,age）的RDD
+  val userid_ageRDD = pv_usersRDD.map(_.split(&quot;,&quot;)).map(userData =&gt; (userData(0), userData(1)))
+  &#47;&#47;对上述的两个RDD执行Join操作，形成形如(userid,(pageid,age))的RDD
+  val userid_pageid_ageRDD = userid_pageidRDD.join(userid_ageRDD)
+  userid_pageid_ageRDD.collect().foreach(println)
+  &#47;&#47;对join操作形成的RDD提取pageid、age字段
+  val joinRes = userid_pageid_ageRDD.map(upaData =&gt; (upaData._2._1, upaData._2._2))
+  &#47;&#47;打印输出结果
+  &#47;&#47; (1,32)
+  &#47;&#47; (1,25)
+  &#47;&#47; (2,25)
+  joinRes.collect().foreach(println)
 
+}
 
-  }
-
-
-}</p>2018-11-22</li><br/><li><span>不似旧日</span> 👍（7） 💬（3）<p>大数据框架可以执行sql,能执行sql的框架有hadoop的hive  spark的sparkSQL,sparkSQL的执行速度要快于hive,
+}</p>2018-11-22</li><br/><li><span>不似旧日</span> 👍（7） 💬（3）<p>大数据框架可以执行sql,能执行sql的框架有hadoop的hive spark的sparkSQL,sparkSQL的执行速度要快于hive,
 由于大数据框架能执行sql那么是不是可以把这个框架当做数据库来看待?java就能调用大数据服务操作数据了?</p>2019-01-19</li><br/><li><span>shawn</span> 👍（5） 💬（1）<p>李老师，“生成这些函数的 DAG（有向无环图）”，为什么是有向无环图，您可以说说原因嘛。
 
 </p>2018-11-22</li><br/><li><span>rains</span> 👍（4） 💬（1）<p>拍照软件和图像编辑美化软件结合起来，变成萌拍，美颜相机</p>2018-11-22</li><br/><li><span>一</span> 👍（3） 💬（1）<p>“在我们工作中也可以借鉴一下这种将两种技术嫁接到一起产生极大应用创新性的手段，说不定下一个做出类似Hive这种具有巨大应用价值的产品的人就是你！”老师的这句话好振奋人心啊！</p>2019-04-18</li><br/><li><span>yang</span> 👍（3） 💬（1）<p>智能手机就是嘛！ 以前的手机只能打电话，现在可以拍照、打电话、录音，也可以远程操控家电……等等 把操控其他事物的技术嫁接到手机上……</p>2018-11-23</li><br/><li><span>Flychen</span> 👍（1） 💬（1）<p>小白一个，想体验下hive中跑SQL，有什么在线环境吗</p>2021-08-06</li><br/><li><span>李二木</span> 👍（1） 💬（1）<p>子弹短信，智能音响也算吧。</p>2018-11-22</li><br/><li><span>有点意思</span> 👍（0） 💬（1）<p>老师好
@@ -154,13 +153,13 @@ SELECT pv.pageid, u.age FROM page_view pv JOIN users u ON (pv.userid = u.userid)
 
 Number of reduce tasks is set to 0 since there&#39;s no reduce operator
 Hadoop job information for Stage-3: number of mappers: 1; number of reducers: 0
-2018-12-15 17:21:21,269 Stage-3 map = 0%,  reduce = 0%
-2018-12-15 17:21:26,382 Stage-3 map = 100%,  reduce = 0%
+2018-12-15 17:21:21,269 Stage-3 map = 0%, reduce = 0%
+2018-12-15 17:21:26,382 Stage-3 map = 100%, reduce = 0%
 
 Total MapReduce CPU Time Spent: 0 msec
 OK
-1	25
-2	25
-1	32
+1 25
+2 25
+1 32
 Time taken: 26.01 seconds, Fetched: 3 row(s)</p>2018-12-15</li><br/><li><span>诺侠</span> 👍（57） 💬（0）<p>jupyter notebook应该算是一个。</p>2018-11-22</li><br/><li><span>李</span> 👍（45） 💬（8）<p>此教程适合有一定大数据基础的人，如果是新人，那么肯定是懵懂的</p>2018-11-22</li><br/>
 </ul>

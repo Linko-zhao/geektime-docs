@@ -595,7 +595,7 @@ pub trait Generator<R = ()> {
     type Yield;
     type Return;
     fn resume(
-        self: Pin<&mut Self>, 
+        self: Pin<&mut Self>,
         arg: R
     ) -> GeneratorState<Self::Yield, Self::Return>;
 }

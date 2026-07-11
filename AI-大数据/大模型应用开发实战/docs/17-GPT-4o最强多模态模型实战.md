@@ -66,13 +66,13 @@ GPT-4o中的 “o”，英文是omni。它是一个来自拉丁语的前缀，�
 如果你是用Linux，比如Ubuntu，那么直接安装即可。
 
 ```plain
-sudo apt install ffmpeg 
+sudo apt install ffmpeg
 ```
 
 除了FFmpeg 之外，还需要安装 opencv-python 和 moviepy。
 
 ```plain
-pip install opencv-python 
+pip install opencv-python
 pip install moviepy
 ```
 

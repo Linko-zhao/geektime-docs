@@ -14,10 +14,10 @@ Android 6.0及以上的系统，需要动态申请权限。
 
 ```plain
 if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
-  //没有权限就在这里申请 
-  ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_OK); 
-}else { 
-  //说明已经获取到摄像头权限了 
+  //没有权限就在这里申请
+  ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_OK);
+}else {
+  //说明已经获取到摄像头权限了
 }
 ```
 
@@ -334,7 +334,7 @@ GLfloat textureCoordNoRotation[8] = {
 Q1：老师用的AS是什么版本？
 我目前安装了两个版本，一个是AS3.5，另外一个是AS2021(免安装版本)。如果我的版本和老师的不同，可能会出很多问题。最好保持AS版本一样，避免不必要的问题。
 
-Q2：FFmpeg具有“编辑”音频的能力吗？ 
+Q2：FFmpeg具有“编辑”音频的能力吗？
 在win10下，我做过这样的操作，一个3分钟的长音频，一个5秒的短音频，用FFmpeg可以将两个音频合成为一个音频，播放时，前五秒钟，同时听到两个音频的声音，五秒之后，只有长音频的声音。进一步地，通过设置参数，可以让短音频重复播放，合成后的效果是：在长音频文件的播放过程中，短音频文件不停地重复播放，同时听到两个音频文件的声音。
 这算是“音频”编辑的能力吗？
 在win10下面可以合成声音，在移动端也能实现“音频合成”的功能吗？</p>2022-08-26</li><br/><li><span>北国风光</span> 👍（0） 💬（0）<p>请问项目整体代码在哪里？</p>2023-04-27</li><br/>

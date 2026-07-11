@@ -119,7 +119,7 @@ struct Post {
 fn main() {
     let opts: Opts = Opts::parse();
     println!("{:?}", opts);
-} 
+}
 ```
 
 代码中用到了 clap 提供的宏来让 CLI 的定义变得简单，这个宏能够生成一些额外的代码帮我们处理 CLI 的解析。通过 clap ，我们只需要**先用一个数据结构 T 描述 CLI 都会捕获什么数据，之后通过 T::parse() 就可以解析出各种命令行参数了**。parse() 函数我们并没有定义，它是 #\[derive(Clap)] 自动生成的。
@@ -570,39 +570,39 @@ use std::str::FromStr;
 &#47;&#47;&#47; A naive httpie implementation wite Rust, can you imagine how easy it is?
 #[derive(Parser, Debug)]
 struct Opts {
-    #[clap(subcommand)]
-    subcmd: SubCommand,
+#[clap(subcommand)]
+subcmd: SubCommand,
 }
 
 &#47;&#47;&#47; 子命令分别对应不同的 HTTP 方法，暂时只支持 GET &#47; POST 方法
 #[derive(Parser, Debug)]
 enum SubCommand {
-    Get(Get),
-    Post(Post),
+Get(Get),
+Post(Post),
 }
 
 #[derive(Parser, Debug)]
 struct Get {
-    #[arg(value_parser=parse_url)]
-    url: String,
+#[arg(value_parser=parse_url)]
+url: String,
 }
 
 #[derive(Parser, Debug)]
 struct Post {
-    #[arg(value_parser=parse_url)]
-    url: String,
-    #[arg(value_parser=parse_kv_pair)]
-    body: Vec&lt;KvPair&gt;,
+#[arg(value_parser=parse_url)]
+url: String,
+#[arg(value_parser=parse_kv_pair)]
+body: Vec&lt;KvPair&gt;,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 struct KvPair {
-    k: String,
-    v: String,
+k: String,
+v: String,
 }
 
 impl FromStr for KvPair {
-    type Err = anyhow::Error;
+type Err = anyhow::Error;
 
     fn from_str(s: &amp;str) -&gt; Result&lt;Self, Self::Err&gt; {
         &#47;&#47; 使用 = 进行 split，这会得到一个迭代器
@@ -616,23 +616,26 @@ impl FromStr for KvPair {
             v: (split.next().ok_or_else(err)?).to_string(),
         })
     }
+
 }
 
 fn parse_kv_pair(s: &amp;str) -&gt; Result&lt;KvPair&gt; {
-    s.parse()
+s.parse()
 }
 
 fn parse_url(s: &amp;str) -&gt; Result&lt;String&gt; {
-    &#47;&#47; check url
-    let _url: Url = s.parse()?;
+&#47;&#47; check url
+let _url: Url = s.parse()?;
 
     Ok(s.into())
+
 }
 
 fn main() {
-    let opts = Opts::parse();
+let opts = Opts::parse();
 
     println!(&quot;{:?}&quot;, opts);
+
 }
 </p>2023-01-28</li><br/><li><span>Faith信</span> 👍（2） 💬（1）<p>rustc 1.58.1 
 不能编译的参考老师github代码依赖修改</p>2022-07-20</li><br/><li><span>linuxfish</span> 👍（5） 💬（3）<p>遇到一个问题，提醒下刚开始学的同学：
@@ -647,29 +650,29 @@ cargo 在安装依赖的时候会自动使用【最新】的 Pre-releases 版本
 
 参考：https:&#47;&#47;doc.rust-lang.org&#47;cargo&#47;reference&#47;resolver.html#pre-releases</p>2021-12-29</li><br/><li><span>Quincy</span> 👍（16） 💬（1）<p>&#47;&#47;&#47; 打印服务器返回的 HTTP body
 fn print_body(m: Option&lt;Mime&gt;, body: &amp;String) {
-    match m {
-        &#47;&#47; 对于 &quot;application&#47;json&quot; 我们 pretty print
-        Some(v) if v == mime::APPLICATION_JSON =&gt; {
-            &#47;&#47; println!(&quot;{}&quot;, jsonxf::pretty_print(body).unwrap().cyan())
-            print_syntect(body);
-        }
-        &#47;&#47; 其他 mime type，我们就直接输出
-        _ =&gt; println!(&quot;{}&quot;, body),
-    }
+match m {
+&#47;&#47; 对于 &quot;application&#47;json&quot; 我们 pretty print
+Some(v) if v == mime::APPLICATION_JSON =&gt; {
+&#47;&#47; println!(&quot;{}&quot;, jsonxf::pretty_print(body).unwrap().cyan())
+print_syntect(body);
+}
+&#47;&#47; 其他 mime type，我们就直接输出
+_ =&gt; println!(&quot;{}&quot;, body),
+}
 }
 
 fn print_syntect(s: &amp;str) {
-    &#47;&#47; Load these once at the start of your program
-    let ps = SyntaxSet::load_defaults_newlines();
-    let ts = ThemeSet::load_defaults();
-    let syntax = ps.find_syntax_by_extension(&quot;json&quot;).unwrap();
-    let mut h = HighlightLines::new(syntax, &amp;ts.themes[&quot;base16-ocean.dark&quot;]);
-    for line in LinesWithEndings::from(s) {
-        let ranges: Vec&lt;(Style, &amp;str)&gt; = h.highlight(line, &amp;ps);
-        let escaped = as_24_bit_terminal_escaped(&amp;ranges[..], true);
-        println!(&quot;{}&quot;, escaped);
-    }
-}</p>2021-08-31</li><br/><li><span>王槐铤</span> 👍（9） 💬（2）<p>环境 
+&#47;&#47; Load these once at the start of your program
+let ps = SyntaxSet::load_defaults_newlines();
+let ts = ThemeSet::load_defaults();
+let syntax = ps.find_syntax_by_extension(&quot;json&quot;).unwrap();
+let mut h = HighlightLines::new(syntax, &amp;ts.themes[&quot;base16-ocean.dark&quot;]);
+for line in LinesWithEndings::from(s) {
+let ranges: Vec&lt;(Style, &amp;str)&gt; = h.highlight(line, &amp;ps);
+let escaped = as_24_bit_terminal_escaped(&amp;ranges[..], true);
+println!(&quot;{}&quot;, escaped);
+}
+}</p>2021-08-31</li><br/><li><span>王槐铤</span> 👍（9） 💬（2）<p>环境
 cargo --version
 cargo 1.52.0 (69767412a 2021-04-21)
 
@@ -679,14 +682,14 @@ rustc 1.52.1 (9bc8c42bb 2021-05-09)
 编译程序代码 clap 库部分报
 
 8 | #![doc = include_str!(&quot;..&#47;README.md&quot;)]
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-把 Cargo.toml 里 clap 依赖 
+把 Cargo.toml 里 clap 依赖
 clap = &quot;=3.0.0-beta.4&quot;
-改为 
-clap = &quot;=3.0.0-beta.2&quot; 
+改为
+clap = &quot;=3.0.0-beta.2&quot;
 clap_derive = &quot;=3.0.0-beta.2&quot;
-即可通过 
+即可通过
 
 具体原因 详见 https:&#47;&#47;github.com&#47;dfinity&#47;agent-rs&#47;pull&#47;260</p>2021-08-30</li><br/><li><span>Tyr</span> 👍（21） 💬（10）<p>这堂课的源代码可以在这里找到：https:&#47;&#47;github.com&#47;tyrchen&#47;geektime-rust&#47;tree&#47;master&#47;04_httpie</p>2021-08-30</li><br/><li><span>qinsi</span> 👍（54） 💬（3）<p>习惯了 npm install 的可以试试 cargo-edit:
 
@@ -695,13 +698,15 @@ $ cargo add anyhow colored jsonxf mime
 $ cargo add clap --allow-prerelease
 $ cargo add reqwest --features json
 $ cargo add tokio --features full</p>2021-08-30</li><br/><li><span>Arthur</span> 👍（14） 💬（1）<p>对Rust里的derive, impl, trait等概念，和Java&#47;C++中面向对象编程概念里的封装、继承、方法等概念，有怎样的类比和不同，一直模糊不清，希望老师后面能讲到</p>2021-09-05</li><br/><li><span>Marvichov</span> 👍（12） 💬（2）<p>查了下colorize trait的doc (https:&#47;&#47;docs.rs&#47;colored&#47;2.0.0&#47;colored&#47;trait.Colorize.html), 没看到这个trait impl for String啊, 为啥可以call blue on String type呢?
+
 ```
 format!(&quot;{:?} {}&quot;, resp.version(), resp.status()).blue();
 ```
+
 老师知道这里面发生了什么转换么?</p>2021-09-07</li><br/><li><span>qinsi</span> 👍（12） 💬（1）<p>疑问：查了下reqwest似乎是依赖tokio运行时的，是否意味着用了reqwest就必须用tokio而不能用其他的运行时比如async-std？</p>2021-08-30</li><br/><li><span>逸风</span> 👍（12） 💬（1）<p>喜欢这样的教学方式！</p>2021-08-30</li><br/><li><span>Kerry</span> 👍（9） 💬（3）<p>简洁的背后意味着大量的抽象。
 
 而初学者见到这么简洁的代码，会迷惑：”我复制了啥，怎么这么短就跑出这么多功能来？？？“
 
-假以时日，就不禁感叹Rust语言表达力的强大。</p>2021-08-31</li><br/><li><span>gzgywh</span> 👍（7） 💬（1）<p>Rust里面的宏感觉跟Python里面的装饰器作用差不多嘛？</p>2021-09-12</li><br/><li><span>CR</span> 👍（7） 💬（1）<p>很想知道老师的画图工具都有哪些🤔</p>2021-09-03</li><br/><li><span>chinandy</span> 👍（6） 💬（1）<p>大家参考老师写的代码的时候，如果是网页不能正常的美化显示，有可能是网页是UTF8的原因，print_body函数match分支加一个TEXT_HTML_UTF_8判断，        Some(v) if v == mime::TEXT_HTML_UTF_8 || v == mime::TEXT_HTML =&gt; print_syntect(body, &quot;html&quot;),即可。
+假以时日，就不禁感叹Rust语言表达力的强大。</p>2021-08-31</li><br/><li><span>gzgywh</span> 👍（7） 💬（1）<p>Rust里面的宏感觉跟Python里面的装饰器作用差不多嘛？</p>2021-09-12</li><br/><li><span>CR</span> 👍（7） 💬（1）<p>很想知道老师的画图工具都有哪些🤔</p>2021-09-03</li><br/><li><span>chinandy</span> 👍（6） 💬（1）<p>大家参考老师写的代码的时候，如果是网页不能正常的美化显示，有可能是网页是UTF8的原因，print_body函数match分支加一个TEXT_HTML_UTF_8判断， Some(v) if v == mime::TEXT_HTML_UTF_8 || v == mime::TEXT_HTML =&gt; print_syntect(body, &quot;html&quot;),即可。
 </p>2021-09-18</li><br/>
 </ul>

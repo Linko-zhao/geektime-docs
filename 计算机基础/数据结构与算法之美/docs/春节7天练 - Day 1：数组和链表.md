@@ -12,7 +12,7 @@
 2. 7篇中的所有题目，只要回答正确3道及以上，即可获得极客时间99元专栏通用阅码。
 3. 如果7天连续参与答题，并且每天的留言均被精选，还可额外获得极客时间价值365元的每日一课年度会员。
 
-* * *
+---
 
 ## 关于数组和链表的几个必知必会的代码实现
 
@@ -65,7 +65,7 @@
 
 中文版：[https://leetcode-cn.com/problems/merge-k-sorted-lists/](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
-* * *
+---
 
 做完题目之后，你可以点击“请朋友读”，把测试题分享给你的朋友，说不定就帮他解决了一个难题。
 
@@ -121,7 +121,7 @@
                 dic[i] = 1
             else:
                 dic[i] +=1
-        
+
         #根据列表获取值最大的索引
         vs = list(dic.values())
         return list(dic.keys())[vs.index(max(vs))]
@@ -133,86 +133,88 @@
         n = 1
         while n in nums:
             n +=1
-        return n</p>2019-02-14</li><br/><li><span>acqierement</span> 👍（2） 💬（1）<p>自己总结了链表的部分算法，链表算是很简单的数据结构了，只要你心里有一个个节点的概念，必要时画图看一下还是很简单的。        
+        return n</p>2019-02-14</li><br/><li><span>acqierement</span> 👍（2） 💬（1）<p>自己总结了链表的部分算法，链表算是很简单的数据结构了，只要你心里有一个个节点的概念，必要时画图看一下还是很简单的。
       1.单链表反转  反转比较简单,就是要有一个先前节点prev和当前节点cur，要有一个临时节点保存cur的下一个节点（cur.next），否则反转之后你就找不到下一个节点了。然后让head指向前一个节点prev。之后继续移动cur和prev节点进行下一次反转
-	public ListNode reverse(ListNode head) {
-		ListNode prev = null;
-		ListNode cur = head;
-		while(cur != null) {
-			ListNode temp = cur.next;
-			cur.next = prev;
-			prev = cur;
-			cur = temp;
-		}
-		return prev;
-	}
-	2.两个有序的链表合并   思路就是自己创建一个链表，每次从两个链表头中找到较小的那个节点，接到自己的那个链表中。说着很简单，但还是有很多细节要注意。
-	public ListNode mergeTwoLists(ListNode l1,ListNode l2) {
-		if (l1  == null) return l2;
-		if (l2 == null) return l1;
-		ListNode head = new ListNode(0);
-		ListNode cur = head;
-		while(l1 != null &amp;&amp; l2 != null) {
-			if (l1.val &lt; l2.val) {
-				cur.next = l1;
-				l1 = l1.next;
-			}else {
-				cur.next = l2;
-				l2 = l2.next;
-			}
+    public ListNode reverse(ListNode head) {
+    	ListNode prev = null;
+    	ListNode cur = head;
+    	while(cur != null) {
+    		ListNode temp = cur.next;
+    		cur.next = prev;
+    		prev = cur;
+    		cur = temp;
+    	}
+    	return prev;
+    }
+    2.两个有序的链表合并   思路就是自己创建一个链表，每次从两个链表头中找到较小的那个节点，接到自己的那个链表中。说着很简单，但还是有很多细节要注意。
+    public ListNode mergeTwoLists(ListNode l1,ListNode l2) {
+    	if (l1  == null) return l2;
+    	if (l2 == null) return l1;
+    	ListNode head = new ListNode(0);
+    	ListNode cur = head;
+    	while(l1 != null &amp;&amp; l2 != null) {
+    		if (l1.val &lt; l2.val) {
+    			cur.next = l1;
+    			l1 = l1.next;
+    		}else {
+    			cur.next = l2;
+    			l2 = l2.next;
+    		}
             cur = cur.next;
-		}
-		if (l1 == null) cur.next = l2;
-		if (l2 == null) cur.next = l1;
-		return head.next;
-	}
+    	}
+    	if (l1 == null) cur.next = l2;
+    	if (l2 == null) cur.next = l1;
+    	return head.next;
+    }
 
-	3.求链表的中间结点(如果是偶数，返回中间两个中靠右的那个）
+    3.求链表的中间结点(如果是偶数，返回中间两个中靠右的那个）
+
 这个问题就很简单了，环的检测也可以用到这种方法。就是用快慢指针，快的前进两步，慢的前进一步，等到快的指针到结尾时，慢的指针就到了中点。
-	public ListNode findCenter(ListNode head) {
-		ListNode slow = head;
-		ListNode fast = head;
-		while(fast != null &amp;&amp; fast.next != null) {
-			slow = slow.next;
-			fast = fast.next.next;
-		}
-		return slow;
-	}</p>2019-02-05</li><br/><li><span>赵菁垚</span> 👍（1） 💬（1）<p>王老师，请教您一个问题，想参加NOIP c++考这些算法吗？</p>2019-08-08</li><br/><li><span>神盾局闹别扭</span> 👍（1） 💬（1）<p>加油礼包的福利在哪里领呢？</p>2019-02-18</li><br/><li><span>Neo_Zhang</span> 👍（1） 💬（1）<p>Three Sum（求三数之和）Go语言：
+public ListNode findCenter(ListNode head) {
+ListNode slow = head;
+ListNode fast = head;
+while(fast != null &amp;&amp; fast.next != null) {
+slow = slow.next;
+fast = fast.next.next;
+}
+return slow;
+}</p>2019-02-05</li><br/><li><span>赵菁垚</span> 👍（1） 💬（1）<p>王老师，请教您一个问题，想参加NOIP c++考这些算法吗？</p>2019-08-08</li><br/><li><span>神盾局闹别扭</span> 👍（1） 💬（1）<p>加油礼包的福利在哪里领呢？</p>2019-02-18</li><br/><li><span>Neo_Zhang</span> 👍（1） 💬（1）<p>Three Sum（求三数之和）Go语言：
 func threeSum(nums []int) [][]int {
-    results := [][]int{}
-	n := len(nums)
-	if n == 0 || n &lt; 3 {
-		return results
-	}
-	sort.Ints(nums)  &#47;&#47;首先，对数组进行排序
-	for i := 0; i &lt; n-2; i++ {
-		if i &gt; 0 &amp;&amp; nums[i] == nums[i-1] {  &#47;&#47;如果相邻两个数相等
-			continue
-		}
-		target := -nums[i]
-		left := i + 1 
-		right := n - 1  
-		for left &lt; right {
-			sum := nums[left] + nums[right]
-			if sum == target {
-				results = append(results, []int{nums[left], nums[right], nums[i]})
-				left++
-				right--
-				for left &lt; right &amp;&amp; nums[left] == nums[left-1] {
-					left++
-				}
-				for left &lt; right &amp;&amp; nums[right] == nums[right+1] {
-					right--
-				}
-			} else if sum &gt; target {
-				right--
-			} else if sum &lt; target {
-				left++
-			}
-		}
+results := [][]int{}
+n := len(nums)
+if n == 0 || n &lt; 3 {
+return results
+}
+sort.Ints(nums) &#47;&#47;首先，对数组进行排序
+for i := 0; i &lt; n-2; i++ {
+if i &gt; 0 &amp;&amp; nums[i] == nums[i-1] { &#47;&#47;如果相邻两个数相等
+continue
+}
+target := -nums[i]
+left := i + 1
+right := n - 1  
+for left &lt; right {
+sum := nums[left] + nums[right]
+if sum == target {
+results = append(results, []int{nums[left], nums[right], nums[i]})
+left++
+right--
+for left &lt; right &amp;&amp; nums[left] == nums[left-1] {
+left++
+}
+for left &lt; right &amp;&amp; nums[right] == nums[right+1] {
+right--
+}
+} else if sum &gt; target {
+right--
+} else if sum &lt; target {
+left++
+}
+}
 
-	}
-	return results
+    }
+    return results
+
 }
 </p>2019-02-12</li><br/><li><span>欢乐小熊</span> 👍（1） 💬（1）<p>链表篇
 1. 翻转单链表
@@ -234,90 +236,90 @@ void reversalList(Node&lt;int&gt;* head) {
 }
 
 2. 将两个有序的单链表合并
-&#47;* 合并两个有序链表, 将 list2 合并到 list1 中 *&#47;
-Node&lt;int&gt;* mergeOrderList(Node&lt;int&gt;* list1, Node&lt;int&gt;* list2) {
-	&#47;&#47; 记录 list2 的头结点
-	Node&lt;int&gt;* head = list2;
-	&#47;&#47; 创建哨兵, 用于处理将 list2 中的元素插入到 list1 头结点前面的情况
-	Node&lt;int&gt;* sentry = new Node&lt;int&gt;(-1);
-	sentry-&gt;next = list1;
-	&#47;&#47; 记录 list1 要遍历的元素
-	Node&lt;int&gt;* node = sentry;
-	Node&lt;int&gt;* temp = NULL;
-	while (node-&gt;next &amp;&amp; head) {
-		if (node-&gt;next-&gt;data &gt; head-&gt;data) {
-			temp = head-&gt;next;
-			head-&gt;next = node-&gt;next;
-			node-&gt;next = head;
-			head = temp;
-		}
-		else {
-			node = node-&gt;next;
-		}
-	}
-	&#47;&#47; 若 list2 的头结点不为 NULL, 则说明 list1 中的元素提前遍历结束了
-	&#47;&#47; 剩下的 list2 中的元素均比 list1 中的大
-	&#47;&#47; 直接将 list1 的尾结点连接到 list2 的首结点即可
-	if (head) {
-		node-&gt;next = head;
-	}
-	&#47;&#47; 释放哨兵结点内存
-	list1 = sentry-&gt;next;
-	sentry-&gt;next = NULL;
-	delete(sentry);
-	return list1;
-}
+   &#47;* 合并两个有序链表, 将 list2 合并到 list1 中 _&#47;
+   Node&lt;int&gt;_ mergeOrderList(Node&lt;int&gt;* list1, Node&lt;int&gt;* list2) {
+   &#47;&#47; 记录 list2 的头结点
+   Node&lt;int&gt;* head = list2;
+   &#47;&#47; 创建哨兵, 用于处理将 list2 中的元素插入到 list1 头结点前面的情况
+   Node&lt;int&gt;* sentry = new Node&lt;int&gt;(-1);
+   sentry-&gt;next = list1;
+   &#47;&#47; 记录 list1 要遍历的元素
+   Node&lt;int&gt;* node = sentry;
+   Node&lt;int&gt;* temp = NULL;
+   while (node-&gt;next &amp;&amp; head) {
+   if (node-&gt;next-&gt;data &gt; head-&gt;data) {
+   temp = head-&gt;next;
+   head-&gt;next = node-&gt;next;
+   node-&gt;next = head;
+   head = temp;
+   }
+   else {
+   node = node-&gt;next;
+   }
+   }
+   &#47;&#47; 若 list2 的头结点不为 NULL, 则说明 list1 中的元素提前遍历结束了
+   &#47;&#47; 剩下的 list2 中的元素均比 list1 中的大
+   &#47;&#47; 直接将 list1 的尾结点连接到 list2 的首结点即可
+   if (head) {
+   node-&gt;next = head;
+   }
+   &#47;&#47; 释放哨兵结点内存
+   list1 = sentry-&gt;next;
+   sentry-&gt;next = NULL;
+   delete(sentry);
+   return list1;
+   }
 
 3. 求单链表的中间结点
-&#47;* 查询单链表的中间结点 *&#47;
-template&lt;typename E&gt;
-Node&lt;E&gt;* findMidNode(Node&lt;E&gt;* head, Node&lt;E&gt;** mid_node) {
-	if (!head) {
-		return NULL;
-	}
-	Node&lt;E&gt;* fast = head;
-	Node&lt;E&gt;* slow = head;
-	while (fast &amp;&amp; fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next) {
-		&#47;&#47; 快指针走两步
-		fast = fast-&gt;next-&gt;next;
-		&#47;&#47; 慢指针走一步
-		slow = slow-&gt;next;
-	}
-	*mid_node = slow;
-}</p>2019-02-12</li><br/><li><span>ALAN</span> 👍（1） 💬（1）<p>array answer:
-import java.util.Arrays;
+   &#47;* 查询单链表的中间结点 _&#47;
+   template&lt;typename E&gt;
+   Node&lt;E&gt;_ findMidNode(Node&lt;E&gt;* head, Node&lt;E&gt;** mid_node) {
+   if (!head) {
+   return NULL;
+   }
+   Node&lt;E&gt;* fast = head;
+   Node&lt;E&gt;* slow = head;
+   while (fast &amp;&amp; fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next) {
+   &#47;&#47; 快指针走两步
+   fast = fast-&gt;next-&gt;next;
+   &#47;&#47; 慢指针走一步
+   slow = slow-&gt;next;
+   }
+   *mid_node = slow;
+   }</p>2019-02-12</li><br/><li><span>ALAN</span> 👍（1） 💬（1）<p>array answer:
+   import java.util.Arrays;
 
 public class Array1 {
-	public int n;
-	public int cur;
-	public static int ary[];  &#47;&#47;dynamic expand
-	public static int fix[];  &#47;&#47;fixed array
-	public Array1(int size) {
-		n=size;
-		ary=new int [n];
-	}
-	
-	&#47;&#47;dynamic expand
-	public void insert(int ele) {
-		if(cur==ary.length) {
-						
-			ary=Arrays.copyOf(ary, ary.length*2);
-			System.out.println(&quot;length:&quot;+ary.length);
-			
-		}
-		ary[cur]=ele;
-		cur++;
-		
-	}
-	&#47;&#47;fixed array --add   
-	public void  add(int ele) {
-		if(cur==fix.length) {
-			return;
-		}
-		fix[cur]=ele;
-		cur++;
-	}
-	&#47;&#47;fixed array --delete
+public int n;
+public int cur;
+public static int ary[]; &#47;&#47;dynamic expand
+public static int fix[]; &#47;&#47;fixed array
+public Array1(int size) {
+n=size;
+ary=new int [n];
+}
+
+    &#47;&#47;dynamic expand
+    public void insert(int ele) {
+    	if(cur==ary.length) {
+
+    		ary=Arrays.copyOf(ary, ary.length*2);
+    		System.out.println(&quot;length:&quot;+ary.length);
+
+    	}
+    	ary[cur]=ele;
+    	cur++;
+
+    }
+    &#47;&#47;fixed array --add
+    public void  add(int ele) {
+    	if(cur==fix.length) {
+    		return;
+    	}
+    	fix[cur]=ele;
+    	cur++;
+    }
+    &#47;&#47;fixed array --delete
     public void delete() {
     	if(cur==-1)
     		return ;
@@ -342,7 +344,7 @@ public class Array1 {
     			c[i]=a[j];
     			j++;
     			continue;
-    			
+
     		}
     		if(a[j]&lt;b[k]) {
     			c[i]=a[j];
@@ -351,11 +353,12 @@ public class Array1 {
     			c[i]=b[k];
     			k++;
     		}
-    		
+
     	}
-    	
+
     	return c;
     }
+
 }
 </p>2019-02-07</li><br/><li><span>陈小白( ´･ᴗ･` )</span> 👍（0） 💬（1）<p>这些题，我都做了一遍，除了那个“求缺失的第一个正数“没有相处方法，其它的都是自己做出来了。尤其最后那个”合并 k 个排序链表“，其实以前我也看过一次，当时的想法觉得是一个个取出来，然后排序然后再遍历。学完这堂课之后，看完题目，咦，这不是合并两个链表么？哦，合并多个，怎么处理多个问题？好像可以分治归并，嗯，好像是可以。我了个去，就有那种顿塞的感觉，那种开心。谢谢这门课。也谢谢老师，虽然课程里面还有很多没有明白，不过有些数据结构，算法，细细品味，好爽。
 </p>2019-10-06</li><br/><li><span>coldpark</span> 👍（0） 💬（1）<p>缺失的第一个正数那个题，如果让用额外内存空间还行，如果严格按照题意就是一道智力题，请问这种题在面时中遇到的多吗？</p>2019-10-05</li><br/><li><span>二哥不再迷茫</span> 👍（0） 💬（1）<p>Missing Positive；循环n次和2n次，时间复杂度都算是O(n)吧，空间复杂度也是如此!
@@ -382,85 +385,86 @@ public static int getFirstMissingPositive(int[] nums){
         return result;
 
     }</p>2019-04-10</li><br/><li><span>hopeful</span> 👍（0） 💬（1）<p>&#47;&#47;支持动态扩容的数组
+
 public class MyArray {
-	Object[] object ;
-	private int capacity;
-	private int count;
-	MyArray(int capacity){
-		this.capacity = capacity;
-		this.object = new Object[capacity];
-		this.count = 0;
-	}
-	public Object get(int i) {
-		if(i&lt;0 || i&gt;=count) {
-			return null;
-		}else {
-			return object[i];
-		}
-	}
-	public int size() {
-		return this.count;
-	}
-	public int capacity() {
-		return this.capacity;
-	}
-	public void add(int j, Object o) {
-		if((count+1)&gt;=capacity) {
-			Object[] ob = new Object[2*capacity];
-			System.arraycopy(object, 0, ob, 0, count);
-			this.object = ob;
-			this.capacity = object.length;
-		}
-		if(j &lt; 0 || j &gt; count) {
-			System.out.println(&quot;位置不合法&quot;);
-			return false;
-		}
-		for (int i = count; i &gt; j; i--) {
-			object[i] = object[i-1];
-		}
-		object[j] = o;
-		count++;
-		return true;
-	}
-	public void addFirst(Object o) {
-		if((count+1)&gt;=capacity) {
-			Object[] ob = new Object[2*capacity];
-			System.arraycopy(object, 0, ob, 0, count);
-			this.object = ob;
-			this.capacity = object.length;
-		}	
-		for (int i = count; i &gt; 0; i--) {
-			object[i] = object[i-1];
-		}
-		object[0] = o;
-		count++;
-	}
-	public void addLast(Object o) {
-		if((count+1)&gt;=capacity) {
-			Object[] ob = new Object[2*capacity];
-			System.arraycopy(object, 0, ob, 0, count);
-			this.object = ob;
-			this.capacity = object.length;
-		}
-		object[this.size()] = o;
-		count++;	
-	}
-	public boolean delete(int index) {
-		if(index &lt; 0 || index &gt;= count)
-			return false;
-		for (int i = index + 1; i &lt; count; i++) {
-			object[i-1] = object[i];
-		}
-		count--;
-		return true;
-	}
-	public Object[] list() {
-		Object[] o = new Object[this.size()];
-		for (int i = 0; i &lt; o.length; i++) {
-			o[i] = object[i];
-		}
-		return o;
-	}
+Object[] object ;
+private int capacity;
+private int count;
+MyArray(int capacity){
+this.capacity = capacity;
+this.object = new Object[capacity];
+this.count = 0;
+}
+public Object get(int i) {
+if(i&lt;0 || i&gt;=count) {
+return null;
+}else {
+return object[i];
+}
+}
+public int size() {
+return this.count;
+}
+public int capacity() {
+return this.capacity;
+}
+public void add(int j, Object o) {
+if((count+1)&gt;=capacity) {
+Object[] ob = new Object[2*capacity];
+System.arraycopy(object, 0, ob, 0, count);
+this.object = ob;
+this.capacity = object.length;
+}
+if(j &lt; 0 || j &gt; count) {
+System.out.println(&quot;位置不合法&quot;);
+return false;
+}
+for (int i = count; i &gt; j; i--) {
+object[i] = object[i-1];
+}
+object[j] = o;
+count++;
+return true;
+}
+public void addFirst(Object o) {
+if((count+1)&gt;=capacity) {
+Object[] ob = new Object[2*capacity];
+System.arraycopy(object, 0, ob, 0, count);
+this.object = ob;
+this.capacity = object.length;
+}
+for (int i = count; i &gt; 0; i--) {
+object[i] = object[i-1];
+}
+object[0] = o;
+count++;
+}
+public void addLast(Object o) {
+if((count+1)&gt;=capacity) {
+Object[] ob = new Object[2*capacity];
+System.arraycopy(object, 0, ob, 0, count);
+this.object = ob;
+this.capacity = object.length;
+}
+object[this.size()] = o;
+count++;
+}
+public boolean delete(int index) {
+if(index &lt; 0 || index &gt;= count)
+return false;
+for (int i = index + 1; i &lt; count; i++) {
+object[i-1] = object[i];
+}
+count--;
+return true;
+}
+public Object[] list() {
+Object[] o = new Object[this.size()];
+for (int i = 0; i &lt; o.length; i++) {
+o[i] = object[i];
+}
+return o;
+}
 }
 </p>2019-02-13</li><br/><li><span>xumc</span> 👍（0） 💬（1）<p>数组基础 - 有序数组 （2）
 func (array *OrderArray) Remove(val int) {
@@ -469,46 +473,49 @@ func (array *OrderArray) Remove(val int) {
 		return
 	}
 
-	for i := index; i &lt; len(*array)-1; i++ {
-		(*array)[i] = (*array)[i+1]
-	}
-	&#47;&#47;清除最后一个节点
-	(*array) = (*array)[0 : len(*array)-1]
+    for i := index; i &lt; len(*array)-1; i++ {
+    	(*array)[i] = (*array)[i+1]
+    }
+    &#47;&#47;清除最后一个节点
+    (*array) = (*array)[0 : len(*array)-1]
+
 }
 
 &#47;&#47;a := OrderArray{9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 11, 12}
 &#47;&#47;a.RemoveAll(9)
 func (array *OrderArray) RemoveAll(val int) {
-	indexs := array.FindAll(val)
-	if len(indexs) == 0 {
-		return
-	}
+indexs := array.FindAll(val)
+if len(indexs) == 0 {
+return
+}
 
-	sort.Ints(indexs)
-	start := indexs[0]
-	leng := len(indexs)
+    sort.Ints(indexs)
+    start := indexs[0]
+    leng := len(indexs)
 
-	for i := start; i+leng &lt; len(*array); i++ {
-		(*array)[i] = (*array)[i+leng]
-	}
-	&#47;&#47;清除最后n节点
-	(*array) = (*array)[0 : len(*array)-leng]
+    for i := start; i+leng &lt; len(*array); i++ {
+    	(*array)[i] = (*array)[i+leng]
+    }
+    &#47;&#47;清除最后n节点
+    (*array) = (*array)[0 : len(*array)-leng]
+
 }
 
 func (array *OrderArray) Set(index int, val int) {
-	leng := len(*array)
-	if index &gt; leng || index &lt; 0 || leng == 0 {
-		panic(&quot;cannot set&quot;)
-	}
+leng := len(*array)
+if index &gt; leng || index &lt; 0 || leng == 0 {
+panic(&quot;cannot set&quot;)
+}
 
-	if (leng == 1 &amp;&amp; index == 0) || (index == 0) &amp;&amp; val &lt;= (*array)[1] || (index == leng-1 &amp;&amp; val &gt;= (*array)[leng-2]) {
-		(*array)[index] = val
-		return
-	}
-	if val &gt; (*array)[index+1] || val &lt; (*array)[index-1] {
-		panic(&quot;cannot set&quot;)
-	}
-	(*array)[index] = val
+    if (leng == 1 &amp;&amp; index == 0) || (index == 0) &amp;&amp; val &lt;= (*array)[1] || (index == leng-1 &amp;&amp; val &gt;= (*array)[leng-2]) {
+    	(*array)[index] = val
+    	return
+    }
+    if val &gt; (*array)[index+1] || val &lt; (*array)[index-1] {
+    	panic(&quot;cannot set&quot;)
+    }
+    (*array)[index] = val
+
 }
 
 基础薄弱，其他我慢慢写，谢谢老师。</p>2019-02-13</li><br/><li><span>未来的胡先森</span> 👍（0） 💬（1）<p>「三数之和」
@@ -522,57 +529,57 @@ func (array *OrderArray) Set(index int, val int) {
 
 4、优化代码，防止超时。第 1 个数为正数时即可结束循环，将三重循环优化成双重循环。
 代码
-int compare(const void  *a, const void *b)
+int compare(const void _a, const void *b)
 {
-	return (*(int*)a - *(int*)b);
+return (*(int_)a - _(int_)b);
 }
 int** threeSum(int* nums, int numsSize, int* returnSize)
 {
-	qsort(nums, numsSize, sizeof(int), compare);
-	int flag = numsSize, size = 64;
-	for (int i = 0; i &lt; numsSize; i++)
-		if (nums[i] &gt; 0)
-		{
-			flag = i; break;
-		}
-	if (flag == 0 || flag &gt; numsSize - 2)
-		flag = numsSize - 2;
-	int **arrys = (int **)malloc(size * sizeof(int *));
-	*returnSize = 0;
-	for (int i = 0; i &lt; flag; i++)
-	{
-		int  start = i + 1, end = numsSize - 1;
-		if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1])
-			continue;
-		while (start &lt; end)
-		{
-			int sum = nums[i] + nums[start] + nums[end];
-			if (sum== 0)
-			{
-				if (start &gt; i + 1 &amp;&amp; nums[start] == nums[start - 1])
-				{
-					start++; continue;
-				}
-				arrys[*returnSize] = (int*)malloc(3 * sizeof(int));
-				arrys[*returnSize][0] = nums[i]; arrys[*returnSize][1] = nums[start]; arrys[*returnSize][2] = nums[end];
-				printf(&quot;%d %d %d\n&quot;, arrys[*returnSize][0], arrys[*returnSize][1], arrys[*returnSize][2]);
-				(*returnSize)++;
-				if (size == *returnSize)
-				{
-					size &lt;&lt;= 1;
-					arrys = (int **)realloc(arrys, sizeof(int *) * size);
-				}
-				start++; end--;&#47;&#47;因为是从小到大排序，start 增大 则第 3 个数需要减小
-				continue;
-			}
-			else if (sum &gt; 0)
-				end--;
-			else
-			{
-				start++;&#47;&#47; end = numsSize - 1;
-			}
-		}
-	}
-	return arrys;
+qsort(nums, numsSize, sizeof(int), compare);
+int flag = numsSize, size = 64;
+for (int i = 0; i &lt; numsSize; i++)
+if (nums[i] &gt; 0)
+{
+flag = i; break;
+}
+if (flag == 0 || flag &gt; numsSize - 2)
+flag = numsSize - 2;
+int **arrys = (int **)malloc(size * sizeof(int *));
+*returnSize = 0;
+for (int i = 0; i &lt; flag; i++)
+{
+int start = i + 1, end = numsSize - 1;
+if (i &gt; 0 &amp;&amp; nums[i] == nums[i - 1])
+continue;
+while (start &lt; end)
+{
+int sum = nums[i] + nums[start] + nums[end];
+if (sum== 0)
+{
+if (start &gt; i + 1 &amp;&amp; nums[start] == nums[start - 1])
+{
+start++; continue;
+}
+arrys[_returnSize] = (int_)malloc(3 * sizeof(int));
+arrys[*returnSize][0] = nums[i]; arrys[*returnSize][1] = nums[start]; arrys[*returnSize][2] = nums[end];
+printf(&quot;%d %d %d\n&quot;, arrys[*returnSize][0], arrys[*returnSize][1], arrys[*returnSize][2]);
+(*returnSize)++;
+if (size == *returnSize)
+{
+size &lt;&lt;= 1;
+arrys = (int **)realloc(arrys, sizeof(int *) * size);
+}
+start++; end--;&#47;&#47;因为是从小到大排序，start 增大 则第 3 个数需要减小
+continue;
+}
+else if (sum &gt; 0)
+end--;
+else
+{
+start++;&#47;&#47; end = numsSize - 1;
+}
+}
+}
+return arrys;
 }</p>2019-02-12</li><br/>
 </ul>

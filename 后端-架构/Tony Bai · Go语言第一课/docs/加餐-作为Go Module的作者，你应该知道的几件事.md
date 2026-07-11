@@ -277,11 +277,11 @@ m1
 │   └── pkg1.go
 ├── go.mod
 ├── v2
-│   ├── pkg1 
+│   ├── pkg1
 │   │   └── pkg1.go
 │   └── go.mod
 └── v3
-    ├── pkg1 
+    ├── pkg1
     │   └── pkg1.go
     └── go.mod
 ```

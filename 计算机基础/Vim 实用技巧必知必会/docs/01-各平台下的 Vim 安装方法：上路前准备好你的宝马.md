@@ -162,7 +162,7 @@ source $VIMRUNTIME/vimrc_example.vim
 
 ![Fig1.6](https://static001.geekbang.org/resource/image/07/17/07ebd8b7d535e516e8d68517a6338717.gif?wh=660%2A507 "创建基本的 _vimrc 配置文件")
 
-注意由于历史上的文件系统限制，在 Windows 下 Vim 的配置文件名称是 \_vimrc 而不是 .vimrc（虽然 Windows 命令行不支持像 Unix 一样用“~”代表用户的主目录，在 Vim 里我们仍然可以使用“~\\\_vimrc”或“~/\_vimrc”这样的写法）。这是 Unix 和 Windows 下的 Vim 配置的区别之一。其他的主要区别是以下两点：
+注意由于历史上的文件系统限制，在 Windows 下 Vim 的配置文件名称是 \_vimrc 而不是 .vimrc（虽然 Windows 命令行不支持像 Unix 一样用“~~”代表用户的主目录，在 Vim 里我们仍然可以使用“~~\\\_vimrc”或“~/\_vimrc”这样的写法）。这是 Unix 和 Windows 下的 Vim 配置的区别之一。其他的主要区别是以下两点：
 
 - 点打头的 Vim 文件都成了“\_”打头，如 .viminfo 也成了 \_viminfo
 - 点打头的 Vim 配置目录 .vim 在 Windows 下则成了 vimfiles
@@ -260,6 +260,7 @@ vim --clean -c "e $VIMRUNTIME/tutor/tutor.zh_cn.utf-8" -c "w! TUTORCOPY" -c "q"
 
 由于我经常开很多buffer,需要在不同的buffer间跳转,所以我都配置了快捷键.
 配置很简单:
+
 ```
 let g:airline#extensions#tabline#enabled = 1            &quot; 展示顶部的状态栏
 let g:airline#extensions#tabline#buffer_nr_show = 1     &quot; 展示:buffers中的序号 便于通过:buffer number 跳转
@@ -270,6 +271,7 @@ for i in range(1, 99)
   exe printf(&#39;nmap &lt;silent&gt; &lt;Space&gt;%d &lt;Plug&gt;AirlineSelectTab%02d&#39;, i, i)
 endfor
 ```
+
 </p>2020-07-22</li><br/><li><span>冰糕🍦</span> 👍（3） 💬（2）<p>内网环境，有没有离线装插件的好方法？</p>2020-07-21</li><br/><li><span>oaeen</span> 👍（3） 💬（4）<p>请问在 VS Code 下使用 Vim 插件 和直接使用 Vim 比起来怎么样？推荐这种方式吗</p>2020-07-20</li><br/><li><span>吴 谦</span> 👍（2） 💬（2）<p>请问老师，我手动安装的vim，在家目录里没找到.vim文件夹</p>2021-12-25</li><br/><li><span>人在江湖龙在江湖</span> 👍（2） 💬（2）<p>看了这篇文章，觉得只需要安装linux就行了，现在有docker,不论在mac或者Windows上，装个docker,搞个linux,就像在本地机上一样快，不像vmware虚拟机，占用资源太多，开了个vmware,本地机器其他软件都用不了</p>2020-11-08</li><br/><li><span>中年男子</span> 👍（2） 💬（1）<p>再一次被吴老师折服了，每个问题都耐心的回答了，读吴老师的专栏总是能收获比专栏价值更大东西。</p>2020-07-23</li><br/><li><span>我来也</span> 👍（2） 💬（4）<p>我习惯了hhkb的键位后，在别人的电脑上确实会相当不习惯。
 
 大小写锁定键不推荐更换为ESC，因为Ctrl+[就是ESC键的效果。

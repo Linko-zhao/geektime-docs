@@ -97,8 +97,8 @@ sum(6.5 + x)
 
 再看另一个复杂些的例子，函数的组合 \[2]。如果我们有函数 $f$ 和 函数 $g$，要得到函数的联用 $g \\circ f$，其满足：
 
-$$  
-(g \\circ f)(x) = g(f(x))  
+$$
+(g \\circ f)(x) = g(f(x))
 $$
 
 我们能不能用一种非常简单的方式，写不包含变量 $x$ 的表达式来表示函数组合呢？答案是肯定的。
@@ -418,7 +418,7 @@ auto bit_count = get_bit_count(
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>李亮亮</span> 👍（7） 💬（1）<p>N--&gt;(N-1, N-1)--&gt;(N-2, N-2, N-1)--&gt;(1, 1 , 2 ....N-1)--&gt;(0, 0, 1, 2...N-1)</p>2020-01-06</li><br/><li><span>泰伦卢</span> 👍（4） 💬（1）<p>compose那是完全没看懂唉，还有sequence那... </p>2020-01-09</li><br/><li><span>Geek_845be1</span> 👍（3） 💬（1）<p>不用 index_sequence 来初始化 bit_count：
 
-```
+````
 consteval int count_bits(unsigned char val)
 {
     if (val == 0)
@@ -505,7 +505,7 @@ auto compose(F f)
 }
 
 貌似用compiler(gcc version 4.8.5 20150623) 就会遇到下面编译错误
-&#47;&#47; In function ‘auto compose(F)’: 
+&#47;&#47; In function ‘auto compose(F)’:
 &#47;&#47; error: expansion pattern ‘auto&amp;&amp;’ contains no argument packs
 &#47;&#47; return [f](auto&amp;&amp;... x) {
 
@@ -520,3 +520,4 @@ auto compose(F f)
 &lt;256&gt;后面是不是多了一对圆括号()？
 make_index_sequence&lt;256&gt;展开之后，代入get_bit_count(index_sequence&lt;V...&gt;)模板，并没有一对圆括号()啊？</p>2021-10-18</li><br/><li><span>常振华</span> 👍（0） 💬（1）<p>为什么一会儿是大写的Tuple，一会儿又是小写的tuple，C++库里的模板不是小写tuple吗？</p>2021-10-18</li><br/>
 </ul>
+````

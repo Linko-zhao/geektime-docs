@@ -95,9 +95,9 @@ public class TodoItemService {
 public class TodoItemService {
   @Autowired
   private ApplicationContext context;
-  
-  private TodoItemRepository repository; 
-  
+
+  private TodoItemRepository repository;
+
   public TodoItemService() {
     this.repository = context.getBean(TodoItemRepository.class);
   }

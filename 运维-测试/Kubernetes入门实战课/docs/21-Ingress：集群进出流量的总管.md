@@ -328,45 +328,46 @@ $ kubectl apply -f common&#47;crds&#47;k8s.nginx.org_policies.yaml
 
 然后就启动成功了。
 
-也可以将 -enable-custom-resources 命令行参数配置为 Readyfalse </p>2022-10-22</li><br/><li><span>新时代农民工</span> 👍（12） 💬（1）<p>文末的kic.yml是来自 https:&#47;&#47;github.com&#47;nginxinc&#47;kubernetes-ingress&#47;blob&#47;main&#47;deployments&#47;deployment&#47;nginx-ingress.yaml</p>2022-08-09</li><br/><li><span>小江爱学术</span> 👍（9） 💬（3）<p>一个小问题老师，service基于四层转发，会暴露ip。基于这些缺点我们引入了ingress，基于七层网络协议转发，但是为了外部服务访问，需要在ingress前再暴露一个nodeport类型的service，那我们这么做的意义在哪里捏，最外层的入口处不还是service吗。</p>2022-10-06</li><br/><li><span>stefen</span> 👍（7） 💬（1）<p>最后ingress-controller运行起来的pod 可以看作是一个pod的nginx反向代理的VIP， 由于pod网络隔离的原因，需要还套娃一个service, 对外提供统一的管理入口，是否可以换种思路， 在启动这种ingress-controller运行起来的pod的，设置pod的网络为host，就是公用宿主机网卡，这样就不用套娃service了.</p>2022-08-28</li><br/><li><span>Grey</span> 👍（7） 💬（2）<p>Nginx Ingress Controller 只用那4个不行，看了23节，跟着老师用bash脚本全部弄进去了才把kic起了起来</p>2022-08-14</li><br/><li><span>李一</span> 👍（5） 💬（1）<p>老师，请问 Ingress 工作在7层协议中，指针对http(s)应用层协议进行控制，那如果 我的应用是需要长链接的 不如IM通讯相关，那是不是Ingress就无法满足了，只能通过service 定义吗？</p>2022-08-08</li><br/><li><span>拓山</span> 👍（4） 💬（1）<p>说一下我的感受，按照最新的理论来看，调用链路顺序是  ingress-control. ---&gt; ingress-class --&gt; ingress。
+也可以将 -enable-custom-resources 命令行参数配置为 Readyfalse </p>2022-10-22</li><br/><li><span>新时代农民工</span> 👍（12） 💬（1）<p>文末的kic.yml是来自 https:&#47;&#47;github.com&#47;nginxinc&#47;kubernetes-ingress&#47;blob&#47;main&#47;deployments&#47;deployment&#47;nginx-ingress.yaml</p>2022-08-09</li><br/><li><span>小江爱学术</span> 👍（9） 💬（3）<p>一个小问题老师，service基于四层转发，会暴露ip。基于这些缺点我们引入了ingress，基于七层网络协议转发，但是为了外部服务访问，需要在ingress前再暴露一个nodeport类型的service，那我们这么做的意义在哪里捏，最外层的入口处不还是service吗。</p>2022-10-06</li><br/><li><span>stefen</span> 👍（7） 💬（1）<p>最后ingress-controller运行起来的pod 可以看作是一个pod的nginx反向代理的VIP， 由于pod网络隔离的原因，需要还套娃一个service, 对外提供统一的管理入口，是否可以换种思路， 在启动这种ingress-controller运行起来的pod的，设置pod的网络为host，就是公用宿主机网卡，这样就不用套娃service了.</p>2022-08-28</li><br/><li><span>Grey</span> 👍（7） 💬（2）<p>Nginx Ingress Controller 只用那4个不行，看了23节，跟着老师用bash脚本全部弄进去了才把kic起了起来</p>2022-08-14</li><br/><li><span>李一</span> 👍（5） 💬（1）<p>老师，请问 Ingress 工作在7层协议中，指针对http(s)应用层协议进行控制，那如果 我的应用是需要长链接的 不如IM通讯相关，那是不是Ingress就无法满足了，只能通过service 定义吗？</p>2022-08-08</li><br/><li><span>拓山</span> 👍（4） 💬（1）<p>说一下我的感受，按照最新的理论来看，调用链路顺序是 ingress-control. ---&gt; ingress-class --&gt; ingress。
 
-但实际上配置的时候，可以看到 ingress-control 配置了 ingress-class的引用，但ingress-class里却没有配置ingress，反而是ingress反向引用了ingress-class，即为  ingress-control. ---&gt; ingress-class &lt;--- ingress。
+但实际上配置的时候，可以看到 ingress-control 配置了 ingress-class的引用，但ingress-class里却没有配置ingress，反而是ingress反向引用了ingress-class，即为 ingress-control. ---&gt; ingress-class &lt;--- ingress。
 
-这种情况确实是反直觉的，我分析可能是  ingress-class 是后来提出的概念，为了兼容以前的  ingress-control --&gt; ingress 模型，才搞了ingress-class 这个缝合怪。</p>2023-05-08</li><br/><li><span>极客酱酱</span> 👍（4） 💬（2）<p>为ingres-controller设置Service:
-➜  ingress kubectl expose deploy nginx-kic-dep -n nginx-ingress --port=80 --target-port=80 $=out&gt;ingress-svc.yml
+这种情况确实是反直觉的，我分析可能是 ingress-class 是后来提出的概念，为了兼容以前的 ingress-control --&gt; ingress 模型，才搞了ingress-class 这个缝合怪。</p>2023-05-08</li><br/><li><span>极客酱酱</span> 👍（4） 💬（2）<p>为ingres-controller设置Service:
+➜ ingress kubectl expose deploy nginx-kic-dep -n nginx-ingress --port=80 --target-port=80 $=out&gt;ingress-svc.yml
 
-➜  ingress cat ingress-svc.yml     
+➜ ingress cat ingress-svc.yml
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-kic-svc
-  namespace: nginx-ingress
+name: nginx-kic-svc
+namespace: nginx-ingress
 spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
+ports:
+
+- port: 80
+  protocol: TCP
+  targetPort: 80
   selector:
-    app: nginx-kic-dep
+  app: nginx-kic-dep
   type: NodePort
 
-➜  ingress kubectl get svc -n nginx-ingress
-NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
-nginx-kic-svc   NodePort   10.105.174.176   &lt;none&gt;        80:32519&#47;TCP   3m41s
+➜ ingress kubectl get svc -n nginx-ingress
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+nginx-kic-svc NodePort 10.105.174.176 &lt;none&gt; 80:32519&#47;TCP 3m41s
 
-➜  ingress kubectl get node -o wide        
-NAME     STATUS   ROLES                  AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-VERSION      CONTAINER-RUNTIME
-ubuntu   Ready    control-plane,master   4d    v1.23.3   10.211.55.5   &lt;none&gt;        Ubuntu 22.04 LTS   5.15.0-58-generic   docker:&#47;&#47;20.10.12
-worker   Ready    &lt;none&gt;                 4d    v1.23.3   10.211.55.6   &lt;none&gt;        Ubuntu 22.04 LTS   5.15.0-58-generic   docker:&#47;&#47;20.10.12
+➜ ingress kubectl get node -o wide  
+NAME STATUS ROLES AGE VERSION INTERNAL-IP EXTERNAL-IP OS-IMAGE KERNEL-VERSION CONTAINER-RUNTIME
+ubuntu Ready control-plane,master 4d v1.23.3 10.211.55.5 &lt;none&gt; Ubuntu 22.04 LTS 5.15.0-58-generic docker:&#47;&#47;20.10.12
+worker Ready &lt;none&gt; 4d v1.23.3 10.211.55.6 &lt;none&gt; Ubuntu 22.04 LTS 5.15.0-58-generic docker:&#47;&#47;20.10.12
 
-➜  ingress curl --resolve ngx.test:32519:10.211.55.5 http:&#47;&#47;ngx.test:32519
+➜ ingress curl --resolve ngx.test:32519:10.211.55.5 http:&#47;&#47;ngx.test:32519
 srv : 10.10.1.10:80
 host: ngx-dep-6796688696-867dm
 uri : GET ngx.test &#47;
 date: 2023-02-09T15:10:48+00:00
 
-➜  ingress curl --resolve ngx.test:32519:10.211.55.5 http:&#47;&#47;ngx.test:32519
+➜ ingress curl --resolve ngx.test:32519:10.211.55.5 http:&#47;&#47;ngx.test:32519
 srv : 10.10.1.11:80
 host: ngx-dep-6796688696-psp5v
 uri : GET ngx.test &#47;
@@ -375,16 +376,16 @@ date: 2023-02-09T15:10:50+00:00</p>2023-02-09</li><br/><li><span>YueShi</span> �
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingress-svc
-  namespace: nginx-ingress
+name: ingress-svc
+namespace: nginx-ingress
 spec:
-  selector:
-    app: ngx-kic-dep
-  ports:
-  - port: 80
-    targetPort: 80
-  type: NodePort
+selector:
+app: ngx-kic-dep
+ports:
 
+- port: 80
+  targetPort: 80
+  type: NodePort
 
 请求 后面的端口要根据kubectl get svc -n nginx-ingress 查看
 
@@ -392,18 +393,19 @@ curl --resolve ngx.test:31967:127.0.0.1 http:&#47;&#47;ngx.test:31967</p>2022-08
 apiVersion: v1
 kind: Service
 metadata:
-  name: ngx-kic-svc
-  namespace: nginx-ingress
+name: ngx-kic-svc
+namespace: nginx-ingress
 
 spec:
-  selector:
-    app: ngx-kic-dep
-  type: NodePort
-  ports:
-  - port: 8082
-    targetPort: 80
-    protocol: TCP
-~                   
+selector:
+app: ngx-kic-dep
+type: NodePort
+ports:
+
+- port: 8082
+  targetPort: 80
+  protocol: TCP
+  ~
 
 查看svc的ip后访问：
 curl -H &quot;Host: ngx.test&quot; &quot;http:&#47;&#47;10.103.79.195:8082&quot;
@@ -416,12 +418,12 @@ Failed to watch *v1.Endpoints: failed to list *v1.Endpoints: endpoints is forbid
 总结：因没有拉老师提供的yml清单生成对应的对象，而是自己去github拉最新版本的yml生成对象，而镜像文件使用了老师提供，导致pod起不来。目测是版本对rabc规则的不兼容导致，不知道老师可以解答下吗？</p>2023-03-26</li><br/><li><span>pyhhou</span> 👍（2） 💬（4）<p>老师，setup Ingress Controller 那里有个问题不知道如何解决，看到评论区里也有很多同学有一样的问题
 
 $ kubectl logs ngx-kic-dep-75f4f5c7c-v9lt8 -n nginx-ingress
-I0907 22:10:01.222921       1 main.go:213] Starting NGINX Ingress Controller Version=2.2.2 GitCommit=a88b7fe6dbde5df79593ac161749afc1e9a009c6 Date=2022-05-24T00:33:34Z Arch=linux&#47;arm64 PlusFlag=false
-I0907 22:10:01.233010       1 main.go:344] Kubernetes version: 1.23.3
-F0907 22:10:01.233818       1 main.go:357] Error when getting IngressClass ngx-ink: ingressclasses.networking.k8s.io &quot;ngx-ink&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:default&quot; cannot get resource &quot;ingressclasses&quot; in API group &quot;networking.k8s.io&quot; at the cluster scope
+I0907 22:10:01.222921 1 main.go:213] Starting NGINX Ingress Controller Version=2.2.2 GitCommit=a88b7fe6dbde5df79593ac161749afc1e9a009c6 Date=2022-05-24T00:33:34Z Arch=linux&#47;arm64 PlusFlag=false
+I0907 22:10:01.233010 1 main.go:344] Kubernetes version: 1.23.3
+F0907 22:10:01.233818 1 main.go:357] Error when getting IngressClass ngx-ink: ingressclasses.networking.k8s.io &quot;ngx-ink&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:default&quot; cannot get resource &quot;ingressclasses&quot; in API group &quot;networking.k8s.io&quot; at the cluster scope
 
 pod 的状态是 CrashLoopBackOff
 
-我是直接执行你 GitHub 上面的 setup.sh 脚本的，然后再执行 kic.yaml 的，所以 rbac.yaml 也是执行了的。或者说 rbac.yaml 文件中的参数需要更改？</p>2022-09-08</li><br/><li><span>许飞</span> 👍（2） 💬（2）<p>F0818 12:36:23.718350       1 main.go:357] Error when getting IngressClass ngx-ink: ingressclasses.networking.k8s.io &quot;ngx-ink&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:default&quot; cannot get resource &quot;ingressclasses&quot; in API group &quot;networking.k8s.io&quot; at the cluster scope
+我是直接执行你 GitHub 上面的 setup.sh 脚本的，然后再执行 kic.yaml 的，所以 rbac.yaml 也是执行了的。或者说 rbac.yaml 文件中的参数需要更改？</p>2022-09-08</li><br/><li><span>许飞</span> 👍（2） 💬（2）<p>F0818 12:36:23.718350 1 main.go:357] Error when getting IngressClass ngx-ink: ingressclasses.networking.k8s.io &quot;ngx-ink&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:default&quot; cannot get resource &quot;ingressclasses&quot; in API group &quot;networking.k8s.io&quot; at the cluster scope
 老师这报错是为啥</p>2022-08-18</li><br/><li><span>悟远</span> 👍（2） 💬（2）<p>老师，请问Ingress可以针对http2.0进行控制吗？如gRPC，我试验gPRC时通过kubectl port-forward映射到本地，再加hosts，访问gRPC时失败了</p>2022-08-09</li><br/>
 </ul>

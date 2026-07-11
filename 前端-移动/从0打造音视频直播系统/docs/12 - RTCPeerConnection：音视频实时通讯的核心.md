@@ -156,7 +156,7 @@ let localPeerConnection = new RTCPeerConnection(servers);
 navigator.mediaDevices.getUserMedia(mediaStreamConstraints).
   then(gotLocalMediaStream).
   catch(handleLocalMediaStreamError);
-  
+
 //如果 getUserMedia 获得流，则会回调该函数
 //在该函数中一方面要将获取的音视频流展示出来
 //另一方面是保存到 localSteam
@@ -223,7 +223,7 @@ function createdOffer(description) {
     .catch(setSessionDescriptionError);
 }
 
-//当 answer 创建成功后，会回调该函数 
+//当 answer 创建成功后，会回调该函数
 function createdAnswer(description) {
   ...
   //远端保存 answer
@@ -250,7 +250,7 @@ function createdAnswer(description) {
 
 ```
 ...
-localPeerConnection.onicecandidate= handleConnection(event); 
+localPeerConnection.onicecandidate= handleConnection(event);
 ...
 ```
 
@@ -261,7 +261,7 @@ localPeerConnection.onicecandidate= handleConnection(event);
 ```
 ...
 function handleConnection(event) {
-  
+
   //获取到触发 icecandidate 事件的 RTCPeerConnection 对象
   //获取到具体的Candidate
   const peerConnection = event.target;
@@ -283,7 +283,7 @@ function handleConnection(event) {
 
     ...
   }
-  
+
 }
 ...
 ```
@@ -337,5 +337,5 @@ function handleRemoteStreamAdded(event) {
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>forever</span> 👍（7） 💬（1）<p>老师您好，我想请教一下如何解决webrtc 兼容性的问题，特别是在ios端使用腾讯x5内核的时候</p>2019-08-10</li><br/><li><span>Bubbly</span> 👍（3） 💬（1）<p>addStream好像要被addTrack替代了。老师可以分析下使用addTrack来替代addStream的原因吗？</p>2020-10-30</li><br/><li><span>dayu</span> 👍（3） 💬（2）<p>老师，请问一下，如果在局域网内进行一对一通话，是不是可以不搭建STUN\TURN服务器？</p>2020-02-16</li><br/><li><span>Jackson</span> 👍（2） 💬（2）<p>这个例子是webrtc官方的吧？</p>2019-12-18</li><br/><li><span>Random</span> 👍（1） 💬（2）<p>老师你好，通话过程中的ice restart的触发时机选择什么时候比较好呢？</p>2020-06-04</li><br/><li><span>xilie</span> 👍（1） 💬（1）<p>前面看不懂，到这才有感觉，又得回头去看前面的协议，建议凡事先上能跑起来的代码，再逐步解剖协议，好一点</p>2019-08-14</li><br/><li><span>Ray-J</span> 👍（1） 💬（1）<p>老师,Candidate的作用是用来做什么的呢?翻译过来 是候选人, 很难理解这个词,希望能得到老师的帮助加深理解</p>2019-08-12</li><br/><li><span>Her later</span> 👍（0） 💬（1）<p>在真实的场景中，每当获得一个新的 Candidate 后，就会通过信令服务器交换给对端，对端再调用 RTCPeerConnection 对象的 addIceCandidate() 方法将收到的 Candidate 保存起来，然后按照 Candidate 的优先级进行连通性检测。
 
-真实场景中，应该是candidate 都是通过信令服务器转发的吧，rtcpeerconnection并不会收到oncandidate 的回调，不知道我理解是否正确？</p>2021-04-15</li><br/><li><span>Her later</span> 👍（0） 💬（1）<p>这篇文章解析了 如何端对端的推拉流 ，但是如果我要将流推到服务器 ，其他很多人订阅服务器的流老播放 ，又该怎样实现呢 ，有没有专门的文章介绍 ，有的话 ，我就买了 。</p>2021-04-08</li><br/><li><span>npersonal</span> 👍（0） 💬（1）<p>老师，编解码没有讲解吗。我现在碰到个问题，使用h264编码，stream的width和height都为0，这是什么原因</p>2021-03-02</li><br/><li><span>十斗簸箕</span> 👍（0） 💬（1）<p>有这样一个场景，主机（PC）采集音视频然后推送到客户端浏览器，类似vnc只不过客户端是通过浏览器来操作，请问老师这类的业务场景webrtc能支持吗？如果能方面讲一下框架流程吗？谢谢</p>2021-01-20</li><br/><li><span>Zgjian</span> 👍（0） 💬（1）<p>老师您好，请问下在通话过程中切换摄像头还有修改分辨率怎么做，有哪些关键接口？</p>2020-10-21</li><br/><li><span>gseng</span> 👍（0） 💬（1）<p>Candidate会在直播的过程中一直有变化吗？ 还是说在直播建立之前两端交互完Candidate之后，就不再变化了？ </p>2020-05-28</li><br/><li><span>吴国广</span> 👍（0） 💬（1）<p>老师 在addstream事件获取到MediaStream  后  video  播放什么都没有  也没报错  可能是啥原因</p>2020-03-31</li><br/><li><span>zhushengtong</span> 👍（0） 💬（2）<p>老师，请问是不是可以使用虚拟机搭建服务器呢？谢谢！</p>2020-03-09</li><br/>
+真实场景中，应该是candidate 都是通过信令服务器转发的吧，rtcpeerconnection并不会收到oncandidate 的回调，不知道我理解是否正确？</p>2021-04-15</li><br/><li><span>Her later</span> 👍（0） 💬（1）<p>这篇文章解析了 如何端对端的推拉流 ，但是如果我要将流推到服务器 ，其他很多人订阅服务器的流老播放 ，又该怎样实现呢 ，有没有专门的文章介绍 ，有的话 ，我就买了 。</p>2021-04-08</li><br/><li><span>npersonal</span> 👍（0） 💬（1）<p>老师，编解码没有讲解吗。我现在碰到个问题，使用h264编码，stream的width和height都为0，这是什么原因</p>2021-03-02</li><br/><li><span>十斗簸箕</span> 👍（0） 💬（1）<p>有这样一个场景，主机（PC）采集音视频然后推送到客户端浏览器，类似vnc只不过客户端是通过浏览器来操作，请问老师这类的业务场景webrtc能支持吗？如果能方面讲一下框架流程吗？谢谢</p>2021-01-20</li><br/><li><span>Zgjian</span> 👍（0） 💬（1）<p>老师您好，请问下在通话过程中切换摄像头还有修改分辨率怎么做，有哪些关键接口？</p>2020-10-21</li><br/><li><span>gseng</span> 👍（0） 💬（1）<p>Candidate会在直播的过程中一直有变化吗？ 还是说在直播建立之前两端交互完Candidate之后，就不再变化了？ </p>2020-05-28</li><br/><li><span>吴国广</span> 👍（0） 💬（1）<p>老师 在addstream事件获取到MediaStream 后 video 播放什么都没有 也没报错 可能是啥原因</p>2020-03-31</li><br/><li><span>zhushengtong</span> 👍（0） 💬（2）<p>老师，请问是不是可以使用虚拟机搭建服务器呢？谢谢！</p>2020-03-09</li><br/>
 </ul>

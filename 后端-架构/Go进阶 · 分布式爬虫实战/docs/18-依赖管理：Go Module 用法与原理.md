@@ -150,7 +150,7 @@ go/
 在mod目录下，我们能够看到模块名路径中的第一部分即为顶级文件夹，如下所示：
 
 ```plain
-~/go/pkg/mod » ls -l  
+~/go/pkg/mod » ls -l
 drwxr-xr-x    6 jackson  staff    192  1 15 20:50 cache
 drwxr-xr-x    7 jackson  staff    224  2 20 17:50 cloud.google.com
 drwxr-xr-x    3 jackson  staff     96  2 18 12:03 git.apache.org
@@ -288,13 +288,13 @@ func main(){
 有多种方式可以实现依赖模块的更新，我们需要在go.mod文件中修改版本号为：
 
 ```plain
-require github.com/dreamerjackson/mydiv latest 
+require github.com/dreamerjackson/mydiv latest
 ```
 
 或者 ：
 
 ```plain
-require github.com/dreamerjackson/mydiv master 
+require github.com/dreamerjackson/mydiv master
 ```
 
 或者将指定commit Id 复制到末尾：
@@ -348,8 +348,8 @@ exclude (
 
 ```plain
 retract (
-    v1.0.0 
-    v1.0.1 
+    v1.0.0
+    v1.0.1
 )
 ```
 
@@ -503,7 +503,7 @@ github.com/dreamerjackson/mydiv v1.0.2
 第三种方式，我们可以使用“go list -m -u all”指令查看直接和间接模块的当前和最新版本。
 
 ```plain
-~/mathlib » go list -m -u all | column -t                                                                                                                                                          
+~/mathlib » go list -m -u all | column -t
 go: finding github.com/dreamerjackson/minidiv latest
 github.com/dreamerjackson/mathlib
 github.com/dreamerjackson/minidiv  v0.0.0-20200305104752-fcd15cf402bb
@@ -516,7 +516,7 @@ github.com/pkg/errors              v0.9.1
 更新模块可以使用go get指令，go get指令有不少的参数可供选择。使用下面的命令，可以更新项目中所有的依赖模块为最新版本。（注意，除非你了解项目的所有细节，否则不要直接将所有模块调整到最新版本。）
 
 ```plain
-~/mathlib » go get -u -t -v ./...                                              
+~/mathlib » go get -u -t -v ./...
 go: finding github.com/dreamerjackson/minidiv latest
 go: downloading github.com/dreamerjackson/mydiv v1.0.3
 go: extracting github.com/dreamerjackson/mydiv v1.0.3

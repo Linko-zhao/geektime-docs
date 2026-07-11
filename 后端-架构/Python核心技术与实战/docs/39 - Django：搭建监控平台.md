@@ -92,9 +92,9 @@ python3 manage.py createsuperuser
 ########## 输出 ##########
 
 Username (leave blank to use 'ubuntu'): admin
-Email address:  
-Password: 
-Password (again): 
+Email address:
+Password:
+Password (again):
 Superuser created successfully.
 ```
 
@@ -363,7 +363,7 @@ django-admin --version
 ########## 输出 ##########
 
 2.2.3
-老师  django的这些命令再Windows CMD命令框执行后不行，访问不了https:&#47;&#47;127.0.0.1:8000,  再centos 执行完所有代码  启动后django 服务，命令显示[root@localhost TradingMonitor]# python3 manage.py runserver
+老师 django的这些命令再Windows CMD命令框执行后不行，访问不了https:&#47;&#47;127.0.0.1:8000, 再centos 执行完所有代码 启动后django 服务，命令显示[root@localhost TradingMonitor]# python3 manage.py runserver
 Watching for file changes with StatReloader
 Performing system checks...
 

@@ -53,7 +53,7 @@ assert(!op.has_value()); 				// 默认是无效值
 op = 10; 								// 赋值，持有有效值
 if (op.has_value()) {					// 判断是否有效
   cout << "value is valid" << endl;
-} 
+}
 ```
 
 如果optional是有效的，也就是说里面有值，那么我们可以调用成员函数value()获取值的引用，而另一个成员函数value\_or()则更灵活些，如果optional无效就会返回给定的替代值，可以免去我们检查的步骤，代码写起来更加简单：

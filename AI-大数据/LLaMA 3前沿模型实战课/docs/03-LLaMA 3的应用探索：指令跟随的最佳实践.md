@@ -285,6 +285,7 @@ print(f"用户问题：{user_question}")
 response = agent.run(user_question)
 print(response)
 ```
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>小虎子11🐯</span> 👍（1） 💬（0）<p>课程代码地址：https:&#47;&#47;github.com&#47;tylerelyt&#47;LLaMa-in-Action</p>2024-11-25</li><br/><li><span>悟光</span> 👍（3） 💬（0）<p>格式化（如 JSON）的大语言模型输出我觉得会很好和现有的系统集成，标准的输出格式类似一个接口，这个接口已经被现有的系统广泛使用，理想情况下大模型可以应用到现有系统的任何一个模块里面</p>2024-12-09</li><br/><li><span>edward</span> 👍（2） 💬（0）<p>请问老师 大模型是如何判断什么时候该调用什么工具的。</p>2024-10-18</li><br/><li><span>Geek_820805</span> 👍（1） 💬（0）<p>改成 prompt = hub.pull(&quot;hwchase17&#47;react&quot;)
 tools=[city_code_tool, weather_tool]

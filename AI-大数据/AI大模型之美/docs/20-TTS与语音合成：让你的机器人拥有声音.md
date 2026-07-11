@@ -256,8 +256,8 @@ tts_executor = TTSExecutor()
 
 text = "早上好, how are you? 百度Paddle Speech一样能做中英文混合的语音合成。"
 output_file = "./data/paddlespeech_mix.wav"
-tts_executor(text=text, output=output_file, 
-             am="fastspeech2_mix", voc="hifigan_csmsc", 
+tts_executor(text=text, output=output_file,
+             am="fastspeech2_mix", voc="hifigan_csmsc",
              lang="mix", spk_id=174)
 
 play_wav_audio(output_file)
@@ -307,7 +307,7 @@ print(result)
 
 2. 语音为中英文混合的文件 &quot;.&#47;data&#47;BaiduTTS&#47;paddlespeech_mix_1.wav&quot;，用上面的代码运行
 
-输出结果: 
+输出结果:
 早上好哈沃尔姨百度他都斯一样能做中英文混合的语音合成
 语音原文:
 早上好, how are you? 百度 Paddle Speech 一样能做中英文混合的语音合成

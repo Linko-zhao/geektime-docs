@@ -45,12 +45,12 @@ foreach循环的意思是“遍历每一个成员”，它能够以更简洁的�
 public static void main(String args[]) {
     List<String> names = new ArrayList<String>();
     ...
-    //foreach循环 
+    //foreach循环
     for (String name:names)
         System.out.println(name);
 
 
-    //基础for循环   
+    //基础for循环
     for ( Iterator i = names.iterator(); i.hasNext(); ) {
         String name = (String)i.next();
         System.out.println(name);

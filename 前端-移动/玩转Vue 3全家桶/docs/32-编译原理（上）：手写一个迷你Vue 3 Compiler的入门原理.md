@@ -25,12 +25,11 @@
 理清了流程，我们动手完成具体代码实现。用下面的代码就能实现上述的流程图里的内容。其中parse函数负责生成抽象语法树AST，transform函数负责语义转换，generate函数负责最终的代码生成。
 
 ```javascript
-
 function compiler(template) {
   const ast = parse(template);
-  transform(ast)
-  const code = generate(ast)
-  return code
+  transform(ast);
+  const code = generate(ast);
+  return code;
 }
 
 let template = `<div id="app">
@@ -38,10 +37,10 @@ let template = `<div id="app">
   <h1 :name="title">玩转vue3</h1>
   <p >编译原理</p>
 </div>
-`
+`;
 
-const renderFunction = compiler(template)
-console.log(renderFunction)
+const renderFunction = compiler(template);
+console.log(renderFunction);
 ```
 
 我们先来看下parse函数如何实现。template转成render函数是两种语法的转换，这种代码转换的需求其实计算机的世界中非常常见。比如我们常用的Babel，就是把ES6的语法转成低版本浏览器可以执行的代码。
@@ -54,45 +53,47 @@ console.log(renderFunction)
 
 ```javascript
 function tokenizer(input) {
-  let tokens = []
-  let type = ''
-  let val = ''
+  let tokens = [];
+  let type = "";
+  let val = "";
   // 粗暴循环
   for (let i = 0; i < input.length; i++) {
-    let ch = input[i]
-    if (ch === '<') {
-      push()
-      if (input[i + 1] === '/') {
-        type = 'tagend'
+    let ch = input[i];
+    if (ch === "<") {
+      push();
+      if (input[i + 1] === "/") {
+        type = "tagend";
       } else {
-        type = 'tagstart'
+        type = "tagstart";
       }
-    } if (ch === '>') {
-      if(input[i-1]=='='){
-        //箭头函数
-      }else{
-        push()
-        type = "text"
-        continue
-      }
-    } else if (/[\s]/.test(ch)) { // 碰见空格截断一下
-      push()
-      type = 'props'
-      continue
     }
-    val += ch
+    if (ch === ">") {
+      if (input[i - 1] == "=") {
+        //箭头函数
+      } else {
+        push();
+        type = "text";
+        continue;
+      }
+    } else if (/[\s]/.test(ch)) {
+      // 碰见空格截断一下
+      push();
+      type = "props";
+      continue;
+    }
+    val += ch;
   }
-  return tokens
+  return tokens;
 
   function push() {
     if (val) {
-      if (type === "tagstart") val = val.slice(1) // <div => div
-      if (type === "tagend") val = val.slice(2)   //  </div  => div
+      if (type === "tagstart") val = val.slice(1); // <div => div
+      if (type === "tagend") val = val.slice(2); //  </div  => div
       tokens.push({
         type,
-        val
-      })
-      val = ''
+        val,
+      });
+      val = "";
     }
   }
 }
@@ -130,54 +131,54 @@ function tokenizer(input) {
 
 ```javascript
 function parse(template) {
-  const tokens = tokenizer(template)
-  let cur = 0
+  const tokens = tokenizer(template);
+  let cur = 0;
   let ast = {
-    type: 'root',
-    props:[],
-    children: []
-  }
+    type: "root",
+    props: [],
+    children: [],
+  };
   while (cur < tokens.length) {
-    ast.children.push(walk())
+    ast.children.push(walk());
   }
-  return ast
+  return ast;
 
   function walk() {
-    let token = tokens[cur]
-    if (token.type == 'tagstart') {
+    let token = tokens[cur];
+    if (token.type == "tagstart") {
       let node = {
-        type: 'element',
+        type: "element",
         tag: token.val,
         props: [],
-        children: []
-      }
-      token = tokens[++cur]
-      while (token.type !== 'tagend') {
-        if (token.type == 'props') {
-          node.props.push(walk())
+        children: [],
+      };
+      token = tokens[++cur];
+      while (token.type !== "tagend") {
+        if (token.type == "props") {
+          node.props.push(walk());
         } else {
-          node.children.push(walk())
+          node.children.push(walk());
         }
-        token = tokens[cur]
+        token = tokens[cur];
       }
-      cur++
-      return node
+      cur++;
+      return node;
     }
-    if (token.type === 'tagend') {
-      cur++
+    if (token.type === "tagend") {
+      cur++;
       // return token
     }
     if (token.type == "text") {
-      cur++
-      return token
+      cur++;
+      return token;
     }
     if (token.type === "props") {
-      cur++
-      const [key, val] = token.val.replace('=','~').split('~')
+      cur++;
+      const [key, val] = token.val.replace("=", "~").split("~");
       return {
         key,
-        val
-      }
+        val,
+      };
     }
   }
 }
@@ -266,10 +267,10 @@ function transform(ast) {
   // 优化一下ast
   let context = {
     // import { toDisplayString , createVNode , openBlock , createBlock } from "vue"
-    helpers:new Set(['openBlock','createVnode']), // 用到的工具函数 
-  }
-  traverse(ast, context)
-  ast.helpers = context.helpers
+    helpers: new Set(["openBlock", "createVnode"]), // 用到的工具函数
+  };
+  traverse(ast, context);
+  ast.helpers = context.helpers;
 }
 ```
 
@@ -280,63 +281,61 @@ function transform(ast) {
 然后冒号开头的就是动态的属性传递，并且把class和style标记了不同的flag。如果都没有命中的话，就使用static:true，标记当前节点位是静态节点。
 
 ```javascript
-function traverse(ast, context){
-  switch(ast.type){
+function traverse(ast, context) {
+  switch (ast.type) {
     case "root":
-      context.helpers.add('createBlock')
-      // log(ast)
+      context.helpers.add("createBlock");
+    // log(ast)
     case "element":
-      ast.children.forEach(node=>{
-        traverse(node,context)
-      })
-      ast.flag = 0
-      ast.props = ast.props.map(prop=>{
-        const {key,val} = prop
-        if(key[0]=='@'){
-          ast.flag |= PatchFlags.EVENT // 标记event需要更新
+      ast.children.forEach((node) => {
+        traverse(node, context);
+      });
+      ast.flag = 0;
+      ast.props = ast.props.map((prop) => {
+        const { key, val } = prop;
+        if (key[0] == "@") {
+          ast.flag |= PatchFlags.EVENT; // 标记event需要更新
           return {
-            key:'on'+key[1].toUpperCase()+key.slice(2),
-            val
-          }
+            key: "on" + key[1].toUpperCase() + key.slice(2),
+            val,
+          };
         }
-        if(key[0]==':'){
-          const k = key.slice(1)
-          if(k=="class"){
-            ast.flag |= PatchFlags.CLASS // 标记class需要更新
-
-          }else if(k=='style'){
-            ast.flag |= PatchFlags.STYLE // 标记style需要更新
-          }else{
-            ast.flag |= PatchFlags.PROPS // 标记props需要更新
+        if (key[0] == ":") {
+          const k = key.slice(1);
+          if (k == "class") {
+            ast.flag |= PatchFlags.CLASS; // 标记class需要更新
+          } else if (k == "style") {
+            ast.flag |= PatchFlags.STYLE; // 标记style需要更新
+          } else {
+            ast.flag |= PatchFlags.PROPS; // 标记props需要更新
           }
-          return{
-            key:key.slice(1),
-            val
-          }
+          return {
+            key: key.slice(1),
+            val,
+          };
         }
-        if(key.startsWith('v-')){
-          // pass such as v-model 
+        if (key.startsWith("v-")) {
+          // pass such as v-model
         }
         //标记static是true 静态节点
-        return {...prop,static:true} 
-      })
-      break
+        return { ...prop, static: true };
+      });
+      break;
     case "text":
       // trnsformText
-      let re = /\{\{(.*)\}\}/g
-      if(re.test(ast.val)){
+      let re = /\{\{(.*)\}\}/g;
+      if (re.test(ast.val)) {
         //有{{
-          ast.flag |= PatchFlags.TEXT // 标记props需要更新
-          context.helpers.add('toDisplayString')
-          ast.val = ast.val.replace(/\{\{(.*)\}\}/g,function(s0,s1){
-            return s1
-          })
-      }else{
-        ast.static = true
+        ast.flag |= PatchFlags.TEXT; // 标记props需要更新
+        context.helpers.add("toDisplayString");
+        ast.val = ast.val.replace(/\{\{(.*)\}\}/g, function (s0, s1) {
+          return s1;
+        });
+      } else {
+        ast.static = true;
       }
   }
-}  
-
+}
 ```
 
 经过上面的代码标记优化之后，项目在数据更新之后，浏览器计算虚拟dom diff运算的时候，就会执行类似下面的代码逻辑。
@@ -345,10 +344,10 @@ function traverse(ast, context){
 
 ```javascript
 if(vnode.static){
-  return 
+  return
 }
 if(vnode.flag & patchFlag.CLASS){
-  遍历class 计算diff  
+  遍历class 计算diff
 }else if(vnode.flag & patchFlag.STYLE){
   计算style的diff
 }else if(vnode.flag & patchFlag.TEXT){
@@ -362,41 +361,46 @@ if(vnode.flag & patchFlag.CLASS){
 
 ```javascript
 function generate(ast) {
-  const {helpers} = ast 
+  const { helpers } = ast;
 
   let code = `
-import {${[...helpers].map(v=>v+' as _'+v).join(',')}} from 'vue'\n
+import {${[...helpers].map((v) => v + " as _" + v).join(",")}} from 'vue'\n
 export function render(_ctx, _cache, $props){
-  return(_openBlock(), ${ast.children.map(node=>walk(node))})}`
+  return(_openBlock(), ${ast.children.map((node) => walk(node))})}`;
 
-  function walk(node){
-    switch(node.type){
-      case 'element':
-        let {flag} = node // 编译的标记
-        let props = '{'+node.props.reduce((ret,p)=>{
-          if(flag.props){
-            //动态属性
-            ret.push(p.key +':_ctx.'+p.val.replace(/['"]/g,'') )
-          }else{
-            ret.push(p.key +':'+p.val )
-          }
+  function walk(node) {
+    switch (node.type) {
+      case "element":
+        let { flag } = node; // 编译的标记
+        let props =
+          "{" +
+          node.props
+            .reduce((ret, p) => {
+              if (flag.props) {
+                //动态属性
+                ret.push(p.key + ":_ctx." + p.val.replace(/['"]/g, ""));
+              } else {
+                ret.push(p.key + ":" + p.val);
+              }
 
-          return ret
-        },[]).join(',')+'}'
+              return ret;
+            }, [])
+            .join(",") +
+          "}";
         return `_createVnode("${node.tag}",${props}),[
-          ${node.children.map(n=>walk(n))}
-        ],${JSON.stringify(flag)}`
-        break
-      case 'text':
-        if(node.static){
-          return '"'+node.val+'"'
-        }else{
-          return `_toDisplayString(_ctx.${node.val})`
+          ${node.children.map((n) => walk(n))}
+        ],${JSON.stringify(flag)}`;
+        break;
+      case "text":
+        if (node.static) {
+          return '"' + node.val + '"';
+        } else {
+          return `_toDisplayString(_ctx.${node.val})`;
         }
-        break
+        break;
     }
   }
-  return code
+  return code;
 }
 ```
 
@@ -407,10 +411,10 @@ export function render(_ctx, _cache, $props){
 ```javascript
 function compiler(template) {
   const ast = parse(template);
-  transform(ast)
+  transform(ast);
 
-  const code = generate(ast)
-  return code
+  const code = generate(ast);
+  return code;
 }
 
 let template = `<div id="app">
@@ -418,26 +422,37 @@ let template = `<div id="app">
   <h1 :name="title">玩转vue3</h1>
   <p >编译原理</p>
 </div>
-`
+`;
 
-const renderFunction = compiler(template)
-console.log(renderFunction)
+const renderFunction = compiler(template);
+console.log(renderFunction);
 
 // 下面是输出结果
-import { openBlock as _openBlock, createVnode as _createVnode, createBlock as _createBlock, toDisplayString as _toDisplayString } from 'vue'
+import {
+  openBlock as _openBlock,
+  createVnode as _createVnode,
+  createBlock as _createBlock,
+  toDisplayString as _toDisplayString,
+} from "vue";
 
 export function render(_ctx, _cache, $props) {
-  return (_openBlock(), _createVnode("div", { id: "app" }), [
-    _createVnode("div", { onClick: "()=>console.log(xx)", id: "name" }), [
-      _toDisplayString(_ctx.name)
-    ], 24, _createVnode("h1", { name: "title" }), [
-      "玩转vue3"
-    ], 8, _createVnode("p", {}), [
-      "编译原理"
-    ], 0
-  ], 0)
+  return (
+    _openBlock(),
+    _createVnode("div", { id: "app" }),
+    [
+      _createVnode("div", { onClick: "()=>console.log(xx)", id: "name" }),
+      [_toDisplayString(_ctx.name)],
+      24,
+      _createVnode("h1", { name: "title" }),
+      ["玩转vue3"],
+      8,
+      _createVnode("p", {}),
+      ["编译原理"],
+      0,
+    ],
+    0
+  );
 }
-
 ```
 
 ## 总结
@@ -456,9 +471,9 @@ export function render(_ctx, _cache, $props) {
 <div><strong>精选留言（6）</strong></div><ul>
 <li><span>神瘦</span> 👍（0） 💬（1）<p>“tokenizer 的迷你实现”这个地方“把模板中的”这几个字后面一大段空白呢，你们那边能看到吗？检查下呢</p>2022-01-30</li><br/><li><span>openbilibili</span> 👍（0） 💬（1）<p>template中的p标签 不能有空格 不然解析不了</p>2022-01-06</li><br/><li><span>斜月浮云</span> 👍（0） 💬（2）<p>hoisted开头的变量用于静态节点提升，说白了就是在整个生命周期中只需要进行一次创建，有效节省不必要的性能开销。
 
-话说最后的generate代码明显不对啊，createVnode的后括号阔歪了哦~🙂</p>2022-01-03</li><br/><li><span>陈坚泓</span> 👍（0） 💬（0）<p>const [key, val] = token.val.replace(&#39;=&#39;,&#39;~&#39;).split(&#39;~&#39;)  
+话说最后的generate代码明显不对啊，createVnode的后括号阔歪了哦~~🙂</p>2022-01-03</li><br/><li><span>陈坚泓</span> 👍（0） 💬（0）<p>const [key, val] = token.val.replace(&#39;=&#39;,&#39;~~&#39;).split(&#39;~&#39;)  
 是不是可以写成
-const [key, val] = token.val.split(&#39;=&#39;)  
+const [key, val] = token.val.split(&#39;=&#39;)
 
-备注里 &#47;&#47; trnsformText    估计是拼错了 </p>2022-05-20</li><br/><li><span>Blueberry</span> 👍（0） 💬（0）<p>template语法需要经过这么一系列的编译，那h函数呢，是经过什么变成了最后的render语法?</p>2022-04-12</li><br/><li><span>名字好长的大林</span> 👍（0） 💬（1）<p>PatchFlags 这个变量没有给？？</p>2022-02-04</li><br/>
+备注里 &#47;&#47; trnsformText 估计是拼错了 </p>2022-05-20</li><br/><li><span>Blueberry</span> 👍（0） 💬（0）<p>template语法需要经过这么一系列的编译，那h函数呢，是经过什么变成了最后的render语法?</p>2022-04-12</li><br/><li><span>名字好长的大林</span> 👍（0） 💬（1）<p>PatchFlags 这个变量没有给？？</p>2022-02-04</li><br/>
 </ul>

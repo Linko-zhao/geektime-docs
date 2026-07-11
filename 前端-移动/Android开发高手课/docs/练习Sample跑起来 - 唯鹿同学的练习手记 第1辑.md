@@ -1,5 +1,5 @@
 > 你好，我是张绍文，今天我要跟你分享唯鹿同学完成专栏课后练习作业的“手记”。专栏承诺会为坚持完成练习作业的同学送出GMTC大会门票，唯鹿同学通过自己的努力和坚持，为自己赢得了GMTC大会的门票。
-> 
+>
 > 如果你还没开始练习，我强烈建议你花一些时间在练习上，因为每个练习的Sample都是我和学习委员花费很多精力精心准备的，为的是让你在学习完后可以有机会上手实践，帮你尽快消化专栏里的知识并为自己所用。
 
 大家好，我是唯鹿，来自西安，从事Android开发也有近5年的时间了，目前在做智慧社区方面的业务。我自己坚持写博客已经有三年多的时间了，希望分享自己在工作、学习中的收获。
@@ -8,7 +8,7 @@
 
 后面我计划专栏结束后再多看、多练习几遍，不断查漏补缺。说真的，我很喜欢《Android开发高手课》的难度，让我在完成练习作业时有种翻越高山的快感。最后，希望同学们一起坚持，享受翻越高山带来的成就感。
 
-* * *
+---
 
 最近在学习张绍文老师的《Android开发高手课》。课后作业可不是一般的难，最近几天抽空练习了一下，结合老师给的步骤和其他同学的经验，完成了前5课的内容。
 
@@ -97,7 +97,7 @@ Crash()
 [**Chapter03**](https://github.com/AndroidAdvanceWithGeektime/Chapter03)
 
 > 项目使用了Inline Hook来拦截内存对象分配时候的RecordAllocation函数，通过拦截该接口可以快速获取到当时分配对象的类名和分配的内存大小。
-> 
+>
 > 在初始化的时候我们设置了一个分配对象数量的最大值，如果从start开始对象分配数量超过最大值就会触发内存dump，然后清空alloc对象列表，重新计算。该功能和Android Studio里的Allocation Tracker类似，只不过可以在代码级别更细粒度的进行控制。可以精确到方法级别。
 
 项目直接跑起来后，点击开始记录，然后点击5次生成1000对象按钮。生成对象代码如下：
@@ -304,7 +304,7 @@ for (Heap heap : heaps) {
             instance = instance.getNextInstanceToGcRoot();
         }
         // 根据hashcode来进行重复判断
-        
+
     }
 }
 ```
@@ -338,7 +338,7 @@ usage: CPU usage 5000ms(from 23:23:33.000 to 23:23:38.000):
  CPU Core: 8
  Load Average: 8.74 / 7.74 / 7.36
 
- Process:com.sample.app 
+ Process:com.sample.app
    50% 23468/com.sample.app(S): 11% user + 38% kernel faults:4965
 
  Threads:
@@ -359,7 +359,7 @@ private void testIO() {
                 File f = new File(getFilesDir(), "aee.txt");
 				FileOutputStream fos = new FileOutputStream(f);
 				byte[] data = new byte[1024 * 4 * 3000];// 此处分配一个 12mb 大小的 byte 数组
-	
+
 				for (int i = 0; i < 30; i++) {// 由于 IO cache 机制的原因所以此处写入多次 cache，触发 dirty writeback 到磁盘中
     				Arrays.fill(data, (byte) i);// 当执行到此处的时候产生 minor fault，并且产生 User cpu useage
     				fos.write(data);
@@ -384,6 +384,7 @@ private void testIO() {
 
 - [练习Sample跑起来 | 热点问题答疑第1期](https://time.geekbang.org/column/article/73068)
 - [练习Sample跑起来 | 热点问题答疑第2期](https://time.geekbang.org/column/article/75440)
+
 <div><strong>精选留言（10）</strong></div><ul>
 <li><span>戴寅华</span> 👍（1） 💬（1）<p>张老师您好，关于chapter01练习，我想自己手动去编译一下breakpad按照您的教程，不过在clone depot_tools的时候，出现了failed to connect 443，搜索后使用了很多可能的办法，好像都不行，还望您指教，谢谢</p>2019-03-02</li><br/><li><span>CathyChen</span> 👍（1） 💬（0）<p>优秀，要向你学习</p>2019-03-01</li><br/><li><span>LD</span> 👍（1） 💬（0）<p>优秀</p>2019-03-01</li><br/><li><span>董尚斌</span> 👍（1） 💬（0）<p>优秀</p>2019-02-28</li><br/><li><span>小虎哥V</span> 👍（1） 💬（0）<p>同学太优秀啦，赞</p>2019-02-28</li><br/><li><span>夏</span> 👍（1） 💬（0）<p>优秀</p>2019-02-28</li><br/><li><span>zhuxiaohao</span> 👍（1） 💬（0）<p>同学优秀。</p>2019-02-28</li><br/><li><span>GEEK_jahen</span> 👍（0） 💬（0）<p>模仿ProcessCpuTracker能否找到死循环的线程，死循环线程的特点是什么？</p>2022-10-27</li><br/><li><span>EchoSomeTH</span> 👍（0） 💬（2）<p>ArrayInstance咋弄出来的？请问？那个HahaHelper能发一个吗？</p>2019-07-21</li><br/><li><span>程序员小跃</span> 👍（0） 💬（0）<p>时间是检验真理的唯一标准，给力给力</p>2019-06-20</li><br/>
 </ul>

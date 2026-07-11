@@ -216,7 +216,8 @@ Calico的网络架构我也画了一张示意图，你可以再对比Flannel来�
 Calico 也有多种工作模式，默认是 IPinIP，同节点的 Pod 间直接通过虚拟网卡结合路由表传输，跨节点间的 Pod 需要IP层的封装，数据包通过IP隧道传输，如 tunl0。多节点间的路由通过BGP协议共享。
 
 在节点上抓包观察同节点 Pod 和 跨节点 Pod 数据传输：
-```bash
+
+````bash
 kubectl exec -it ngx-dep-bfbb5f64b-87sm4 -- curl 10.244.225.25
 sudo tcpdump -n -s0 -i any host 10.244.225.25
 kubectl exec -it ngx-dep-bfbb5f64b-87sm4 -- curl 10.244.185.207
@@ -253,3 +254,4 @@ Events:
   Warning  BackOff  23m (x55 over 9h)   kubelet  Back-off restarting failed container
   Normal   Pulled   55s (x97 over 10h)  kubelet  Container image &quot;docker.io&#47;calico&#47;node:v3.23.5&quot; already present on machine</p>2023-06-28</li><br/>
 </ul>
+````

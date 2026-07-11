@@ -207,11 +207,12 @@ telnet 实例IP 实例端口
 127.0.0.1:6479&gt; LPUSH mylist 1 2 3.3 4 hello
 (integer) 5
 127.0.0.1:6479&gt; LRANGE mylist 0 4
-1) &quot;hello&quot;
-2) &quot;4&quot;
-3) &quot;3.3&quot;
-4) &quot;2&quot;
-5) &quot;1&quot;
+
+1. &quot;hello&quot;
+2. &quot;4&quot;
+3. &quot;3.3&quot;
+4. &quot;2&quot;
+5. &quot;1&quot;
 
 使用telnet发送命令，观察结果：
 
@@ -301,7 +302,7 @@ put testkey2 testvalue
 
 最后，关于 Hash 类型的 testhash 和 Sorted Set 类型的 testzset 的例子
 
-```
+````
 hset testhash a 1 b 2 c 3
 :0
 hgetall testhash
@@ -341,14 +342,18 @@ $1
 ```</p>2021-03-22</li><br/><li><span>Geek_zbvt62</span> 👍（1） 💬（0）<p>用旧的客户端连接6没看到返回合适有变化，2和3的兼容是服务端做的嘛？</p>2021-02-05</li><br/><li><span>GJXAIOU</span> 👍（0） 💬（0）<p>MAC  ARM 验证示例：
 ```shell
 brew install telnet
-```
+````
+
 然后使用 telnet
+
 ```shell
 telnet 127.0.0.1 6379
 ```
+
 然后可以执行 Redis 命令（和 telnet 同窗口就行）：
+
 ```shell
-GET key 
+GET key
 $3
 112
 SET KEY 123
@@ -357,6 +362,7 @@ GET KEY
 $3
 123
 ```
+
 ```</p>2024-08-18</li><br/><li><span>Geek_LIAO</span> 👍（0） 💬（0）<p>lpush mylist 1 2 3.3 4 hello
 :5                                                                                                                                
 
@@ -379,3 +385,4 @@ $1
 https:&#47;&#47;github.com&#47;redis&#47;redis-specifications&#47;tree&#47;master&#47;protocol</p>2022-09-10</li><br/><li><span>少</span> 👍（0） 💬（0）<p>Redis6 默认也是支持RESP2的</p>2021-11-08</li><br/><li><span>L-an</span> 👍（0） 💬（0）<p>老师，HSET testhash a 1 b 2 c 3  这个命令是不是有问题呢？
 长字符串类型返回长度之后应该有换行吧，应该是： $9\r\ntestvalue\r\n</p>2021-08-24</li><br/><li><span>dfuru</span> 👍（0） 💬（0）<p>*5\r\n:1\r\n:2\r\n,3.3\r\n:4\r\n$5\r\nhello\r\n</p>2020-11-05</li><br/>
 </ul>
+```

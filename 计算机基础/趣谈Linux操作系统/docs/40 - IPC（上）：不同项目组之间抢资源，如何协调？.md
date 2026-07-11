@@ -21,21 +21,21 @@ struct shm_data {
 };
 
 union semun {
-  int val; 
-  struct semid_ds *buf; 
-  unsigned short int *array; 
-  struct seminfo *__buf; 
-}; 
+  int val;
+  struct semid_ds *buf;
+  unsigned short int *array;
+  struct seminfo *__buf;
+};
 
 int get_shmid(){
   int shmid;
   key_t key;
-  
+
   if((key = ftok("/root/sharememory/sharememorykey", 1024)) < 0){
       perror("ftok error");
           return -1;
   }
-  
+
   shmid = shmget(key, sizeof(struct shm_data), IPC_CREAT|0777);
   return shmid;
 }
@@ -43,39 +43,39 @@ int get_shmid(){
 int get_semaphoreid(){
   int semid;
   key_t key;
-  
+
   if((key = ftok("/root/sharememory/semaphorekey", 1024)) < 0){
       perror("ftok error");
           return -1;
   }
-  
+
   semid = semget(key, 1, IPC_CREAT|0777);
   return semid;
 }
 
 int semaphore_init (int semid) {
-  union semun argument; 
-  unsigned short values[1]; 
-  values[0] = 1; 
-  argument.array = values; 
-  return semctl (semid, 0, SETALL, argument); 
+  union semun argument;
+  unsigned short values[1];
+  values[0] = 1;
+  argument.array = values;
+  return semctl (semid, 0, SETALL, argument);
 }
 
 int semaphore_p (int semid) {
-  struct sembuf operations[1]; 
-  operations[0].sem_num = 0; 
-  operations[0].sem_op = -1; 
-  operations[0].sem_flg = SEM_UNDO; 
-  return semop (semid, operations, 1); 
+  struct sembuf operations[1];
+  operations[0].sem_num = 0;
+  operations[0].sem_op = -1;
+  operations[0].sem_flg = SEM_UNDO;
+  return semop (semid, operations, 1);
 }
 
 int semaphore_v (int semid) {
-  struct sembuf operations[1]; 
-  operations[0].sem_num = 0; 
-  operations[0].sem_op = 1; 
-  operations[0].sem_flg = SEM_UNDO; 
-  return semop (semid, operations, 1); 
-} 
+  struct sembuf operations[1];
+  operations[0].sem_num = 0;
+  operations[0].sem_op = 1;
+  operations[0].sem_flg = SEM_UNDO;
+  return semop (semid, operations, 1);
+}
 ```
 
 ## 共享内存
@@ -145,7 +145,7 @@ int main() {
   int shmid = get_shmid();
   int semid = get_semaphoreid();
   int i;
-  
+
   shm = shmat(shmid, (void*)0, 0);
   if(shm == (void*)-1){
     exit(0);
@@ -192,7 +192,7 @@ int main() {
   int shmid = get_shmid();
   int semid = get_semaphoreid();
   int i;
-  
+
   shm = shmat(shmid, (void*)0, 0);
   if(shm == (void*)-1){
     exit(0);
@@ -229,19 +229,19 @@ int main() {
 ```
 # ipcs
 ------ Message Queues --------
-key        msqid      owner      perms      used-bytes   messages    
+key        msqid      owner      perms      used-bytes   messages
 ------ Shared Memory Segments --------
-key        shmid      owner      perms      bytes      nattch     status      
-0x00016988 32768      root       777        516        0             
+key        shmid      owner      perms      bytes      nattch     status
+0x00016988 32768      root       777        516        0
 ------ Semaphore Arrays --------
-key        semid      owner      perms      nsems     
-0x00016989 32768      root       777        1 
+key        semid      owner      perms      nsems
+0x00016989 32768      root       777        1
 ```
 
 下面我们来运行一下producer和consumer，可以得到下面的结果：
 
 ```
-# ./producer 
+# ./producer
 how many integers to caculate : 2
 Input the 0 integer : 3
 Input the 1 integer : 4
@@ -259,7 +259,7 @@ Input the 4 integer : 5
 Input the 5 integer : 4
 Input the 6 integer : 3
 
-# ./consumer 
+# ./consumer
 3+4=7
 3+4+5+6=18
 9+8+7+6+5+4+3=42

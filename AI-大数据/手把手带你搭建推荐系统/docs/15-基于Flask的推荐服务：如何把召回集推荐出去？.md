@@ -46,7 +46,7 @@
 我们首先在项目中新建一个Redis数据库的连接工具类，用作连接Redis数据库。我们在dao目录下新建一个名为 redis\_db.py 的Python文件，并编写如下代码。
 
 ```plain
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import redis
  

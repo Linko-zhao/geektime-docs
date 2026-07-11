@@ -222,7 +222,7 @@ start group_replication;
 检查复制通道是否配置正确。
 
 ```plain
-select user_name, user_password from mysql.slave_master_info 
+select user_name, user_password from mysql.slave_master_info
 where channel_name = 'group_replication_recovery';
 ```
 
@@ -407,7 +407,7 @@ mysql> select group_replication_switch_to_single_primary_mode('7caa9a48-b325-11e
 1 row in set (0.04 sec)
 
 
-mysql> select member_id, member_state, member_role 
+mysql> select member_id, member_state, member_role
     from performance_schema.replication_group_members;
 +--------------------------------------+--------------+-------------+
 | member_id                            | member_state | member_role |
@@ -426,7 +426,7 @@ mysql> select member_id, member_state, member_role
 单主模式下，如果主节点发生异常，集群会发起选举，选择新的主节点。也可以通过函数group\_replication\_set\_as\_primary指定新的主节点。
 
 ```plain
-mysql> select member_id,member_host, member_state, member_role 
+mysql> select member_id,member_host, member_state, member_role
   from replication_group_members;
 +--------------------------------------+----------------+--------------+-------------+
 | member_id                            | member_host    | member_state | member_role |
@@ -478,8 +478,8 @@ SELECT * FROM performance_schema.replication_group_members;
 SELECT @@GLOBAL.GTID_EXECUTED;
 
 
-SELECT received_transaction_set 
-FROM performance_schema.replication_connection_status 
+SELECT received_transaction_set
+FROM performance_schema.replication_connection_status
 WHERE channel_name="group_replication_applier";
 ```
 

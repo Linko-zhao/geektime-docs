@@ -109,7 +109,7 @@ public class Sub extends Parent{
   public Sub(){
     System.out.println("sub instance initialization");
   }
- 
+
   public static void main(String[] args){
     System.out.println("sub main");
     new Sub();
@@ -261,14 +261,14 @@ public static void main(String[] args) {
 }
 
 public static int getAge(){
-	Student person = new Student("小明",18,30);   
+	Student person = new Student("小明",18,30);
     return person.getAge();
 }
 
 static class Student {
     private String name;
     private int age;
-   
+
     public Student(String name, int age) {
         this.name = name;
         this.age = age;
@@ -339,7 +339,7 @@ static class Student {
 逃逸分析后，代码会被优化为：
 
 ```
-   
+
    public void foo() {
         id = 1;
         count = 99;

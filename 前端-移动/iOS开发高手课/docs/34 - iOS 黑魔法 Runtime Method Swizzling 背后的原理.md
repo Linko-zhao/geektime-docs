@@ -34,8 +34,8 @@ Runtime 不光能够进行方法交换，还能够在运行时处理 Objective-C
     Method fromMethod = class_getInstanceMethod(class, fromSelector);
     // 得到交换类的实例方法
     Method toMethod = class_getInstanceMethod(class, toSelector);
-    
-    // class_addMethod() 函数返回成功表示被交换的方法没实现，然后会通过 class_addMethod() 函数先实现；返回失败则表示被交换方法已存在，可以直接进行 IMP 指针交换 
+
+    // class_addMethod() 函数返回成功表示被交换的方法没实现，然后会通过 class_addMethod() 函数先实现；返回失败则表示被交换方法已存在，可以直接进行 IMP 指针交换
     if(class_addMethod(class, fromSelector, method_getImplementation(toMethod), method_getTypeEncoding(toMethod))) {
         // 进行方法的交换
         class_replaceMethod(class, toSelector, method_getImplementation(fromMethod), method_getTypeEncoding(fromMethod));
@@ -135,11 +135,11 @@ static void aspect_prepareClassAndHookSelector(NSObject *self, SEL selector, NSE
    “第三个风险是，交换的方法如果依赖了 cmd，那么交换后，如果...”这句话有点不太理解，能做个详细的阐述吗？交换方法在什么情况会依赖cmd？不是特别理解，谢谢~</p>2019-05-28</li><br/><li><span>daniel</span> 👍（19） 💬（0）<p>cmd是指每个函数中都会存在的一个隐藏参数，比如我们想要知道当前函数的名字可以通过在函数内部NSStringFromSelector(_cmd)打印当前函数名字，方法交换后显然原方法的cmd不同了，就跟评论其他人说的差不多，假如原函数有些逻辑是对_cmd进行的，这时候就会出现奇怪的错误。</p>2019-07-05</li><br/><li><span>Trust me ҉҉҉҉҉҉҉❀</span> 👍（10） 💬（0）<p>aspect风险才多 bug也多</p>2019-05-28</li><br/><li><span>帅气潇洒的豆子</span> 👍（7） 💬（1）<p>问题跟Vicky 朋友一样，我不清楚这里的cmd指的是什么，谢谢</p>2019-05-29</li><br/><li><span>Usama Bin Laden</span> 👍（6） 💬（0）<p>方法交换，都没用过库，都是直接写的。。。</p>2019-05-28</li><br/><li><span>Realtime</span> 👍（5） 💬（0）<p>老师，swift 有 相关功能么？ 没有的话，怎么做无侵入埋点呀。苹果为啥把动态功能去掉了，怎么考虑的呀？有相关的替代方法么？</p>2019-05-29</li><br/><li><span>bart</span> 👍（4） 💬（1）<p>@Vicky 我帮你举个栗子
 当你在运行时替换某对象中的某函数实现时，如果需要在替换函数中调用原始函数实现，则可以使用cmd。
 
- 1.创建新类继承老类实现相同的函数
- 2.在老类的分类的函数中将被hook的类的isa指向新类(也就是修改了元类)
- 此时的实例实际上就是新创建子类的实例了
- 3.所以此时调用实例的函数就会调用子类的函数
- 4.(可选：在子类中动态获取父类，调用父类的eat函数)就是这步，可以使用cmd。
+1.创建新类继承老类实现相同的函数
+2.在老类的分类的函数中将被hook的类的isa指向新类(也就是修改了元类)
+此时的实例实际上就是新创建子类的实例了
+3.所以此时调用实例的函数就会调用子类的函数
+4.(可选：在子类中动态获取父类，调用父类的eat函数)就是这步，可以使用cmd。
 
 </p>2019-06-03</li><br/><li><span>席🍐🍎</span> 👍（3） 💬（0）<p>@Vicky 那是指方法内部对cmd做了判断，运行特殊的逻辑，进行swizz之后原方法的cmd会变，可能会导致逻辑错误</p>2019-05-28</li><br/><li><span>王万杰</span> 👍（2） 💬（0）<p>Aspects性能不如Stinger，是大不如</p>2020-03-15</li><br/><li><span>Chouee</span> 👍（1） 💬（0）<p>原来纯OC开发，Aspect无埋点统计用得66的。自从混编了之后。。。🕳🕳🕳</p>2019-05-29</li><br/><li><span>筇琼</span> 👍（1） 💬（2）<p>戴老师你好，用 Aspects 进行方法拦截时，如何实现带有返回值方法的替换？此时的返回值由我自己定义，而调用原方法的对象可以得到这个返回值。</p>2019-05-29</li><br/><li><span>Kai</span> 👍（1） 💬（0）<p>swift怎么进行类似method swizzling的技术呢？</p>2019-05-29</li><br/><li><span>hopestar90</span> 👍（1） 💬（0）<p>Aspects确实在做hook上很有想法，不仅能对类做hook，还能对单独实例做hook。但是本质上他用了消息转发流程，作者也说了 不适合于高频度调用的方法</p>2019-05-28</li><br/><li><span>马小平</span> 👍（0） 💬（0）<p>Runtime Method Swizzling 背后的原理是什么？怎么没看到</p>2023-10-15</li><br/><li><span>小良</span> 👍（0） 💬（0）<p>我觉得文章所说的「风险」，应该是注意事项吧：① 在 +load 方法交换（调用前完成方法的交换）；② 需要避免父类交换；③ 这个的确我之前没想到，可能我没有试过在方法里使用 _cmd 来做一些业务逻辑吧；④ 方法交换命名冲突（注意加前缀）🐶</p>2022-09-13</li><br/>
 </ul>

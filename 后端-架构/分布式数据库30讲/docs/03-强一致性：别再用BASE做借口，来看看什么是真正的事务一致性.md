@@ -16,15 +16,15 @@
 
 ## 事务的ACID特性
 
-在数据库中，“事务”是由多个操作构成的序列。1970年詹姆斯 · 格雷（Jim Gray）提出了事务的ACID四大特性，将广义上的事务一致性具化到了原子性、一致性、隔离性和持久性这4个方面。我们先来看一下他在 *Transaction Processing Concepts and Techniques* 中给出的定义：
+在数据库中，“事务”是由多个操作构成的序列。1970年詹姆斯 · 格雷（Jim Gray）提出了事务的ACID四大特性，将广义上的事务一致性具化到了原子性、一致性、隔离性和持久性这4个方面。我们先来看一下他在 _Transaction Processing Concepts and Techniques_ 中给出的定义：
 
-> **Atomicity**: *Either all the changes from the transaction occur (writes, and messages sent), or none occur.*
+> **Atomicity**: _Either all the changes from the transaction occur (writes, and messages sent), or none occur._
 
-> **Consistency**: *The transaction preserves the integrity of stored information.*
+> **Consistency**: _The transaction preserves the integrity of stored information._
 
-> **Isolation**: *Concurrently executing transactions see the stored information as if they were running serially (one after another).*
+> **Isolation**: _Concurrently executing transactions see the stored information as if they were running serially (one after another)._
 
-> **Durability**: *Once a transaction commits, the changes it made (writes and messages sent) survive any system failures.*
+> **Durability**: _Once a transaction commits, the changes it made (writes and messages sent) survive any system failures._
 
 翻译过来的意思就是：
 
@@ -184,7 +184,7 @@ MySQL下 RR与RC隔离级别的操作都分当前读和快照读，当前读才�
 
 其实我感觉这一章中既然是说分布式数据库的事务，我觉得也应该说说分布式事务，毕竟我们定义了数据库是分片的，如果事务涉及到多个机器就得上分布式事务了呀。
 
-还有确实很巧，以前我写过一篇关于事务的博客，里面有几个例子都非常直观，理解起几个文中的概念也更简单些：https:&#47;&#47;blog.csdn.net&#47;weixin_43705457&#47;article&#47;details&#47;105443927</p>2020-08-14</li><br/><li><span>佳佳的爸</span> 👍（3） 💬（1）<p>解决写倾斜主要就是加上写锁，但是这样会严重影响并发性能。</p>2020-08-21</li><br/><li><span>姑射仙人</span> 👍（1） 💬（1）<p>&quot; 数据一致性关注的是单对象、单操作在多副本上的一致性，事务一致性则是关注多对象、多操作在单副本上的一致性，分布式数据库的一致性是数据一致性与事务一致性的融合。&quot; 
+还有确实很巧，以前我写过一篇关于事务的博客，里面有几个例子都非常直观，理解起几个文中的概念也更简单些：https:&#47;&#47;blog.csdn.net&#47;weixin_43705457&#47;article&#47;details&#47;105443927</p>2020-08-14</li><br/><li><span>佳佳的爸</span> 👍（3） 💬（1）<p>解决写倾斜主要就是加上写锁，但是这样会严重影响并发性能。</p>2020-08-21</li><br/><li><span>姑射仙人</span> 👍（1） 💬（1）<p>&quot; 数据一致性关注的是单对象、单操作在多副本上的一致性，事务一致性则是关注多对象、多操作在单副本上的一致性，分布式数据库的一致性是数据一致性与事务一致性的融合。&quot;
 老师，分布式数据肯定也要支持分布式事务，那分布式事务是多对象、多操作在多副本上的实现吗？有点混了。</p>2021-03-09</li><br/><li><span>扩散性百万咸面包</span> 👍（1） 💬（1）<p>我之前的发言有些误解，我再阐述一下：
 SI隔离级别是MVCC，实际上RR也可以用MVCC，不过之前没有这种技术，都用的是2PL。SI主要通过Gap lock来解决RR的幻读？因为光一个MVCC是解决不了幻读的。</p>2020-08-15</li><br/><li><span>扩散性百万咸面包</span> 👍（1） 💬（2）<p>有点问题：
 快照隔离相当于是比可重复读解决了幻读的问题，文章中说是MVCC的功能特性，但是MVCC并不能解决幻读呀，真正解决幻读的是Gap Lock（Mysql）？

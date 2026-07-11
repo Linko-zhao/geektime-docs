@@ -33,7 +33,7 @@ function render(){
 我们简单回忆上一讲介绍的[mount函数](https://github.com/vuejs/vue-next/blob/master/packages/runtime-core/src/apiCreateApp.ts#L283)，在代码中，我们使用createVNode函数创建项目的虚拟DOM，可以看到**Vue内部的虚拟DOM，也就是vnode，就是一个对象，通过type、props、children等属性描述整个节点**：
 
 ```javascript
-const vnode = createVNode(    
+const vnode = createVNode(
   rootComponent as ConcreteComponent,
   rootProps
 )
@@ -173,33 +173,32 @@ update()
 在patch函数中，会针对不同的组件类型执行不同的函数，组件我们会执行processComponent，HTML标签我们会执行processElement：
 
 ```javascript
-  function path(n1, n2, container){
-    const { type, shapeFlag } = n2
-    switch (type) {
-      case Text:
-        processText(n1, n2, container)
-        break
-      // 还有注释，fragment之类的可以处理，这里忽略
-      default:
-        // 通过shapeFlag判断类型
-        if (shapeFlag & ShapeFlags.ELEMENT) {
-          processElement(n1, n2, container, anchor)
-        } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-          processComponent(n1, n2, container)
-        }
-    }
-    
+function path(n1, n2, container) {
+  const { type, shapeFlag } = n2;
+  switch (type) {
+    case Text:
+      processText(n1, n2, container);
+      break;
+    // 还有注释，fragment之类的可以处理，这里忽略
+    default:
+      // 通过shapeFlag判断类型
+      if (shapeFlag & ShapeFlags.ELEMENT) {
+        processElement(n1, n2, container, anchor);
+      } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+        processComponent(n1, n2, container);
+      }
   }
+}
 
-  function processComponent(n1, n2, container) {
-    // 老规矩，么有n1就是mount
-    if (!n1) {
-      // 初始化 component
-      mountComponent(n2, container)
-    } else {
-      updateComponent(n1, n2, container)
-    }
+function processComponent(n1, n2, container) {
+  // 老规矩，么有n1就是mount
+  if (!n1) {
+    // 初始化 component
+    mountComponent(n2, container);
+  } else {
+    updateComponent(n1, n2, container);
   }
+}
 ```
 
 由于更新之后不是首次渲染了，patch函数内部会执行updateComponent，看下面的updateComponent函数内部，shouldUpdateComponent会判断组件是否需要更新，实际执行的是instance.update：
@@ -215,7 +214,7 @@ if (shouldUpdateComponent(n1, n2, optimized)) {
   invalidateJob(instance.update)
   // instance.update is the reactive effect.
   instance.update()
-  
+
 } else {
   // no update needed. just copy over properties
   n2.component = n1.component
@@ -298,7 +297,7 @@ if (shouldUpdateComponent(n1, n2, optimized)) {
 
         // 属性需要diff
         if (patchFlag & PatchFlags.PROPS) {
-          // 
+          //
           const propsToUpdate = n2.dynamicProps!
           for (let i = 0; i < propsToUpdate.length; i++) {
             const key = propsToUpdate[i]
@@ -327,7 +326,7 @@ if (shouldUpdateComponent(n1, n2, optimized)) {
           hostSetElementText(el, n2.children as string)
         }
       }
-    } 
+    }
   }
 ```
 
@@ -475,14 +474,14 @@ patchKeyedChildren函数，做的事情就是尽可能高效地把老的子元�
 
 ```javascript
 a b c d e f g h
-a b c d i f j g h 
+a b c d i f j g h
 ```
 
 这样我们虚拟DOM diff的逻辑就变成了下面的结构, 现在只需要比较ef和ifg的区别：
 
 ```javascript
 (a b c d) e f (g h)
-(a b c) d) i f j (g h) 
+(a b c) d) i f j (g h)
 ```
 
 相比于之前的对比场景，我们需要遍历的运算量就大大减小了。

@@ -92,13 +92,11 @@ Copilot支持多种编程语言和框架，其中就包括了对JavaScript和Typ
 
 ```typescript
 // 我们开始编写以下代码：
-for (let i = 0; i < arr.length; i++) {
-
-}
+for (let i = 0; i < arr.length; i++) {}
 
 // Copilot可能会自动提供以下for循环模板：
 for (let i = 0; i < arr.length; i++) {
-  // TODO: Fill in loop body
+  // TODO: Fill in loop body
 }
 ```
 

@@ -270,6 +270,7 @@ spring.native.image.args=-Xshare -Xverify=none -Dspring.config.location=file:/pa
 1. [JDK 20 和 JDK 21 最新动态](https://www.infoq.cn/article/o4cLTZJXMgC7pJwfA8og?utm_campaign=geektime_search&utm_content=geektime_search&utm_medium=geektime_search&utm_source=geektime_search&utm_term=geektime_search)
 2. [Java 近期新闻：JDK 21、面向 JDK 21 的 GraalVM、Apache Pinot 1.0 和 Eclipse Epicyro 3.0](https://www.infoq.cn/article/0hhqSZ0mg99KVNwGtzmG?utm_campaign=geek_search&utm_content=geek_search&utm_medium=geek_search&utm_source=geek_search&utm_term=geek_search)
 3. [JEP 444：JDK 21 中出现虚拟线程，开创并发新纪元](https://www.infoq.cn/article/0hhqSZ0mg99KVNwGtzmG?utm_campaign=geek_search&utm_content=geek_search&utm_medium=geek_search&utm_source=geek_search&utm_term=geek_search)
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>张立勋</span> 👍（6） 💬（1）<p>请问一下：
 第5步：使用Dockerfile打包镜像，并且运行docker镜像，这个是单独运行，没有在K8S里面的相关配置和操作，和云原生还是差了一截，建议可以增加这部分的描述，以紧跟前面的主题 云原生。

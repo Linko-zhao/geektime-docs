@@ -145,9 +145,9 @@ OK，我们看一看具体操作。现在，针对一个开始为空的跳表，
 template <typename T>
 struct Node
 {
-	T  data;		
+	T  data;
 	Node* right;  //向右指向的指针
-	Node* down;   //向下指向的指针		
+	Node* down;   //向下指向的指针
 };
 
 #define MAX_LEVEL 100 
@@ -164,7 +164,7 @@ public:
 		m_head = new Node<T>; //先创建一个头结点
 		m_head->right = nullptr;
 		m_head->down = nullptr;
-		m_head->data = -1; //可以随便给个值，方便调试时观察和区分			
+		m_head->data = -1; //可以随便给个值，方便调试时观察和区分
 	}
 	~SkipList() //析构函数
 	{
@@ -178,7 +178,7 @@ public:
 				pnode = pnode->right;
 				delete ptmp;
 			}
-				
+
 			Node<T>* tmphead = m_head;
 			m_head = m_head->down;
 			delete tmphead;
@@ -186,14 +186,14 @@ public:
 		}
 		return;
 	}
-		
+
 	//插入数据
 	template <typename T>
 	void Insert(const T& e)
 	{
 		pathList.clear(); //记得每次清理，以免使用上次遗留的旧数据
 		Node<T>* p = m_head;
-		
+
 		//先往右找再往下找(跨过多级索引，找到原始链表)，目的就是找到原始链表中的插入位置
 		while (p)
 		{
@@ -202,42 +202,42 @@ public:
 			{
 				p = p->right; //先往右走
 			}
-			
+
 			pathList.push_back(p);  //尾部插入元素，最终原始链表在最尾部
 			p = p->down; //再往下走
 		} //end while
-		
+
 		bool insertupsign = true; //向上层插入节点的概率，刚开始是原始链表，肯定是要将数据插入其中的
 		Node<T>* downNode = nullptr; //创建一个新节点时，新节点的down指针指向的就是这个downNode所代表的节点
 
-		//下面这个while能够从最底下往上回溯处理			
+		//下面这个while能够从最底下往上回溯处理
 		while (insertupsign == true && pathList.size() > 0)
 		{
 			//insert指向插入位置的节点
 			Node<T>* insert = pathList.back(); //返回最底部的数据——第一次返回的是原始链表
 			pathList.pop_back(); //干掉最底部的数据
-			
+
 			//创建新节点
 			Node<T>* newnode = new Node<T>();
 			newnode->data = e;
 			newnode->right = insert->right; //原来insert节点指向的元素现在让newnode指向
 			newnode->down = downNode; 
-				
+
 			insert->right = newnode; //insert指向这个新节点
 			downNode = newnode;
-				
-			//每一层节点被提取到上一层的概率是1/2（50%)	
+
+			//每一层节点被提取到上一层的概率是1/2（50%)
 			unsigned int tmpvalue = g_ac.randInt(); //产生随机数
 			if (tmpvalue % 2 == 0)
 			{
-				insertupsign = true;					
+				insertupsign = true;
 			}
 			else
 			{
 				insertupsign = false;
 			}
 		} //end while
-			
+
 		//标志要新加一级索引（新加一级索引意味着肯定要在这个索引中加入一个节点）
 		if (pathList.size() <= 0 && g_ac.randInt() % 2 == 0)  //后一个条件表示是否增加新一级索引
 		{
@@ -246,17 +246,17 @@ public:
 			newnode->right = nullptr;
 			newnode->down = downNode;
 			newnode->data = e;
-			
+
 			//既然是新加一级索引，那么索引也要个头节点，所以如下是增加头节点
 			Node<T>* tmpheadnode = new Node<T>();
 			tmpheadnode->right = newnode;
 			tmpheadnode->down = m_head;
 			tmpheadnode->data = -1;
 			m_head = tmpheadnode; //m_head指向最上级索引的头节点
-		}			
+		}
 		return;
 	}
-		
+
 	//删除数据，返回true表示找到并删除了数据，返回false表示没找到数据
 	template <typename T>
 	bool Delete(const T& e)
@@ -270,7 +270,7 @@ public:
 			{
 				p = p->right; //先往右走
 			}
-				
+
 			//右边没节点了，或者右边的节点过大，则需要向下找
 			if (p->right == nullptr || p->right->data > e)
 			{
@@ -286,18 +286,18 @@ public:
 				p = p->down;
 			}
 		} //end while
-			
+
 		//如果某级索引只有一个节点，删除该节点后，可能会导致该该级索引一个节点也不存在，只有索引头节点存在，不过这并不要紧，无需处理
 		return iffind;
 	}
-		
+
 	//查找数据
 	template <typename T>
 	bool Find(const T& e)
 	{
 		Node<T>* p = m_head;
 		int jumptimes = 0; //寻找进行的指针跳跃次数统计
-		
+
 		while (p)
 		{
 			//向右找合适的节点位置
@@ -306,7 +306,7 @@ public:
 				jumptimes++;
 				p = p->right; //先往右走
 			}
-			
+
 			//右边没节点了，或者右边的节点过大，则需要向下找
 			if (p->right == nullptr || p->right->data > e)
 			{
@@ -323,29 +323,29 @@ public:
 		cout <<"Find寻找元素:"<< e <<"失败!"<< endl;
 		return false;
 	}
-	
+
 	//输出跳表中的所有元素，从上到下，从左到右输出
 	void DispSkipList()
-	{	
+	{
 		if (m_head->right == nullptr && m_head->down == nullptr)
 			return; //空表没啥可输出的
-		
+
 		cout <<"--------------begin----------------"<< endl;
 		Node<T>* tmphead = m_head;
 		int level = 0; //统计下有多少级索引
 		while (true)
-		{	
+		{
 			Node<T>* currp = tmphead->right;
 			while (currp != nullptr)
 			{
-				cout << currp->data <<"";	
+				cout << currp->data <<"";
 				currp = currp->right;
-			} //end while	
+			} //end while
 			cout << endl;
 			level++;
 			tmphead = tmphead->down; //下走
 			if (tmphead == nullptr)
-				break;				
+				break;
 		} //end while
 		cout <<"--------------end----------------"<< endl;
 		cout <<"共产生了:"<< level-1 <<"级索引。"<< endl;
@@ -356,7 +356,7 @@ public:
 	{
 		if (m_head->down == nullptr)
 			return 0;
-		
+
 		Node<T>* p = m_head;
 		int level = 0; 
 		while (p)
@@ -368,23 +368,23 @@ public:
 	}
 private:
 	Node<T>* m_head; //头指针，指向最上级索引的头节点
-	vector<Node<T> *> pathList; //#include <vector>，记录这从索引到最底下的原始链表的向下行走路径		
+	vector<Node<T> *> pathList; //#include <vector>，记录这从索引到最底下的原始链表的向下行走路径
 };
 ```
 
 在main主函数中，加入如下测试代码来测试插入、删除、查找操作：
 
 ```plain
-SkipList<int> myskiplist;		
+SkipList<int> myskiplist;
 myskiplist.Insert(3);
 myskiplist.Insert(1);
 myskiplist.Insert(7);
-myskiplist.Insert(6);	
+myskiplist.Insert(6);
 myskiplist.Insert(9);
 myskiplist.Insert(5);
 myskiplist.Insert(15);
-myskiplist.Insert(2);	
-myskiplist.DispSkipList();		
+myskiplist.Insert(2);
+myskiplist.DispSkipList();
 myskiplist.Delete(1);
 myskiplist.DispSkipList();
 for (int i = 0; i <21000000; ++i) //搞大量数据进行插入和查找测试

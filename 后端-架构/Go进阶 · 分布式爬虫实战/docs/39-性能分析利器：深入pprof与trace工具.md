@@ -238,11 +238,11 @@ Showing top 10 nodes out of 92
 我们还可以使用tree命令查看当前函数的调用链。例如，runtime.allocm分配了2.5M内存，其中512.56KB是runtime.mcall调用的，另外2050.25KB是由runtime.mstart0调用的。（runtime.mstart0是程序启动时调用的函数）。
 
 ```plain
-(pprof) tree                
+(pprof) tree
 Showing nodes accounting for 5915.93kB, 100% of 5915.93kB total
 Showing top 80 nodes out of 92
 ----------------------------------------------------------+-------------
-      flat  flat%   sum%        cum   cum%   calls calls% + context              
+      flat  flat%   sum%        cum   cum%   calls calls% + context
 ----------------------------------------------------------+-------------
                                          2050.25kB 80.00% |   runtime.mstart0
                                           512.56kB 20.00% |   runtime.mcall
@@ -350,7 +350,7 @@ Showing top 10 nodes out of 96
 (pprof) tree
 Showing nodes accounting for 33, 89.19% of 37 total
 ----------------------------------------------------------+-------------
-      flat  flat%   sum%        cum   cum%   calls calls% + context              
+      flat  flat%   sum%        cum   cum%   calls calls% + context
 ----------------------------------------------------------+-------------
                                                 22 66.67% |   runtime.selectgo
                                                  6 18.18% |   runtime.netpollblock
@@ -595,7 +595,7 @@ pprof 提供了内存大小、CPU 使用时间、协程堆栈信息、堵塞时�
 <li><span>Realm</span> 👍（1） 💬（0）<p>思考题：
 单次执行占用很高的cpu和内存的函数，不一定是瓶颈。
 
-调用非常频繁的函数，并且每次需要分配内存或者造成软中断，也可能形成瓶颈。</p>2023-01-12</li><br/><li><span>公共账号</span> 👍（0） 💬（0）<p>pprof  top后为什么会有负数出现</p>2024-01-06</li><br/><li><span>加油</span> 👍（0） 💬（0）<p>火焰图 : 框越长、颜色越深，代表当前函数占用 CPU 的时间越久。
+调用非常频繁的函数，并且每次需要分配内存或者造成软中断，也可能形成瓶颈。</p>2023-01-12</li><br/><li><span>公共账号</span> 👍（0） 💬（0）<p>pprof top后为什么会有负数出现</p>2024-01-06</li><br/><li><span>加油</span> 👍（0） 💬（0）<p>火焰图 : 框越长、颜色越深，代表当前函数占用 CPU 的时间越久。
 ——————
 这句话有问题哈，框越长，代表当前函数占用CPU的时间越久。但是和颜色无关，火焰图的颜色是随机的暖色调。</p>2023-05-18</li><br/><li><span>徐海浪</span> 👍（0） 💬（0）<p>内存分配多和CPU耗时长，只能说明这个函数占用的资源多，还需要结合执行次数分析，计算平均每次执行时间和内存分配的情况。</p>2023-01-17</li><br/>
 </ul>

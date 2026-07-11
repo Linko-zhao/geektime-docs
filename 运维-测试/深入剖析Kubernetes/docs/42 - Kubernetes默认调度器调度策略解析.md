@@ -107,14 +107,14 @@ metadata:
   name: with-pod-antiaffinity
 spec:
   affinity:
-    podAntiAffinity: 
-      requiredDuringSchedulingIgnoredDuringExecution: 
-      - weight: 100  
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
         podAffinityTerm:
           labelSelector:
             matchExpressions:
-            - key: security 
-              operator: In 
+            - key: security
+              operator: In
               values:
               - S2
           topologyKey: kubernetes.io/hostname
@@ -134,14 +134,14 @@ metadata:
   name: with-pod-affinity
 spec:
   affinity:
-    podAffinity: 
-      requiredDuringSchedulingIgnoredDuringExecution: 
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
           matchExpressions:
-          - key: security 
-            operator: In 
+          - key: security
+            operator: In
             values:
-            - S1 
+            - S1
         topologyKey: failure-domain.beta.kubernetes.io/zone
   containers:
   - name: with-pod-affinity
@@ -215,25 +215,26 @@ score = 10 - variance(cpuFraction,memoryFraction,volumeFraction)*10
             topologyKey: &quot;kubernetes.io&#47;hostname&quot;
 
 我用了反亲和的特性让pod分到了不同的机器上，不知道是否回答了你的问题</p>2018-11-28</li><br/><li><span>芒果少侠</span> 👍（90） 💬（7）<p>思考题答案，个人认为有三个解决思路
+
 1. 为pod.yaml设置PreferredDuringSchedulingIgnoredDuringExecution（注意不是required），可以指定【不想和同一个label的pod】放在一起。调度器随后会根据node上不满足podAntiAffinity的pod数量打分，如果不想一起的pod数量越多分数越少。就能够尽量打散同一个service下多个副本pod的分布。
-关于这一思路，k8s官网也给出了相同应用的例子。【preferredDuringSchedulingIgnoredDuringExecution 反亲和性的一个例子是 “在整个域内平均分布这个服务的所有 pod”（这里如果用一个硬性的要求是不可行的，因为您可能要创建比域更多的 pod）。】 -- https:&#47;&#47;k8smeetup.github.io&#47;docs&#47;concepts&#47;configuration&#47;assign-pod-node&#47;
+   关于这一思路，k8s官网也给出了相同应用的例子。【preferredDuringSchedulingIgnoredDuringExecution 反亲和性的一个例子是 “在整个域内平均分布这个服务的所有 pod”（这里如果用一个硬性的要求是不可行的，因为您可能要创建比域更多的 pod）。】 -- https:&#47;&#47;k8smeetup.github.io&#47;docs&#47;concepts&#47;configuration&#47;assign-pod-node&#47;
 
 2. SelectorSpreadPriority，kubernetes内置的一个priority策略。具体：与services上其他pod尽量不在同一个节点上，节点上同一个Service里pod数量越少得分越高。
 3. 自定义策略，实现自己的负载均衡算法（一次性哈希等）。
 
-参考资料：
-0. PreferredDuringSchedulingIgnoredDuringExecution ：在调度期间尽量满足亲和性或者反亲和性规则，如果不能满足规则，POD也有可能被调度到对应的主机上。在之后的运行过程中，系统不会再检查这些规则是否满足。
+参考资料：0. PreferredDuringSchedulingIgnoredDuringExecution ：在调度期间尽量满足亲和性或者反亲和性规则，如果不能满足规则，POD也有可能被调度到对应的主机上。在之后的运行过程中，系统不会再检查这些规则是否满足。
+
 1. https:&#47;&#47;wilhelmguo.cn&#47;blog&#47;post&#47;william&#47;Kubernetes%E8%B0%83%E5%BA%A6%E8%AF%A6%E8%A7%A3
 2. https:&#47;&#47;blog.fleeto.us&#47;post&#47;adv-scheduler-in-k8s&#47;
 3. https:&#47;&#47;zhuanlan.zhihu.com&#47;p&#47;56088355
 4. https:&#47;&#47;kuboard.cn&#47;learning&#47;k8s-advanced&#47;schedule&#47;#filtering</p>2020-03-10</li><br/><li><span>Dale</span> 👍（14） 💬（1）<p>在工作中遇到这个问题，需要将pod尽量分散在不通的node上，通过kubernetes提供的反亲和性来解决的。从回答中老师希望从Priorities阶段中实现，我的想法如下：
-1、首先在Predicates阶段，已经选择出来一组可以使用的node节点
-2、在Priorities阶段，根据资源可用情况将node从大到小排序，加上node节点个数为m
-3、根据pod中配置replicate个数n，在node列表中进行查找出资源可用的top n的node节点
-4、如果node节点个数m不满足pod中的replicate个数，每次选择top m之后，重新计算node的资源可用情况，在选择top（n-m）的node，会存在node上有多个情况，最大程度上保证pod分散在不同的node上</p>2018-12-13</li><br/><li><span>陈斯佳</span> 👍（11） 💬（0）<p>第四十二课:Kubernetes默认调度器调度策略解析
-Predicates在调度过程中的作用，可以理解为Filter，也就是按照调度策略从当前的集群所有节点中“过滤”出一些符合条件的节点来运行调度的 Pod。
+   1、首先在Predicates阶段，已经选择出来一组可以使用的node节点
+   2、在Priorities阶段，根据资源可用情况将node从大到小排序，加上node节点个数为m
+   3、根据pod中配置replicate个数n，在node列表中进行查找出资源可用的top n的node节点
+   4、如果node节点个数m不满足pod中的replicate个数，每次选择top m之后，重新计算node的资源可用情况，在选择top（n-m）的node，会存在node上有多个情况，最大程度上保证pod分散在不同的node上</p>2018-12-13</li><br/><li><span>陈斯佳</span> 👍（11） 💬（0）<p>第四十二课:Kubernetes默认调度器调度策略解析
+   Predicates在调度过程中的作用，可以理解为Filter，也就是按照调度策略从当前的集群所有节点中“过滤”出一些符合条件的节点来运行调度的 Pod。
 
 默认的调度策略有三种，一种是GerenalPredicates，负责最基础的调度策略，比如计算宿主机CPU和内存资源等是否够用的PodFitsResource；还有检查宿主机名字是否和Pod的spec.nodeName一致的PodFitsHost。第二类是和Volume相关的过滤规则，比如NoDiskConflict是检查多个Pod申明挂载的持久化Volume是否有冲突。第三类是宿主机相关的过滤条件，主要考察待调度的Pod是否满足Node本身条件，比PodToleratesNodeTaints，负责检查Node 的“污点”taint机制，而 NodeMemoryPressurePredicate，检查的是当前节点的内存是不是已经不够充足，如果是的话，那么待调度 Pod 就不能被调度到该节点上。第四种类型是和Pod相关的过滤规则，这一组规则，跟 GeneralPredicates 大多数是重合的。而比较特殊的，是 PodAffinityPredicate。在具体执行的时候， 当开始调度一个 Pod 时，Kubernetes 调度器会同时启动 16 个 Goroutine，来并发地为集群里的所有 Node 计算 Predicates，最后返回可以运行这个 Pod 的宿主机列表。
 
-在 Predicates 阶段完成了节点的“过滤”之后，Priorities 阶段的工作就是为这些节点打分。这里打分的范围是 0-10 分，得分最高的节点就是最后被 Pod 绑定的最佳节点。Priorities 里最常用到的一个打分规则，是LeastRequestedPriority。这个算法实际上就是在选择空闲资源（CPU 和 Memory）最多的宿主机。此外，还有 NodeAffinityPriority、TaintTolerationPriority 和 InterPodAffinityPriority 这三种 Priority。在默认 Priorities 里，还有一个叫作 ImageLocalityPriority 的策略。它是在 Kubernetes v1.12 里新开启的调度规则，即：如果待调度 Pod 需要使用的镜像很大，并且已经存在于某些 Node 上，那么这些 Node 的得分就会比较高。</p>2021-11-03</li><br/><li><span>freeman</span> 👍（9） 💬（1）<p>首先筛选出满足资源的机器。如果可用节点大于等于需求副本集则一个node一份，顺序取node调度即可，如果node节点少于副本数量，则进行一次调度后，剩下的副本重复上面的事情。直到为每个副本找到对应node或者调度失败。</p>2018-11-29</li><br/><li><span>陈小白( ´･ᴗ･` )</span> 👍（5） 💬（2）<p>这个我们线上就遇到了，一开始编排好差不多100个系统，发现其中几台主机一堆pod ，内存cpu 都很吃紧，而其他的主机却十分空闲。重启也没用。另外还想请教老师一个问题，我们遇到主机内存不足的时候，经常出现docker  hang 住了，就是docker 的命令完全卡死，没反应，不知道老师有遇到过呢？</p>2019-12-30</li><br/><li><span>tyamm</span> 👍（4） 💬（0）<p>老师，我有个疑问。这个课程后面会讲到如何搭建master节点高可用么？？</p>2018-11-28</li><br/><li><span>王景迁</span> 👍（3） 💬（1）<p>根据老师上面说的，默认的调度策略不是应该有四种类型吗？为什么文章开头说是三种类型？</p>2019-10-23</li><br/><li><span>小朱</span> 👍（1） 💬（0）<p>请教一个问题，自己启动了另一个scheduler，某一个node上同时存在default-scheduler和second-scheduler调度的资源。但是scheduler只统计schedulerName是自己的pod，这样就和node上面kubelet统计的资源就出现了不一致，这种设计是为什么呢？</p>2018-12-05</li><br/><li><span>周娄子</span> 👍（1） 💬（0）<p>写一个类似nginx一致性hash的算法</p>2018-11-28</li><br/><li><span>Geek_4df222</span> 👍（0） 💬（0）<p>思考题：将pod尽可能分布在不同节点上，这是一个优先的调度策略，应该在Priorities 阶段定义，具体来说，根据根据节点上的pod数量，pod数量越少，node的分数越高。</p>2023-08-27</li><br/><li><span>卢俊义</span> 👍（0） 💬（0）<p>一个dev开启后pod运行在node1的话，重启后是否不管node1的资源占用情况如何，新的pod是否还会运行在node1呢。线上项目遇到很多pod都会堆积在一个node节点，其他节点有空闲资源</p>2023-06-06</li><br/><li><span>浅陌</span> 👍（0） 💬（1）<p>请问默认情况下，这些predicate的算法和priority的算法都会被执行吗</p>2022-10-22</li><br/><li><span>zhoufeng</span> 👍（0） 💬（1）<p>Predicates 单词字面意思是“谓词”，谁知道为啥调度算法要取这个名字，有什么说法吗</p>2022-09-30</li><br/>
+在 Predicates 阶段完成了节点的“过滤”之后，Priorities 阶段的工作就是为这些节点打分。这里打分的范围是 0-10 分，得分最高的节点就是最后被 Pod 绑定的最佳节点。Priorities 里最常用到的一个打分规则，是LeastRequestedPriority。这个算法实际上就是在选择空闲资源（CPU 和 Memory）最多的宿主机。此外，还有 NodeAffinityPriority、TaintTolerationPriority 和 InterPodAffinityPriority 这三种 Priority。在默认 Priorities 里，还有一个叫作 ImageLocalityPriority 的策略。它是在 Kubernetes v1.12 里新开启的调度规则，即：如果待调度 Pod 需要使用的镜像很大，并且已经存在于某些 Node 上，那么这些 Node 的得分就会比较高。</p>2021-11-03</li><br/><li><span>freeman</span> 👍（9） 💬（1）<p>首先筛选出满足资源的机器。如果可用节点大于等于需求副本集则一个node一份，顺序取node调度即可，如果node节点少于副本数量，则进行一次调度后，剩下的副本重复上面的事情。直到为每个副本找到对应node或者调度失败。</p>2018-11-29</li><br/><li><span>陈小白( ´･ᴗ･` )</span> 👍（5） 💬（2）<p>这个我们线上就遇到了，一开始编排好差不多100个系统，发现其中几台主机一堆pod ，内存cpu 都很吃紧，而其他的主机却十分空闲。重启也没用。另外还想请教老师一个问题，我们遇到主机内存不足的时候，经常出现docker hang 住了，就是docker 的命令完全卡死，没反应，不知道老师有遇到过呢？</p>2019-12-30</li><br/><li><span>tyamm</span> 👍（4） 💬（0）<p>老师，我有个疑问。这个课程后面会讲到如何搭建master节点高可用么？？</p>2018-11-28</li><br/><li><span>王景迁</span> 👍（3） 💬（1）<p>根据老师上面说的，默认的调度策略不是应该有四种类型吗？为什么文章开头说是三种类型？</p>2019-10-23</li><br/><li><span>小朱</span> 👍（1） 💬（0）<p>请教一个问题，自己启动了另一个scheduler，某一个node上同时存在default-scheduler和second-scheduler调度的资源。但是scheduler只统计schedulerName是自己的pod，这样就和node上面kubelet统计的资源就出现了不一致，这种设计是为什么呢？</p>2018-12-05</li><br/><li><span>周娄子</span> 👍（1） 💬（0）<p>写一个类似nginx一致性hash的算法</p>2018-11-28</li><br/><li><span>Geek_4df222</span> 👍（0） 💬（0）<p>思考题：将pod尽可能分布在不同节点上，这是一个优先的调度策略，应该在Priorities 阶段定义，具体来说，根据根据节点上的pod数量，pod数量越少，node的分数越高。</p>2023-08-27</li><br/><li><span>卢俊义</span> 👍（0） 💬（0）<p>一个dev开启后pod运行在node1的话，重启后是否不管node1的资源占用情况如何，新的pod是否还会运行在node1呢。线上项目遇到很多pod都会堆积在一个node节点，其他节点有空闲资源</p>2023-06-06</li><br/><li><span>浅陌</span> 👍（0） 💬（1）<p>请问默认情况下，这些predicate的算法和priority的算法都会被执行吗</p>2022-10-22</li><br/><li><span>zhoufeng</span> 👍（0） 💬（1）<p>Predicates 单词字面意思是“谓词”，谁知道为啥调度算法要取这个名字，有什么说法吗</p>2022-09-30</li><br/>
 </ul>

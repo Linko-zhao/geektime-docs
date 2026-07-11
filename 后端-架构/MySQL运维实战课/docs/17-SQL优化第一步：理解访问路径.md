@@ -183,7 +183,7 @@ select * from tab where a = 'a' and c = 'c'
 我们用下面这个例子，来说明索引等值匹配的执行过程。
 
 ```plain
-select * from tab where a = 'Aj' 
+select * from tab where a = 'Aj'
 ```
 
 ![图片](https://static001.geekbang.org/resource/image/46/14/466038532e7d5796ed58ff294a0d4a14.jpg?wh=1840x1072)  
@@ -342,7 +342,7 @@ select * from tab where C1 = x1 order by C3, C2
 index(C1, C2, C3, C4, C5)
 
 
-select C1,C2 
+select C1,C2
 from tab
 where C3=x
 order by C5
@@ -490,15 +490,17 @@ select id, a, b, c from t_abc where b = 10;
 select id, a, b, c, d from t_abc where b = 10;
 
 上述三条sql区别在于是否可以利用覆盖索引，根据语句的内容选择扫描成本低的方案</p>2024-09-25</li><br/><li><span>山河已无恙</span> 👍（0） 💬（1）<p>老师覆盖索引哪里 Where 条件不满足最左匹配原则么，也会走覆盖索引么
+
 ```sql
 index(C1, C2, C3, C4, C5)
 
 
-select C1,C2 
+select C1,C2
 from tab
 where C3=x
 order by C5
 ```
+
 </p>2025-01-11</li><br/><li><span>山河已无恙</span> 👍（0） 💬（2）<p>测试用的表，用于模拟业务表
 ```sql
 SET profiling=1;
@@ -510,15 +512,16 @@ SHOW PROFILE;
 
 ams_accounts_order
 ---
-| COUNT(*) | 
-| ---: | 
-| 6202700 | 
+
+| COUNT(*) |
+| -------: |
+|  6202700 |
 
 默认情况下只有主键，两个查询条件的查询时间
 
 ```sql
 SET profiling=1;
-SELECT * from ams_accounts_order where hotel_id = 10029 AND room_order_no = &#39;UDDH807015895560880128&#39; ORDER BY accounts_id DESC 
+SELECT * from ams_accounts_order where hotel_id = 10029 AND room_order_no = &#39;UDDH807015895560880128&#39; ORDER BY accounts_id DESC
 
 ;
 &#47;* 受影响记录行数: 0  已找到记录行: 18  警告: 0  持续时间 1 查询: 6.250 秒. *&#47;
@@ -543,15 +546,16 @@ SELECT * from ams_accounts_order where hotel_id = 10029 AND room_order_no = &#39
 SHOW PROFILE;
 SET profiling=0;
 ```
+
 发现加了不如不加，时间是原来的 3 倍多
 
 查看 `EXPLAIN` 结果中的 `key` 和 `Extra` 字段,确认使用了创建的索引
 
-
 EXPLAIN
-| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra | 
-| ---: | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | --- | 
-| 1 | SIMPLE | ams_accounts_order | \N | ref | hotel_id | hotel_id | 4 | const | 3069172 | 10.00 | Using where | 
+
+|  id | select_type | table              | partitions | type | possible_keys | key      | key_len | ref   |    rows | filtered | Extra       |
+| --: | ----------- | ------------------ | ---------- | ---- | ------------- | -------- | ------- | ----- | ------: | -------: | ----------- |
+|   1 | SIMPLE      | ams_accounts_order | \N         | ref  | hotel_id      | hotel_id | 4       | const | 3069172 |    10.00 | Using where |
 
 老师这种情况为什么加了不如不加</p>2024-10-26</li><br/><li><span>123</span> 👍（0） 💬（1）<p>老师，请教两个问题：
 1、“在分支页面中，Value 存了下一层索引页面的编号（Page No），页面编号就是页面在数据文件中的地址”，其中页面编号就是页面在数据文件中地址，这个数据文件应该就是.ibd文件吧，存储了数据信息，并且一二级索引的数据都在这个文件里面，所在在ibd文件中哪里可以看到页编号，老师后面会讲数据的物理存储结构吗？

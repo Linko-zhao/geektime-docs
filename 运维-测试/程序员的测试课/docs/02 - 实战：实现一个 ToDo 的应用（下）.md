@@ -50,13 +50,13 @@ class FileTodoItemRepositoryTest {
     File tempDir;
     private File tempFile;
     private FileTodoItemRepository repository;
-    
+
     @BeforeEach
     void setUp() throws IOException {
         this.tempFile = File.createTempFile("file", "", tempDir);
         this.repository = new FileTodoItemRepository(this.tempFile);
     }
-    
+
     @Test
     public void should_find_nothing_for_empty_repository() throws IOException {
         final Iterable<TodoItem> items = repository.findAll();
@@ -100,7 +100,7 @@ public Iterable<TodoItem> findAll() {
     if (this.file.length() == 0) {
         return ImmutableList.of();
     }
-    
+
     try {
         final CollectionType type = typeFactory.constructCollectionType(List.class, TodoItem.class);
         return mapper.readValue(this.file, type);
@@ -140,7 +140,7 @@ public Iterable<TodoItem> findAll() {
 public final class Jsons {
     private static final TypeFactory FACTORY = TypeFactory.defaultInstance();
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    
+
     public static Iterable<TodoItem> toObjects(final File file) {
         final CollectionType type = FACTORY.constructCollectionType(List.class, TodoItem.class);
         try {
@@ -149,7 +149,7 @@ public final class Jsons {
             throw new TodoException("Fail to read objects", e);
         }
     }
-    
+
     ...
 }
 ```
@@ -162,7 +162,7 @@ public Iterable<TodoItem> findAll() {
     if (this.file.length() == 0) {
         return ImmutableList.of();
     }
-    
+
     return Jsons.toObjects(this.file);
 }
 ```
@@ -257,12 +257,12 @@ public class ObjectFactory {
     public CommandLine createCommandLine(final File repositoryFile) {
         return new CommandLine(createTodoCommand(repositoryFile));
     }
-    
+
     private TodoCommand createTodoCommand(final File repositoryFile) {
         final TodoItemService service = createService(repositoryFile);
         return new TodoCommand(service);
     }
-    
+
     public TodoItemService createService(final File repositoryFile) {
         final TodoItemRepository repository = new FileTodoItemRepository(repositoryFile);
         return new TodoItemService(repository);
@@ -280,7 +280,7 @@ class TodoCommandTest {
     File tempDir;
     private TodoItemService service;
     private CommandLine cli;
-    
+
     @BeforeEach
     void setUp() {
         final ObjectFactory factory = new ObjectFactory();
@@ -296,9 +296,9 @@ class TodoCommandTest {
 @Test
 public void should_mark_as_done() {
     service.addTodoItem(TodoParameter.of("foo"));
-    
+
     cli.execute("done", "1");
-    
+
     final List<TodoItem> items = service.list(true);
     assertThat(items.get(0).isDone()).isTrue();
 }
@@ -348,9 +348,9 @@ public void should_mark_as_done() {
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Geek_3b1096</span> 👍（4） 💬（1）<p>学习了封装其它程序库 ，谢谢老师</p>2021-08-26</li><br/><li><span>davix</span> 👍（3） 💬（1）<p>老師可否後面詳細講講測試金字塔各層case的設計？哪些放入哪層？
 我發現team中有傾向，如果有了集成測試，甚至端到端測試，很多人就願意在集成測試裡寫，不寫單元了，認為反正單元被測到了，而且覆蓋的更多。
-在本節cli例子中沒有用單元，還覆蓋了那麼多case，我擔心有人就會覺得之前單元測試可以省掉。</p>2021-08-21</li><br/><li><span>إ并向你招手إ祥子</span> 👍（3） 💬（1）<p>老师好，对于lombk注解生成的代码在测试覆盖不到的时候是如何处理的呢？    
+在本節cli例子中沒有用單元，還覆蓋了那麼多case，我擔心有人就會覺得之前單元測試可以省掉。</p>2021-08-21</li><br/><li><span>إ并向你招手إ祥子</span> 👍（3） 💬（1）<p>老师好，对于lombk注解生成的代码在测试覆盖不到的时候是如何处理的呢？
 
-在业务开发中，有很多VO,DTO之类的实体类对象，这类一部分对象内部可能会有一部分的行为方法，比如转换为别的对象，通常为了简化代码，会使用lombok注解，在单元测试覆盖率的统计中，lombok生成的代码可能是测不到的，同时由于这些对象可能是有除了get  set之外的行为的，因此也不能简单的屏蔽在测试覆盖率的检查之外，目前在团队内的做法是让大家补上未覆盖部分的测试，有没有更好的建议呢？</p>2021-08-08</li><br/><li><span>大碗</span> 👍（2） 💬（1）<p>请问老师，样例代码中数据库的测试是使用了一个todo_test的实际mysql数据库是怎么考虑的，不选择用H2是什么考虑呢？
+在业务开发中，有很多VO,DTO之类的实体类对象，这类一部分对象内部可能会有一部分的行为方法，比如转换为别的对象，通常为了简化代码，会使用lombok注解，在单元测试覆盖率的统计中，lombok生成的代码可能是测不到的，同时由于这些对象可能是有除了get set之外的行为的，因此也不能简单的屏蔽在测试覆盖率的检查之外，目前在团队内的做法是让大家补上未覆盖部分的测试，有没有更好的建议呢？</p>2021-08-08</li><br/><li><span>大碗</span> 👍（2） 💬（1）<p>请问老师，样例代码中数据库的测试是使用了一个todo_test的实际mysql数据库是怎么考虑的，不选择用H2是什么考虑呢？
 用mysql优点是测试更接近最终的运行环境，也能测试创表语句，缺点：稍微依赖了本地的环境，第一次需要创建数据库表，建账号。用H2的优缺点就反过来。两者在影响测试速度上似乎目前看不出差距</p>2021-08-24</li><br/><li><span>X</span> 👍（2） 💬（1）<p>老师，你好，我想问下 Springboot 开发，在进行 集成测试的时候，有redis 依赖，是怎么进行测试的呢？
 尝试过，embedded-redis 这些内嵌数据库，但是这些用起来不太理想，而且年久失修，有很多bug。
 想问问老师这方面是怎么处理的。</p>2021-08-10</li><br/><li><span>程九森</span> 👍（1） 💬（1）<p>请问参看代码在哪? </p>2021-08-19</li><br/><li><span>sylan215</span> 👍（1） 💬（1）<p>这一节的收获：

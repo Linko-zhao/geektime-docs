@@ -129,6 +129,7 @@
 - [洞悉PaaS平台的本质](https://time.geekbang.org/column/article/1610)
 - [推荐阅读：分布式系统架构经典资料](https://time.geekbang.org/column/article/2080)
 - [推荐阅读：分布式数据调度相关论文](https://time.geekbang.org/column/article/2421)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>delete is create</span> 👍（31） 💬（1）<p>耗子哥   这些主流技术是你所在工作中用到的还是下班写写demo学到的呢？</p>2018-06-09</li><br/><li><span>李博越</span> 👍（23） 💬（1）<p>目前工作在搞这些，不过是用的swarm，估计过两年就会被淘汰吧</p>2018-01-01</li><br/><li><span>噜啦</span> 👍（4） 💬（1）<p>需要好好品味，刚入paas这个坑，看来还需要修炼啊。
 耗叔，你觉得k8s的官方文档和网上的、社区上的讨论哪个更容易让新手对整个k8s+docker的生态有一个了解？

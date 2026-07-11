@@ -132,7 +132,7 @@ func (p *myFrameCodec) Encode(w io.Writer, framePayload FramePayload) error {
     if err != nil {
         return err
     }
-  
+
     if n != len(framePayload) {
         return ErrShortWrite
     }
@@ -152,7 +152,7 @@ func (p *myFrameCodec) Decode(r io.Reader) (FramePayload, error) {
     if err != nil {
         return nil, err
     }
-  
+
     if n != int(totalLen-4) {
         return nil, ErrShortRead
     }
@@ -744,6 +744,7 @@ handleConn: frame decode error: EOF
 2. 为我们的服务端增加优雅退出机制，以及捕捉某个链接上出现的可能导致整个程序退出的panic。
 
 ### [项目的源代码在这里！](https://github.com/bigwhite/publication/tree/master/column/timegeek/go-first-course/37)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Aeins</span> 👍（7） 💬（1）<p>几点疑问
 
@@ -754,22 +755,22 @@ handleConn: frame decode error: EOF
 3. 协议头和协议体，分两次写入的，会不会有并发安全问题，为什么？这里应该没做到上节课说的，一次写入一个“业务包”吧。
 
 4. 多次运行 client，错误偶发。有时 io.ReadFull 读不满数据，有时读取的数据长度不对，会是哪些原因导致的呢？</p>2022-06-07</li><br/><li><span>左耳朵东</span> 👍（4） 💬（2）<p>client 代码中的 done chan 好像没必要吧，去掉它也能正常退出</p>2022-02-12</li><br/><li><span>枫</span> 👍（3） 💬（2）<p>&#47;&#47;
-select {
-		case &lt;-quit:
-			done &lt;- struct{}{}
-			return
-		default:
-}
-老师，client中读取服务端返回响应的这个goroutine中，这段select的作用不是很理解，如果没有从quit中收到值就会一直轮询，但是从quit中收到值又会return，那下面的代码不是一直都没有机会执行了吗</p>2022-07-28</li><br/><li><span>晚枫</span> 👍（2） 💬（2）<p>为什么totalLen指定了字节序，payload不需要指定吗？</p>2022-05-09</li><br/><li><span>罗杰</span> 👍（2） 💬（1）<p>还是老师实现的代码优雅，我们项目的这块代码是刚开始学 Go 时实现的，只能说可以用。但对比老师的实现，我觉得我们的代码可以好好优化一下了。</p>2022-01-26</li><br/><li><span>张尘</span> 👍（1） 💬（1）<p>白老师好, 本节课受益颇多, 有点疑问, 还望有时间能够帮忙解答下:
-frameCodec.Decode返回值是自定义数据结构FramePayload
-packet.Decode的入参是[]byte
-client&#47;server 代码中直接将FramePayload当做[]byte使用
+   select {
+   case &lt;-quit:
+   done &lt;- struct{}{}
+   return
+   default:
+   }
+   老师，client中读取服务端返回响应的这个goroutine中，这段select的作用不是很理解，如果没有从quit中收到值就会一直轮询，但是从quit中收到值又会return，那下面的代码不是一直都没有机会执行了吗</p>2022-07-28</li><br/><li><span>晚枫</span> 👍（2） 💬（2）<p>为什么totalLen指定了字节序，payload不需要指定吗？</p>2022-05-09</li><br/><li><span>罗杰</span> 👍（2） 💬（1）<p>还是老师实现的代码优雅，我们项目的这块代码是刚开始学 Go 时实现的，只能说可以用。但对比老师的实现，我觉得我们的代码可以好好优化一下了。</p>2022-01-26</li><br/><li><span>张尘</span> 👍（1） 💬（1）<p>白老师好, 本节课受益颇多, 有点疑问, 还望有时间能够帮忙解答下:
+   frameCodec.Decode返回值是自定义数据结构FramePayload
+   packet.Decode的入参是[]byte
+   client&#47;server 代码中直接将FramePayload当做[]byte使用
 
 frameCodec.Decode为什么要返回自定义数据结构FramePayload而不是[]byte呢? 是因为FramePayload的结构可能改变吗? FramePayload可能不是[]byte吗? FramePayload可能包含Packet之外的其它数据吗?
 可是如果FramePayload的结构改变, 那client&#47;server 的代码中直接将FramePayload当做[]byte的用法不是就有问题了吗?</p>2022-12-27</li><br/><li><span>Sunrise</span> 👍（1） 💬（1）<p>有个小疑问：
-func (p *myFrameCodec) Encode(w io.Writer, framePayload FramePayload) error { 
-  var f = framePayload
-  ...
+func (p *myFrameCodec) Encode(w io.Writer, framePayload FramePayload) error {
+var f = framePayload
+...
 }
 var f = framePayload 这个地方有必要重新定义一个 f 吗，直接使用 framePayload 会有什么问题？</p>2022-11-24</li><br/><li><span>农民园丁</span> 👍（1） 💬（1）<p>请问老师，framePayload, err := frameCodec.Decode(c)
 以上代码中&quot;c&quot;是net.Conn 类型，
@@ -778,27 +779,27 @@ var f = framePayload 这个地方有必要重新定义一个 f 吗，直接使�
 &#47;&#47; tcp-server-demo1&#47;packet&#47;packet.go
 
 func Encode(p Packet) ([]byte, error) {
-  var commandID uint8
-  var pktBody []byte
-  var err error
+var commandID uint8
+var pktBody []byte
+var err error
 
-  switch t := p.(type) {
-  case *Submit:
-    commandID = CommandSubmit
-    pktBody, err = p.Encode()
-    if err != nil {
-      return nil, err
-    }
-  case *SubmitAck:
-    commandID = CommandSubmitAck
-    pktBody, err = p.Encode()
-    if err != nil {
-      return nil, err
-    }
-  default:
-    return nil, fmt.Errorf(&quot;unknown type [%s]&quot;, t)
-  }
-  return bytes.Join([][]byte{[]byte{commandID}, pktBody}, nil), nil
+switch t := p.(type) {
+case *Submit:
+commandID = CommandSubmit
+pktBody, err = p.Encode()
+if err != nil {
+return nil, err
+}
+case *SubmitAck:
+commandID = CommandSubmitAck
+pktBody, err = p.Encode()
+if err != nil {
+return nil, err
+}
+default:
+return nil, fmt.Errorf(&quot;unknown type [%s]&quot;, t)
+}
+return bytes.Join([][]byte{[]byte{commandID}, pktBody}, nil), nil
 }
 老师，这段代码的最后的 return bytes.Join(), nil这个在什么情况下回运行到呢?不是很理解</p>2022-06-10</li><br/><li><span>Calvin</span> 👍（1） 💬（1）<p>老师，Conn 和 ConnAck 要实现的话，请问从业务中来讲，一般会需要发送一些什么 Payload 呢？我看这里的例子没有他们也可以正常运行整个流程，是类似 需要认证的系统中的登录账号和密码 的这种内容吗？</p>2022-01-26</li><br/><li><span>骨汤鸡蛋面</span> 👍（1） 💬（2）<p>老师，一些rpc框架学习 http2 的stream概念，在connection与协议之间加了一个stream层， 这块主要抽象了啥，很想听一下老师的看法。 </p>2022-01-26</li><br/><li><span>爱吃胡萝卜</span> 👍（0） 💬（1）<p>老师这节课学完了，主要还是有一下几点困惑，烦请解答
 1.关于大端小端小问题
@@ -806,34 +807,34 @@ func Encode(p Packet) ([]byte, error) {
 而本地的的比如磁盘这种 默认的是小端
 
 2. 关于命名规范
-go语言通过大小写区分public和internel权限
-那么这里我怎么通过命名去区分该类型具体是变量，还是结构体接口类型呢
-有什么具体规范没有，因为之前接触的语言都是通过大小写区分变量和结构体固有次一问
-我看代码里很多参数 都是以短字符命名，我接触到语言命名都是尽可能长，以做到望文知义，
-以短字符命名这个符合go的编码规范吗
+   go语言通过大小写区分public和internel权限
+   那么这里我怎么通过命名去区分该类型具体是变量，还是结构体接口类型呢
+   有什么具体规范没有，因为之前接触的语言都是通过大小写区分变量和结构体固有次一问
+   我看代码里很多参数 都是以短字符命名，我接触到语言命名都是尽可能长，以做到望文知义，
+   以短字符命名这个符合go的编码规范吗
 
 3. const 类型推断
 
 const (
-	CommonConn  = iota + 0x01
-	CommonSumbit
+CommonConn = iota + 0x01
+CommonSumbit
 )
 
 const (
-	CommonConnAck  = iota + 0x81
-	CommonSumbitAck
+CommonConnAck = iota + 0x81
+CommonSumbitAck
 )
 
 编译器是如何识别它的具体类型的，因为这个字段最终会被encode所以有次一问 万一编译器识别成int型那编码就是失败了
 我把它简单重构了一下
 
 const (
-	CommonConn uint8 = iota + 0x01
-	CommonSumbit
+CommonConn uint8 = iota + 0x01
+CommonSumbit
 )
 
 const (
-	CommonConnAck uint8 = iota + 0x81
-	CommonSumbitAck
+CommonConnAck uint8 = iota + 0x81
+CommonSumbitAck
 )</p>2023-11-11</li><br/><li><span>Geek_1cc6d1</span> 👍（0） 💬（1）<p>怎么根据totalLength拆包的？</p>2023-04-25</li><br/><li><span>Six Days</span> 👍（0） 💬（1）<p>frame encode 的方法将数据编码与发送耦合在一起，在外界调用的时候无法直观的感受到消息发送，建议可以做下合理拆分，对体验消息发送与接收更容易理解</p>2023-03-08</li><br/>
 </ul>

@@ -518,18 +518,17 @@ include也可以包含通配符`include scripts/make-rules/*`。make命令会按
 因为伪目标不是文件，make 无法生成它的依赖关系，也无法决定是否要执行它。
 因为伪目标总是会被执行，所以其依赖总是会被决议。</p>2021-06-28</li><br/><li><span>lesserror</span> 👍（1） 💬（1）<p>大家有什么不懂的，可以结合：陈皓老师编写的《跟我一起写 Makefile》 (PDF 重制版) 来看，本文受限于篇幅，有些概念可能不能花很大的篇幅去讲解。</p>2021-09-29</li><br/><li><span>Fan</span> 👍（1） 💬（3）<p>多行变量 的例子没明白
 
-
 define USAGE_OPTIONS
 
 Options:
-  DEBUG        Whether to generate debug symbols. Default is 0.
-  BINS         The binaries to build. Default is all of cmd.
-  ...
-  V            Set to 1 enable verbose build. Default is 0.
+DEBUG Whether to generate debug symbols. Default is 0.
+BINS The binaries to build. Default is all of cmd.
+...
+V Set to 1 enable verbose build. Default is 0.
 endef</p>2021-08-11</li><br/><li><span>Jone_乔泓恺</span> 👍（0） 💬（1）<p>老师，有问格式问题想问下：ifeq 语句中的内容建议要用 tab，还是顶格呢？</p>2022-07-01</li><br/><li><span>Jone_乔泓恺</span> 👍（0） 💬（1）<p>ifeq ($(origin ROOT_DIR),undefined)
 ROOT_DIR := $(abspath $(shell cd $(COMMON_SELF_DIR)&#47;..&#47;.. &amp;&amp; pwd -P))
 endif
-和 
+和
 ROOT_DIR ?= $(abspath $(shell cd $(COMMON_SELF_DIR)&#47;..&#47;.. &amp;&amp; pwd -P))
 
 请问：这两种方式的效果是否相同？

@@ -328,6 +328,6 @@ vim内置多语言的集成确实强大,现在好多脚本都有Python集成.
 我对python不太熟,只能看懂和简单的修改.倒是对Lua比较熟.
 
 作为vim脚本语法的补充,推荐一本电子书:
-[The VimL Primer](https:&#47;&#47;book.douban.com&#47;subject&#47;26304281&#47;&#47;)
+[The VimL Primer](https://book.douban.com/subject/26304281//)
 </p>2020-08-31</li><br/><li><span>瀚海星尘</span> 👍（1） 💬（0）<p>和老师一起写了这么久的配置，可算是能看懂了，哈哈！</p>2020-10-23</li><br/>
 </ul>

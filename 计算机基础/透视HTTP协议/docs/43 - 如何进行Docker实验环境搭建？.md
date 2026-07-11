@@ -98,7 +98,7 @@ cat ~/http_study/hosts >> /etc/hosts  #cat追加到hosts末尾
 另一种方式是在“docker run”的时候用“**–add-host**”参数，手动指定域名/IP的映射关系。
 
 ```
-docker run -it --rm --add-host=www.chrono.com:127.0.0.1 chronolaw/http_study 
+docker run -it --rm --add-host=www.chrono.com:127.0.0.1 chronolaw/http_study
 ```
 
 保险起见，我建议你还是用第一种方式比较好。也就是启动容器后，用“cat”命令，把实验域名的解析追加到hosts文件里，然后再启动OpenResty服务。
@@ -219,7 +219,8 @@ tcpdump: lo: SIOCETHTOOL(ETHTOOL_GET_TS_INFO) ioctl failed: Function not impleme
 ③其他java服务请求有问题的内部服务没没出现connect timeout 
 跪求排查方向～PHP服务是使用contos  docker搭建的</p>2023-07-26</li><br/><li><span>ifelse</span> 👍（0） 💬（1）<p>打卡</p>2023-02-10</li><br/><li><span>忧天小鸡</span> 👍（0） 💬（1）<p>又学了一点点docker，很棒的体验，认真负责</p>2021-12-22</li><br/><li><span>zha.qiang</span> 👍（0） 💬（1）<p>Found a typo:
 
-```
+````
 cu加l https:&#47;&#47;www.chrono.com&#47;30-1 -k --tlsv1.2
 ```</p>2020-10-19</li><br/><li><span>candy</span> 👍（0） 💬（2）<p>谢谢老师，节日快乐！还建立了镜像，学习更方便了</p>2020-09-10</li><br/>
 </ul>
+````

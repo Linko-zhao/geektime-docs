@@ -201,7 +201,7 @@ bpftool map
 bpftool map update name stats_map key 0xc1 0xc2 value 0xa1 0xa2
 
 //查询哈希表映射中的所有数据
- 
+
 bpftool map dump name stats_map
 //示例输出
 //key: c1 c2  value: a1 a2
@@ -281,7 +281,7 @@ BTF和一次编译到处执行带来了很多的好处，但你也需要注意�
 
 1、bpf 系统调用一定程度上参考了 perf_event_open 设计，bpf_attr、perf_event_attr 均包含了大量 union，用于适配不同的 cmd 或者性能监控事件类型。因此，bpf、perf_event_open 接口看似简单，其实是大杂烩。
 
-bpf(int cmd, union bpf_attr *attr, ...) 
+bpf(int cmd, union bpf_attr *attr, ...)
 perf_event_open(struct perf_event_attr *attr, ...)
 
 2、bpftool 命令设计风格重度参考了 iproute2 软件包中的 ip 命令，用法基本上一致。
@@ -295,17 +295,20 @@ Usage: ip [ OPTIONS ] OBJECT { COMMAND | help }
 当我想新增一个trace事件，我的.c需要去包含那些头文件，我的.py需要跟踪那个系统调用。
 这些头文件与系统调用在哪可以找到，如果去找？
 
-希望飞哥大佬能给个大体的框架，思路，谢谢</p>2022-01-26</li><br/><li><span>写点啥呢</span> 👍（4） 💬（1）<p>想请教下老师关于bpf内核态程序的成名周期，比如前几节课的例子，如果我通过ctrl-c终端用户态程序的时候在bpf虚拟机会发生什么呢？我理解应该会结束已经加载的bpf指令，清理map之类的资源等等，具体会有哪些，这些操作是如何在我们程序中自动插入和实现，请老师指点下。</p>2022-01-29</li><br/><li><span>不了峰</span> 👍（2） 💬（1）<p>BPF 系统调用  --&gt; 发生在 用户态
-BPF 辅助函数  --&gt; 内核态
+希望飞哥大佬能给个大体的框架，思路，谢谢</p>2022-01-26</li><br/><li><span>写点啥呢</span> 👍（4） 💬（1）<p>想请教下老师关于bpf内核态程序的成名周期，比如前几节课的例子，如果我通过ctrl-c终端用户态程序的时候在bpf虚拟机会发生什么呢？我理解应该会结束已经加载的bpf指令，清理map之类的资源等等，具体会有哪些，这些操作是如何在我们程序中自动插入和实现，请老师指点下。</p>2022-01-29</li><br/><li><span>不了峰</span> 👍（2） 💬（1）<p>BPF 系统调用 --&gt; 发生在 用户态
+BPF 辅助函数 --&gt; 内核态
 ---
+
 root@ubuntu-impish:&#47;proc# bpftool perf
-pid 38110  fd 6: prog_id 572  kprobe  func do_sys_openat2  offset 0
+pid 38110 fd 6: prog_id 572 kprobe func do_sys_openat2 offset 0
 
 root@ubuntu-impish:&#47;proc# ps -ef|grep 38110
-root       38110   38109  0 03:41 pts&#47;2    00:00:02 python3 .&#47;trace_open.py</p>2022-01-28</li><br/><li><span>piboye</span> 👍（1） 💬（3）<p>老师， bpf 的 map 怎么移除啊？ 没看到 bpftools 的命令</p>2022-03-15</li><br/><li><span>Geek_59a6f9</span> 👍（1） 💬（1）<p>在高版本内核编译运行的ebpf程序，移植到低版本也能直接运行吗？低版本的libbpf 如何感知到高版本内核的修改，从而预定义不同内核版本的数据结构吗？</p>2022-02-04</li><br/><li><span>│．Sk</span> 👍（0） 💬（1）<p>倪老师好，
+root 38110 38109 0 03:41 pts&#47;2 00:00:02 python3 .&#47;trace_open.py</p>2022-01-28</li><br/><li><span>piboye</span> 👍（1） 💬（3）<p>老师， bpf 的 map 怎么移除啊？ 没看到 bpftools 的命令</p>2022-03-15</li><br/><li><span>Geek_59a6f9</span> 👍（1） 💬（1）<p>在高版本内核编译运行的ebpf程序，移植到低版本也能直接运行吗？低版本的libbpf 如何感知到高版本内核的修改，从而预定义不同内核版本的数据结构吗？</p>2022-02-04</li><br/><li><span>│．Sk</span> 👍（0） 💬（1）<p>倪老师好，
 
-想请教一下，在支持 BTF 的内核中，利用 CO-RE 编译出的 ebpf 程序可执行文件，直接 copy 到低版本不支持 BTF 的内核版本的系统上能正常运行吗？ 谢谢！</p>2022-12-31</li><br/><li><span>MoGeJiEr🐔</span> 👍（1） 💬（0）<p>BTF那块是不是没说完阿？不是只介绍了可以使用bpftool生成vmlinux.h头文件嘛？ 怎么后面CO-RE就可以借助BTF的调试信息？这个调试信息哪里来？一头雾水。</p>2022-08-15</li><br/><li><span>woJA1wCgAAbjKldokPvO1h9ZEJTUP8ug</span> 👍（1） 💬（0）<p>老师，结构化的数据需要怎么看，bpftool map dump id mapid和bpftool map dump name mapname结果都是一样的16进制数</p>2022-04-21</li><br/><li><span>helloworld</span> 👍（0） 💬（0）<p>老师，请问下ebpf对系统内核的要求，可以通过容器的操作系统来屏蔽掉对吗？ 不要求物理机节点的内核版本吧？ </p>2024-03-26</li><br/><li><span>Geek_94444c</span> 👍（0） 💬（0）<p>&quot;eBPF 程序最多可以访问 64 个不同的 BPF 映射&quot; 
+想请教一下，在支持 BTF 的内核中，利用 CO-RE 编译出的 ebpf 程序可执行文件，直接 copy 到低版本不支持 BTF 的内核版本的系统上能正常运行吗？ 谢谢！</p>2022-12-31</li><br/><li><span>MoGeJiEr🐔</span> 👍（1） 💬（0）<p>BTF那块是不是没说完阿？不是只介绍了可以使用bpftool生成vmlinux.h头文件嘛？ 怎么后面CO-RE就可以借助BTF的调试信息？这个调试信息哪里来？一头雾水。</p>2022-08-15</li><br/><li><span>woJA1wCgAAbjKldokPvO1h9ZEJTUP8ug</span> 👍（1） 💬（0）<p>老师，结构化的数据需要怎么看，bpftool map dump id mapid和bpftool map dump name mapname结果都是一样的16进制数</p>2022-04-21</li><br/><li><span>helloworld</span> 👍（0） 💬（0）<p>老师，请问下ebpf对系统内核的要求，可以通过容器的操作系统来屏蔽掉对吗？ 不要求物理机节点的内核版本吧？ </p>2024-03-26</li><br/><li><span>Geek_94444c</span> 👍（0） 💬（0）<p>&quot;eBPF 程序最多可以访问 64 个不同的 BPF 映射&quot;
+
 1. 这句话的意思是单个用户态的ebpf程序能创建64个map，还是主机上所有ebpf程序加起来可以创建64个内核态的ebpf程序？
 2. 用户态的ebpf程序怎么绑定这些map的，有实例吗？</p>2023-12-12</li><br/><li><span>朝东</span> 👍（0） 💬（1）<p>你好，偶尔遇到个问题，在bpf加载成功后，没看到prink 到pipe 调试打印，重启系统就恢复，不知什么原因？</p>2023-04-12</li><br/><li><span>小印_zoe</span> 👍（0） 💬（0）<p>有没有详细的付费学习群？</p>2023-03-10</li><br/><li><span>张Dave</span> 👍（0） 💬（0）<p>老师，请问下，一次编译到处执行，哪里还有更详细的解释呢？
-没太明白文中总结的两点具体是怎么做的？</p>2022-09-24</li><br/><li><span>ヾ(◍°∇°◍)ﾉﾞ</span> 👍（0） 💬（0）<p>老师，请教个问题，就是在比如在jdbc连接的时候，有时候一些防火墙或者VPN什么瞬间的原因会导致这个连接要卡住很长时间（通常是2小时15分），有什么办法可以快速探测并结束这种TCP反馈给客户端，ebpf这个手段可以嘛？</p>2022-05-07</li><br/>
+   没太明白文中总结的两点具体是怎么做的？</p>2022-09-24</li><br/><li><span>ヾ(◍°∇°◍)ﾉﾞ</span> 👍（0） 💬（0）<p>老师，请教个问题，就是在比如在jdbc连接的时候，有时候一些防火墙或者VPN什么瞬间的原因会导致这个连接要卡住很长时间（通常是2小时15分），有什么办法可以快速探测并结束这种TCP反馈给客户端，ebpf这个手段可以嘛？</p>2022-05-07</li><br/>
+
 </ul>

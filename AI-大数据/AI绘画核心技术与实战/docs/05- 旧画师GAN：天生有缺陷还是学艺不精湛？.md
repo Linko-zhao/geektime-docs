@@ -203,8 +203,8 @@ GigaGAN是一种具有突破性的GAN模型，它通过扩大模型规模，在�
 
 在训练过程中，生成器和判别器互相对抗。生成器试图生成更逼真的样本来迷惑判别器，而判别器则努力辨别出生成器生成的伪造样本。它们之间会不断重复这个过程，持续更新自己的参数，达到相互改进和提升
 
-
 而随着训练的进行，生成器和判别器逐渐“学会”了“博弈”，最终会达到一个平衡状态，即生成器的样本会越来越逼真，判别器识别的准确率也会越来越高。通过这种对抗式的训练方式，GAN可以生成非常逼真的数据，使用场景有图像合成、图像修复、图像风格转换等等。</p>2023-09-26</li><br/><li><span>Wiliam</span> 👍（0） 💬（1）<p>老师请教一下：
+
 1. GAN 的局限性主要表现在训练不稳定性、生成图像模糊、难以评估和控制生成质量等问题，那么GigaGAN具体是解决了哪个问题呢？
 2. 抛开GAN的劣势，相比Diffusion，GAN有什么优点吗？有考虑过GAN的优点与Diffusion的优点强强联合吗？</p>2023-09-13</li><br/><li><span>xixi</span> 👍（0） 💬（1）<p>giga读错了</p>2023-09-01</li><br/><li><span>xingliang</span> 👍（0） 💬（1）<p>BigGAN：BigGAN 是为了实现高分辨率、高质量的图像生成而设计的。它的特点是在模型中引入了大量的参数，利用更大的批次大小和更多的特征通道。这样可以实现高分辨率且内容丰富的图像生成。但同时，由于模型的复杂性，它需要大量的计算资源和时间来训练。
 
@@ -256,11 +256,10 @@ generator_optimizer.step()：更新生成器的参数，使用优化器进行梯
 
 这段代码的作用是通过交替地训练判别器和生成器，使生成器能够生成逼真的假图像，同时判别器能够准确地区分真实图像和假图像。</p>2023-07-29</li><br/><li><span>大将</span> 👍（0） 💬（0）<p>最大化真实图像的损失（d_loss_real）和最小化生成图像的损失（d_loss_fake），个人感觉这个描述并不准确，最大化和最小化容易引起歧义</p>2024-02-06</li><br/><li><span>Geek_0bac2d</span> 👍（0） 💬（0）<p>AI生成的代码解释
 for epoch in range(num_epochs):
-    for batch_data in data_loader:
-        # 更新判别器
-        real_images = batch_data.to(device)  # 获取真实图像数据
-        z = torch.randn(batch_size, latent_dim).to(device)  # 生成随机噪声向量
-        fake_images = generator(z).detach()  # 通过生成器生成假图像，并将其与生成器的梯度计算图分离
+for batch_data in data_loader: # 更新判别器
+real_images = batch_data.to(device) # 获取真实图像数据
+z = torch.randn(batch_size, latent_dim).to(device) # 生成随机噪声向量
+fake_images = generator(z).detach() # 通过生成器生成假图像，并将其与生成器的梯度计算图分离
 
         d_loss_real = discriminator(real_images)  # 判别器对真实图像的判别结果
         d_loss_fake = discriminator(fake_images)  # 判别器对假图像的判别结果
@@ -281,5 +280,6 @@ for epoch in range(num_epochs):
         generator.zero_grad()  # 清空生成器的梯度
         g_loss.backward()  # 反向传播计算生成器的梯度
         generator_optimizer.step()  # 利用优化器更新生成器的参数
+
 </p>2023-07-30</li><br/>
 </ul>

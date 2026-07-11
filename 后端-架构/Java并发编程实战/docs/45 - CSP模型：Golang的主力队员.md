@@ -71,7 +71,7 @@ func calc(from uint64, to uint64) <-chan uint64 {
 而创建一个有缓冲的channel也很简单，在下面的示例代码中，我们创建了一个容量为4的channel，同时创建了4个协程作为生产者、4个协程作为消费者。
 
 ```
-// 创建一个容量为4的channel 
+// 创建一个容量为4的channel
 ch := make(chan int, 4)
 // 创建4个协程，作为生产者
 for i := 0; i < 4; i++ {
@@ -106,10 +106,10 @@ Golang中的channel是语言层面支持的，所以可以使用一个左向箭�
 
 ```
 func main() {
-    // 创建一个无缓冲的channel  
+    // 创建一个无缓冲的channel
     ch := make(chan int)
     // 主协程会阻塞在此处，发生死锁
-    <- ch 
+    <- ch
 }
 ```
 

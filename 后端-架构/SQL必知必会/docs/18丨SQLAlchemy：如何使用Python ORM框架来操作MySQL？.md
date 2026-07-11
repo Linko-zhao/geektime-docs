@@ -60,7 +60,7 @@ create\_engine的使用方法类似我们在上篇文章中提到的mysql.connec
 class Player(Base):
     # 表的名字:
     __tablename__ = 'player'
- 
+
     # 表的结构:
     player_id = Column(Integer, primary_key=True, autoincrement=True)
     team_id = Column(Integer)
@@ -237,7 +237,8 @@ hibernate:强调对单条数据的处理
 mybits:基于自定义配置的sql操作</p>2019-07-23</li><br/><li><span>JustDoDT</span> 👍（21） 💬（3）<p>缺少一些代码，可以参考廖雪峰的这个。
 https:&#47;&#47;www.liaoxuefeng.com&#47;wiki&#47;1016959663602400&#47;1017803857459008</p>2019-07-22</li><br/><li><span>一叶知秋</span> 👍（12） 💬（1）<p>日常交作业~~~
 
-# -*- coding:utf-8 -*-
+# -_- coding:utf-8 -_-
+
 from sqlalchemy import and_
 from sqlalchemy import Column, INT, FLOAT, VARCHAR
 from sqlalchemy import create_engine
@@ -246,14 +247,13 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-
 class Test_db:
-    def __init__(self):
-        &quot;&quot;&quot;此处填上自己的连接配置&quot;&quot;&quot;
-        self.engine = create_engine(
-            &#39;mysql+pymysql:&#47;&#47;UserName:Password@host:port&#47;Db_Name?charset=utf8&#39;)
-        db_session = sessionmaker(bind=self.engine)
-        self.session = db_session()
+def **init**(self):
+&quot;&quot;&quot;此处填上自己的连接配置&quot;&quot;&quot;
+self.engine = create_engine(
+&#39;mysql+pymysql:&#47;&#47;UserName:Password@host:port&#47;Db_Name?charset=utf8&#39;)
+db_session = sessionmaker(bind=self.engine)
+self.session = db_session()
 
     def update(self, target_class, query_filter, target_obj):
         &quot;&quot;&quot;
@@ -271,14 +271,13 @@ class Test_db:
         except Exception as e:
             print(e)
 
-
 class Player(Base):
-    &quot;&quot;&quot;定义表结构&quot;&quot;&quot;
-    __tablename__ = &#39;player&#39;
-    player_id = Column(INT(), primary_key=True)
-    team_id = Column(INT())
-    player_name = Column(VARCHAR(255))
-    height = Column(FLOAT())
+&quot;&quot;&quot;定义表结构&quot;&quot;&quot;
+**tablename** = &#39;player&#39;
+player_id = Column(INT(), primary_key=True)
+team_id = Column(INT())
+player_name = Column(VARCHAR(255))
+height = Column(FLOAT())
 
     def __init__(self, player_id, team_id, player_name, height):
         self.player_id = player_id
@@ -286,12 +285,11 @@ class Player(Base):
         self.player_name = player_name
         self.height = height
 
-
-if __name__ == &#39;__main__&#39;:
-    db_obj = Test_db()
-    query_filter = and_(Player.height == 2.08)
-    target_obj = {&#39;height&#39;: 2.09}
-    update_result = db_obj.update(Player, query_filter, target_obj)
+if **name** == &#39;**main**&#39;:
+db_obj = Test_db()
+query_filter = and_(Player.height == 2.08)
+target_obj = {&#39;height&#39;: 2.09}
+update_result = db_obj.update(Player, query_filter, target_obj)
 
 后续更新数量、更新结果等等判断就略过了...
 （小声bb：什么时候极客时间评论也能支持markdown啊。。）</p>2019-07-22</li><br/><li><span>ABC</span> 👍（9） 💬（1）<p>翻了一下SQLAlchemy的官方文档,看到一个简单的办法,作业如下:
@@ -302,11 +300,9 @@ if __name__ == &#39;__main__&#39;:
 
 使用SQLAlchemy工具查询身高为2.08米的球员,并且将这些球员的身高修改为2.09;
 
-
 参考:
-		
-		https:&#47;&#47;docs.sqlalchemy.org&#47;en&#47;13&#47;core&#47;dml.html
 
+    	https:&#47;&#47;docs.sqlalchemy.org&#47;en&#47;13&#47;core&#47;dml.html
 
 &#39;&#39;&#39;
 
@@ -316,34 +312,32 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 engine = create_engine(&#39;mysql+mysqlconnector:&#47;&#47;root:123456@localhost:3306&#47;geektime-sql&#39;)
 
-
 class Player(Base):
-    __tablename__ = &#39;player&#39;
- 
+**tablename** = &#39;player&#39;
+
     player_id = Column(Integer, primary_key=True, autoincrement=True)
     team_id = Column(Integer)
     player_name = Column(String(255))
     height = Column(Float(3,2))
 
 def to_dict(self):
-    return {c.name: getattr(self, c.name, None)
-            for c in self.__table__.columns}
+return {c.name: getattr(self, c.name, None)
+for c in self.**table**.columns}
 
-if __name__ == &#39;__main__&#39;:
-	DBSession = sessionmaker(bind=engine)
-	session = DBSession()
-	Base.to_dict = to_dict
-	print(&quot;更新前:&quot;)
-	rows = session.query(Player).filter(Player.height == 2.08).all()
-	print([row.to_dict() for row in rows])
-	# 参考: https:&#47;&#47;docs.sqlalchemy.org&#47;en&#47;13&#47;core&#47;dml.html#sqlalchemy.sql.expression.update
-	stmt = update(Player).where(Player.height == 2.08).values(height=2.09)
-	engine.execute(stmt)
-	session.commit()
-	rows = session.query(Player).filter(Player.height == 2.09).all()
-	print(&quot;更新后:&quot;)
-	print([row.to_dict() for row in rows])
-	session.close()
+if **name** == &#39;**main**&#39;:
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+Base.to_dict = to_dict
+print(&quot;更新前:&quot;)
+rows = session.query(Player).filter(Player.height == 2.08).all()
+print([row.to_dict() for row in rows]) # 参考: https:&#47;&#47;docs.sqlalchemy.org&#47;en&#47;13&#47;core&#47;dml.html#sqlalchemy.sql.expression.update
+stmt = update(Player).where(Player.height == 2.08).values(height=2.09)
+engine.execute(stmt)
+session.commit()
+rows = session.query(Player).filter(Player.height == 2.09).all()
+print(&quot;更新后:&quot;)
+print([row.to_dict() for row in rows])
+session.close()
 太长,省略了部分执行结果.自己执行一下,就可以看到完整结果了..
 
 更新前:
@@ -370,38 +364,33 @@ engine = create_engine(&quot;mysql+pymysql:&#47;&#47;root:toor@localhost:3306&#4
 
 Session = sessionmaker(bind=engine)
 
-
 def to_dict(self):
-    return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
-
+return {c.name: getattr(self, c.name, None) for c in self.**table**.columns}
 
 Base.to_dict = to_dict
 
-
 class Player(Base):
-    __tablename__ = &quot;player&quot;
+**tablename** = &quot;player&quot;
 
     player_id = Column(Integer, primary_key=True, autoincrement=True)
     team_id = Column(Integer)
     player_name = Column(String(255))
     height = Column(Float(3, 2))
 
-
 session = Session()
 
 rows = session.query(Player).filter(Player.height == 2.08).all()
 for row in rows:
-    print(row.to_dict())
-    row.height = 2.09
+print(row.to_dict())
+row.height = 2.09
 session.commit()
 
-
 # 验证
+
 rows = session.query(Player).filter(Player.height == 2.09).all()
 print([row.to_dict() for row in rows])
 
 session.close()
-
 
 </p>2019-12-23</li><br/><li><span>阿锋</span> 👍（2） 💬（1）<p>上面那个分组查询，按照分组后数据行数递增的顺序进行排序，怎么结果是[(1001, 20), (1002, 17)]，那不是递减？是不是写错了？</p>2019-07-22</li><br/><li><span>Geek_5d805b</span> 👍（1） 💬（2）<p>to_dict方法这块看不太懂，base类指的是player类吗，谁给讲讲</p>2019-07-25</li><br/><li><span>NIXUS</span> 👍（1） 💬（1）<p>ORM的使用，更多的不都是通过查文档的吗？</p>2019-07-24</li><br/><li><span>LJK</span> 👍（1） 💬（1）<p>老师好，对于修改数据的事例有一点困惑还请您解答。对于下面这段代码中
 

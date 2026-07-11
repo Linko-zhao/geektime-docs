@@ -163,7 +163,7 @@ function BlogView({ id }) {
     fetchBlog(id);
     // 监听指定 id 的博客文章的评论变化通知
     const listener = comments.addListener(id, handleCommentsChange);
-    
+
     return () => {
       // 当 id 发生变化时，移除之前的监听
       comments.removeListener(listener);
@@ -215,9 +215,9 @@ function BlogView({ id }) {
 }, [])</p>2021-06-03</li><br/><li><span>海洋</span> 👍（7） 💬（2）<p>useEffect 第二个参数传入空，就只在组件初始化时和销毁前分别执行一次</p>2021-06-03</li><br/><li><span>Geek_12f953</span> 👍（4） 💬（1）<p>老师，useSingleton这个Hook里面使用useRef来定义called标记而不是用useState，是因为called并不会影响UI渲染吗？我尝试了用useState好像也可以实现只执行一次的效果</p>2021-08-03</li><br/><li><span>花儿与少年</span> 👍（4） 💬（1）<p>请教： 以下代码不是每次render后都会执行吗，return的函数在每次effect执行前执行？
 
 useEffect(() =&gt; {
-  return () =&gt; {
-    &#47;&#47; 这里只会在组件销毁前（componentWillUnmount）执行一次
-  }
+return () =&gt; {
+&#47;&#47; 这里只会在组件销毁前（componentWillUnmount）执行一次
+}
 }, [])
 </p>2021-08-02</li><br/><li><span>Isaac</span> 👍（4） 💬（1）<p>老师，useEffect 的执行时机是 DOM 渲染完毕后执行，还是依赖发生变化，不管 DOM 有没有更新完毕就立即执行？</p>2021-06-09</li><br/><li><span>大大小小</span> 👍（4） 💬（3）<p>BlogView那个例子，为什么要把useCallback返回的函数作为useEffect的依赖呢？是要达到什么目的吗？</p>2021-06-03</li><br/><li><span>Geek_sky</span> 👍（3） 💬（1）<p>老师，我看到useRef的用法有一个疑问：例子中useSingleton包含了一个useRef的定义为false，如果我在MyComp中定义多个useSingleton，程序在启动的时候第二次及之后的调用useRef是怎么确认需要创建新的还是使用之前的？那么界面在刷新之后，useSingleton会再次被调用，那时会有多个useRef的检查，那么程序又是如何判定的？</p>2021-06-09</li><br/><li><span>浩然</span> 👍（2） 💬（1）<p>useEffect(() =&gt; {
     return () =&gt; {

@@ -261,11 +261,11 @@ const io = require('socket.io').listen(app); //侦听 2013
 io.sockets.on('connection', (socket) => {
 
   // convenience function to log server messages to the client
-  function log(){ 
-    const array = ['>>> Message from server: ']; 
+  function log(){
+    const array = ['>>> Message from server: '];
     for (var i = 0; i < arguments.length; i++) {
       array.push(arguments[i]);
-    } 
+    }
       socket.emit('log', array);
   }
 
@@ -368,46 +368,44 @@ var io = socketIo.listen(http_server);
 
 io.sockets.on(&#39;connection&#39;, (socket)=&gt; {
 
-	socket.on(&#39;message&#39;, (room, data)=&gt;{
-	    console.log(&#39;message, room: &#39; + room + &quot;, data, type:&quot; + data);
-		socket.to(room).emit(&#39;message&#39;,room, data+&#39;from server!&#39;);
-	});
+    socket.on(&#39;message&#39;, (room, data)=&gt;{
+        console.log(&#39;message, room: &#39; + room + &quot;, data, type:&quot; + data);
+    	socket.to(room).emit(&#39;message&#39;,room, data+&#39;from server!&#39;);
+    });
 
-	socket.on(&#39;join&#39;, (room)=&gt;{
-		socket.join(room);
-		var myRoom = io.sockets.adapter.rooms[room]; 
-		var users = (myRoom)? Object.keys(myRoom.sockets).length : 0;
-		console.log(&#39;the user number of room (&#39; + room + &#39;) is: &#39; + users);
+    socket.on(&#39;join&#39;, (room)=&gt;{
+    	socket.join(room);
+    	var myRoom = io.sockets.adapter.rooms[room];
+    	var users = (myRoom)? Object.keys(myRoom.sockets).length : 0;
+    	console.log(&#39;the user number of room (&#39; + room + &#39;) is: &#39; + users);
 
-		if(users &lt; USERCOUNT){
-			socket.emit(&#39;joined&#39;, room, socket.id); &#47;&#47;发给除自己之外的房间内的所有人
-			if(users &gt; 1){
-				socket.to(room).emit(&#39;otherjoin&#39;, room, socket.id);
-			}
-		
-		}else{
-			socket.leave(room);	
-			socket.emit(&#39;full&#39;, room, socket.id);
-		}
-	});
+    	if(users &lt; USERCOUNT){
+    		socket.emit(&#39;joined&#39;, room, socket.id); &#47;&#47;发给除自己之外的房间内的所有人
+    		if(users &gt; 1){
+    			socket.to(room).emit(&#39;otherjoin&#39;, room, socket.id);
+    		}
 
-	socket.on(&#39;leave&#39;, (room)=&gt;{
+    	}else{
+    		socket.leave(room);
+    		socket.emit(&#39;full&#39;, room, socket.id);
+    	}
+    });
 
-		socket.leave(room);
+    socket.on(&#39;leave&#39;, (room)=&gt;{
 
-		var myRoom = io.sockets.adapter.rooms[room]; 
-		var users = (myRoom)? Object.keys(myRoom.sockets).length : 0;
-		console.log(&#39;the user number of room is: &#39; + users);
+    	socket.leave(room);
 
-		socket.to(room).emit(&#39;bye&#39;, room, socket.id);
-		socket.emit(&#39;leaved&#39;, room, socket.id);
-	});
+    	var myRoom = io.sockets.adapter.rooms[room];
+    	var users = (myRoom)? Object.keys(myRoom.sockets).length : 0;
+    	console.log(&#39;the user number of room is: &#39; + users);
+
+    	socket.to(room).emit(&#39;bye&#39;, room, socket.id);
+    	socket.emit(&#39;leaved&#39;, room, socket.id);
+    });
 
 });
 
 http_server.listen(8080, &#39;0.0.0.0&#39;);
-
-
 
 </p>2020-09-14</li><br/><li><span>like_wind</span> 👍（1） 💬（1）<p>没太理解老师说的这个房间的概念，文中提到的“房间概念”是指客户端和服务端的一个连接就是一个房间吗？还是说这个房间指的是业务上的某一个房间，比如说某直播平台的一个直播间?</p>2020-03-23</li><br/><li><span>dahaowenge</span> 👍（1） 💬（3）<p>node serves.js     Error: ENOENT: no such file or directory, open &#39;.&#47;cert&#47;1557605_www.learningrtc.cn.key&#39;</p>2019-10-10</li><br/><li><span>Jason</span> 👍（1） 💬（1）<p>老师好，问一下， 这套简单的信令系统，已经实现了交换各端sdp信息的功能了吗？</p>2019-08-27</li><br/><li><span>许童童</span> 👍（1） 💬（1）<p>两个不同的 V8 引擎上，你知道它们的对应关系吗
 一个是nodejs服务端的V8，一个是浏览器中客户端的V8。</p>2019-08-08</li><br/><li><span>人生在事</span> 👍（0） 💬（1）<p>&lt;script src=&#39;&#47;socket.io&#47;socket.io.js&#39;&gt;&lt;&#47;script&gt;这段代码没看到，李老师。第一次接触nodejs和socket.io.js，不太明白，希望指导一下
@@ -423,16 +421,16 @@ client端不能显示发送出去的消息
         ^^^^^^^^^^^
 
 SyntaxError: Unexpected identifier
-    at createScript (vm.js:56:10)
-    at Object.runInThisContext (vm.js:97:10)
-    at Module._compile (module.js:549:28)
-    at Object.Module._extensions..js (module.js:586:10)
-    at Module.load (module.js:494:32)
-    at tryModuleLoad (module.js:453:12)
-    at Function.Module._load (module.js:445:3)
-    at Module.require (module.js:504:17)
-    at require (internal&#47;module.js:20:19)
-    at Object.&lt;anonymous&gt; (&#47;root&#47;node_modules&#47;streamroller&#47;lib&#47;index.js:2:27)
+at createScript (vm.js:56:10)
+at Object.runInThisContext (vm.js:97:10)
+at Module._compile (module.js:549:28)
+at Object.Module._extensions..js (module.js:586:10)
+at Module.load (module.js:494:32)
+at tryModuleLoad (module.js:453:12)
+at Function.Module._load (module.js:445:3)
+at Module.require (module.js:504:17)
+at require (internal&#47;module.js:20:19)
+at Object.&lt;anonymous&gt; (&#47;root&#47;node_modules&#47;streamroller&#47;lib&#47;index.js:2:27)
 
-是我的环境有问题么</p>2019-11-21</li><br/><li><span>而立斋</span> 👍（0） 💬（2）<p>跑起来报啦个错误，页面显示Cannot GET </p>2019-11-04</li><br/><li><span>dahaowenge</span> 👍（0） 💬（1）<p>老师，用的是官方demo，但是运行node server.js时，报错  Error: Cannot find module &#39;log4js&#39;</p>2019-10-10</li><br/>
+是我的环境有问题么</p>2019-11-21</li><br/><li><span>而立斋</span> 👍（0） 💬（2）<p>跑起来报啦个错误，页面显示Cannot GET </p>2019-11-04</li><br/><li><span>dahaowenge</span> 👍（0） 💬（1）<p>老师，用的是官方demo，但是运行node server.js时，报错 Error: Cannot find module &#39;log4js&#39;</p>2019-10-10</li><br/>
 </ul>

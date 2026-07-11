@@ -46,7 +46,7 @@ if(LGlobal.canTouch){
       LSystem.screen(LStage.FULL_SCREEN);
 }
 </script>
-<script type="text/javascript" src="./js/Main.js"></script> 
+<script type="text/javascript" src="./js/Main.js"></script>
 ```
 
 如果你熟悉web编程，对于这些代码肯定非常熟悉。在开始的地方，我们看到载入的JavaScript代码是load\_lufylegend.js，这个js文件包含在打飞机游戏的上一层目录，内部就只有一行代码。
@@ -114,7 +114,7 @@ LSprite是引擎的基本显示列表构造，里面包含了显示内容的列�
 //添加游戏背景
 bitmapdata = new LBitmapData(imglist["back"]);
 bitmap = new LBitmap(bitmapdata);
-backLayer.addChild(bitmap);  
+backLayer.addChild(bitmap);
 ```
 
 这几段代码就是将背景图片也添加到显示节点列表。
@@ -164,7 +164,7 @@ backLayer.addEventListener(LMouseEvent.MOUSE_UP,onup);
 事实上这个循环，就在上面这串代码中。
 
 ```
-backLayer.addEventListener(LEvent.ENTER_FRAME,onframe); 
+backLayer.addEventListener(LEvent.ENTER_FRAME,onframe);
 ```
 
 其中，LEvent为事件类。**和传统客户端游戏不同，在HTML5游戏引擎中，循环采用了事件代码来完成，只要你在侦听器函数中注册了事件，都会一帧一帧不停地调度这个事件，以此达到循环的效果。**

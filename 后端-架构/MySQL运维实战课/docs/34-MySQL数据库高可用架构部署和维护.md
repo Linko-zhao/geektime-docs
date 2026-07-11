@@ -314,7 +314,7 @@ mysql> start replica;
 mysql> show replica status\G
 ...
                 Auto_Position: 1
-              
+
 ```
 
 ## 管理数据复制

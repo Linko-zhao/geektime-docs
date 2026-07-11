@@ -173,7 +173,7 @@ window对象上提供了一些全局的尺寸信息，它是通过属性来提�
 - window.outerWidth, window.outerHeight 这两个属性表示浏览器窗口占据的大小，很多浏览器没有实现，一般来说这两个属性无关紧要。
 - window.devicePixelRatio 这个属性非常重要，表示物理像素和CSS像素单位的倍率关系，Retina屏这个值是2，后来也出现了一些3倍的Android屏。
 - window.screen （屏幕尺寸相关的信息）
-  
+
   - window.screen.width, window.screen.height 设备的屏幕尺寸。
   - window.screen.availWidth, window.screen.availHeight 设备屏幕的可渲染区域尺寸，一些Android机器会把屏幕的一部分预留做固定按钮，所以有这两个属性，实际上一般浏览器不会实现的这么细致。
   - window.screen.colorDepth, window.screen.pixelDepth 这两个属性是固定值24，应该是为了以后预留。
@@ -224,27 +224,27 @@ CSSOM是CSS的对象模型，在W3C标准中，它包含两个部分：描述样
 <li><span>Geek_ianp87</span> 👍（1） 💬（1）<p>display:inline;的元素会不会产生盒？</p>2019-10-09</li><br/><li><span>Russell</span> 👍（0） 💬（1）<p>这个咋换行啊。。。 不好意思，老师好，我想咨询浏览器API的种类。 我可以认为是，DOM，BOM，CSSOM这几类么？</p>2019-04-03</li><br/><li><span>阿成</span> 👍（61） 💬（2）<p>Look via gist: https:&#47;&#47;gist.github.com&#47;aimergenge&#47;2bcf41ac4c4d2586e48ccd5cec5c9768
 
 void function () {
-  const canvas = document.createElement(&#39;canvas&#39;)
+const canvas = document.createElement(&#39;canvas&#39;)
 
-  canvas.width = document.documentElement.offsetWidth
-  canvas.height = document.documentElement.offsetHeight
+canvas.width = document.documentElement.offsetWidth
+canvas.height = document.documentElement.offsetHeight
 
-  canvas.style.position = &#39;absolute&#39;
-  canvas.style.left = &#39;0&#39;
-  canvas.style.right = &#39;0&#39;
-  canvas.style.top = &#39;0&#39;
-  canvas.style.bottom = &#39;0&#39;
-  canvas.style.zIndex = &#39;99999&#39;
+canvas.style.position = &#39;absolute&#39;
+canvas.style.left = &#39;0&#39;
+canvas.style.right = &#39;0&#39;
+canvas.style.top = &#39;0&#39;
+canvas.style.bottom = &#39;0&#39;
+canvas.style.zIndex = &#39;99999&#39;
 
-  document.body.appendChild(canvas)
+document.body.appendChild(canvas)
 
-  const ctx = canvas.getContext(&#39;2d&#39;)
-  draw(ctx, getAllRects())
+const ctx = canvas.getContext(&#39;2d&#39;)
+draw(ctx, getAllRects())
 
-  function draw (ctx, rects) {
-    let i = 0
-    ctx.strokeStyle = &#39;red&#39;
-    window.requestAnimationFrame(_draw)
+function draw (ctx, rects) {
+let i = 0
+ctx.strokeStyle = &#39;red&#39;
+window.requestAnimationFrame(_draw)
 
     function _draw () {
       let {x, y, width, height} = rects[i++]
@@ -255,27 +255,28 @@ void function () {
         console.log(&#39;%cDONE&#39;, &#39;background-color: green; color: white; padding: 0.3em 0.5em;&#39;)
       }
     }
-  }
 
-  function getAllRects () {
-    const allElements = document.querySelectorAll(&#39;*&#39;)
-    const rects = []
-    const {x: htmlX, y: htmlY} = document.documentElement.getBoundingClientRect()
-    allElements.forEach(element =&gt; {
-      const eachElRects = Array.from(element.getClientRects()).filter(rect =&gt; {
-        return rect.width || rect.height
-      }).map(rect =&gt; {
-        return {
-          x: rect.x - htmlX,
-          y: rect.y - htmlY,
-          width: rect.width,
-          height: rect.height
-        }
-      })
-      rects.push(...eachElRects)
-    })
-    return rects
-  }
+}
+
+function getAllRects () {
+const allElements = document.querySelectorAll(&#39;*&#39;)
+const rects = []
+const {x: htmlX, y: htmlY} = document.documentElement.getBoundingClientRect()
+allElements.forEach(element =&gt; {
+const eachElRects = Array.from(element.getClientRects()).filter(rect =&gt; {
+return rect.width || rect.height
+}).map(rect =&gt; {
+return {
+x: rect.x - htmlX,
+y: rect.y - htmlY,
+width: rect.width,
+height: rect.height
+}
+})
+rects.push(...eachElRects)
+})
+return rects
+}
 }()
 </p>2019-03-16</li><br/><li><span>welkin</span> 👍（14） 💬（6）<p>希望作者能讲一下虚拟dom
 还有浏览器的重绘和重排
@@ -337,54 +338,54 @@ renderCanvas();
 </p>2024-08-27</li><br/><li><span>Fiona B Y Fan</span> 👍（0） 💬（0）<p>通过document.getStyleSheets修改style以及window.getComputedStyle window.getBoundingClientRect window.getClientRects方法会导致重排和重绘，影响性能，不是应该少用吗</p>2022-04-17</li><br/><li><span>pasico</span> 👍（0） 💬（0）<p>
 
 function dfs(top, callback){
-    let node = top
-    let stack = Array.from(node.children).reverse()
-    callback(node)
-    while(stack.length){
-        node = stack.pop()
-        callback(node)
-        stack.push(...Array.from(node.children).reverse())
-    }
+let node = top
+let stack = Array.from(node.children).reverse()
+callback(node)
+while(stack.length){
+node = stack.pop()
+callback(node)
+stack.push(...Array.from(node.children).reverse())
+}
 }
 
 function traverse(){
-    let body = document.body
-    &#47;&#47; let color = 0
-    let time = 0
-    let count = 0
-    let can = document.createElement(&#39;canvas&#39;)
-    can.style.position = &#39;fixed&#39;
-    can.style.top=0
-    can.style.left=0
-    let ctx = can.getContext(&#39;2d&#39;)
-    const callback=(node)=&gt;{
-        time+=50
-        count++
-        setTimeout(()=&gt;{            
-            var {x,y,width,height} = node.getBoundingClientRect()
-            console.log(&#39;count&#39;, count, node, x, y, width, height)
-            if(node === body){
-                can.style.width = width
-                can.width = width
-                can.style.height = height
-                can.height = height
-            }
-            &#47;&#47; color++
-            &#47;&#47; ctx.fillStyle=`rgb(${color%255},${color%255},${color%255})`;
-            &#47;&#47; ctx.fillRect(x,y,width, height)
-            ctx.strokeStyle = &#39;green&#39;;
-            ctx.strokeRect(x, y, width, height);
-        }, time)
-    }
-    dfs(body, callback)
-    body.appendChild(can)
+let body = document.body
+&#47;&#47; let color = 0
+let time = 0
+let count = 0
+let can = document.createElement(&#39;canvas&#39;)
+can.style.position = &#39;fixed&#39;
+can.style.top=0
+can.style.left=0
+let ctx = can.getContext(&#39;2d&#39;)
+const callback=(node)=&gt;{
+time+=50
+count++
+setTimeout(()=&gt;{  
+var {x,y,width,height} = node.getBoundingClientRect()
+console.log(&#39;count&#39;, count, node, x, y, width, height)
+if(node === body){
+can.style.width = width
+can.width = width
+can.style.height = height
+can.height = height
+}
+&#47;&#47; color++
+&#47;&#47; ctx.fillStyle=`rgb(${color%255},${color%255},${color%255})`;
+&#47;&#47; ctx.fillRect(x,y,width, height)
+ctx.strokeStyle = &#39;green&#39;;
+ctx.strokeRect(x, y, width, height);
+}, time)
+}
+dfs(body, callback)
+body.appendChild(can)
 }
 
 traverse()</p>2022-02-17</li><br/><li><span>胡永</span> 👍（0） 💬（0）<p>
-    const newWindow = window.open(&quot;about:blank&quot;, &quot;_blank&quot;, &quot;width=100,height=100,left=100,right=100&quot;)
-    const canvas = newWindow.document.body.appendChild(newWindow.document.createElement(&#39;canvas&#39;));
-    canvas.width = document.documentElement.offsetWidth
-    canvas.height = document.documentElement.offsetHeight
+const newWindow = window.open(&quot;about:blank&quot;, &quot;_blank&quot;, &quot;width=100,height=100,left=100,right=100&quot;)
+const canvas = newWindow.document.body.appendChild(newWindow.document.createElement(&#39;canvas&#39;));
+canvas.width = document.documentElement.offsetWidth
+canvas.height = document.documentElement.offsetHeight
 
     canvas.style.position = &#39;absolute&#39;
     canvas.style.left = &#39;0&#39;
@@ -428,6 +429,7 @@ traverse()</p>2022-02-17</li><br/><li><span>胡永</span> 👍（0） 💬（0�
             tagsArr.add(item.nodeName.slice(0).toLowerCase())
         })
     }</p>2021-06-16</li><br/><li><span>Peter</span> 👍（0） 💬（0）<p>
+
 &#47;&#47; 创建覆盖在网页上方的canvas
 const cvs = document.createElement(&#39;canvas&#39;)
 cvs.width = document.documentElement.scrollWidth;
@@ -442,11 +444,11 @@ ctx.strokeStyle=&quot;red&quot;;
 &#47;&#47; 查找所有块元素，计算位置并在对应坐标绘制边框在canvas上。
 const BlockLevel = [&#39;block&#39;, &#39;inline-block&#39;, &#39;inline-table&#39;, &#39;table&#39;, &#39;flex&#39;, &#39;grid&#39;, &#39;flow-root&#39;];
 [].forEach.call(document.body.getElementsByTagName(&#39;*&#39;), (item) =&gt; {
-    if (BlockLevel.indexOf(getComputedStyle(item).display) &gt; -1) {
-        const rect = item.getBoundingClientRect();
-        const { x, y, width, height } = rect;
-        ctx.strokeRect(x, y, width, height);
-    }
+if (BlockLevel.indexOf(getComputedStyle(item).display) &gt; -1) {
+const rect = item.getBoundingClientRect();
+const { x, y, width, height } = rect;
+ctx.strokeRect(x, y, width, height);
+}
 })
 
 document.body.append(cvs);

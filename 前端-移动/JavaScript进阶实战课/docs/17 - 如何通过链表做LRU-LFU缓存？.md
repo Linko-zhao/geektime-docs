@@ -16,7 +16,7 @@
 
 ```javascript
 class Node {
-  constructor(data){
+  constructor(data) {
     this.data = data;
     this.next = null;
   }
@@ -27,20 +27,40 @@ class Node {
 
 ```javascript
 class LinkedList {
-  constructor(){
+  constructor() {
     this.head = null;
     this.size = 0;
   }
-  isEmpty(){ /*判断是否为空*/ }
-  size() { /*获取链表大小*/ }
-  getHead() { /*获取链表头节点*/ } 
-  indexOf(element) { /*获取某个元素的位置*/ } 
-  insertAtTail(element) { /*在表尾插入元素*/ }
-  insertAt(element, index) { /*在指定位置插入*/ }
-  remove(element) { /*删除某个元素*/ }
-  removeAt(index) { /*在指定位置删除*/ }
-  getElementAt(index) { /*根据某个位置获取元素*/ }
-  removeAtHead(){ /*在表头位置删除元素*/ }
+  isEmpty() {
+    /*判断是否为空*/
+  }
+  size() {
+    /*获取链表大小*/
+  }
+  getHead() {
+    /*获取链表头节点*/
+  }
+  indexOf(element) {
+    /*获取某个元素的位置*/
+  }
+  insertAtTail(element) {
+    /*在表尾插入元素*/
+  }
+  insertAt(element, index) {
+    /*在指定位置插入*/
+  }
+  remove(element) {
+    /*删除某个元素*/
+  }
+  removeAt(index) {
+    /*在指定位置删除*/
+  }
+  getElementAt(index) {
+    /*根据某个位置获取元素*/
+  }
+  removeAtHead() {
+    /*在表头位置删除元素*/
+  }
 }
 ```
 
@@ -55,10 +75,10 @@ class LinkedList {
 所以在双链表节点的实现上，我们可以在单链表基础上增加一个上一节点指针的属性。同样的，双链表也可以基于单链表扩展，在里面加一个表尾节点。对于从后往前的遍历，和从前往后的遍历一样，复杂度都是$O(n)$。
 
 ```javascript
-class DoublyNode extends Node { 
+class DoublyNode extends Node {
   constructor(data, next, prev) {
-    super(data, next); 
-    this.prev = prev; 
+    super(data, next);
+    this.prev = prev;
   }
 }
 
@@ -96,15 +116,17 @@ class DoublyLinkedList extends LinkedList {
 在这里，我们看一个LFU关键的代码实现部分的说明。LFU双链表节点，可以通过继承双链表的节点类，在里面增加需要用到的键值，除此之外还有一个计数器来计算一个元素被获取和设置的频率。
 
 ```javascript
-class LFUNode extends DoublyNode { 
+class LFUNode extends DoublyNode {
   constructor(key) {
-    this.key = key; 
+    this.key = key;
     this.freqCount = 1;
   }
 }
 
 class LFUDoublyLinkedList extends LinkedList {
-  constructor() {/* LFU 双链表 */ }
+  constructor() {
+    /* LFU 双链表 */
+  }
 }
 ```
 
@@ -127,8 +149,12 @@ class LFUCache {
     this.minFreq = 0; // 把最低访问频率初始设置为0
     this.size = 0; // 把缓存大小初始设置为0
   }
-  set() {/* 插入一个节点 */}
-  get() {/* 读取一个节点 */}
+  set() {
+    /* 插入一个节点 */
+  }
+  get() {
+    /* 读取一个节点 */
+  }
 }
 ```
 
@@ -143,9 +169,9 @@ class LFUCache {
 从实现的角度看，LRU当中的节点和LFU没有特别大的差别，也需要一个键值散列表，但是不需要频率散列表。LRU缓存可以通过传入承载量capacity参数来定义可以允许缓存的量。同样和LFU类似的，LRU也需要在链表头部删除节点和链表尾部增加节点的功能。在此基础之上，有着获取和设置的两个对外使用的方法。所以总体看来，LRU的实现和LFU相比是简化了的。
 
 ```javascript
-class LRUNode extends DoublyNode { 
+class LRUNode extends DoublyNode {
   constructor(key) {
-    this.key = key; 
+    this.key = key;
   }
 }
 
@@ -155,8 +181,12 @@ class LRUCache {
     this.capacity = capacity; // 用来定义缓存的承载量
     this.size = 0; // 把缓存大小初始设置为0
   }
-  set() {/* 插入一个节点 */}
-  get() {/* 读取一个节点 */}
+  set() {
+    /* 插入一个节点 */
+  }
+  get() {
+    /* 读取一个节点 */
+  }
 }
 ```
 

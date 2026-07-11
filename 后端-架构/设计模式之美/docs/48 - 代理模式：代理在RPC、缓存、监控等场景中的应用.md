@@ -266,43 +266,43 @@ login() 和register() 方法应该直接调用super.login() 和 super.register()
      动态代理中所说的&quot;动态&quot;,是针对使用Java代码实际编写了代理类的&quot;静态&quot;代理而言的,它的优势不在于省去了编写代理类那一点编码工作量,而是实现了可以在原始类和接口还未知的时候,就确定了代理类的行为,当代理类与原始类脱离直接联系后,就可以很灵活的重用于不同的应用场景之中
      </p>2020-02-21</li><br/><li><span>free2one</span> 👍（32） 💬（7）<p>粗略“翻译”至PHP，中间省略了很多关键的判断，主要是想知道有多少PHPer在看。
 
-interface IUserController 
+interface IUserController
 {
-    public function login(String $telephone, String $password);
-    public function register(String $telephone, String $password);
+public function login(String $telephone, String $password);
+public function register(String $telephone, String $password);
 }
-  
-class UserController implements IUserController 
+
+class UserController implements IUserController
 {
-    public function login(String $telephone, String $password) 
-    {
-        echo &#39;is Login&#39; . PHP_EOL;
-    }
-  
-    public function register(String $telephone, String $password) 
+public function login(String $telephone, String $password)
+{
+echo &#39;is Login&#39; . PHP_EOL;
+}
+
+    public function register(String $telephone, String $password)
     {
 
     }
+
 }
 
 class MetricsCollector
 {
-    public function recordRequest($requestInfo)
-    {
-    }
+public function recordRequest($requestInfo)
+{
+}
 }
 
 class RequestInfo
 {
-    public function __construct($apiName, $responseTime, $startTimestamp)
-    {
-    }
+public function __construct($apiName, $responseTime, $startTimestamp)
+{
+}
 }
 
-
-class MetricsCollectorProxy 
+class MetricsCollectorProxy
 {
-    private $proxiedObject;
+private $proxiedObject;
 
     private $metricsCollector;
 
@@ -310,7 +310,7 @@ class MetricsCollectorProxy
     {
         $this-&gt;metricsCollector = $metricsCollector;
     }
-    
+
     public function createProxy(object $object)
     {
         $this-&gt;proxiedObject = $object;
@@ -331,18 +331,17 @@ class MetricsCollectorProxy
         $requestInfo = new RequestInfo(&quot;login&quot;, $responseTime, $startTimestamp);
         $this-&gt;metricsCollector-&gt;recordRequest($requestInfo);
 
-        return $userVo;    
+        return $userVo;
     }
 
 
     private function callMethod(\ReflectionMethod $method, $arguments)
     {
         &#47;&#47;前置判断省略
-        $method-&gt;invokeArgs($this-&gt;proxiedObject, $arguments);  
+        $method-&gt;invokeArgs($this-&gt;proxiedObject, $arguments);
     }
 
 }
-
 
 $proxy = new MetricsCollectorProxy(new MetricsCollector);
 $userController = $proxy-&gt;createProxy(new UserController);
@@ -353,19 +352,20 @@ class RealClass(object):
         print(f&quot;Real func is coming {s}&quot;)
 
 class DynamicProxy(object):
-    def __init__(self, target):
-        self.target = target
-    
+def **init**(self, target):
+self.target = target
+
     def __getattribute__(self, name):
         target = object.__getattribute__(self, &quot;target&quot;)
         attr = object.__getattribute__(target, name)
-        
+
         def newAttr(*args, **kwargs):
             print(&quot;Before Calling Func&quot;)
             res = attr(*args, **kwargs)
             print(&quot;After Calling Func&quot;)
             return res
         return newAttr</p>2020-02-21</li><br/><li><span>迷羊</span> 👍（27） 💬（0）<p>Java中的动态代理原理就是运行的时候通过asm在内存中生成一份字节码，而这个字节码就是代理类的字节码，通过System.getProperties().put(&quot;sun.misc.ProxyGenerator.saveGeneratedFiles&quot;, &quot;true&quot;);设置可以保存这份字节码，反编译后看下其源码就知道Java中的动态代理是什么原理了。</p>2020-02-22</li><br/><li><span>辣么大</span> 👍（17） 💬（3）<p>感谢争哥，今天终于学会了“动态代理”
+
 还是要动手试试，代码在这是 https:&#47;&#47;bit.ly&#47;37UqLNf
 
 学有余力的小伙伴，附上一些资料吧：
@@ -378,17 +378,20 @@ https:&#47;&#47;www.baeldung.com&#47;java-dynamic-proxies</p>2020-02-25</li><br/
   - 静态代理
     1. 实现被代理对象口： 要求被代理类和代理类同时实现相应的一套接口，通过代理类调用重写接口的方法，实际上调用的是原始对象的同样的方法。
     2. 继承被代理对象：代理类继承原始类，然后扩展附加功能。
-  - 动态代理 ： 在运行的时候，动态地创建原始类对应的代理类，然后在系统中用代理类替换掉原始类。 
+  - 动态代理 ： 在运行的时候，动态地创建原始类对应的代理类，然后在系统中用代理类替换掉原始类。
     1.  jdk动态代理是利用反射机制生成一个实现代理接口的匿名类，在调用具体方法前调用InvokeHandler来处理。
-    2. cglib动态代理是利用asm开源包，对被代理对象类的class文件加载进来，通过修改其字节码生成子类来处理。 </p>2020-02-24</li><br/><li><span>webmin</span> 👍（11） 💬（0）<p>1. .net支持反射和动态代理，所以实现方式和java类似；golang目前看到的都是习惯使用代码生成的方式来达成，根据已有代码生成一份加壳代码，调用方使用加壳代码的方法，例好：easyJson给类加上序列化和反序列化功能；gomock生成mock代理。
+    2.  cglib动态代理是利用asm开源包，对被代理对象类的class文件加载进来，通过修改其字节码生成子类来处理。 </p>2020-02-24</li><br/><li><span>webmin</span> 👍（11） 💬（0）<p>1. .net支持反射和动态代理，所以实现方式和java类似；golang目前看到的都是习惯使用代码生成的方式来达成，根据已有代码生成一份加壳代码，调用方使用加壳代码的方法，例好：easyJson给类加上序列化和反序列化功能；gomock生成mock代理。
+
 2. 组合与继承的优缺点：
-没有绝对的优缺点，要看场景比如：
-当被代理的类所有功能都需要被代理时，使用继承方式就可以编译器检查（被代理类修改时编译期就可以检查出问题）；
-当被代理的类只是部分功能需要被代理时，使用组合方式就可按需代理，但是如果原来不需要的，后来也需要了就比较尴尬了。
-继承可能会让代理类被迫实现一些对代理类来说无意义代码，继承方式对代理类的侵入比较大，而组合的侵入影响比继承可控。</p>2020-02-21</li><br/><li><span>小马哥</span> 👍（10） 💬（1）<p>不少同学纠结代理模式与后面要学的装饰器模式在功能上不能区分, 小马哥给个最简单的解释
- *          在行为效果上, 两种设计模式都可以实现增强
- *          代理模式的增强: 添加非业务功能;
- *          装饰器模式的增强: 弥补或者扩展业务功能;
+   没有绝对的优缺点，要看场景比如：
+   当被代理的类所有功能都需要被代理时，使用继承方式就可以编译器检查（被代理类修改时编译期就可以检查出问题）；
+   当被代理的类只是部分功能需要被代理时，使用组合方式就可按需代理，但是如果原来不需要的，后来也需要了就比较尴尬了。
+   继承可能会让代理类被迫实现一些对代理类来说无意义代码，继承方式对代理类的侵入比较大，而组合的侵入影响比继承可控。</p>2020-02-21</li><br/><li><span>小马哥</span> 👍（10） 💬（1）<p>不少同学纠结代理模式与后面要学的装饰器模式在功能上不能区分, 小马哥给个最简单的解释
+
+-          在行为效果上, 两种设计模式都可以实现增强
+-          代理模式的增强: 添加非业务功能;
+-          装饰器模式的增强: 弥补或者扩展业务功能;
+
 如果你非要使用装饰器进行非业务功能的增强, 以及使用代理模式扩展业务功能是否可以? 可以, 但是我们学习设计模式的目的是为了写出大牛一样专业的代码, 那么就借鉴设计模式的规则.
 去高速公路上开车就遵守高速的限速规定</p>2021-05-03</li><br/><li><span>Eden Ma</span> 👍（9） 💬（5）<p>1、OC中通过runtime和分类来实现动态代理.
 2、组合优势可以直接使用原始类实例,继承要通过代理类实例来操作,可能会导致有人用原始类有人用代理类.而继承可以不改变原始类代码来使用.</p>2020-02-21</li><br/><li><span>J.Smile</span> 👍（8） 💬（3）<p>动态代理有两种:jdk动态代理和cglib动态代理。</p>2020-02-21</li><br/><li><span>Geek_35cfdd</span> 👍（7） 💬（1）<p>动态代码虽然对使用场景讲了，先不说自己如何实现一个动态代码没有讲。就算拿java的现成接口，是不是最起码应该讲下里面的实现。做到知其然知其所以然呢？你这动态代理讲的就像一个hello world。</p>2020-09-09</li><br/>

@@ -26,7 +26,7 @@ util.load_dump("/data/backup/db_backups", {
 
 ```go
 util.load_dump("employees_dump", {
-    "includeTables":["employees.salaries"], 
+    "includeTables":["employees.salaries"],
     "loadDdl":True,
     "loadData":False
 })
@@ -271,7 +271,7 @@ INFILE指定文件路径，如果不加LOCAL，那么文件需要存放在数据
 
 ```go
 mysql -vvv -uuser_01 -h172.16.121.234 -pabc123 -psomepass --local-infile employees <<EOF
-load data local infile '/data/backup/emp2.csv' 
+load data local infile '/data/backup/emp2.csv'
 replace into table emp3
 character set utf8mb4
 fields terminated by ','
@@ -327,7 +327,7 @@ emp4这个表和刚才的emp2.csv文件的字段顺序不一样，字段数量�
 
 ```go
 mysql -vvv -uuser_01 -h172.16.121.234 -pabc123 -psomepass --local-infile employees <<EOF
-load data local infile '/data/backup/emp2.csv' 
+load data local infile '/data/backup/emp2.csv'
 replace into table emp4
 character set utf8mb4
 fields terminated by ','
@@ -368,9 +368,9 @@ MySQL Shell Dump导出的文件，也可以用import\_table来导入。有一点
 # mysqlsh -u user_01 -h172.16.121.234 -psomepass --py --mysql
 
  MySQL Py > util.import_table(
-     "/data/backup/employees_dump/employees@salaries@@0.tsv", 
-     {   
-        "schema": "employees",  
+     "/data/backup/employees_dump/employees@salaries@@0.tsv",
+     {
+        "schema": "employees",
         "table": "salaries_backup",
         "bytesPerChunk": "1M",
         "threads":8
@@ -415,11 +415,11 @@ Command: Query
 
 ```plain
 util.import_table(
-     "/data/backup/emp2.csv", 
-     {   
-        "schema": "employees",  
+     "/data/backup/emp2.csv",
+     {
+        "schema": "employees",
         "table": "emp4",
-  
+
         "linesTerminatedBy": "\n",
         "fieldsTerminatedBy": ",",
         "fieldsEnclosedBy": '"',
@@ -472,5 +472,5 @@ MySQL Shell的Dump和Load工具能以多线程的方式运行，在导出和导�
 
 导入过程中使用import_table，指定线程数，具体的线程数据还是要根据目标数据库的并发写性能来确定，尽可能的缩短时间;
 
-对于导出导入过程中的增量数据，可以在导出开始的时候记录binlog位置或GTID的全局事务id，导入增量数据的时候可以通过binlog位置和GTID来恢复增量数据，且导出数据的过程尽量在用户量少的时间操作，确保增量的数据尽可能少，同时来减少导入增量数据时业务库的停机时间；</p>2024-09-09</li><br/><li><span>ls</span> 👍（0） 💬（1）<p>也可以看数据变化程度，如果历史数据几乎不会改变，可以直接oracle 并发导出csv ，然后mysql  并发导入csv，最后检查数据</p>2024-09-10</li><br/><li><span>ls</span> 👍（0） 💬（1）<p>借用ogg 先实时同步 Oracle和MySQL的数据，切换窗口时间用来检测数据同步是否正确。</p>2024-09-10</li><br/><li><span>Geek_0126</span> 👍（0） 💬（1）<p>异构数据源之间的同步问题，就要借助同步工具了，例如DataX、cloudcanal等，可以先进行全量迁移，然后再开启增量同步。不过其中需要注意的细节太多了，比如数据类型及各种数据库对象之间的转换。</p>2024-09-09</li><br/>
+对于导出导入过程中的增量数据，可以在导出开始的时候记录binlog位置或GTID的全局事务id，导入增量数据的时候可以通过binlog位置和GTID来恢复增量数据，且导出数据的过程尽量在用户量少的时间操作，确保增量的数据尽可能少，同时来减少导入增量数据时业务库的停机时间；</p>2024-09-09</li><br/><li><span>ls</span> 👍（0） 💬（1）<p>也可以看数据变化程度，如果历史数据几乎不会改变，可以直接oracle 并发导出csv ，然后mysql 并发导入csv，最后检查数据</p>2024-09-10</li><br/><li><span>ls</span> 👍（0） 💬（1）<p>借用ogg 先实时同步 Oracle和MySQL的数据，切换窗口时间用来检测数据同步是否正确。</p>2024-09-10</li><br/><li><span>Geek_0126</span> 👍（0） 💬（1）<p>异构数据源之间的同步问题，就要借助同步工具了，例如DataX、cloudcanal等，可以先进行全量迁移，然后再开启增量同步。不过其中需要注意的细节太多了，比如数据类型及各种数据库对象之间的转换。</p>2024-09-09</li><br/>
 </ul>

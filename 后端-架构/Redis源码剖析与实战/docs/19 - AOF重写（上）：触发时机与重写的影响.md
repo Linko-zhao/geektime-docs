@@ -36,7 +36,7 @@ void bgrewriteaofCommand(client *c) {
         ...
     } else if (rewriteAppendOnlyFileBackground() == C_OK) { //实际执行AOF重写
         ...
-    } 
+    }
     ...
 }
 ```
@@ -144,7 +144,7 @@ int rewriteAppendOnlyFileBackground(void) {
    }
    else{ //父进程执行的逻辑
       ...
-      server.aof_rewrite_scheduled = 0;  
+      server.aof_rewrite_scheduled = 0;
       server.aof_rewrite_time_start = time(NULL);
       server.aof_child_pid = childpid; //记录重写子进程的进程号
       updateDictResizePolicy(); //关闭rehash功能
@@ -201,21 +201,21 @@ RDB文件的创建是由一个子进程来完成的，而AOF重写也是由一�
 
 整体来说都是为了资源考虑，所以不会让它们同时进行。</p>2021-09-09</li><br/><li><span>曾轼麟</span> 👍（7） 💬（0）<p>先回答老师的问题：RDB和AOF进程为什么不能同时运行？
 答：有多方的原因
-    1、AOF-RDB混合持久化
-        现在Redis官方主推的是AOF-RDB混合持久化方案，同时运行AOF进程重写和RDB进程保存必然会带来不必要的冲突。
+1、AOF-RDB混合持久化
+现在Redis官方主推的是AOF-RDB混合持久化方案，同时运行AOF进程重写和RDB进程保存必然会带来不必要的冲突。
 
     2、两个都是fork出来的
         由于AOF重写进程和RDB保存进程都是通过fork出来的，AOF在重写期间还会继续保存来自主进程的命令操作，那么同时运行必然带来风险也需要考虑更多问题。
 
-    3、更高的资源消耗 
+    3、更高的资源消耗
         AOF和RDB都是高IO的操作，而且业务场景也非必须同时进行，同时进行对资源是较大的浪费。
 
 总结：
-    本次老师介绍了AOF重写是如何进行的，和上一篇文章一样AOF重写是高IO操作，并且是一个异步缓慢的过程为了避免阻塞主进程Redis是通过fork子进程进行的，但是与RDB不同的是AOF重写期间还需要同步重写期间来自主进程的命令，并在重写完成后同步到文件中，在这里老师也引出了管道技术，为AOF进程同步主进程命令买下伏笔（期待老师的下篇文章）
+本次老师介绍了AOF重写是如何进行的，和上一篇文章一样AOF重写是高IO操作，并且是一个异步缓慢的过程为了避免阻塞主进程Redis是通过fork子进程进行的，但是与RDB不同的是AOF重写期间还需要同步重写期间来自主进程的命令，并在重写完成后同步到文件中，在这里老师也引出了管道技术，为AOF进程同步主进程命令买下伏笔（期待老师的下篇文章）
 
     其次值得注意的是updateDictResizePolicy函数，文章中提到updateDictResizePolicy是在AOF进行中调用，目的是为了阻止渐进式Rehash从而减少【写时复制】带来的大量内存开销，除了AOF意外其实bgsave 异步保存RDB文件也会调用这个方法来避免同样的问题。</p>2021-09-09</li><br/><li><span>William</span> 👍（0） 💬（3）<p>这里有疑问，“在父进程中，这个 rewriteAppendOnlyFileBackground 函数会把 aof_rewrite_scheduled 变量设置为 0，同时记录 AOF 重写开始的时间，以及记录 AOF 子进程的进程号。”
 
-我看这是if..else 结构呀？ 进来的时候 是 if ((childpid = fork()) == 0) { ....} , 怎么会既有fork子进程重写AOF, 又有父进程，对这个标记调整为0 ？ 
+我看这是if..else 结构呀？ 进来的时候 是 if ((childpid = fork()) == 0) { ....} , 怎么会既有fork子进程重写AOF, 又有父进程，对这个标记调整为0 ？
 
 查到的资料： fock函数调用一次却返回两次；向父进程返回子进程的ID，向子进程中返回0；
 

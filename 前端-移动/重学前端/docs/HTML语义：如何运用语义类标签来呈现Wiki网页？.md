@@ -42,8 +42,8 @@
 
 ```html
 <hgroup>
-<h1>World Wide Web </h1>
-<h2>From Wikipedia, the free encyclopedia</h2>
+  <h1>World Wide Web</h1>
+  <h2>From Wikipedia, the free encyclopedia</h2>
 </hgroup>
 ```
 
@@ -72,9 +72,9 @@ abbr标签表示缩写。考虑到WWW是World Wide Web的缩写，所以文中�
 接下来一段，我们看到了三段“note”，也就是注记。它在文章中用作额外注释。
 
 > “WWW” and “The Web” redirect here. For other uses of WWW, see WWW (disambiguation). For other uses of web, see Web (disambiguation).
-> 
+>
 > For the first web software, see WorldWideWeb.
-> 
+>
 > Not to be confused with the Internet.
 
 HTML中并没有note相关的语义，所以，我们用普通的p标签，加上`class="note"`来实现。后面的多数自然段都是普通的段落，我们用p标签来实现。
@@ -86,7 +86,7 @@ HTML中并没有note相关的语义，所以，我们用普通的p标签，加�
 注意，这里 “World Wide Web (WWW)” 和 “the Web” 使用了黑体呈现，从上下文来看，这里表示这个词很重要，所以我们使用strong标签。
 
 ```
-<p> 
+<p>
 A global map of the web index for countries in 2014
 <strong>The World Wide Web (WWW)</strong>, also called <strong>the Web</strong>,
 ......
@@ -155,9 +155,9 @@ A global map of the web index for countries in 2014
 
 ```
 
-The terms Internet and World Wide Web are often used without much distinction. However, the two are not the same. 
+The terms Internet and World Wide Web are often used without much distinction. However, the two are not the same.
 The <dfn>Internet</dfn> is a global system of interconnected computer networks.
-In contrast, the <dfn>World Wide Web</dfn> is a global collection of documents and other resources, linked by hyperlinks and URIs. 
+In contrast, the <dfn>World Wide Web</dfn> is a global collection of documents and other resources, linked by hyperlinks and URIs.
 
 ```
 

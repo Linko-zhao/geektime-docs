@@ -265,14 +265,16 @@ Context类存在一个成员变量xxx，new StrategyContext(xxx).apply();
 工厂中getDiscountStrategy()方法中拿到所有策略类，根据condition找到符合的策略
 伪代码：
 DiscountStrategy getDiscountStrategy(T condition)
-{ 
+{
 allStartegys.foreach(
-if(switch(condition) 
+if(switch(condition)
 return thisStartegy;
 ))}
 使用起来就是DiscountStrategyFactory.getDiscountStrategy(condition).discount(order);</p>2020-03-20</li><br/><li><span>Jxin</span> 👍（6） 💬（5）<p>1.业务代码少用反射。这个场景和原型模式的应用场景很贴合。依旧是type查表，只是每次使用的都是type对应策略实例的copy对象。详细请参照spring原型模式的实现。
 
 2.往往业务场景里面，往往不是选择策略这一场景，而是编排策略这一场景。即利用type查表拿出一堆要用到的策略，并按顺序去执行。对于这种场景，栏主怎么看？</p>2020-03-20</li><br/><li><span>Geek_78eadb</span> 👍（5） 💬（3）<p>如果我说，这个例子就是工厂模式，并且可以放到工厂方法的那一章，该怎么反驳我？
+
 1. 为什么算法类的实例化就不是对象（工厂解决的是创建对象的问题，算法类难道不是对象吗）？
 2. 工厂模式为什么不能用查表法解决，如果可以，为什么不能说工厂模式与策略模式一样（不要说关注角度不一样，我粗俗认为对象和类可以包含任何情况，比如算法类）？</p>2020-11-21</li><br/><li><span>Michael</span> 👍（4） 💬（0）<p>我觉得结合下Spring中的应用场景讲下，毕竟大家都是依赖Spring开发的</p>2020-03-22</li><br/>
+
 </ul>

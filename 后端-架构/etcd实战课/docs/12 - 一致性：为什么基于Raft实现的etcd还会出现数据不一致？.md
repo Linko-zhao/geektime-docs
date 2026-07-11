@@ -39,7 +39,7 @@
 于是我们通过如下命令查看etcd节点详细的状态信息：
 
 ```
-etcdctl endpoint status --cluster -w json | python -m 
+etcdctl endpoint status --cluster -w json | python -m
 json.tool
 ```
 
@@ -301,5 +301,6 @@ etcd数据不一致的修复工作极其棘手。发生数据不一致后，各�
 
 谢谢老师</p>2021-02-15</li><br/><li><span>Tachone</span> 👍（0） 💬（0）<p>apply 失败为啥不强制设置raft状态机为error呢，拒绝写入，这样应该是最安全的，不会出现数据不一致了还在写入</p>2023-11-29</li><br/><li><span>yybear</span> 👍（0） 💬（0）<p>获取各个节点的 revision 和 boltdb hash 值，若出现 Follower 节点的 revision 大于 Leader 等异常情况时，就可以认为不一致
 ---------------------------------
+
 revision 是apply时递增的，如果follower的apply处理速度大于Leader 的速度，是存在Follower 节点的 revision 大于 Leader的情况吧？</p>2021-10-08</li><br/>
 </ul>

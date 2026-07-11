@@ -159,7 +159,7 @@ nginx-deployment-3167673210   3         3         3       20s
 
 ```
 $ kubectl edit deployment/nginx-deployment
-... 
+...
     spec:
       containers:
       - name: nginx
@@ -403,12 +403,12 @@ nginx-3196763511   3         3         3         28s
 蓝绿部署：2组机器，蓝代表当前的V1版本，绿代表已经升级完成的V2版本。通过LB将流量全部导入V2完成升级部署。优点是切换快速，缺点是影响全部用户。
 本文学习的滚动更新，我觉得就是一个自动化更新的金丝雀发布。</p>2018-10-01</li><br/><li><span>黑米</span> 👍（45） 💬（36）<p>老师真的是厉害，我在极客时间买了24门课了，这个是含金量第二高的一门</p>2018-12-22</li><br/><li><span>Pixar</span> 👍（31） 💬（1）<p>关于Pod的状态一直有一些疑问, 学完这节课就更混了, 囧.   还望老师能解答下.
 
-`kubectl get deployments` 得到的 available 字段表示的是处于Running状态且健康检查通过的Pod, 这里有一个疑问: 健康检查不是针对Pod里面的Container吗? 如果某一个Pod里面包含多个Container, 但是这些Container健康检查有些并没有通过, 那么此时该Pod会出现在 available里面吗? 
+`kubectl get deployments` 得到的 available 字段表示的是处于Running状态且健康检查通过的Pod, 这里有一个疑问: 健康检查不是针对Pod里面的Container吗? 如果某一个Pod里面包含多个Container, 但是这些Container健康检查有些并没有通过, 那么此时该Pod会出现在 available里面吗?
 
 Pod通过健康检查是指里面所有的Container都通过吗?</p>2018-10-07</li><br/><li><span>bus801</span> 👍（25） 💬（3）<p>如果我直接edit rs，将image修改成新的版本，是不是也能实现pod中容器镜像的更新？我试了一下，什么反应也没有。既然rs控制pod，为什么这样改不能生效呢？还请指教一下</p>2020-02-19</li><br/><li><span>阿文</span> 👍（23） 💬（1）<p>注意，在这里，我额外加了一个–record 参数。它的作用，...
 
 这个应该要解释下--record 是只记录当前命令，老师，你下面的命令没有加。history 里面只看到
-   kubectl create --filename=nginx-deployment.yaml --record=true</p>2019-08-16</li><br/><li><span>王由华</span> 👍（22） 💬（6）<p>有个问题，scale down时，k8s是对pod里的容器发送kill 信号吗？所以应用需要处理好这个信号？</p>2018-12-17</li><br/><li><span>我是一根葱</span> 👍（20） 💬（4）<p>请教个问题，如果水平收缩的过程中，某个pod中的容器有正在运行的业务，而业务如果中断的话可能会导致数据库数据出错，该怎么办？如何保证把pod的业务执行完再收缩？</p>2018-11-04</li><br/><li><span>千寻</span> 👍（15） 💬（1）<p>在滚动更新的过程中，Service的流量转发会有怎样的变化呢？</p>2018-10-01</li><br/><li><span>Tigerfive</span> 👍（10） 💬（1）<p>半夜从火车上醒来，就来看看有没有更新，果然没有让我失望！</p>2018-10-01</li><br/><li><span>Nokiak8</span> 👍（8） 💬（1）<p>Cronjob 类型也有spec.revisionHistoryLimit么？</p>2018-10-12</li><br/><li><span>小小笑儿</span> 👍（8） 💬（2）<p>有几个问题想请问一下:
+kubectl create --filename=nginx-deployment.yaml --record=true</p>2019-08-16</li><br/><li><span>王由华</span> 👍（22） 💬（6）<p>有个问题，scale down时，k8s是对pod里的容器发送kill 信号吗？所以应用需要处理好这个信号？</p>2018-12-17</li><br/><li><span>我是一根葱</span> 👍（20） 💬（4）<p>请教个问题，如果水平收缩的过程中，某个pod中的容器有正在运行的业务，而业务如果中断的话可能会导致数据库数据出错，该怎么办？如何保证把pod的业务执行完再收缩？</p>2018-11-04</li><br/><li><span>千寻</span> 👍（15） 💬（1）<p>在滚动更新的过程中，Service的流量转发会有怎样的变化呢？</p>2018-10-01</li><br/><li><span>Tigerfive</span> 👍（10） 💬（1）<p>半夜从火车上醒来，就来看看有没有更新，果然没有让我失望！</p>2018-10-01</li><br/><li><span>Nokiak8</span> 👍（8） 💬（1）<p>Cronjob 类型也有spec.revisionHistoryLimit么？</p>2018-10-12</li><br/><li><span>小小笑儿</span> 👍（8） 💬（2）<p>有几个问题想请问一下:
 1是在 deployment rollout undo 的时候，是也会创建一个新的rs对象吗？如果是的话那么这个rs的template hash不就重复了？如果不是得话又是如何处理的呢？
 2是deployment 关注的应该是自身的api对象和rs的api对象，但是我看deployment controller 的源码中也关注了pod的变更，这是为了处理哪种情况？</p>2018-10-01</li><br/><li><span>阿鹏</span> 👍（3） 💬（2）<p>老师，我们公司准备试水k8s，我看网上很多文章都在说跨主机容器间通信的解决方案，如果我们的服务分批容器化，需要解决宿主机网络和容器网络的互通，我用flannel或者calico目前都只能做到宿主机能访问容器网络或者容器能访问宿主机网络，不能做到双向通讯，老师能指点一下吗？</p>2018-10-01</li><br/><li><span>付盼星</span> 👍（1） 💬（1）<p>老师好，如果不修改镜像名称和tag，如何做到强制拉取镜像，触发更新？</p>2018-10-07</li><br/><li><span>虎虎❤️</span> 👍（1） 💬（1）<p>滚动升级指定比例的pod处于离线或新建，这个desired 值25%怎么算的呢？分子和分母各是什么？
 国庆有时间充电，多来点内容呀！加油！</p>2018-10-01</li><br/>

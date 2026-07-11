@@ -143,14 +143,14 @@ estimator.fit('s3://bucket/path/to/training/data')
 ```
 from sagemaker.tensorflow import TensorFlow
 
-tf_estimator = TensorFlow(entry_point='tf-train.py',     
+tf_estimator = TensorFlow(entry_point='tf-train.py',
     role=role,
     train_instance_count=2,
     train_instance_type='ml.p2.xlarge',
     framework_version='2.1.0',
     py_version='py3',
     distributions={'parameter_server': {'enabled': True}}))
-    
+
 tf_estimator.fit('s3://bucket/path/to/training/data')
 ```
 

@@ -98,9 +98,9 @@ OpenResty每年的版本更新频率是个位数，特别是从2018年到现在�
 再来看模块间的差异。如果你留意OpenResty与Nginx间二进制文件的体积，会发现使用默认配置时，**OpenResty的可执行文件大了5倍，**如下所示：
 
 ```
-# ls -s --block-size=1 /usr/local/openresty/nginx/sbin/nginx 
+# ls -s --block-size=1 /usr/local/openresty/nginx/sbin/nginx
 16437248 /usr/local/openresty/nginx/sbin/nginx
-# ls -s --block-size=1 /usr/local/nginx/sbin/nginx 
+# ls -s --block-size=1 /usr/local/nginx/sbin/nginx
 3851568 /usr/local/openresty/nginx/sbin/nginx
 ```
 
@@ -115,7 +115,7 @@ OpenResty每年的版本更新频率是个位数，特别是从2018年到现在�
 那么从官方模块上，Nginx就与OpenResty完全一致了，此时再观察二进制文件的体积，会发现它翻了一倍：
 
 ```
-# ls -s --block-size=1 /usr/local/openresty/nginx/sbin/nginx 
+# ls -s --block-size=1 /usr/local/openresty/nginx/sbin/nginx
 6999144 /usr/local/openresty/nginx/sbin/nginx
 ```
 

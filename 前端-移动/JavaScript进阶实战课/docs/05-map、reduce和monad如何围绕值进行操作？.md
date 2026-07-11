@@ -21,13 +21,13 @@
 我们再用一段抽象的代码来表示一个字符串的映射函子stringMap。可以看到，stringMap可以把字符串Hello World!作为输入，然后通过一个uppercaseLetter工具函数的转换，对应返回大写的HELLO WORLD!。
 
 ```javascript
-stringMap( uppercaseLetter, "Hello World!" ); // HELLO WORLD!
+stringMap(uppercaseLetter, "Hello World!"); // HELLO WORLD!
 ```
 
 类似地，如果我们有一个数组的映射函子arrayMap，也可以把数组 \[“1”,“2”,“3”] 中每个字符串的元素转化成整数，然后再对应输出一个整数数组 \[1, 2, 3]。
 
 ```javascript
-["1","2","3","4","5"].map( unary( parseInt ) ); // [1,2,3,4,5]
+["1", "2", "3", "4", "5"].map(unary(parseInt)); // [1,2,3,4,5]
 ```
 
 ### filter过滤和筛选
@@ -43,7 +43,7 @@ filter顾名思义，就是过滤的意思。但要注意一点，filter可以�
 举个例子，假如有一个用来判断“一个值是不是奇数”的isOdd函数，它是一个断言，而它的筛选条件就是筛选出数组中的单数。所以，如果用它来筛选 \[1,2,3,4,5]，得到的结果就是 \[1,3,5]。
 
 ```javascript
-[1,2,3,4,5].filter( isOdd ); // [1,3,5]
+[1, 2, 3, 4, 5].filter(isOdd); // [1,3,5]
 ```
 
 在Javascript中也有自带的 some() 和 every() 断言方法。它们的作用就是可以判断数组中的一组元素是不是都符合判断条件。
@@ -75,7 +75,7 @@ arr.some(x => x % 2 === 1)  // => true，数组a里面有一些奇数
 在reduce当中，有一个**缩减器（reducer）**函数和一个初始值。比如在下面的例子中，初始值是3，reducer函数会计算3乘以5的结果，再乘以10，得出的结果再乘以15，最后归为一个结果2250。
 
 ```javascript
-[5,10,15].reduce( (arr,val) => arr * val, 3 ); // 2250
+[5, 10, 15].reduce((arr, val) => arr * val, 3); // 2250
 ```
 
 而缩减reduce除了能独立来实现以外，也可以用映射map和过滤filter的方法来实现。这是因为 **reduce的初始值可以是一个空数组\[]**，这样我们就可以把迭代的结果当成另一个数组了。
@@ -83,26 +83,17 @@ arr.some(x => x % 2 === 1)  // => true，数组a里面有一些奇数
 我们来看一个例子：
 
 ```javascript
-var half = v => v / 2;
-[2,4,6,8,10].map( half ); // [1,2,3,4,5]
+var half = (v) => v / 2;
+[2, 4, 6, 8, 10].map(half); // [1,2,3,4,5]
 
-[2,4,6,8,10].reduce(
-    (list,v) => (
-        list.push( half( v ) ),
-        list
-    ), []
-); // [1,2,3,4,5]
+[2, 4, 6, 8, 10].reduce((list, v) => (list.push(half(v)), list), []); // [1,2,3,4,5]
 
+var isEven = (v) => v % 2 == 0;
+[1, 2, 3, 4, 5].filter(isEven); // [2,4]
 
-
-var isEven = v => v % 2 == 0;
-[1,2,3,4,5].filter( isEven ); // [2,4]
-
-[1,2,3,4,5].reduce(
-    (list,v) => (
-        isEven( v ) ? list.push( v ) : undefined,
-        list
-    ), []
+[1, 2, 3, 4, 5].reduce(
+  (list, v) => (isEven(v) ? list.push(v) : undefined, list),
+  [],
 ); // [2,4]
 ```
 
@@ -126,18 +117,19 @@ var isEven = v => v % 2 == 0;
 
 ```javascript
 function Just(val) {
-    return { map };
+  return { map };
 
-    function map(fn) { return Just( fn( val ) ); }
-
+  function map(fn) {
+    return Just(fn(val));
+  }
 }
 ```
 
 可见，它的使用方式就类似于我们之前看到的array.map映射。比如在下面的例子里，我们用map将一个函数 v =&gt; v * 2 运用到了Just monad封装的值10上，它返回的就是20。
 
 ```javascript
-var A = Just( 10 );
-var B = A.map( v => v * 2 ); // 20
+var A = Just(10);
+var B = A.map((v) => v * 2); // 20
 ```
 
 ### **chain**作为bind、flatMap
@@ -148,23 +140,27 @@ chain通常又叫做flatMap或bind，它的作用是flatten或unwrap，也就是
 
 ```javascript
 function Just(val) {
-    return { map, chain };
-    
-    function map(fn) { return Just( fn( val ) ); }
-   
-     // aka: bind, flatMap
-    function chain(fn) { return fn( val ); }
+  return { map, chain };
+
+  function map(fn) {
+    return Just(fn(val));
+  }
+
+  // aka: bind, flatMap
+  function chain(fn) {
+    return fn(val);
+  }
 }
 ```
 
 我再举个例子，我们用chain方法函数把一个加一的函数作为参数运用到monad A上，得到了一个 15+1=16 的结果，那么之后返回的就是一个flatten或unwrap展开的16了。
 
 ```javascript
-var A = Just( 15 );
-var B = A.chain( v => v + 1 );
+var A = Just(15);
+var B = A.chain((v) => v + 1);
 
-B;          // 16
-typeof B;   // "number"
+B; // 16
+typeof B; // "number"
 ```
 
 ### **monoid**
@@ -184,8 +180,8 @@ function identity<T>(arg: T): T {
 identity在monad中有一个用处，就是如果把identity作为一个参数，可以起到**观察inspect的作用**。比如，我们先用Just来封装 15 这个值，然后调用chain的方法时，把identity作为参数，返回的就是一个flatten或unwrap展开的15。所以我们可以看出，它也这里也起到了一个log的作用。
 
 ```javascript
-var A = Just( 15 );
-A.chain (identity) // 返回 15
+var A = Just(15);
+A.chain(identity); // 返回 15
 ```
 
 ### **applicative**
@@ -196,24 +192,29 @@ ap的作用其实也很简单。应用函子，顾名思义，它的作用是可
 
 ```javascript
 function Just(val) {
-    return { map, ap };
+  return { map, ap };
 
-    function map(fn) { return Just( fn( val ) ); }
+  function map(fn) {
+    return Just(fn(val));
+  }
 
-    function ap(anotherMonad) { return anotherMonad.map( val ); }
-
+  function ap(anotherMonad) {
+    return anotherMonad.map(val);
+  }
 }
 ```
 
 再来看一个例子，可以看到，ap把monad B里的值取出来，通过monad A的映射把它应用到了monad A上。因为映射接受的值类型是函数，所以这里我们传入的是柯里化的add函数，它先通过闭包的记忆功能，记住第一个参数6，之后再加上传入的10，最后输出的结果就是16。
 
 ```javascript
-var A = Just( 6 );
-var B = Just( 10 );
+var A = Just(6);
+var B = Just(10);
 
-function add(x,y) { return x + y; }
+function add(x, y) {
+  return x + y;
+}
 
-var C = A.map( curry( add ) ).ap( B );
+var C = A.map(curry(add)).ap(B);
 
 C.chain(identity); // 返回 16
 ```
@@ -222,27 +223,33 @@ C.chain(identity); // 返回 16
 
 ```javascript
 function Just(val) {
-    return { map, chain, ap, log };
+  return { map, chain, ap, log };
 
-    // *********************
+  // *********************
 
-    function map(fn) { return Just( fn( val ) ); }
+  function map(fn) {
+    return Just(fn(val));
+  }
 
-    // aka: bind, flatMap
-    function chain(fn) { return fn( val ); }
+  // aka: bind, flatMap
+  function chain(fn) {
+    return fn(val);
+  }
 
-    function ap(anotherMonad) { return anotherMonad.map( val ); }
+  function ap(anotherMonad) {
+    return anotherMonad.map(val);
+  }
 
-    function log() {
-        return `simpleMonad(${ val })`;
-    }
+  function log() {
+    return `simpleMonad(${val})`;
+  }
 }
 ```
 
 说到函子和应用函子，我们也可以看一下，在数组中，有一个array.of的工厂方法，它的作用是接收一组参数，形成一个新数组。
 
 ```javascript
-var arr = Array.of(1,2,3,4,5); // 返回：[1,2,3,4,5]
+var arr = Array.of(1, 2, 3, 4, 5); // 返回：[1,2,3,4,5]
 ```
 
 在函数式编程中，我们称实现了of工厂方法的函子是pointed函子。通过pointed函子，我们可以把一组值放到了一个数组的容器中，之后还可以通过映射函子对每个值做映射。而应用函子，（applicative functor）就是实现了应用方法的pointed函子。
@@ -281,38 +288,37 @@ c.ap(b); &#47;&#47; Error: Just(6(2)) -&gt; 6 is not a function
 、、、
 
 这里的调用应该会出现问题。</p>2022-12-07</li><br/><li><span>朱基</span> 👍（0） 💬（1）<p>在“reduce 和缩减器”这一节的课程里，突然显示了一代码示例，var getSessionId = partial( prop, &quot;sessId&quot; );…if (orders != null) processOrders( orders ); 它是用来说明上面所说的：“我们没有必要为了几乎没有负面影响的副作用—改变了原数据，而牺牲性能”的吗？</p>2022-11-10</li><br/><li><span>李滨</span> 👍（0） 💬（2）<p>array 作为 functor 小节下面的那个例子 : Just return 的map函数的定义不对吧 ，map应该直接返回 fn(val)吧？ </p>2022-10-09</li><br/><li><span>Nuvole Bianche</span> 👍（1） 💬（0）<p>function Just(val) {
-  return { map, log };
+return { map, log };
 
-  function map(fn) {
-    return Just(fn(val));
-  }
+function map(fn) {
+return Just(fn(val));
+}
 
-  function log() {
-    return `Just(${val})`;
-  }
+function log() {
+return `Just(${val})`;
+}
 }
 
 var A = Just(10);
 
 var B = A.map((v) =&gt; v * 2); &#47;&#47; 20
-console.log(B.log());   &#47;&#47; Just(20)
-console.log(A.log());   &#47;&#47; Just(10)
-
+console.log(B.log()); &#47;&#47; Just(20)
+console.log(A.log()); &#47;&#47; Just(10)
 
 反复看后，注意到这里其实生成了两个闭包，一个是针对A的闭包这时val是10，二针对B的闭包中val存放的是20。作为小白的知道这种写法非常nobility，但现阶段的我完全不知道这种写法的具体使用场景。</p>2023-01-16</li><br/><li><span>海绵薇薇</span> 👍（1） 💬（0）<p>“而缩减 reduce 除了能独立来实现以外，也可以用映射 map 和过滤 filter 的方法来实现。&quot;
 
 这句话是不是反了🤣，”map和filter除了能独立实现以外，也可以用reduce的方法来实现。“还是我理解的有点问题🤣。</p>2023-01-12</li><br/><li><span>轩爷</span> 👍（0） 💬（0）<p>function Just(val) {
-    return { map };
-    function map(fn) { return fn( val ) ; }
+return { map };
+function map(fn) { return fn( val ) ; }
 }
 var A = Just( 10 );
-var B = A.map( v =&gt; v * 2 );  &#47;&#47; 20
+var B = A.map( v =&gt; v * 2 ); &#47;&#47; 20
 
-function Just(val) { 
-  return { map }; 
-  function map(fn) { return Just( fn( val ) ); }
+function Just(val) {
+return { map };
+function map(fn) { return Just( fn( val ) ); }
 }
 
 var A = Just( 10 );
-var B = A.map( v =&gt; v * 2 );  &#47;&#47; { map: f} </p>2023-02-10</li><br/>
+var B = A.map( v =&gt; v * 2 ); &#47;&#47; { map: f} </p>2023-02-10</li><br/>
 </ul>

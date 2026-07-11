@@ -494,7 +494,7 @@ impl<T> Clone for Sender<T> {
 impl<T> Drop for Sender<T> {
     fn drop(&mut self) {
         self.shared.senders.fetch_sub(1, Ordering::AcqRel);
-        
+
     }
 }
 ```
@@ -590,9 +590,9 @@ use std::mem;
 fn main() {
     let mut x = "hello world".to_string();
     let mut y = "goodbye world".to_string();
-    
+
     mem::swap(&mut x, &mut y);
-    
+
     assert_eq!("goodbye world", x);
     assert_eq!("hello world", y);
 }
@@ -712,12 +712,14 @@ Receiver thread:
 3. 使用CondVar wait
 
 假设在 Receiver thread 执行完2之后切换到 其他线程执行 drop s 的操作，其他线程notify_all，此时 Receiver thread还没有进入到wait的状态，那么后面Receiver thread进入到wait状态后再也不会被唤醒了</p>2023-11-11</li><br/><li><span>Geek_zbvt62</span> 👍（1） 💬（2）<p>Drop for Sender&lt;T&gt;的实现中，notify_all没有在Mutex的保护下进行。这是否会导致一种可能性：
+
 1. receiver发现sender不为0，准备进入wait
 2. sender被drop，减一，为0，执行notify_all
 3. receiver执行wait，释放锁，阻塞住
-此时已经没有sender能唤醒receiver
+   此时已经没有sender能唤醒receiver
 
-？？？</p>2022-11-02</li><br/><li><span>爱学习的小迪</span> 👍（1） 💬（0）<p>看老师的课程真的是可以学习到很多东西啊，不止Rust。太爽了</p>2022-04-10</li><br/><li><span>吃藕吧割吾爱</span> 👍（1） 💬（1）<p>receiver_should_be_blocked_when_nothing_to_read()测试中主线程退出后，Sender全部被析构，thread1中的迭代器就返回None了，那不是就会运行到assert!(false)这句话了吗？</p>2022-04-02</li><br/><li><span>小可爱(`へ´*)ノ</span> 👍（0） 💬（0）<p>老师的课太强了，能学到很多深入的东西</p>2022-11-16</li><br/><li><span>进击的Lancelot</span> 👍（0） 💬（0）<p>思考题：对于 bounded_channel  的测试如下：
+？？？</p>2022-11-02</li><br/><li><span>爱学习的小迪</span> 👍（1） 💬（0）<p>看老师的课程真的是可以学习到很多东西啊，不止Rust。太爽了</p>2022-04-10</li><br/><li><span>吃藕吧割吾爱</span> 👍（1） 💬（1）<p>receiver_should_be_blocked_when_nothing_to_read()测试中主线程退出后，Sender全部被析构，thread1中的迭代器就返回None了，那不是就会运行到assert!(false)这句话了吗？</p>2022-04-02</li><br/><li><span>小可爱(`へ´*)ノ</span> 👍（0） 💬（0）<p>老师的课太强了，能学到很多深入的东西</p>2022-11-16</li><br/><li><span>进击的Lancelot</span> 👍（0） 💬（0）<p>思考题：对于 bounded_channel 的测试如下：
+
 ```rust
 &#47;&#47; 需求6: 当 channel 满了的时候，sender 发送会被阻塞
     #[test]
@@ -749,8 +751,10 @@ Receiver thread:
         assert_eq!(s.total_queued_items(), 3);
     }
 ```
-确定好了测试用例之后，就可以开始思考实现方式。主要就是给 shared 增加一个 capacity 的原子变量，在 send 时候减一，recv 的时候加一，并且在 send 时候，如果 capacity 为 0，则需要 block 住 send 所在的线程。由于 bounded_channel 底层容器有容量上限，使用 cache 会导致一些问题，比如：明明装满了 channel 读一次后，却又能继续往里面 send 数据，容易让用户感到困惑，因此取消了 cache 的优化。 
+
+确定好了测试用例之后，就可以开始思考实现方式。主要就是给 shared 增加一个 capacity 的原子变量，在 send 时候减一，recv 的时候加一，并且在 send 时候，如果 capacity 为 0，则需要 block 住 send 所在的线程。由于 bounded_channel 底层容器有容量上限，使用 cache 会导致一些问题，比如：明明装满了 channel 读一次后，却又能继续往里面 send 数据，容易让用户感到困惑，因此取消了 cache 的优化。
 具体完整代码可以参考：https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=facca5a34f7bd1d103a482da3a6c8d5e</p>2022-09-30</li><br/><li><span>zxk</span> 👍（0） 💬（1）<p>老师，receiver_shall_be_notified_when_all_senders_exit 应该只是大概率能测出问题吧？
+
 ```
 
 #[test]
@@ -772,5 +776,6 @@ fn receiver_shall_be_notified_when_all_senders_exit() {
     t1.join().unwrap();
 }
 ```
+
 t1 的 sender.send(0).unwrap() 会唤醒 t2 中的 receiver.recv().unwrap()，这时候 t2 中的 drop(s) 是有可能在 t1 中的 assert!(r.recv().is_err()) 之前执行，导致无法测出问题，虽然概率非常小。</p>2022-07-07</li><br/><li><span>Curricane</span> 👍（0） 💬（2）<p>实际项目中，会有网络请求，数据库，或者与其他组件交互，这个时候，怎么进行 TDD 呢</p>2022-06-15</li><br/>
 </ul>

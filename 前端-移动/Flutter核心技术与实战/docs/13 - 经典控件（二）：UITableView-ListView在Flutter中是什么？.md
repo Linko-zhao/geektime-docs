@@ -19,7 +19,7 @@
 ```
 ListView(
   children: <Widget>[
-    //设置ListTile组件的标题与图标 
+    //设置ListTile组件的标题与图标
     ListTile(leading: Icon(Icons.map),  title: Text('Map')),
     ListTile(leading: Icon(Icons.mail), title: Text('Mail')),
     ListTile(leading: Icon(Icons.message), title: Text('Message')),
@@ -224,8 +224,8 @@ class MyAPPState extends State<MyApp> {
                 controller: _controller,//初始化传入控制器
                 itemCount: 100,//列表元素总数
                 itemBuilder: (context, index) => ListTile(title: Text("Index : $index")),//列表项构造方法
-               )      
-        ...   
+               )
+        ...
     );
 
   @override
@@ -312,8 +312,9 @@ Widget build(BuildContext context) {
       }
 
     });
+
 这里的setstate在滚动中会一直重复调用吧，会不会影响性能呢</p>2019-09-02</li><br/><li><span>Dominic</span> 👍（1） 💬（2）<p>有没有完整的代码放github上，后端程序表示片段代码，运行不起来</p>2019-07-31</li><br/><li><span>杨闯</span> 👍（1） 💬（2）<p>你好，我们现在需要在debug的时候引用一些库，而在release的时候不引用一些库，而这个库使用了fmdb，因此有以下两个问题
 1、在dart代码中，如何通过判断来决定要不要将import这个库和使用这个库的相关方法，而现在不能完成编译。
-2、如果将这个库放到dev_dependencies里面，在编译release的时候，这个库没有被引入进来，但是fmdb被引入进来了，怎么避免fmdb给引用进来，是哪里出现问题了吗，还是哪里需要进行特别的设置</p>2019-07-29</li><br/><li><span>Longwei243</span> 👍（1） 💬（2）<p>这个sliver里面想要一个可折叠的多级列表有对应的控件吗？还是需要自己来实现一个</p>2019-07-28</li><br/><li><span>cv0cv0</span> 👍（0） 💬（1）<p>视差那个怎么设置滚动速度比率？</p>2019-12-18</li><br/><li><span>狗子不要喝奶茶</span> 👍（0） 💬（1）<p>课后小作业的预加载：是否使用cacheExtent呢</p>2019-10-29</li><br/><li><span>赤茗</span> 👍（0） 💬（1）<p>问一下问什么ListView和SliverList（其他 list没试）为什么一定要以Scaffold作为根布局？我直接 return  CustomScrollView的话，只有SliverAppBar部分是正常的，下边的SliverList显示是错误的</p>2019-10-24</li><br/><li><span>微笑美男😄</span> 👍（0） 💬（1）<p>老师 ,separated 在分割线里面没法设置itemExtent 是吧
+2、如果将这个库放到dev_dependencies里面，在编译release的时候，这个库没有被引入进来，但是fmdb被引入进来了，怎么避免fmdb给引用进来，是哪里出现问题了吗，还是哪里需要进行特别的设置</p>2019-07-29</li><br/><li><span>Longwei243</span> 👍（1） 💬（2）<p>这个sliver里面想要一个可折叠的多级列表有对应的控件吗？还是需要自己来实现一个</p>2019-07-28</li><br/><li><span>cv0cv0</span> 👍（0） 💬（1）<p>视差那个怎么设置滚动速度比率？</p>2019-12-18</li><br/><li><span>狗子不要喝奶茶</span> 👍（0） 💬（1）<p>课后小作业的预加载：是否使用cacheExtent呢</p>2019-10-29</li><br/><li><span>赤茗</span> 👍（0） 💬（1）<p>问一下问什么ListView和SliverList（其他 list没试）为什么一定要以Scaffold作为根布局？我直接 return CustomScrollView的话，只有SliverAppBar部分是正常的，下边的SliverList显示是错误的</p>2019-10-24</li><br/><li><span>微笑美男😄</span> 👍（0） 💬（1）<p>老师 ,separated 在分割线里面没法设置itemExtent 是吧
 </p>2019-10-10</li><br/><li><span>巫山老妖</span> 👍（0） 💬（1）<p>如果要用Flutter来实现ListView，其实可以讲的东西很多，比如item复用、item事件点击、下拉刷新实现，滚动底部刷新。</p>2019-10-04</li><br/>
 </ul>

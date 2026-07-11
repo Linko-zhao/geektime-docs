@@ -95,7 +95,7 @@ NewSQL的基础是NoSQL，更具体地说，是类似BigTable的分布式键值�
 
 ## 学习资料
 
-Joseph M. Hellerstein et al.：[*Architecture of a Database System*](https://dsf.berkeley.edu/papers/fntdb07-architecture.pdf)
+Joseph M. Hellerstein et al.：[_Architecture of a Database System_](https://dsf.berkeley.edu/papers/fntdb07-architecture.pdf)
 
 加西亚-莫利纳 等：[《数据库系统实现》](https://book.douban.com/subject/4838430/)
 <div><strong>精选留言（15）</strong></div><ul>

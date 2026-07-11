@@ -188,28 +188,28 @@ HTTP/2.0 一共对61个常用的头，以及头和值的组合做了编码（[�
 		for (char ch: text) {
 			freq[ch]++;
 		}
-	
+
 		// 用堆去动态维护所有树中最小的两颗
 		priority_queue<Node*, vector<Node*>, comp> pq;
-	
+
 		// 将所有的字符都初始化成为哈夫曼树的一个叶子节点
         // 并推入优先队列
 		for (auto pair: freq) {
 			pq.push(getNode(pair.first, pair.second, nullptr, nullptr));
 		}
-	
+
 		// 每次取出最小的两个合并 直至优先队列只剩一个节点
 		while (pq.size() != 1)
 		{
 			// 最小的两个节点出队
 			Node *left = pq.top(); pq.pop();
 			Node *right = pq.top();	pq.pop();
-	
+
 			// 建立一个内部节点，以这两个最小的树为左右节点
     		int sum = left->freq + right->freq;
 			pq.push(getNode('\0', sum, left, right));
 		}
-	
+
 		// 优先队列中最后一个元素为整棵树的根节点
 		Node* root = pq.top();
 	}

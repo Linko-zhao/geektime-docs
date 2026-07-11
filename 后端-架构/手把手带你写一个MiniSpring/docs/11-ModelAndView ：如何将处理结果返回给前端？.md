@@ -42,7 +42,7 @@ public class DefaultHttpMessageConverter implements HttpMessageConverter {
 	String defaultContentType = "text/json;charset=UTF-8";
 	String defaultCharacterEncoding = "UTF-8";
 	ObjectMapper objectMapper;
-	
+
 	public ObjectMapper getObjectMapper() {
 		return objectMapper;
 	}
@@ -94,13 +94,13 @@ import java.util.Date;
 public class DefaultObjectMapper implements ObjectMapper{
 	String dateFormat = "yyyy-MM-dd";
 	DateTimeFormatter datetimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
-	
+
 	String decimalFormat = "#,##0.00";
 	DecimalFormat decimalFormatter = new DecimalFormat(decimalFormat);
 
 	public DefaultObjectMapper() {
 	}
-	
+
 	@Override
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
@@ -113,9 +113,9 @@ public class DefaultObjectMapper implements ObjectMapper{
 		this.decimalFormatter = new DecimalFormat(decimalFormat);
 	}
 	public String writeValuesAsString(Object obj) {
-		String sJsonStr = "{";		
+		String sJsonStr = "{";
 		Class<?> clz = obj.getClass();
-		
+
 		Field[] fields = clz.getDeclaredFields();
         //对返回对象中的每一个属性进行格式转换
 		for (Field field : fields) {
@@ -127,7 +127,7 @@ public class DefaultObjectMapper implements ObjectMapper{
 			field.setAccessible(true);
 			value = field.get(obj);
 			type = field.getType();
-			
+
             //针对不同的数据类型进行格式转换
 			if (value instanceof Date) {
 				LocalDate localDate = ((Date)value).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -139,15 +139,15 @@ public class DefaultObjectMapper implements ObjectMapper{
 			else {
 				strValue = value.toString();
 			}
-			
+
             //拼接Json串
 			if (sJsonStr.equals("{")) {
 				sField = "\"" + name + "\":\"" + strValue + "\"";
 			}
 			else {
-				sField = ",\"" + name + "\":\"" + strValue + "\"";	
+				sField = ",\"" + name + "\":\"" + strValue + "\"";
 			}
-			
+
 			sJsonStr += sField;
 		}
 		sJsonStr += "}";
@@ -177,7 +177,7 @@ public class DefaultObjectMapper implements ObjectMapper{
 		... ...
 		if (invocableMethod.isAnnotationPresent(ResponseBody.class)){ //ResponseBody
 	        this.messageConverter.write(returnObj, response);
-		}	
+		}
 		... ...
 	}
 ```
@@ -189,9 +189,9 @@ public class DefaultObjectMapper implements ObjectMapper{
 	 <property type="com.minis.web.HttpMessageConverter" name="messageConverter" ref="messageConverter"/>
 	 <property type="com.minis.web.WebBindingInitializer" name="webBindingInitializer" ref="webBindingInitializer"/>
 	</bean>
-	
+
 	<bean id="webBindingInitializer" class="com.test.DateInitializer" /> 
-	
+
 	<bean id="messageConverter" class="com.minis.web.DefaultHttpMessageConverter"> 
 	 <property type="com.minis.web.ObjectMapper" name="objectMapper" ref="objectMapper"/>
 	</bean>
@@ -218,7 +218,7 @@ public class DefaultObjectMapper implements ObjectMapper{
 		user.setName(user.getName() + "---");
 		user.setBirthday(new Date());
 		return user;
-	}	
+	}
 ```
 
 程序里面声明了一个注解@ResponseBody，程序中返回的是对象User，框架处理的时候用message converter将其转换成JSON字符串返回。
@@ -325,7 +325,7 @@ protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
 			mav.setViewName(sTarget);
 		}
 	}
-		
+
 	return mav;
 }
 ```
@@ -431,17 +431,17 @@ import com.minis.web.servlet.ViewResolver;
 
 public class InternalResourceViewResolver implements ViewResolver{
 	private Class<?> viewClass = null;
-	private String viewClassName = "";	
+	private String viewClassName = "";
 	private String prefix = "";
 	private String suffix = "";
 	private String contentType;
-	
+
 	public InternalResourceViewResolver() {
 		if (getViewClass() == null) {
-			setViewClass(JstlView.class);			
+			setViewClass(JstlView.class);
 		}
 	}
-	
+
 	public void setViewClassName(String viewClassName) {
 		this.viewClassName = viewClassName;
 		Class<?> clz = null;
@@ -452,7 +452,7 @@ public class InternalResourceViewResolver implements ViewResolver{
 		}
 		setViewClass(clz);
 	}
-	
+
 	protected String getViewClassName() {
 		return this.viewClassName;
 	}
@@ -550,7 +550,7 @@ public class JstlView implements View{
 			throws Exception {
 		for (Entry<String, ?> e : model.entrySet()) {
 			request.setAttribute(e.getKey(),e.getValue());
-		}	
+		}
 		request.getRequestDispatcher(getUrl()).forward(request, response);
 	}
 }

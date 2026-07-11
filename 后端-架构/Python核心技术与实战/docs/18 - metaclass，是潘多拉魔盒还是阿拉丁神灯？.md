@@ -30,7 +30,7 @@ class Monster(yaml.YAMLObject):
     self.attacks = attacks
   def __repr__(self):
     return "%s(name=%r, hp=%r, ac=%r, attacks=%r)" % (
-       self.__class__.__name__, self.name, self.hp, self.ac,      
+       self.__class__.__name__, self.name, self.hp, self.ac,
        self.attacks)
 
 yaml.load("""
@@ -115,7 +115,7 @@ class YAMLObject(object):
 你可以发现，YAMLObject把metaclass都声明成了YAMLObjectMetaclass，尽管声明方式在Python 2 和3中略有不同。在YAMLObjectMetaclass中， 下面这行代码就是魔法发生的地方：
 
 ```
-cls.yaml_loader.add_constructor(cls.yaml_tag, cls.from_yaml) 
+cls.yaml_loader.add_constructor(cls.yaml_tag, cls.from_yaml)
 ```
 
 YAML应用metaclass，拦截了所有YAMLObject子类的定义。也就说说，在你定义任何YAMLObject子类时，Python会强行插入运行下面这段代码，把我们之前想要的`add_constructor(Foo)`给自动加上。
@@ -183,7 +183,7 @@ type.__init__(class, classname, superclasses, attributedict)
 ```
 class MyClass:
   data = 1
-  
+
 instance = MyClass()
 MyClass, instance
 # 输出
@@ -212,7 +212,7 @@ instance.data
 一旦你把一个类型MyClass的metaclass设置成MyMeta，MyClass就不再由原生的type创建，而是会调用MyMeta的`__call__`运算符重载。
 
 ```
-class = type(classname, superclasses, attributedict) 
+class = type(classname, superclasses, attributedict)
 # 变为了
 class = MyMeta(classname, superclasses, attributedict)
 ```
@@ -260,9 +260,9 @@ class Mymeta(type):
         obj = cls.__new__(cls)
         cls.__init__(cls, *args, **kwargs)
         return obj
-    
+
 class Foo(metaclass=Mymeta):
-    yaml_tag = &#39;!Foo&#39;
+yaml_tag = &#39;!Foo&#39;
 
     def __init__(self, name):
         print(&#39;Foo.__init__&#39;)
@@ -276,7 +276,7 @@ foo = Foo(&#39;foo&#39;)
 把上面的例子运行完之后就会明白很多了，正常情况下我们在父类中是不能对子类的属性进行操作，但是元类可以。换种方式理解：元类、装饰器、类装饰器都可以归为元编程(引用自 python-cook-book 中的一句话)。</p>2019-06-20</li><br/><li><span>KaitoShy</span> 👍（6） 💬（3）<p>yaml.load(&quot;&quot;&quot;
 --- !Monster
 name: Cave spider
-hp: [2,6]    # 2d6
+hp: [2,6] # 2d6
 ac: 16
 attacks: [BITE, HURT]
 &quot;&quot;&quot;)
@@ -284,10 +284,10 @@ attacks: [BITE, HURT]
 yaml.load(&quot;&quot;&quot;
 --- !Monster
 name: Cave spider
-hp: [2,6]    # 2d6
+hp: [2,6] # 2d6
 ac: 16
 attacks: [BITE, HURT]
-&quot;&quot;&quot;，Loader=yaml.Loader)即可，参见&quot;https:&#47;&#47;github.com&#47;yaml&#47;pyyaml&#47;issues&#47;266&quot;</p>2019-06-19</li><br/><li><span>TKbook</span> 👍（4） 💬（2）<p>一开始还以为我打开错专栏了。   目前看了好多解释metaclass的文章，感觉这一篇看起来最明了。</p>2019-06-19</li><br/><li><span>隔壁家老鲍</span> 👍（1） 💬（1）<p>感觉入门了，不过还是有一些问题
+&quot;&quot;&quot;，Loader=yaml.Loader)即可，参见&quot;https:&#47;&#47;github.com&#47;yaml&#47;pyyaml&#47;issues&#47;266&quot;</p>2019-06-19</li><br/><li><span>TKbook</span> 👍（4） 💬（2）<p>一开始还以为我打开错专栏了。 目前看了好多解释metaclass的文章，感觉这一篇看起来最明了。</p>2019-06-19</li><br/><li><span>隔壁家老鲍</span> 👍（1） 💬（1）<p>感觉入门了，不过还是有一些问题
 @修饰符是在python里是怎么实现的呢
 老师如果看到了可以给点意见么</p>2019-12-16</li><br/><li><span>jackstraw</span> 👍（0） 💬（1）<p>这代码跑都跑不通</p>2020-01-12</li><br/><li><span>奔跑的蜗牛</span> 👍（123） 💬（5）<p>看不懂了 😄</p>2019-06-19</li><br/><li><span>=_=</span> 👍（41） 💬（0）<p>基础不够，之前没接触过metaclass，这一讲读起来太费劲了</p>2019-06-19</li><br/><li><span>程序员人生</span> 👍（36） 💬（1）<p>装饰器像AOP，metaclass像反射机制</p>2019-06-19</li><br/><li><span>Hoo-Ah</span> 👍（28） 💬（0）<p>之前讲装饰器的时候讲到函数装饰器和类装饰器，而类装饰器就是在雷里面定义了__call__方法，之后在函数执行的时候会调用类的__call__方法。
 在metaclass中重载了__call__方法，在使用metaclass实例化生成类的时候也是调用了__call__方法，从这方面来讲是很像。
@@ -297,8 +297,8 @@ attacks: [BITE, HURT]
 景老师，这里这段是不是有点问题，我做了以下实验：
 
 class MyMeta(type):
-    def __init__(cls, name, bases, dict):
-        print(&#39;MyMeta __init__&#39;)
+def **init**(cls, name, bases, dict):
+print(&#39;MyMeta **init**&#39;)
 
     def __new__(cls, name, bases, dict):
         print(&#39;MyMeta __new__&#39;)
@@ -309,7 +309,7 @@ class MyMeta(type):
         return type.__call__(cls)
 
 class Test(metaclass=MyMeta):
-    a = 10
+a = 10
 
     def __init__(self):
         pass
@@ -319,17 +319,16 @@ class Test(metaclass=MyMeta):
 
 test = Test()
 我发现在使用class Test()定义类时，会依次调用MyMeta的__new__和__init__方法构建Test类，然后在使用test = Test()创建类对象时，才会调用MyMeta的__call__方法来调用Test类的__new__和__init__方法。好像和您说的不一样？
-我看您说的意思是，在使用class定义类的时候，先调用metaclass的__call__,然后再调用metaclass的__new__和__init__？</p>2019-06-19</li><br/><li><span>Wing·三金</span> 👍（8） 💬（1）<p>个人粗浅的理解是：metaclass 与 类装饰器相似，大多数情况下本质上都是重载了 __call__ 函数，但有一个明显的区别是前者对【继承了 metaclass 的子类本身】的属性造成了影响，而类装饰器是对【作为装饰器本身的类】造成影响而已，对【被装饰的类】的属性没有直接影响（间接影响就看被装饰的函数怎么操作了）。</p>2019-06-22</li><br/><li><span>Jon徐</span> 👍（8） 💬（3）<p>之前没有接触过 metaclass，感觉用metaclass的作用就是超动态生成类。这节课感觉确实比较魔术，跟上一节装饰器还要再细想一下。
+我看您说的意思是，在使用class定义类的时候，先调用metaclass的__call__,然后再调用metaclass的__new__和__init__？</p>2019-06-19</li><br/><li><span>Wing·三金</span> 👍（8） 💬（1）<p>个人粗浅的理解是：metaclass 与 类装饰器相似，大多数情况下本质上都是重载了 **call** 函数，但有一个明显的区别是前者对【继承了 metaclass 的子类本身】的属性造成了影响，而类装饰器是对【作为装饰器本身的类】造成影响而已，对【被装饰的类】的属性没有直接影响（间接影响就看被装饰的函数怎么操作了）。</p>2019-06-22</li><br/><li><span>Jon徐</span> 👍（8） 💬（3）<p>之前没有接触过 metaclass，感觉用metaclass的作用就是超动态生成类。这节课感觉确实比较魔术，跟上一节装饰器还要再细想一下。
 
 pyyaml 5.1以上，这段代码会报错，要把 yaml.load() 改成 yaml.load_all()
 yaml.load(&quot;&quot;&quot;
 --- !Monster
 name: Cave spider
-hp: [2,6]    # 2d6
+hp: [2,6] # 2d6
 ac: 16
 attacks: [BITE, HURT]
 &quot;&quot;&quot;)
-
 
 </p>2019-06-20</li><br/><li><span>向南</span> 👍（5） 💬（0）<p>metaclass的应用：单例模式、ORM模式</p>2020-03-08</li><br/><li><span>Ray</span> 👍（5） 💬（0）<p>我的感觉装饰器是通过正常的函数的调用、闭包等方法实现附加的功能。metaclass直接就是一种hack的方法。另外，在前面type类的说明代码中：
 type(instance)# 输出 &lt;class &#39;__main__.C&#39;&gt;  --&gt; 应该是&lt;class &#39;__main__.MyClass&#39;&gt;？</p>2020-02-22</li><br/>

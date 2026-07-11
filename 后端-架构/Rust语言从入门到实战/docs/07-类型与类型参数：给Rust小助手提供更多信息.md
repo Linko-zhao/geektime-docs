@@ -223,7 +223,7 @@ struct Point<T> {
 
 fn main() {
     let integer = Point::<u32> { x: 5, y: 10 };     
-    let float = Point::<f32> { x: 1.0, y: 4.0 };    
+    let float = Point::<f32> { x: 1.0, y: 4.0 };   
 }
 ```
 
@@ -423,7 +423,7 @@ fn main() {
     let p = Point { x: 5, y: 10 };
     println!("p.x = {}", p.x());
 }
-// 输出 
+// 输出
 p.x = 5
 ```
 
@@ -458,7 +458,7 @@ fn main() {
     println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
 }
 
-// 输出 
+// 输出
 p3.x = 5, p3.y = c
 ```
 
@@ -645,14 +645,13 @@ PS：老师我在 06 讲提了一个问题，之前在学 Rust 的时候就一�
 编译报错如下：
 
 error[E0592]: duplicate definitions with name `print`
-  --&gt; examples&#47;generic.rs:7:5
-   |
-7  |     fn print(&amp;self) {
-   |     ^^^^^^^^^^^^^^^ duplicate definitions for `print`
+--&gt; examples&#47;generic.rs:7:5
+|
+7 | fn print(&amp;self) {
+| ^^^^^^^^^^^^^^^ duplicate definitions for `print`
 ...
-13 |     fn print(&amp;self) {
-   |     --------------- other definition for `print`
-
+13 | fn print(&amp;self) {
+| --------------- other definition for `print`
 
 所以一般情况下，如果 impl&lt;T&gt; 后面的 T 没有任何的约束，那么就表示为所有类型的 T 都实现了方法，比如说 print()，这个时候是不能为具化类型再次实现 print() 的，因为这个时候就产生了方法冲突。
 
@@ -660,7 +659,7 @@ error[E0592]: duplicate definitions with name `print`
 
 如：
 
-```rust
+````rust
 struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -706,7 +705,8 @@ error[E0592]: duplicate definitions with name `plus`
 不能</p>2023-11-03</li><br/><li><span>Noya</span> 👍（0） 💬（1）<p>思考题：通常是不能， 但是可以通过 trait 进行特化</p>2023-11-09</li><br/><li><span>伯阳</span> 👍（1） 💬（0）<p>和Java的范型类似</p>2023-11-03</li><br/><li><span>坤</span> 👍（0） 💬（0）<p>let a = 9 + &#39;1&#39; as u8;
 结果是 58,让我困惑了:9+1 结果明明是10,这怎么就58了.
 然后就想:为什么是58而不是其他的值,特征是这个数字小于100,
-那么&#39;1&#39; 就是 58-9=49,有了一个猜想&#39;1&#39; as u8 是指ascii码的1,转之后是49, 
+那么&#39;1&#39; 就是 58-9=49,有了一个猜想&#39;1&#39; as u8 是指ascii码的1,转之后是49,
 然后就去验证,查看ascii,果然&#39;1&#39;是49.
 </p>2024-11-22</li><br/>
 </ul>
+````

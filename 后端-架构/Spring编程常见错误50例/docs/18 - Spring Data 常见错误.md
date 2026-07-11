@@ -85,12 +85,12 @@ public class StringRedisSerializer implements RedisSerializer<String> {
 
    private final Charset charset;
 
-   
+
    @Override
    public byte[] serialize(@Nullable String string) {
       return (string == null ? null : string.getBytes(charset));
    }
- 
+
 }
 ```
 
@@ -99,7 +99,7 @@ public class StringRedisSerializer implements RedisSerializer<String> {
 ```
 public class JdkSerializationRedisSerializer implements RedisSerializer<Object> {
 
-  
+
    @Override
    public byte[] serialize(@Nullable Object object) {
       if (object == null) {
@@ -168,7 +168,7 @@ public class StringRedisTemplate extends RedisTemplate<String, String> {
 
 ```
 basic.request {
- 
+
 
   # The consistency level.
   #
@@ -176,8 +176,8 @@ basic.request {
   # Modifiable at runtime: yes, the new value will be used for requests issued after the change.
   # Overridable in a profile: yes
   consistency = LOCAL_ONE
- 
-//省略其他非关键配置 
+
+//省略其他非关键配置
 }
 ```
 
@@ -324,7 +324,7 @@ public class CassandraConfig extends AbstractCassandraConfiguration
      public CqlSessionFactoryBean session() {
          log.info("init session");
          CqlSessionFactoryBean cqlSessionFactoryBean = new CqlSessionFactoryBean();
-         //省略其他非关键代码    
+         //省略其他非关键代码
          return cqlSessionFactoryBean ;
      }
      //省略其他非关键代码

@@ -10,7 +10,7 @@
 目前的任务列表为（仅列出与当前相关的模块），这里的列表我们合并了从ResourceServlet发现的需求，以及在第40讲中分解的任务：
 
 - ResourceRouter
-  
+
   - 在处理请求派分时，可以支持多级子资源（Sub-Resource）
   - 在处理请求派分时，可以根据客户端提供的超媒体类型，选择对应的资源方法（Resource Method）
   - 在处理请求派分时，可以根据客户端提供的Http方法，选择对应的资源方法
@@ -23,15 +23,16 @@
 继续细化任务列表，根据架构愿景，分配到不同的模块：
 
 - ResourceRouter
-  
+
   - 将Resource Method的返回值包装为Response对象
-    
+
     - 根据与Path匹配结果，降序排列RootResource，选择第一个的RootResource
     - 如果没有匹配的RootResource，则构造404的Response
     - 如果返回的RootResource中无法匹配剩余Path，则构造404的Response
     - 如果ResourceMethod返回null，则构造204的Response
+
 - Resource/RootResource/ResourceMethod
-  
+
   - 在处理请求派分时，可以支持多级子资源（Sub-Resource）
   - 在处理请求派分时，可以根据客户端提供的超媒体类型，选择对应的资源方法（Resource Method）
   - 在处理请求派分时，可以根据客户端提供的Http方法，选择对应的资源方法

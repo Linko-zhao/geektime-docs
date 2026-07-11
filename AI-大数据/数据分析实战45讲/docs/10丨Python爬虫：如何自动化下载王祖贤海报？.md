@@ -137,7 +137,7 @@ def download(src, id):
 		fp.close()
 	except requests.exceptions.ConnectionError:
 		print('图片无法下载')
-            
+
 ''' for 循环 请求全部的 url '''
 for i in range(0, 22471, 20):
 	url = 'https://www.douban.com/j/search_photo?q='+query+'&limit=20&start='+str(i)
@@ -247,27 +247,27 @@ for src, title in zip(srcs, titles):
 &gt;&gt;&gt; driver.get(request_url)
 &gt;&gt;&gt; html = etree.HTML(driver.page_source)
 &gt;&gt;&gt; srcs = html.xpath(src_xpath)
-&gt;&gt;&gt; print (srcs)  #大家可要看下打印出来的数据是否只是一页的内容，以及图片url的后缀格式
+&gt;&gt;&gt; print (srcs) #大家可要看下打印出来的数据是否只是一页的内容，以及图片url的后缀格式
 &gt;&gt;&gt; picpath = &#39;&#47;Users&#47;apple&#47;Downloads&#47;宫崎骏电影海报&#39;
 &gt;&gt;&gt; if not os.path.isdir(picpath):
-	os.mkdir(picpath)
+os.mkdir(picpath)
 &gt;&gt;&gt; def download(src, id):
-	dic = picpath + &#39;&#47;&#39; + str(id) + &#39;.webp&#39;
-	try:
-		pic = req.get(src, timeout = 30)
-		fp = open(dic, &#39;wb&#39;)
-		fp.write(pic.content)
-		fp.close()
-	except req.exceptions.ConnectionError:
-		print (&#39;图片无法下载&#39;)
+dic = picpath + &#39;&#47;&#39; + str(id) + &#39;.webp&#39;
+try:
+pic = req.get(src, timeout = 30)
+fp = open(dic, &#39;wb&#39;)
+fp.write(pic.content)
+fp.close()
+except req.exceptions.ConnectionError:
+print (&#39;图片无法下载&#39;)
 &gt;&gt;&gt; for i in range(0, 150, 15):
-	url = request_url + &#39;&amp;start=&#39; + str(i)
-	driver.get(url)
-	html = etree.HTML(driver.page_source)
-	srcs = html.xpath(src_xpath)
-	titles = html.xpath(title_xpath)
-	for src,title in zip(srcs, titles):
-		download(src, title.text)
+url = request_url + &#39;&amp;start=&#39; + str(i)
+driver.get(url)
+html = etree.HTML(driver.page_source)
+srcs = html.xpath(src_xpath)
+titles = html.xpath(title_xpath)
+for src,title in zip(srcs, titles):
+download(src, title.text)
 </p>2019-04-10</li><br/><li><span>rOMEo罗密欧</span> 👍（46） 💬（4）<p>老师请问一下：如果是需要用户登陆后才能爬取的数据该怎么用python来实现呢？</p>2019-01-04</li><br/><li><span>Bayes</span> 👍（18） 💬（8）<p>老师你这跳过了太多步骤了，表示对于python跟着你前几节课入门的人什么都不会，按着你的代码运行，要不就是没有定义，要不就是没有这个函数。刚开始的人也不知道哪个函数在哪个库，建议老师按照流程来一步一步给代码，要不就在最后给一个完整的代码示例，真的是学的很困难加上想放弃</p>2019-07-30</li><br/><li><span>LY</span> 👍（16） 💬（1）<p>#环境：Mac Python3
 #pip install selenium
 #下载chromedriver，放到项目路径下（https:&#47;&#47;npm.taobao.org&#47;mirrors&#47;chromedriver&#47;2.33&#47;）
@@ -283,40 +283,38 @@ downloadPath = &#39;&#47;Users&#47;yong&#47;Desktop&#47;Python&#47;xpath&#47;ima
 
 &#39;&#39;&#39; 下载图片 &#39;&#39;&#39;
 def download(src, id):
-    dir = downloadPath + str(id) + &#39;.jpg&#39;
-    try:
-        pic = requests.get(src, timeout=10)
-    except requests.exceptions.ConnectionError:
-    # print &#39;error, %d 当前图片无法下载&#39;, %id
-        print(&#39;图片无法下载&#39;)
-    if not os.path.exists(downloadPath):
-        os.mkdir(downloadPath)
-    if os.path.exists(dir):
-        print(&#39;已存在:&#39;+ id)
-        return
-    fp = open(dir, &#39;wb&#39;)
-    fp.write(pic.content)
-    fp.close()
- 
+dir = downloadPath + str(id) + &#39;.jpg&#39;
+try:
+pic = requests.get(src, timeout=10)
+except requests.exceptions.ConnectionError: # print &#39;error, %d 当前图片无法下载&#39;, %id
+print(&#39;图片无法下载&#39;)
+if not os.path.exists(downloadPath):
+os.mkdir(downloadPath)
+if os.path.exists(dir):
+print(&#39;已存在:&#39;+ id)
+return
+fp = open(dir, &#39;wb&#39;)
+fp.write(pic.content)
+fp.close()
+
 def searchImages():
-    &#39;&#39;&#39; for 循环 请求全部的 url &#39;&#39;&#39;
-    for i in range(0, 22471, 20):
-        url = &#39;https:&#47;&#47;www.douban.com&#47;j&#47;search_photo?q=&#39;+query+&#39;&amp;limit=20&amp;start=&#39;+str(i)
-        html = requests.get(url).text    # 得到返回结果
-        print(&#39;html:&#39;+html)
-        response = json.loads(html,encoding=&#39;utf-8&#39;) # 将 JSON 格式转换成 Python 对象
-        for image in response[&#39;images&#39;]:
-            print(image[&#39;src&#39;]) # 查看当前下载的图片网址
-            download(image[&#39;src&#39;], image[&#39;id&#39;]) # 下载一张图片
+&#39;&#39;&#39; for 循环 请求全部的 url &#39;&#39;&#39;
+for i in range(0, 22471, 20):
+url = &#39;https:&#47;&#47;www.douban.com&#47;j&#47;search_photo?q=&#39;+query+&#39;&amp;limit=20&amp;start=&#39;+str(i)
+html = requests.get(url).text # 得到返回结果
+print(&#39;html:&#39;+html)
+response = json.loads(html,encoding=&#39;utf-8&#39;) # 将 JSON 格式转换成 Python 对象
+for image in response[&#39;images&#39;]:
+print(image[&#39;src&#39;]) # 查看当前下载的图片网址
+download(image[&#39;src&#39;], image[&#39;id&#39;]) # 下载一张图片
 
 def getMovieImages():
-    url = &#39;https:&#47;&#47;movie.douban.com&#47;subject_search?search_text=&#39;+ query +&#39;&amp;cat=1002&#39;
-    driver = webdriver.Chrome(&#39;&#47;Users&#47;yong&#47;Desktop&#47;Python&#47;xpath&#47;libs&#47;chromedriver&#39;)
-    driver.get(url)
-    html = etree.HTML(driver.page_source)
-    # 使用xpath helper, ctrl+shit+x 选中元素，如果要匹配全部，则需要修改query 表达式
-    src_xpath = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;a[@class=&#39;cover-link&#39;]&#47;img[@class=&#39;cover&#39;]&#47;@src&quot;
-    title_xpath = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;div[@class=&#39;detail&#39;]&#47;div[@class=&#39;title&#39;]&#47;a[@class=&#39;title-text&#39;]&quot;
+url = &#39;https:&#47;&#47;movie.douban.com&#47;subject_search?search_text=&#39;+ query +&#39;&amp;cat=1002&#39;
+driver = webdriver.Chrome(&#39;&#47;Users&#47;yong&#47;Desktop&#47;Python&#47;xpath&#47;libs&#47;chromedriver&#39;)
+driver.get(url)
+html = etree.HTML(driver.page_source) # 使用xpath helper, ctrl+shit+x 选中元素，如果要匹配全部，则需要修改query 表达式
+src_xpath = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;a[@class=&#39;cover-link&#39;]&#47;img[@class=&#39;cover&#39;]&#47;@src&quot;
+title_xpath = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;div[@class=&#39;detail&#39;]&#47;div[@class=&#39;title&#39;]&#47;a[@class=&#39;title-text&#39;]&quot;
 
     srcs = html.xpath(src_xpath)
     titles = html.xpath(title_xpath)
@@ -344,35 +342,36 @@ limit = 15
 total = 90
 
 def download(img, title):
-	dir = &quot;D:\\数据分析\\python test\\query\\&quot; + search_text + &quot;\\&quot; 
-	id = title.replace(u&#39;\u200e&#39;, u&#39;&#39;).replace(u&#39;?&#39;, u&#39;&#39;) .replace(u&#39;&#47;&#39;, u&#39;or&#39;)
-	if not os.path.exists(dir):
-		os.makedirs(dir)
-	try:    
-		pic = requests.get(img, timeout=10) 
-		img_path = dir  + str(id) + &#39;.jpg&#39;   
-		fp = open(img_path, &#39;wb&#39;)    
-		fp.write(pic.content)    
-		fp.close()  
-	except requests.exceptions.ConnectionError:    
-		print(&#39;图片无法下载&#39;)
+dir = &quot;D:\\数据分析\\python test\\query\\&quot; + search_text + &quot;\\&quot;
+id = title.replace(u&#39;\u200e&#39;, u&#39;&#39;).replace(u&#39;?&#39;, u&#39;&#39;) .replace(u&#39;&#47;&#39;, u&#39;or&#39;)
+if not os.path.exists(dir):
+os.makedirs(dir)
+try:  
+pic = requests.get(img, timeout=10)
+img_path = dir + str(id) + &#39;.jpg&#39;  
+fp = open(img_path, &#39;wb&#39;)  
+fp.write(pic.content)  
+fp.close()  
+except requests.exceptions.ConnectionError:  
+print(&#39;图片无法下载&#39;)
 
 def crawler_xpath():
-	src_img = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;a[@class=&#39;cover-link&#39;]&#47;img[@class=&#39;cover&#39;]&#47;@src&quot;
-	src_title = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;div[@class=&#39;detail&#39;]&#47;div[@class=&#39;title&#39;]&#47;a[@class=&#39;title-text&#39;]&quot;
-	
-	for i in range(start,total,limit):
-		request_url = &quot;https:&#47;&#47;search.douban.com&#47;movie&#47;subject_search?search_text=&quot;+search_text+&quot;&amp;cat=1002&amp;start=&quot;+str(i)
-		driver = webdriver.Chrome()
-		driver.get(request_url)
-		html = etree.HTML(driver.page_source)
-		imgs = html.xpath(src_img)
-		titles = html.xpath(src_title)
-		print(imgs,titles)
-		for img, title in zip(imgs, titles): 
-			download(img, title.text)
-if __name__ == &#39;__main__&#39;:
-	crawler_xpath()
+src_img = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;a[@class=&#39;cover-link&#39;]&#47;img[@class=&#39;cover&#39;]&#47;@src&quot;
+src_title = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;div[@class=&#39;detail&#39;]&#47;div[@class=&#39;title&#39;]&#47;a[@class=&#39;title-text&#39;]&quot;
+
+    for i in range(start,total,limit):
+    	request_url = &quot;https:&#47;&#47;search.douban.com&#47;movie&#47;subject_search?search_text=&quot;+search_text+&quot;&amp;cat=1002&amp;start=&quot;+str(i)
+    	driver = webdriver.Chrome()
+    	driver.get(request_url)
+    	html = etree.HTML(driver.page_source)
+    	imgs = html.xpath(src_img)
+    	titles = html.xpath(src_title)
+    	print(imgs,titles)
+    	for img, title in zip(imgs, titles):
+    		download(img, title.text)
+
+if **name** == &#39;**main**&#39;:
+crawler_xpath()
 </p>2020-04-08</li><br/><li><span>germany</span> 👍（6） 💬（2）<p>老师：为什么我在豆瓣网查询图片的网址与你不一样？https:&#47;&#47;www.douban.com&#47;search?cat=1025&amp;q=王祖贤&amp;source=suggest  。是什么原因？</p>2019-01-04</li><br/><li><span>許敲敲</span> 👍（5） 💬（1）<p>要下载所有James 哈登的图片</p>2019-01-04</li><br/><li><span>Geek_2008d9</span> 👍（4） 💬（3）<p>为什么我总是response=json.loads那一行显示json.decoder.JSONDecoderError:expecting value:line 1 column 1(char 0) 呢，怎么解决啊，各位大佬</p>2019-12-14</li><br/><li><span>Geek_c45626</span> 👍（3） 💬（7）<p>老师，运行代码总是出错：JSONDecodeError: Expecting value: line 1 column 1 (char 0)，这个怎么解决？</p>2019-12-06</li><br/><li><span>qinggeouye</span> 👍（3） 💬（1）<p>https:&#47;&#47;github.com&#47;qinggeouye&#47;GeekTime&#47;blob&#47;master&#47;DataAnalysis&#47;10_crawl_xpath.py
 
 import os
@@ -381,66 +380,71 @@ from lxml import etree
 from selenium import webdriver
 
 search_text = &#39;王祖贤&#39;
-start = 0  # 请求 url 的 start 从 0 开始，每一页间隔 15，有 6 页
+start = 0 # 请求 url 的 start 从 0 开始，每一页间隔 15，有 6 页
 total = 90
 limit = 15
 
 # 电影海报图片地址
+
 src_xpath = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;a[@class=&#39;cover-link&#39;]&#47;img[@class=&#39;cover&#39;]&#47;@src&quot;
+
 # 电影海报图片title
+
 title_xpath = &quot;&#47;&#47;div[@class=&#39;item-root&#39;]&#47;div[@class=&#39;detail&#39;]&#47;div[@class=&#39;title&#39;]&#47;a[@class=&#39;title-text&#39;]&quot;
 
 # 保存目录
-pic_path = &#39;10&#47;xpath&#39;  # 相对目录
-# WebDriver 创建一个 Chrome 浏览器的 drive
-driver = webdriver.Chrome(&#39;.&#47;chromedriver&#39;)  # MAC 版本
 
+pic_path = &#39;10&#47;xpath&#39; # 相对目录
+
+# WebDriver 创建一个 Chrome 浏览器的 drive
+
+driver = webdriver.Chrome(&#39;.&#47;chromedriver&#39;) # MAC 版本
 
 # 创建图片保存路径
-def mk_save_path(pic_path_):
-    if not os.path.exists(pic_path_):
-        os.makedirs(pic_path_)
-    return os.getcwd() + &#39;&#47;&#39; + pic_path_ + &#39;&#47;&#39;
 
+def mk_save_path(pic_path_):
+if not os.path.exists(pic_path_):
+os.makedirs(pic_path_)
+return os.getcwd() + &#39;&#47;&#39; + pic_path_ + &#39;&#47;&#39;
 
 # 下载图片
-def download(src, pic_id, save_path_):
-    directory = save_path_ + str(pic_id) + &#39;.jpg&#39;
-    try:
-        pic = requests.get(src, timeout=10)
-        fp = open(directory, &#39;wb&#39;)
-        fp.write(pic.content)
-        fp.close()
-    except requests.exceptions.ConnectionError:
-        print(&#39;图片如无法下载&#39;)
 
+def download(src, pic_id, save_path_):
+directory = save_path_ + str(pic_id) + &#39;.jpg&#39;
+try:
+pic = requests.get(src, timeout=10)
+fp = open(directory, &#39;wb&#39;)
+fp.write(pic.content)
+fp.close()
+except requests.exceptions.ConnectionError:
+print(&#39;图片如无法下载&#39;)
 
 def get_response_xpath():
-    save_path = mk_save_path(pic_path)
-    for i in range(start, total, limit):
-        requests_url = &#39;https:&#47;&#47;search.douban.com&#47;movie&#47;subject_search?search_text=&#39; + search_text + &#39;&amp;cat=1002&#39; + \
-                       &#39;&amp;start=&#39; + str(i)
-        driver.get(url=requests_url)
-        html = etree.HTML(driver.page_source)
-        src_list = html.xpath(src_xpath)
-        title_list = html.xpath(title_xpath)
-        for src, title in zip(src_list, title_list):
-            download(src, title.text, save_path)
+save_path = mk_save_path(pic_path)
+for i in range(start, total, limit):
+requests_url = &#39;https:&#47;&#47;search.douban.com&#47;movie&#47;subject_search?search_text=&#39; + search_text + &#39;&amp;cat=1002&#39; + \
+&#39;&amp;start=&#39; + str(i)
+driver.get(url=requests_url)
+html = etree.HTML(driver.page_source)
+src_list = html.xpath(src_xpath)
+title_list = html.xpath(title_xpath)
+for src, title in zip(src_list, title_list):
+download(src, title.text, save_path)
 
-
-if __name__ == &#39;__main__&#39;:
-    get_response_xpath()</p>2019-11-06</li><br/><li><span>Yezhiwei</span> 👍（3） 💬（1）<p>用Scrapy爬取数据更方便哈，请问老师怎么做一个通用的爬虫呢？比如要爬取文章标题和内容，不同的网站Xpath结构不一样，如果源少的话可以分别配置，但如果要爬取几百上千的网站数据，分别配置Xpath挺麻烦的。请问这个问题有什么解决方案吗？谢谢</p>2019-01-04</li><br/><li><span>qinggeouye</span> 👍（2） 💬（2）<p>https:&#47;&#47;github.com&#47;qinggeouye&#47;GeekTime&#47;blob&#47;master&#47;DataAnalysis&#47;10_crawl.py
+if **name** == &#39;**main**&#39;:
+get_response_xpath()</p>2019-11-06</li><br/><li><span>Yezhiwei</span> 👍（3） 💬（1）<p>用Scrapy爬取数据更方便哈，请问老师怎么做一个通用的爬虫呢？比如要爬取文章标题和内容，不同的网站Xpath结构不一样，如果源少的话可以分别配置，但如果要爬取几百上千的网站数据，分别配置Xpath挺麻烦的。请问这个问题有什么解决方案吗？谢谢</p>2019-01-04</li><br/><li><span>qinggeouye</span> 👍（2） 💬（2）<p>https:&#47;&#47;github.com&#47;qinggeouye&#47;GeekTime&#47;blob&#47;master&#47;DataAnalysis&#47;10_crawl.py
 
 # coding: utf-8
+
 import os
 
 import requests
 import json
 
-
 # 下载图片
+
 def download(src, pic_id, save_path_):
-    directory = save_path_ + str(pic_id) + &#39;.jpg&#39;
+directory = save_path_ + str(pic_id) + &#39;.jpg&#39;
 
     try:
         pic = requests.get(src, timeout=10)
@@ -450,14 +454,13 @@ def download(src, pic_id, save_path_):
     except requests.exceptions.ConnectionError:
         print(&#39;图片如无法下载&#39;)
 
-
 # 获取返回页面内容
-def get_resp(query_, limit_, start_):
-    url_ = &#39;https:&#47;&#47;www.douban.com&#47;j&#47;search_photo?q=&#39; + query_ + &#39;&amp;limit=&#39; + str(limit_) + &#39;&amp;start=&#39; + str(start_)
-    html_ = requests.get(url_).text  # 得到返回结果
-    response_ = json.loads(html_, encoding=&#39;utf-8&#39;)  # 将 JSON 格式转换为 Python 对象
-    return response_
 
+def get_resp(query_, limit_, start_):
+url_ = &#39;https:&#47;&#47;www.douban.com&#47;j&#47;search_photo?q=&#39; + query_ + &#39;&amp;limit=&#39; + str(limit_) + &#39;&amp;start=&#39; + str(start_)
+html_ = requests.get(url_).text # 得到返回结果
+response_ = json.loads(html_, encoding=&#39;utf-8&#39;) # 将 JSON 格式转换为 Python 对象
+return response_
 
 query = &#39;王祖贤&#39;
 limit = 20
@@ -467,16 +470,17 @@ start = 0
 total = get_resp(query, limit, start)[&#39;total&#39;]
 print(total)
 
-pic_path = &#39;10&#39;  # 相对目录
+pic_path = &#39;10&#39; # 相对目录
 if not os.path.exists(pic_path):
-    os.mkdir(pic_path)
+os.mkdir(pic_path)
 save_path = os.getcwd() + &#39;&#47;&#39; + pic_path + &#39;&#47;&#39;
 
 # 循环 请求全部的 url
+
 for i in range(start, total, limit):
-    response = get_resp(query, limit, i)
-    for image in response[&#39;images&#39;]:
-        print(image[&#39;src&#39;])  # 查看当前下载的图片地址
-        download(image[&#39;src&#39;], image[&#39;id&#39;], save_path)  # 下载一张图片
+response = get_resp(query, limit, i)
+for image in response[&#39;images&#39;]:
+print(image[&#39;src&#39;]) # 查看当前下载的图片地址
+download(image[&#39;src&#39;], image[&#39;id&#39;], save_path) # 下载一张图片
 </p>2019-11-05</li><br/><li><span>爱喝酸奶的程序员</span> 👍（2） 💬（1）<p>有个问题selenium，是用来自动化测试的，他回打开浏览器……我做爬虫是不想让代码打开浏览器，只想要他爬取的动作～要怎么办呢？</p>2019-02-26</li><br/><li><span>十六。</span> 👍（1） 💬（1）<p>由于python学习是爬虫上手的，爬虫还是会一点的，哈哈，去下一章了ღ( ´･ᴗ･` )</p>2020-03-27</li><br/>
 </ul>

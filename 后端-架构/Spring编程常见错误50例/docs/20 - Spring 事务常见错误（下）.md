@@ -160,7 +160,7 @@ Exception in thread "main" org.springframework.transaction.UnexpectedRollbackExc
 ```
 protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
       final InvocationCallback invocation) throws Throwable {
- 
+
    TransactionAttributeSource tas = getTransactionAttributeSource();
    final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
    final PlatformTransactionManager tm = determineTransactionManager(txAttr);
@@ -264,7 +264,7 @@ private void processRollback(DefaultTransactionStatus status, boolean unexpected
         }
       }
 
-      // 省略非关键代码 
+      // 省略非关键代码
       if (unexpectedRollback) {
          throw new UnexpectedRollbackException(
                "Transaction rolled back because it has been marked as rollback-only");
@@ -480,7 +480,7 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource imple
 
    @Nullable
    private DataSource resolvedDefaultDataSource;
- 
+
    //省略非关键代码
 }
 ```

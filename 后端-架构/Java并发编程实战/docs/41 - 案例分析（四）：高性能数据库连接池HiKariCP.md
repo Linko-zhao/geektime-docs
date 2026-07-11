@@ -38,7 +38,7 @@ ResultSet rs = null;
 try {
   // 获取数据库连接
   conn = ds.getConnection();
-  // 创建Statement 
+  // 创建Statement
   stmt = conn.createStatement();
   // 执行SQL
   rs = stmt.executeQuery("select * from abc");
@@ -52,7 +52,7 @@ try {
 } finally {
   //关闭ResultSet
   close(rs);
-  //关闭Statement 
+  //关闭Statement
   close(stmt);
   //关闭Connection
   close(conn);
@@ -122,8 +122,8 @@ void add(final T bagEntry){
   sharedList.add(bagEntry);
   //如果有等待连接的线程，
   //则通过handoffQueue直接分配给等待的线程
-  while (waiters.get() > 0 
-    && bagEntry.getState() == STATE_NOT_IN_USE 
+  while (waiters.get() > 0
+    && bagEntry.getState() == STATE_NOT_IN_USE
     && !handoffQueue.offer(bagEntry)) {
       yield();
   }
@@ -144,12 +144,12 @@ T borrow(long timeout, final TimeUnit timeUnit){
   final List<Object> list = threadList.get();
   for (int i = list.size() - 1; i >= 0; i--) {
     final Object entry = list.remove(i);
-    final T bagEntry = weakThreadLocals 
-      ? ((WeakReference<T>) entry).get() 
+    final T bagEntry = weakThreadLocals
+      ? ((WeakReference<T>) entry).get()
       : (T) entry;
     //线程本地存储中的连接也可以被窃取，
     //所以需要用CAS方法防止重复分配
-    if (bagEntry != null 
+    if (bagEntry != null
       && bagEntry.compareAndSet(STATE_NOT_IN_USE, STATE_IN_USE)) {
       return bagEntry;
     }
@@ -169,7 +169,7 @@ T borrow(long timeout, final TimeUnit timeUnit){
     do {
       final long start = currentTime();
       final T bagEntry = handoffQueue.poll(timeout, NANOSECONDS);
-      if (bagEntry == null 
+      if (bagEntry == null
         || bagEntry.compareAndSet(STATE_NOT_IN_USE, STATE_IN_USE)) {
           return bagEntry;
       }
@@ -193,7 +193,7 @@ void requite(final T bagEntry){
   bagEntry.setState(STATE_NOT_IN_USE);
   //如果有等待的线程，则直接分配给线程，无需进入任何队列
   for (int i = 0; waiters.get() > 0; i++) {
-    if (bagEntry.getState() != STATE_NOT_IN_USE 
+    if (bagEntry.getState() != STATE_NOT_IN_USE
       || handoffQueue.offer(bagEntry)) {
         return;
     } else if ((i & 0xff) == 0xff) {
@@ -205,8 +205,8 @@ void requite(final T bagEntry){
   //如果没有等待的线程，则进入线程本地存储
   final List<Object> threadLocalList = threadList.get();
   if (threadLocalList.size() < 50) {
-    threadLocalList.add(weakThreadLocals 
-      ? new WeakReference<>(bagEntry) 
+    threadLocalList.add(weakThreadLocals
+      ? new WeakReference<>(bagEntry)
       : bagEntry);
   }
 }

@@ -210,6 +210,7 @@ Zhurong的防攻击策略，是过滤器自动在所有响应页面的表单form
 附：极客时间也有一个专门讲Web漏洞攻击与防护的专栏[Web 漏洞挖掘实战](https://time.geekbang.org/column/intro/100101501?tab=intro)，有兴趣的同学不妨看一看，再回来一起交流讨论。
 
 > 【编辑温馨提示】4月10日12点前，提交[期中测试](http://https://time.geekbang.org/column/article/495175)作业，有机会获得老师精心准备的奖励哦~
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>neohope</span> 👍（11） 💬（1）<p>
 除了课程中提到的几种，Web方面的还有水平越权攻击，垂直越权攻击，渗透攻击，漏洞攻击，源码分析攻击，DDOS攻击，缓存攻击，随机数预测攻击，字典攻击，刷单攻击，钓鱼网站，钓鱼邮件，木马攻击，社会工程学攻击等等很多种。

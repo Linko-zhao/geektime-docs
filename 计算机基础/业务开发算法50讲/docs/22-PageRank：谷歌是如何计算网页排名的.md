@@ -62,32 +62,32 @@ $$R(u)=\\sum\_{v\\subset B\_u}R(v)/(N\_v)$$
 
 如果按照前面说的方式进行权重的转移，我们可以得到一个类似于马氏链的状态转移矩阵，矩阵的每一列都代表某个网页的权重如何传递到其他网页上（A的50%到B，50%到C；B的100%到C；C的100%到A）：
 
-$$  
-\\left[\\begin{array}{ccc}  
-0 &amp; 0 &amp; 1 \\\\\\  
-0.5 &amp; 0 &amp; 0 \\\\\\  
-0.5 &amp; 1 &amp; 0  
-\\end{array}\\right]  
+$$
+\\left[\\begin{array}{ccc}
+0 &amp; 0 &amp; 1 \\\\\\
+0.5 &amp; 0 &amp; 0 \\\\\\
+0.5 &amp; 1 &amp; 0
+\\end{array}\\right]
 $$
 
 所以如果用这个矩阵乘以表示每个页面权重的向量，得到的新的向量，自然代表一轮计算之后的网页权重。
 
 假设我们初始化三个网页的权重都是 1/3 ，那么：
 
-$$  
-\\left[\\begin{array}{ccc}  
-0 &amp; 0 &amp; 1 \\\\\\  
-0.5 &amp; 0 &amp; 0 \\\\\\  
-0.5 &amp; 1 &amp; 0  
-\\end{array}\\right] \*\\left[\\begin{array}{c}  
-1 / 3 \\\\\\  
-1 / 3 \\\\\\  
-1 / 3  
-\\end{array}\\right]=\\left[\\begin{array}{c}  
-1 / 3 \\\\\\  
-1 / 6 \\\\\\  
-1 / 2  
-\\end{array}\\right]  
+$$
+\\left[\\begin{array}{ccc}
+0 &amp; 0 &amp; 1 \\\\\\
+0.5 &amp; 0 &amp; 0 \\\\\\
+0.5 &amp; 1 &amp; 0
+\\end{array}\\right] \*\\left[\\begin{array}{c}
+1 / 3 \\\\\\
+1 / 3 \\\\\\
+1 / 3
+\\end{array}\\right]=\\left[\\begin{array}{c}
+1 / 3 \\\\\\
+1 / 6 \\\\\\
+1 / 2
+\\end{array}\\right]
 $$
 
 经过一次权重分配计算之后，得到的新的权重是 1/3、1/6、1/2。
@@ -96,20 +96,20 @@ $$
 
 这其实就是所谓的马氏平稳状态。如果你用 0.4 0.2 0.4 作为网页权重再做一次计算，会发现整个网页的权重不会再有任何变化。
 
-$$  
-\\left[\\begin{array}{ccc}  
-0 &amp; 0 &amp; 1 \\\\\\  
-0.5 &amp; 0 &amp; 0 \\\\\\  
-0.5 &amp; 1 &amp; 0  
-\\end{array}\\right] \*\\left[\\begin{array}{c}  
-0.4 \\\\\\  
-0.2 \\\\\\  
-0.4  
-\\end{array}\\right]=\\left[\\begin{array}{c}  
-0.4 \\\\\\  
-0.2 \\\\\\  
-0.4  
-\\end{array}\\right]  
+$$
+\\left[\\begin{array}{ccc}
+0 &amp; 0 &amp; 1 \\\\\\
+0.5 &amp; 0 &amp; 0 \\\\\\
+0.5 &amp; 1 &amp; 0
+\\end{array}\\right] \*\\left[\\begin{array}{c}
+0.4 \\\\\\
+0.2 \\\\\\
+0.4
+\\end{array}\\right]=\\left[\\begin{array}{c}
+0.4 \\\\\\
+0.2 \\\\\\
+0.4
+\\end{array}\\right]
 $$
 
 总的来说，在这个简单例子里，无论如何初始化网页权重，在这样的链接情况下，所有网页的权重都是固定可以计算出来的。A和C的权重高一些也很容易理解，因为相比于B，有更多的链接指向A和C。
@@ -173,15 +173,15 @@ R是权重，M是转移矩阵，e是单位矩阵。添加了跳转因子$\\beta$
 	      System.err.println("Usage: SparkPageRank <file> <iter>")
 	      System.exit(1)
 	    }
-	
+
 	    showWarning()
-	
+
         // spark 初始化
 	    val spark = SparkSession
 	      .builder
 	      .appName("SparkPageRank")
 	      .getOrCreate()
-	
+
         // 迭代轮次
 	    val iters = if (args.length > 1) args(1).toInt else 10
 	    val lines = spark.read.textFile(args(0)).rdd
@@ -190,10 +190,10 @@ R是权重，M是转移矩阵，e是单位矩阵。添加了跳转因子$\\beta$
 	      val parts = s.split("\\s+")
 	      (parts(0), parts(1))
 	    }.distinct().groupByKey().cache()
-	    
+
         // 初始化所有节点的权重为1
 	    var ranks = links.mapValues(v => 1.0)
-	
+
 	    for (i <- 1 to iters) {
           // 将所有的处边对应的权重分配计算出来
 	      val contribs = links
@@ -206,10 +206,10 @@ R是权重，M是转移矩阵，e是单位矩阵。添加了跳转因子$\\beta$
           // 进行累积求和
 	      ranks = contribs.reduceByKey(_ + _).mapValues(0.15 + 0.85 * _)
 	    }
-	
+
 	    val output = ranks.collect()
 	    output.foreach(tup => println(tup._1 + " has rank: " + tup._2 + "."))
-	
+
 	    spark.stop()
 	  }
 ```

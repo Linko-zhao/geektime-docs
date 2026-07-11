@@ -323,8 +323,8 @@ zhangDaYeListen和liDaYeListen这两个方法，它们的实现是差不多的�
 打包发送有一定的改进，1次3条数据 14s
 现在100万次胡同碰面，8.66s(公司的i7)
 
-https:&#47;&#47;gist.github.com&#47;liutianpeng&#47;d9330f85d47525a8e32dcd24f5738e55</p>2019-08-26</li><br/><li><span>nfx</span> 👍（2） 💬（3）<p>有个疑问,  request queue, journal cache都是生产者, 消费者模型的队列,  里面应该会有锁吧?  只是这种队列锁需要的资源很少. 
- 不知道怎么理解对不对</p>2020-03-28</li><br/><li><span>顶新</span> 👍（2） 💬（1）<p>FlushThread 和 ReplicationThread线程对内存的链表 Pending Callbacks 中数据的更新，然后ResponseThread扫描链表Pending Callbacks，批量取出符合 QOS 规则的响应及超时的响应，然后并发返回给客户端。这块也存在对 Pending Callbacks 存在互斥锁吧？不知道理解的对不对，还请老师答疑 :)</p>2019-09-18</li><br/><li><span>ykkk88</span> 👍（2） 💬（1）<p>如果要保证前一句话要对方确认回复后再发送下一句话 就不能用这种方式了吧？这样吞吐量就会很低了</p>2019-08-25</li><br/><li><span>TWT_Marq</span> 👍（2） 💬（1）<p>JMQ中，接受请求的iothreads将请求丢给request queue，WriteThread从queue中取出来开始干活。这个queue是concurrentBlockingQueue吗？</p>2019-08-25</li><br/><li><span>linqw</span> 👍（2） 💬（10）<p>我用java实现了一版，老师帮忙看下哦，评论只能发2000字，其余在评论区补上
+https:&#47;&#47;gist.github.com&#47;liutianpeng&#47;d9330f85d47525a8e32dcd24f5738e55</p>2019-08-26</li><br/><li><span>nfx</span> 👍（2） 💬（3）<p>有个疑问, request queue, journal cache都是生产者, 消费者模型的队列, 里面应该会有锁吧? 只是这种队列锁需要的资源很少.
+不知道怎么理解对不对</p>2020-03-28</li><br/><li><span>顶新</span> 👍（2） 💬（1）<p>FlushThread 和 ReplicationThread线程对内存的链表 Pending Callbacks 中数据的更新，然后ResponseThread扫描链表Pending Callbacks，批量取出符合 QOS 规则的响应及超时的响应，然后并发返回给客户端。这块也存在对 Pending Callbacks 存在互斥锁吧？不知道理解的对不对，还请老师答疑 :)</p>2019-09-18</li><br/><li><span>ykkk88</span> 👍（2） 💬（1）<p>如果要保证前一句话要对方确认回复后再发送下一句话 就不能用这种方式了吧？这样吞吐量就会很低了</p>2019-08-25</li><br/><li><span>TWT_Marq</span> 👍（2） 💬（1）<p>JMQ中，接受请求的iothreads将请求丢给request queue，WriteThread从queue中取出来开始干活。这个queue是concurrentBlockingQueue吗？</p>2019-08-25</li><br/><li><span>linqw</span> 👍（2） 💬（10）<p>我用java实现了一版，老师帮忙看下哦，评论只能发2000字，其余在评论区补上
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -340,39 +340,41 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 &#47;**
- * @author linqw
- *&#47;
-public class SocketExample {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SocketExample.class);
+- @author linqw
+  *&#47;
+  public class SocketExample {
 
-    private static final ReentrantLock LI_WRITE_REENTRANT_LOCK = new ReentrantLock();
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketExample.class);
 
-    private static final ReentrantLock ZHANG_WRITE_REENTRANT_LOCK = new ReentrantLock();
+  private static final ReentrantLock LI_WRITE_REENTRANT_LOCK = new ReentrantLock();
 
-    private static final int NCPU = Runtime.getRuntime().availableProcessors();
+  private static final ReentrantLock ZHANG_WRITE_REENTRANT_LOCK = new ReentrantLock();
 
-    private final ThreadPoolExecutor serverThreadPoolExecutor = new ThreadPoolExecutor(NCPU, NCPU, 5, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(200000), new ThreadFactoryImpl(&quot;server-&quot;), new ThreadPoolExecutor.CallerRunsPolicy());
+  private static final int NCPU = Runtime.getRuntime().availableProcessors();
 
-    private final ThreadPoolExecutor clientThreadPoolExecutor = new ThreadPoolExecutor(NCPU, NCPU, 5, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(200000), new ThreadFactoryImpl(&quot;client-&quot;), new ThreadPoolExecutor.CallerRunsPolicy());
+  private final ThreadPoolExecutor serverThreadPoolExecutor = new ThreadPoolExecutor(NCPU, NCPU, 5, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(200000), new ThreadFactoryImpl(&quot;server-&quot;), new ThreadPoolExecutor.CallerRunsPolicy());
 
-    private volatile boolean started = false;
+  private final ThreadPoolExecutor clientThreadPoolExecutor = new ThreadPoolExecutor(NCPU, NCPU, 5, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(200000), new ThreadFactoryImpl(&quot;client-&quot;), new ThreadPoolExecutor.CallerRunsPolicy());
 
-    &#47;**
-     * 俩大爷已经遇见了多少次
-     *&#47;
+  private volatile boolean started = false;
+
+  &#47;**
+  - 俩大爷已经遇见了多少次
+    *&#47;
     private volatile AtomicInteger count = new AtomicInteger(0);
 
-    &#47;**
-     * 总共需要遇见多少次
-     *&#47;
+  &#47;**
+  - 总共需要遇见多少次
+    *&#47;
     private static final int TOTAL = 1;
 
-    private static final String Z0 = &quot; 吃了没，您吶?&quot;;
+  private static final String Z0 = &quot; 吃了没，您吶?&quot;;
 
-    private static final String Z3 = &quot; 嗨！吃饱了溜溜弯儿。&quot;;
-    private static final String Z5 = &quot; 回头去给老太太请安！&quot;;
-    private static final String L1 = &quot; 刚吃。&quot;;
-    private static final String L2 = &quot; 您这，嘛去？&quot;;
-    private static final String L4 = &quot; 有空家里坐坐啊。&quot;;</p>2019-08-25</li><br/>
+  private static final String Z3 = &quot; 嗨！吃饱了溜溜弯儿。&quot;;
+  private static final String Z5 = &quot; 回头去给老太太请安！&quot;;
+  private static final String L1 = &quot; 刚吃。&quot;;
+  private static final String L2 = &quot; 您这，嘛去？&quot;;
+  private static final String L4 = &quot; 有空家里坐坐啊。&quot;;</p>2019-08-25</li><br/>
+
 </ul>

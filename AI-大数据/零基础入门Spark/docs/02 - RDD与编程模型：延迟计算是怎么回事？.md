@@ -182,38 +182,38 @@ Spark程序的整个运行流程如下图所示：
 老师, 看完这段话和土豆流水线的图片, 我有几个疑问.
 
 1. rdd分为&lt;value&gt;类型和&lt;key,value&gt;类型，数据分区方式只作用于&lt;Key，Value&gt;形式的数据。
-并且刚开始没有任何分区方式，直到遇到包含shuffle的算子时，才会使用“分区方式”，比如hash分区。
+   并且刚开始没有任何分区方式，直到遇到包含shuffle的算子时，才会使用“分区方式”，比如hash分区。
 
 问题1：那么，一坨数据，在成为&lt;key,value&gt;类型的rdd的时候（假如4片），分片方式，是不是平均分成4份呢？
 
 2. &lt;value&gt;类型的rdd，没有分区器，那么它刚刚生成的时候，也是平均分吗？</p>2021-10-14</li><br/><li><span>田大侠</span> 👍（2） 💬（1）<p>作者大大有个问题问一下
-这里的依赖关系有个比较明显的差别
-1.map计算是一个数据分片依赖于前一个RDD“数据分片”，就是说在同一个分片上可以连续计算直到reduce之前
-2.reduce计算是依赖关系前面一个RDD的所有的数据集 spark实际计算的时候要等前面所有的map计算完成才能进行reduce操作
+   这里的依赖关系有个比较明显的差别
+   1.map计算是一个数据分片依赖于前一个RDD“数据分片”，就是说在同一个分片上可以连续计算直到reduce之前
+   2.reduce计算是依赖关系前面一个RDD的所有的数据集 spark实际计算的时候要等前面所有的map计算完成才能进行reduce操作
 
 上面的我的两个理解是否有偏差？</p>2022-02-19</li><br/><li><span>Eazow</span> 👍（0） 💬（2）<p>请问土豆工坊图是用什么画滴那？</p>2021-11-24</li><br/><li><span>xuchuan</span> 👍（0） 💬（1）<p>都是来料加工，目标都是高效率生产。</p>2021-10-17</li><br/><li><span>小马哥</span> 👍（0） 💬（0）<p>老师，打扰想问下action算子，最终收集任务结果，然后计算是在driver中执行吗？</p>2024-10-24</li><br/><li><span>小马哥</span> 👍（0） 💬（0）<p>想问下action算子，怎么收集每个任务的执行结果？是在哪里收集的？</p>2024-10-24</li><br/><li><span>廖子博</span> 👍（0） 💬（0）<p>Java代码
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.SparkSession;
 import scala.Tuple2;
- 
+
 import java.util.Arrays;
 import java.util.List;
- 
+
 public class WorkCount {
-    public static void main(String[] args) {
-        SparkSession spark = SparkSession.builder()
-                .appName(&quot;WorkCount&quot;)
-                .getOrCreate();
-        JavaRDD&lt;String&gt; lines = spark.read().textFile(&quot;&#47;Users&#47;liaozibo&#47;code&#47;demo&#47;spark-demo&#47;spark-readme.md&quot;).javaRDD();
-        JavaRDD&lt;String&gt; words = lines.flatMap(line -&gt; Arrays.asList(line.split(&quot;\\s+&quot;)).iterator()).filter(word -&gt; !word.isEmpty());
-        List&lt;Tuple2&lt;Integer, String&gt;&gt; top5 = words.mapToPair(word -&gt; new Tuple2&lt;&gt;(word, 1))
-                .reduceByKey(Integer::sum)
-                .mapToPair(Tuple2::swap)
-                .sortByKey(false)
-                .take(5);
-        top5.forEach(System.out::println);
-    }
+public static void main(String[] args) {
+SparkSession spark = SparkSession.builder()
+.appName(&quot;WorkCount&quot;)
+.getOrCreate();
+JavaRDD&lt;String&gt; lines = spark.read().textFile(&quot;&#47;Users&#47;liaozibo&#47;code&#47;demo&#47;spark-demo&#47;spark-readme.md&quot;).javaRDD();
+JavaRDD&lt;String&gt; words = lines.flatMap(line -&gt; Arrays.asList(line.split(&quot;\\s+&quot;)).iterator()).filter(word -&gt; !word.isEmpty());
+List&lt;Tuple2&lt;Integer, String&gt;&gt; top5 = words.mapToPair(word -&gt; new Tuple2&lt;&gt;(word, 1))
+.reduceByKey(Integer::sum)
+.mapToPair(Tuple2::swap)
+.sortByKey(false)
+.take(5);
+top5.forEach(System.out::println);
+}
 }
 
 打包执行

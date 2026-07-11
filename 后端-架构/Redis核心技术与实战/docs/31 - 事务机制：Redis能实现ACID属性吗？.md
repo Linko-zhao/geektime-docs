@@ -74,7 +74,7 @@ QUEUED
 OK
 #发送事务中的第一个操作，但是Redis不支持该命令，返回报错信息
 127.0.0.1:6379> PUT a:stock 5
-(error) ERR unknown command `PUT`, with args beginning with: `a:stock`, `5`, 
+(error) ERR unknown command `PUT`, with args beginning with: `a:stock`, `5`,
 #发送事务中的第二个操作，这个操作是正确的命令，Redis把该命令入队
 127.0.0.1:6379> DECR b:stock
 QUEUED
@@ -118,7 +118,7 @@ DISCARD命令具体怎么用呢？我们来看下下面的代码。
 127.0.0.1:6379> GET a:stock
 "4"
 #开启事务
-127.0.0.1:6379> MULTI 
+127.0.0.1:6379> MULTI
 OK
 #发送事务的第一个操作，对a:stock减1
 127.0.0.1:6379> DECR a:stock
@@ -259,9 +259,9 @@ a) 在上面 1-a 场景中，也就是使用了事务命令，但没有配合 Pi
 
 b) 如果事务 + Pipeline 就可以保证隔离性，那 WATCH 还有没有使用的必要？答案是有的。对于一个资源操作为读取、修改、写回这种场景，如果需要保证事物的原子性，此时就需要用到 WATCH 了。例如想要修改某个资源，但需要事先读取它的值，再基于这个值进行计算后写回，如果在这期间担心这个资源被其他客户端修改了，那么可以先 WATCH 这个资源，再读取、修改、写回，如果写回成功，说明其他客户端在这期间没有修改这个资源。如果其他客户端修改了这个资源，那么这个事务操作会返回失败，不会执行，从而保证了原子性。
 
-细节比较多，如果不太好理解，最好亲自动手试一下。</p>2020-10-30</li><br/><li><span>tt</span> 👍（35） 💬（12）<p>	• 原子性就是一批操作，要不全部完成，要不一个也不执行。
-	• 原子性的结果就是中间结果对外不可见，如果中间结果对外可见，则一致性就不会得到满足（比如操作）。
-	• 而隔离性，指一个事务内部的操作及使用的数据对正在进行的其他事务是隔离的，并发执行的各个事务之间不能互相干扰，正是它保证了原子操作的过程中，中间结果对其它事务不可见。
+细节比较多，如果不太好理解，最好亲自动手试一下。</p>2020-10-30</li><br/><li><span>tt</span> 👍（35） 💬（12）<p> • 原子性就是一批操作，要不全部完成，要不一个也不执行。
+• 原子性的结果就是中间结果对外不可见，如果中间结果对外可见，则一致性就不会得到满足（比如操作）。
+• 而隔离性，指一个事务内部的操作及使用的数据对正在进行的其他事务是隔离的，并发执行的各个事务之间不能互相干扰，正是它保证了原子操作的过程中，中间结果对其它事务不可见。
 
 本文在讨论一致性的时候，说到“ 命令入队时没报错，实际执行时报错在这种情况下，有错误的命令不会被执行，正确的命令可以正常执行，也不会改变数据库的一致性。”，我觉得这一点是存疑的，不保证原子性就保证不了一致性。比如转账操作，扣减转出账户的操作成功，增加转入账户的操作失败，则原子性和一致性都被破坏。
 </p>2020-11-02</li><br/><li><span>test</span> 👍（17） 💬（0）<p>redis开启RDB，因为RDB不会在事务执行的时候执行，所以是可以保证原子性的</p>2020-10-30</li><br/><li><span>小文同学</span> 👍（10） 💬（1）<p>1、作者讲了什么？
@@ -289,15 +289,15 @@ Redis 始终坚持是一个高性能的内存数据库，并没有因为事务�
 
 这样理解C比较简单：我（数据库）管你balance是不是小于0，你又没告诉我（设置check），那我小于0违法了吗？</p>2021-07-22</li><br/><li><span>JohnReese</span> 👍（3） 💬（6）<p>那请问老师，Multi 命令 和 Lua脚本 的功能上有什么区别嘛？（似乎都是保证‘原子性’地执行多命令？）</p>2020-10-30</li><br/><li><span>静心</span> 👍（3） 💬（3）<p>老师，在集群模式下，ACID是个什么情况？</p>2020-10-30</li><br/><li><span>不动</span> 👍（1） 💬（0）<p>这里的一致性到底是什么含义，没搞懂</p>2024-04-19</li><br/><li><span>ub8</span> 👍（1） 💬（0）<p>老师redis的pipline 可以保证执行命令结果集按顺序返回么：具体操作如下：
 Pipeline pipeline = jedis.pipelined();
-            Map&lt;Integer,PrizeConfig&gt; day2PrizeConfigMap = new HashMap&lt;&gt;();
-            Map&lt;Integer,redis.clients.jedis.Response&lt;Set&lt;Tuple&gt;&gt;&gt; day2PrizeCache = new HashMap&lt;&gt;();
-            for (Integer dayIndex : days) {
-                String cacheKey = String.format(SignInConstants.PRIZE_VERSION_KEY,
-                        dayIndex);
-                redis.clients.jedis.Response&lt;Set&lt;Tuple&gt;&gt; prizeConfigsResponse  =
-                        pipeline.zrevrangeByScoreWithScores(cacheKey, version, 0);
-                day2PrizeCache.put(dayIndex, prizeConfigsResponse);
-            }
-            pipeline.sync();
+Map&lt;Integer,PrizeConfig&gt; day2PrizeConfigMap = new HashMap&lt;&gt;();
+Map&lt;Integer,redis.clients.jedis.Response&lt;Set&lt;Tuple&gt;&gt;&gt; day2PrizeCache = new HashMap&lt;&gt;();
+for (Integer dayIndex : days) {
+String cacheKey = String.format(SignInConstants.PRIZE_VERSION_KEY,
+dayIndex);
+redis.clients.jedis.Response&lt;Set&lt;Tuple&gt;&gt; prizeConfigsResponse =
+pipeline.zrevrangeByScoreWithScores(cacheKey, version, 0);
+day2PrizeCache.put(dayIndex, prizeConfigsResponse);
+}
+pipeline.sync();
 &#47;&#47; 我的问题是 day2PrizeCache 这个map中的 dayIndex 和 返回值prizeConfigsResponse 可以对应关系有可能发生错位吗？</p>2021-08-26</li><br/>
 </ul>

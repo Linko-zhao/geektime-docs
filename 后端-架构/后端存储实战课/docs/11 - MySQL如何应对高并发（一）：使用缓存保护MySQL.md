@@ -127,7 +127,6 @@ A：读，回写缓存。导致不一致。
 
 写数据时，同时更新DB和缓存。
 
-
 # Read-Through
 
 应用程序只与缓存交互，而对DB的读取由缓存来代理。
@@ -135,18 +134,15 @@ A：读，回写缓存。导致不一致。
 读数据时，先访问缓存，命中则直接返回。
 如果不命中，则由缓存查询DB，并将数据写到缓存，最后返回数据。
 
-
 # Write-Through
 
 应用程序只与缓存交互，而对DB的写由缓存来代理。
 
 写数据时，访问缓存，由缓存将数据写到DB，并将数据缓存起来。
 
-
 例如使用Redis来缓存MySQL的数据，一般都是通过应用程序来直接与Redis、MySQL交互，我的理解是Cache Aside，包&quot;是&#47;否&quot;删除Cache在内。
 
 而Read-Through，像Guava LoadingCache，在load里面定义好访问DB的代码，后续的读操作都是直接与Cache交互了。
-
 
 https:&#47;&#47;www.ehcache.org&#47;documentation&#47;3.8&#47;caching-patterns.html
 https:&#47;&#47;docs.oracle.com&#47;cd&#47;E15357_01&#47;coh.360&#47;e15723&#47;cache_rtwtwbra.htm#COHDG5178
@@ -167,8 +163,7 @@ Cache Aside 模式如何产生脏数据？
 3. t1 把从 db 中读到的 value1写回缓存
 
 这时 db 中 key 的 value 为新数据 value2，缓存中为旧数据 value1，产生了不一致。
-这种情况只发生在读线程从 bd 读到旧数据往 cache    中写前，有写线程更新了 db，然后读线程把老数据写回 cache
-
+这种情况只发生在读线程从 bd 读到旧数据往 cache 中写前，有写线程更新了 db，然后读线程把老数据写回 cache
 
 Read&#47;Write Through 发生脏数据的情况
 第一种情况是并发读写
@@ -177,8 +172,7 @@ Read&#47;Write Through 发生脏数据的情况
 写线程 t2
 
 按照如下时间顺序操作
-1.t1 尝试读缓存但未命中，然后去 db 中读取到了数据 value1，但还未更新缓存兄弟的数据
-2. t2 更新数据库 value2，更新成功后常识读取缓存，未命中，所以更新缓存为 value2
+1.t1 尝试读缓存但未命中，然后去 db 中读取到了数据 value1，但还未更新缓存兄弟的数据 2. t2 更新数据库 value2，更新成功后常识读取缓存，未命中，所以更新缓存为 value2
 3.t1 线程继续把之前从 db 中读到的旧数据 value1 写回缓存
 这样 db 中是新数据，但缓存中是旧数据
 

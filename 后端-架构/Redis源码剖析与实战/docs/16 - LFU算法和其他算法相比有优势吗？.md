@@ -254,22 +254,22 @@ LFU算法在初始化键值对的访问次数时，会将访问次数设置为LF
 LFU_INIT_VAL的初始值为5主要是避免，刚刚创建的对象被立马淘汰，而需要经历一个衰减的过程后才会被淘汰。
 
 LFU算法和LRU算法的不同就是，存粹的LFU算法会累计历史的访问次数，然而在高QPS的情况下可能会出现以下几个问题：
-    1、运行横跨高峰期和低峰期，不同时期存储的数据不一致，可能会导致部分高峰期产生的数据不容易被淘汰，甚至可能永远淘汰不掉（因为在高峰获得一个较高的count值，在计算淘汰的时候仍然存在）
-    2、需要long乃至更大的值去存储count。对于高频访问的数据如果需要统计每一次的调用，可能需要使用更大的空间去存储，还需要考虑溢出的问题。
-    3、 可能存在，每次淘汰掉的几乎是刚刚创建的新数据。
+1、运行横跨高峰期和低峰期，不同时期存储的数据不一致，可能会导致部分高峰期产生的数据不容易被淘汰，甚至可能永远淘汰不掉（因为在高峰获得一个较高的count值，在计算淘汰的时候仍然存在）
+2、需要long乃至更大的值去存储count。对于高频访问的数据如果需要统计每一次的调用，可能需要使用更大的空间去存储，还需要考虑溢出的问题。
+3、 可能存在，每次淘汰掉的几乎是刚刚创建的新数据。
 
 为了解决这些问题，Redis实现了一个近似LFU算法，并做出了以下改进：
-    1、count有上限值255。（避免高频数据获得一个较大的count值，还能节省空间）
-    2、count值是会随着时间衰减。(不再访问的数据更加容易被淘汰，高16位记录上一次访问时间戳-分钟，低8位记录count)
-    3、刚刚创建的数据count值不为0。（避免刚刚创建的数据被淘汰） 
-    4、count值累加是概率随机的。（避免高峰期数据都能一下就能累加到255，其中概率能人为调整）</p>2021-09-07</li><br/><li><span>可怜大灰狼</span> 👍（7） 💬（0）<p>uint8_t LFULogIncr(uint8_t counter) {
-    if (counter == 255) return 255;
-    double r = (double)rand()&#47;RAND_MAX;
-    double baseval = counter - LFU_INIT_VAL;
-    if (baseval &lt; 0) baseval = 0;
-    double p = 1.0&#47;(baseval*server.lfu_log_factor+1);
-    if (r &lt; p) counter++;
-    return counter;
+1、count有上限值255。（避免高频数据获得一个较大的count值，还能节省空间）
+2、count值是会随着时间衰减。(不再访问的数据更加容易被淘汰，高16位记录上一次访问时间戳-分钟，低8位记录count)
+3、刚刚创建的数据count值不为0。（避免刚刚创建的数据被淘汰）
+4、count值累加是概率随机的。（避免高峰期数据都能一下就能累加到255，其中概率能人为调整）</p>2021-09-07</li><br/><li><span>可怜大灰狼</span> 👍（7） 💬（0）<p>uint8_t LFULogIncr(uint8_t counter) {
+if (counter == 255) return 255;
+double r = (double)rand()&#47;RAND_MAX;
+double baseval = counter - LFU_INIT_VAL;
+if (baseval &lt; 0) baseval = 0;
+double p = 1.0&#47;(baseval*server.lfu_log_factor+1);
+if (r &lt; p) counter++;
+return counter;
 }
 通过源码可以发现：如果LFU_INIT_VAL太小，会导致baseval变大，从而导致p变小，导致counter加1比较困难。结果就是很容易导致刚set进去的数据，很快就会被淘汰。</p>2021-08-31</li><br/><li><span>风轻扬</span> 👍（0） 💬（0）<p>回答一下课后问题。如果LFU_INIT_VAL设置为1。会有两方面影响
 1、数据访问次数的增加概率会变大，导致很多数据都会达到255这个值，最终导致不容易淘汰数据

@@ -105,7 +105,7 @@ LoRA 这种方法有许多优点：
 安装很简单。
 
 ```plain
-pip install peft 
+pip install peft
 ```
 
 不过，要完全实现微调，还需要安装其他一些支持库。
@@ -115,12 +115,12 @@ pip install peft
 安装好了所需要的包之后，就加载模型和 PEFT 配置，伪代码如下：
 
 ```plain
-from transformers import AutoModelForCausalLM, AutoTokenizer from peft import get_peft_config, get_peft_model  
-model_name = "你要微调的模型名称" 
-model = AutoModelForCausalLM.from_pretrained(model_name) 
-tokenizer = AutoTokenizer.from_pretrained(model_name)  
-peft_config = get_peft_config('这里会有很多具体的内容') 
-peft_model = get_peft_model(model, peft_config) 
+from transformers import AutoModelForCausalLM, AutoTokenizer from peft import get_peft_config, get_peft_model
+model_name = "你要微调的模型名称"
+model = AutoModelForCausalLM.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+peft_config = get_peft_config('这里会有很多具体的内容')
+peft_model = get_peft_model(model, peft_config)
 ```
 
 上面这个过程，和我们下载开源模型，然后做做全局微调，或者直接做推理，只有一个不同，就是进行 peft\_config，也就是各种微调配置。配置好了之后，就可以开始微调 peft\_model 了。当然不同参数高效微调方法，有不同的配置，各种配置的具体文档，参考 [HuggingFace 官网](https://huggingface.co/docs/peft/en/tutorial/peft_model_config)。
@@ -265,9 +265,9 @@ class CustomDataset(Dataset):
 >   }  
 > ]
 
-\_*init*_ 方法会加载 JSON 文件，并初始化分词器和设备。
+\__init__ 方法会加载 JSON 文件，并初始化分词器和设备。
 
-\_*getitem*_ 方法会获取并格式化这个数据样本，使用分词器将其转换为张量格式，并返回包含输入和标签的字典。
+\__getitem__ 方法会获取并格式化这个数据样本，使用分词器将其转换为张量格式，并返回包含输入和标签的字典。
 
 format\_example 方法会生成上下文和目标文本：
 

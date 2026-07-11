@@ -169,7 +169,7 @@ error: multiple repeat at position 7
 这个正则比较长，但很好理解，中括号里面代表多选一，我们简化一下，就成下面这样：
 
 ```
-^([符合要求的组成1]|[符合要求的组成2])+$ 
+^([符合要求的组成1]|[符合要求的组成2])+$
 ```
 
 脱字符（^）代表以这个正则开头，美元符号（$）代表以正则结尾，我们后面会专门进行讲解。这里可以先理解成整个店铺名称要能匹配上正则，即起到验证的作用。
@@ -214,28 +214,27 @@ error: multiple repeat at position 7
 
 作业题: (这里需要获取单词，不能使用独占模式)
 
-\w+|“[^”]+”  (注意: 例句中的双引号是中文状态下的)
+\w+|“[^”]+” (注意: 例句中的双引号是中文状态下的)
 
 结果(10 次匹配, 48 步): [&#39;we&#39;, &#39;found&#39;, &#39;&quot;the little cat&quot;&#39;, &#39;is&#39;, &#39;in&#39;, &#39;the&#39;, &#39;hat&#39;, &#39;we&#39;, &#39;like&#39;, &#39;&quot;the little cat&quot;&#39;]
-
 
 相应的 Python 代码:
 
 &gt;&gt;&gt; import re
-&gt;&gt;&gt; text = &#39;&#39;&#39;we found “the little cat” is in the hat, we like “the little cat”&#39;&#39;&#39;  # 注意: 例句中的双引号是中文状态下的
+&gt;&gt;&gt; text = &#39;&#39;&#39;we found “the little cat” is in the hat, we like “the little cat”&#39;&#39;&#39; # 注意: 例句中的双引号是中文状态下的
 &gt;&gt;&gt; pattern = re.compile(r&#39;&#39;&#39;\w+|“[^”]+”&#39;&#39;&#39;)
 &gt;&gt;&gt; pattern.findall(text)
 [&#39;we&#39;, &#39;found&#39;, &#39;&quot;the little cat&quot;&#39;, &#39;is&#39;, &#39;in&#39;, &#39;the&#39;, &#39;hat&#39;, &#39;we&#39;, &#39;like&#39;, &#39;&quot;the little cat&quot;&#39;]
 
-
 示例: https:&#47;&#47;regex101.com&#47;r&#47;l8hkqi&#47;1</p>2020-06-15</li><br/><li><span>奕</span> 👍（17） 💬（5）<p>老师，对于文中的这个语句
 regex.findall(r&#39;xy{1,3}+z&#39;, &#39;xyyz&#39;)
 
-这里是独占模式，不进行回溯。这里在尽可能多的匹配第三个 y的时候匹配失败，不应该是直接匹配失败 返回空数组吗？ 怎么是返回 xyyz 呢？ 如果返回 xyyz 不就进行回溯了吗？</p>2020-06-15</li><br/><li><span>BillionY</span> 👍（13） 💬（6）<p>\w+|“[^”]*”   
+这里是独占模式，不进行回溯。这里在尽可能多的匹配第三个 y的时候匹配失败，不应该是直接匹配失败 返回空数组吗？ 怎么是返回 xyyz 呢？ 如果返回 xyyz 不就进行回溯了吗？</p>2020-06-15</li><br/><li><span>BillionY</span> 👍（13） 💬（6）<p>\w+|“[^”]*”  
 \w+|“[\w\s]+?
 \w+|“.+?”
 还有第四种方法吗?</p>2020-06-15</li><br/><li><span>苦行僧</span> 👍（7） 💬（3）<p>w+|“[^”]+”, w+ 看懂了, 但 后面的没看懂?</p>2020-08-13</li><br/><li><span>William</span> 👍（5） 💬（1）<p>js版
-```javascript
+
+````javascript
 let str = `we found &quot;the little cat&quot; is in the hat, we like &quot;the little cat&quot;`
 let re = new RegExp(&#47;&quot;[^&quot;]+&quot;|\w+&#47;, &#39;g&#39;)
 let res = str.match(re)
@@ -251,7 +250,7 @@ console.log(res)
 3. 因为这里没有加问号，属于贪婪匹配，正则中的 y 继续入栈，匹配上 text 中的第三个字符 y
 4. 正则中的 y 继续入栈，但是这个时候 y 和 z 不匹配，执行回溯，就是当前正则的第三个 y 出栈
 5. 用范围量词后的字符 z 继续入栈匹配，匹配上 text 的最后一个字符，完成匹配</p>2020-06-15</li><br/><li><span>Robot</span> 👍（4） 💬（1）<p>建议老师统一下正则的运行环境。</p>2020-06-16</li><br/><li><span>飞</span> 👍（3） 💬（2）<p>[a-z]+|“[^“]+”</p>2020-06-15</li><br/><li><span>中年男子</span> 👍（3） 💬（1）<p>还有就是文章中的例子： xy{1,3}+yz 去匹配 xyyz，我的理解是用y{1,3}尽可能多的去匹配， 也就是 xyy之后，用第三个y 去匹配z，因为不回溯，到这里就失败了， 还没到正则中z前面那个y。
-还请解惑。</p>2020-06-15</li><br/><li><span>简简单单</span> 👍（2） 💬（3）<p>老师我有个疑问求解答: 
+还请解惑。</p>2020-06-15</li><br/><li><span>简简单单</span> 👍（2） 💬（3）<p>老师我有个疑问求解答:
 
 正则: \w+|“.+?”
 字符串 : we found “the little cat” is in the hat, we like “the little cat”
@@ -275,3 +274,4 @@ so easy</p>2020-06-18</li><br/><li><span>中年男子</span> 👍（2） 💬（
 [a-zA-Z]+|“.+? 匹配出来10个
 ”但是为什么我用.+|“.+?”把整个句子都匹配上了呢？</p>2021-07-27</li><br/><li><span>洛奇</span> 👍（1） 💬（1）<p>本人仅看这篇文章后，还是不明白为什么“匹配越南店铺名”的例子会有回溯？从正则表达式xy*yz匹配xyz的例子可以大概明白什么是回溯，但是匹配店铺名的例子中，两个符合条件的组合是“或”的关系，而不是xy*yz里的y*和y的前后关系，而且正则头尾已经用^和$包裹了，为什么也会产生回溯呢？</p>2020-07-03</li><br/>
 </ul>
+````

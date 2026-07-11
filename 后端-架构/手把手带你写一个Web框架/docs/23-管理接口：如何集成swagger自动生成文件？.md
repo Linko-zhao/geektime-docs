@@ -311,7 +311,7 @@ swagger-ui是一个HTML + JSON接口的页面，那么里面分别有动态内�
 
 要一个中间件就行了，就是第7行 import中引入的 github.com/swaggo/gin-swagger 库。它通过创建一个Gin的中间件，将动态和静态的请求都承接起来，静态请求就请求到swaggo/files库，动态请求就请求到docs库中。
 
-所以在路由中，我们\**创建一个路由/swagger/any，就可以获取swagger-ui 并且读取swaggo 创建的doc.go 文件内容了*。
+所以在路由中，我们\*_创建一个路由/swagger/any，就可以获取swagger-ui 并且读取swaggo 创建的doc.go 文件内容了_。
 
 ```go
 r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

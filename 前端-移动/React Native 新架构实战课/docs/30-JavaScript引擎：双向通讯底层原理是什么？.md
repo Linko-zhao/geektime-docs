@@ -121,8 +121,8 @@ JSContext 是 JavaScript 的执行环境。是的，它就是存放 JavaScript �
 有过 JavaScript 开发经验的同学，肯定接触过 this。在 JavaScript 代码中，this 指的就是 JSContext。咱们可以写个例子演示一下。
 
 ```plain
-// JavaScript 
-var num0 = 0; 
+// JavaScript
+var num0 = 0;
 this.num0 // 0
 
 // Objective-C
@@ -139,7 +139,7 @@ context[@"num0"] //0
 如果你好奇，context 究竟长什么样子，你也可以把它打印出来。
 
 ```plain
-// JavaScript 
+// JavaScript
 console.log(this);
 ```
 
@@ -197,10 +197,10 @@ NSLog(@"10+20:%d", [addResult toInt32]); // 10+20=30
 
 ```plain
 // ①
-context[@"subtract"] =  ^(double num1, double num2) { 
+context[@"subtract"] =  ^(double num1, double num2) {
 
     // ③
-  return num1 - num2; 
+  return num1 - num2;
 };
 
 

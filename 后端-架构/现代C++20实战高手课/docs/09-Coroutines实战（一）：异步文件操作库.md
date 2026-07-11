@@ -366,7 +366,7 @@ namespace asyncpp::task {
     }
  
     /* 默认的AsyncTaskSuspender（当任务函数返回类型为void时的特化版本）
-     * 
+     *
      * 当f的返回类型为void时，函数f没有返回值。因此，我们定义了一个函数返回类型为void的特化版本，
      * 在该版本中构造的AsyncTask对象的handler调用用户函数f后，直接调用resumer唤醒协程，
      * 不会将f的返回值存储到Awaitable对象中。

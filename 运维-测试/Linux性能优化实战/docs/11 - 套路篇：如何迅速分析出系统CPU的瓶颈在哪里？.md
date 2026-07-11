@@ -169,7 +169,6 @@ CPU 使用率描述了非空闲时间占总 CPU 时间的百分比，根据 CPU 
 是不是就是对应的可中断进程(软中断)和不可中断进程(硬中断)，这块有点疑惑</p>2018-12-14</li><br/><li><span>划时代</span> 👍（4） 💬（1）<p>整体回顾复习了实践案例，实践练习消化，CPU性能指标关系详解图很赞。</p>2018-12-14</li><br/><li><span>男人十八一枝花</span> 👍（2） 💬（1）<p>top - 22:08:46 up 86 days, 16:05,  2 users,  load average: 0.00, 0.00, 0.00
 Tasks:  89 total,   1 running,  53 sleeping,   0 stopped,   0 zombie
 
-
 老师，请问一下，我在搬瓦工上买的云主机上执行top命令，Task那一行running（1）+sleeping（53）+stopped+zombie的总数并不等于total（89）.请问这是为什么？</p>2018-12-18</li><br/><li><span>2xshu</span> 👍（2） 💬（2）<p>老师你好，非常感谢你能回答之前我提出的问题。我现在有个问题想请教下。
 机器情况如下：
 [root@10.xx.xx.xxx ~]# numactl -H
@@ -181,9 +180,9 @@ node 1 cpus: 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31
 node 1 size: 131072 MB
 node 1 free: 119623 MB
 node distances:
-node   0   1 
-  0:  10  21 
-  1:  21  10 
+node 0 1
+0: 10 21
+1: 21 10
 
 服务器任务情况：
 在这台服务器上运行了两百个进程，每个进程任务是平级的，每个进程基本是下载文件任务。

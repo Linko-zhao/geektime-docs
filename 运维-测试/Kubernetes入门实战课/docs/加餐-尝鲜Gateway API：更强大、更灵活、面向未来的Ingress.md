@@ -502,7 +502,6 @@ HTTPRoute --- Ingress # 路由规则集
 HTTPRoute 指定了 Controller（parentRefs.0.name -&gt; Gateway 对象），而
 Ingress 指定的是 Controller Class （spec.ingressClassName -&gt; Ingress Class 对象）
 
-
 为什么这里会不一致呢？有种割裂感。
 是不是因为 Ingress Class 后面才引入的，所以在 Ingress 里明确设置 ingressClassName 指向 Ingress Class 以支持新特性呢..</p>2024-09-06</li><br/><li><span>六月</span> 👍（0） 💬（1）<p>看完本章马上去试了一下😂发现我的集群是1.23.17版本的。。。</p>2024-02-06</li><br/><li><span>Geek_479239</span> 👍（0） 💬（1）<p>居然读到了最新的文章，新公司在用k8s开发，正好学习实战下</p>2023-12-01</li><br/>
 </ul>

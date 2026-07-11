@@ -272,8 +272,8 @@ file_extractor.update(
 filename_fn = lambda filename: {'file_name': filename}
 
 receipt_reader = SimpleDirectoryReader(
-    input_dir='./data/receipts', 
-    file_extractor=file_extractor, 
+    input_dir='./data/receipts',
+    file_extractor=file_extractor,
     file_metadata=filename_fn,
 )
 receipt_documents = receipt_reader.load_data()
@@ -358,6 +358,7 @@ llama-index的功能非常强大，并且源代码里也专门提供了示例部
 
 1. 官方文档：[https://gpt-index.readthedocs.io/en/latest/](https://gpt-index.readthedocs.io/en/latest/)
 2. 源码以及示例：[https://github.com/jerryjliu/llama\_index](https://github.com/jerryjliu/llama_index)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Owen</span> 👍（7） 💬（0）<p>截止到目前，最新能运行的代码
 
@@ -372,8 +373,8 @@ from llama_index.core.node_parser import SentenceSplitter
 documents = SimpleDirectoryReader(input_dir=&quot;data&quot;).load_data() # 只能填写文件夹，不能具体到文件
 
 service_context = ServiceContext.from_defaults(
-    llm=ChatOpenAI(temperature=0, model_name=&quot;gpt-3.5-turbo&quot;, max_tokens=1000, n=1),
-    node_parser=SentenceSplitter(chunk_size=512, chunk_overlap=20),
+llm=ChatOpenAI(temperature=0, model_name=&quot;gpt-3.5-turbo&quot;, max_tokens=1000, n=1),
+node_parser=SentenceSplitter(chunk_size=512, chunk_overlap=20),
 )
 
 index = SummaryIndex.from_documents(documents = documents, service_context = service_context)
@@ -386,14 +387,15 @@ from langchain.chat_models import ChatOpenAI
 from langchain.text_splitter import SpacyTextSplitter
 from llama_index import ListIndex, LLMPredictor, ServiceContext
 from llama_index import (
-    VectorStoreIndex,
-    get_response_synthesizer,
+VectorStoreIndex,
+get_response_synthesizer,
 )
 from llama_index.retrievers import VectorIndexRetriever
 from llama_index.query_engine import RetrieverQueryEngine
 from llama_index.node_parser import SimpleNodeParser
 
 # define LLM
+
 llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name=&quot;gpt-3.5-turbo&quot;, max_tokens=1024))
 
 text_splitter = SpacyTextSplitter(pipeline=&quot;zh_core_web_sm&quot;, chunk_size = 2048)
@@ -413,16 +415,23 @@ print(response)
 import openai, os
 from llama_index import GPTVectorStoreIndex, SimpleDirectoryReader
 os.environ[&quot;OPENAI_API_KEY&quot;] = &#39;&#39;
+
 # 加载 documents
+
 documents = SimpleDirectoryReader(&#39;.&#47;data&#47;mr_fujino&#39;).load_data()
 index = GPTVectorStoreIndex.from_documents(documents)
 index.storage_context.persist(&#39;index_mr_fujino&#39;)
 
 # 从磁盘重新加载：
+
 from llama_index import StorageContext, load_index_from_storage
+
 # rebuild storage context
+
 storage_context = StorageContext.from_defaults(persist_dir=&quot;.&#47;index_mr_fujino&quot;)
+
 # load index
+
 index = load_index_from_storage(storage_context)
 query_engine = index.as_query_engine()
 response = query_engine.query(&quot;鲁迅先生在日本学习医学的老师是谁？&quot;)
@@ -434,12 +443,12 @@ from llama_index import GPTSimpleVectorIndex,download_loader
 DatabaseReader = download_loader(&#39;DatabaseReader&#39;)
 
 reader = DatabaseReader(
-    scheme = &quot;mysql&quot;, # Database Scheme
-    host = &quot;localhost&quot;, # Database Host
-    port = &quot;3306&quot;, # Database Port
-    user = &quot;martin&quot;, # Database User
-    password = &quot;xxxxxx&quot;, # Database Password
-    dbname = &quot;martin&quot;, # Database Name
+scheme = &quot;mysql&quot;, # Database Scheme
+host = &quot;localhost&quot;, # Database Host
+port = &quot;3306&quot;, # Database Port
+user = &quot;martin&quot;, # Database User
+password = &quot;xxxxxx&quot;, # Database Password
+dbname = &quot;martin&quot;, # Database Name
 )
 
 query = f&quot;&quot;&quot;
@@ -450,7 +459,6 @@ documents = reader.load_data(query=query)
 print(documents)</p>2023-04-12</li><br/><li><span>Oxygen Au 昕</span> 👍（6） 💬（1）<p>
 response = list_index.query(&quot;下面鲁迅先生以第一人称‘我’写的内容，请你用中文总结一下:&quot;, response_mode=&quot;tree_summarize&quot;)
 print(response)
-
 
 上面这段代码报错，AttributeError: &#39;GPTListIndex&#39; object has no attribute &#39;query&#39; ， 我用的是llama-index 0.6.1
 

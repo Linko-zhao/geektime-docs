@@ -34,12 +34,12 @@ def get_response(prompt, model=COMPLETION_MODEL):
         max_tokens=512,
         n=1,
         stop=None,
-        temperature=0.0,        
+        temperature=0.0,
     )
     message = completions.choices[0].text
     return message
 
-print(get_response(prompt)) 
+print(get_response(prompt))
 ```
 
 输出结果：
@@ -53,7 +53,7 @@ NotFoundError: Error code: 404 - {'error': {'message': 'The model `text-davinci-
 ```python
 NEW_MODEL = "gpt-3.5-turbo-instruct"
 
-print(get_response(prompt, model=NEW_MODEL)) 
+print(get_response(prompt, model=NEW_MODEL))
 ```
 
 输出结果：
@@ -110,12 +110,12 @@ def get_chat_response(prompt, model=CHAT_COMPLETION_MODEL):
         max_tokens=512,
         n=1,
         stop=None,
-        temperature=0.7,        
+        temperature=0.7,
     )
     message = response.choices[0].message.content
     return message
 
-print(get_chat_response(prompt)) 
+print(get_chat_response(prompt))
 ```
 
 输出结果：
@@ -153,7 +153,7 @@ Hi,
 Could you write me a title, 5 selling points, and a price range for a product called "工厂现货PVC充气青蛙夜市地摊热卖充气玩具发光蛙儿童水上玩具" in English in json format?
 """
 
-print(get_chat_response(prompt)) 
+print(get_chat_response(prompt))
 ```
 
 输出结果：
@@ -195,8 +195,8 @@ def get_json_response(prompt, model=CHAT_COMPLETION_MODEL):
         max_tokens=512,
         n=1,
         stop=None,
-        temperature=0.7, 
-        response_format={ "type": "json_object" },      
+        temperature=0.7,
+        response_format={ "type": "json_object" },
     )
     message = response.choices[0].message.content
     return message
@@ -222,7 +222,7 @@ The json format should be like this:
 
 """
 
-print(get_json_response(prompt)) 
+print(get_json_response(prompt))
 ```
 
 输出结果：
@@ -282,8 +282,8 @@ def get_fingerprint_response(prompt, seed=42, model=CHAT_COMPLETION_MODEL):
         n=1,
         stop=None,
         seed=seed,
-        temperature=0, 
-        response_format={ "type": "json_object" },      
+        temperature=0,
+        response_format={ "type": "json_object" },
     )
     message = response.choices[0].message.content
     fingerpring = response.system_fingerprint
@@ -418,7 +418,7 @@ True
 
 欢迎你把你试验的成果分享到评论区，也欢迎你把这节课的内容分享给需要的朋友，我们下节课再见！
 <div><strong>精选留言（3）</strong></div><ul>
-<li><span>王平</span> 👍（1） 💬（1）<p>老师如果需要输出是一种自定义的数据结构，有什么好的方法吗？</p>2024-02-22</li><br/><li><span>HXL</span> 👍（0） 💬（0）<p>老师 您好 ! 最近遇到个问题 调用openai的接口 发现一直超时不知道是啥原因 ? 
+<li><span>王平</span> 👍（1） 💬（1）<p>老师如果需要输出是一种自定义的数据结构，有什么好的方法吗？</p>2024-02-22</li><br/><li><span>HXL</span> 👍（0） 💬（0）<p>老师 您好 ! 最近遇到个问题 调用openai的接口 发现一直超时不知道是啥原因 ?
 
 &quot;cause: FetchError: request to https:&#47;&#47;api.openai.com&#47;v1&#47;chat&#47;completions failed, reason:&quot;</p>2024-04-11</li><br/><li><span>Toni</span> 👍（0） 💬（0）<p>试了一下，以期得到每次输出的结果都完全一样，这是概率模型输出的难点。
 调用的参数是 temperature=0.0, seed=12345, 相同的 fingerprint。试了多次，一致性达到前4个卖点都相同已是我得到的最佳结果。
@@ -426,29 +426,29 @@ True
 结果1:
 fp_2b778c6b35
 {
-    &quot;title&quot;: &quot;Inflatable Frog Night Market Hot Selling Toy with LED for Kids&quot;,
-    &quot;selling_points&quot;: [
-        &quot;工厂现货，质量可靠&quot;,
-        &quot;可充气，易携带&quot;,
-        &quot;发光设计，吸引眼球&quot;,
-        &quot;适合水上玩耍，增加乐趣&quot;,
-        &quot;可作为地摊销售，商机多&quot;
-    ],
-    &quot;price_range&quot;: &quot;$10 - $20&quot;
+&quot;title&quot;: &quot;Inflatable Frog Night Market Hot Selling Toy with LED for Kids&quot;,
+&quot;selling_points&quot;: [
+&quot;工厂现货，质量可靠&quot;,
+&quot;可充气，易携带&quot;,
+&quot;发光设计，吸引眼球&quot;,
+&quot;适合水上玩耍，增加乐趣&quot;,
+&quot;可作为地摊销售，商机多&quot;
+],
+&quot;price_range&quot;: &quot;$10 - $20&quot;
 }
 
 结果2:
 fp_2b778c6b35
 {
-    &quot;title&quot;: &quot;Inflatable Frog Night Market Hot Selling Toy with LED for Kids&quot;,
-    &quot;selling_points&quot;: [
-        &quot;工厂现货，质量可靠&quot;,
-        &quot;可充气，易携带&quot;,
-        &quot;发光设计，吸引眼球&quot;,
-        &quot;适合水上玩耍，增加乐趣&quot;,
-        &quot;可用于夜市地摊销售&quot;
-    ],
-    &quot;price_range&quot;: &quot;$10 - $20&quot;
+&quot;title&quot;: &quot;Inflatable Frog Night Market Hot Selling Toy with LED for Kids&quot;,
+&quot;selling_points&quot;: [
+&quot;工厂现货，质量可靠&quot;,
+&quot;可充气，易携带&quot;,
+&quot;发光设计，吸引眼球&quot;,
+&quot;适合水上玩耍，增加乐趣&quot;,
+&quot;可用于夜市地摊销售&quot;
+],
+&quot;price_range&quot;: &quot;$10 - $20&quot;
 }
 
 用英文输出，一致性也无明显提高。

@@ -209,14 +209,13 @@ Chromium为了解决任务饿死的问题，给每个队列设置了执行权重
       });
     });
 
-  &lt;&#47;script&gt;
+&lt;&#47;script&gt;
 &lt;&#47;body&gt;
 &lt;&#47;html&gt;
-
 
 这段代码在Chrome执行之后，元素是从右往左移动的，说明是先绘制然后才执行的rAf
 在火狐执行之后相反，是从右往左移动的
 
-老师能解答一下吗</p>2021-07-05</li><br/><li><span>暖桔灯笼</span> 👍（3） 💬（1）<p>老师，在 宏任务与微任务 那一章的讲解中，下面有一个您的回答说在浏览器的实现中目前只实现了一个消息队列和一个延迟队列？这和这里第二次迭代--根据消息类型来实现消息队列 说法是不是冲突？如果确实实现了多个消息队列，会不会跟之前说的&quot;循环系统的一个循环中，先从消息队列头部取出一个任务执行，该任务执行完后，再去延迟队列中找到所有的过期任务依次执行完&quot;有冲突？我现在有点迷惑浏览器到底实现了几个几个消息队列？囧。。。</p>2020-05-11</li><br/><li><span>神三元</span> 👍（2） 💬（13）<p>讲的有问题，rAF的回调在微任务执行完成之后才会进行</p>2020-03-21</li><br/><li><span>猫叔</span> 👍（2） 💬（3）<p>老师，通过window.postMessage 发送的消息执行回调也是在空闲时间内执行的吗。因为我看到react框架为了模拟兼容requestIdleCallback。使用了postMessage</p>2019-12-04</li><br/><li><span>陈坚泓</span> 👍（1） 💬（0）<p>标题的 setTimeOut 是固定把小写的o改为大写的 O 嘛   setTimeout</p>2022-11-14</li><br/><li><span>Geek_aa1c31</span> 👍（1） 💬（1）<p>这里有一篇将eventloop，rAF, rIC的文章， 强烈建议可以去看一下。
+老师能解答一下吗</p>2021-07-05</li><br/><li><span>暖桔灯笼</span> 👍（3） 💬（1）<p>老师，在 宏任务与微任务 那一章的讲解中，下面有一个您的回答说在浏览器的实现中目前只实现了一个消息队列和一个延迟队列？这和这里第二次迭代--根据消息类型来实现消息队列 说法是不是冲突？如果确实实现了多个消息队列，会不会跟之前说的&quot;循环系统的一个循环中，先从消息队列头部取出一个任务执行，该任务执行完后，再去延迟队列中找到所有的过期任务依次执行完&quot;有冲突？我现在有点迷惑浏览器到底实现了几个几个消息队列？囧。。。</p>2020-05-11</li><br/><li><span>神三元</span> 👍（2） 💬（13）<p>讲的有问题，rAF的回调在微任务执行完成之后才会进行</p>2020-03-21</li><br/><li><span>猫叔</span> 👍（2） 💬（3）<p>老师，通过window.postMessage 发送的消息执行回调也是在空闲时间内执行的吗。因为我看到react框架为了模拟兼容requestIdleCallback。使用了postMessage</p>2019-12-04</li><br/><li><span>陈坚泓</span> 👍（1） 💬（0）<p>标题的 setTimeOut 是固定把小写的o改为大写的 O 嘛 setTimeout</p>2022-11-14</li><br/><li><span>Geek_aa1c31</span> 👍（1） 💬（1）<p>这里有一篇将eventloop，rAF, rIC的文章， 强烈建议可以去看一下。
 https:&#47;&#47;developpaper.com&#47;in-depth-analysis-of-event-loop-and-browser-rendering-frame-animation-idle-callback-animation-demonstration&#47;</p>2022-07-03</li><br/><li><span>Geek_88dd24</span> 👍（1） 💬（1）<p>老师有个问题，如果浏览器在下一次收到vsyncA信号时，上次绘制还没完成，那么浏览器会怎么处理这个vsyncA</p>2022-01-26</li><br/>
 </ul>

@@ -89,7 +89,7 @@ from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 chain_map = {}
 for info in prompt_infos:
-    prompt = PromptTemplate(template=info['template'], 
+    prompt = PromptTemplate(template=info['template'],
                             input_variables=["input"])
     print("目标提示:\n",prompt)
     chain = LLMChain(llm=llm, prompt=prompt,verbose=True)
@@ -100,17 +100,17 @@ for info in prompt_infos:
 
 ```plain
 目标提示:
-input_variables=['input'] 
-output_parser=None partial_variables={} 
-template='你是一个经验丰富的园丁，擅长解答关于养花育花的问题。\n                        下面是需要你来回答的问题:\n                        
-{input}' template_format='f-string' 
+input_variables=['input']
+output_parser=None partial_variables={}
+template='你是一个经验丰富的园丁，擅长解答关于养花育花的问题。\n                        下面是需要你来回答的问题:\n                       
+{input}' template_format='f-string'
 validate_template=True
 
 目标提示:
-input_variables=['input'] 
-output_parser=None partial_variables={} 
-template='你是一位网红插花大师，擅长解答关于鲜花装饰的问题。\n                        下面是需要你来回答的问题:\n                        
-{input}' template_format='f-string' 
+input_variables=['input']
+output_parser=None partial_variables={}
+template='你是一位网红插花大师，擅长解答关于鲜花装饰的问题。\n                        下面是需要你来回答的问题:\n                       
+{input}' template_format='f-string'
 validate_template=True
 ```
 
@@ -132,7 +132,7 @@ router_prompt = PromptTemplate(
     input_variables=["input"],
     output_parser=RouterOutputParser(),)
 print("路由提示:\n",router_prompt)
-router_chain = LLMRouterChain.from_llm(llm, 
+router_chain = LLMRouterChain.from_llm(llm,
                                        router_prompt,
                                        verbose=True)
 ```
@@ -165,8 +165,8 @@ flower_decoration: 适合回答关于鲜花装饰的问题
 << OUTPUT >>
 
 路由提示:
-input_variables=['input'] output_parser=RouterOutputParser(default_destination='DEFAULT', next_inputs_type=<class 'str'>, next_inputs_inner_key='input') 
-partial_variables={} 
+input_variables=['input'] output_parser=RouterOutputParser(default_destination='DEFAULT', next_inputs_type=<class 'str'>, next_inputs_inner_key='input')
+partial_variables={}
 template='Given a raw text input to a language model select the model prompt best suited for the input. You will be given the names of the available prompts and a description of what the prompt is best suited for. You may also revise the original input if you think that revising it will ultimately lead to a better response from the language model.\n\n
 << FORMATTING >>\n
 Return a markdown code snippet with a JSON object formatted to look like:\n```json\n{{\n "destination": string \\ name of the prompt to use or "DEFAULT"\n    "next_inputs": string \\ a potentially modified version of the original input\n}}\n```\n\n
@@ -174,8 +174,8 @@ REMEMBER: "destination" MUST be one of the candidate prompt names specified belo
 REMEMBER: "next_inputs" can just be the original input if you don\'t think any modifications are needed.\n\n<< CANDIDATE PROMPTS >>\n
 flower_care: 适合回答关于鲜花护理的问题\n
 flower_decoration: 适合回答关于鲜花装饰的问题\n\n
-<< INPUT >>\n{input}\n\n<< OUTPUT >>\n' 
-template_format='f-string' 
+<< INPUT >>\n{input}\n\n<< OUTPUT >>\n'
+template_format='f-string'
 validate_template=True
 ````
 
@@ -255,7 +255,7 @@ validate_template=True
 ```plain
 # 构建默认链
 from langchain.chains import ConversationChain
-default_chain = ConversationChain(llm=llm, 
+default_chain = ConversationChain(llm=llm,
                                   output_key="text",
                                   verbose=True)
 ```
@@ -348,6 +348,7 @@ chain = MultiPromptChain(
 
 1. 代码，RouterChain和MultiRouteChain的[实现细节](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/chains/router/base.py)
 2. 代码，MultiPromptChain的[实现细节](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/chains/router/multi_prompt.py)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>在路上</span> 👍（19） 💬（1）<p>ConversationChain和LLMChain的区别在于，ConversationChain有memory成员变量，能保留对话上下文，而LLMChain不行。在源码上，跟踪ConversationBufferMemory.load_memory_variables()可知，对话上下文会作为inputs的一部分传入PromptTemplate，成为llm的提示词。</p>2023-09-22</li><br/><li><span>阶前梧叶</span> 👍（5） 💬（1）<p>在这种路由链中，返回的数据也想做结构化json解析，那最终llm返回的结果，如何去确定是哪个chain返回的？继而选择对应的parser处理</p>2023-09-25</li><br/><li><span>鲸鱼</span> 👍（4） 💬（1）<p>我发现使用MultiPromptChain.from_prompts方法会更简洁，其内部实现就是老师上面列出的内容类似
 flower_care_template = &quot;&quot;&quot;
@@ -378,17 +379,17 @@ print(chain.run(&quot;如何为玫瑰浇水？&quot;))</p>2023-10-27</li><br/><l
 The above exception was the direct cause of the following exception:
 。。。
 
- File &quot;&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;langchain&#47;utils&#47;__init__.py&quot;, line 15, in &lt;module&gt;
-    from langchain.utils.math import cosine_similarity, cosine_similarity_top_k
-  File &quot;&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;langchain&#47;utils&#47;math.py&quot;, line 5, in &lt;module&gt;
-    import numpy as np
-  File &quot;&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;numpy&#47;__init__.py&quot;, line 135, in &lt;module&gt;
-    raise ImportError(msg) from e
+File &quot;&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;langchain&#47;utils&#47;**init**.py&quot;, line 15, in &lt;module&gt;
+from langchain.utils.math import cosine_similarity, cosine_similarity_top_k
+File &quot;&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;langchain&#47;utils&#47;math.py&quot;, line 5, in &lt;module&gt;
+import numpy as np
+File &quot;&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;numpy&#47;**init**.py&quot;, line 135, in &lt;module&gt;
+raise ImportError(msg) from e
 ImportError: Error importing numpy: you should not try to import numpy from
-        its source directory; please exit the numpy source tree, and relaunch
-        your python interpreter from there.
+its source directory; please exit the numpy source tree, and relaunch
+your python interpreter from there.
 
-  </p>2023-12-05</li><br/><li><span>SH</span> 👍（0） 💬（1）<p>这节里面的问题，如果使用 当前的 ChatGPT 我们如果直接向他提问的时候，他的内部是否已经帮助我调整好了相关的提示模版，通过相关的链 来回答相关的问题呢？  
+  </p>2023-12-05</li><br/><li><span>SH</span> 👍（0） 💬（1）<p>这节里面的问题，如果使用 当前的 ChatGPT 我们如果直接向他提问的时候，他的内部是否已经帮助我调整好了相关的提示模版，通过相关的链 来回答相关的问题呢？
 
 实际测试了一下，没有提示模板问，与加了提示模板（告诉他是个专门），两种方式输出的确会有些差异；</p>2023-11-05</li><br/><li><span>sunny</span> 👍（0） 💬（4）<p>文章中的这一段话：
 （RouterChain，也叫路由链，能动态选择用于给定输入的下一个链。我们会根据用户的问题内容，首先使用路由器链确定问题更适合哪个处理模板，然后将问题发送到该处理模板进行回答。如果问题不适合任何已定义的处理模板，它会被发送到默认链。）
@@ -396,8 +397,9 @@ ImportError: Error importing numpy: you should not try to import numpy from
 （比如写个prompt:
 请理解这一段话{变量=用户输入},判断这段话是想进行[鲜花养护]还是[鲜花培育];
 ##若是鲜花养护请输出&quot;A&quot;,若是鲜花培育输出”B“）
-这样得到到了A或B判断出了用户意图走哪个目标链</p>2023-10-16</li><br/><li><span>Geek_19a2eb</span> 👍（0） 💬（2）<p>就是当输入的内容匹配不上其他的链的时候到默认路由这报错  其他的链都是正常的  报错信息如下，麻烦老师帮忙看下 刚入门的小白，多多理解：OutputParserException: Parsing text
-```json
+这样得到到了A或B判断出了用户意图走哪个目标链</p>2023-10-16</li><br/><li><span>Geek_19a2eb</span> 👍（0） 💬（2）<p>就是当输入的内容匹配不上其他的链的时候到默认路由这报错 其他的链都是正常的 报错信息如下，麻烦老师帮忙看下 刚入门的小白，多多理解：OutputParserException: Parsing text
+
+````json
 {
     &quot;destination&quot;: &quot;DEFAULT&quot;,
     &quot;next_inputs&quot;: &quot;如何考入哈佛大学?&quot;
@@ -413,3 +415,4 @@ OutputParserException: Parsing text
  raised following error:
 Got invalid JSON object. Error: Expecting value: line 1 column 1 (char 0)</p>2023-10-16</li><br/><li><span>漏网之渔</span> 👍（0） 💬（1）<p>RouterChain中每个分支chain的输入参数要求是相同的么，可以使用不同数量的参数么</p>2023-10-10</li><br/><li><span>夏落de烦恼</span> 👍（0） 💬（1）<p>langchain有集成文心一言么？这个案例能用在文心一言上么？</p>2023-10-07</li><br/><li><span>zhouqin</span> 👍（0） 💬（1）<p>建议有开发经验的同学，先通过gpt把作者文章核心点精炼出来。然后用作者通过LangChain模板跑出的提示词，通过gpt或者claude做验证。多跑几遍就能感觉到大模型的思维方式。最后再去看代码。事半功倍、、：》</p>2023-10-05</li><br/><li><span>Geek_7ca963</span> 👍（0） 💬（1）<p>老师，Agent 和 Chain 到底有啥区别 ？ chain 似乎也可以做 act，甚至判断用途</p>2023-09-30</li><br/><li><span>Webber</span> 👍（0） 💬（2）<p>老师啥时候更新agent的内容啊，我在用langchain做一个agent。遇到一个问题，就是在最开始输入的是一个query，比如：帮我从上海中心大厦导航到上海虹桥火车站，agent此时决定去调用高德导航这个tool，高德导航tool接收的输入是出发地和目的地，那么这个出发地和目的地是怎么解析出来传给高德导航tool的呢，是在自定义tool的description中写prompt让模型提取出发地和目的地两个实体吗，不懂怎么才能给想要调用的tool传递tool需要的参数。如果有10个tool，每个tool接收的输入参数都不一样，不知道怎么才能实现给指定tool传递特定参数的目标。</p>2023-09-22</li><br/>
 </ul>
+````

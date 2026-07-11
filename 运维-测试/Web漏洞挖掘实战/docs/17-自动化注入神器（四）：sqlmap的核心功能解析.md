@@ -51,7 +51,7 @@ if testSqlInj:
 # 当启发式注入测试失败，就跳过该参数。
         if check != HEURISTIC_TEST.POSITIVE:
             if conf.smart or (kb.ignoreCasted and check == HEURISTIC_TEST.CASTED):
-# ... 
+# ...
                continue
 # ...
 # 通过启发式注入测试后，就会进入到SQL注入测试阶段。
@@ -346,7 +346,7 @@ if trueResult:
         if falseResult:
             continue
 
-# ...   
+# ...
         injectable = True
 ```
 

@@ -921,7 +921,7 @@ use tracing_subscriber;
 use reqwest;
 却可以直接使用？</p>2021-09-02</li><br/><li><span>pedro</span> 👍（21） 💬（4）<p>最让人无法接受的点：
 
-```shell
+````shell
 du -h -d 1 .&#47;target
 395M	.&#47;target&#47;rls
 901M	.&#47;target&#47;debug
@@ -945,10 +945,9 @@ message Spec {
     PaddingBottom  paddingBottom = 8; &#47;&#47; 填充图片
   }
 }
-```
+````
 
 2. 定义新的 spec然后为 spec 实现 SpecTransform trait 和一些辅助函数
-
 
 ```rust
 &#47;&#47; File: 在文件 `pb&#47;mod.rs` 中
@@ -962,7 +961,9 @@ impl Spec {
     }
 }
 ```
+
 3. 最后在 Engine 中使用 spec
+
 ```rust
 impl Engine for Photon {
     fn apply(&amp;mut self, specs: &amp;[Spec]) {
@@ -981,8 +982,10 @@ impl SpecTransform&lt;&amp;PaddingBottom&gt; for Photon {
     }
 }
 ```
+
 4. 在 main.rs 函数中使用
-```rust
+
+````rust
 &#47;&#47; 调试辅助函数
 fn print_test_url(url: &amp;str) {
     use std::borrow::Borrow;
@@ -1026,3 +1029,4 @@ impl SpecTransform&lt;&amp;Oil&gt; for Photon {
     let spec4 = Spec::new_oil(4, 55.0);
     let image_spec = ImageSpec::new(vec![spec1, spec2, spec3, spec4]);</p>2022-01-08</li><br/><li><span>ㅤ</span> 👍（2） 💬（1）<p>陈老师，我想问一下  prost这个依赖的tag是有什么作用么？看了文档也不大理解。</p>2021-09-10</li><br/>
 </ul>
+````

@@ -197,11 +197,12 @@ FAA: 280ms</p>2019-09-04</li><br/><li><span>潘政宇</span> 👍（0） 💬（
 </p>2019-09-03</li><br/><li><span>姜戈</span> 👍（13） 💬（0）<p>JAVA中的FAA和CAS: FAA就是用CAS实现的。
 
 public final int getAndAddInt(Object var1, long var2, int var4) {
-        int var5;
-        do {
-            var5 = this.getIntVolatile(var1, var2);
-        } while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));
+int var5;
+do {
+var5 = this.getIntVolatile(var1, var2);
+} while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));
 
         return var5;
     }</p>2019-09-03</li><br/><li><span>达文西</span> 👍（11） 💬（1）<p>cas需要注意 aba 问题吧</p>2019-10-10</li><br/>
+
 </ul>

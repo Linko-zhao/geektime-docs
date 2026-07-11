@@ -393,14 +393,13 @@ panic: runtime error: invalid memory address or nil pointer dereference [recover
         panic: runtime error: invalid memory address or nil pointer dereference
 [signal SIGSEGV: segmentation violation code=0x1 addr=0x18 pc=0x6678d2]
 
-
 这是啥原因</p>2022-03-07</li><br/><li><span>芒果少侠</span> 👍（3） 💬（5）<p>迁移完成后，遇到testcase不通过的问题。
 https:&#47;&#47;github.com&#47;gin-gonic&#47;gin&#47;blob&#47;21125bbb3f550dbfa4c64151f7e01f58dd64e2b8&#47;context_test.go#L352
 如果是这个testcase，修改正则中包路径那部分即可（与自己项目go module path保持一致即可）。</p>2021-10-09</li><br/><li><span>tiger</span> 👍（2） 💬（0）<p>感觉整合了gin有点没有了自己写一个框架的感觉，我还是选择了分开放，分别同步了两边的一些方法。示例的框架简陋是简陋，不过一路顺下来思路还是很清晰的，引入了gin有种思路被打断了的感觉。</p>2023-08-12</li><br/><li><span>木小柒</span> 👍（2） 💬（1）<p>DefaultQueryXXX 是不是没有实现 形如: foo.com?a=1&amp;b=bar&amp;c[]=bar 中 c 的获取？
 我看 默认就支持 c=1&amp;c=2&amp;c=3 能获取到 c 的 slice [1, 2, 3]
-但是 c[]=1&amp;c[]=2&amp;c[]=3 是获取不到的，除了自己解析不知道有没有更正常一点的方式</p>2021-10-01</li><br/><li><span>i_chase</span> 👍（1） 💬（0）<p>http.request和response其实没有可扩展的，所以gin没有使用接口吧</p>2022-06-14</li><br/><li><span>🌿</span> 👍（1） 💬（0）<p>hade_request.go,hade_response.go,hade_context.go；类型、结构体、方法等命名可采用Object-C的前缀命名规则</p>2022-04-29</li><br/><li><span>一苇以航</span> 👍（0） 💬（1）<p>?       github.com&#47;gohade&#47;hade&#47;framework&#47;gin&#47;internal&#47;json      [no test files]
-        E:&#47;jikeshijian&#47;xuboyu-hade&#47;framework&#47;gin&#47;gin_integration_test.go:220 +0x9a
+但是 c[]=1&amp;c[]=2&amp;c[]=3 是获取不到的，除了自己解析不知道有没有更正常一点的方式</p>2021-10-01</li><br/><li><span>i_chase</span> 👍（1） 💬（0）<p>http.request和response其实没有可扩展的，所以gin没有使用接口吧</p>2022-06-14</li><br/><li><span>🌿</span> 👍（1） 💬（0）<p>hade_request.go,hade_response.go,hade_context.go；类型、结构体、方法等命名可采用Object-C的前缀命名规则</p>2022-04-29</li><br/><li><span>一苇以航</span> 👍（0） 💬（1）<p>? github.com&#47;gohade&#47;hade&#47;framework&#47;gin&#47;internal&#47;json [no test files]
+E:&#47;jikeshijian&#47;xuboyu-hade&#47;framework&#47;gin&#47;gin_integration_test.go:220 +0x9a
 created by github.com&#47;gohade&#47;hade&#47;framework&#47;gin.TestFileDescriptor in goroutine 223
-        E:&#47;jikeshijian&#47;xuboyu-hade&#47;framework&#47;gin&#47;gin_integration_test.go:218 +0x210   怎么解决？
+E:&#47;jikeshijian&#47;xuboyu-hade&#47;framework&#47;gin&#47;gin_integration_test.go:218 +0x210 怎么解决？
 </p>2024-07-30</li><br/><li><span>void</span> 👍（0） 💬（0）<p>这节的代码并没有把 IRequest 接口的方法都实现呀</p>2021-11-12</li><br/>
 </ul>

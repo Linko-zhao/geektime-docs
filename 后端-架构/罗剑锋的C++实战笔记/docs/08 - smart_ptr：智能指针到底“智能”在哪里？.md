@@ -136,8 +136,8 @@ assert(ptr1 && ptr2);              // 此时两个智能指针均有效
 assert(ptr1 == ptr2);             // shared_ptr可以直接比较
 
 // 两个智能指针均不唯一，且引用计数为2
-assert(!ptr1.unique() && ptr1.use_count() == 2); 
-assert(!ptr2.unique() && ptr2.use_count() == 2); 
+assert(!ptr1.unique() && ptr1.use_count() == 2);
+assert(!ptr2.unique() && ptr2.use_count() == 2);
 ```
 
 shared\_ptr支持安全共享的秘密在于**内部使用了“引用计数”**。
@@ -163,7 +163,7 @@ shared\_ptr支持安全共享的秘密在于**内部使用了“引用计数”*
 你要特别小心对象的析构函数，不要有非常复杂、严重阻塞的操作。一旦shared\_ptr在某个不确定时间点析构释放资源，就会阻塞整个进程或者线程，“整个世界都会静止不动”（也许用过Go的同学会深有体会）。这也是我以前遇到的实际案例，排查起来费了很多功夫，真的是“血泪教训”。
 
 ```
-class DemoShared final      //  危险的类，不定时的地雷   
+class DemoShared final      //  危险的类，不定时的地雷
 {
 public:
     DemoShared() = default;
@@ -278,10 +278,10 @@ Template&lt;class T&gt;
 class AutoPtr
 {
 private:
-    T* m_ptr
+T* m_ptr
 public:
-    AutoPtr(T* ptr):m_ptr(ptr)   {}
-    ~AutoPtr()                          {if(ptr) ptr-&gt;release()}          &#47;&#47;析构函数里去回收对象内存
+AutoPtr(T* ptr):m_ptr(ptr) {}
+~AutoPtr() {if(ptr) ptr-&gt;release()} &#47;&#47;析构函数里去回收对象内存
 }
 那现在使用stl的智能指针能否做到这步。
 还有能否介绍下实际项目开发中的一些使用场景和使用小技巧。</p>2020-07-02</li><br/><li><span>Zivon</span> 👍（3） 💬（1）<p>shared_ptr 与unique_ptr最大区别就在于前者可以多个指针共享一个对象或元素，而后者一块内存空间只能由唯一的一个指针持有。

@@ -59,11 +59,11 @@ public abstract class InputStream {
   public int read(byte b[]) throws IOException {
     return read(b, 0, b.length);
   }
-  
+
   public int read(byte b[], int off, int len) throws IOException {
     //...
   }
-  
+
   public long skip(long n) throws IOException {
     //...
   }
@@ -71,11 +71,11 @@ public abstract class InputStream {
   public int available() throws IOException {
     return 0;
   }
-  
+
   public void close() throws IOException {}
 
   public synchronized void mark(int readlimit) {}
-    
+
   public synchronized void reset() throws IOException {
     throw new IOException("mark/reset not supported");
   }
@@ -91,8 +91,8 @@ public class BufferedInputStream extends InputStream {
   protected BufferedInputStream(InputStream in) {
     this.in = in;
   }
-  
-  //...实现基于缓存的读数据接口...  
+
+  //...实现基于缓存的读数据接口...
 }
 
 public class DataInputStream extends InputStream {
@@ -101,7 +101,7 @@ public class DataInputStream extends InputStream {
   protected DataInputStream(InputStream in) {
     this.in = in;
   }
-  
+
   //...实现读取基本类型数据的接口
 }
 ```
@@ -132,7 +132,7 @@ public class AProxy implements IA {
   public AProxy(IA a) {
     this.a = a;
   }
-  
+
   public void f() {
     // 新添加的代理逻辑
     a.f();
@@ -152,7 +152,7 @@ public class ADecorator implements IA {
   public ADecorator(IA a) {
     this.a = a;
   }
-  
+
   public void f() {
     // 功能增强代码
     a.f();
@@ -174,11 +174,11 @@ public class BufferedInputStream extends InputStream {
   protected BufferedInputStream(InputStream in) {
     this.in = in;
   }
-  
+
   // f()函数不需要增强，只是重新调用一下InputStream in对象的f()
   public void f() {
     in.f();
-  }  
+  }
 }
 ```
 
@@ -199,7 +199,7 @@ public class FilterInputStream extends InputStream {
   public int read(byte b[]) throws IOException {
     return read(b, 0, b.length);
   }
-   
+
   public int read(byte b[], int off, int len) throws IOException {
     return in.read(b, off, len);
   }
@@ -270,10 +270,12 @@ https:&#47;&#47;stackoverflow.com&#47;questions&#47;18618779&#47;differences-bet
 假如说BufferedInputStream类直接继承自InputStream类且没有进行重写，只进行了装饰
 创建一个InputStream is = new BufferedInputStream(new FileInputStream(FilePath));
 此时调用is的没有重写方法(如read方法)时调用的是InputStream类中的read方法，而不是FileInputStream中的read方法，这样的结果不是我们想要的。所以要将方法再包装一次，从而有FilterInputStream类，也是避免代码的重复，多个装饰器只用写一遍包装代码即可。</p>2020-02-26</li><br/><li><span>李小四</span> 👍（18） 💬（0）<p>设计模式_50:
+
 # 作业
 
 正如文中所说，装饰器是对原有功能的扩展，代理是增加并不相关的功能。
 所以问题就变成使用者认为“缓存”是否扩展了原功能
+
 - 比如说需要把想把所有的网络信息都加上缓存，提高一些查询效率，这时候应该使用代理模式；
 - 如果我在设计网络通信框架，需要把提供“缓存”作为一种扩展能力，这时应该用装饰器模式；
 
@@ -282,46 +284,47 @@ https:&#47;&#47;stackoverflow.com&#47;questions&#47;18618779&#47;differences-bet
 另外，缓存(Cache)与缓冲(Buffer)是不同的概念，这里也可以区分一下。
 
 # 感受
+
 到了具体模式的课程，有一个明显的特点：一句话感觉看懂了，反复读才能发现有更多的信息在里面，坦白讲，很多模式编程中没有用过，与单纯地读原理和特征相比，我想真正用的时候才能理解更深入的东西。</p>2020-03-07</li><br/><li><span>岁月神偷</span> 👍（14） 💬（1）<p>我觉得应该用代理模式，当然这个是要看场景的。代理模式是在原有功能之外增加了其他的能力，而装饰器模式则在原功能的基础上增加额外的能力。一个是增加，一个是增强，就好比一个是在手机上增加了一个摄像头用于拍照，而另一个则是在拍照这个功能的基础上把像素从800W提升到1600W。我觉得通过这样的方式区分的话，大家互相沟通起来理解会统一一些。</p>2020-02-27</li><br/><li><span>iLeGeND</span> 👍（10） 💬（7）<p>
 &#47;&#47; 代理模式的代码结构(下面的接口也可以替换成抽象类)
 public interface IA {
-  void f();
+void f();
 }
 public class A impelements IA {
-  public void f() { &#47;&#47;... }
+public void f() { &#47;&#47;... }
 }
 public class AProxy impements IA {
-  private IA a;
-  public AProxy(IA a) {
-    this.a = a;
-  }
-  
-  public void f() {
-    &#47;&#47; 新添加的代理逻辑
-    a.f();
-    &#47;&#47; 新添加的代理逻辑
-  }
+private IA a;
+public AProxy(IA a) {
+this.a = a;
+}
+
+public void f() {
+&#47;&#47; 新添加的代理逻辑
+a.f();
+&#47;&#47; 新添加的代理逻辑
+}
 }
 
 &#47;&#47; 装饰器模式的代码结构(下面的接口也可以替换成抽象类)
 public interface IA {
-  void f();
+void f();
 }
 public class A impelements IA {
-  public void f() { &#47;&#47;... }
+public void f() { &#47;&#47;... }
 }
 public class ADecorator impements IA {
-  private IA a;
-  public ADecorator(IA a) {
-    this.a = a;
-  }
-  
-  public void f() {
-    &#47;&#47; 功能增强代码
-    a.f();
-    &#47;&#47; 功能增强代码
-  }
+private IA a;
+public ADecorator(IA a) {
+this.a = a;
 }
 
-老师 上面代码结构完全一样啊 不能因为 f() 中写的 逻辑不同  就说是两种模式吧  </p>2020-02-26</li><br/><li><span>唐朝农民</span> 👍（8） 💬（3）<p>订单的优惠有很多种，比如满减，领券这样的是不是可以使用decorator 模式来实现</p>2020-02-26</li><br/>
+public void f() {
+&#47;&#47; 功能增强代码
+a.f();
+&#47;&#47; 功能增强代码
+}
+}
+
+老师 上面代码结构完全一样啊 不能因为 f() 中写的 逻辑不同 就说是两种模式吧 </p>2020-02-26</li><br/><li><span>唐朝农民</span> 👍（8） 💬（3）<p>订单的优惠有很多种，比如满减，领券这样的是不是可以使用decorator 模式来实现</p>2020-02-26</li><br/>
 </ul>

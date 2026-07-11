@@ -91,7 +91,7 @@ iload后面的那几个指令，是压缩格式的指令，也就是利用指令
 
 第二组是istore系列，它做的工作刚好跟iload相反，是把栈顶的值存到指定下标的变量里去。
 
-第三组，是对常数做入栈的操作。对于0~5这几个数字，Java字节码也是提供了压缩格式的指令。对于8位整数（-128~127），使用bipush指令。对于16位整数（-32768~32767），使用sipush指令。而对于更大的常数，则要使用ldc指令，从常量池里去取。
+第三组，是对常数做入栈的操作。对于0~~5这几个数字，Java字节码也是提供了压缩格式的指令。对于8位整数（-128~~127），使用bipush指令。对于16位整数（-32768~32767），使用sipush指令。而对于更大的常数，则要使用ldc指令，从常量池里去取。
 
 第四组，是几个二元运算的指令。它们都是从栈里取两个操作数，计算完毕之后，再压回栈里。
 
@@ -182,7 +182,7 @@ visitIntegerLiteral(integerLiteral: IntegerLiteral):any{
     //大于16位的，采用ldc指令，从常量池中去取
     else{
         //把value值放入常量池。
-        this.module.consts.push(value); 
+        this.module.consts.push(value);
         ret.push(this.module.consts.length -1);
     }
     return ret;
@@ -194,7 +194,7 @@ visitIntegerLiteral(integerLiteral: IntegerLiteral):any{
 ```plain
 /**
  * 左值的情况，返回符号。否则，生成iload指令。
- * @param v 
+ * @param v
  */
 visitVariable(v:Variable):any{
     if (v.isLeftValue){
@@ -207,7 +207,7 @@ visitVariable(v:Variable):any{
 
 /**
  * 生成获取本地变量值的指令
- * @param varName 
+ * @param varName
  */
 private getVariableValue(sym:VarSymbol|null):any{
     if (sym != null){
@@ -230,9 +230,9 @@ private getVariableValue(sym:VarSymbol|null):any{
                 code.push(OpCode.iload_3);
                 break;
             default:
-                code.push(OpCode.iload);    
-                code.push(index as number);               
-        }            
+                code.push(OpCode.iload);
+                code.push(index as number);
+        }
         return code;
     }
 }
@@ -249,7 +249,7 @@ visitBinary(bi:Binary):any{
 
     ////1.处理赋值
     if (bi.op == Op.Assign){
-        let varSymbol = code1 as VarSymbol; 
+        let varSymbol = code1 as VarSymbol;
         //加入右子树的代码
         code = code2;
         //加入istore代码
@@ -344,7 +344,7 @@ else{
 export class BCModule{
   //常量
   consts:any[] = [];
-  
+
   //入口函数
   _main:FunctionSymbol|null = null;
 }
@@ -385,7 +385,7 @@ while(true){
         case OpCode.sipush:  //加载32位常量，需要取出2个字节
             let byte1 = code[++codeIndex];
             let byte2 = code[++codeIndex];
-            frame.oprandStack.push(byte1<<8|byte2); 
+            frame.oprandStack.push(byte1<<8|byte2);
             opCode = code[++codeIndex];
             continue;
         ...
@@ -428,21 +428,21 @@ case OpCode.invokestatic:
     byte1 = code[++codeIndex];
     byte2 = code[++codeIndex];
     let functionSym = bcModule.consts[byte1<<8|byte2] as FunctionSymbol;
-    
+
     //设置返回值地址，为函数调用的下一条指令
     frame.returnIndex = codeIndex;
-    
+
     //创建新的栈桢
     let lastFrame = frame;
     frame = new StackFrame(functionSym);
     this.callStack.push(frame);
-    
+
     //传递参数
     let paramCount = (functionSym.decl as FunctionDecl).callSignature.params.length;
     for(let i = paramCount -1; i>= 0; i--){
         frame.localVars[i] = lastFrame.oprandStack.pop();
     }
-    
+
     //设置新的code、codeIndex和oPCode
     if (frame.funtionSym.bytecode !=null){
         //切换到被调用函数的代码
@@ -483,7 +483,7 @@ case OpCode.return:
         // frame.retValue = retValue;
         if(opCode == OpCode.ireturn){
             frame.oprandStack.push(retValue);
-        }    
+        }
         //设置新的code、codeIndex和oPCode
         if (frame.funtionSym.byteCode !=null){
             //切换到调用者的代码

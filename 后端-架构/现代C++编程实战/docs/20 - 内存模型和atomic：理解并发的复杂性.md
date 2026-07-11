@@ -342,7 +342,7 @@ public:
 1.对单独没有逻辑联系的变量，直接使用原子量的relaxed就够了，没必要加上内存序
 2.对于有联系的多个多线程中的变量，这时就需要考虑使用原子量的内存序
 3.对于代码段的保护，由于原子量没有阻塞，所以必须使用互斥量和锁来解决
-ps：互斥量+锁的操作   可取代  原子量。反之不可。
+ps：互斥量+锁的操作 可取代 原子量。反之不可。
 
 另外，还产生新的疑问：
 1.互斥量的定义中，一个互斥量只允许在多线程中加一把锁，那么是否可以说互斥量只有和锁配合达到保护代码段的作用，互斥量还有其他单独的用法吗？
@@ -350,9 +350,7 @@ ps：互斥量+锁的操作   可取代  原子量。反之不可。
 
 望老师解答，纠正。</p>2020-02-05</li><br/><li><span>禾桃</span> 👍（4） 💬（4）<p>和大家分享一个链接
 
-
 操作系统中锁的实现原理
-
 
 https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;6MRi_UEcMybKn4YXi6qWng</p>2020-01-14</li><br/><li><span>prowu</span> 👍（4） 💬（1）<p>吴老师，您好！有两个问题请帮忙解答下：
 1、在解释相关memory_order_acquire, memory_order_release等时，都有提到“当前线程可见”，这个“可见”该怎么理解？
@@ -365,9 +363,9 @@ https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;6MRi_UEcMybKn4YXi6qWng</p>2020-01-14<
 谢谢！</p>2020-01-14</li><br/><li><span>Counting stars</span> 👍（2） 💬（2）<p>链接[2]的代码在msvc编译器release模式下用atomic int测试了一下，X Y通过 store的指定memory_order_release并没有达到期望的内存屏障效果，仍然出现了写读序列变成读写序列的问题，仔细分析了一下：
 memory_order_release在x86&#47;64上看源码有一个提示，
 case memory_order_release:
-            _Compiler_or_memory_barrier();
-            _ISO_VOLATILE_STORE32(_Storage, _As_bytes);
-            return;
+_Compiler_or_memory_barrier();
+_ISO_VOLATILE_STORE32(_Storage, _As_bytes);
+return;
 查看了一下具体定义
 #elif defined(_M_IX86) || defined(_M_X64)
 &#47;&#47; x86&#47;x64 hardware only emits memory barriers inside _Interlocked intrinsics
@@ -380,8 +378,8 @@ msvc2019下，memory_order_release并不能保证内存屏障效果，只能通�
 一种是利用static变量的初始化：
 Foo&amp; getInst()
 {
-    static Foo inst(...);
-    return inst;
+static Foo inst(...);
+return inst;
 }
 
 一种是利用pthread_once来保证线程安全
@@ -403,17 +401,17 @@ Foo&amp; getInst()
 
 singleton* singleton::instance()
 {
-  @a
-  if (inst_ptr_ == nullptr) {&#47;&#47;@1
-    @b
-    lock_guard lock;  &#47;&#47;  加锁
-    if (inst_ptr_ == nullptr) {
-	@c
-      inst_ptr_ = new singleton();&#47;&#47;@2
-        @d
-    }
-  }
-  return inst_ptr_;
+@a
+if (inst_ptr_ == nullptr) {&#47;&#47;@1
+@b
+lock_guard lock; &#47;&#47; 加锁
+if (inst_ptr_ == nullptr) {
+@c
+inst_ptr_ = new singleton();&#47;&#47;@2
+@d
+}
+}
+return inst_ptr_;
 }
 
 有个问题，就是对double check那个例子的疑惑，会出现什么问题？
@@ -424,20 +422,20 @@ inst_ptr_应该就两种状态，null和非null。
 
 singleton* singleton::instance()
 {
-  singleton* ptr = inst_ptr_.load(
-    memory_order_acquire);
-  if (ptr == nullptr) {
-    lock_guard&lt;mutex&gt; guard{lock_};
-    ptr = inst_ptr_.load(
-      memory_order_relaxed);
-    if (ptr == nullptr) {
-      ptr = new singleton();
-      inst_ptr_.store(
-        ptr, memory_order_release);
-    }
-  }
-  return inst_ptr_;
-}</p>2020-01-12</li><br/><li><span>禾桃</span> 👍（1） 💬（1）<p>Preshing 
+singleton* ptr = inst_ptr_.load(
+memory_order_acquire);
+if (ptr == nullptr) {
+lock_guard&lt;mutex&gt; guard{lock_};
+ptr = inst_ptr_.load(
+memory_order_relaxed);
+if (ptr == nullptr) {
+ptr = new singleton();
+inst_ptr_.store(
+ptr, memory_order_release);
+}
+}
+return inst_ptr_;
+}</p>2020-01-12</li><br/><li><span>禾桃</span> 👍（1） 💬（1）<p>Preshing
 
 “In particular, each processor is allowed to delay the effect of a store past any load from a different location. “
 
@@ -445,15 +443,14 @@ singleton* singleton::instance()
 
 #1
 X = 1;
-asm volatile(&quot;&quot; ::: &quot;memory&quot;);  &#47;&#47; Prevent memory reordering
+asm volatile(&quot;&quot; ::: &quot;memory&quot;); &#47;&#47; Prevent memory reordering
 r1 = Y;
 
 上面的代码,能确保cpu会先执行store,（至少先写到X_cpu_cache,无法保证1被推送到X_memory)，然后再read?
 
-
 #2
 X = 1;
-asm volatile(&quot;mfence&quot; ::: &quot;memory&quot;); 
+asm volatile(&quot;mfence&quot; ::: &quot;memory&quot;);
 r1 = Y;
 
 上面的代码,能确保cpu会先执行store（包括把1写到X_cpu_cache，再推送至X_memoery), 然后再read?
@@ -472,36 +469,36 @@ y=1;
 if( load(x, memory_order_seq_cst) == 0 ) z=1;
 else y=0;
 
-T2: 
+T2:
 if( CAS(x, 0, 1, memory_order_seq_cst, memory_order_seq_cst) )
 {
-   if( z==1&amp;&amp;y==0 )
-   {
-      printf(&quot;bug&quot;);
-   }
+if( z==1&amp;&amp;y==0 )
+{
+printf(&quot;bug&quot;);
+}
 }</p>2023-11-02</li><br/><li><span>Geek_26c53e</span> 👍（0） 💬（2）<p>请教一下，如果在获取锁之前，别的线程对inst_ptr_进行了store，那加锁之后走到load时，由于是松散的load，会不会读取到旧的inst_ptr_（null）啊？
 
 &#47;&#47; 头文件
 class singleton {
 public:
-  static singleton* instance();
-  …
+static singleton* instance();
+…
 private:
-  static singleton* inst_ptr_;
+static singleton* inst_ptr_;
 };
 
 &#47;&#47; 实现文件
 singleton* singleton::inst_ptr_ =
-  nullptr;
+nullptr;
 
 singleton* singleton::instance()
 {
-  if (inst_ptr_ == nullptr) {
-    lock_guard lock;  &#47;&#47; 加锁
-    if (inst_ptr_ == nullptr) {
-      inst_ptr_ = new singleton();
-    }
-  }
-  return inst_ptr_;
+if (inst_ptr_ == nullptr) {
+lock_guard lock; &#47;&#47; 加锁
+if (inst_ptr_ == nullptr) {
+inst_ptr_ = new singleton();
+}
+}
+return inst_ptr_;
 }</p>2023-09-05</li><br/>
 </ul>

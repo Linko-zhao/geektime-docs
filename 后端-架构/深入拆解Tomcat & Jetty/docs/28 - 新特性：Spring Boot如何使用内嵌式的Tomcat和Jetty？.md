@@ -63,14 +63,14 @@ private void createWebServer() {
     //这里WebServer是Spring Boot抽象出来的接口，具体实现类就是不同的Web容器
     WebServer webServer = this.webServer;
     ServletContext servletContext = this.getServletContext();
-    
+
     //如果Web容器还没创建
     if (webServer == null && servletContext == null) {
         //通过Web容器工厂来创建
         ServletWebServerFactory factory = this.getWebServerFactory();
         //注意传入了一个"SelfInitializer"
         this.webServer = factory.getWebServer(new ServletContextInitializer[]{this.getSelfInitializer()});
-        
+
     } else if (servletContext != null) {
         try {
             this.getSelfInitializer().onStartup(servletContext);
@@ -89,11 +89,11 @@ private void createWebServer() {
 public WebServer getWebServer(ServletContextInitializer... initializers) {
     //1.实例化一个Tomcat，可以理解为Server组件。
     Tomcat tomcat = new Tomcat();
-    
+
     //2. 创建一个临时目录
     File baseDir = this.baseDirectory != null ? this.baseDirectory : this.createTempDir("tomcat");
     tomcat.setBaseDir(baseDir.getAbsolutePath());
-    
+
     //3.初始化各种组件
     Connector connector = new Connector(this.protocol);
     tomcat.getService().addConnector(connector);
@@ -101,7 +101,7 @@ public WebServer getWebServer(ServletContextInitializer... initializers) {
     tomcat.setConnector(connector);
     tomcat.getHost().setAutoDeploy(false);
     this.configureEngine(tomcat.getEngine());
-    
+
     //4. 创建定制版的"Context"组件。
     this.prepareContext(tomcat.getHost(), initializers);
     return this.getTomcatWebServer(tomcat);
@@ -157,13 +157,13 @@ public class MyServletRegister implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) {
-    
+
         //Servlet 3.0规范新的API
         ServletRegistration myServlet = servletContext
                 .addServlet("HelloServlet", HelloServlet.class);
-                
+
         myServlet.addMapping("/hello");
-        
+
         myServlet.setInitParameter("name", "Hello Servlet");
     }
 
@@ -185,7 +185,7 @@ public class MyServletRegister implements ServletContextInitializer {
 @Component
 public class MyGeneralCustomizer implements
   WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
-  
+
     public void customize(ConfigurableServletWebServerFactory factory) {
         factory.setPort(8081);
         factory.setContextPath("/hello");
@@ -252,12 +252,11 @@ context.addServletContainerInitializer(starter, NO_CLASSES);
 其中有上面提到的DispatcherServletRegistrationBean。</p>2020-05-01</li><br/><li><span>蒙开强</span> 👍（2） 💬（0）<p>老师，你好，如果我不想使用内嵌的Tomcat，想用自己装的Tomcat，那需要怎么做呢</p>2019-08-15</li><br/><li><span>红颜铭心</span> 👍（1） 💬（0）<p>相同点：向ServletContext容器注册Servlet,Filter或EventListener
 不同点：生命周期由不同的容器托管，在不同的地方调用，最终的结果都是一样。
 内嵌容器不支持ServletContainerInitializer，因此不能通过spi方式加载ServletContainerInitializer，
-而是用TomcatStarter的onStartup，间接启动ServletContextInitializers，来达到ServletContainerInitializer的效果。</p>2020-05-29</li><br/><li><span>东方奇骥</span> 👍（1） 💬（0）<p>这篇文章让人受益匪浅，读了几遍，又对着源码看了一下，并且实验了一下。</p>2020-02-17</li><br/><li><span>| ~浑蛋~</span> 👍（0） 💬（0）<p>怎么动态注册spring websocket的处理器</p>2022-07-31</li><br/><li><span>花花大脸猫</span> 👍（0） 💬（0）<p>在源码中对二者的区别已经有比较明确的阐述，在ServletContextInitializer类中的注释中，有如下说明：This interface is designed to act in a similar way to ServletContainerInitializer, but have a lifecycle that&#39;s managed by Spring and not the Servlet container.</p>2022-06-13</li><br/><li><span>James</span> 👍（0） 💬（0）<p>ServletContainerInitializer调用所有实现ServletContextInitializer接口类的方法。
+而是用TomcatStarter的onStartup，间接启动ServletContextInitializers，来达到ServletContainerInitializer的效果。</p>2020-05-29</li><br/><li><span>东方奇骥</span> 👍（1） 💬（0）<p>这篇文章让人受益匪浅，读了几遍，又对着源码看了一下，并且实验了一下。</p>2020-02-17</li><br/><li><span>| ~~浑蛋~~</span> 👍（0） 💬（0）<p>怎么动态注册spring websocket的处理器</p>2022-07-31</li><br/><li><span>花花大脸猫</span> 👍（0） 💬（0）<p>在源码中对二者的区别已经有比较明确的阐述，在ServletContextInitializer类中的注释中，有如下说明：This interface is designed to act in a similar way to ServletContainerInitializer, but have a lifecycle that&#39;s managed by Spring and not the Servlet container.</p>2022-06-13</li><br/><li><span>James</span> 👍（0） 💬（0）<p>ServletContainerInitializer调用所有实现ServletContextInitializer接口类的方法。
 ServletContextInitializer是通过ServletContextInitializer类型依赖查找的，是Spring管理的。
 
 ServletContainerInitializer是启动的时候调用，具体看StandardContext#startInternal方法中的entry.getKey().onStartup(entry.getValue(),getServletContext());
 此方法会调用ServletContainerInitializer.onStartup，而在springboot中，是TomcatStarter来实现ServletContainerInitializer接口并调用所有实现ServletContextInitializer方法的类的onStartup方法
-
 
 </p>2021-03-21</li><br/>
 </ul>

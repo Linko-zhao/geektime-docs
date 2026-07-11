@@ -418,7 +418,7 @@ func main() {
 我们运行该示例：
 
 ```plain
-$go run main.go 
+$go run main.go
 Current time in nanoseconds: 397501409223055
 ```
 
@@ -494,12 +494,12 @@ Go从1.11版本就开始支持将Go源码编译为wasm二进制文件，并在�
 
 ```plain
 // main.go
-package main            
+package main
 
 
-func main() {           
-    println("hello")    
-}                     
+func main() {
+    println("hello")
+}
 ```
 
 下载Go 1.21及之后版本后，可以执行下面命令将main.go编译为wasm程序：
@@ -513,7 +513,7 @@ $ GOARCH=wasm GOOS=wasip1 gotip build -o main.wasm main.go
 ```plain
 $curl https://wazero.io/install.sh
 $wazero run main.wasm
-hello     
+hello
 ```
 
 Go 1.24版本又新增了一个编译器指示符go:wasmexport，用于向编译器发出信号，表明某个函数应该在生成的wasm二进制文件中导出。该指示符只能在GOOS=wasip1时使用，否则会导致编译失败。

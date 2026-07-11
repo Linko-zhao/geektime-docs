@@ -51,8 +51,8 @@ SELECT COUNT(*) as num FROM titanic_train WHERE Age IS NULL
 当然我们也可以同时对多个字段的非空值进行统计：
 
 ```
-SELECT 
-SUM((CASE WHEN Age IS NULL THEN 1 ELSE 0 END)) AS age_null_num, 
+SELECT
+SUM((CASE WHEN Age IS NULL THEN 1 ELSE 0 END)) AS age_null_num,
 SUM((CASE WHEN Cabin IS NULL THEN 1 ELSE 0 END)) AS cabin_null_num
 FROM titanic_train
 ```
@@ -66,26 +66,26 @@ FROM titanic_train
 CREATE PROCEDURE `check_column_null_num`(IN schema_name VARCHAR(100), IN table_name2 VARCHAR(100))
 BEGIN
 -- 数据表schema_name中的列名称
-DECLARE temp_column VARCHAR(100); 
--- 创建结束标志变量  
+DECLARE temp_column VARCHAR(100);
+-- 创建结束标志变量
 DECLARE done INT DEFAULT false;
 -- 定义游标来操作每一个COLUMN_NAME
 DECLARE cursor_column CURSOR FOR
 SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE table_schema = schema_name AND table_name = table_name2;
--- 指定游标循环结束时的返回值  
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;  
+-- 指定游标循环结束时的返回值
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
 -- 打开游标
 OPEN cursor_column;
 read_loop:LOOP
            FETCH cursor_column INTO temp_column;
-           -- 判断游标的循环是否结束 
-           IF done THEN 
+           -- 判断游标的循环是否结束
+           IF done THEN
                     LEAVE read_loop;
            END IF;
            -- 这里需要设置具体的SQL语句temp_query
            SET @temp_query=CONCAT('SELECT COUNT(*) as ', temp_column, '_null_num FROM ', table_name2, ' WHERE ', temp_column, ' IS NULL');
            -- 执行SQL语句
-           PREPARE stmt FROM @temp_query;           
+           PREPARE stmt FROM @temp_query;
            EXECUTE stmt;
 END LOOP;
 -- 关闭游标
@@ -100,7 +100,7 @@ END
 然后我们执行这个SQL语句，提取相应的结果。
 
 ```
-call check_column_null_num('wucai', 'titanic_train'); 
+call check_column_null_num('wucai', 'titanic_train');
 ```
 
 运行结果如下：
@@ -239,30 +239,39 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 读入清洗好的数据
+
 df = pd.read_csv(&#39;.&#47;titanic_train.csv&#39;)
 
 # 数据透视表用到的数据 df_temp
+
 df_temp = df[[&#39;Embarked&#39;, &#39;Survived&#39;]]
 
 # 生成数据透视表
-## 方法1 
+
+## 方法1
+
 table = pd.pivot_table(df_temp, index=[&#39;Embarked&#39;], columns=[&#39;Survived&#39;], aggfunc=len)
 table = pd.pivot_table(df_temp, index=[&#39;Embarked&#39;], columns=[&#39;Survived&#39;], aggfunc=len)
+
 ## 方法2 数据交叉表
+
 table = pd.crosstab(df.Embarked, df.Survived)
 
 # 画图
+
 table.plot(kind=&#39;bar&#39;)
 plt.show()
 
 ----------------分割线 上面是code------------------
 talbe
+
 # 输出结果
-Survived	0	1
-Embarked		
-C	75	93
-Q	47	30
-S	427	219
+
+Survived 0 1
+Embarked
+C 75 93
+Q 47 30
+S 427 219
 </p>2019-09-23</li><br/><li><span>骑行的掌柜J</span> 👍（10） 💬（3）<p>陈老师 我对这一节的操作全部用MySQL进行了一个实操 中间遇到一些问题 我也全部做了一个整理补充 放到了我的博客里面：https:&#47;&#47;blog.csdn.net&#47;weixin_41013322&#47;article&#47;details&#47;103616783  希望对后面学习的朋友有帮助 谢谢</p>2019-12-19</li><br/><li><span>ABC</span> 👍（4） 💬（1）<p>WPS同样可以使用,这种方式很方便.所需下载的文件我放到网盘了，地址: 链接: https:&#47;&#47;pan.baidu.com&#47;s&#47;1Wrq7VcypQiofKp70YaQLBA 提取码: 2avt
 
 看了这一课，忽然想去买数据分析的课学习一下.</p>2019-11-30</li><br/><li><span>JustDoDT</span> 👍（3） 💬（1）<p>仅对某一列缺失值处理
@@ -273,93 +282,124 @@ https:&#47;&#47;github.com&#47;LearningChanging&#47;sql_must_konw&#47;tree&#47;m
 即使调整为非严格模式读取成功，Age 和 cabin 空的部分，本来该是NULL，但是在SQL读取后，分别是 0 和 空字符串，并非NULL。
 先创建表格：
 CREATE TABLE titanic_train(
-	passenger_id INT(3) PRIMARY KEY,
-	survived INT(1),
-	pcalss INT(1),
-	name VARCHAR(255),
-	sex VARCHAR(6),
-	age DECIMAL(4,2),
-	sibsp INT(1),
-	parch INT(1),
-	ticket VARCHAR(20),
-	fare DECIMAL(7,4),
-	cabin VARCHAR(5),
-	embarked CHAR(1)
+passenger_id INT(3) PRIMARY KEY,
+survived INT(1),
+pcalss INT(1),
+name VARCHAR(255),
+sex VARCHAR(6),
+age DECIMAL(4,2),
+sibsp INT(1),
+parch INT(1),
+ticket VARCHAR(20),
+fare DECIMAL(7,4),
+cabin VARCHAR(5),
+embarked CHAR(1)
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 再导入数据：
-LOAD DATA INFILE &#39;文件位置&#47;train.csv&#39; 
-  INTO TABLE titanic_train
-  FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39; ESCAPED BY &#39;&quot;&#39;
-  LINES TERMINATED BY &#39;\n&#39;
-  IGNORE 1 LINES
-  (passenger_id, survived, pcalss, name, sex, @age, sibsp, parch, ticket, fare, @cabin, embarked)
-  SET age = NULLIF(@age,&#39;&#39;), cabin = NULLIF(@cabin,&#39;&#39;);</p>2021-06-10</li><br/><li><span>完美坚持</span> 👍（1） 💬（0）<p>mport pandas as pd
+LOAD DATA INFILE &#39;文件位置&#47;train.csv&#39;
+INTO TABLE titanic_train
+FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39; ESCAPED BY &#39;&quot;&#39;
+LINES TERMINATED BY &#39;\n&#39;
+IGNORE 1 LINES
+(passenger_id, survived, pcalss, name, sex, @age, sibsp, parch, ticket, fare, @cabin, embarked)
+SET age = NULLIF(@age,&#39;&#39;), cabin = NULLIF(@cabin,&#39;&#39;);</p>2021-06-10</li><br/><li><span>完美坚持</span> 👍（1） 💬（0）<p>mport pandas as pd
 import matplotlib.pyplot as plt
 
 # Python导入数据
+
 titanic_train1 = pd.read_csv(&#39;train.csv&#39;)
+
 # 大致看下数据，注意到空值可以正常读取为NaN，如果直接用MySQL客户端中LOAD DATA，会出现很多问题
+
 titanic_train1.head(8)
 
 # 完整性
+
 titanic_train1.isnull().sum()
 
 # 简单查看数据
+
 titanic_train1.describe()
 
 # Age 列均值填充
+
 titanic_train1.Age.fillna(titanic_train1.Age.mean(), inplace = True)
 
 # Cabin 列的不重复取值有多少个
+
 titanic_train1.Cabin.nunique()
+
 # Cabin 列一共有多少个非空取值
+
 titanic_train1.Cabin.count()
+
 # 上述两步只用一步就可以得出
+
 titanic_train1.Cabin.describe()
+
 # 只有三种取值
+
 titanic_train1.Embarked.describe()
+
 # 统计离散的登录港口变量，每个港口的个数统计
+
 titanic_train1.Embarked.value_counts()
+
 # 采用高频方式填充控制
+
 titanic_train1.Embarked.fillna(&#39;S&#39;, inplace = True)
 
 # MySQL导入清洗好的数据
 
-# -*- coding: UTF-8 -*-
+# -_- coding: UTF-8 -_-
+
 import mysql.connector
+
 # 打开数据库连接
+
 db = mysql.connector.connect(
-       host=&quot;localhost&quot;,
-       user=&quot;root&quot;,
-       passwd=&quot;***********&quot;, # 写上你的数据库密码
-       database=&#39;XXX, 
-       auth_plugin=&#39;mysql_native_password&#39;
+host=&quot;localhost&quot;,
+user=&quot;root&quot;,
+passwd=&quot;***********&quot;, # 写上你的数据库密码
+database=&#39;XXX,
+auth_plugin=&#39;mysql_native_password&#39;
 )
-# 获取操作游标 
+
+# 获取操作游标
+
 cursor = db.cursor()
+
 # 执行SQL语句
+
 cursor.execute(&quot;SELECT GROUP_CONCAT(column_name SEPARATOR &#39;, &#39;) FROM information_schema.COLUMNS WHERE table_name = &#39;titanic_train&#39;&quot;)
+
 # 获取一条数据：列名
+
 data = cursor.fetchone()
 print(&quot;列名: %s &quot; % data)
 
 cursor.execute(&quot;SELECT * FROM titanic_train&quot;)
+
 # 获取一条数据
+
 data = cursor.fetchall()
-titanic_train2 = pd.DataFrame(data, 
-                              columns = [&quot;passenger_id&quot;, &quot;Survived&quot;, &quot;pcalss&quot;, &quot;name&quot;, &quot;sex&quot;, &quot;Age&quot;, &quot;Sibsp&quot;, &quot;parch&quot;, &quot;ticket&quot;, &quot;Fare&quot;, &quot;cabin&quot;, &quot;embarked&quot; ])
+titanic_train2 = pd.DataFrame(data,
+columns = [&quot;passenger_id&quot;, &quot;Survived&quot;, &quot;pcalss&quot;, &quot;name&quot;, &quot;sex&quot;, &quot;Age&quot;, &quot;Sibsp&quot;, &quot;parch&quot;, &quot;ticket&quot;, &quot;Fare&quot;, &quot;cabin&quot;, &quot;embarked&quot; ])
 
 # 数据可视化
 
 # 数据透视表
+
 table = pd.crosstab(titanic_train1.Embarked, titanic_train1.Survived)
 print(table)
 
 # 用得到的数据透视表作数据透视图
+
 table.plot(kind=&#39;bar&#39;, ylabel = &#39;Frequency&#39;)
 plt.show()
 
 # 法二直接画图
+
 import seaborn as sns
 ax = sns.countplot(x=&quot;Embarked&quot;, hue=&quot;Survived&quot;, data=titanic_train1)</p>2021-06-11</li><br/><li><span>完美坚持</span> 👍（1） 💬（0）<p>LOAD DATA 导入数据 （二）
 下面就来解决这个问题：
@@ -375,7 +415,7 @@ https:&#47;&#47;blog.csdn.net&#47;duckyamd&#47;article&#47;details&#47;53143639
 
 SELECT GROUP_CONCAT(column_name SEPARATOR &#39;, &#39;) FROM information_schema.COLUMNS WHERE table_name = &#39;titanic_train&#39;;
 +---------------------------------------------------------------------------------------------+
-| GROUP_CONCAT(column_name SEPARATOR &#39;, &#39;)                                                    |
+| GROUP_CONCAT(column_name SEPARATOR &#39;, &#39;) |
 +---------------------------------------------------------------------------------------------+
 | passenger_id, survived, pcalss, name, sex, age, sibsp, parch, ticket, fare, cabin, embarked |
 +---------------------------------------------------------------------------------------------+
@@ -385,34 +425,35 @@ SELECT GROUP_CONCAT(column_name SEPARATOR &#39;, &#39;) FROM information_schema.
 passenger_id, survived, pcalss, name, sex, age, sibsp, parch, ticket, fare, cabin, embarked
 
 # 删除表格数据
+
 DELETE FROM titanic_train
 
 -- 加载数据的时候进行判断
 LOAD DATA INFILE &#39;C:&#47;Users&#47;ASUS&#47;Documents&#47;Python Scripts&#47;sql&#47;train_ansi.csv&#39;
-  INTO TABLE titanic_train
-  FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39; ESCAPED BY &#39;&quot;&#39;
-  LINES TERMINATED BY &#39;\n&#39;
-  IGNORE 1 LINES
-  (passenger_id, survived, pcalss, name, sex, @age, sibsp, parch, ticket, fare, @cabin, embarked)
-  SET age = NULLIF(@age,&#39;&#39;), cabin = NULLIF(@cabin,&#39;&#39;);
+INTO TABLE titanic_train
+FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39; ESCAPED BY &#39;&quot;&#39;
+LINES TERMINATED BY &#39;\n&#39;
+IGNORE 1 LINES
+(passenger_id, survived, pcalss, name, sex, @age, sibsp, parch, ticket, fare, @cabin, embarked)
+SET age = NULLIF(@age,&#39;&#39;), cabin = NULLIF(@cabin,&#39;&#39;);
 Query OK, 891 rows affected (0.05 sec)
-Records: 891  Deleted: 0  Skipped: 0  Warnings: 0
+Records: 891 Deleted: 0 Skipped: 0 Warnings: 0
 可以看到相应空字符的位置是 null 而不是 0 了
 NULLIF 的文档：意思就是如果这个变量是空字符就设置为null
 https:&#47;&#47;dev.mysql.com&#47;doc&#47;refman&#47;8.0&#47;en&#47;flow-control-functions.html#function_nullif</p>2021-06-10</li><br/><li><span>完美坚持</span> 👍（1） 💬（0）<p>LOAD DATA 导入数据（没有Navicat）（一）：
 CREATE TABLE titanic_train(
-	passenger_id INT(3) PRIMARY KEY,
-	survived INT(1),
-	pcalss INT(1),
-	name VARCHAR(255),
-	sex VARCHAR(6),
-	age DECIMAL(4,2),
-	sibsp INT(1),
-	parch INT(1),
-	ticket VARCHAR(20),
-	fare DECIMAL(7,4),
-	cabin VARCHAR(5),
-	embarked CHAR(1)
+passenger_id INT(3) PRIMARY KEY,
+survived INT(1),
+pcalss INT(1),
+name VARCHAR(255),
+sex VARCHAR(6),
+age DECIMAL(4,2),
+sibsp INT(1),
+parch INT(1),
+ticket VARCHAR(20),
+fare DECIMAL(7,4),
+cabin VARCHAR(5),
+embarked CHAR(1)
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 ALTER TABLE titanic_train MODIFY name VARCHAR(255);
@@ -423,14 +464,14 @@ ALTER TABLE titanic_train MODIFY cabin VARCHAR(255);
 
 SET SESSION sql_mode = &#39;&#39;; -- 严格模式下会报错：Incorrect integer value: &#39;&#39; for column &#39;出错的column&#39; at row 出错的行数
 -- 这里将session 的 sql_mode 置为空，就不是严格模式了
--- 另外 这里Setting the SESSION variable affects only the current client. Each client can change its session sql_mode value at any time. 
--- 参考：SQL mode  网址：https:&#47;&#47;dev.mysql.com&#47;doc&#47;refman&#47;8.0&#47;en&#47;sql-mode.html#sqlmode_strict_trans_tables
+-- 另外 这里Setting the SESSION variable affects only the current client. Each client can change its session sql_mode value at any time.
+-- 参考：SQL mode 网址：https:&#47;&#47;dev.mysql.com&#47;doc&#47;refman&#47;8.0&#47;en&#47;sql-mode.html#sqlmode_strict_trans_tables
 
-LOAD DATA INFILE &#39;C:&#47;Users&#47;ASUS&#47;Documents&#47;Python Scripts&#47;sql&#47;train_ansi.csv&#39; 
-  INTO TABLE titanic_train
-  FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39; ESCAPED BY &#39;&quot;&#39;
-  LINES TERMINATED BY &#39;\n&#39;
-  IGNORE 1 LINES;
+LOAD DATA INFILE &#39;C:&#47;Users&#47;ASUS&#47;Documents&#47;Python Scripts&#47;sql&#47;train_ansi.csv&#39;
+INTO TABLE titanic_train
+FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39; ESCAPED BY &#39;&quot;&#39;
+LINES TERMINATED BY &#39;\n&#39;
+IGNORE 1 LINES;
 
 SHOW warnings;
 -- 在非严格模式下，很多严格模式下的错误会退化为 warnings，此时一定要查看 warnings，发现需要改正的问题。理论上讲，除了要忽略的问题（比如这里空字符无法导入int类型）之外，没有其他问题的时候，用严格模式来忽略这些问题；但是通常我们可能还有其它应该避免、不应该忽略的问题，最好查看一下非严格模式下的warnings.

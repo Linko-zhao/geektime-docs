@@ -145,13 +145,13 @@ jobs:
     name: My Job
     runs-on: ubuntu-latest
     steps:
-    - name: Print a greeting
-      env:
-        MY_VAR: Hello! My name is
-        FIRST_NAME: Lingfei
-        LAST_NAME: Kong
-      run: |
-        echo $MY_VAR $FIRST_NAME $LAST_NAME.
+      - name: Print a greeting
+        env:
+          MY_VAR: Hello! My name is
+          FIRST_NAME: Lingfei
+          LAST_NAME: Kong
+        run: |
+          echo $MY_VAR $FIRST_NAME $LAST_NAME.
 ```
 
 上面的代码中，`steps`字段只包括一个步骤。该步骤先注入三个环境变量，然后执行一条 Bash 命令。
@@ -215,7 +215,6 @@ name: Go Test
 on: [push, pull_request]
 
 jobs:
-
   helloci-build:
     name: Test with go ${{ matrix.go_version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -226,7 +225,6 @@ jobs:
         os: [ubuntu-latest, macOS-latest]
 
     steps:
-
       - name: Set up Go ${{ matrix.go_version }}
         uses: actions/setup-go@v2
         with:
@@ -272,14 +270,14 @@ secret name不区分大小写，所以如果新建secret的名字是name，使�
 
 ```yaml
 steps:
-      - run: npm ci
-      - run: npm test
+  - run: npm ci
+  - run: npm test
 
-      - name: Collect Test Coverage File
-        uses: actions/upload-artifact@v1.0.0
-        with:
-          name: coverage-output
-          path: coverage
+  - name: Collect Test Coverage File
+    uses: actions/upload-artifact@v1.0.0
+    with:
+      name: coverage-output
+      path: coverage
 ```
 
 执行成功后，我们就能在对应action面板看到生成的Artifact：
@@ -309,7 +307,7 @@ $ git clone https://github.com/marmotedu/helloci
 **第三步，**创建GitHub Actions workflow配置目录：
 
 ```bash
-$ mkdir -p .github/workflows                     
+$ mkdir -p .github/workflows
 ```
 
 **第四步，**创建GitHub Actions workflow配置。
@@ -322,7 +320,6 @@ name: Go Test
 on: [push, pull_request]
 
 jobs:
-
   helloci-build:
     name: Test with go ${{ matrix.go_version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -335,7 +332,6 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-
       - name: Set up Go ${{ matrix.go_version }}
         uses: actions/setup-go@v2
         with:
@@ -362,7 +358,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-GitHub-Action@master
         with:
-          name: ccr.ccs.tencentyun.com/marmotedu/helloci:beta  # docker image 的名字
+          name: ccr.ccs.tencentyun.com/marmotedu/helloci:beta # docker image 的名字
           username: ${{ secrets.DOCKER_USERNAME}} # 用户名
           password: ${{ secrets.DOCKER_PASSWORD }} # 密码
           registry: ccr.ccs.tencentyun.com # 腾讯云Registry
@@ -500,15 +496,15 @@ jobs:
 
 上面的workflow依次执行了以下步骤：
 
-01. 设置Go编译环境。
-02. 下载IAM项目源码。
-03. 添加/删除不需要的Go包。
-04. 生成所有的代码文件。
-05. 对IAM源码进行静态代码检查。
-06. 运行单元测试用例，并计算单元测试覆盖率是否达标。
-07. 编译代码。
-08. 收集构建产物`_output/coverage.out`。
-09. 配置Docker构建环境。
+1.  设置Go编译环境。
+2.  下载IAM项目源码。
+3.  添加/删除不需要的Go包。
+4.  生成所有的代码文件。
+5.  对IAM源码进行静态代码检查。
+6.  运行单元测试用例，并计算单元测试覆盖率是否达标。
+7.  编译代码。
+8.  收集构建产物`_output/coverage.out`。
+9.  配置Docker构建环境。
 10. 登陆DockerHub。
 11. 构建Docker镜像，并push到DockerHub。
 
@@ -538,7 +534,7 @@ GitHub Actions支持通过push事件来触发CI流程。一个CI流程其实就�
 <li><span>pedro</span> 👍（13） 💬（1）<p>最后一讲留个言，专栏基本覆盖 Go 技术栈的方方面面，还有很多工具的加餐，项目开发规范，云原生，容器等知识，物超所值。
 
 代码质量很高，学习了很多，一路走来，多谢了～</p>2021-09-28</li><br/><li><span>随风而过</span> 👍（3） 💬（1）<p>整个专栏质量很高，文案虽然有些瑕疵，不影响整体专栏的专业度，专栏介绍了很多编程规范，主要还是云原生范畴内，看完整个专栏有很多反思，对go语言自我的认知有一个全新的提高(比如项目目录参杂其他语言的习惯目录结构来做是错误的，还有代码规范也会参照其他语言来组织)。
-也到说再见的时候了，希望老师在出高质量的专栏，订阅破万，与君共勉。。。。</p>2021-09-30</li><br/><li><span>jxs1211</span> 👍（0） 💬（2）<p>gitlab对应的工具叫啥</p>2022-04-22</li><br/><li><span>dairongpeng</span> 👍（0） 💬（1）<p>物超所值，非常感谢作者分享自己的优秀实践，自身在go语言领域又上一个台阶</p>2021-12-08</li><br/><li><span>helloworld</span> 👍（0） 💬（1）<p>感谢分享，非常全面的Go工程实践，建议码农们都来学习学习，不限使用语言：）</p>2021-11-17</li><br/><li><span>Summer  空城</span> 👍（0） 💬（1）<p>老哥，请教个多了服务公用common包的问题，什么样的内容应该抽出来一个独立的sdk包，供各个微服务引用？我们现在只要有两个及以上微服务重复的代码，都放在一个core lib中，甚至于一些rpc调用、配置中心查询都放在这个core lib中。我觉得这是一个不好的设计，及时两个微服务中有一些重复的代码也是ok的。请教下老哥我理解的对么？什么内容可以放在core lib中？麻烦老哥。</p>2021-10-15</li><br/><li><span>gopher523</span> 👍（4） 💬（0）<p>真的物超所值，大厂的工程师 真不一样啊，膜拜了，各种规范 各种设计。唉 如果给我一次重新上大学的机会 我一定要努力校招上。现在社招压力大啊</p>2021-11-11</li><br/><li><span>҉我爱小笨蛋</span> 👍（2） 💬（0）<p>质量非常高，是我买的所有教材里面，最值的，没有之一！</p>2023-04-24</li><br/><li><span>Realm</span> 👍（2） 💬（0）<p>很专业、很系统，感谢老师的指引。
+也到说再见的时候了，希望老师在出高质量的专栏，订阅破万，与君共勉。。。。</p>2021-09-30</li><br/><li><span>jxs1211</span> 👍（0） 💬（2）<p>gitlab对应的工具叫啥</p>2022-04-22</li><br/><li><span>dairongpeng</span> 👍（0） 💬（1）<p>物超所值，非常感谢作者分享自己的优秀实践，自身在go语言领域又上一个台阶</p>2021-12-08</li><br/><li><span>helloworld</span> 👍（0） 💬（1）<p>感谢分享，非常全面的Go工程实践，建议码农们都来学习学习，不限使用语言：）</p>2021-11-17</li><br/><li><span>Summer 空城</span> 👍（0） 💬（1）<p>老哥，请教个多了服务公用common包的问题，什么样的内容应该抽出来一个独立的sdk包，供各个微服务引用？我们现在只要有两个及以上微服务重复的代码，都放在一个core lib中，甚至于一些rpc调用、配置中心查询都放在这个core lib中。我觉得这是一个不好的设计，及时两个微服务中有一些重复的代码也是ok的。请教下老哥我理解的对么？什么内容可以放在core lib中？麻烦老哥。</p>2021-10-15</li><br/><li><span>gopher523</span> 👍（4） 💬（0）<p>真的物超所值，大厂的工程师 真不一样啊，膜拜了，各种规范 各种设计。唉 如果给我一次重新上大学的机会 我一定要努力校招上。现在社招压力大啊</p>2021-11-11</li><br/><li><span>҉我爱小笨蛋</span> 👍（2） 💬（0）<p>质量非常高，是我买的所有教材里面，最值的，没有之一！</p>2023-04-24</li><br/><li><span>Realm</span> 👍（2） 💬（0）<p>很专业、很系统，感谢老师的指引。
 
 内容覆盖了编程技巧、工程化、云原生实践的经验总结，当然还有加餐鸡腿.
 

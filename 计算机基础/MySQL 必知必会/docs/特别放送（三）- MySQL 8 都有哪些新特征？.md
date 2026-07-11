@@ -97,7 +97,7 @@ mysql> SELECT * FROM demo.b;
 mysql> SELECT a.city AS 城市,a.county AS 区,a.salesvalue AS 区销售额,
     -> b.salesvalue AS 市销售额,a.salesvalue/b.salesvalue AS 市比率,
     -> c.salesvalue AS 总销售额,a.salesvalue/c.salesvalue AS 总比率
-    -> FROM demo.test1 AS a               
+    -> FROM demo.test1 AS a
     -> JOIN demo.b AS b ON (a.city=b.city) -- 连接市统计结果临时表
     -> JOIN demo.a AS c                    -- 连接总计金额临时表
     -> ORDER BY a.city,a.county;
@@ -341,15 +341,15 @@ mysql> WITH RECURSIVE
 DROP TABLE
 IF
 	EXISTS memtrans;
-	
+
 CREATE TABLE
 IF
-	NOT EXISTS memtrans (
-		id INT PRIMARY KEY auto_increment,
-		membername VARCHAR ( 20 ) NOT NULL,
-		goodname VARCHAR ( 20 ) NOT NULL,
-		actualvalue DECIMAL ( 10, 2 ) NOT NULL 
-	)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+NOT EXISTS memtrans (
+id INT PRIMARY KEY auto_increment,
+membername VARCHAR ( 20 ) NOT NULL,
+goodname VARCHAR ( 20 ) NOT NULL,
+actualvalue DECIMAL ( 10, 2 ) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 2.插入数据：
 insert into memtrans values(1,&#39;张三&#39;,&#39;书&#39;,890);
@@ -358,11 +358,11 @@ insert into memtrans values(3,&#39;王五&#39;,&#39;书&#39;,89);
 
 3.数据查询：
 SELECT
-	membername AS 会员名称,
-	goodname AS 商品名称,
-	actualvalue AS 销售金额,
-	sum( actualvalue ) over ( PARTITION BY goodname ) AS 总计金额,
-	actualvalue &#47; sum( actualvalue ) over ( PARTITION BY goodname ) AS 销售占比 
+membername AS 会员名称,
+goodname AS 商品名称,
+actualvalue AS 销售金额,
+sum( actualvalue ) over ( PARTITION BY goodname ) AS 总计金额,
+actualvalue &#47; sum( actualvalue ) over ( PARTITION BY goodname ) AS 销售占比
 FROM
-	memtrans;</p>2021-05-13</li><br/><li><span>彭彬</span> 👍（0） 💬（0）<p>SQL  SERVER有这两个概念</p>2021-10-07</li><br/>
+memtrans;</p>2021-05-13</li><br/><li><span>彭彬</span> 👍（0） 💬（0）<p>SQL SERVER有这两个概念</p>2021-10-07</li><br/>
 </ul>

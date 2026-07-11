@@ -190,7 +190,7 @@ kubectl expose deployment front-end --type=NodePort --port=80 --target-port=80 -
 
 ```bash
 [root@k8s-master ~]# kubectl get svc front-end-svc
-NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE  
+NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
 front-end-svc   NodePort   10.104.106.175   <none>        80:32280/TCP   6m52s
 [root@k8s-master ~]# curl 10.104.106.175:80
 <!DOCTYPE html>
@@ -241,7 +241,7 @@ kind: Ingress
 metadata:
   name: ping
   namespace: ing-internal
-  annotations: 
+  annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx    # 上一步查到的 ingressClass 名字
@@ -389,7 +389,7 @@ cat /opt/KUSC00402/kusc00402.txt
 - 名称：kucc8
 - Containers：2 个
 - Container 名称/ Images：
-  
+
   - nginx
   - memcached
 

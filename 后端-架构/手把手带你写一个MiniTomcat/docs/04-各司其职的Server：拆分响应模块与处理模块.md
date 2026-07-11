@@ -62,7 +62,7 @@ MiniTomcat
             <version>3.4</version>
         </dependency>
     </dependencies>
-</project>  
+</project>
 ```
 
 ## 适配Servlet规范
@@ -425,12 +425,12 @@ public class ServletProcessor {
         catch (ClassNotFoundException e) {
             System.out.println(e.toString());
         }
-        
+
         //生成返回头
         String head = composeResponseHead();
         writer.println(head);
         Servlet servlet = null;
-        try {  
+        try {
             //调用servlet，由servlet写response体
             servlet = (Servlet) servletClass.newInstance();
             servlet.service(request, response);

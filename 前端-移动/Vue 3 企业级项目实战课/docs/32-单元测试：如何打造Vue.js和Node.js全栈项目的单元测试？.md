@@ -88,34 +88,32 @@
 
 ```typescript
 // packages/work-server/__tests__/database.test.ts
-import { describe, test, expect } from 'vitest';
-import md5 from 'md5';
+import { describe, test, expect } from "vitest";
+import md5 from "md5";
 import {
   findUserByUsernameAndPassword,
-  checkUserIsUsernameExist
-} from '../src/model/user';
+  checkUserIsUsernameExist,
+} from "../src/model/user";
 
-describe('work-server: database', () => {
-
+describe("work-server: database", () => {
   // 验证查询用户数据方法
-  test('model/user.ts findUserByUsernameAndPassword', async () => {
+  test("model/user.ts findUserByUsernameAndPassword", async () => {
     const result = await findUserByUsernameAndPassword({
-      username: 'admin001',
-      password: md5('88888888')
+      username: "admin001",
+      password: md5("88888888"),
     });
     expect(result).toStrictEqual({
       id: 1,
-      uuid: '00000000-aaaa-bbbb-cccc-ddddeeee0001',
-      username: 'admin001',
-      password: '1f22f6ce6e58a7326c5b5dd197973105',
+      uuid: "00000000-aaaa-bbbb-cccc-ddddeeee0001",
+      username: "admin001",
+      password: "1f22f6ce6e58a7326c5b5dd197973105",
       status: 1,
-      info: '{}',
+      info: "{}",
       extend: null,
-      createTime: '2023-01-18T08:33:18.000Z',
-      modifyTime: '2023-01-18T08:33:18.000Z'
+      createTime: "2023-01-18T08:33:18.000Z",
+      modifyTime: "2023-01-18T08:33:18.000Z",
     });
   });
-   
 });
 ```
 
@@ -127,24 +125,24 @@ describe('work-server: database', () => {
 
 ```typescript
 // packages/work-server/__tests__/service.test.ts
-import { describe, test, expect } from 'vitest';
-import md5 from 'md5';
-import { queryAccount } from '../src/service/user';
+import { describe, test, expect } from "vitest";
+import md5 from "md5";
+import { queryAccount } from "../src/service/user";
 
-describe('work-server: database', () => {
-  test('service/user.ts queryAccount', async () => {
+describe("work-server: database", () => {
+  test("service/user.ts queryAccount", async () => {
     const result = await queryAccount({
-      username: 'admin001',
-      password: md5('88888888')
+      username: "admin001",
+      password: md5("88888888"),
     });
     expect(result).toStrictEqual({
       data: {
         allow: true,
-        username: 'admin001',
-        uuid: '00000000-aaaa-bbbb-cccc-ddddeeee0001'
+        username: "admin001",
+        uuid: "00000000-aaaa-bbbb-cccc-ddddeeee0001",
       },
       success: true,
-      message: '登录成功'
+      message: "登录成功",
     });
   });
 });
@@ -163,9 +161,9 @@ describe('work-server: database', () => {
 ```typescript
 // packages/work-server/__tests__/http.test.ts
 // ...
-describe('work-server', () => {
- //...
- test('page /page/sign-in', async () => {
+describe("work-server", () => {
+  //...
+  test("page /page/sign-in", async () => {
     const url = `http://${workServerHost}:${workServerPort}/page/sign-in`;
     const res = await nodeFetch(url);
     const html = await res.text();
@@ -191,7 +189,7 @@ describe('work-server', () => {
     expect(html).toStrictEqual(expectHtml);
   });
 
- //...
+  //...
 });
 ```
 
@@ -200,29 +198,29 @@ describe('work-server', () => {
 ```typescript
 // packages/work-server/__tests__/http.test.ts
 // ...
-describe('work-server', () => {
- //...
- test('login action /api/post/account/sign-in', async () => {
+describe("work-server", () => {
+  //...
+  test("login action /api/post/account/sign-in", async () => {
     const url = `http://${workServerHost}:${workServerPort}/api/post/account/sign-in`;
     const res = await nodeFetch(url, {
       body: JSON.stringify({
-        username: 'admin001',
-        password: md5('123456')
+        username: "admin001",
+        password: md5("123456"),
       }),
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json",
       },
-      method: 'POST'
+      method: "POST",
     });
     const json = await res.json();
     expect(json).toStrictEqual({
       data: { allow: false },
       success: true,
-      message: '登录成功'
+      message: "登录成功",
     });
   });
 
- //...
+  //...
 });
 ```
 
@@ -231,9 +229,9 @@ describe('work-server', () => {
 ```typescript
 // packages/work-server/__tests__/http.test.ts
 // ...
-describe('work-server', () => {
- //...
-  test('login action', async () => {
+describe("work-server", () => {
+  //...
+  test("login action", async () => {
     const loginStatusUrl = `http://${workServerHost}:${workServerPort}/api/get/account/online`;
     const noLoginRes = await nodeFetch(loginStatusUrl);
     const noLoginjson = await noLoginRes.json();
@@ -243,44 +241,44 @@ describe('work-server', () => {
     const signInurl = `http://${workServerHost}:${workServerPort}/api/post/account/sign-in`;
     const signInRes = await nodeFetch(signInurl, {
       body: JSON.stringify({
-        username: 'admin001',
-        password: md5('88888888')
+        username: "admin001",
+        password: md5("88888888"),
       }),
       // credentials: 'same-origin',
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json",
       },
-      method: 'POST'
+      method: "POST",
     });
     const signInHeaders = signInRes.headers;
     const signInJson = await signInRes.json();
     expect(signInJson).toStrictEqual({
       data: {
         allow: true,
-        username: 'admin001',
-        uuid: '00000000-aaaa-bbbb-cccc-ddddeeee0001'
+        username: "admin001",
+        uuid: "00000000-aaaa-bbbb-cccc-ddddeeee0001",
       },
       success: true,
-      message: '登录成功'
+      message: "登录成功",
     });
 
     // 登录后再判断登录态
-    const cookie = signInHeaders.get('set-cookie') || '';
+    const cookie = signInHeaders.get("set-cookie") || "";
     const hasLoginRes = await nodeFetch(loginStatusUrl, {
       headers: {
-        credentials: 'same-origin',
-        cookie
-      }
+        credentials: "same-origin",
+        cookie,
+      },
     });
     const hasLoginJson = await hasLoginRes.json();
     expect(hasLoginJson).toStrictEqual({
       allow: true,
-      username: 'admin001',
-      uuid: '00000000-aaaa-bbbb-cccc-ddddeeee0001'
+      username: "admin001",
+      uuid: "00000000-aaaa-bbbb-cccc-ddddeeee0001",
     });
   });
 
- //...
+  //...
 });
 ```
 
@@ -306,10 +304,10 @@ Node.js服务测试到这里，还要进行测试覆盖率的统计，这个配�
 
 ```typescript
 // packages/work-server/__tests__/http.bench.ts
-import { bench, expect, afterAll, beforeAll } from 'vitest';
+import { bench, expect, afterAll, beforeAll } from "vitest";
 // ...
 bench(
-  'no login /api/get/account/online',
+  "no login /api/get/account/online",
   async () => {
     const url = `http://${workServerHost}:${workServerPort}/api/get/account/online`;
     const res = await nodeFetch(url);
@@ -317,8 +315,8 @@ bench(
     expect(json).toStrictEqual({ username: null, uuid: null });
   },
   {
-    time: 1000
-  }
+    time: 1000,
+  },
 );
 ```
 
@@ -358,6 +356,7 @@ bench(
 欢迎留言参与讨论，我们下节课见。
 
 ## [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/31-32)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-10-05</li><br/>
 </ul>

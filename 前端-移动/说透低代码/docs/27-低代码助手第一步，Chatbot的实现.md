@@ -25,9 +25,9 @@
 这俩我都不满意，我本想找一个前后端一体的，但是这两个解决方案只有前端，没有服务端能力。
 
 > 你可能会问：陈老师awade用啥解决方案？答案是：我们自研了Chatbot。
-> 
+>
 > 我对人机交互做了很深入的思考，我断定高度灵活的 AI 必然导致人机的触点必须要有巨大的灵活性和可能性，同时UX团队也及时定义了完善的智能化规范，再加上当时市面上压根就没有可选的开源解决方案。
-> 
+>
 > 最后提一句，很可惜，我们没有开源的计划。
 
 综合看了一下，我挑了Pro Chat作为咱们这个专栏的Chatbot的前端解决方案。然后，再给你推荐一个功能还不错的SDK——[Vercel AI SDK](https://sdk.vercel.ai/docs)。
@@ -67,9 +67,10 @@ LangChain是一个风靡一时的AI服务端框架，提供了不少功能，适
 1. 安装python，我现在用的是python3.9，更高版本的应该也可以。
 2. 到server目录下执行 python -m venv venv 命令创建一个虚拟环境。
 3. 在server目录下执行下面命令来激活虚拟环境。
-   
+
    1. Windows下执行 .\\venv\\Scripts\\activate
    2. Mac或者LinUX下执行 source ./venv/bin/activate
+
 4. 在server目录下执行pip install -r requirements.txt安装后端依赖。
 5. 在server目录下执行python .\\src\\main.py启动后端。
 

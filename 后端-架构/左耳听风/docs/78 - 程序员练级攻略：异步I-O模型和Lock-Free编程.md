@@ -38,7 +38,7 @@
 
 - [The Secret To 10 Million Concurrent Connections -The Kernel Is The Problem, Not The Solution](http://highscalability.com/blog/2013/5/13/the-secret-to-10-million-concurrent-connections-the-kernel-i.html) - C10M问题来了……
 - 还有几篇可能有争议的文章，让你从不同的角度思考。
-  
+
   - [Select is fundamentally broken](https://idea.popcount.org/2017-01-06-select-is-fundamentally-broken/)
   - [Epoll is fundamentally broken 1/2](https://idea.popcount.org/2017-02-20-epoll-is-fundamentally-broken-12/)
   - [Epoll is fundamentally broken 2/2](https://idea.popcount.org/2017-03-20-epoll-is-fundamentally-broken-22/)
@@ -87,13 +87,15 @@ Lock-Free - 无锁技术越来越被开发人员重视，因为锁对于性能�
 
 - 关于64位系统编程，只要去一个地方就行了： [All about 64-bit programming in one place](https://software.intel.com/en-us/blogs/2011/07/07/all-about-64-bit-programming-in-one-place/)，这是一个关于64位编程相关的收集页面，其中包括相关的文章、28节课程，还有知识库和相关的blog。
 - [What Scalable Programs Need from Transactional Memory](https://dl.acm.org/citation.cfm?id=3037750) ，事务性内存（TM）一直是许多研究的重点，它在诸如IBM Blue Gene/Q和Intel Haswell等处理器中得到了支持。许多研究都使用STAMP基准测试套件来评估其设计。然而，我们所知的所有TM系统上的STAMP基准测试所获得的加速比较有限。
-  
+
   例如，在IBM Blue Gene/Q上有64个线程，我们观察到使用Blue Gene/Q硬件事务内存（HTM）的中值加速比为1.4倍，使用软件事务内存（STM）的中值加速比为4.1倍。什么限制了这些TM基准的性能？在本论文中，作者认为问题在于用于编写它们的编程模型和数据结构上，只要使用合适的模型和数据结构，程序的性能可以有10多倍的提升。
+
 - [Improving OpenSSL Performance](https://software.intel.com/en-us/articles/improving-openssl-performance) ，这篇文章除了教你如何提高OpenSSL的执行性能，还讲了一些底层的性能调优知识。
 - 关于压缩的内容。为了避免枯燥，主要推荐下面这两篇实践性很强的文章。
-  
+
   - [How eBay’s Shopping Cart used compression techniques to solve network I/O bottlenecks](https://www.ebayinc.com/stories/blogs/tech/how-ebays-shopping-cart-used-compression-techniques-to-solve-network-io-bottlenecks/) ，这是一篇很好的文章，讲述了eBay是如何通过压缩数据来提高整体服务性能的，其中有几个比较好的压缩算法。除了可以让你学到相关的技术知识，还可以让你看到一种比较严谨的工程师文化。
   - [Linkedin: Boosting Site Speed Using Brotli Compression](https://engineering.linkedin.com/blog/2017/05/boosting-site-speed-using-brotli-compression) ，LinkedIn在2017年早些时候开始使用 [Brotli](https://en.wikipedia.org/wiki/Brotli) 来替换 gzip，以此带来更快的访问，这篇文章讲述了什么是Brotli以及与其它压缩程序的比较和所带来的性能提升。
+
 - 这里有两篇关于SSD硬盘性能测试的文章。[Performance Testing with SSDs, Part 1](https://devs.mailchimp.com/blog/performance-testing-with-ssds-part-1/) 和 [Performance Testing with SSDs Part 2](https://devs.mailchimp.com/blog/performance-testing-with-ssds-pt-2/) ，这两篇文章介绍了测试SSD硬盘性能以及相关的操作系统调优方法。
 - [Secure Programming HOWTO - Creating Secure Software](https://www.dwheeler.com/secure-programs/) ，这是一本电子书，其中有繁体中文的翻译，这本电子书讲了Linux/Unix下的一些安全编程方面的知识。
 
@@ -101,9 +103,9 @@ Lock-Free - 无锁技术越来越被开发人员重视，因为锁对于性能�
 
 - [Hints for Computer System Design](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/acrobat-17.pdf) ，计算机设计的忠告，这是ACM图灵奖得主 [Butler Lampson](https://en.wikipedia.org/wiki/Butler_Lampson) 在Xerox PARC工作时的一篇论文。这篇论文简明扼要地总结了他在做系统设计时的一些想法，非常值得一读。（用他的话来说，“Studying the design and implementation of a number of computer has led to some general hints for system design. They are described here and illustrated by many examples, ranging from hardware such as the Alto and the Dorado to application programs such as Bravo and Star“。）
 - [The 5 minute rule for trading memory for disc accesses and the 5 byte rule for trading memory for CPU time](http://www.hpl.hp.com/techreports/tandem/TR-86.1.pdf) ，根据文章名称也可以看出，5分钟法则是用来衡量内存与磁盘的，而5字节法则则是在内存和CPU之间的权衡。这两个法则是Jim Gray和Franco Putzolu在1986年的文章。
-  
+
   在该论文发表10年后的1997年，Jim Gray和Goetz Graefe 又在 [The Five-Minute Rule Ten Years Later and Other Computer Storage Rules of Thumb](http://research.microsoft.com/en-us/um/people/gray/5_min_rule_SIGMOD.pdf) 中对该法则进行了重新审视。2007年，也就是该论文发表20年后，这年的1月28日，Jim Gray驾驶一艘40英尺长的船从旧金山港出海，目的是航行到附近的费拉隆岛，在那里撒下母亲的骨灰。出海之后，他就同朋友和亲属失去了联系。为了纪念和向大师致敬，时隔10多年后的2009年Goetz Graefe又发表了 [The Five-Minute Rule 20 Years Later (and How Falsh Memory Changes the Rules)](http://cacm.acm.org/magazines/2009/7/32091-the-five-minute-rule-20-years-later/fulltext)。
-  
+
   注明一下，Jim Gray是关系型数据库领域的大师。因在数据库和事务处理研究和实现方面的开创性贡献而获得1998年图灵奖。美国科学院、工程院两院院士，ACM和IEEE两会会士。他25岁成为加州大学伯克利分校计算机科学学院第一位博士。在IBM工作期间参与和主持了IMS、System R、SQL／DS、DB2等项目的开发。后任职于微软研究院，主要关注应用数据库技术来处理各学科的海量信息。
 
 # 小结
@@ -116,22 +118,26 @@ Lock-Free - 无锁技术越来越被开发人员重视，因为锁对于性能�
 
 - [开篇词](https://time.geekbang.org/column/article/8136)
 - 入门篇
-  
+
   - [零基础启蒙](https://time.geekbang.org/column/article/8216)
   - [正式入门](https://time.geekbang.org/column/article/8217)
+
 - 修养篇
-  
+
   - [程序员修养](https://time.geekbang.org/column/article/8700)
+
 - 专业基础篇
-  
+
   - [编程语言](https://time.geekbang.org/column/article/8701)
   - [理论学科](https://time.geekbang.org/column/article/8887)
   - [系统知识](https://time.geekbang.org/column/article/8888)
+
 - 软件设计篇
-  
+
   - [软件设计](https://time.geekbang.org/column/article/9369)
+
 - 高手成长篇
-  
+
   - [Linux系统、内存和网络（系统底层知识）](https://time.geekbang.org/column/article/9759)
   - [异步I/O模型和Lock-Free编程（系统底层知识）](https://time.geekbang.org/column/article/9851)
   - [Java底层知识](https://time.geekbang.org/column/article/10216)
@@ -146,6 +152,7 @@ Lock-Free - 无锁技术越来越被开发人员重视，因为锁对于性能�
   - [前端性能优化和框架（前端方向）](https://time.geekbang.org/column/article/12389)
   - [UI/UX设计（前端方向）](https://time.geekbang.org/column/article/12486)
   - [技术资源集散地](https://time.geekbang.org/column/article/12561)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>李小红</span> 👍（51） 💬（6）<p>全部放链接？一篇文章下来全是推荐看其他文章，有时间看那么多文章还订阅这个嘛？</p>2018-06-28</li><br/><li><span>喬海軍</span> 👍（22） 💬（1）<p>老陈领进门，修行靠个人，感谢陈老师给出的这些资料。</p>2018-06-28</li><br/><li><span>子非鱼焉知鱼之乐</span> 👍（16） 💬（5）<p>对专栏还是比较失望，觉得远远没有达预期，没有什么自己深入理解的东西，更像是罗列一些资料和使用经验，越听越失望，即便是介绍的这些资料，也根本没兴趣去查，都有自己的学习资料，不是来听这个的，以为有自己独特的想法和研究，还是名副其实的少。</p>2018-07-20</li><br/><li><span>echo</span> 👍（14） 💬（1）<p>看了这个系列的文章，惊叹于是如何收集如此多的链接。想问下耗子哥，这些链接是平常查询时遇到，觉得很好就分类整理了，并经常查看（手册类）或偶尔回看（经验类）?还是先收藏下来，每一段时间有一个整理的习惯?</p>2018-06-29</li><br/><li><span>poetess</span> 👍（8） 💬（1）<p>对新手一点都不友好啊这个系列</p>2018-06-28</li><br/><li><span>江小田</span> 👍（66） 💬（0）<p>专栏本来就是方向指导性质的，并不会有什么可以让你直接看了就能用，能涨工资的所谓干货，订阅前都提醒过了，干嘛还有那么多抱怨？</p>2018-06-28</li><br/><li><span>yzz</span> 👍（42） 💬（0）<p>如果一本书一篇文章就能让你精通某个技术，那说明这个技术本身就没什么难度（价值），技术就是要静下心来。给这么多干货还不知道感激，感谢陈老师。</p>2018-06-28</li><br/><li><span>vooc</span> 👍（20） 💬（0）<p>看了很多文章下的评论，感觉挺奇怪的。不少人期待的是什么呢，看几篇文章就希望能成为大神？都总想着走捷径，学习是持续的过程，能力也不是一朝一夕就起来的，都只看到大神的风光，却没有看到别人背后的努力跟付出。</p>2018-06-28</li><br/><li><span>流浪</span> 👍（10） 💬（0）<p>这个专栏的干货太多太多了，衷心感谢作者大大的分享！希望作者大大不要像云风一样被其他人的评论影响了，冲冠一怒把专栏删了，损失的是我们😂</p>2018-07-31</li><br/><li><span>mz</span> 👍（10） 💬（0）<p>今年补了一下英语，虽然文章里面还是有很多单词不认识，但是现在已经乐于看英文文章了。</p>2018-06-28</li><br/><li><span>CookeCooler</span> 👍（6） 💬（0）<p>这些干货， 可能是你一辈子都发现不了的好资源。
 耗子叔如此慷慨的告诉我们。

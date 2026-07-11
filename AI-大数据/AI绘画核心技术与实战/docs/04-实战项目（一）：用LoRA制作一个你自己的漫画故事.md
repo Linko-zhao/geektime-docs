@@ -127,7 +127,7 @@ LoRA不仅可以作为一个风格化模型，还可以实现对特定ID的保�
 negative prompt可以按照下面这样设置。
 
 ```bash
-negative prompt：EasyNegative, (worst quality, low quality:1.4), (lip, nose, rouge, lipstick:1.4), (jpeg artifacts:1.4), (1boy, abs, muscular:1.0), greyscale, monochrome, dusty sunbeams, trembling, motion lines, motion blur, emphasis lines, text, title, logo, signature 
+negative prompt：EasyNegative, (worst quality, low quality:1.4), (lip, nose, rouge, lipstick:1.4), (jpeg artifacts:1.4), (1boy, abs, muscular:1.0), greyscale, monochrome, dusty sunbeams, trembling, motion lines, motion blur, emphasis lines, text, title, logo, signature
 ```
 
 ![](https://static001.geekbang.org/resource/image/97/e2/979829fa6646892fdeb4c2fd588533e2.jpg?wh=3957x4939)
@@ -182,7 +182,7 @@ negative prompt：EasyNegative, (worst quality, low quality:1.4), (lip, nose, ro
 - negative prompt：
 
 ```python
-EasyNegative, (worst quality, low quality:1.4), (lip, nose, rouge, lipstick:1.4), (jpeg artifacts:1.4), (1boy, abs, muscular:1.0), greyscale, monochrome, dusty sunbeams, trembling, motion lines, motion blur, emphasis lines, text, title, logo, signature 
+EasyNegative, (worst quality, low quality:1.4), (lip, nose, rouge, lipstick:1.4), (jpeg artifacts:1.4), (1boy, abs, muscular:1.0), greyscale, monochrome, dusty sunbeams, trembling, motion lines, motion blur, emphasis lines, text, title, logo, signature
 ```
 
 - 采样器：DPM++ 2s a Karras

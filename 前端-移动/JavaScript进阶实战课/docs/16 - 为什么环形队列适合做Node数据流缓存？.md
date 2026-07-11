@@ -20,7 +20,7 @@
 
 ```javascript
 class Queue {
-  constructor () {
+  constructor() {
     this.queue = [];
   }
   enqueue(item) {

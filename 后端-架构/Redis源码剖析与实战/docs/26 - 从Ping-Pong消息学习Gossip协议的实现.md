@@ -127,7 +127,7 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
    …
    run_with_period(100) {
       //每100ms调用依次clusterCron函数
-      if (server.cluster_enabled) clusterCron();  
+      if (server.cluster_enabled) clusterCron(); 
    }
    …
 }
@@ -386,11 +386,10 @@ PS: 当时看这段代码的时候非常疑惑，看源码的注释也很疑惑.
 
 https:&#47;&#47;github.com&#47;redis&#47;redis&#47;commit&#47;1e659a04cf19e4349c8dbba931d1606336970b8c#diff-55c2de0fa49d05f6ed8f0c13cacedc85fba5d5739c8360567743f9f740df3179
 
-
 &#47;* If there are PFAIL nodes, add them at the end. *&#47;
-    if (pfail_wanted) {
-        dictIterator *di;
-        dictEntry *de;
+if (pfail_wanted) {
+dictIterator *di;
+dictEntry *de;
 
         di = dictGetSafeIterator(server.cluster-&gt;nodes);
         while((de = dictNext(di)) != NULL &amp;&amp; pfail_wanted &gt; 0) {
@@ -417,10 +416,10 @@ Redis Cluster计算故障转移确认时间是cluster-node-timeout*2，那这段
 对于节点A，在cluster-node-timeout*2的故障转移确认时间内，最少也可以与他节点交换关于C节点到这么多个包：
 PROB * GOSSIP_ENTRIES_PER_PACKET * TOTAL_PACKETS
 (节点C被包含在一个entry中的几率，100选1，也就是1%)*(一个GOSSIP包中的entry数量，10分之1，100个节点网络中是10)*（其他节点与A交换的最小总包数，节点数*8）
-1%*10*(100*8)=80
+1%_10_(100*8)=80
 由于这些包都是随机选择entry的，节点A收发的这80个包含C节点信息的包，也就是与A交换过C节点信息的节点也差不多为80个，大概率覆盖了100个节点的多数节点，也就可以确实证明了C点有问题了。
 
-为何不再高一些：现在这个比例已经够高了，如果再高一些，只会增加网络负担而已。而且，收发8个包已经是最差情况了，平时比8个包还会多一些。 
+为何不再高一些：现在这个比例已经够高了，如果再高一些，只会增加网络负担而已。而且，收发8个包已经是最差情况了，平时比8个包还会多一些。
 同时，在4.x的源码中，已经补充了pfail_wanted的代码，会让PFAIL节点更快的传播。
 
 为何不再低一些：在正常的redis cluster集群中，有一些slave节点，不会参与投票，所以保持了这样一个比例。

@@ -117,7 +117,7 @@ Rust中，unsafe 代码把程序的正确性和安全性交给了开发者来保
 在[第3讲](https://time.geekbang.org/column/article/411632)里，我们讲过 const 和 static，它们都可以用于声明全局变量。但注意，除非使用 unsafe，static 无法作为 mut 使用，因为这意味着它可能在多个线程下被修改，所以不安全：
 
 ```rust
-static mut COUNTER: u64 = 0; 
+static mut COUNTER: u64 = 0;
 
 fn main() {
     COUNTER += 1; // 编译不过，编译器告诉你需要使用 unsafe
@@ -182,7 +182,7 @@ struct Packet<const N: usize> {
 fn main() {
     let ip = Packet { data: [0u8; 20] };
     let udp = Packet { data: [0u8; 8] };
-    
+
     println!("ip: {:?}, udp: {:?}", ip, udp);
 }
 ```
@@ -247,6 +247,7 @@ chars()返回的iterator具有和函数参数name相同的生命周期，name本
 
 参考材料：
 编译器报错信息
+
 ```plain
    |
 12 | fn lifetime1() -&gt; &amp;str {
@@ -264,20 +265,23 @@ chars()返回的iterator具有和函数参数name相同的生命周期，name本
 ```
 
 标准库具体实现
-```rust
+
+````rust
 &#47;&#47; Returns an iterator over the chars of a string slice.
 pub fn chars(&amp;self) -&gt; Chars&lt;&#39;_&gt;
 
 &#47;&#47; Converts the given value to a String.
 fn to_string(&amp;self) -&gt; String
-```</p>2021-09-17</li><br/><li><span>gnu</span> 👍（10） 💬（1）<p>lifetime1: 
+```</p>2021-09-17</li><br/><li><span>gnu</span> 👍（10） 💬（1）<p>lifetime1:
 返回的引用是在 lifetime1 里被分配，lifetime1 结束后引用就被回收，所以错误。
 改为转成 string 后返回。
-```
+````
+
 fn lifetime1() -&gt; String {
-    let name = &quot;Tyr&quot;.to_string();
-    name[1..].to_string()
+let name = &quot;Tyr&quot;.to_string();
+name[1..].to_string()
 }
+
 ```
 
 
@@ -285,16 +289,18 @@ lifetime2:
 函数参数是 String，编译器无法通过参数确定返回值 &amp;str 的生命周期。
 修改为
 ```
+
 fn lifetime2(name: &amp;String) -&gt; &amp;str {
-    &amp;name[1..]
+&amp;name[1..]
 }
+
 ```
 
 lifetime3:
 返回 Chars 类型的生命周期与参数 name 关联，所以正确。</p>2021-09-17</li><br/><li><span>记事本</span> 👍（6） 💬（2）<p>老师，关于智能指针一些问题：
 数据放在堆上，返回指针给栈上的结构体
 智能指针有个特点，*解耦到原型，&amp;*就是获取数据的引用，单&amp;栈上结构体的地址
-*因为会解耦出原型，所以原数据是否实现copy trait，否则会move，智能指针就没有所有权了</p>2021-09-17</li><br/><li><span>彭亚伦</span> 👍（5） 💬（1）<p>关于String 和 &amp;str相关的各种问题,  我的经验, 一个核心原因是因为 String 实现了Deref&lt;Target = str&gt;,  String和&amp;str是通过这个Deref Trait建立了互换的关系; 
+*因为会解耦出原型，所以原数据是否实现copy trait，否则会move，智能指针就没有所有权了</p>2021-09-17</li><br/><li><span>彭亚伦</span> 👍（5） 💬（1）<p>关于String 和 &amp;str相关的各种问题,  我的经验, 一个核心原因是因为 String 实现了Deref&lt;Target = str&gt;,  String和&amp;str是通过这个Deref Trait建立了互换的关系;
 
 这样做带来了很多便利, 同时也有个side effect, 就是当参数要求是 &amp;str 时, 实参可能是&amp;str也可能是&amp;String, 而两者的生命周期明显是不一样的, 于是就产生了各种看似比较难以琢磨的问题.</p>2021-10-26</li><br/><li><span>Kerry</span> 👍（3） 💬（1）<p>例子一：
 
@@ -303,7 +309,7 @@ lifetime3:
 
 可改为：
 
-fn lifetime1() -&gt; &amp;&#39;static str { 
+fn lifetime1() -&gt; &amp;&#39;static str {
     let name = &quot;Tyr&quot;;
     &amp;name[1..]
 }
@@ -312,7 +318,7 @@ fn lifetime1() -&gt; &amp;&#39;static str {
 
 函数参数不是引用类型，而且String没有实现Copy Trait，传参的时候会把形参的所有权给到实参，这时候跟例子一是一样的。解决办法是把形参定义为引用类型，如&amp;str（&amp;String也不是不行）:
 
-fn lifetime2(name: &amp;str) -&gt; &amp;str { 
+fn lifetime2(name: &amp;str) -&gt; &amp;str {
     &amp;name[1..]
 }
 
@@ -329,8 +335,9 @@ pub fn chars(&amp;self) -&gt; Chars&lt;&#39;_&gt;
 pub struct Chars&lt;&#39;a&gt; {
     pub(super) iter: slice::Iter&lt;&#39;a, u8&gt;,
 }</p>2021-09-18</li><br/><li><span>罗杰</span> 👍（3） 💬（1）<p>比较简单的问题，第一个 name 在函数里面创建的 String，函数返回时就释放掉了，这是最直白的悬垂引用。第二个 name 是从调用者 move 过来的 String，进入该函数，所有权就归函数了，返回时 name 也将被释放。第三个 name 不用加生命周期标注可以正常工作，参数是引用，返回的数据与该参数的生命周期相同，没有问题，可以编译通过。</p>2021-09-17</li><br/><li><span>亚伦碎语</span> 👍（2） 💬（1）<p>对&amp;str 和 &amp;String的区别，更新一点：
-String可以动态的调整内存大小。 str不能resize. 
+String可以动态的调整内存大小。 str不能resize.
 &amp;str直接是指到了String存储的引用，&amp;String是对于String内存对象的引用。
 参考：
 https:&#47;&#47;users.rust-lang.org&#47;t&#47;whats-the-difference-between-string-and-str&#47;10177&#47;8</p>2021-09-23</li><br/><li><span>丁卯</span> 👍（1） 💬（1）<p>to_owned() 什么意思？</p>2021-10-30</li><br/><li><span>记事本</span> 👍（1） 💬（1）<p>老师，String，Vec算是智能指针吗？*String解除str，然后&amp;*String就是&amp;str了，Box::new()好像也可以这样用，Box::new(String::new)这样的使用，内存发生了什么变化啊</p>2021-09-17</li><br/><li><span>手机失联户</span> 👍（0） 💬（1）<p>老师，我看课程里没有提到rust宏相关的知识点，请问后续会讲这个吗？因为有些rust项目，比如tokio都会用到宏，导致代码不是很容易懂，老师能不能后续专门出一期讲一下。</p>2021-11-30</li><br/><li><span>mobus</span> 👍（0） 💬（1）<p>老师，有没有办法快速提取 枚举值？比如jsonrpc request ，为了匹配最终请求值，代码膨胀的太厉害了</p>2021-11-11</li><br/><li><span>活着</span> 👍（0） 💬（1）<p>老师辛苦了，课程非常好👍</p>2021-11-03</li><br/>
 </ul>
+```

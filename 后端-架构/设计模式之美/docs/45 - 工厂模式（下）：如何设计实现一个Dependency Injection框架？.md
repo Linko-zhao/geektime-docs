@@ -51,7 +51,7 @@ public class RedisCounter {
    <bean id="rateLimiter" class="com.xzg.RateLimiter">
       <constructor-arg ref="redisCounter"/>
    </bean>
- 
+
    <bean id="redisCounter" class="com.xzg.redisCounter">
      <constructor-arg type="String" value="127.0.0.1">
      <constructor-arg type="int" value=1234>
@@ -87,7 +87,7 @@ public class RedisCounter {
    <bean id="rateLimiter" class="com.xzg.RateLimiter">
       <constructor-arg ref="redisCounter"/>
    </bean>
- 
+
    <bean id="redisCounter" class="com.xzg.redisCounter" scope="singleton" lazy-init="true">
      <constructor-arg type="String" value="127.0.0.1">
      <constructor-arg type="int" value=1234>
@@ -196,7 +196,7 @@ public class BeanDefinition {
   private Scope scope = Scope.SINGLETON;
   private boolean lazyInit = false;
   // 省略必要的getter/setter/constructors
- 
+
   public boolean isSingleton() {
     return scope.equals(Scope.SINGLETON);
   }
@@ -206,7 +206,7 @@ public class BeanDefinition {
     SINGLETON,
     PROTOTYPE
   }
-  
+
   public static class ConstructorArg {
     private boolean isRef;
     private Class type;
@@ -332,42 +332,36 @@ BeansFactory 下 createBean 方法中：singletonObjects.contains 应为 singlet
 三级缓存源码对应
 org.springframework.beans.factory.support.DefaultSingletonBeanRegistry#getSingleton
 
-&#47;**
-	 * Return the (raw) singleton object registered under the given name.
-	 * &lt;p&gt;Checks already instantiated singletons and also allows for an early
-	 * reference to a currently created singleton (resolving a circular reference).
-	 * @param beanName the name of the bean to look for
-	 * @param allowEarlyReference whether early references should be created or not
-	 * @return the registered singleton object, or {@code null} if none found
-	 *&#47;
-	@Nullable
-	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
-		Object singletonObject = this.singletonObjects.get(beanName);
-		if (singletonObject == null &amp;&amp; isSingletonCurrentlyInCreation(beanName)) {
-			synchronized (this.singletonObjects) {
-				singletonObject = this.earlySingletonObjects.get(beanName);
-				if (singletonObject == null &amp;&amp; allowEarlyReference) {
-					ObjectFactory&lt;?&gt; singletonFactory = this.singletonFactories.get(beanName);
-					if (singletonFactory != null) {
-						singletonObject = singletonFactory.getObject();
-						this.earlySingletonObjects.put(beanName, singletonObject);
-						this.singletonFactories.remove(beanName);
-					}
-				}
-			}
-		}
-		return singletonObject;
-	}
+&#47;** * Return the (raw) singleton object registered under the given name. * &lt;p&gt;Checks already instantiated singletons and also allows for an early * reference to a currently created singleton (resolving a circular reference). * @param beanName the name of the bean to look for * @param allowEarlyReference whether early references should be created or not * @return the registered singleton object, or {@code null} if none found
+*&#47;
+@Nullable
+protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+Object singletonObject = this.singletonObjects.get(beanName);
+if (singletonObject == null &amp;&amp; isSingletonCurrentlyInCreation(beanName)) {
+synchronized (this.singletonObjects) {
+singletonObject = this.earlySingletonObjects.get(beanName);
+if (singletonObject == null &amp;&amp; allowEarlyReference) {
+ObjectFactory&lt;?&gt; singletonFactory = this.singletonFactories.get(beanName);
+if (singletonFactory != null) {
+singletonObject = singletonFactory.getObject();
+this.earlySingletonObjects.put(beanName, singletonObject);
+this.singletonFactories.remove(beanName);
+}
+}
+}
+}
+return singletonObject;
+}
 
+    &#47;** Cache of singleton objects: bean name to bean instance. *&#47;
+    private final Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap&lt;&gt;(256);
 
-	&#47;** Cache of singleton objects: bean name to bean instance. *&#47;
-	private final Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap&lt;&gt;(256);
+    &#47;** Cache of singleton factories: bean name to ObjectFactory. *&#47;
+    private final Map&lt;String, ObjectFactory&lt;?&gt;&gt; singletonFactories = new HashMap&lt;&gt;(16);
 
-	&#47;** Cache of singleton factories: bean name to ObjectFactory. *&#47;
-	private final Map&lt;String, ObjectFactory&lt;?&gt;&gt; singletonFactories = new HashMap&lt;&gt;(16);
+    &#47;** Cache of early singleton objects: bean name to bean instance. *&#47;
+    private final Map&lt;String, Object&gt; earlySingletonObjects = new HashMap&lt;&gt;(16);
 
-	&#47;** Cache of early singleton objects: bean name to bean instance. *&#47;
-	private final Map&lt;String, Object&gt; earlySingletonObjects = new HashMap&lt;&gt;(16);
 </p>2020-04-24</li><br/><li><span>王先森</span> 👍（11） 💬（0）<p>php开发者默默的去瞅laravel的DI容器</p>2020-06-16</li><br/><li><span>好吃不贵</span> 👍（9） 💬（1）<p>createBean先用Topology sort看是否有环，然后再按序创建？</p>2020-02-14</li><br/><li><span>J.Smile</span> 👍（9） 💬（0）<p>思考题:
 ①构造器初始化方式，无法解决循环依赖
 ②set注入方式初始化，有两种:

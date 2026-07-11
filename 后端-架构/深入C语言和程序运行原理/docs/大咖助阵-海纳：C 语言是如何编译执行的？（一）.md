@@ -59,7 +59,7 @@ int main() {
 我们分别使用“gcc -E -DUSE\_MACRO”命令和“gcc -E”命令处理这个文件，就会得到不同的结果。先来看定义了“USE\_MACRO”的情况：
 
 ```plain
-// gcc -E macro_def.c -DUSE_MACRO 
+// gcc -E macro_def.c -DUSE_MACRO
 int main() {
     int a = 3;
     int b = (++a)*(++a);

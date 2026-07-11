@@ -461,13 +461,13 @@ int main()
 bool operator!=(I i, null_sentinel)
 { return *i != 0;}
 
-可以請老師說明一下null_sentinel在這邊的作用嗎？function body並沒有用到null_sentinel, null sentinel只出現在input parameter上。</p>2020-10-13</li><br/><li><span>三味</span> 👍（3） 💬（1）<p>emmmmmmm... 
+可以請老師說明一下null_sentinel在這邊的作用嗎？function body並沒有用到null_sentinel, null sentinel只出現在input parameter上。</p>2020-10-13</li><br/><li><span>三味</span> 👍（3） 💬（1）<p>emmmmmmm...
 最后提到的这篇文章，我之前看到过，印象最深刻的一句话就是，没有C++博士学位还想写C++？
 最近的未来篇三篇我基本上都是走马观花的在看。。对我个人来说，感觉收益和学习成本比值有点小，根据以往经验，C++20要想全面开花，还有好几年的路要走。。
 感觉C++11也是到了C++14才算是稳定点。。至少给我的感觉，直到C++17都是在对C++11进行修补。
 所以，这三讲一年后我再回来好好学习吧！本来我的主业是图形</p>2020-02-11</li><br/><li><span>Sochooligan</span> 👍（2） 💬（1）<p>一、看得云里雾里地，好的方面是所有例子都运行了。
 二、发现两处分心的地方：
-（1）我们可以在输出 r 之前插入下面这行： 
+（1）我们可以在输出 r 之前插入下面这行：
 我们可以在输出 r 之前（15行之后，16行之前）插入下面这行：
 （2）除了 view，vector 满足所有的 range 概念。
 vector 满足除view外所有的 range 概念。

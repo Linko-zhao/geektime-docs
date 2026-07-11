@@ -106,14 +106,13 @@ Spring不仅仅提供了各种Java项目开发的常用功能模块，而且还�
 <li><span>浩浩</span> 👍（0） 💬（4）<p>&quot;模块之间关系，仅有上层对下层的依赖关系，而同层之间以及下层对上层，几乎没有依赖和耦合&quot;前面说“仅有上层对下层的依赖关系”；后面说：“而同层之间以及下层对上层，几乎没有依赖和耦合”
 这不前后矛盾了吗？想不明白，求教。
 
-
 </p>2020-05-25</li><br/><li><span>守拙</span> 👍（50） 💬（6）<p>Gson是google出品的Json序列化&#47;反序列化开源框架(相信专栏读者没人没用过吧).
 
 Gson符合&quot;约定优于配置&quot;:
 
 通常情况, 实体类的成员变量名与序列化后的json key是一致的, 无需配置, 算是一种约定.
 
-但实体类的成员变量名和json key也可以不同. 通过@SeriailzedName()注解, 可以配置成员变量与json key的映射关系. 
+但实体类的成员变量名和json key也可以不同. 通过@SeriailzedName()注解, 可以配置成员变量与json key的映射关系.
 
 例:
 private String userName;&#47;&#47;序列化后: {&quot;userName&quot; : &quot;xx&quot;}

@@ -29,7 +29,7 @@ JVM内存分配不合理最直接的表现就是频繁的GC，这会导致上下
 我们知道了一个对象从创建至回收到堆中的过程，接下来我们再来了解下JVM堆内存是如何分配的。在默认不配置JVM堆内存大小的情况下，JVM根据默认值来配置当前内存大小。我们可以通过以下命令来查看堆内存配置的默认值：
 
 ```
-java -XX:+PrintFlagsFinal -version | grep HeapSize 
+java -XX:+PrintFlagsFinal -version | grep HeapSize
 jmap -heap 17284
 ```
 
@@ -50,14 +50,14 @@ jmap -heap 17284
 我们先使用JVM的默认配置，观察应用服务的运行情况，下面我将结合一个实际案例来讲述。现模拟一个抢购接口，假设需要满足一个5W的并发请求，且每次请求会产生20KB对象，我们可以通过千级并发创建一个1MB对象的接口来模拟万级并发请求产生大量对象的场景，具体代码如下：
 
 ```
-	
+
 	@RequestMapping(value = "/test1")
 	public String test1(HttpServletRequest request) {
 		List<Byte[]> temp = new ArrayList<Byte[]>();
-		
+
 		Byte[] b = new Byte[1024*1024];
 		temp.add(b);
-		
+
 		return "success";
 	}
 ```

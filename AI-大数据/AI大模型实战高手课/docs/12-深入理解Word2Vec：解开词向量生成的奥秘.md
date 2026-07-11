@@ -223,13 +223,13 @@ import os
 path1 = &#39;data.xml&#39;
 path2 = &#39;data1.xml&#39;
 with open(path1, &#39;r&#39;, encoding=&#39;utf-8&#39;,) as f1:
-    with open(path2, &#39;a+&#39;, encoding=&#39;utf-8&#39;) as f2:
-        line = f1.readline()
-        while line:
-            # print(line.strip())
-            f2.write(line.replace(&#39;&amp;brvbar;&#39;, &#39;¦&#39;).replace(&#39;￿&#39;,&#39;&#39;))
-            line = f1.readline() </p>2024-07-23</li><br/><li><span>黄蓉 Jessie</span> 👍（0） 💬（2）<p>对于&amp;brvbar;无法解析的问题，可以用代码将其替换为｜。然后还会遇到一个报错，xml.etree.ElementTree.ParseError: not well-formed (invalid token): line 411575, column 19。这个是因为xml文件里有特殊字符，找到对应行411575，复制这个字符批量替换掉就可以运行成功。
+with open(path2, &#39;a+&#39;, encoding=&#39;utf-8&#39;) as f2:
+line = f1.readline()
+while line: # print(line.strip())
+f2.write(line.replace(&#39;&amp;brvbar;&#39;, &#39;¦&#39;).replace(&#39;￿&#39;,&#39;&#39;))
+line = f1.readline() </p>2024-07-23</li><br/><li><span>黄蓉 Jessie</span> 👍（0） 💬（2）<p>对于&amp;brvbar;无法解析的问题，可以用代码将其替换为｜。然后还会遇到一个报错，xml.etree.ElementTree.ParseError: not well-formed (invalid token): line 411575, column 19。这个是因为xml文件里有特殊字符，找到对应行411575，复制这个字符批量替换掉就可以运行成功。
 实测能运行起来的预处理代码如下（替换特殊字符后）
+
 ```python
 import jieba
 import xml.etree.ElementTree as ET
@@ -269,3 +269,4 @@ for text in processed_texts:
     print(text)</p>2024-07-23</li><br/><li><span>Juha</span> 👍（0） 💬（4）<p>这个xml文件，不知道有没有一样无法正常读取的，如果换了lxml的话，数据会变得很多，结果不准确</p>2024-07-09</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（0）<p>老师，你好，基于Word2Vec是怎么实现情感分析的呢？是预先定义一些比如负面情绪的词语，计算拿到一组向量。然后输入一个词，计算出向量，跟预先定义好负面情绪的向量计算相似度，判断是否为负面情绪吗？
 </p>2024-12-22</li><br/>
 </ul>
+```

@@ -213,35 +213,37 @@ from sklearn import preprocessing
 from skimage import color
 
 # 加载图像，并对数据进行规范化
-def load_data(filePath):
-    # 读文件
-    f = open(filePath,&#39;rb&#39;)
-    data = []
-    # 得到图像的像素值
-    img = image.open(f)
-    # 得到图像尺寸
-    width, height = img.size
-    for x in range(width):
-        for y in range(height):
-            # 得到点(x,y)的三个通道值
-            c1, c2, c3 = img.getpixel((x, y))
-            data.append([c1, c2, c3])
-    f.close()
-    # 采用Min-Max规范化
-    mm = preprocessing.MinMaxScaler()
-    data = mm.fit_transform(data)
-    return np.mat(data), width, height
+
+def load_data(filePath): # 读文件
+f = open(filePath,&#39;rb&#39;)
+data = [] # 得到图像的像素值
+img = image.open(f) # 得到图像尺寸
+width, height = img.size
+for x in range(width):
+for y in range(height): # 得到点(x,y)的三个通道值
+c1, c2, c3 = img.getpixel((x, y))
+data.append([c1, c2, c3])
+f.close() # 采用Min-Max规范化
+mm = preprocessing.MinMaxScaler()
+data = mm.fit_transform(data)
+return np.mat(data), width, height
 
 # 加载图像，得到规范化的结果img，以及图像尺寸
+
 img, width, height = load_data(&#39;.&#47;baby2.jpg&#39;)
 
 # 用K-Means对图像进行16聚类
+
 kmeans =KMeans(n_clusters=16)
 kmeans.fit(img)
 label = kmeans.predict(img)
+
 # 将图像聚类结果，转化成图像尺寸的矩阵
+
 label = label.reshape([width, height])
+
 # 将聚类标识矩阵转化为不同颜色的矩阵
+
 label_color = (color.label2rgb(label)*255).astype(np.uint8)
 label_color = label_color.transpose(1,0,2)
 images = image.fromarray(label_color)
@@ -255,21 +257,21 @@ import numpy as np
 import pandas as pd
 #载入数据
 def load_data(file):
-    with open(file,&#39;rb&#39;) as f:
-        data=[]
-        #打开文件
-        img=image.open(f)
-        width,height=img.size
-        #获取特征数据
-        for x in range(width):
-            for y in range(height):
-                c1,c2,c3=img.getpixel((x,y))
-                data.append([c1,c2,c3])
-        #进行mm规范化
-        from sklearn.preprocessing import MinMaxScaler
-        mm=MinMaxScaler()
-        data=mm.fit_transform(data)
-        return np.mat(data),width,height
+with open(file,&#39;rb&#39;) as f:
+data=[]
+#打开文件
+img=image.open(f)
+width,height=img.size
+#获取特征数据
+for x in range(width):
+for y in range(height):
+c1,c2,c3=img.getpixel((x,y))
+data.append([c1,c2,c3])
+#进行mm规范化
+from sklearn.preprocessing import MinMaxScaler
+mm=MinMaxScaler()
+data=mm.fit_transform(data)
+return np.mat(data),width,height
 data,width,height=load_data(&#39;.&#47;27&#47;baby.jpg&#39;)
 
 #进行聚类
@@ -281,38 +283,55 @@ label=kmeans.fit_predict(data)
 #转换成图像矩阵
 label=label.reshape([width,height])
 #生成一张新图片
+
 # pic_1=image.new(&quot;L&quot;,(width,height))
+
 # #把像素信息写入
+
 # #方法1写入灰度值
+
 # for x in range(width):
-#     for y in range(height):
-#         #按照分类确定灰度值
-#         pic_1.putpixel((x,y),int(label[x][y]*256&#47;16))
+
+# for y in range(height):
+
+# #按照分类确定灰度值
+
+# pic_1.putpixel((x,y),int(label[x][y]*256&#47;16))
+
 # pic_1.save(&#39;.&#47;27&#47;baby.jpg&#39;)
 
 # #方法2
+
 # # 使用模组，将表示矩阵转换为各种颜色的矩阵
+
 # #使用label2rgb(label)*255转化,再把矩阵转化为unit8类型，无符号整数
+
 # from skimage import color
+
 # label_color=(color.label2rgb(label)*255).astype(np.uint8)
+
 # #似乎都需要进行颠倒处理
+
 # label_color=label_color.transpose(1,0,2)
+
 # #使用fromarray把矩阵生成图片
+
 # images=image.fromarray(label_color)
+
 # images.save(&#39;.&#47;27&#47;baby_color_2.jpg&#39;)
 
 #方法3获取对应原图
 #创建新的图片
 imges1=image.new(&#39;RGB&#39;,(width,height))
 #写入图片
-for x in  range(width):
-    for y in range(height):
-        #吧范围为0-255的数值投射到1-256
-        #获取第一列即r的值
-        c1=kmeans.cluster_centers_[label[x,y],0]
-        c2 = kmeans.cluster_centers_[label[x, y], 1]
-        c3 = kmeans.cluster_centers_[label[x, y], 2]
-        imges1.putpixel((x,y),(int(c1*256)-1,int(c2*256)-1,int(c3*256)-1))
+for x in range(width):
+for y in range(height):
+#吧范围为0-255的数值投射到1-256
+#获取第一列即r的值
+c1=kmeans.cluster_centers_[label[x,y],0]
+c2 = kmeans.cluster_centers_[label[x, y], 1]
+c3 = kmeans.cluster_centers_[label[x, y], 2]
+imges1.putpixel((x,y),(int(c1*256)-1,int(c2*256)-1,int(c3*256)-1))
 imges1.save(&#39;.&#47;27&#47;baby_yasuo.jpg&#39;)</p>2019-02-19</li><br/><li><span>Ronnyz</span> 👍（1） 💬（1）<p>import numpy as np
 import PIL.Image as Image
 from sklearn import preprocessing
@@ -321,26 +340,26 @@ from skimage import color
 
 #加载图片，并进行规范化
 def load_data(filepath):
-    #读图片
-    f=open(filepath,&#39;rb&#39;)
-    #获取图片像素
-    img=Image.open(f)
-    #获取图片尺寸和像素矩阵
-    width,height =img.size
-    data=[]
-    for x in range(width):
-        for y in range(height):
-            #得到点（x,y）的R,G,B通道值
-            r,g,b=img.getpixel((x,y))
-            data.append([r,g,b])
-    f.close()
-    #采用min-max规范化
-    mm=preprocessing.MinMaxScaler()
-    print(&#39;原位置列表：&#39;)
-    print(type(data))
-    print(len(data))
-    data=mm.fit_transform(data)
-    return np.mat(data),width,height
+#读图片
+f=open(filepath,&#39;rb&#39;)
+#获取图片像素
+img=Image.open(f)
+#获取图片尺寸和像素矩阵
+width,height =img.size
+data=[]
+for x in range(width):
+for y in range(height):
+#得到点（x,y）的R,G,B通道值
+r,g,b=img.getpixel((x,y))
+data.append([r,g,b])
+f.close()
+#采用min-max规范化
+mm=preprocessing.MinMaxScaler()
+print(&#39;原位置列表：&#39;)
+print(type(data))
+print(len(data))
+data=mm.fit_transform(data)
+return np.mat(data),width,height
 
 #加载图片，得到规范化结果
 img,width,height = load_data(&#39;.&#47;kmeans-master&#47;baby.jpg&#39;)
@@ -365,11 +384,11 @@ images.save(&#39;.&#47;kmeans-master&#47;baby_mark.jpg&#39;)
 #创建新图像，保存聚类压缩之后的结果
 img=Image.new(&#39;RGB&#39;,(width,height))
 for x in range(width):
-    for y in range(height):
-        r1=kmeans.cluster_centers_[label[x, y],0]
-        g1=kmeans.cluster_centers_[label[x, y], 1]
-        b1=kmeans.cluster_centers_[label[x, y], 2]
-        img.putpixel((x,y),(int(r1*256)-1,int(g1*256)-1,int(b1*256)-1))
+for y in range(height):
+r1=kmeans.cluster_centers_[label[x, y],0]
+g1=kmeans.cluster_centers_[label[x, y], 1]
+b1=kmeans.cluster_centers_[label[x, y], 2]
+img.putpixel((x,y),(int(r1*256)-1,int(g1*256)-1,int(b1*256)-1))
 img.save(&#39;.&#47;kmeans-master&#47;baby_new.jpg&#39;)</p>2019-11-18</li><br/><li><span>§mc²ompleXWr</span> 👍（0） 💬（2）<p>为什么要用np.mat(data)??
 我用array()跑出来的结果完全是一样的啊。。</p>2020-07-12</li><br/><li><span>宋晓明</span> 👍（0） 💬（1）<p>极客时间 pc界面终于改了。。之前的界面找某篇文章费死个劲</p>2019-03-12</li><br/><li><span>Rickie</span> 👍（0） 💬（1）<p>老师好，想请问下您聚类后得到的那张灰度图像有其他的设置吗？我使用跟您一样的代码，最后生成的图尺寸非常小，且一些细节并没有分类正确...不知道是什么原因？</p>2019-02-14</li><br/><li><span>mickey</span> 👍（18） 💬（1）<p>import PIL.Image as image
 导入的是pillow包，而非pil包。

@@ -361,7 +361,7 @@ Time                 Id Command    Argument
 
 ```go
  MySQL Py > util.dump_schemas( ["employees","src_db"],
-     "/data/backup/db_backups", 
+     "/data/backup/db_backups",
     {"consistent":False})
 ```
 
@@ -370,7 +370,7 @@ Time                 Id Command    Argument
 MySQL Shell Dump工具将导出的文件存放在指定的路径下，每个表的DDL语句和数据分别存放在单独的文件中。建表语句存放在database\_name@table\_name.sql文件中，表的数据存放在database\_name@table\_name@@n.xxx.xxx文件中。一个表的数据按一定的大小切割成多个文件存放。导出时可以指定文件的格式，默认使用tsv格式，并且使用zstd进行压缩。
 
 ```go
-# tree /data/backup/fulldump_20240722 
+# tree /data/backup/fulldump_20240722
 /data/backup/fulldump_20240722
 ├── employees@current_dept_emp.pre.sql
 ├── employees@current_dept_emp.sql

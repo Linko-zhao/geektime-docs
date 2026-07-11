@@ -329,12 +329,12 @@ struct has_reserve : false_type {};
 
 template &lt;typename T&gt;
 struct has_reserve&lt;
-  T, void_t&lt;decltype(
-       declval&lt;T&amp;&gt;().reserve(1U))&gt;&gt;
-  : true_type {};
+T, void_t&lt;decltype(
+declval&lt;T&amp;&gt;().reserve(1U))&gt;&gt;
+: true_type {};
 第二个是一个类特化，但我理解，第二个中void的模板参数的推导结果和第一个是一样的。那此处 更特殊 这个意思是体现在 void的模板参数推导过程（无错）吗？</p>2021-03-08</li><br/><li><span>Simon</span> 👍（1） 💬（1）<p>typename = void_t&lt;&gt; 这个写法是什么意思？类型名是不重要的？</p>2022-08-01</li><br/><li><span>李亮亮</span> 👍（1） 💬（2）<p>
 template &lt;typename T,
-          typename = void_t&lt;&gt;&gt;
+typename = void_t&lt;&gt;&gt;
 struct has_reserve : false_type {};
 这里的冒号是什么语法？</p>2019-12-30</li><br/><li><span>。</span> 👍（0） 💬（1）<p>用 void_t 实现的 has_reserve 函数有一些问题，它没法判断类型的reserve 方法的返回值是否是 void，所以可以修改一下：
 
@@ -343,15 +343,15 @@ struct has_reserve : std::false_type {};
 
 template &lt;typename T&gt;
 struct has_reserve&lt;T, std::__void_t&lt;decltype(std::declval&lt;T&amp;&gt;().reserve(1U))&gt;&gt;
-    : std::is_void&lt;decltype(std::declval&lt;T&amp;&gt;().reserve(1U))&gt; {};</p>2024-03-10</li><br/><li><span>！null</span> 👍（0） 💬（2）<p>void_t代码例子后边没有解释void_t的作用，或者没有typename=void_t&lt;&gt;这部分 为什么不行。
+: std::is_void&lt;decltype(std::declval&lt;T&amp;&gt;().reserve(1U))&gt; {};</p>2024-03-10</li><br/><li><span>！null</span> 👍（0） 💬（2）<p>void_t代码例子后边没有解释void_t的作用，或者没有typename=void_t&lt;&gt;这部分 为什么不行。
 另外typename=void_t&lt;&gt;这个是什么神仙语法？</p>2023-08-05</li><br/><li><span>yuchen</span> 👍（0） 💬（3）<p>请问，为什么 ‘declval&lt;T&amp;&gt;().reserve(1U)’中为什么要使用T&amp;而不是T？</p>2023-06-16</li><br/><li><span>Roblaboy</span> 👍（0） 💬（1）<p>我这边提示 enable_if_t 不是模板C&#47;C++(864) 是为什么，我这边用的是C++17</p>2022-09-29</li><br/><li><span>Geek_fa7226</span> 👍（0） 💬（1）<p>auto append(C&amp; container, T* ptr, size_t size) -&gt; decltype（...）中的-&gt;是什么语法？</p>2022-09-28</li><br/><li><span>Geek_fd78c0</span> 👍（0） 💬（1）<p>
 
 请问老师这个-&gt;是什么意思，不太懂这个语法？
 template &lt;typename C, typename T&gt;
 auto append(C&amp; container, T* ptr,
-            size_t size)
-  -&gt; decltype(
-    declval&lt;C&amp;&gt;().reserve(1U),
-    void())
+size_t size)
+-&gt; decltype(
+declval&lt;C&amp;&gt;().reserve(1U),
+void())
 </p>2022-06-30</li><br/>
 </ul>

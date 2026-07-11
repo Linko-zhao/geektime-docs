@@ -19,9 +19,9 @@ NPM（Node Package Manager）虽然它叫做 Node 包管理，但是其实你也
 如果模块是在Git上管理的，可以在包所在的根目录下，将模块加进来。或者，我们也可以选择直接在目录下写一个模块。以下面的 printMsg 模块为例，这里通过 `export` 导出的模块，可以在其它的程序中通过 `require()` 导入引用。
 
 ```javascript
-exports.printMsg = function() {
+exports.printMsg = function () {
   console.log("This is a message from the demo package");
-}
+};
 ```
 
 在我们创建了一个包之后，在正式发布前，最好先通过 `npm install` 自己测试一下。确保无误之后，我们可以通过 `npm publish` 对包进行发布。**无论是公开还是私有包的发布，都需要在发布前在NPM的注册页面上创建一个用户。**为了安全，发布包以前，最好通过2FA的双因子认证。

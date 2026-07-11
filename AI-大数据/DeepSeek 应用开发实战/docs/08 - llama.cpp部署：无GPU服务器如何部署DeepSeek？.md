@@ -142,7 +142,7 @@ apt install ninja-build
 pip install uvicorn anyio starlette fastapi sse_starlette starlette_context pydantic_settings
 
 
-pip install llama-cpp-python -i https://mirrors.aliyun.com/pypi/simple/ 
+pip install llama-cpp-python -i https://mirrors.aliyun.com/pypi/simple/
 ```
 
 安装好后运行模型：
@@ -201,8 +201,8 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model=&quot;&#47;Users&#47;rsvp&#47;models&#47;deepseek&#47;DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf&quot;,  # 本地模型路径
-    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好，你是谁？&quot;}]
+model=&quot;&#47;Users&#47;rsvp&#47;models&#47;deepseek&#47;DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf&quot;, # 本地模型路径
+messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好，你是谁？&quot;}]
 )
 print(response)
 </p>2025-03-26</li><br/><li><span>grok</span> 👍（2） 💬（1）<p>云阳大佬，求答疑解惑：
@@ -210,4 +210,5 @@ print(response)
 1. 本地部署好了deepseek，如何调用batch API？支持吗？https:&#47;&#47;platform.openai.com&#47;docs&#47;guides&#47;batch
 2. 想压力测试一下单并发&#47;10并发&#47;100&#47;1000&#47;10000并发，有推荐的压力测试库吗？难道要自己写一点asyncio的脚本来模拟高并发？
 3. 底层原理：我调用openai api时候，采用 `response_format={&#39;type&#39;: &#39;json_object&#39;}` 。我很好奇大模型底层是如何强制返回json的呀？</p>2025-03-17</li><br/>
+
 </ul>

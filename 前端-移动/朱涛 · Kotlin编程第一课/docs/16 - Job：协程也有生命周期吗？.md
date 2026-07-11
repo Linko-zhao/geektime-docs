@@ -96,8 +96,8 @@ fun main() = runBlocking {
         logX("Coroutine start!")
         delay(1000L)
     }
-    delay(500L)     
-    job.log()       
+    delay(500L)
+    job.log()
     job.start()     // 变化在这里
     job.log()
     delay(500L)
@@ -221,9 +221,9 @@ fun main() = runBlocking {
     job.log()
     job.start()
     job.log()
-    delay(1100L)    
+    delay(1100L)
     job.log()
-    delay(2000L)    
+    delay(2000L)
     logX("Process end!")
 }
 
@@ -782,7 +782,7 @@ fun main() = runBlocking {
         logX("First coroutine end!")
     }
 
-    job.join()      
+    job.join()
     val job2 = launch(job) {
         logX("Second coroutine start!")
         delay(1000L)
@@ -833,10 +833,10 @@ val result3 = async { getResult3() }
 results = listOf(result1.await(), result2.await(), result3.await())
 用作者的思维模型，相当于三个钓鱼杆同时拉杆
 
-val result1 = async { getResult1() } 
+val result1 = async { getResult1() }
 &#47;&#47;调用时机
 result1.await()
-val result2 = async { getResult2() } 
+val result2 = async { getResult2() }
 &#47;&#47;调用时机
 result2.await()
 val result3 = async { getResult3() }
@@ -849,26 +849,26 @@ result3.await()
 通过源码可知launch中传入的CoroutineContext会作为parentJob，而job2的parentJob为job，job协程已经处于completed状态，故不执行job2直接跳过</p>2022-02-23</li><br/><li><span>20220106</span> 👍（1） 💬（1）<p>这里 await() 后面的代码，虽然看起来是阻塞了，但它只是执行流程被挂起和恢复的一种表现。而且如果你仔细思考的话，你会发现上面这个动图，同样也描述了之前 job.join() 的行为模式，在协程执行完毕之前，后面的协程代码都被暂时挂起了，等到协程执行完毕，才有机会继续执行。
 
 ——”在协程执行完毕之前“这里的协程指的父级协程，“后面的协程代码都被暂时挂起了“这里的协程代码指的子级协程代码部份。也就是说：如果子级自己有挂起操作，那么子级的代码会被暂时挂起，直到父级的协程代码执行完毕之后再继续执行子级协程代码（前提是父级没有挂起延迟之类的操作）。</p>2022-04-14</li><br/><li><span>dawn</span> 👍（1） 💬（1）<p>fun main() = runBlocking {
-    val job = launch {
-        logX(&quot;Coroutine  start!&quot;)
-        delay(1000L)
-        logX(&quot;Coroutine  end!&quot;)
-    }
-    job.log()
-    delay(500)
-    job.cancel()
-    job.log()
-    delay(1) &#47;&#47;延时1ms
-    job.log()
-    delay(2000)
-    logX(&quot;Process end!&quot;)
+val job = launch {
+logX(&quot;Coroutine start!&quot;)
+delay(1000L)
+logX(&quot;Coroutine end!&quot;)
+}
+job.log()
+delay(500)
+job.cancel()
+job.log()
+delay(1) &#47;&#47;延时1ms
+job.log()
+delay(2000)
+logX(&quot;Process end!&quot;)
 }
 为什么取消后输出延时1ms输出job的isCompleted会有false变为true</p>2022-03-30</li><br/><li><span>张国庆</span> 👍（1） 💬（1）<p>最后问题应该是按顺序打印</p>2022-02-18</li><br/><li><span>Luckykelan</span> 👍（0） 💬（1）<p>老师你好，请问完善后的思维模型这个例子中，是怎么知道println(&quot;Result = $result&quot;)和logX(&quot;Process end!&quot;)这两段代码是和协程在同一个task 中并一同挂起的呢？</p>2022-04-24</li><br/><li><span>neo</span> 👍（0） 💬（1）<p>Finishing[cancelling=true, completing=false, rootCause=kotlinx.coroutines.JobCancellationException: Parent job is Completed; job=&quot;coroutine#2&quot;:StandaloneCoroutine{Completed}@d6da883, exceptions=null, list=List{Active}[]]
-上面cancelling的原因是父job已经被完结</p>2022-04-22</li><br/><li><span>20220106</span> 👍（0） 💬（1）<p>这里的阻塞和之前的挂起不是一回事把</p>2022-04-12</li><br/><li><span>jim</span> 👍（0） 💬（1）<p>思考题，job与job2存在父子协程关系吗？</p>2022-04-01</li><br/><li><span>Allen</span> 👍（0） 💬（1）<p>    val job = launch {
-        log(&quot;First coroutine start!&quot;)
-        delay(1000L)
-        log(&quot;First coroutine end!&quot;)
-    }
+上面cancelling的原因是父job已经被完结</p>2022-04-22</li><br/><li><span>20220106</span> 👍（0） 💬（1）<p>这里的阻塞和之前的挂起不是一回事把</p>2022-04-12</li><br/><li><span>jim</span> 👍（0） 💬（1）<p>思考题，job与job2存在父子协程关系吗？</p>2022-04-01</li><br/><li><span>Allen</span> 👍（0） 💬（1）<p> val job = launch {
+log(&quot;First coroutine start!&quot;)
+delay(1000L)
+log(&quot;First coroutine end!&quot;)
+}
 
     job.join()
     val job2 = launch(job) {

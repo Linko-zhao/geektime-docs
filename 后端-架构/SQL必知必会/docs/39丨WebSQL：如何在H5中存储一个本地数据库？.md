@@ -33,23 +33,23 @@ WebSQL更准确的说是WebSQL DB API，它是一种操作本地数据库的网�
 if (!window.openDatabase) {
   alert('浏览器不支持WebSQL');
 }
-                                
+
 完整代码如下：
 <!DOCTYPE HTML>
 <html>
    <head>
       <meta charset="UTF-8">
-      <title>SQL必知必会</title> 
-      <script type="text/javascript">                   
+      <title>SQL必知必会</title>
+      <script type="text/javascript">
         if (!window.openDatabase) {
                  alert('浏览器不支持WebSQL');
-        }                               
-      </script>                    
+        }
+      </script>
    </head>
-           
+
    <body>
       <div id="status" name="status">WebSQL Test</div>
-   </body>       
+   </body>
 </html>
 ```
 
@@ -78,7 +78,7 @@ var db = openDatabase('wucai', '1.0', '王者荣耀数据库', 1024 * 1024);
 我们使用transaction方法来对事务进行处理，执行提交或回滚操作，方法如下：
 
 ```
-transaction(callback, errorCallback, successCallback); 
+transaction(callback, errorCallback, successCallback);
 ```
 
 这里的3个参数代表的含义如下：
@@ -143,7 +143,7 @@ tx.executeSql('INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (1
 <html>
    <head>
       <meta charset="UTF-8">
-      <title>SQL必知必会</title> 
+      <title>SQL必知必会</title>
       <script type="text/javascript">
          // 初始化
          function init() {
@@ -156,7 +156,7 @@ tx.executeSql('INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (1
             var td2 = document.createElement("td");
             var td3 = document.createElement("td");
             var td4 = document.createElement("td");
-            var td5 = document.createElement("td"); 
+            var td5 = document.createElement("td");
             td1.innerHTML = row.id;
             td2.innerHTML = row.name;
             td3.innerHTML = row.hp_max;
@@ -167,7 +167,7 @@ tx.executeSql('INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (1
             tr.appendChild(td3);
             tr.appendChild(td4);
             tr.appendChild(td5);
-            datatable.appendChild(tr);   
+            datatable.appendChild(tr);
          }
          // 设置数据库信息
          var db = openDatabase('wucai', '1.0', '王者荣耀英雄数据', 1024 * 1024);
@@ -197,11 +197,11 @@ tx.executeSql('INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (1
 
          });
       </script>
-   </head> 
+   </head>
    <body>
       <div id="status" name="status">状态信息</div>
       <table border="1" id="datatable"></table>
-   </body> 
+   </body>
 </html>
 ```
 
@@ -248,13 +248,13 @@ tx.executeSql('INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (1
             tx.executeSql(&#39;INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (10003, &quot;牛魔&quot;, 8476, 1926, &quot; 坦克 &quot;)&#39;);
             tx.executeSql(&#39;INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (10004, &quot;吕布&quot;, 7344, 0, &quot; 战士 &quot;)&#39;);
             msg = &#39; 数据表创建成功，一共插入 5 条数据&#39;;
-            
+
             console.log(msg);
          });
 
          function query(){
             var name = document.getElementById(&#39;name&#39;).value;
-            
+
             var sql = &#39;SELECT * FROM heros where name like ?&#39;;
              &#47;&#47; 查询数据
             db.transaction(function (tx) {
@@ -267,8 +267,11 @@ tx.executeSql('INSERT INTO heros (id, name, hp_max, mp_max, role_main) VALUES (1
             });
          }
     &lt;&#47;script&gt;
+
 &lt;&#47;body&gt;
+
 ```</p>2019-09-02</li><br/><li><span>ABC</span> 👍（6） 💬（2）<p>localForage这个库可以兼容处理IndexDB,localStorage,webSQL等</p>2019-11-25</li><br/><li><span>Middleware</span> 👍（6） 💬（1）<p>WebSQL 这项标准已经废弃了吧
 
 https:&#47;&#47;dev.w3.org&#47;html5&#47;webdatabase&#47;</p>2019-09-02</li><br/><li><span>许童童</span> 👍（4） 💬（1）<p>WebSQL的功能确实很强大，但是在目前的项目中还没有用到过。</p>2019-09-02</li><br/><li><span>nimil</span> 👍（3） 💬（2）<p>这个功能厉害了</p>2019-09-02</li><br/><li><span>cfanbo</span> 👍（1） 💬（2）<p>这两个都是长期有效，只能用户手动删除才可以的吗？</p>2019-09-03</li><br/><li><span>雪飞鸿</span> 👍（0） 💬（3）<p>看了下文档IndexedDB虽然是NoSql，但也是基于事务来处理数据的。</p>2019-11-12</li><br/><li><span>RRR</span> 👍（2） 💬（0）<p>webSQL 已经被规范废弃，现在只支持 IndexDB。</p>2020-06-15</li><br/><li><span>博弈</span> 👍（2） 💬（0）<p>了解了浏览器端的五种存储方式：Cookie,Local storage,Session storage,WebSQL,IndexedDB</p>2020-03-26</li><br/><li><span>victor666</span> 👍（2） 💬（0）<p>挺有意思的。可以拿来做SQL语句测试</p>2020-03-22</li><br/><li><span>humor</span> 👍（1） 💬（1）<p>session是什么概念呢？http请求不是无状态的么，难道一次http请求就是一个session吗</p>2019-09-02</li><br/><li><span>钱</span> 👍（0） 💬（0）<p>长见识了</p>2024-08-26</li><br/>
 </ul>
+```

@@ -96,7 +96,7 @@ const fragment = `
   void main()
   {
     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  }    
+  }
 `;
 ```
 
@@ -289,7 +289,7 @@ varying vec3 color;
 void main()
 {
   gl_FragColor = vec4(color, 1.0);
-}  
+}
 ```
 
 我们将gl\_FragColor的rgb值设为变量color的值，这样我们就能得到下面这个三角形：
@@ -327,7 +327,7 @@ WebGL完整的绘图过程实在比较复杂，为了帮助你理解，我总结
 
 欢迎在留言区和我讨论，分享你的答案和思考，也欢迎你把这一节课分享给你的朋友，我们下节课再见！
 
-* * *
+---
 
 ## 源码
 
@@ -345,43 +345,44 @@ WebGL完整的绘图过程实在比较复杂，为了帮助你理解，我总结
 作业二
 a. 先封装一个生成多边形顶点坐标数组的函数
 function createCircleVertex(x, y, r, n) {
-    const sin = Math.sin;
-    const cos = Math.cos;
-    const perAngel = (2 * Math.PI) &#47; n;
-    const positionArray = [];
-    for (let i = 0; i &lt; n; i++) {
-        const angel = i * perAngel;
-        const nx = x + r * cos(angel);
-        const ny = y + r * sin(angel);
-        positionArray.push(nx, ny);
-    }
-    return new Float32Array(positionArray);
+const sin = Math.sin;
+const cos = Math.cos;
+const perAngel = (2 * Math.PI) &#47; n;
+const positionArray = [];
+for (let i = 0; i &lt; n; i++) {
+const angel = i * perAngel;
+const nx = x + r * cos(angel);
+const ny = y + r * sin(angel);
+positionArray.push(nx, ny);
+}
+return new Float32Array(positionArray);
 }
 b. 封装一个生成正多角星顶点的数组函数
 function create2CircleVertex(x, y, r, R, n) {
-    const sin = Math.sin;
-    const cos = Math.cos;
-    const perAngel = Math.PI &#47; n;
-    const positionArray = [];
-    for (let i = 0; i &lt; 2 * n; i++) {
-        const angel = i * perAngel;
-        if (i % 2 !== 0) {
-            const Rx = x + R * cos(angel);
-            const Ry = y + R * sin(angel);
-            positionArray.push(Rx, Ry);
-        } else {
-            const rx = x + r * cos(angel);
-            const ry = y + r * sin(angel);
-            positionArray.push(rx, ry);
-        }
-    }
-    return new Float32Array(positionArray);
+const sin = Math.sin;
+const cos = Math.cos;
+const perAngel = Math.PI &#47; n;
+const positionArray = [];
+for (let i = 0; i &lt; 2 * n; i++) {
+const angel = i * perAngel;
+if (i % 2 !== 0) {
+const Rx = x + R * cos(angel);
+const Ry = y + R * sin(angel);
+positionArray.push(Rx, Ry);
+} else {
+const rx = x + r * cos(angel);
+const ry = y + r * sin(angel);
+positionArray.push(rx, ry);
 }
-1. 正四边形  const points = createCircleVertex(0, 0, 0.5, 4); 
-2. 正五边形  const points = createCircleVertex(0, 0, 0.5, 5); 
+}
+return new Float32Array(positionArray);
+}
+
+1. 正四边形 const points = createCircleVertex(0, 0, 0.5, 4);
+2. 正五边形 const points = createCircleVertex(0, 0, 0.5, 5);
 3. 正六角星 const points = create2CircleVertex(0, 0, 0.3, 0.6, 6);
 
-以上要绘制空心用gl.LINE_LOOP图元，实心用gl.TRIANGLE_FAN图元   
+以上要绘制空心用gl.LINE_LOOP图元，实心用gl.TRIANGLE_FAN图元  
 1)空心:gl.drawArrays(gl.LINE_LOOP, 0, points.length &#47; 2);
 2)实心:gl.drawArrays(gl.TRIANGLE_FAN, 0, points.length &#47; 2);
 </p>2020-06-30</li><br/><li><span>Cailven</span> 👍（17） 💬（1）<p>补充：vs不仅仅只有postion值，一般通过attribute 进行属性赋值。在图形学管顶点操作叫做VAO(vertex array object)，而vao操作的float数据底层是vbo。不过如果用了threejs后很多图元操作就依赖引擎直接就解决了，但在Threejs中依然可以通过shaderMatiral通过setAttribute给bufferGeometry的顶点赋值。
@@ -391,14 +392,14 @@ function create2CircleVertex(x, y, r, R, n) {
 不过这课程来的太晚，如果几年前能早点接触到这门课，估计会在图形学方面少走很多弯路，谢谢月影大大。</p>2020-06-29</li><br/><li><span>xiao豪</span> 👍（8） 💬（2）<p>老师，将数据存入缓存再拿出来是有什么意义呢？</p>2020-07-06</li><br/><li><span>宁康</span> 👍（5） 💬（1）<p>正n边型，r是外接圆半径
 
 getPolygonPoints( n, r ){
-      const stepAngle = 2*Math.PI &#47; n
-      let initAngle = 0
-      const pointArray = []
-      for(let i = 0; i &lt; n; i++) {
-        &#47;&#47; 存储x坐标
-        pointArray.push(r * Math.cos(initAngle))
-        &#47;&#47; 存储y坐标
-        pointArray.push(r * Math.sin(initAngle))
+const stepAngle = 2*Math.PI &#47; n
+let initAngle = 0
+const pointArray = []
+for(let i = 0; i &lt; n; i++) {
+&#47;&#47; 存储x坐标
+pointArray.push(r * Math.cos(initAngle))
+&#47;&#47; 存储y坐标
+pointArray.push(r * Math.sin(initAngle))
 
         initAngle += stepAngle
       }
@@ -420,12 +421,12 @@ gl.drawArrays(gl. LINE_LOOP, 0, ponits.length &#47; 2)
 3、绘制多边形
 a.定义多边形的(x, y)坐标
 const ponits = new Float32Array([
-        -1, -1,
-        0, -2,
-        1, -1,
-        1, 1,
-        -1, 1
-      ])
+-1, -1,
+0, -2,
+1, -1,
+1, 1,
+-1, 1
+])
 b.绘制多边形
 gl.drawArrays(gl.TRIANGLE_FAN, 0, ponits.length &#47; 2)
 </p>2020-06-29</li><br/><li><span>Kevin</span> 👍（2） 💬（1）<p>实现了一个正多边形的样例，动态修改边数。
@@ -435,13 +436,13 @@ https:&#47;&#47;codesandbox.io&#47;s&#47;practice-canvas-vme4k?file=&#47;src&#47
 
 WebGL可绘制的图元有以下7种，来源网络查找：https:&#47;&#47;www.jianshu.com&#47;p&#47;1e750f20ec23
 
-点	gl.POINTS	
-线段	gl.LINES	
-线条	gl.LINE_STRIP
-回路线条	gl.LINE_LOOP
-三角形	gl.TRIANGLES
-三角带	gl.TRIANGLE_STRIP	
-三角扇	gl.TRIANGLE_FAN </p>2020-07-15</li><br/><li><span>国旗</span> 👍（1） 💬（1）<p>老师问下MDN文档里WebGL常数这儿，表格里十六进制的‘Value’表示的意思是类似于CPU指令寄存器么？
+点 gl.POINTS
+线段 gl.LINES
+线条 gl.LINE_STRIP
+回路线条 gl.LINE_LOOP
+三角形 gl.TRIANGLES
+三角带 gl.TRIANGLE_STRIP
+三角扇 gl.TRIANGLE_FAN </p>2020-07-15</li><br/><li><span>国旗</span> 👍（1） 💬（1）<p>老师问下MDN文档里WebGL常数这儿，表格里十六进制的‘Value’表示的意思是类似于CPU指令寄存器么？
 Getting GL parameter information这节BLEND_EQUATION，BLEND_EQUATION_RGB的value都是0x8009，也有点不理解
 https:&#47;&#47;developer.mozilla.org&#47;en-US&#47;docs&#47;Web&#47;API&#47;WebGL_API&#47;Constants</p>2020-09-23</li><br/><li><span>不见飞刀</span> 👍（1） 💬（3）<p>&quot;图形中有多少个像素点，着色器程序在 GPU 中就会被同时执行多少次。&quot;
 

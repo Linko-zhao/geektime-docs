@@ -274,6 +274,7 @@ binlog在MySQL的各种高可用方案上扮演了重要角色。今天介绍的
 > @一大只 同学验证了在sync\_binlog=0的情况下，设置sync\_delay和sync\_no\_delay\_count的现象，点赞这种发现边界的意识和手动验证的好习惯。是这样的：sync\_delay和sync\_no\_delay\_count的逻辑先走，因此该等还是会等。等到满足了这两个条件之一，就进入sync\_binlog阶段。这时候如果判断sync\_binlog=0，就直接跳过，还是不调fsync。
 
 > @锅子 同学提到，设置sync\_binlog=0的时候，还是可以看到binlog文件马上做了修改。这个是对的，我们说“写到了page cache”，就是文件系统的page cache。而你用ls命令看到的就是文件系统返回的结果。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>geraltlaush</span> 👍（133） 💬（12）<p>老师，我想问下双M架构下，主从复制，是不是一方判断自己的数据比对方少就从对方复制，判断依据是什么</p>2019-01-25</li><br/><li><span>Sinyo</span> 👍（191） 💬（4）<p>主库 A 从本地读取 binlog，发给从库 B；
 老师，请问这里的本地是指文件系统的 page cache还是disk呢？</p>2019-01-21</li><br/><li><span>Joker</span> 👍（128） 💬（3）<p>老师您好，读到您关于binlog的文章之后，我有个疑问。
@@ -292,17 +293,17 @@ M1执行
      start slave；
 然后就能看到c的值在不断变大，想停止就把server_id改回原来的就可以了。
 
-
 </p>2019-01-07</li><br/><li><span>三木禾</span> 👍（45） 💬（4）<p>老师，双M可能会造成数据不一致的情况么? 比如，A  B同时更新同一条数据？</p>2019-03-31</li><br/><li><span>hua168</span> 👍（45） 💬（8）<p>大神，我前些天去面试，面试官问了一题:
 mysql做主从，一段时间后发现从库在高峰期会发生一两条条数据丢失（不记得是查询行空白还是查询不到了），主从正常，怎么判断？
 1.我问他是不是所以从库都是一样，他说不一样
 2.我说低峰期重做新的从库观察，查看日志有没有报错？他好像不满意这个答案。
 
- 二、他还问主库挂了怎么办？
+二、他还问主库挂了怎么办？
+
 1.  mysql主从+keepalived&#47;heartbeat
-     有脑裂，还是有前面丢数据问题
-2. 用MMM或HMA之类
-3.用ZK之类
+    有脑裂，还是有前面丢数据问题
+2.  用MMM或HMA之类
+    3.用ZK之类
 
 三、写的压力大怎么办？
 我回答，分库，分表
@@ -324,16 +325,22 @@ update t set d=2 where c=10;
 
 场景：
 SSD硬盘，我们数据一天一备份，想通过昨天凌晨备份+binlog恢复到最新数据，导出的binlog为2G，然后发现导入binlog花费了4，5小时，看了下binlog日志里面有很多这种信息
+
 # at 2492
-#190108 17:08:38 server id 2  end_log_pos 2601 CRC32 0x8b0598ec         Query   thread_id=12277795      exec_time=0     error_code=0
-SET TIMESTAMP=1546938518&#47;*!*&#47;;
+
+#190108 17:08:38 server id 2 end_log_pos 2601 CRC32 0x8b0598ec Query thread_id=12277795 exec_time=0 error_code=0
+SET TIMESTAMP=1546938518&#47;_!_&#47;;
 BEGIN
-&#47;*!*&#47;;
+&#47;_!_&#47;;
+
 # at 2601
+
 # at 2633
+
 # at 2919
-#190108 17:08:38 server id 2  end_log_pos 2950 CRC32 0x13806369         Xid = 1924155105
-COMMIT&#47;*!*&#47;;
+
+#190108 17:08:38 server id 2 end_log_pos 2950 CRC32 0x13806369 Xid = 1924155105
+COMMIT&#47;_!_&#47;;
 
 问题：
 1、在导出binlog为2G而且看了下里面很多这种事务，这是什么东西，有什么用吗

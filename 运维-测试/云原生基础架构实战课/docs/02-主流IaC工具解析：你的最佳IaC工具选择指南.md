@@ -118,10 +118,10 @@ resource "aws_instance" "example" {
 resource "aws_s3_bucket" "my_bucket" {
   # S3 bucket configuration here
 }
- 
+
 resource "aws_instance" "my_ec2_instance" {
   # EC2 instance configuration here
- 
+
   # Explicit dependency on the S3 bucket resource
   depends_on = [aws_s3_bucket.my_bucket]
 }
@@ -190,16 +190,16 @@ terraform {
 
 ```json
 [
-    {
-        "env_name": "dev",
-        "mysql": "mysql-dev.awsamazon.com:3306",
-        "redis": "redis-dev.awsamazon.com:6379",
-    },
-    {
-        "env_name": "stg",
-        "mysql": "mysql-stg.awsamazon.com:3306",
-        "redis": "redis-stg.awsamazon.com:6379",
-    }
+  {
+    "env_name": "dev",
+    "mysql": "mysql-dev.awsamazon.com:3306",
+    "redis": "redis-dev.awsamazon.com:6379"
+  },
+  {
+    "env_name": "stg",
+    "mysql": "mysql-stg.awsamazon.com:3306",
+    "redis": "redis-stg.awsamazon.com:6379"
+  }
 ]
 ```
 
@@ -269,45 +269,45 @@ provider &quot;aws&quot; {
 }
 
 resource &quot;aws_instance&quot; &quot;example&quot; {
-  ami           = &quot;ami-0c55b159cbfafe1f0&quot;  
-  instance_type = &quot;t2.micro&quot;
-  tags = {
-    Name = &quot;example-instance&quot;
-  }
+ami = &quot;ami-0c55b159cbfafe1f0&quot;  
+instance_type = &quot;t2.micro&quot;
+tags = {
+Name = &quot;example-instance&quot;
+}
 
-  provisioner &quot;remote-exec&quot; {
-    inline = [
-      &quot;sudo yum install -y  httpd&quot;,
-      &quot;sudo systemctl start httpd&quot;,
-      &quot;sudo systemctl enable httpd&quot;
-    ]
-  }
+provisioner &quot;remote-exec&quot; {
+inline = [
+&quot;sudo yum install -y httpd&quot;,
+&quot;sudo systemctl start httpd&quot;,
+&quot;sudo systemctl enable httpd&quot;
+]
+}
 
-  connection {
-    type        = &quot;ssh&quot;
-    user        = &quot;ec2-user&quot;
-    private_key = file(&quot;~&#47;.ssh&#47;your_private_key.pem&quot;)  
-    host        = self.public_ip
-  }
+connection {
+type = &quot;ssh&quot;
+user = &quot;ec2-user&quot;
+private_key = file(&quot;~&#47;.ssh&#47;your_private_key.pem&quot;)  
+host = self.public_ip
+}
 }
 
 resource &quot;aws_security_group&quot; &quot;http_sg&quot; {
-  name        = &quot;http_sg&quot;
-  description = &quot;Allow HTTP inbound traffic&quot;
+name = &quot;http_sg&quot;
+description = &quot;Allow HTTP inbound traffic&quot;
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = &quot;tcp&quot;
-    cidr_blocks = [&quot;0.0.0.0&#47;0&quot;]
-  }
+ingress {
+from_port = 80
+to_port = 80
+protocol = &quot;tcp&quot;
+cidr_blocks = [&quot;0.0.0.0&#47;0&quot;]
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = &quot;-1&quot;
-    cidr_blocks = [&quot;0.0.0.0&#47;0&quot;]
-  }
+egress {
+from_port = 0
+to_port = 0
+protocol = &quot;-1&quot;
+cidr_blocks = [&quot;0.0.0.0&#47;0&quot;]
+}
 }
 </p>2024-03-27</li><br/><li><span>二十三</span> 👍（2） 💬（2）<p>怎么感觉使用terraform 各种配置还要学习语法、还不如自己写代码封装云api接口啊？ </p>2024-04-19</li><br/><li><span>Joe Black</span> 👍（0） 💬（0）<p>Terraform好像不让在中国用……</p>2024-04-13</li><br/>
 </ul>

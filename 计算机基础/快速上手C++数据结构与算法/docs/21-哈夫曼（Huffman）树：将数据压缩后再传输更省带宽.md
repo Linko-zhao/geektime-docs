@@ -88,11 +88,11 @@ struct HFMTreeNode
 	int parent; //父亲（数组下标值）
 	int lchild; //左孩子（数组下标值）
 	int rchild; //右孩子（数组下标值）
-};	
+};
 ```
 
 ```plain
-//哈夫曼树：用一个数组来保存哈夫曼树	
+//哈夫曼树：用一个数组来保存哈夫曼树
 class HFMTree
 {
 public:
@@ -103,7 +103,7 @@ public:
 		m_length = nodecount;
 		int iMaxNodeCount = 2 * m_length - 1;
 		m_data = new HFMTreeNode[iMaxNodeCount];  //哈夫曼树的节点总数是2n-1（n代表哈夫曼树的叶子节点数量）
-		
+
 		for (int i = 0; i < iMaxNodeCount; ++i)
 		{
 			m_data[i].parent = -1;  //-1标记未被使用
@@ -119,14 +119,14 @@ public:
 	{
 		delete [] m_data;
 	}
-		
+
 public:
 	//真正的开始创建哈夫曼树
 	void CreateHFMTree()
 	{
 		int idx1 = 0;
 		int idx2 = 0;
-		
+
 		int iMaxNodeCount = 2 * m_length - 1; //2n-1是整个哈夫曼树的节点数量
 		int initlength = m_length;  
 		for (int i = initlength; i < iMaxNodeCount; ++i)
@@ -135,15 +135,15 @@ public:
 			m_data[i].weight = m_data[idx1].weight + m_data[idx2].weight; //新节点的权值等于左右孩子
 			m_data[i].lchild = idx1;
 			m_data[i].rchild = idx2;
-			
+
 			m_data[idx1].parent = i;
 			m_data[idx2].parent = i;
-			
+
 			m_length++; //SelectTwoMinValue()函数要用到该值
 		} //end for i
 		return;
 	}
-		
+
 	//前序遍历二叉树(根左右)
 	void preOrder(int idx)
 	{
@@ -152,22 +152,22 @@ public:
 			cout << m_data[idx].weight <<" ";
 			preOrder(m_data[idx].lchild);
 			preOrder(m_data[idx].rchild);
-		}			
+		}
 	}
-		
+
 	//获取树中节点数量
 	int GetLength()
 	{
 		return m_length;
 	}
-	
+
 private:
 	//选择两个根权重最小的节点，通过引用返回这个节点所在的下标
 	void SelectTwoMinValue(int& rtnIdx1, int& rtnIdx2)
 	{
 		int minval1 = INT_MAX;
 		int minval2 = INT_MAX;
-		
+
 		//找最小值
 		for (int i = 0; i < m_length; ++i)
 		{
@@ -180,7 +180,7 @@ private:
 				}
 			}
 		} //end for i
-		
+
 		//找第二个最小的值
 		for (int i = 0; i < m_length; ++i)
 		{
@@ -204,12 +204,12 @@ private:
 在main主函数中，增加下面的测试代码。
 
 ```plain
-int weighLst[] = { 1,2,2,4,8}; //权值列表（数组），数组中的数据顺序无所谓	
+int weighLst[] = { 1,2,2,4,8}; //权值列表（数组），数组中的数据顺序无所谓
 HFMTree hfmtobj(
 				sizeof(weighLst) / sizeof(weighLst[0]),   //权值列表中元素个数
 				weighLst                            //权值列表首地址
 					); 
-	
+
 hfmtobj.CreateHFMTree(); //创建哈夫曼树
 hfmtobj.preOrder(hfmtobj.GetLength()-1); //遍历哈夫曼树，参数其实就是根节点的下标（数组最后一个有效位置的下标）
 ```
@@ -289,7 +289,7 @@ bool CreateHFMCode(int idx) //参数idx是用于保存哈夫曼树的数组某�
 {
 	//调用这个函数时，m_length应该已经等于整个哈夫曼树的节点数量，那么哈夫曼树的叶子节点数量应该这样求
 	int leafNodeCount = (m_length + 1) / 2;
-	
+
 	if (idx < 0 || idx >= leafNodeCount)
 	{
 		//只允许对叶子节点求其哈夫曼编码
@@ -326,14 +326,14 @@ HFMTree hfmtobj(
 		sizeof(weighLst) / sizeof(weighLst[0]),   //权值列表中元素个数
 		weighLst                                  //权值列表首地址
 		); 
-	
+
 hfmtobj.CreateHFMTree(); //创建哈夫曼树
 hfmtobj.preOrder(hfmtobj.GetLength()-1); //遍历哈夫曼树，参数其实就是根节点的下标（数组最后一个有效位置的下标）
-	
+
 //求哈夫曼编码
 cout <<"--------------"<< endl;
 for(int i = 0; i < sizeof(weighLst) / sizeof(weighLst[0]); ++i)
-	hfmtobj.CreateHFMCode(i);	
+	hfmtobj.CreateHFMCode(i);
 ```
 
 执行结果如下：

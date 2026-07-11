@@ -11,17 +11,19 @@
 根据选择器列表的语法，选择器的连接方式可以理解为像四则运算一样有优先级。
 
 - 第一优先级
-  
+
   - 无连接符号
+
 - 第二优先级
-  
+
   - “空格”
   - “~”
   - “+”
   - “&gt;”
   - “||”
+
 - 第三优先级
-  
+
   - “,”
 
 例如以下选择器：
@@ -35,13 +37,13 @@
 我们应该理解为这样的结构。
 
 - .c,.a&gt;.b.d
-  
+
   - .c
   - .a&gt;.b.d
-    
+
     - .a
     - .b.d
-      
+
       - .b
       - .d
 
@@ -189,8 +191,8 @@ paragraph.</p>
 ```
 
 ```
-p::first-line { 
-    text-transform: uppercase 
+p::first-line {
+    text-transform: uppercase
 }
 ```
 
@@ -208,10 +210,10 @@ paragraph.</p>
 ```
 
 ```
-p::first-letter { 
+p::first-letter {
     text-transform: uppercase;
     font-size:2em;
-    float:left; 
+    float:left;
 }
 ```
 
@@ -231,8 +233,8 @@ div>p#a {
     color:green;
 }
 
-div::first-line { 
-    color:blue; 
+div::first-line {
+    color:blue;
 }
 ```
 
@@ -252,8 +254,8 @@ div>span#a {
     color:green;
 }
 
-div::first-line { 
-    color:blue; 
+div::first-line {
+    color:blue;
 }
 ```
 
@@ -273,8 +275,8 @@ div>span#a {
     color:green;
 }
 
-div::first-letter { 
-    color:blue; 
+div::first-letter {
+    color:blue;
 }
 ```
 
@@ -358,14 +360,15 @@ p.special::before {
 
 对细节感兴趣的可以看下https:&#47;&#47;www.petershi.net&#47;archives&#47;3305</p>2020-06-24</li><br/><li><span>Ranjay</span> 👍（4） 💬（0）<p>BEM规范实际上就已经是很好的实践</p>2019-03-24</li><br/><li><span>阿歡。</span> 👍（4） 💬（2）<p>老师您好,下面例子中 把&lt;br&gt;去掉，会变成First paragraph为绿色，Second paragraph为蓝色，这是为何？
 &lt;div&gt;
-            &lt;span id=&quot;a&quot;&gt;First paragraph&lt;&#47;span&gt;&lt;br&gt;
-            &lt;span&gt;Second paragraph&lt;&#47;span&gt;
- &lt;&#47;div&gt;
+&lt;span id=&quot;a&quot;&gt;First paragraph&lt;&#47;span&gt;&lt;br&gt;
+&lt;span&gt;Second paragraph&lt;&#47;span&gt;
+&lt;&#47;div&gt;
 
            div&gt;span#a {
                 color:green;
             }
-            div::first-line { 
-                color:blue; 
+            div::first-line {
+                color:blue;
             }</p>2019-03-13</li><br/><li><span>薛定鄂的猫</span> 👍（3） 💬（1）<p>后代和子代这两个词真的不好，完全就是一个词</p>2020-05-20</li><br/><li><span>不二</span> 👍（3） 💬（1）<p>first-line和first-letter那部分的代码，刚在浏览器端试了一下，div内部不管是span还是p，都是可以生效的，我理解这两个属性都是作用于 块元素， 所以如果将外面的div改成span可能就没有效果了，这块实际得到的效果为什么和老师将的不太一样？</p>2020-02-22</li><br/><li><span>qqq</span> 👍（2） 💬（0）<p>提醒下：伪元素那部分说的是子元素 color 覆盖父元素 color，而非 CSS 规则覆盖</p>2019-03-22</li><br/>
+
 </ul>

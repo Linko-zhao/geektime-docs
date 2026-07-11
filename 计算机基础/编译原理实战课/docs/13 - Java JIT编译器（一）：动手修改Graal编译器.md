@@ -66,7 +66,7 @@ Oracle公司还专门推出了一款JVM，叫做**GraalVM**。它除了用Graal�
 首先，下载源代码（指定了代码的分支）：
 
 ```
-git clone -b vm-20.0.1 https://github.com/oracle/graal.git 
+git clone -b vm-20.0.1 https://github.com/oracle/graal.git
 ```
 
 接着，下载GraalVM的构建工具mx，它是用Python2.7编写的，你需要有正确的Python环境：
@@ -111,9 +111,9 @@ public class Foo{
                     Thread.sleep(100);  //暂停100ms
                 }catch(Exception e){}
             }
-            
+
             i++;
-            add(i,i+1);   
+            add(i,i+1);
         }
     }
 
@@ -129,9 +129,9 @@ public class Foo{
 
 ```
 public CompilationRequestResult compileMethod(CompilationRequest request) {
-    //打印被编译的方法名和字节码  
+    //打印被编译的方法名和字节码
     System.out.println("Begin to compile method: " + request.getMethod().getName() + "\nbytecode: " + java.util.Arrays.toString(request.getMethod().getCode()));
-        
+
     return compileMethod(request, true, graalRuntime.getOptions());
 }
 ```
@@ -155,7 +155,7 @@ mx vm \
   -XX:+UseJVMCICompiler \
   -XX:-TieredCompilation \
   -XX:CompileOnly=Foo.add \
-Foo  
+Foo
 ```
 
 你会看到，命令中包含了很多不同的参数，它们分别代表了不同的含义。
@@ -215,7 +215,7 @@ mx vm \
   -XX:+UnlockDiagnosticVMOptions \
   -XX:+PrintAssembly \
   -XX:CompileOnly=Foo.add \
-Foo  
+Foo
 ```
 
 输出的汇编码信息如下：
@@ -245,7 +245,7 @@ mx -d vm \
   -XX:+UseJVMCICompiler \
   -XX:-TieredCompilation \
   -XX:CompileOnly=Foo.add \
-Foo  
+Foo
 ```
 
 这个时候，在JVM启动起来之后，会在8000端口等待调试工具跟它连接。
@@ -320,6 +320,7 @@ Graal执行过程的主要结构如下图所示。
 1. GraalVM项目的官方网站：[graalvm.org](https://www.graalvm.org/)。
 2. Graal的[Github地址](https://github.com/oracle/graal)。
 3. Graal项目的[出版物](https://github.com/oracle/graal/blob/master/docs/Publications.md)。有很多围绕这个项目来做研究的论文，值得一读。
+
 <div><strong>精选留言（7）</strong></div><ul>
 <li><span>wusiration</span> 👍（3） 💬（2）<p>这是目前在win 7环境下的编译报错，
 Extracting LIBFFI_SOURCES...

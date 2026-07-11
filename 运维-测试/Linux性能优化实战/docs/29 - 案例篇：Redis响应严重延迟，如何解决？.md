@@ -392,12 +392,12 @@ Initialized empty Git repository in &#47;root&#47;redis-slow&#47;.git&#47;
 error: The requested URL returned error: 403 Forbidden while accessing https:&#47;&#47;github.com&#47;feiskyer&#47;linux-perf-examples&#47;tree&#47;master&#47;redis-slow&#47;info&#47;refs
 
 代码怎么克隆不下来</p>2019-01-25</li><br/><li><span>Chn.K</span> 👍（1） 💬（2）<p>请教个问题：我用iotop观测IO使用情况，发现某进程的DISK READ 和DISK WRITE都是0，但是IO已经到99.99%了，通过top&#47;iostat对cpu&#47;磁盘的使用情况进行观测，均未发现什么异常，这个是什么原因呢？
-Total DISK READ :      18.14 M&#47;s | Total DISK WRITE :      31.59 M&#47;s
-Actual DISK READ:      18.02 M&#47;s | Actual DISK WRITE:      15.60 M&#47;s
-  PID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN      IO    COMMAND
-  148 be&#47;4 root        0.00 B&#47;s    0.00 B&#47;s  0.00 % 99.99 % [ksoftirqd&#47;17]
-23655 be&#47;4 root        0.00 B&#47;s  988.19 K&#47;s  0.00 %  0.00 % .&#47;xxxx ..&#47;etc&#47;base.conf
-17535 be&#47;4 root       18.14 M&#47;s   30.63 M&#47;s  0.00 %  0.00 % xxxx
+Total DISK READ : 18.14 M&#47;s | Total DISK WRITE : 31.59 M&#47;s
+Actual DISK READ: 18.02 M&#47;s | Actual DISK WRITE: 15.60 M&#47;s
+PID PRIO USER DISK READ DISK WRITE SWAPIN IO COMMAND
+148 be&#47;4 root 0.00 B&#47;s 0.00 B&#47;s 0.00 % 99.99 % [ksoftirqd&#47;17]
+23655 be&#47;4 root 0.00 B&#47;s 988.19 K&#47;s 0.00 % 0.00 % .&#47;xxxx ..&#47;etc&#47;base.conf
+17535 be&#47;4 root 18.14 M&#47;s 30.63 M&#47;s 0.00 % 0.00 % xxxx
 </p>2019-02-20</li><br/><li><span>李逍遥</span> 👍（1） 💬（1）<p>Device:         rrqm&#47;s   wrqm&#47;s     r&#47;s     w&#47;s    rkB&#47;s    wkB&#47;s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
 vda               0.00   392.00    0.00 1103.00     0.00  5984.00    10.85     1.00    0.58    0.00    0.58   0.91 100.00
 我这边 %util到了100%，说明磁盘有瓶颈了吗？（请求参数一致）

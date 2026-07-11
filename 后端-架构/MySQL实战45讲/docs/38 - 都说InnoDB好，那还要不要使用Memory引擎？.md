@@ -231,9 +231,10 @@ select * from t1 join temp_t on (t1.b=temp_t.b);
 评论区留言点赞板：
 
 > @老杨同志、@poppy、@长杰 这三位同学给出了正确答案，春节期间还持续保持跟进学习，给你们点赞。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>放</span> 👍（26） 💬（1）<p>老师新年快乐！过年都不忘给我们传授知识！</p>2019-02-08</li><br/><li><span>Long</span> 👍（23） 💬（1）<p>老师新年好 :-)
-刚好遇到一个问题。 
+刚好遇到一个问题。
 
 本来准备更新到，一个查询是怎么运行的里面的，看到这篇更新文章，就写在这吧，希望老师帮忙解答。
 
@@ -243,7 +244,6 @@ select * from t1 join temp_t on (t1.b=temp_t.b);
 （2）数据量table_schema = abc的有接近4W的表，整个实例有接近10W的表。（默认innodb引擎）
 （3）mysql.user和mysql.db的数据量都是100-200的行数，MyISAM引擎。
 （4）默认事务隔离级别RC
-
 
 在运行查询语句1的时候：select * from information_schema.tables where table_schema = &#39;abc&#39;;
 状态一直是check permission，opening tables，其他线程需要打开的表在opend tables里面被刷掉的，会显示在opening tables，可能需要小几秒后基本恢复正常。
@@ -256,10 +256,8 @@ select * from t1 join temp_t on (t1.b=temp_t.b);
 （2）语句1和语句2在运行的时候的过程分别是怎样的，特别是语句2。
 （3）语句2为什么会出现大量阻塞其他事务，其他事务都卡在opening tables的状态。
 
-
 PS: 最后根据audit log分析来看，语句实际上是MySQL的一个客户端Toad发起的，当使用Toad的object explorer的界面来查询表，或者设置connection的时候指定的的default schema是大域的时候就会run这个语句：（table_schema改成了abc，其他都是原样）
 SELECT COUNT(1) FROM information_schema.tables WHERE table_schema = &#39;abc&#39; AND table_type != &#39;VIEW&#39;;
-
 
 再次感谢！</p>2019-02-08</li><br/><li><span>salt</span> 👍（22） 💬（3）<p>新年好！
 课后作业：在备库配置跳过该内存表的主从同步。

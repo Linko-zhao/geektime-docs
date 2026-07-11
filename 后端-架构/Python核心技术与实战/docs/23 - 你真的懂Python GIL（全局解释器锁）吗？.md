@@ -100,18 +100,18 @@ CPython使用引用计数来管理内存，所有Python脚本中创建的实例�
 for (;;) {
     if (--ticker < 0) {
         ticker = check_interval;
-    
+
         /* Give another thread a chance */
         PyThread_release_lock(interpreter_lock);
-    
+
         /* Other threads may run now */
-    
+
         PyThread_acquire_lock(interpreter_lock, 1);
     }
 
     bytecode = *next_instr++;
     switch (bytecode) {
-        /* execute the next instruction ... */ 
+        /* execute the next instruction ... */
     }
 }
 ```
@@ -214,20 +214,21 @@ def foo():
 以上是个人的一点肤浅理解，请老师指正。</p>2019-10-25</li><br/><li><span>jackstraw</span> 👍（9） 💬（1）<p>关于绕过GIL的第二个方式：将关键的性能代码放到别的语言中（通常C++）实现；这种解决方式指的是在别的语言中使用多线程的方式处理任务么？就是不用python的多线程，而是在别的语言中使用多线程？</p>2020-01-15</li><br/><li><span>小侠龙旋风</span> 👍（145） 💬（2）<p>先mark一下学到的知识点：
 一、查看引用计数的方法：sys.getrefcount(a)
 二、CPython引进GIL的主要原因是：
+
 1. 设计者为了规避类似内存管理这样的复杂竞争风险问题（race condition）；
 2. CPython大量使用C语言库，但大部分C语言库都不是线程安全的（线程安全会降低性能和增加复杂度）。
-三、绕过GIL的两种思路：
-1. 绕过CPython，使用JPython等别的实现；
-2. 把关键性能代码放到其他语言中实现，比如C++。
-
+   三、绕过GIL的两种思路：
+3. 绕过CPython，使用JPython等别的实现；
+4. 把关键性能代码放到其他语言中实现，比如C++。
 
 问答老师的问题：
+
 1. cpu-bound属于计算密集型程序，用多线程运行时，每个线程在开始执行时都会锁住GIL、执行完会释放GIL，这两个步骤比较费时。相比单线程就没有切换线程的问题，所以更快。
-相反，在处理多阻塞高延迟的IO密集型程序时，因为多线程有check interval机制，若遇阻塞，CPython会强制当前线程让出（释放）GIL，给其他线程执行的机会。所以能提高程序的执行效率。
+   相反，在处理多阻塞高延迟的IO密集型程序时，因为多线程有check interval机制，若遇阻塞，CPython会强制当前线程让出（释放）GIL，给其他线程执行的机会。所以能提高程序的执行效率。
 2. 第二个问题摘抄了知乎上的讨论：
-在python3中，GIL不使用ticks计数，改为使用计时器（执行时间达到阈值后interval=15毫秒，当前线程释放GIL），这样对CPU密集型程序更加友好，但依然没有解决GIL导致的同一时间只能执行一个线程的问题，所以效率依然不尽如人意。多核多线程比单核多线程更差，原因是单核下多线程，每次释放GIL，唤醒的那个线程都能获取到GIL锁，所以能够无缝执行，但多核下，CPU0释放GIL后，其他CPU上的线程都会进行竞争，但GIL可能会马上又被CPU0拿到，导致其他几个CPU上被唤醒后的线程会醒着等待到切换时间后又进入待调度状态，这样会造成线程颠簸(thrashing)，导致效率更低。
-经常会听到老手说：“python下想要充分利用多核CPU，就用多进程”，原因是什么呢？原因是：每个进程有各自独立的GIL，互不干扰，这样就可以真正意义上的并行执行，所以在python中，多进程的执行效率优于多线程(仅仅针对多核CPU而言)。所以我们能够得出结论：多核下，想做并行提升效率，比较通用的方法是使用多进程，能够有效提高执行效率。</p>2019-07-06</li><br/><li><span>leixin</span> 👍（41） 💬（3）<p>有重要的一点没讲，GIL会在遇到io的时候自动释放，给其他线程执行的机会，这样Python多线程在io阻塞的多任务中有效。</p>2019-07-01</li><br/><li><span>leixin</span> 👍（34） 💬（1）<p>老师，我曾经去某大厂面试。人家问了我几个问题，比说说，你知道元类吗？Python是如何解决循环引用的？换句话说，Python的垃圾回收机制是如何？我后来自己找了些资料看了，还是，不是理解的特别明白。老师后面的课程能帮我们讲解下吗？</p>2019-07-01</li><br/><li><span>helloworld</span> 👍（10） 💬（0）<p>python的单线程和多线程同时都只能利用一颗cpu核心，对于纯cpu heavy任务场景，不涉及到io耗时环节，cpu都是充分利用的，多线程和单线程相比反倒是多了线程切换的成本，所以性能反而不如单线程。</p>2019-07-01</li><br/><li><span>SCAR</span> 👍（8） 💬（1）<p>1.cpu-bound任务的多线程相比单线程，时间的增加在于锁添加的获取和释放的开销结果。
-2.返回到python诞生的年代，GIL相对来说是合理而且有效率的，它易于实现，很容易就添加到python中，而且它为单线程程序提供了性能提升。以至于Guido在“It isn&#39;t Easy to Remove the GIL”里面说“ I&#39;d welcome a set of patches into Py3k only if the performance for a single-threaded program (and for a multi-threaded but I&#47;O-bound program) does not decrease”。而到现在为止，任何尝试都没有达到这一条件。
+   在python3中，GIL不使用ticks计数，改为使用计时器（执行时间达到阈值后interval=15毫秒，当前线程释放GIL），这样对CPU密集型程序更加友好，但依然没有解决GIL导致的同一时间只能执行一个线程的问题，所以效率依然不尽如人意。多核多线程比单核多线程更差，原因是单核下多线程，每次释放GIL，唤醒的那个线程都能获取到GIL锁，所以能够无缝执行，但多核下，CPU0释放GIL后，其他CPU上的线程都会进行竞争，但GIL可能会马上又被CPU0拿到，导致其他几个CPU上被唤醒后的线程会醒着等待到切换时间后又进入待调度状态，这样会造成线程颠簸(thrashing)，导致效率更低。
+   经常会听到老手说：“python下想要充分利用多核CPU，就用多进程”，原因是什么呢？原因是：每个进程有各自独立的GIL，互不干扰，这样就可以真正意义上的并行执行，所以在python中，多进程的执行效率优于多线程(仅仅针对多核CPU而言)。所以我们能够得出结论：多核下，想做并行提升效率，比较通用的方法是使用多进程，能够有效提高执行效率。</p>2019-07-06</li><br/><li><span>leixin</span> 👍（41） 💬（3）<p>有重要的一点没讲，GIL会在遇到io的时候自动释放，给其他线程执行的机会，这样Python多线程在io阻塞的多任务中有效。</p>2019-07-01</li><br/><li><span>leixin</span> 👍（34） 💬（1）<p>老师，我曾经去某大厂面试。人家问了我几个问题，比说说，你知道元类吗？Python是如何解决循环引用的？换句话说，Python的垃圾回收机制是如何？我后来自己找了些资料看了，还是，不是理解的特别明白。老师后面的课程能帮我们讲解下吗？</p>2019-07-01</li><br/><li><span>helloworld</span> 👍（10） 💬（0）<p>python的单线程和多线程同时都只能利用一颗cpu核心，对于纯cpu heavy任务场景，不涉及到io耗时环节，cpu都是充分利用的，多线程和单线程相比反倒是多了线程切换的成本，所以性能反而不如单线程。</p>2019-07-01</li><br/><li><span>SCAR</span> 👍（8） 💬（1）<p>1.cpu-bound任务的多线程相比单线程，时间的增加在于锁添加的获取和释放的开销结果。
+   2.返回到python诞生的年代，GIL相对来说是合理而且有效率的，它易于实现，很容易就添加到python中，而且它为单线程程序提供了性能提升。以至于Guido在“It isn&#39;t Easy to Remove the GIL”里面说“ I&#39;d welcome a set of patches into Py3k only if the performance for a single-threaded program (and for a multi-threaded but I&#47;O-bound program) does not decrease”。而到现在为止，任何尝试都没有达到这一条件。
 
 </p>2019-07-01</li><br/><li><span>farFlight</span> 👍（4） 💬（2）<p>另外，在测试不加锁的 foo 函数的时候，我这里循环测试10000次也不会见到n!=100的情况，这是为什么呢？</p>2019-07-01</li><br/><li><span>张巡</span> 👍（3） 💬（0）<p>这是mackbook被黑的最惨的一次，哈哈哈</p>2020-09-13</li><br/><li><span>Kfreer</span> 👍（2） 💬（0）<p>1在我们处理 cpu-bound 的任务（文中第一个例子）时，为什么有时候使用多线程会比单线程还要慢些？
 答：由于CPython中GIL的存在（运行线程前需要先获取GIL），所以即便是多线程运行，同一时刻也只能有一个线程处于运行状态，且切线程之间切换时还要消耗一部分资源。这就导致cpu密集型任务下多线程反而没有单线程运行的快。

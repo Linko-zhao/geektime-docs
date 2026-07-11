@@ -40,7 +40,7 @@ RunLoop 的目的是，当有事件要去处理时保持线程忙，当没有事
 
 ```
 //通知 observers
-if (currentMode->_observerMask & kCFRunLoopEntry ) 
+if (currentMode->_observerMask & kCFRunLoopEntry )
     __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopEntry);
 //进入 loop
 result = __CFRunLoopRun(rl, currentMode, seconds, returnAfterSourceHandled, previousMode);
@@ -130,11 +130,11 @@ handle_msg:
 // 如果 Timer 时间到，就触发 Timer 回调
 if (msg-is-timer) {
     __CFRunLoopDoTimers(runloop, currentMode, mach_absolute_time())
-} 
+}
 // 如果 dispatch 就执行 block
 else if (msg_is_dispatch) {
     __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__(msg);
-} 
+}
 
 // Source1 事件的话，就处理这个事件
 else {
@@ -282,7 +282,7 @@ void InitCrashReport()
     for (int i = 0; i < s_fatal_signal_num; ++i) {
         signal(s_fatal_signals[i], SignalHandler);
     }
-    
+
     //oc未捕获异常的捕获
     NSSetUncaughtExceptionHandler(&UncaughtExceptionHandler);
 }
@@ -334,6 +334,6 @@ NSLog(@"lag happen, detail below: \n %@",lagReportString);
 
 比如說點 A 花一秒匀速位移至點 B，秒間平均幀率 60FPS，但是前 59&#47;60 秒才跑了一幀出來，剩下 59 幀都在後 1&#47;60 秒跑出來，那麼用戶必然看到的是點 A 花了 59&#47;60 秒停在 A + ((B - A)&#47;60) 這個位置上，然後突然「飛」到了 B 點上。
 
-所以監控 FPS &gt; 24 的同時還要監控 FPS 變化率的波動。而這個波動的成因其實就是主線程上計算任務的性能衝擊。</p>2019-04-10</li><br/><li><span>金阳</span> 👍（22） 💬（0）<p>https:&#47;&#47;blog.ibireme.com&#47;2015&#47;05&#47;18&#47;runloop&#47;  这篇文章讲的更清晰些</p>2019-07-31</li><br/><li><span>鼠辈</span> 👍（17） 💬（0）<p>这个3秒是不是太长了，1秒60帧，每帧16.67ms。runlooo会在每次sleep之前去刷新ui，这样的话如果掉了30帧，就是500ms左右，用户的体验就已经下去了，能感觉到卡顿了.
+所以監控 FPS &gt; 24 的同時還要監控 FPS 變化率的波動。而這個波動的成因其實就是主線程上計算任務的性能衝擊。</p>2019-04-10</li><br/><li><span>金阳</span> 👍（22） 💬（0）<p>https:&#47;&#47;blog.ibireme.com&#47;2015&#47;05&#47;18&#47;runloop&#47; 这篇文章讲的更清晰些</p>2019-07-31</li><br/><li><span>鼠辈</span> 👍（17） 💬（0）<p>这个3秒是不是太长了，1秒60帧，每帧16.67ms。runlooo会在每次sleep之前去刷新ui，这样的话如果掉了30帧，就是500ms左右，用户的体验就已经下去了，能感觉到卡顿了.
 </p>2019-04-09</li><br/>
 </ul>

@@ -230,7 +230,7 @@ public boolean rollbackOn(Throwable ex) {
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    
+
     //异常无法传播出方法，导致事务无法回滚
     @Transactional
     public void createUserWrong1(String name) {
@@ -516,43 +516,40 @@ commit;
 
 两个请求中只有一个可以执行成功update语句，将signature_lock更新为1。
 
-
-
 2.在代码层面按照在数据库层面的逻辑，service层的伪代码如下：
 public void test(ParamDto paramDto) {
- &#47;&#47;取数据
- Data data = getByParamDto(paramDto);
- &#47;&#47; 尝试加锁,返回1表示加锁成功
- Integer lockStatus = lockData(paramDto);
- &#47;&#47; 加锁失败直接返回
- if(!Objects.equals(1,lockStatus)){
-  return;
- }
- try{
-   &#47;&#47; 处理业务代码，大概2到3秒 
-   handle();
- }catch(Exception e){
- 
- } finally{
-   &#47;&#47; 释放锁
-   releaseLock(paramDto);
- }
+&#47;&#47;取数据
+Data data = getByParamDto(paramDto);
+&#47;&#47; 尝试加锁,返回1表示加锁成功
+Integer lockStatus = lockData(paramDto);
+&#47;&#47; 加锁失败直接返回
+if(!Objects.equals(1,lockStatus)){
+return;
 }
+try{
+&#47;&#47; 处理业务代码，大概2到3秒
+handle();
+}catch(Exception e){
 
+} finally{
+&#47;&#47; 释放锁
+releaseLock(paramDto);
+}
+}
 
 按照这样的方式，在方法上面不加注解的情况下，执行结果与在写sql的结果是一致的，两个请求只有一个可以执行成功；加上@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)之后，两个请求都可以拿到锁。
 
-疑问是，Spring的事务和数据库的事务有什么关系，加上事务注解后，为什么和数据库的结果不一致。</p>2020-03-21</li><br/><li><span>火很大先生</span> 👍（15） 💬（1）<p>    @Transactional
-    public int createUserRight(String name) throws IOException {
-        try {
-            userRepository.save(new UserEntity(name));
-            throw new RuntimeException(&quot;error&quot;);
-        } catch (Exception ex) {
-            log.error(&quot;create user failed because {}&quot;, ex.getMessage());
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-        }
-        return userRepository.findByName(name).size();
-    }
+疑问是，Spring的事务和数据库的事务有什么关系，加上事务注解后，为什么和数据库的结果不一致。</p>2020-03-21</li><br/><li><span>火很大先生</span> 👍（15） 💬（1）<p> @Transactional
+public int createUserRight(String name) throws IOException {
+try {
+userRepository.save(new UserEntity(name));
+throw new RuntimeException(&quot;error&quot;);
+} catch (Exception ex) {
+log.error(&quot;create user failed because {}&quot;, ex.getMessage());
+TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+}
+return userRepository.findByName(name).size();
+}
 请教老师，我这种写法，控制台打出了Initiating transaction rollback 但是数据库还是存上了数据，没有回滚，是因为findByName 这个查询语句的默认commit给提交了吗</p>2020-04-10</li><br/><li><span>王刚</span> 👍（6） 💬（2）<p>老师问个问题，您说得@Transactional事物回滚，只有是RuntimeException 或error时，才会回滚；
 但是我在做测试时，发现@Transactional有一个rollbackFor属性，该属性可以指定什么异常回滚，如果@Transactional 不指定rollbackFor，默认得是RuntimeException？</p>2020-03-26</li><br/><li><span>汝林外史</span> 👍（6） 💬（5）<p>老师，创建主子用户那个业务，应该是子用户创建失败不影响主用户，但是主用户失败应该子用户也要回滚吧？如果是这样，那传播机制是不是应该用Propagation.NESTED</p>2020-03-24</li><br/><li><span>Yanni</span> 👍（5） 💬（5）<p>要注意，@Transactional 与 @Async注解不能同时在一个方法上使用, 这样会导致事物不生效。</p>2020-04-10</li><br/><li><span>magic</span> 👍（5） 💬（1）<p>老师能补充下对私有方法事务的代码示例吗？</p>2020-03-28</li><br/><li><span>汝林外史</span> 👍（5） 💬（1）<p>很明显，this 调用因为没有走代理，事务没有在 createUserPublic 方法上生效，只在 Repository 的 save 方法层面生效。
 createUserPublic这个方法不是本来就一个save操作吗，既然save层面生效了，那这个方法的事务难道不也就生效了吗？</p>2020-03-23</li><br/><li><span>COLDLY</span> 👍（4） 💬（2）<p>请问如果仅是select语句，需要加事务吗</p>2020-04-07</li><br/><li><span>张珮磊想静静</span> 👍（4） 💬（2）<p>如果一个事务里面操作了不同的数据库，回滚操作是不是就得自己写补偿的重试了？</p>2020-03-26</li><br/><li><span>nimil</span> 👍（3） 💬（2）<p>前几天还真出现了个事务不生效的问题，于是对着文章仔细review了一下代码，发现也没文中说的那些毛病，最后排查到是事务管理器只配置了一个数据库，而我是在另一个数据库进行的数据操作，所以事务不生效了，最后添加另一个数据库的事务管理器事务就生效了</p>2020-06-11</li><br/>

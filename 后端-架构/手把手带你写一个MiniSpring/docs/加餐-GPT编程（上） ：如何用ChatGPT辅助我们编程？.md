@@ -49,32 +49,32 @@ Create a controller
 1. Create a class called EmployeeController with the following methods:
 
 ```plain
-@Controller 
+@Controller
 public class EmployeeController {
    @Autowired
    private EmployeeDAO employeeDAO;
-   
+
    @RequestMapping(value = "/", method = RequestMethod.GET)
    public ModelAndView home() {
         List<Employee> employees = employeeDAO.getAllEmployees();
-        ModelAndView model = new ModelAndView("home");     
-        model.addObject("employees", employees);     
-        return model;   
-    }    
-    
+        ModelAndView model = new ModelAndView("home");
+        model.addObject("employees", employees);
+        return model;
+    }
+
     @RequestMapping(value = "/addEmployee", method = RequestMethod.GET)
     public ModelAndView addEmployee() {
-         ModelAndView model = new ModelAndView("addEmployee");     
-         model.addObject("employee", new Employee());     
-         return model;   
-     }    
-     
+         ModelAndView model = new ModelAndView("addEmployee");
+         model.addObject("employee", new Employee());
+         return model;
+     }
+
      @RequestMapping(value = "/saveEmployee", method = RequestMethod.POST)
-     public ModelAndView saveEmployee(@ModelAttribute("employee") Employee employee) {     
-         employeeDAO.addEmployee(employee);     
-         return new ModelAndView("redirect:/");   
-     } 
- } 
+     public ModelAndView saveEmployee(@ModelAttribute("employee") Employee employee) {
+         employeeDAO.addEmployee(employee);
+         return new ModelAndView("redirect:/");
+     }
+ }
 ```
 
 对于它的答案，我们可以校正，比如告诉它最后一步我们不想用JSP，而是想用React，让它给个例子。
@@ -95,18 +95,18 @@ public class EmployeeController {
 
 它的回复是：Sure, here’s a step-by-step guide on how to create a new Spring Boot CRUD project:
 
-01. Open your preferred IDE (Integrated Development Environment) such as Eclipse or IntelliJ IDEA.
-02. Create a new Spring Boot project using the Spring Initializr. You can do this by going to [https://start.spring.io/](https://start.spring.io/) and filling out the necessary information such as project type, language, packaging, and dependencies. For this example, we’ll use Maven as the project type and select Spring Web, Spring Data JPA, and H2 Database as the dependencies.
-03. Click the Generate button to download the project as a zip file.
-04. Extract the contents of the downloaded zip file to a directory on your computer.
-05. Open your IDE and import the project. In Eclipse, go to File &gt; Import &gt; Maven &gt; Existing Maven Projects and select the directory where you extracted the project. In IntelliJ IDEA, go to File &gt; New &gt; Project from Existing Sources and select the directory where you extracted the project.
-06. Once the project is imported, open the application.properties file located in the src/main/resources directory. This file contains configuration properties for the project such as database connection settings. For this example, we’ll use the default H2 database settings.
-07. Create a new package called “model” and create a new class called “Person” in that package. This class will represent our data model for the CRUD operations. Add the necessary fields such as “id”, “firstName”, “lastName”, and “email”. Add getters and setters for each field.
-08. Create a new package called “repository” and create a new interface called “PersonRepository” in that package. This interface will extend the JpaRepository interface provided by Spring Data JPA and will allow us to perform CRUD operations on the “Person” class. Add any custom methods you need for your application.
-09. Create a new package called “controller” and create a new class called “PersonController” in that package. This class will handle incoming requests and call the appropriate methods in the “PersonRepository”. Use annotations such as @RestController and @RequestMapping to define the endpoint mappings.
+1.  Open your preferred IDE (Integrated Development Environment) such as Eclipse or IntelliJ IDEA.
+2.  Create a new Spring Boot project using the Spring Initializr. You can do this by going to [https://start.spring.io/](https://start.spring.io/) and filling out the necessary information such as project type, language, packaging, and dependencies. For this example, we’ll use Maven as the project type and select Spring Web, Spring Data JPA, and H2 Database as the dependencies.
+3.  Click the Generate button to download the project as a zip file.
+4.  Extract the contents of the downloaded zip file to a directory on your computer.
+5.  Open your IDE and import the project. In Eclipse, go to File &gt; Import &gt; Maven &gt; Existing Maven Projects and select the directory where you extracted the project. In IntelliJ IDEA, go to File &gt; New &gt; Project from Existing Sources and select the directory where you extracted the project.
+6.  Once the project is imported, open the application.properties file located in the src/main/resources directory. This file contains configuration properties for the project such as database connection settings. For this example, we’ll use the default H2 database settings.
+7.  Create a new package called “model” and create a new class called “Person” in that package. This class will represent our data model for the CRUD operations. Add the necessary fields such as “id”, “firstName”, “lastName”, and “email”. Add getters and setters for each field.
+8.  Create a new package called “repository” and create a new interface called “PersonRepository” in that package. This interface will extend the JpaRepository interface provided by Spring Data JPA and will allow us to perform CRUD operations on the “Person” class. Add any custom methods you need for your application.
+9.  Create a new package called “controller” and create a new class called “PersonController” in that package. This class will handle incoming requests and call the appropriate methods in the “PersonRepository”. Use annotations such as @RestController and @RequestMapping to define the endpoint mappings.
 10. Run the project using your IDE or by running the “mvn spring-boot:run” command in the project directory. This will start the Spring Boot application and make it available at [http://localhost:8080](http://localhost:8080/).
 11. Test the CRUD operations by sending HTTP requests to the appropriate endpoints using a tool such as Postman or cURL. You can use the following endpoints as examples:
-    
+
     - GET /person - Retrieve a list of all persons
     - GET /person/{id} - Retrieve a person by ID
     - POST /person - Create a new person

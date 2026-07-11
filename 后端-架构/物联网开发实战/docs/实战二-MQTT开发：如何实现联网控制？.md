@@ -113,11 +113,11 @@ int w800_living_send_attribute(const char *dev_id, const char *msg);
 int w800_living_idmau(const char *mykey,const char *myname,const char *mysecret,const char *mypsecret)
 {
 	int ret = -1;
-	
+
 	aos_mutex_lock(&g_cmd_mutex,AOS_WAIT_FOREVER);
-	
+
 	atparser_clr_buf(g_atparser_uservice_t);
-	
+
 	if (atparser_send(g_atparser_uservice_t,
 		"AT+IDMAU=\"%s\",\"%s\",\"%s\",\"%s\"", mykey, myname, mysecret, mypsecret) == 0) {
 		if (atparser_recv(g_atparser_uservice_t, "OK\n") == 0) {
@@ -127,13 +127,13 @@ int w800_living_idmau(const char *mykey,const char *myname,const char *mysecret,
 			printf("Destination Host Unreachable!\r\n");
 		}
 	}
-	
+
 	atparser_cmd_exit(g_atparser_uservice_t);
-	
+
 	if (ret == 0) {
 		printf("key = %s name = %s secret = %s psecret = %s!\r\n", mykey, myname, mysecret, mypsecret);
 	}
-	
+
 	aos_mutex_unlock(&g_cmd_mutex);
 	return ret;
 }
@@ -141,11 +141,11 @@ int w800_living_idmau(const char *mykey,const char *myname,const char *mysecret,
 int w800_living_idmcon(void)
 {
 	int ret = -1;
-	
+
 	aos_mutex_lock(&g_cmd_mutex,AOS_WAIT_FOREVER);
-	
+
 	atparser_clr_buf(g_atparser_uservice_t);
-	
+
 	if (atparser_send(g_atparser_uservice_t, "AT+IDMCON") == 0) {
 		if (atparser_recv(g_atparser_uservice_t, "OK\n") == 0) {
 			ret = 0;
@@ -153,13 +153,13 @@ int w800_living_idmcon(void)
 			printf("Destination Host Unreachable!\r\n");
 		}
 	}
-	
+
 	atparser_cmd_exit(g_atparser_uservice_t);
-	
+
 	if (ret == 0) {
 		printf("AT+IDMCON \r\n");
 	}
-	
+
 	aos_mutex_unlock(&g_cmd_mutex);
 	return ret;
 }
@@ -176,11 +176,11 @@ int w800_living_send_attribute(const char *dev_id, const char *msg)
     if (!dev_id || !msg) {
         return ret;
     }
-	
+
     aos_mutex_lock(&g_cmd_mutex, AOS_WAIT_FOREVER);
-	
+
     atparser_clr_buf(g_atparser_uservice_t);
-	
+
     printf("Send msg: %s\r\n", msg);
     if (atparser_send(g_atparser_uservice_t, "AT+IDMPP=0,\"%s\"", msg) == 0) {
         if (atparser_recv(g_atparser_uservice_t, "OK\n") == 0) {
@@ -190,9 +190,9 @@ int w800_living_send_attribute(const char *dev_id, const char *msg)
     } else {
         printf("Send at cmd err\n");
     }
-	
+
     atparser_cmd_exit(g_atparser_uservice_t);
-	
+
     aos_mutex_unlock(&g_cmd_mutex);
 
     return ret;
@@ -261,9 +261,9 @@ void update_attr(uint8_t powerstate, uint8_t bright, RgbColor rgb)
 	const char *dev_id = "0";
 	char msg[128] = {0};
 	const char *msg_format = "{\\\"powerstate\\\":%d,\\\"brightness\\\":%d,\\\"RGBColor\\\":{\\\"Red\\\":%d,\\\"Green\\\":%d,\\\"Blue\\\":%d}}";
-	
+
 	sprintf(msg, msg_format, powerstate, bright, rgb.r,rgb.g,rgb.b);
-	
+
 	w800_living_send_attribute(dev_id, msg);
 }
 
@@ -294,7 +294,7 @@ static int parse_living_msg(const char *msg)
 		bright = item->valueint;
 		event_publish(EVENT_LIVING_ATTR_BRIGHTNESS, &bright);
     }
-	
+
 	item = cJSON_GetObjectItem(root, "RGBColor");
 	static RgbColor rgb;
 	if (item && cJSON_IsObject(item)) {
@@ -347,20 +347,20 @@ int connect_iot_demo(void)
 	w800_living_recv_callback_register("+IDMPS:", living_set_attr_callback, NULL);
 
 	ret2 = w800_living_idmau(my_key,my_name,my_secret,my_p_secret);
-	
+
 	if (ret2 == 0){
 		printf("AT+IDMAU:OK!\n");
 	} else {
 		printf("AT+IDMAU:ERROR!\n");
 	}
-	
+
 	ret3 = w800_living_idmcon();
 	if (ret3 == 0){
 		printf("AT+IDMCON:OK!\n");
 	} else {
 		printf("AT+IDMCON:ERROR!\n");
 	}
-	
+
 	if(ret2 == 0 && ret3 == 0){
 		return 0;
 	}else{
@@ -691,10 +691,10 @@ int main(void)
 	uint32_t time_cnt = 0;
 	bool mqtt_conn = false;
     board_yoc_init();
-	
+
 	led_pinmux_init();
 	relay_pinmux_init();
-	
+
 	led_color.r = 255;
 	led_color.g = 255;
 	led_color.b = 0;
@@ -708,7 +708,7 @@ int main(void)
 	event_subscribe(EVENT_LIVING_ATTR_POWER, living_event, NULL);
 	event_subscribe(EVENT_LIVING_ATTR_BRIGHTNESS, living_event, NULL);
 	event_subscribe(EVENT_LIVING_ATTR_COLOR, living_event, NULL);
-	
+
 	while(1){
 		if (g_wifi_ok) {
 			int ret = connect_iot_demo();
@@ -720,12 +720,12 @@ int main(void)
 			}
 			g_wifi_ok = false;
 		}
-		
+
 		if (mqtt_conn && time_cnt >= 10) {
 			update_attr(get_state(), led_brightness, led_color);
 			time_cnt = 0;
 		}
-		
+
 		time_cnt += 1;
 		aos_msleep(500);
 	}

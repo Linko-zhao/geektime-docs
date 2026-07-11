@@ -95,7 +95,7 @@ public class SimpleBeanFactory extends DefaultSingletonBeanRegistry implements B
             }
             try {
                 singleton = Class.forName(beanDefinition.getClassName()).newInstance();
-            } 
+            }
             //新注册这个bean实例
             this.registerSingleton(beanName, singleton);
         }
@@ -224,7 +224,7 @@ public class AServiceImpl {
 
 ```java
 public class AServiceImpl {
-  
+
   private String name;
   private int level;
 

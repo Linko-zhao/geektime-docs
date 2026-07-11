@@ -128,15 +128,15 @@ public static void main(String[] args) {
 
 调用端具体流程如下：
 
-01. 根据ConsumerConfig的配置信息生成registryUrl（注册中心URL对象）与serviceUrl（服务URL对象）；
-02. 根据registryUrl，调用Registry插件，创建Registry对象，Registry对象为注册中心对象，与注册中心进行交互；
-03. 创建动态代理对象；
-04. 调用Registry对象的Open方法，开启注册中心对象；
-05. 调用Registry对象subscribe方法，订阅接口的配置信息与全局配置信息；
-06. 调用InvokeManager的refer方法，用来创建Refer对象；
-07. InvokeManager在创建Refer对象之前会先创建Cluster对象，Cluser对象是集群层的核心对象，Cluster会维护该调用端与服务端节点的连接状态；
-08. InvokeManager创建Refer对象；
-09. Refer对象初始化，其中主要包括创建路由策略、消息分发策略、创建负载均衡、调用链、添加eventbus事件监听等等；
+1.  根据ConsumerConfig的配置信息生成registryUrl（注册中心URL对象）与serviceUrl（服务URL对象）；
+2.  根据registryUrl，调用Registry插件，创建Registry对象，Registry对象为注册中心对象，与注册中心进行交互；
+3.  创建动态代理对象；
+4.  调用Registry对象的Open方法，开启注册中心对象；
+5.  调用Registry对象subscribe方法，订阅接口的配置信息与全局配置信息；
+6.  调用InvokeManager的refer方法，用来创建Refer对象；
+7.  InvokeManager在创建Refer对象之前会先创建Cluster对象，Cluser对象是集群层的核心对象，Cluster会维护该调用端与服务端节点的连接状态；
+8.  InvokeManager创建Refer对象；
+9.  Refer对象初始化，其中主要包括创建路由策略、消息分发策略、创建负载均衡、调用链、添加eventbus事件监听等等；
 10. ConsumerConfig调用Refer的open方法，开启调用端；
 11. Refer对象调用Cluster对象的open方法，开启集群；
 12. Cluster对象调用Registry对象的subcribe方法，订阅服务端节点变化，收到服务端节点变化时，Cluster会调用传输层EndpointFactroy插件，创建Client对象，与这些服务节点建立连接，Cluster会维护这些连接；
@@ -164,15 +164,15 @@ Refer对象在构造调用链的时候，其最后一个调用链就是Refer对�
 
 调用端发送流程如下：
 
-01. 动态代理对象调用ConsumerInvokerHandler对象的Invoke方法；
-02. ConsumerInvokerHandler对象生成请求消息对象；
-03. ConsumerInvokerHandler对象调用Refer对象的Invoke方法；
-04. Refer对象对请求消息对象进行处理，如设置接口信息、分组信息等等；
-05. Refer对象调用消息透传插件，处理透传信息，其中就包括隐式参数信息；
-06. Refer对象调用FilterChain对象的Invoker方法，执行调用链；
-07. FilterChain对象调用每个Filter；
-08. Refer对象的distribute方法作为最后一个Filter，被调用链最后一个执行。
-09. 调用NodeSelecter对象的select方法，NodeSelecter是集群层的路由规则节点选择器，其select方法用来选择出符合路由规则的服务节点；
+1.  动态代理对象调用ConsumerInvokerHandler对象的Invoke方法；
+2.  ConsumerInvokerHandler对象生成请求消息对象；
+3.  ConsumerInvokerHandler对象调用Refer对象的Invoke方法；
+4.  Refer对象对请求消息对象进行处理，如设置接口信息、分组信息等等；
+5.  Refer对象调用消息透传插件，处理透传信息，其中就包括隐式参数信息；
+6.  Refer对象调用FilterChain对象的Invoker方法，执行调用链；
+7.  FilterChain对象调用每个Filter；
+8.  Refer对象的distribute方法作为最后一个Filter，被调用链最后一个执行。
+9.  调用NodeSelecter对象的select方法，NodeSelecter是集群层的路由规则节点选择器，其select方法用来选择出符合路由规则的服务节点；
 10. 调用Route对象的route方法，Route对象为路由分发器，也是集群层中的对象，默认为路由分发策略为Failover，即请求失败后可以重试请求，这里你可以回顾下[\[第 12 讲\]](https://time.geekbang.org/column/article/211261)，在这一讲的思考题中我就问过异常重试发送在RPC调用中的哪个环节，其实就在此环节；
 11. Route对象调用LoadBalance对象的select方法，通过负载均衡选择一个节点；
 12. Route对象回调Refer对象的invokeRemote方法；
@@ -188,15 +188,15 @@ Refer对象在构造调用链的时候，其最后一个调用链就是Refer对�
 
 服务端的传输层会接收到请求消息，并对请求消息进行编解码以及反序列化，之后调用Exporter对象的invoke方法，具体流程如下：
 
-01. 传输层接收到请求，触发协议适配器ProtocolAdapter；
-02. ProtocolAdapter对象遍历Protocol插件的实现类，匹配协议；
-03. 匹配协议之后，根据Protocol对象，传输层的Server对象绑定该协议的编解码器（Codec对象）、Channel处理链（ChainChannelHandler对象）；
-04. 对接收的消息进行解码与反序列化；
-05. 执行Channel处理链；
-06. 在业务线程池中调用消息处理链（MessageHandle插件）；
-07. 调用BizReqHandle对象的handle方法，处理请求消息；
-08. BizReqHandle对象调用restore方法，根据连接Session信息，处理请求消息数据，并根据请求的接口名、分组名与方法名，获取Exporter对象；
-09. 调用Exporter对象的invoke方法，Exporter对象返回CompletableFuture对象；
+1.  传输层接收到请求，触发协议适配器ProtocolAdapter；
+2.  ProtocolAdapter对象遍历Protocol插件的实现类，匹配协议；
+3.  匹配协议之后，根据Protocol对象，传输层的Server对象绑定该协议的编解码器（Codec对象）、Channel处理链（ChainChannelHandler对象）；
+4.  对接收的消息进行解码与反序列化；
+5.  执行Channel处理链；
+6.  在业务线程池中调用消息处理链（MessageHandle插件）；
+7.  调用BizReqHandle对象的handle方法，处理请求消息；
+8.  BizReqHandle对象调用restore方法，根据连接Session信息，处理请求消息数据，并根据请求的接口名、分组名与方法名，获取Exporter对象；
+9.  调用Exporter对象的invoke方法，Exporter对象返回CompletableFuture对象；
 10. Exporter对象调用FilterChain的invoke方法；
 11. FilterChain执行所有Filter对象；
 12. Exporter对象的invokeMethod方法作为最后一个Filter，最后被调用；

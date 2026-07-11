@@ -302,7 +302,7 @@ Send/Sync 是 Rust 并发安全的基础：
 之前介绍过 Rc / RefCell（[第9讲](https://time.geekbang.org/column/article/416722)），我们来看看，如果尝试跨线程使用 Rc / RefCell，会发生什么。在 Rust 下，如果想创建一个新的线程，需要使用 [std::thread::spawn](https://doc.rust-lang.org/std/thread/fn.spawn.html)：
 
 ```rust
-pub fn spawn<F, T>(f: F) -> JoinHandle<T> 
+pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 where
     F: FnOnce() -> T,
     F: Send + 'static,
@@ -484,7 +484,7 @@ fn print(v: impl Into<IpAddr>) {
 fn main() {
     let v4: Ipv4Addr = "2.2.2.2".parse().unwrap();
     let v6: Ipv6Addr = "::1".parse().unwrap();
-    
+
     // IPAddr 实现了 From<[u8; 4]，转换 IPv4 地址
     print([1, 1, 1, 1]);
     // IPAddr 实现了 From<[u16; 8]，转换 IPv6 地址
@@ -838,12 +838,12 @@ fn it_works() {
 2. 因为 Arc 实现了 Deref 和 DerefMut trait，解应用可以直接访问内部的 Mutex
 
 3. 实现的时候遇到了一个问题：对于非法的 index （比如测试用例中的 128）该如何返回，没找到解决方法于是只针对 List&lt;u32&gt; 实现了 Index trait，这样在遇到非法 index 时返回 &amp;0 即可。
-针对 Vec 测试了一下非法 index 的情形，发现会直接终止进程。具体代码如下
+   针对 Vec 测试了一下非法 index 的情形，发现会直接终止进程。具体代码如下
 
 ```rust
 fn index(&amp;self, index: isize) -&gt; &amp;Self::Output {
     &#47;&#47; todo!();
-    if let Some(idx_abs) = 
+    if let Some(idx_abs) =
         if index &gt;= 0 {
             Some(index as usize)
         } else {
@@ -865,6 +865,7 @@ fn index(&amp;self, index: isize) -&gt; &amp;Self::Output {
 2. trait继承这里，经常看到一句话，组合优于继承，怎么理解。同时对于实现和继承来说，可能基础不扎实，一直没理解好什么时候继承什么时候实现，学java的时候，那些抽象类和接口也迷糊的很。
 
 另外这里隐藏了很多东西，看老师代码的时候经常用unwrap，其实生产环境代码是非常危险的。例如今天写hashmap替换里面内容时，最好用containkeys判断一下，如果没有则插入一个空的，再使用get_mut和unwarp，这样就保证安全不会panic了。</p>2021-10-27</li><br/><li><span>彭亚伦</span> 👍（4） 💬（3）<p>第3题, 同样使用标准库的2个方法, `checked_rem_euclid`取得合理索引值, `iter().nth()`获得实际值
+
 ```rust
 use std::{
     collections::LinkedList,
@@ -898,7 +899,7 @@ impl&lt;T&gt; Index&lt;isize&gt; for List&lt;T&gt; {
     fn index(&amp;self, index: isize) -&gt; &amp;Self::Output {
         let len = self.0.len();
         &#47;&#47;标准库的checked_rem_euclid方法, 如果len=0 则返回None
-        &#47;&#47;这里直接把i进行unwrap, 如果链表长度不为0, 则i一定在0..len范围内, 可以放心使用, 
+        &#47;&#47;这里直接把i进行unwrap, 如果链表长度不为0, 则i一定在0..len范围内, 可以放心使用,
         &#47;&#47;如果长度为零, 意味这对一个空链表进行索引, 那么我panic应该也是合情合理的吧
         let i = (index as usize).checked_rem_euclid(len).unwrap();
         &amp;self.0.iter().nth(i).unwrap()
@@ -922,10 +923,8 @@ fn it_works() {
 }
 ```
 
-playground 链接:  https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=73b4129f1a6608892691da92d501ba15</p>2021-11-17</li><br/><li><span>周烨</span> 👍（4） 💬（3）<p>1. 不能，因为不能确定T是否实现了Copy trait。
-2. 因为Arc实现了Deref trait
-3. ```impl&lt;T&gt; Index&lt;isize&gt; for List&lt;T&gt; {
-    type Output = T;
+playground 链接: https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=73b4129f1a6608892691da92d501ba15</p>2021-11-17</li><br/><li><span>周烨</span> 👍（4） 💬（3）<p>1. 不能，因为不能确定T是否实现了Copy trait。2. 因为Arc实现了Deref trait 3. ```impl&lt;T&gt; Index&lt;isize&gt; for List&lt;T&gt; {
+type Output = T;
 
     fn index(&amp;self, index: isize) -&gt; &amp;Self::Output {
         let len = self.len() as isize;
@@ -937,10 +936,12 @@ playground 链接:  https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;m
         let it = self.iter();
         return it.skip(i).next().unwrap();
     }
+
 }```</p>2021-10-08</li><br/><li><span>夏洛克Moriaty</span> 👍（2） 💬（3）<p>let a = *list;
-let b  = list.deref();
+let b = list.deref();
 
 老师请问下这两种方式有什么区别，为什么a和b的类型不同？</p>2021-09-26</li><br/><li><span>GE</span> 👍（1） 💬（1）<p>1. 不能，但是这里和T关系无关，而是因为Vec本身已经实现了Drop trait，所以和Copy trait是冲突的
+
 ```
 &#47;&#47; source code
 unsafe impl&lt;#[may_dangle] T, A: Allocator&gt; Drop for Vec&lt;T, A&gt;
@@ -956,25 +957,23 @@ Note: 我学rust陆续2年了，看源码时对这些需要编译器额外处理
 #[stable(feature = &quot;rust1&quot;, since = &quot;1.0.0&quot;)]
 #[cfg_attr(not(test), rustc_diagnostic_item = &quot;mem_forget&quot;)]
 pub const fn forget&lt;T&gt;(t: T) {
-    let _ = ManuallyDrop::new(t);
+let _ = ManuallyDrop::new(t);
 }
-
-
-
 
 </p>2021-09-26</li><br/><li><span>james</span> 👍（0） 💬（1）<p>向老师请教一个问题：在如下Deref范例中，既然deref的self变量是&amp;Self类型，那self.value的类型应该就是&amp;Self.Target，但汉服返回时为何还要在self.value前加&amp;呢？
 
 use std::ops::Deref;
 
 struct DerefExample&lt;T&gt; {
-    value: T
+value: T
 }
 impl&lt;T&gt; Deref for DerefExample&lt;T&gt; {
-    type Target = T;
+type Target = T;
 
     fn deref(&amp;self) -&gt; &amp;Self::Target {
         &amp;self.value
     }
+
 }
 
 </p>2021-12-10</li><br/><li><span>作死的卡基</span> 👍（0） 💬（1）<p>想请教一下老师，比如要自己实现 Drop trait，有没有类似 Java 中子类覆写父类方法的机制，甚至覆写时还能用super.xxx()还能调用父类的被覆写方法。还是只能自己新建一个 trait？</p>2021-11-24</li><br/><li><span>阿成</span> 👍（0） 💬（1）<p>impl&lt;T&gt; Index&lt;isize&gt; for List&lt;T&gt; {
@@ -988,6 +987,7 @@ impl&lt;T&gt; Deref for DerefExample&lt;T&gt; {
         let index = (index % len + len) % len;
         self.iter().nth(index as usize).unwrap()
     }
+
 }
 </p>2021-11-24</li><br/><li><span>核桃</span> 👍（0） 💬（3）<p>clone_from 这里说提高效率的，没看出来区别到底在哪里，源码里面也是直接 clone的？解释也没看懂，多谢了。</p>2021-11-21</li><br/><li><span>三叶虫tlb</span> 👍（0） 💬（2）<p>&amp;self.0，0是指下标第一个属性的意思吗？</p>2021-11-17</li><br/>
 </ul>

@@ -196,11 +196,12 @@ https://oauth-server.com/auth?respons_type=code&client_id=CLIENTID&redirect_uri=
 在请求授权码的时候 附带了一个 state 的值，然后 state 会和授权码一起被返回，这时候攻击者按下暂停，然后在钓鱼页面中同样携带这个 state 是不是同样不安全？
 
 我理解的是这样？是我哪儿理解错了嘛？</p>2021-01-23</li><br/><li><span>JianXu</span> 👍（2） 💬（0）<p>“在https:&#47;&#47;time.geekbang.org&#47;page&#47;下，创建了一个页面 hacker.html。” — 老师，黑客是怎么才能在这里新创建一个自己的页面呢？</p>2020-10-13</li><br/><li><span>Geek_0cinhr</span> 👍（1） 💬（1）<p>关于csrf的state我是这样理解的: 攻击者在截取到 “回调地址？code=自己的code”这个链接后，也就是原本从 开放平台跳转到第三方平台的动作被暂停了，攻击者想让受害者点击这个链接来完成这个跳转动作。 所以如果第三方平台每次在申请code时如果加上了state参数，并且保存当前用户和state的关联关系, 那就好办了，当受害者点击 攻击者准备好的这个链接时，第三方平台首先会检查 state和当前操作的用户的关联关系是否正确，结果发现当前用户(受害者)在本平台没有与此state关联！ 应该就是这么回事</p>2024-09-06</li><br/><li><span>Geek_0cinhr</span> 👍（1） 💬（1）<p>csrf那里有个问题，问题是，既然攻击者能拿到code肯定也能拿到state啊。原模原样做个链接，不就能继续诱导用户走后半段流程获取access_token了么？ state反正又不用攻击者自己构造，直接截获拿来用就行了啊</p>2023-10-31</li><br/><li><span>gjc</span> 👍（1） 💬（0）<p>这个讲的非常好，https:&#47;&#47;www.jianshu.com&#47;p&#47;c7c8f51713b6</p>2022-12-26</li><br/><li><span>曙光</span> 👍（1） 💬（2）<p>“如果这个时候用户 G 被攻击者软件 A 诱导而点击了这个恶意页面，那结果就是，极客时间使用 codeA 值去继续 OAuth 2.0 的流程了。” 第三讲中有说，code会和用户以及appid做关联，如果codeA关联的是用户A，那用户G点击回调函数，也只能获取用户A的access_Token吧。如果传输了G用户的相关信息，授权服务应该拒绝。 所以CSRF攻击有一些前提，如授权服务没有校验codeA是属于哪个用户的code</p>2020-09-17</li><br/><li><span>Der Kaiser</span> 👍（0） 💬（0）<p>state可以在用户点击第三方软件上的授权的时候，第三方软件生成一个state值并保存在session中。当受害者A用户点击了钓鱼链接，该钓鱼链接回调第三方软件时，第三方软件服务端发现A用户的session的state和钓鱼链接中的state不同，从而拒绝执行后续的操作。流程图如下：
-用户点击登录 → 服务端生成 state → 保存到 Session → 跳转到授权服务器（携带 state） 
-                  ↑                                  ↓
-              攻击者伪造请求（无&#47;假 state）        用户同意授权
-                  ↓                                  ↓
-              验证失败 ← 服务端对比 state ← 回调携带 state 和 code</p>2025-02-01</li><br/><li><span>布兜兜</span> 👍（0） 💬（0）<p>结合https:&#47;&#47;www.jianshu.com&#47;p&#47;c7c8f51713b6，个人OAuth 2.0 协议中csrf攻击的梳理一下：
+用户点击登录 → 服务端生成 state → 保存到 Session → 跳转到授权服务器（携带 state）
+↑ ↓
+攻击者伪造请求（无&#47;假 state） 用户同意授权
+↓ ↓
+验证失败 ← 服务端对比 state ← 回调携带 state 和 code</p>2025-02-01</li><br/><li><span>布兜兜</span> 👍（0） 💬（0）<p>结合https:&#47;&#47;www.jianshu.com&#47;p&#47;c7c8f51713b6，个人OAuth 2.0 协议中csrf攻击的梳理一下：
+
 1. 攻击者通过合法手段或者对应的authorization code
 2. 通过钓鱼手段将已经登录的受害者点击带有攻击者授权码的链接
 3. 将受害者和授权码发到对应的验证服务器进行绑定操作获取对应的access code

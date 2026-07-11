@@ -16,11 +16,11 @@
 
 极客时间版权所有: https:&#47;&#47;time.geekbang.org&#47;quiz&#47;question?sheet_id=579778&amp;quiz_id=32402</p>2023-05-26</li><br/><li><span>๑云中客๑</span> 👍（0） 💬（2）<p>老师您好
 const [count, setCount] = useState(0);
-  useEffect(() =&gt; {
-    setCount(count + 1)
-    setCount(count + 1)
-    setCount(count + 1)
-    setCount(count + 1)
-  }, []);
+useEffect(() =&gt; {
+setCount(count + 1)
+setCount(count + 1)
+setCount(count + 1)
+setCount(count + 1)
+}, []);
 像这种多个相同的useState只会执行最后一次，请问react内部是在哪通过什么方式知道这里的useState是重复的并且过滤掉的呢？</p>2021-08-25</li><br/>
 </ul>

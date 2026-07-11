@@ -337,6 +337,7 @@ public class MyClass {
             e.printStackTrace();
         }
     }
+
 }</p>2023-09-06</li><br/><li><span>C.</span> 👍（0） 💬（0）<p>第一个问题：Class.forName静态方法一般用于加载驱动或者判断类是否存在的情况，.class必须事先知道有这个类，object.getClass必须要有类实例对象。
 第二个问题：clazz.getFields();&#47;&#47;获取当前类及其父类的所有公有字段。clazz.getDeclaredFields();&#47;&#47;取私有字段或受保护的字段和公共字段。
 </p>2023-09-08</li><br/><li><span>peter</span> 👍（0） 💬（0）<p>Q1：最简单程序，只是打印一个“hello”字符串；此程序的运行，会有哪些类加载器参与？ 以及加载顺序？

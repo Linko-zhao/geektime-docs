@@ -408,7 +408,7 @@ API 层的 Client 通过匿名的方式继承了基础层的 Client。</p>2021-1
 [root@dev sdk]# go mod init sdk
 go: creating new go.mod: module sdk
 go: to add module requirements and sums:
-        go mod tidy
+go mod tidy
 [root@dev sdk]# go mod tidy
 go: finding module for package github.com&#47;marmotedu&#47;medu-sdk-go&#47;services&#47;iam
 go: finding module for package github.com&#47;marmotedu&#47;medu-sdk-go&#47;sdk
@@ -417,20 +417,20 @@ go: found github.com&#47;marmotedu&#47;medu-sdk-go&#47;sdk in github.com&#47;mar
 go: found github.com&#47;ory&#47;ladon in github.com&#47;ory&#47;ladon v1.2.0
 go: finding module for package github.com&#47;marmotedu&#47;medu-sdk-go&#47;services&#47;iam
 sdk imports
-        github.com&#47;marmotedu&#47;medu-sdk-go&#47;services&#47;iam: module github.com&#47;marmotedu&#47;medu-sdk-go@latest found (v1.0.0), but does not contain package github.com&#47;marmotedu&#47;medu-sdk-go&#47;services&#47;iam
+github.com&#47;marmotedu&#47;medu-sdk-go&#47;services&#47;iam: module github.com&#47;marmotedu&#47;medu-sdk-go@latest found (v1.0.0), but does not contain package github.com&#47;marmotedu&#47;medu-sdk-go&#47;services&#47;iam
 [root@dev sdk]#
 [root@dev sdk]# ll &#47;root&#47;workspace&#47;golang&#47;pkg&#47;mod&#47;github.com&#47;marmotedu&#47;
 total 8
-dr-xr-xr-x  6 root root  185 Sep 16 01:16 api@v1.0.1
-dr-xr-xr-x  3 root root  138 Sep 25 17:48 component-base@v0.0.2
-dr-xr-xr-x  3 root root  138 Sep 22 22:43 component-base@v1.0.0
-dr-xr-xr-x  3 root root  138 Sep 16 01:16 component-base@v1.0.1
-dr-xr-xr-x  2 root root 4096 Sep 22 22:43 errors@v0.0.1
-dr-xr-xr-x  2 root root 4096 Sep 16 01:16 errors@v1.0.2
-dr-xr-xr-x 18 root root  257 Sep 15 22:57 gopractise-demo@v0.0.1
-dr-xr-xr-x  5 root root  261 Sep 16 01:16 log@v0.0.1
-dr-xr-xr-x  8 root root  233 Sep 16 01:18 marmotedu-sdk-go@v1.0.2-0.20210528170801-2c91b80cb4cf
-dr-xr-xr-x  5 root root  112 Sep 25 17:48 medu-sdk-go@v1.0.0
+dr-xr-xr-x 6 root root 185 Sep 16 01:16 api@v1.0.1
+dr-xr-xr-x 3 root root 138 Sep 25 17:48 component-base@v0.0.2
+dr-xr-xr-x 3 root root 138 Sep 22 22:43 component-base@v1.0.0
+dr-xr-xr-x 3 root root 138 Sep 16 01:16 component-base@v1.0.1
+dr-xr-xr-x 2 root root 4096 Sep 22 22:43 errors@v0.0.1
+dr-xr-xr-x 2 root root 4096 Sep 16 01:16 errors@v1.0.2
+dr-xr-xr-x 18 root root 257 Sep 15 22:57 gopractise-demo@v0.0.1
+dr-xr-xr-x 5 root root 261 Sep 16 01:16 log@v0.0.1
+dr-xr-xr-x 8 root root 233 Sep 16 01:18 marmotedu-sdk-go@v1.0.2-0.20210528170801-2c91b80cb4cf
+dr-xr-xr-x 5 root root 112 Sep 25 17:48 medu-sdk-go@v1.0.0
 [root@dev sdk]#
 </p>2021-09-25</li><br/><li><span>Geek_d71d64</span> 👍（0） 💬（1）<p>sdk的api和前端网页的api如何区分开来呢？</p>2022-11-18</li><br/><li><span>tiny🌾</span> 👍（0） 💬（1）<p>前端比如安卓的sdk也是这个设计思路吗</p>2022-10-26</li><br/><li><span>阿波罗尼斯圆</span> 👍（0） 💬（2）<p>doc.go是干啥的</p>2022-10-17</li><br/><li><span>Sch0ng</span> 👍（2） 💬（0）<p>sdk为服务使用方提供了方便的同时，也为服务提供方省去很多不必要的沟通培训成本。
 文中介绍了go sdk的目录结构，架构和云厂商常用的设计实现方案。</p>2021-08-17</li><br/><li><span>Joeforfun</span> 👍（1） 💬（8）<p>很赞，准备给没有go-sdk的某云厂商写个简单的demo</p>2021-08-31</li><br/><li><span>SmartsYoung</span> 👍（0） 💬（0）<p>doSend 方法中 err = sign(req)  这个函数调用没有看懂，SignFunc 是 func(*http.Request) error 的别名，但这个函数只定义，并没有实现啊，这样调用的目的是什么呢？</p>2024-05-16</li><br/><li><span>@噜咪啦</span> 👍（0） 💬（0）<p>func (v1 SignatureV1) Sign(serviceName string, r *http.Request, body io.ReadSeeker) http.Header {

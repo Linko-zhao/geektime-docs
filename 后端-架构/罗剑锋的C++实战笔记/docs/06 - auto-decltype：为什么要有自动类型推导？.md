@@ -85,7 +85,7 @@ auto  f = bind1st(std::less<int>(), 2);  // 自动推导出类型，具体是啥
 ```
 auto x = 0L;    // 自动推导为long
 auto y = &x;    // 自动推导为long*
-auto z {&x};    // 自动推导为long* 
+auto z {&x};    // 自动推导为long*
 
 auto err;       // 错误，没有赋值表达式，不知道是什么类型
 ```

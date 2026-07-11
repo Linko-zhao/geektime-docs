@@ -134,7 +134,7 @@ spring:
                 port: 5672
                 username: guest
                 password: guest
-      
+
 ```
 
 配置完了binders，我们接下来看看如何定义spring.cloud.stream.bindings节点，这个节点保存了生产者、消费者、binder和RabbitMQ四方的关联关系。
@@ -227,8 +227,7 @@ DefaultBinderFactory      : Retrieving cached binder: rocketmq
 DirectWithAttributesChannel    : Channel &#39;unknown.channel.name&#39; has 1 subscriber(s).
 BeanFactoryAwareFunctionRegistry : Looking up function &#39;streamBridge&#39; with acceptedOutputTypes: [application&#47;json]
 
-.MessagingMethodInvokerHelper   : Overriding default instance of MessageHandlerMethodFactory with provided one.
-
+.MessagingMethodInvokerHelper : Overriding default instance of MessageHandlerMethodFactory with provided one.
 
 这些都正常嘛
 </p>2022-02-24</li><br/><li><span>peter</span> 👍（0） 💬（2）<p>请教老师几个问题：

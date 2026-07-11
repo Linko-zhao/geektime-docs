@@ -165,7 +165,7 @@ GitHub 社区中那些流行的仓库都有一套完整的上线流程，比如 
 
 项目中使用 axios 怎么配置可以支持 Charles 抓包
 配置了 proxy : { host, port }
-现在原生项目请求可以抓包 
+现在原生项目请求可以抓包
 React Native 请求不能抓包</p>2023-10-12</li><br/><li><span>Geek4329</span> 👍（0） 💬（0）<p>老师，为什么不推荐React Native Debugger呢？</p>2023-09-22</li><br/><li><span>雷声大</span> 👍（0） 💬（0）<p>你好，我初学rn，调试的时候手机开启live reloading 以后经常红屏报错堆栈溢出是什么原因啊，我启动开发者工具的时候增加了堆栈大小不管用，我用的rn是比较老的0. 51版本
 maximum call stack size exceeded.</p>2023-06-07</li><br/><li><span>house</span> 👍（0） 💬（0）<p>请问这种混合工程怎么调试，比如调试安卓的java代码。尝试直接用android studio启动失败</p>2022-12-16</li><br/><li><span>Geek_9a4011</span> 👍（0） 💬（0）<p>代码跑不起来啊，苦恼</p>2022-10-07</li><br/><li><span>下一刻。</span> 👍（0） 💬（0）<p>React Native Debugger是支持抓包请求，右键需要开启 Enable Network Inspect</p>2022-06-13</li><br/><li><span>诸思码纪(Merrill)</span> 👍（0） 💬（1）<p>老师，你好，rn怎么访问不了不安全的https，请问下这个该怎么解决呢</p>2022-06-07</li><br/><li><span>孙树</span> 👍（0） 💬（0）<p>有没有老哥watchman 配置好环境变量之后，Flipper 检查这一项还是 报叹号的</p>2022-04-29</li><br/><li><span>python4</span> 👍（0） 💬（1）<p>咱们课程的后续部分, 有没有关于单元测试的部分? 如果没有, 有没有相关的课程或者学习材料推荐. 很期待. 我们平常业务开发基本上都不写测试...</p>2022-04-20</li><br/>
 </ul>

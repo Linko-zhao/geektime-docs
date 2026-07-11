@@ -119,8 +119,8 @@ pgen能给你生成新的语法解析器。parser.c的注释中讲解了它的�
 我们通过一个例子来看一下Python的语法分析特点，这里采用的是我们熟悉的一个语法规则：
 
 ```
-add: mul ('+' mul)* 
-mul: pri ('*' pri)* 
+add: mul ('+' mul)*
+mul: pri ('*' pri)*
 pri: IntLiteral | '(' add ')'
 ```
 
@@ -289,11 +289,11 @@ instaviz会启动一个Web服务器，你可以在浏览器里通过http://local
 
 GDB的安装和配置：参考[这篇文章](https://github.com/RichardGong/CompilersInPractice/edit/master/python/GDB.md)。
 <div><strong>精选留言（5）</strong></div><ul>
-<li><span>reverse</span> 👍（1） 💬（0）<p>老师 
+<li><span>reverse</span> 👍（1） 💬（0）<p>老师
 
 #define Tuple(a0, a1, a2, a3, a4, a5, a6) _Py_Tuple(a0, a1, a2, a3, a4, a5, a6)
 expr_ty _Py_Tuple(asdl_seq * elts, expr_context_ty ctx, int lineno, int
-                  col_offset, int end_lineno, int end_col_offset, PyArena
-                  *arena);
+col_offset, int end_lineno, int end_col_offset, PyArena
+*arena);
 这些代码中操作的入参好像都是固定的，感觉和寄存器有很大的关系</p>2020-08-20</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>比起java编译器，感觉python的很low</p>2022-01-14</li><br/><li><span>骨汤鸡蛋面</span> 👍（0） 💬（0）<p>老师，python等是解释执行的，支持shell 端一次输入一行代码。这种一行代码一行代码的解释执行和一个完整代码的一次性编译执行主要区别可以介绍下嘛？</p>2021-01-30</li><br/><li><span>Jacob.C</span> 👍（0） 💬（0）<p>请问文中 lex 函数是哪里来的，没查到相关包哦</p>2020-09-16</li><br/><li><span>Aaron Cheung</span> 👍（0） 💬（0）<p>很赞的分享 获益匪浅</p>2020-09-14</li><br/>
 </ul>

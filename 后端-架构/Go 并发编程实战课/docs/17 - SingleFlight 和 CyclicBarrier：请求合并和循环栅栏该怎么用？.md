@@ -34,19 +34,19 @@ SingleFlight的数据结构是Group，它提供了三个方法。
   // 代表一个正在处理的请求，或者已经处理完的请求
   type call struct {
 		wg sync.WaitGroup
-	
+
 
 		// 这个字段代表处理完的值，在waitgroup完成之前只会写一次
         // waitgroup完成之后就读取这个值
 		val interface{}
 		err error
-	
+
         // 指示当call在处理时是否要忘掉这个key
 		forgotten bool
 		dups  int
 		chans []chan<- Result
 	}
-	
+
     // group代表一个singleflight对象
 	type Group struct {
 		mu sync.Mutex       // protects m
@@ -72,7 +72,7 @@ SingleFlight的数据结构是Group，它提供了三个方法。
 		c.wg.Add(1)
 		g.m[key] = c //加入到key map中
 		g.mu.Unlock()
-	
+
 
 		g.doCall(c, key, fn) // 调用方法
 		return c.val, c.err, c.dups > 0
@@ -85,7 +85,7 @@ doCall方法会实际调用函数fn：
   func (g *Group) doCall(c *call, key string, fn func() (interface{}, error)) {
 		c.val, c.err = fn()
 		c.wg.Done()
-	
+
 
 		g.mu.Lock()
 		if !c.forgotten { // 已调用完，删除这个key
@@ -127,7 +127,7 @@ func metaImportsForPrefix(importPrefix string, mod ModuleMode, security web.Secu
 			defer fetchCacheMu.Unlock()
 			fetchCache[importPrefix] = res
 			return res, nil
-		
+
         // 使用 SingleFlight请求
 		resi, _, _ := fetchGroup.Do(importPrefix, func() (resi interface{}, err error) {
 			fetchCacheMu.Lock()
@@ -348,7 +348,7 @@ func TestWaterFactory(t *testing.T) {
     // 用来等待所有的goroutine完成
     var wg sync.WaitGroup
     wg.Add(N * 3)
-   
+
     // 200个氢原子goroutine
     for i := 0; i < 2*N; i++ {
         go func() {
@@ -365,7 +365,7 @@ func TestWaterFactory(t *testing.T) {
             wg.Done()
         }()
     }
-    
+
     //等待所有的goroutine执行完
     wg.Wait()
 
@@ -434,7 +434,7 @@ func (h2o *H2O) oxygen(releaseOxygen func()) {
     // 标记自己已达到，等待其它goroutine到达
     h2o.wg.Done()
     h2o.wg.Wait()
-    //都到达后重置wg 
+    //都到达后重置wg
     h2o.wg.Add(3)
 
     h2o.semaO.Release(1)
@@ -458,150 +458,155 @@ ps:老师的文章几乎都是一篇顶两篇，刚订阅的时候还担心课�
 。请问老师这应该怎么解决呢？很困惑，望老师指点。</p>2020-12-28</li><br/><li><span>Fan</span> 👍（1） 💬（4）<p>老师，感觉你上面用waitGroup实现这个H2O的例子有问题的。我这边运行都panic的。</p>2020-12-25</li><br/><li><span>伟伟</span> 👍（1） 💬（1）<p>package main
 
 import (
-	&quot;context&quot;
+&quot;context&quot;
 
-	&quot;github.com&#47;marusama&#47;cyclicbarrier&quot;
-	&quot;golang.org&#47;x&#47;sync&#47;semaphore&quot;
+    &quot;github.com&#47;marusama&#47;cyclicbarrier&quot;
+    &quot;golang.org&#47;x&#47;sync&#47;semaphore&quot;
+
 )
 
 type H2O2 struct {
-	semaH *semaphore.Weighted
-	semaO *semaphore.Weighted
-	b     cyclicbarrier.CyclicBarrier
+semaH *semaphore.Weighted
+semaO *semaphore.Weighted
+b cyclicbarrier.CyclicBarrier
 }
 
 func New() *H2O2 {
-	return &amp;H2O2{
-		semaH: semaphore.NewWeighted(2),
-		semaO: semaphore.NewWeighted(2),
-		b:     cyclicbarrier.New(4),
-	}
+return &amp;H2O2{
+semaH: semaphore.NewWeighted(2),
+semaO: semaphore.NewWeighted(2),
+b: cyclicbarrier.New(4),
+}
 }
 
 func (h2o2 *H2O2) hydrogen(releaseHydrogen func()) {
-	h2o2.semaH.Acquire(context.Background(), 1)
-	releaseHydrogen()
-	h2o2.b.Await(context.Background())
-	h2o2.semaH.Release(1)
+h2o2.semaH.Acquire(context.Background(), 1)
+releaseHydrogen()
+h2o2.b.Await(context.Background())
+h2o2.semaH.Release(1)
 }
 
 func (h2o2 *H2O2) oxygen(releaseOxygen func()) {
-	h2o2.semaO.Acquire(context.Background(), 1)
-	releaseOxygen()
-	h2o2.b.Await(context.Background())
-	h2o2.semaO.Release(1)
+h2o2.semaO.Acquire(context.Background(), 1)
+releaseOxygen()
+h2o2.b.Await(context.Background())
+h2o2.semaO.Release(1)
 }</p>2020-11-23</li><br/><li><span>白开d水</span> 👍（0） 💬（2）<p>为什么在 h2o.semaH.Acquire(context.Background(), 1) 1不能换成2呢，直接请求2个资源？</p>2023-03-23</li><br/><li><span>李晓清</span> 👍（0） 💬（1）<p>package main
 
 import (
-	&quot;context&quot;
-	&quot;fmt&quot;
-	&quot;time&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+&quot;time&quot;
 
-	&quot;github.com&#47;marusama&#47;cyclicbarrier&quot;
+    &quot;github.com&#47;marusama&#47;cyclicbarrier&quot;
+
 )
 
 var result chan string = make(chan string, 4)
 
 var barrier = cyclicbarrier.NewWithAction(4, func() error {
-	fmt.Println(&lt;-result, &lt;-result, &lt;-result, &lt;-result)
-	return nil
+fmt.Println(&lt;-result, &lt;-result, &lt;-result, &lt;-result)
+return nil
 })
 
 var h = func() {
-	for {
-		time.Sleep(1 * time.Second)
-		result &lt;- &quot;H&quot;
-		barrier.Await(context.TODO())
-	}
+for {
+time.Sleep(1 * time.Second)
+result &lt;- &quot;H&quot;
+barrier.Await(context.TODO())
+}
 }
 
 var o = func() {
-	for {
-		time.Sleep(1 * time.Second)
-		result &lt;- &quot;O&quot;
-		barrier.Await(context.TODO())
-	}
+for {
+time.Sleep(1 * time.Second)
+result &lt;- &quot;O&quot;
+barrier.Await(context.TODO())
+}
 }
 
 func main() {
 
-	go h()
-	go h()
-	go o()
-	go o()
+    go h()
+    go h()
+    go o()
+    go o()
 
-	select {}
+    select {}
+
 }
 </p>2023-03-17</li><br/><li><span>Geek8956</span> 👍（0） 💬（1）<p>老师，请问循环栏栅和cond并发原语有什么区别？他们都可以让多个协程等待某个条件满足，然后并发的开始执行。</p>2021-11-29</li><br/><li><span>老纪</span> 👍（0） 💬（1）<p>在CyclicBarrier中，是需要一组goroutine都执行到Await()方法后，才会都向下执行否则就会阻塞在Await()方法上吗</p>2020-12-08</li><br/><li><span>Linuxer</span> 👍（0） 💬（1）<p>感觉自已Go刚刚入门，我确实也才学习一周左右，看着挺爽，写起来还是不顺手，还得多练习，老师能否给我们这些打算转Go的新手一些建议，谢谢</p>2020-11-20</li><br/><li><span>那时刻</span> 👍（7） 💬（0）<p>SingleFlight 能不能合并并发的写操作呢？
 我觉得得分情况讨论，如果多个写请求是对于同一个对象相同的写操作，比如把某条记录的一个字段设置为某一个值，这样的话可以合并。
 如果写操作是对于对象增减操作，涉及幂等行操作不太合适合并。</p>2020-11-18</li><br/><li><span>chapin</span> 👍（4） 💬（2）<p>这一节在实际项目中都直接用到。</p>2020-11-21</li><br/><li><span>gitxuzan</span> 👍（1） 💬（0）<p>package main
 
 import (
-	&quot;golang.org&#47;x&#47;sync&#47;singleflight&quot;
-	&quot;log&quot;
-	&quot;time&quot;
+&quot;golang.org&#47;x&#47;sync&#47;singleflight&quot;
+&quot;log&quot;
+&quot;time&quot;
 )
 
 func main() {
-	var singleSetCache singleflight.Group
+var singleSetCache singleflight.Group
 
-	getAndSetCache := func(requestID int, cacheKey string) (string, error) {
-		value, _, _ := singleSetCache.Do(cacheKey, func() (ret interface{}, err error) { &#47;&#47;do的入参key，可以直接使用缓存的key，这样同一个缓存，只有一个协程会去读DB
-			log.Printf(&quot;requestid执行一次 %v &quot;, requestID)
-			return &quot;VALUE&quot;, nil
-		})
-		return value.(string), nil
-	}
+    getAndSetCache := func(requestID int, cacheKey string) (string, error) {
+    	value, _, _ := singleSetCache.Do(cacheKey, func() (ret interface{}, err error) { &#47;&#47;do的入参key，可以直接使用缓存的key，这样同一个缓存，只有一个协程会去读DB
+    		log.Printf(&quot;requestid执行一次 %v &quot;, requestID)
+    		return &quot;VALUE&quot;, nil
+    	})
+    	return value.(string), nil
+    }
 
-	cacheKey := &quot;cacheKey&quot;
-	for i := 1; i &lt; 10; i++ { &#47;&#47;模拟多个协程同时请求
-		go func(requestID int) {
-			value, _ := getAndSetCache(requestID, cacheKey)
-			&#47;&#47;_ = value
-			log.Printf(&quot;requestID %v get 值: %v&quot;, requestID, value)
-		}(i)
-	}
-	time.Sleep(20 * time.Second)
-}</p>2021-10-26</li><br/><li><span>Panda</span> 👍（1） 💬（0）<p>学到了     SingleFight  合并      
+    cacheKey := &quot;cacheKey&quot;
+    for i := 1; i &lt; 10; i++ { &#47;&#47;模拟多个协程同时请求
+    	go func(requestID int) {
+    		value, _ := getAndSetCache(requestID, cacheKey)
+    		&#47;&#47;_ = value
+    		log.Printf(&quot;requestID %v get 值: %v&quot;, requestID, value)
+    	}(i)
+    }
+    time.Sleep(20 * time.Second)
+
+}</p>2021-10-26</li><br/><li><span>Panda</span> 👍（1） 💬（0）<p>学到了 SingleFight 合并
 </p>2021-06-11</li><br/><li><span>虫子樱桃</span> 👍（1） 💬（0）<p>写了singleFlight的例子辅助思考。
 package main
 
 import (
-	&quot;log&quot;
-	&quot;sync&quot;
-	&quot;sync&#47;atomic&quot;
-	&quot;time&quot;
+&quot;log&quot;
+&quot;sync&quot;
+&quot;sync&#47;atomic&quot;
+&quot;time&quot;
 
-	&quot;golang.org&#47;x&#47;sync&#47;singleflight&quot;
+    &quot;golang.org&#47;x&#47;sync&#47;singleflight&quot;
+
 )
 
 var (
-	sf           = singleflight.Group{}
-	requestCount = int64(0)
-	resp         = make(chan int64, 0)
-	wg           sync.WaitGroup
+sf = singleflight.Group{}
+requestCount = int64(0)
+resp = make(chan int64, 0)
+wg sync.WaitGroup
 )
 
 func main() {
-	for i := 0; i &lt; 100; i++ {
-		wg.Add(1)
-		go func() {
-			do, err, _ := sf.Do(&quot;number&quot;, Request)
-			if err != nil {
-				log.Println(err)
-			}
-			log.Println(&quot;resp&quot;, do)
-			defer wg.Done()
-		}()
-	}
-	time.Sleep(time.Second)
-	resp &lt;- atomic.LoadInt64(&amp;requestCount)
-	wg.Wait()
+for i := 0; i &lt; 100; i++ {
+wg.Add(1)
+go func() {
+do, err, _ := sf.Do(&quot;number&quot;, Request)
+if err != nil {
+log.Println(err)
+}
+log.Println(&quot;resp&quot;, do)
+defer wg.Done()
+}()
+}
+time.Sleep(time.Second)
+resp &lt;- atomic.LoadInt64(&amp;requestCount)
+wg.Wait()
 
 }
 
 func Request() (interface{}, error) {
-	atomic.AddInt64(&amp;requestCount, 1)
-	return &lt;-resp, nil
+atomic.AddInt64(&amp;requestCount, 1)
+return &lt;-resp, nil
 }</p>2020-11-19</li><br/>
 </ul>

@@ -245,11 +245,11 @@ def fix_code(code, test_results):
 def auto_programming_pipeline(user_input):
     code = generate_code(user_input)
     print(f"生成的代码：\n{code}")
-    
+
     while True:
         test_cases = generate_test_cases(code)
         test_results = run_tests(code, test_cases)
-        
+
         if "通过" in test_results:
             print("所有测试用例都通过了！代码没有问题。")
             break

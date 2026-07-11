@@ -30,21 +30,21 @@ struct page {
             struct list_head lru;
             //用于文件系统，address_space结构描述上文件占用了哪些内存页面
             struct address_space *mapping;
-            pgoff_t index;  
+            pgoff_t index;
             unsigned long private;
         };
         //DMA设备的地址
         struct {
             dma_addr_t dma_addr;
         };
-        //当页面用于内存对象时指向相关的数据结构 
-        struct {   
+        //当页面用于内存对象时指向相关的数据结构
+        struct {
             union {
                 struct list_head slab_list;
-                struct {  
+                struct {
                     struct page *next;
 #ifdef CONFIG_64BIT
-                    int pages; 
+                    int pages;
                     int pobjects;
 #else
                     short int pages;
@@ -55,11 +55,11 @@ struct page {
             //指向管理SLAB的结构kmem_cache
             struct kmem_cache *slab_cache;
             //指向SLAB的第一个对象
-            void *freelist;   
+            void *freelist;
             union {
-                void *s_mem;  
-                unsigned long counters;   
-                struct {            
+                void *s_mem;
+                unsigned long counters;
+                struct {
                     unsigned inuse:16;
                     unsigned objects:15;
                     unsigned frozen:1;
@@ -68,8 +68,8 @@ struct page {
         };
         //用于页表映射相关的字段
         struct {
-            unsigned long _pt_pad_1;   
-            pgtable_t pmd_huge_pte; 
+            unsigned long _pt_pad_1;
+            pgtable_t pmd_huge_pte;
             unsigned long _pt_pad_2;
             union {
                 struct mm_struct *pt_mm;
@@ -108,7 +108,7 @@ struct page {
 
 Linux内核中也有区的逻辑概念，因为硬件的限制，Linux内核不能对所有的物理内存页统一对待，所以就把属性相同物理内存页面，归结到了一个区中。
 
-不同硬件平台，区的划分也不一样。比如在32位的x86平台中，一些使用DMA的设备只能访问0~16MB的物理空间，因此将0~16MB划分为DMA区。
+不同硬件平台，区的划分也不一样。比如在32位的x86平台中，一些使用DMA的设备只能访问0~~16MB的物理空间，因此将0~~16MB划分为DMA区。
 
 高内存区则适用于要访问的物理地址空间大于虚拟地址空间，Linux内核不能建立直接映射的情况。除开这两个内存区，物理内存中剩余的页面就划分到常规内存区了。有的平台没有DMA区，64位的x86平台则没有高内存区。
 
@@ -129,7 +129,7 @@ enum migratetype {
     MIGRATE_CMA,   //属于CMA区的
 #endif
 #ifdef CONFIG_MEMORY_ISOLATION
-    MIGRATE_ISOLATE,   
+    MIGRATE_ISOLATE,
 #endif
     MIGRATE_TYPES
 };
@@ -144,14 +144,14 @@ struct zone {
     unsigned long watermark_boost;
     //预留的内存页面数
     unsigned long nr_reserved_highatomic;
-    //内存区属于哪个内存节点 
+    //内存区属于哪个内存节点
 #ifdef CONFIG_NUMA
     int node;
 #endif
     struct pglist_data  *zone_pgdat;
-    //内存区开始的page结构数组的开始下标 
+    //内存区开始的page结构数组的开始下标
     unsigned long       zone_start_pfn;
-    
+
     atomic_long_t       managed_pages;
     //内存区总的页面数
     unsigned long       spanned_pages;
@@ -237,19 +237,19 @@ typedef struct pglist_data {
     //两个zonelist，一个是指向本节点的的内存区，另一个指向由本节点分配不到内存时可选的备用内存区。
     struct zonelist node_zonelists[MAX_ZONELISTS];
     //本节点有多少个内存区
-    int nr_zones; 
+    int nr_zones;
     //本节点开始的page索引号
     unsigned long node_start_pfn;
-    //本节点有多少个可用的页面 
+    //本节点有多少个可用的页面
     unsigned long node_present_pages;
-    //本节点有多少个可用的页面包含内存空洞 
+    //本节点有多少个可用的页面包含内存空洞
     unsigned long node_spanned_pages;
     //节点id
     int node_id;
     //交换内存页面相关的字段
     wait_queue_head_t kswapd_wait;
     wait_queue_head_t pfmemalloc_wait;
-    struct task_struct *kswapd; 
+    struct task_struct *kswapd;
     //本节点保留的内存页面
     unsigned long       totalreserve_pages;
     //自旋锁
@@ -554,7 +554,7 @@ retry:
     if (page)
         goto got_pg;
 
-    //尝试直接回收内存并且再分配内存页面    
+    //尝试直接回收内存并且再分配内存页面
     page = __alloc_pages_direct_reclaim(gfp_mask, order, alloc_flags, ac,
                             &did_some_progress);
     if (page)
@@ -575,7 +575,7 @@ retry:
                 compact_result, &compact_priority,
                 &compaction_retries))
         goto retry;
-    //回收、压缩内存已经失败了，开始尝试杀死进程，回收内存页面 
+    //回收、压缩内存已经失败了，开始尝试杀死进程，回收内存页面
     page = __alloc_pages_may_oom(gfp_mask, order, ac, &did_some_progress);
     if (page)
         goto got_pg;
@@ -615,7 +615,7 @@ static inline struct page *rmqueue(struct zone *preferred_zone,
             goto out;
         }
     }
-    //加锁并关中断 
+    //加锁并关中断
     spin_lock_irqsave(&zone->lock, flags);
     do {
         page = NULL;

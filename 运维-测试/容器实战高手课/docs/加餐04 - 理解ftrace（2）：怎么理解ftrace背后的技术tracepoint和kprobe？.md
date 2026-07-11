@@ -45,7 +45,7 @@
 /sys/kernel/debug/tracing/events/block/block_bio_bounce
 /sys/kernel/debug/tracing/events/block/block_bio_complete
 /sys/kernel/debug/tracing/events/block/block_bio_frontmerge
- 
+
 …
 ```
 
@@ -57,14 +57,14 @@ long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
         struct open_flags op;
         int fd = build_open_flags(flags, mode, &op);
         struct filename *tmp;
- 
+
         if (fd)
                 return fd;
- 
+
         tmp = getname(filename);
         if (IS_ERR(tmp))
                 return PTR_ERR(tmp);
- 
+
         fd = get_unused_fd_flags(flags);
         if (fd >= 0) {
                 struct file *f = do_filp_open(dfd, tmp, &op);
@@ -86,11 +86,11 @@ long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
 
 ```shell
 # # perf stat -a -e fs:do_sys_open -- sleep 10
- 
+
  Performance counter stats for 'system wide':
- 
+
                  7      fs:do_sys_open
- 
+
       10.001954100 seconds time elapsed
 ```
 
@@ -100,7 +100,7 @@ long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
 # pwd
 /sys/kernel/debug/tracing
 # echo 1 > events/fs/do_sys_open/enable
- 
+
 # cat trace
 # tracer: nop
 #
@@ -134,11 +134,11 @@ long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
 ```shell
 # perf probe --add do_filp_open
 # perf stat -a -e probe:do_filp_open -- sleep 10
- 
+
  Performance counter stats for 'system wide':
- 
+
                 11      probe:do_filp_open
- 
+
       10.001489223 seconds time elapsed
 ```
 
@@ -154,7 +154,7 @@ long do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
 
 ```shell
 # echo 1 > /sys/kernel/debug/tracing/events/kprobes/myprobe/enable
- 
+
 # cat /sys/kernel/debug/tracing/trace
 …
       irqbalance-1328  [005] .... 2773211.189573: myprobe: (do_filp_open+0x0/0x100) dfd=4294967295 pathname="/proc/interrupts"
@@ -204,7 +204,7 @@ static inline void trace_##name(proto)                          \
 ```shell
 #define __DO_TRACE(tp, proto, args, cond, rcuidle)                      \
 …
- 
+
                 it_func_ptr = rcu_dereference_raw((tp)->funcs);         \
                                                                         \
                 if (it_func_ptr) {                                      \
@@ -215,7 +215,7 @@ static inline void trace_##name(proto)                          \
                         } while ((++it_func_ptr)->func);                \
                 }
 …
- 
+
 …
 ```
 
@@ -248,21 +248,21 @@ static inline void trace_##name(proto)                          \
 #define MAX_SYMBOL_LEN   64
 static char symbol[MAX_SYMBOL_LEN] = "_do_fork";
 module_param_string(symbol, symbol, sizeof(symbol), 0644);
- 
+
 /* For each probe you need to allocate a kprobe structure */
 static struct kprobe kp = {
             .symbol_name = symbol,
 };
- 
+
 …
- 
+
 static int __init kprobe_init(void)
 {
             int ret;
             kp.pre_handler = handler_pre;
             kp.post_handler = handler_post;
             kp.fault_handler = handler_fault;
- 
+
             ret = register_kprobe(&kp);
             if (ret < 0) {
                         pr_err("register_kprobe failed, returned %d\n", ret);
@@ -304,7 +304,7 @@ static int __init kprobe_init(void)
         kp.pre_handler = handler_pre;
         kp.post_handler = handler_post;
         kp.fault_handler = handler_fault;
- 
+
         ret = register_kprobe(&kp);
         if (ret < 0) {
                 pr_err("register_kprobe failed, returned %d\n", ret);

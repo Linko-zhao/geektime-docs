@@ -165,7 +165,7 @@ synchronized (this) {
   // 对逻辑时钟的值执行加一操作
   logicalclock.incrementAndGet();
   // 创建投票提案，并默认推荐自己为领导者
-  updateProposal(getInitId(), getInitLastLoggedZxid(),    
+  updateProposal(getInitId(), getInitLastLoggedZxid(),
                  getPeerEpoch());
 }
 // 广播投票信息给所有节点
@@ -176,7 +176,7 @@ sendNotifications();
 
 ```
 while ((self.getPeerState() == ServerState.LOOKING) && (!stop)) {
-   // 从队列中读取接收到的投票信息             
+   // 从队列中读取接收到的投票信息
    Notification n = recvqueue.poll(notTimeout, TimeUnit.MILLISECONDS);
    ......
 }

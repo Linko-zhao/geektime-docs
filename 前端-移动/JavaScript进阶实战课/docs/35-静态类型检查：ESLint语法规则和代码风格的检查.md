@@ -59,10 +59,10 @@ npx eslint yourfile.js
 
 ```javascript
 // bad
-const add = new Function('a', 'b', 'return a + b');
+const add = new Function("a", "b", "return a + b");
 
 // still bad
-const subtract = Function('a', 'b', 'return a - b');
+const subtract = Function("a", "b", "return a - b");
 ```
 
 在下面的例子中，第一行的对象字面量的表达非常长。虽然代码本身的质量没问题，但是这么长的句子会影响代码的可读性。而第二种写法则更加可读。所以通常 linter 工具会要求一行代码的长度不要超过80个字符。这样，**可以提高代码的可读性**。
@@ -70,15 +70,19 @@ const subtract = Function('a', 'b', 'return a - b');
 这里，你可能会问，难道写在一行就没有优点吗？其实也不是，如果我们把代码写在一行的话，按说在没有换行的情况下占用的空间会更小，可以压缩文件的大小。但是这个问题通常不是在写代码的时候解决的，而是在程序写完后，可以通过压缩器 JS minifier 来处理。在编写代码的环节，我们始终更重视的问题是我们的代码对于自己和同事是否易读。
 
 ```javascript
-// Bad 
-const foo = { "bar": "This is a bar.", "baz": { "qux": "This is a qux" }, "difficult": "to read" }; 
+// Bad
+const foo = {
+  bar: "This is a bar.",
+  baz: { qux: "This is a qux" },
+  difficult: "to read",
+};
 
 // Good
 const foo = {
-  "bar": "This is a bar.", 
-  "baz": { "qux": "This is a qux" }, 
-  "difficult": "to read" 
-}; 
+  bar: "This is a bar.",
+  baz: { qux: "This is a qux" },
+  difficult: "to read",
+};
 ```
 
 从上面的例子中，我们可以看到 linter 是一种可以让我们的代码变得更好的方式。但是类似这样的问题，在JavaScript 中有很多。同时在有些时候，大家对“好”的定义可能还不一样。那么遇到这么庞大的规则数量，以及大家对代码风格的不同定义，应该怎么处理呢？
@@ -96,8 +100,12 @@ const foo = {
 除了 linter 这种代码检查类的工具外，还有一种代码规范化的工具，其中一个例子就是 Prettier。它的工作原理也是**对代码进行解析和格式化**。例如我们编写了下面的函数，从功能层面讲，它是有效的，但格式不符合常规。
 
 ```javascript
-function HelloWorld({greeting = "hello", greeted = '"World"', silent = false, onMouseOver,}) {
-}
+function HelloWorld({
+  greeting = "hello",
+  greeted = '"World"',
+  silent = false,
+  onMouseOver,
+}) {}
 ```
 
 在此代码上运行 Prettier 可以修复缩进，添加缺少的换行，让代码更加可读。

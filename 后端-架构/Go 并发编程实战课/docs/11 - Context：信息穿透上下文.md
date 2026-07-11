@@ -25,9 +25,9 @@ Go在1.7的版本中才正式把Context加入到标准库中。在这之前，�
 ```
     // +build go1.9
 	package context
-	
+
 	import "context"
-	
+
 	type Context = context.Context
 	type CancelFunc = context.CancelFunc
 ```
@@ -301,34 +301,35 @@ var (
 package main
 
 import (
-	&quot;context&quot;
-	&quot;fmt&quot;
-	&quot;time&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+&quot;time&quot;
 )
 
 func main() {
-	parent := context.Background()
-	ctx, cancel := context.WithCancel(parent)
-	child := context.WithValue(ctx, &quot;name&quot;, &quot;wuqq&quot;)
-	go func() {
-		for {
-			select {
-			case &lt;-child.Done():
-				fmt.Println(&quot;it&#39;s over&quot;)
-				return
-			default:
-				res := child.Value(&quot;name&quot;)
-				fmt.Println(&quot;name:&quot;, res)
-				time.Sleep(1 * time.Second)
-			}
-		}
-	}()
-	go func() {
-		time.Sleep(3 * time.Second)
-		cancel()
-	}()
+parent := context.Background()
+ctx, cancel := context.WithCancel(parent)
+child := context.WithValue(ctx, &quot;name&quot;, &quot;wuqq&quot;)
+go func() {
+for {
+select {
+case &lt;-child.Done():
+fmt.Println(&quot;it&#39;s over&quot;)
+return
+default:
+res := child.Value(&quot;name&quot;)
+fmt.Println(&quot;name:&quot;, res)
+time.Sleep(1 * time.Second)
+}
+}
+}()
+go func() {
+time.Sleep(3 * time.Second)
+cancel()
+}()
 
-	time.Sleep(5 * time.Second)
+    time.Sleep(5 * time.Second)
+
 }
 
 ```
@@ -360,3 +361,4 @@ func main() {
 }
 </p>2022-04-15</li><br/><li><span>努力的狗狗</span> 👍（0） 💬（0）<p>只是概念，应该多举两个例子的</p>2021-11-19</li><br/>
 </ul>
+```

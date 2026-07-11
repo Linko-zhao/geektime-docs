@@ -552,9 +552,8 @@ Loading checkpoint shards: 100%|██████████| 4&#47;4 [01:00&l
 Setting `pad_token_id` to `eos_token_id`:None for open-end generation.
 Starting from v4.46, the `logits` model output will have the same type as the model (except at train time, where it will always be FP32)
 
-
 请问是因为没有使用gpu么，是硬件配置的原因？还是其它原因？ </p>2024-11-11</li><br/><li><span>S！</span> 👍（0） 💬（0）<p>import sys; print(&#39;Python %s on %s&#39; % (sys.version, sys.platform))
-&#47;usr&#47;local&#47;bin&#47;python3.10 -X pycache_prefix=&#47;Users&#47;salesonlee&#47;Library&#47;Caches&#47;JetBrains&#47;PyCharm2024.1&#47;cpython-cache &#47;Applications&#47;PyCharm.app&#47;Contents&#47;plugins&#47;python&#47;helpers&#47;pydev&#47;pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 57101 --file &#47;Users&#47;salesonlee&#47;IT&#47;dev_codes&#47;PythonProjects&#47;tylerelyt-llama&#47;chapter1&#47;lesson1&#47;example1.py 
+&#47;usr&#47;local&#47;bin&#47;python3.10 -X pycache_prefix=&#47;Users&#47;salesonlee&#47;Library&#47;Caches&#47;JetBrains&#47;PyCharm2024.1&#47;cpython-cache &#47;Applications&#47;PyCharm.app&#47;Contents&#47;plugins&#47;python&#47;helpers&#47;pydev&#47;pydevd.py --multiprocess --qt-support=auto --client 127.0.0.1 --port 57101 --file &#47;Users&#47;salesonlee&#47;IT&#47;dev_codes&#47;PythonProjects&#47;tylerelyt-llama&#47;chapter1&#47;lesson1&#47;example1.py
 Connected to pydev debugger (build 241.17890.14)
 Loading checkpoint shards: 100%|██████████| 4&#47;4 [01:00&lt;00:00, 15.10s&#47;it]
 Setting `pad_token_id` to `eos_token_id`:None for open-end generation.
@@ -564,7 +563,7 @@ from common import create_app
 
 app = create_app(&quot;system: 你是一个熟悉人工智能技术的计算机科学家。&quot;)
 
-if __name__ == &#39;__main__&#39;:
-    app.run(port=5000)
+if **name** == &#39;**main**&#39;:
+app.run(port=5000)
 请问，在用AutoDL这样的云服务的时候，app.run(port=5000）需要怎么修改。或者，agent_a、b、c和common文件需要做哪些修改？</p>2024-10-21</li><br/><li><span>Allen</span> 👍（0） 💬（0）<p>你好，请问在调用模型时with torch.no_grad():为啥后面几段里没有加？会影响性能吗？谢谢。</p>2024-10-20</li><br/><li><span>Dowen Liu</span> 👍（0） 💬（0）<p>不用python 能不能做同样的调用呢？比如直接调用接口、spring ai </p>2024-10-19</li><br/><li><span>J Sun</span> 👍（0） 💬（1）<p>模型在哪里下载</p>2024-10-18</li><br/>
 </ul>

@@ -61,7 +61,7 @@ y_label = [] #初始化
 imgsize = 150 #图片大小
 # 定义一个函数读入花的图片
 def training_data(label,data_dir):
-    print ("正在读入：", data_dir) 
+    print ("正在读入：", data_dir)
     for img in os.listdir(data_dir): #目录
         path = os.path.join(data_dir,img) #目录+文件名
         img = cv2.imread(path,cv2.IMREAD_COLOR) #读入图片
@@ -248,7 +248,7 @@ from tensorflow.keras import layers # 导入所有层 行1
 from tensorflow.keras import models # 导入所有模型 行2
 cnn = models.Sequential() # 贯序模型 行3
 cnn.add(layers.Conv2D(32, (3, 3), activation='relu', # 输入卷积层 行4
-                        input_shape=(150, 150, 3))) 
+                        input_shape=(150, 150, 3)))
 cnn.add(layers.MaxPooling2D((2, 2))) # 最大池化层 行5
 cnn.add(layers.Conv2D(64, (3, 3), activation='relu')) # 卷积层 行6
 cnn.add(layers.MaxPooling2D((2, 2))) # 最大池化层 行7
@@ -441,7 +441,7 @@ print('第一张测试图片的分类结果为:', np.argmax(prediction[0]))
 1. 增加更多的卷积层、池化层组合；
 2. 增加或减少中间卷积层滤波器的个数（如64，128，256，512…）；
 3. 调整中间层中卷积和池化窗口的高度和宽度（如(5, 5)、(7, 7)…）
-   
+
    cnn.add(layers.Conv2D(256, (5, 5), activation=‘relu’)) # 卷积  
    cnn.add(layers.MaxPooling2D((3, 3))) # 最大池化
 

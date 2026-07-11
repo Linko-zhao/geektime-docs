@@ -278,7 +278,7 @@ def search_index(index, df, query, k=5):
     results = []
     for i in range(len(indexes)):
         product_names = df.iloc[indexes[i]]['product_name'].values.tolist()
-        results.append((distances[i], product_names))    
+        results.append((distances[i], product_names))
     return results
 
 products = search_index(index, df, "自然淡雅背包", k=3)
@@ -326,7 +326,7 @@ Faiss这个库能够加载的数据量，受限于我们的内存大小。如果
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>廉烨</span> 👍（14） 💬（1）<p>老师，请问是否有开源的embedding组件，能够达到或接近openai embedding能力的？能够用于中文问答搜索</p>2023-04-11</li><br/><li><span>金</span> 👍（6） 💬（1）<p>这门课程主要讲nlp吗？</p>2023-04-03</li><br/><li><span>黄智荣</span> 👍（4） 💬（1）<p>这个挺有意思的。不过这种性能应该会降低很多，就算有这种通过faiss计算。原来通过倒排索引，用很低的资源就可以实现，用这faiss 数据量一大，估计都要用显卡才可以，量大对显存要求也很高</p>2023-05-07</li><br/><li><span>Yezhiwei</span> 👍（4） 💬（3）<p>请问老师可以把关系型数据库的结构化数据embedding 到向量数据库吗？比如财务报表的数据，然后通过自然语言的方式查询数据，谢谢</p>2023-04-12</li><br/><li><span>eagle</span> 👍（4） 💬（1）<p>过几天openAI的模型版本升级了，这些保存的embedding会失效吗？</p>2023-04-05</li><br/><li><span>Jelly</span> 👍（3） 💬（1）<p>当使用Llama Index导入一篇产品介绍的时候，问：本产品的特征是什么，向量匹配不准确。使用XXX的特征就没问题。当导入年报的时候问：2022年营收是多少？向量匹配也不准确，直接问：营收是多少就可以。请问怎么让用户问的问题更智能？</p>2023-04-23</li><br/><li><span>Joe Black</span> 👍（1） 💬（1）<p>embedding的实现是否也需要基础模型的知识沉淀呢？比如文字上虽然不相同，但是含义相近的句子生成的向量是相似的，这个是依靠模型之前学习的知识是吗？那这样自然就是越大的模型embedding的效果越好？可以这样理解吗？</p>2023-05-11</li><br/><li><span>渔樵耕读</span> 👍（1） 💬（2）<p>请问有遇到安装faiss时提示：PackagesNotFoundError的没？改为pip install faiss 报错：
 ERROR: Could not find a version that satisfies the requirement faiss (from versions: none)
-ERROR: No matching distribution found for faiss</p>2023-04-11</li><br/><li><span>xbc</span> 👍（1） 💬（1）<p>cosine_similarity 也可以传入多个embeddings. 
+ERROR: No matching distribution found for faiss</p>2023-04-11</li><br/><li><span>xbc</span> 👍（1） 💬（1）<p>cosine_similarity 也可以传入多个embeddings.
 
 scores = cosine_similarity(list[list[float]], list[float])
 indices = np.argsort(scores)[::-1]</p>2023-04-04</li><br/><li><span>Oli张帆</span> 👍（1） 💬（3）<p>考虑到我的服务器硬件资源有限（300MB的软限制，500MB的硬限制，现在已经占到了450MB），而且我已经在进行其他任务时使用了很多资源，当我在OpenAI之上构建AI机器人时，我考虑使用这个策略。请老师看看是否能行得通。

@@ -60,14 +60,14 @@ DeepFM是由哈工大和华为公司联合提出的深度学习模型，我把�
 
 Bi-Interaction Pooling Layer翻译成中文就是“两两特征交叉池化层”。假设Vx是所有特征域的Embedding集合，那么特征交叉池化层的具体操作如下所示。
 
-$$  
-f\_{\\mathrm{PI}}\\left(V\_{x}\\right)=\\sum\_{i=1}^{n} \\sum\_{j=i+1}^{n} x\_{i} \\boldsymbol{v}\_{i} \\odot \\boldsymbol{x}\_{j} \\boldsymbol{v}\_{j}  
+$$
+f\_{\\mathrm{PI}}\\left(V\_{x}\\right)=\\sum\_{i=1}^{n} \\sum\_{j=i+1}^{n} x\_{i} \\boldsymbol{v}\_{i} \\odot \\boldsymbol{x}\_{j} \\boldsymbol{v}\_{j}
 $$
 
 其中$\\odot$运算代表两个向量的元素积（Element-wise Product）操作，即两个长度相同的向量对应维相乘得到元素积向量。其中，第k维的操作如下所示。
 
-$$  
-\\left(V\_{i} \\odot V\_{j}\\right)\_{K}=v\_{i k} v\_{j k}  
+$$
+\\left(V\_{i} \\odot V\_{j}\\right)\_{K}=v\_{i k} v\_{j k}
 $$
 
 在进行两两特征Embedding向量的元素积操作后，再求取所有交叉特征向量之和，我们就得到了池化层的输出向量。接着，我们再把该向量输入上层的多层全连接神经网络，就能得出最后的预测得分。

@@ -56,7 +56,7 @@ javac Sample.java   // 生成Sample.class，也就是Java字节码
 javap -v Sample     // 查看Sample类的Java字节码
 
 //通过Java字节码，生成Dalvik字节码
-dx --dex --output=Sample.dex Sample.class   
+dx --dex --output=Sample.dex Sample.class
 
 dexdump -d Sample.dex   // 查看Sample.dex的Dalvik的字节码
 ```
@@ -297,12 +297,13 @@ protected void onMethodExit(int opcode) {
             mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, &quot;java&#47;lang&#47;StringBuilder&quot;, &quot;append&quot;, &quot;(J)Ljava&#47;lang&#47;StringBuilder;&quot;, false);
             mv.visitInsn(Opcodes.POP);
     </p>2020-05-14</li><br/><li><span>古月弓虽1993</span> 👍（3） 💬（0）<p>如果build.gradle配置的变体buildType类型配置：shrinkResources true minifyEnabled true。第7期的练习是没法正常插桩的。因为代码里要hook的任务是写死的task名称：transformClassesWithDexBuilderFor。而在这种情况下需要hook的任务名是类似这样的：transformClassesAndResourcesWithR8For</p>2020-02-26</li><br/><li><span>。ZQN</span> 👍（2） 💬（0）<p>做了一个可视化埋点系统</p>2019-10-21</li><br/><li><span>程序员小跃</span> 👍（1） 💬（0）<p>文章只是敲门砖，还得看看虚拟机，以及课后的这些链接，Android高手之路，任重道远</p>2019-06-19</li><br/><li><span>l晟睿致远</span> 👍（0） 💬（0）<p>三、
-   mv.visitInsn(Opcodes.POP);
-            mv.visitLdcInsn(&quot;Geek&quot;);
-            mv.visitVarInsn(Opcodes.ALOAD, stringBuilderIndex);
-            mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, &quot;java&#47;lang&#47;StringBuilder&quot;, &quot;toString&quot;, &quot;()Ljava&#47;lang&#47;String;&quot;, false);
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, &quot;android&#47;util&#47;Log&quot;, &quot;d&quot;, &quot;(Ljava&#47;lang&#47;String;Ljava&#47;lang&#47;String;)I&quot;, false);&#47;&#47;注意： Log.d 方法是有返回值的，需要 pop 出去
-            mv.visitInsn(Opcodes.POP);&#47;&#47;插入字节码后要保证栈的清洁，不影响原来的逻辑，否则就会产生异常，也会对其他框架处理字节码造成影响
+
+mv.visitInsn(Opcodes.POP);
+mv.visitLdcInsn(&quot;Geek&quot;);
+mv.visitVarInsn(Opcodes.ALOAD, stringBuilderIndex);
+mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, &quot;java&#47;lang&#47;StringBuilder&quot;, &quot;toString&quot;, &quot;()Ljava&#47;lang&#47;String;&quot;, false);
+mv.visitMethodInsn(Opcodes.INVOKESTATIC, &quot;android&#47;util&#47;Log&quot;, &quot;d&quot;, &quot;(Ljava&#47;lang&#47;String;Ljava&#47;lang&#47;String;)I&quot;, false);&#47;&#47;注意： Log.d 方法是有返回值的，需要 pop 出去
+mv.visitInsn(Opcodes.POP);&#47;&#47;插入字节码后要保证栈的清洁，不影响原来的逻辑，否则就会产生异常，也会对其他框架处理字节码造成影响
 
             &#47;&#47;执行内容结束
             mv.visitLabel(l2); &#47;&#47;label2起始
@@ -336,4 +337,5 @@ protected void onMethodExit(int opcode) {
             mv.visitVarInsn(Opcodes.LLOAD, timeLocalIndex);
             mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, &quot;java&#47;lang&#47;StringBuilder&quot;, &quot;append&quot;, &quot;(J)Ljava&#47;lang&#47;StringBuilder;&quot;, false);
          </p>2020-05-14</li><br/>
+
 </ul>

@@ -206,7 +206,7 @@ if (defined(param('action'))) {
 首先是`Java`中的`Runtime.exec()`函数，我们通过一个例子来理解这个函数。
 
 ```java
-String [] cmd={"/bin/sh","-c","ln -s exe1 exe2"}; 
+String [] cmd={"/bin/sh","-c","ln -s exe1 exe2"};
 Process proc =Runtime.getRuntime().exec(cmd);
 ```
 

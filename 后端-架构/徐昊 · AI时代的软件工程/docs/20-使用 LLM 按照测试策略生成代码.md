@@ -14,26 +14,28 @@
 
 接下来让我们按照测试策略，针对不同的组件构造提示词模板（Prompting template）。我们先从Persistent层开始：
 
-> 架构描述  
-> =======  
+> 架构描述
+> =======
+>
 > 当前系统技术栈为Spring Boot，Jersey和MyBatis。  
 >    
-> 当前系统采用典型的三层架构设计，分布为:  
+> 当前系统采用典型的三层架构设计，分布为:
+>
 > - HTTP interface层，负责提供RESTful API，命名规则为XXXAPI，比如OrdersAPI；  
-> – Application Logic层，负责提供核心逻辑，命名规则为XXXService，比如OrderService；  
-> – Persistent层，负责与持久化数据交互，命名规则为XXXDAO，比如OrderDAO；  
-> – DAO通过MyBatis的Mapper实现  
-> – 在对DAO进行测试时，使用H2数据库作为fake implementation，也就是在测试中，初始化H2数据库，然后保证应用程序链接到这个数据库，并在测试结束后销毁这个数据库。  
->    
-> 功能需求  
-> =======  
-> {functionalities}  
->    
-> 任务  
-> ====  
-> 上面功能需求描述的场景，在Persistent层中需要哪些组件（目标组件）；  
-> 列出需求描述的场景使用到目标组件的功能（目标功能）；  
-> 列出目标功能需要测试的场景。描述场景，并给出相关的测试数据。
+>   – Application Logic层，负责提供核心逻辑，命名规则为XXXService，比如OrderService；  
+>   – Persistent层，负责与持久化数据交互，命名规则为XXXDAO，比如OrderDAO；  
+>   – DAO通过MyBatis的Mapper实现  
+>   – 在对DAO进行测试时，使用H2数据库作为fake implementation，也就是在测试中，初始化H2数据库，然后保证应用程序链接到这个数据库，并在测试结束后销毁这个数据库。  
+>      
+>   功能需求
+>   =======
+>   {functionalities}  
+>      
+>   任务
+>   ====
+>   上面功能需求描述的场景，在Persistent层中需要哪些组件（目标组件）；  
+>   列出需求描述的场景使用到目标组件的功能（目标功能）；  
+>   列出目标功能需要测试的场景。描述场景，并给出相关的测试数据。
 
 注意在这个提示词模板中，我们并没有直接要求LLM帮助我们生成代码，还是与之前一样，先让LLM给出场景和测试数据。ChatGPT的答案如下：
 
@@ -73,11 +75,11 @@ public class ProductDAOTest {
 
   @Autowired
   private DataSource dataSource;
-  
+
   @Autowired
   private ProductDAO productDAO;
   private Connection connection;
-  
+
   @BeforeEach
   public void setUp() throws SQLException {
     // 获取H2数据库连接
@@ -91,7 +93,7 @@ public class ProductDAOTest {
       statement.executeUpdate("INSERT INTO Product (product_id, name, description, price) VALUES (3, 'Product 3', 'Description of Product 3', 39.99)");
     }
   }
-  
+
   @Test
   public void testGetAllProducts() {
     // 调用被测试的方法
@@ -102,7 +104,7 @@ public class ProductDAOTest {
     assertTrue(products.stream().anyMatch(p -> p.getProductId() == 2 && p.getName().equals("Product 2")));
     assertTrue(products.stream().anyMatch(p -> p.getProductId() == 3 && p.getName().equals("Product 3")));
   }
-  
+
   @AfterEach
   public void tearDown() throws SQLException {
     // 删除测试表并关闭连接
@@ -126,29 +128,31 @@ public class ProductDAOTest {
 
 对于现在这个简单的例子，这个代码也就足够了。接下来，我们可以补充提示词模板中关于HTTP Interface部分的架构描述，并更改任务描述：
 
-> 架构描述  
-> =======  
+> 架构描述
+> =======
+>
 > 当前系统技术栈为Spring Boot，Jersey和MyBatis。  
 >    
-> 当前系统采用典型的三层架构设计，分布为:  
-> - HTTP interface层，负责提供RESTful API，命名规则为XXXAPI，比如OrdersAPI；  
-> - API通过JAX-RS的Resource实现  
+> 当前系统采用典型的三层架构设计，分布为:
+>
+> - HTTP interface层，负责提供RESTful API，命名规则为XXXAPI，比如OrdersAPI；
+> - API通过JAX-RS的Resource实现
 > - 在对API进行测试时，首先要stub掉Application Logic层中的Services，然后再使用JerseyTest对API进行测试  
->    
-> - Application Logic层，负责提供核心逻辑，命名规则为XXXService，比如OrderService；  
-> - Persistent层，负责与持久化数据交互，命名规则为XXXDAO，比如OrderDAO；  
-> - DAO通过MyBatis的Mapper实现  
+>    
+> - Application Logic层，负责提供核心逻辑，命名规则为XXXService，比如OrderService；
+> - Persistent层，负责与持久化数据交互，命名规则为XXXDAO，比如OrderDAO；
+> - DAO通过MyBatis的Mapper实现
 > - 在对DAO进行测试时，使用H2数据库作为fake implementation，也就是在测试中，初始化H2数据库，然后保证应用程序链接到这个数据库，并在测试结束后销毁这个数据库。  
->    
-> 功能需求  
-> =======  
-> {functionalities}  
->    
-> 任务  
-> ====  
-> 上面功能需求描述的场景，在HTTP Interface层中需要哪些组件（目标组件）；  
-> 列出需求描述的场景使用到目标组件的功能（目标功能）；  
-> 列出目标功能需要测试的场景。描述场景，并给出相关的测试数据。
+>      
+>   功能需求
+>   =======
+>   {functionalities}  
+>      
+>   任务
+>   ====
+>   上面功能需求描述的场景，在HTTP Interface层中需要哪些组件（目标组件）；  
+>   列出需求描述的场景使用到目标组件的功能（目标功能）；  
+>   列出目标功能需要测试的场景。描述场景，并给出相关的测试数据。
 
 ChatGPT的答案如下：
 
@@ -177,7 +181,7 @@ public class OrdersAPITest extends JerseyTest {
   protected Application configure() {
     return new ResourceConfig(OrdersAPI.class);
   }
-  
+
   @Test
   public void testGetAllProducts() {
     // 发送GET请求到/products端点
@@ -210,8 +214,9 @@ public class OrdersAPITest extends JerseyTest {
 
 首先给出任务描述：
 
-> 架构描述  
-> =======  
+> 架构描述
+> =======
+>
 > 当前系统采用典型的三层架构设计，分布为:  
 > HTTP interface层，负责提供RESTful API，命名规则为XXXAPI，比如OrdersAPI；  
 > Application Logic层，负责提供核心逻辑，命名规则为XXXService，比如OrderService；  
@@ -221,12 +226,14 @@ public class OrdersAPITest extends JerseyTest {
 >    
 > 当为当前系统生成功能测试时，我们使用Http Client通过访问API完成真正的测试。但是为了保证测试的可重复性，我们在setup测试的时候，链接数据库，完成测试数据的准备。测试时，使用MySQL数据库。  
 >    
-> 功能需求  
-> =======  
+> 功能需求
+> =======
+>
 > 目前为一个电子商务系统。需要列出所有产品的目录  
 >    
-> 任务  
-> ====  
+> 任务
+> ====
+>
 > 上面功能需求描述的场景，需要用到哪些API（目标API）；  
 > 列出需求描述的场景使用到目标API的功能（目标功能）；  
 > 列出目标功能需要测试的场景。描述场景，并给出相关的测试数据。
@@ -259,10 +266,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ProductAPITest {
   @LocalServerPort
   private int port;
-  
+
   @Autowired
   private RestTemplate restTemplate;
-  
+
   private Connection connection;
 
   @BeforeEach
@@ -276,7 +283,7 @@ public class ProductAPITest {
     statement.executeUpdate("INSERT INTO products (product_id, product_name, category) VALUES (4, 'Office Chair', 'Furniture')");
     statement.executeUpdate("INSERT INTO products (product_id, product_name, category) VALUES (5, 'T-shirt', 'Clothing')");
   }
-  
+
   @AfterEach
   public void tearDown() throws SQLException {
     // 清除测试数据库中的数据
@@ -284,7 +291,7 @@ public class ProductAPITest {
     statement.executeUpdate("DELETE FROM products");
     connection.close();
   }
-  
+
   @Test
   public void testListAllProducts() {
     // 发送GET请求到API端点
@@ -321,12 +328,12 @@ public class ProductAPITest {
 <li><span>范飞扬</span> 👍（2） 💬（0）<p>同学问：自己设计Q1的测试用例，有典型用法、边界值、对象状态、耗时性能、并发情况、误用情况、反复调用等方面的考虑，这些在目前的示例里没体现，是否有必要考虑，在哪个步骤做合适？
 
 ===
-我理解，这个问题其实是，How many tests should you write? 
+我理解，这个问题其实是，How many tests should you write?
 这是个好问题。
 
 我之前有个 Kent Beck 的《TDD by example》的读书笔记，可以回答这个问题：
 
-How many tests should you write? 
+How many tests should you write?
 
 For simple problem of triangle, Kent wrote six tests, Bob Binder wrote 65.
 
@@ -334,7 +341,6 @@ Think about MTBF, if you want the MTBF to be 10 years, you should write more tes
 
 （下面是原文了）
 TDD’s view of testing is pragmatic. In TDD, the tests are a means to have great conﬁdence. If our knowledge of the implementation gives us conﬁdence even without a test, then we will not write that test. Black box testing demonstrates adifferent value system. It’s an appropriate attitude to take in some circumstances, but that is different from TDD.
-
 
 总结一下就是：“看情况”。测与不测，黑盒白盒，覆盖范围，都看情况。
 怎么看情况？

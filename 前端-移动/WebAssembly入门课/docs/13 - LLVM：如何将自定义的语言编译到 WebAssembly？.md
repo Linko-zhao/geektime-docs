@@ -128,10 +128,10 @@ LLVM ERROR: 64-bit WebAssembly (wasm64) is not currently supported
 
 版本信息：
 LLVM (http:&#47;&#47;llvm.org&#47;):
-  LLVM version 10.0.1
-  Optimized build.
-  Default target: x86_64-apple-darwin19.3.0
-  Host CPU: skylake</p>2020-10-07</li><br/><li><span>奕</span> 👍（1） 💬（0）<p>存在 wasm32 和 wasm64的平台， 应该可以操作系统 中存在64和32 位的原因是一样的
-1:  64 有更大的 CPU 位宽，可以进行更大的数值的计算
-2:  内存寻址空间大小不一样</p>2020-10-07</li><br/>
+LLVM version 10.0.1
+Optimized build.
+Default target: x86_64-apple-darwin19.3.0
+Host CPU: skylake</p>2020-10-07</li><br/><li><span>奕</span> 👍（1） 💬（0）<p>存在 wasm32 和 wasm64的平台， 应该可以操作系统 中存在64和32 位的原因是一样的
+1: 64 有更大的 CPU 位宽，可以进行更大的数值的计算
+2: 内存寻址空间大小不一样</p>2020-10-07</li><br/>
 </ul>

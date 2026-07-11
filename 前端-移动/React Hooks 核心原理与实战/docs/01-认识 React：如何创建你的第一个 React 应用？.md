@@ -213,7 +213,7 @@ export default function UserList() {
       <button onClick={fetchUsers} disabled={loading}>
         {loading ? "Loading..." : "Show Users"}
       </button>
-      {error && 
+      {error &&
         <div style={{ color: "red" }}>Failed: {String(error)}</div>
       }
       <br />

@@ -185,16 +185,16 @@ func Test()  {
 }
 
 func test01() {
-	if e := recover(); e != nil {
-		fmt.Println(&quot;recover...&quot;)
-	} else {
-		fmt.Println(&quot;no recover...&quot;)
-	}
-	fmt.Println(&quot;defer exe...&quot;)
+if e := recover(); e != nil {
+fmt.Println(&quot;recover...&quot;)
+} else {
+fmt.Println(&quot;no recover...&quot;)
+}
+fmt.Println(&quot;defer exe...&quot;)
 }
 
 func main() {
-	Test()
+Test()
 }
 &#47;&#47;输出：
 no recover...
@@ -203,31 +203,31 @@ recover2...
 no recover2...
 
 &#47;&#47;测试场景2
-func Test()  {
-	defer func() {
-		if errRecover := recover(); errRecover != nil {
-			fmt.Println(&quot;recover2...&quot;)
-		}
-		fmt.Println(&quot;no recover2...&quot;)
-	}()
-	defer test01()  &#47;&#47;test01()直接放到defer后面 
-	b := 0
-	a := 1 &#47; b
-	fmt.Println(a)
-	return
+func Test() {
+defer func() {
+if errRecover := recover(); errRecover != nil {
+fmt.Println(&quot;recover2...&quot;)
+}
+fmt.Println(&quot;no recover2...&quot;)
+}()
+defer test01() &#47;&#47;test01()直接放到defer后面
+b := 0
+a := 1 &#47; b
+fmt.Println(a)
+return
 }
 
 func test01() {
-	if e := recover(); e != nil {
-		fmt.Println(&quot;recover...&quot;)
-	} else {
-		fmt.Println(&quot;no recover...&quot;)
-	}
-	fmt.Println(&quot;defer exe...&quot;)
+if e := recover(); e != nil {
+fmt.Println(&quot;recover...&quot;)
+} else {
+fmt.Println(&quot;no recover...&quot;)
+}
+fmt.Println(&quot;defer exe...&quot;)
 }
 
 func main() {
-	Test()
+Test()
 }
 &#47;&#47;输出：
 recover...
@@ -235,82 +235,81 @@ defer exe...
 no recover2...
 
 我的问题是：为什么场景1中出现panic没有在defer func() {
-		test01()
-	}()中被recover，而在defer func() {
-		if errRecover := recover(); errRecover != nil {
-			fmt.Println(&quot;recover2...&quot;)
-		}
-		fmt.Println(&quot;no recover2...&quot;)
-	}()中被recover。
+test01()
+}()中被recover，而在defer func() {
+if errRecover := recover(); errRecover != nil {
+fmt.Println(&quot;recover2...&quot;)
+}
+fmt.Println(&quot;no recover2...&quot;)
+}()中被recover。
 场景2使用defer test01 的写法后就可以被recover。</p>2020-07-08</li><br/><li><span>疯琴</span> 👍（4） 💬（1）<p>试验了一下在 goroutine 里面 panic，其他的 goroutine（比如main）是 recover()不到的：
 
 func main() {
-	fmt.Println(&quot;start&quot;)
-	defer func() {
-		if p := recover(); p != nil {
-			fmt.Println(p)
-		}
-	}()
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer func() {
-		    wg.Done()
-		}()
-		panic(errors.New(&quot;panic in goroutine&quot;))
+fmt.Println(&quot;start&quot;)
+defer func() {
+if p := recover(); p != nil {
+fmt.Println(p)
+}
+}()
+var wg sync.WaitGroup
+wg.Add(1)
+go func() {
+defer func() {
+wg.Done()
+}()
+panic(errors.New(&quot;panic in goroutine&quot;))
 
-	}()
-	wg.Wait()
+    }()
+    wg.Wait()
+
 }</p>2019-12-07</li><br/><li><span>Zz~</span> 👍（3） 💬（2）<p>老师，您好，我想问一下，如果在main函数里调用一个我自定义的panic方法，recover可以恢复；但是如果我将自定义的panic方法改为go mypanic这样，recover就不能恢复。这是什么原因呢？下面是我实验的代码
-
 
 ==============可以恢复的==============
 package main
 
 import (
-	&quot;errors&quot;
-	&quot;fmt&quot;
+&quot;errors&quot;
+&quot;fmt&quot;
 )
 
 func myRecover() {
-	if err := recover(); err != nil {
-		fmt.Printf(&quot;panic is %s&quot;, err)
-	}
+if err := recover(); err != nil {
+fmt.Printf(&quot;panic is %s&quot;, err)
+}
 }
 
 func myPanic() {
-	panic(errors.New(&quot;自定义异常&quot;))
+panic(errors.New(&quot;自定义异常&quot;))
 }
 
 func main() {
-	defer myRecover()
-	myPanic()
+defer myRecover()
+myPanic()
 }
-
 
 =================不可以恢复的==============
 package main
 
 import (
-	&quot;errors&quot;
-	&quot;fmt&quot;
-	&quot;time&quot;
+&quot;errors&quot;
+&quot;fmt&quot;
+&quot;time&quot;
 )
 
 func myRecover() {
-	if err := recover(); err != nil {
-		fmt.Printf(&quot;panic is %s&quot;, err)
-	}
+if err := recover(); err != nil {
+fmt.Printf(&quot;panic is %s&quot;, err)
+}
 }
 
 func myPanic() {
-	panic(errors.New(&quot;自定义异常&quot;))
+panic(errors.New(&quot;自定义异常&quot;))
 }
 
 func main() {
-	defer myRecover()
-	go myPanic()
-	time.Sleep(time.Second * 5)
+defer myRecover()
+go myPanic()
+time.Sleep(time.Second * 5)
 }
 </p>2021-01-02</li><br/><li><span>翼江亭赋</span> 👍（3） 💬（3）<p>iava世界里曾经try catch满天飞，现在还能看到不少这种代码，但逐渐大家认同了在去掉这种代码。
 
@@ -320,6 +319,7 @@ go世界里，err guard满天飞，但大部分的处理也是层层上传。但
 
 底层实现其实都是setjmp，主要的区别之一我认为是go设计者认为java异常的性能代价大。</p>2019-10-31</li><br/><li><span>来碗绿豆汤</span> 👍（3） 💬（1）<p>可以 defer 有点类似java中的final语句，里面还可以抛出异常。这样的好处是，我们捕获panic之后，可以对起内容进行查看，如果不是我们关注的panic那么可以继续抛出去</p>2018-10-01</li><br/><li><span>honnkyou</span> 👍（2） 💬（2）<p>「延迟到什么时候呢？这要延迟到该语句所在的函数即将执行结束的那一刻，无论结束执行的原因是什么。」
 以该节课中代码为例的话是要吃到main函数快结束时执行是吗？执行defer函数。</p>2019-05-14</li><br/><li><span>有匪君子</span> 👍（2） 💬（1）<p>这个问题就引发了另一个问题。defer可以在同一个函数中嵌套使用吗？感觉这两个问题答案应该一致</p>2018-10-01</li><br/><li><span>张sir</span> 👍（1） 💬（1）<p>您好，请问defer函数压𣏾的时候，为什么把当时的入参也放入𣏾中呢
+
 ```
 func test() {
 	var a, b = 1, 1
@@ -335,19 +335,19 @@ func test() {
 ```
 
 这个输出的２不是４的理论论据是什么呢</p>2020-03-12</li><br/><li><span>Pana</span> 👍（1） 💬（1）<p>在defer 中 recover 了panic ，是否还能让函数返回错误呢</p>2020-03-05</li><br/><li><span>大雄</span> 👍（0） 💬（1）<p>是否可以理解，我们一般自己返回的error都是可以预见的业务异常（例如：手机号码格式不正确等），可以灵活判断。
-panic则是意料外的，但不需要终止进程，所以需要要recover恢复</p>2022-10-14</li><br/><li><span>jxs1211</span> 👍（0） 💬（2）<p>如果	s5 := s1[5]引发panic，可以在函数退出前通过defer语句中recover捕获并处理，哪是否有办法让函数继续执行完引发panic时后面哪些代码，像其他语言用try catch一样，能继续向下执行完整个函数的代码，还是说go的设计并不是如此，一定要在引发异常处立即返回
+panic则是意料外的，但不需要终止进程，所以需要要recover恢复</p>2022-10-14</li><br/><li><span>jxs1211</span> 👍（0） 💬（2）<p>如果 s5 := s1[5]引发panic，可以在函数退出前通过defer语句中recover捕获并处理，哪是否有办法让函数继续执行完引发panic时后面哪些代码，像其他语言用try catch一样，能继续向下执行完整个函数的代码，还是说go的设计并不是如此，一定要在引发异常处立即返回
 func caller2() (err error) {
-	defer func() {
-		p := recover()
-		if p != nil {
-			err = fmt.Errorf(&quot;error: %s\n&quot;, p)
-		}
-	}()
-	fmt.Println(&quot;Enter function caller2.&quot;)
-	s1 := []int{1, 2, 3, 4, 5}
-	s5 := s1[5]
-	_ = s5
-	fmt.Println(&quot;Exit function caller2.&quot;)
-	return err
+defer func() {
+p := recover()
+if p != nil {
+err = fmt.Errorf(&quot;error: %s\n&quot;, p)
+}
+}()
+fmt.Println(&quot;Enter function caller2.&quot;)
+s1 := []int{1, 2, 3, 4, 5}
+s5 := s1[5]
+_ = s5
+fmt.Println(&quot;Exit function caller2.&quot;)
+return err
 }</p>2021-12-15</li><br/><li><span>爱学习的好孩子</span> 👍（0） 💬（1）<p>看不懂，defer函数和defer语句是什么关系？</p>2021-11-06</li><br/>
 </ul>

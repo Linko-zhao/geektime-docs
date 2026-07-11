@@ -184,14 +184,14 @@ this.height_ = 0; //图表的高度
 
 ```
 repaint: function () {
-            
+
   ...
-            
+
   let width = this.canvas_.width;
   let height = this.canvas_.height;
   let context = this.canvas_.getContext('2d');
 
-  //清空 Canvas 
+  //清空 Canvas
   context.fillStyle = BACKGROUND_COLOR;
   context.fillRect(0, 0, width, height);
 
@@ -218,7 +218,7 @@ drawLines: function (context) {
         }
         //取出画线的颜色
         context.strokeStyle = this.dataSeries_[i].getColor();
-        context.beginPath(); 
+        context.beginPath();
         for (let x = 0; x < values.length; ++x) {
             //连线
             context.lineTo(

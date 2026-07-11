@@ -18,7 +18,7 @@ func usersInfo() []UserModel{
         {UserID: 1, UserName: "User1", UserEmail: "user1@example.com"},
         {UserID: 2, UserName: "User2", UserEmail: "user2@example.com"},
     }
-    
+
     return users
 }
 

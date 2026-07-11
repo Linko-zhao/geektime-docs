@@ -29,52 +29,64 @@ JAX-RS的需求非常庞杂，根据前面我们介绍过的部分（参看第36
 正如在DI Container项目中看到的那样，这并不一定是最终完成的功能。随着项目的进行，我们还可能会增加更多的功能点。下一步，是根据架构愿景，将功能点关联到不同的功能上下文（也就是架构愿景中的组件）：
 
 - 将请求派分给对应的资源（Resource），并根据返回的状态、超媒体类型、内容，响应Http请求
-  
+
   - ResourceServlet
   - ResourceRouter
+
 - 在处理请求派分时，可以支持多级子资源（Sub-Resource）
-  
+
   - ResourceRouter
+
 - 在处理请求派分时，可以根据客户端提供的超媒体类型，选择对应的资源方法（Resource Method）
-  
+
   - ResourceRouter
+
 - 在处理请求派分时，可以根据客户端提供的Http方法，选择对应的资源方法
-  
+
   - ResourceRouter
+
 - 资源方法可以返回Java对象，由Runtime自行推断正确的返回状态
-  
+
   - ResourceRouter
+
 - 资源方法可以不明确指定返回的超媒体类型，由Runtime自行推断，比如，资源方法标注了Produces，那么就使用标注提供的超媒体类型等
-  
+
   - ResourceRouter
+
 - 可通过扩展点MessageBodyWriter处理不同类型的返回内容
-  
+
   - Providers
+
 - 当资源方法抛出异常时，根据异常影响Http请求
-  
+
   - ResourceServlet
+
 - 可通过扩展点ExceptionMapper处理不同类型的异常
-  
+
   - Providers
+
 - 资源方法可按找期望的类型，访问Http请求的内容
-  
+
   - ResourceRouter
+
 - 可通过扩展点MessageBodyReader处理不同类型的请求内容
-  
+
   - Providers
+
 - 资源对象和资源方法可接受环境组件的注入
-  
+
   - ResourceContext
   - ReosurceRouter
 
 如果是应用系统，那么我们可以继续分解到任务项。然而对于技术框架，特别是从头开始研发的技术框架，按照技术组件重组功能列表是更常用的手法：
 
 - ResourceServlet
-  
+
   - 将请求派分给对应的资源（Resource），并根据返回的状态、超媒体类型、内容，响应Http请求
   - 当资源方法抛出异常时，根据异常影响Http请求
+
 - ResourceRouter
-  
+
   - 将请求派分给对应的资源（Resource），并根据返回的状态、超媒体类型、内容，响应Http请求
   - 在处理请求派分时，可以支持多级子资源（Sub-Resource）
   - 在处理请求派分时，可以根据客户端提供的超媒体类型，选择对应的资源方法（Resource Method）
@@ -83,12 +95,14 @@ JAX-RS的需求非常庞杂，根据前面我们介绍过的部分（参看第36
   - 资源方法可以不明确指定返回的超媒体类型，由Runtime自行推断，比如，资源方法标注了Produces，那么就使用标注提供的超媒体类型等
   - 资源方法可按找期望的类型，访问Http请求的内容
   - 资源对象和资源方法可接受环境组件的注入
+
 - Providers
-  
+
   - 可通过扩展点MessageBodyWriter处理不同类型的返回内容
   - 可通过扩展点ExceptionMapper处理不同类型的异常
+
 - ResourceContext
-  
+
   - 资源对象和资源方法可接受环境组件的注入
 
 在这个任务列表中，会发现并没有涉及架构愿景中的全部组件。比如Runtime，这类组件通常是支撑性的组件，可以在主要组件功能完成之后，再分解相关的需求。也可以在主要功能实现的过程中，逐渐明确它们的需求。
@@ -96,7 +110,7 @@ JAX-RS的需求非常庞杂，根据前面我们介绍过的部分（参看第36
 当采用伦敦学派时，会按照调用栈顺序从外而内地实现不同的组件。因而，我们首先需要先实现的是ResourceServlet。那么细化任务列表：
 
 - ResourceServlet
-  
+
   - 将请求派分给对应的资源（Resource），并根据返回的状态、超媒体类型、内容，响应Http请求
   - 使用OutboundResponse的status作为Http Response的状态；
   - 使用OutboundResponse的headers作为Http Response的Http Headers；
@@ -128,7 +142,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.5.1")
     testImplementation("org.eclipse.jetty:jetty-server:11.0.9")
     testImplementation("org.eclipse.jetty:jetty-servlet:11.0.9")
-    
+
 }
 tasks.withType<Test>() {
     useJUnitPlatform()

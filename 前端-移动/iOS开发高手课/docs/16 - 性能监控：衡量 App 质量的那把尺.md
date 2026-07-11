@@ -72,7 +72,7 @@ os_signpost(.end, log: parsingLog, name:"Parsing", "Parsing finished")
 <category>"Networking</category>
 <name>"Parsing"</name>
 <start-pattern>
-<message>"Parsing started SIZE:" ?data-size</message> 
+<message>"Parsing started SIZE:" ?data-size</message>
 </start-pattern>
 <column>
 <mnemonic>data-size</mnemonic>
@@ -130,19 +130,19 @@ struct thread_basic_info {
     const task_t thisTask = mach_task_self();
     //根据当前 task 获取所有线程
     kern_return_t kr = task_threads(thisTask, &threads, &threadCount);
-    
+
     if (kr != KERN_SUCCESS) {
         return 0;
     }
-    
+
     integer_t cpuUsage = 0;
     // 遍历所有线程
     for (int i = 0; i < threadCount; i++) {
-        
+
         thread_info_data_t threadInfo;
         thread_basic_info_t threadBaseInfo;
         mach_msg_type_number_t threadInfoCount = THREAD_INFO_MAX;
-        
+
         if (thread_info((thread_act_t)threads[i], THREAD_BASIC_INFO, (thread_info_t)threadInfo, &threadInfoCount) == KERN_SUCCESS) {
             // 获取 CPU 使用率
             threadBaseInfo = (thread_basic_info_t)threadInfo;
@@ -185,7 +185,7 @@ FPS 是指图像连续在显示设备上出现的频率。FPS低，表示App不�
         if (useTime < 1) return;
         lastTimeStamp = self.dLink.timestamp;
         // fps 计算
-        fps = total / useTime; 
+        fps = total / useTime;
         total = 0;
     }
 }
@@ -251,7 +251,7 @@ Instruments 可以自定义性能数据的监控，那么接下来就请你看�
 (integer_t) $10 = 965
 
 看原文解释 是百分比啊
-integer_t       cpu_usage;      &#47;* scaled cpu usage percentage *&#47;</p>2019-08-01</li><br/><li><span>毛成方</span> 👍（0） 💬（0）<p>threadBaseInfo = (thread_basic_info_data_t)threadInfo;
+integer_t cpu_usage; &#47;* scaled cpu usage percentage *&#47;</p>2019-08-01</li><br/><li><span>毛成方</span> 👍（0） 💬（0）<p>threadBaseInfo = (thread_basic_info_data_t)threadInfo;
 xcode8.2 无法强制转换
 请问得更新xcode？</p>2019-05-14</li><br/><li><span>月落泉</span> 👍（0） 💬（2）<p>mach_task_self()这个函数报错Implicit declaration of function &#39;mach_task_self&#39; is invalid in C99，如何处理</p>2019-05-08</li><br/>
 </ul>

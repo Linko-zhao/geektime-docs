@@ -65,7 +65,7 @@ server_id=1 # 配置一个ServerID
 给Canal开一个专门的MySQL用户并授权，确保这个用户有复制Binlog的权限：
 
 ```
-CREATE USER canal IDENTIFIED BY 'canal';  
+CREATE USER canal IDENTIFIED BY 'canal';
 GRANT SELECT, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'canal'@'%';
 FLUSH PRIVILEGES;
 ```

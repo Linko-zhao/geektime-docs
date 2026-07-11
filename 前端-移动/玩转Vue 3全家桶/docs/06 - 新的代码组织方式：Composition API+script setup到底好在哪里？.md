@@ -49,7 +49,7 @@ h1 {
 ```xml
 <template>
     <h1>这是首页</h1>
-    <TodoList />    
+    <TodoList />
 </template>
 
 <script setup>
@@ -235,7 +235,7 @@ export function useMouse(){
     onMounted(() => {
       window.addEventListener('mousemove', update)
     })
-  
+
     onUnmounted(() => {
       window.removeEventListener('mousemove', update)
     })
@@ -367,14 +367,14 @@ h1 {
 
         至于这些是怎么做到由“被动接受”到“主动告知”的，实现这部分内容，我很期待。
 
-  ✿ 模板语法更好用
-        &lt;script setup&gt; 像是“语法糖”，很甜；&lt;style&gt;里能用 v-bind，以后开发可以
-        少用“黑科技”了，双手点赞。
+✿ 模板语法更好用
+&lt;script setup&gt; 像是“语法糖”，很甜；&lt;style&gt;里能用 v-bind，以后开发可以
+少用“黑科技”了，双手点赞。
 
-  ✿ 至于思考题
-        Vue 本来就属于 DSL，语法方面各有偏好，见仁见智；响应式和生命周期需要 import，个
-        人认为就代表了从之前的“被动主动”转向“主动告知”，这样设计更加灵活。从此一条主线在
-        ”数据&quot;，以后查 bug 顺着这条 &quot;线&quot; 应该更加容易了。</p>2021-10-29</li><br/><li><span>琼斯基亚</span> 👍（39） 💬（2）<p>对于value，官方是这样解释的：
+✿ 至于思考题
+Vue 本来就属于 DSL，语法方面各有偏好，见仁见智；响应式和生命周期需要 import，个
+人认为就代表了从之前的“被动主动”转向“主动告知”，这样设计更加灵活。从此一条主线在
+”数据&quot;，以后查 bug 顺着这条 &quot;线&quot; 应该更加容易了。</p>2021-10-29</li><br/><li><span>琼斯基亚</span> 👍（39） 💬（2）<p>对于value，官方是这样解释的：
 将值封装在一个对象中，看似没有必要，但为了保持 JavaScript 中不同数据类型的行为统一，这是必须的。这是因为在 JavaScript 中，Number 或 String 等基本类型是通过值而非引用传递的：在任何值周围都有一个封装对象，这样我们就可以在整个应用中安全地传递它，而不必担心在某个地方失去它的响应性</p>2021-11-10</li><br/><li><span>ch3cknull</span> 👍（15） 💬（2）<p>关于导入问题，antfu大神有一个插件unplugin-auto-import，可以自动注入依赖项，不用import
 
 https:&#47;&#47;github.com&#47;antfu&#47;unplugin-auto-import

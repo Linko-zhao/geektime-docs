@@ -97,7 +97,6 @@ Docker: 创建出一个名叫foo的Infra容器来hold住整个pod，接着启动
 
 Kata container: 创建出一个轻量级的虚拟机来hold住整个pod，接着创建A、B容器对应的 Mount Namespace。所以，最后在宿主机上，只会有一个叫做foo的轻量级虚拟机在运行
 
-
 </p>2020-12-22</li><br/><li><span>Vinsec</span> 👍（4） 💬（0）<p>天冷适合搞学习 打卡</p>2018-12-07</li><br/><li><span>geraltlaush</span> 👍（3） 💬（1）<p>docker shim 是不是可以理解成remote+CRI shim的一个k8s内部集成的一种实现</p>2019-02-16</li><br/><li><span>Join</span> 👍（2） 💬（0）<p>对CRI的认识更进一层了</p>2021-12-15</li><br/><li><span>Geek_dn82ci</span> 👍（2） 💬（4）<p>Containerd 中的cri-shim和用来控制runC的containerd-shim有什么区别呢？</p>2020-08-13</li><br/><li><span>郑然</span> 👍（2） 💬（1）<p>老师请教两个问题: 
 1. 为什么kubelet要给apiserver返回redirect url呢? 这样做有什么特殊考虑吗?
 2. 镜像服务, 以及下载完镜像之后, 如何和createcontainer接口发生关联的, 这块的细节能讲讲吗?</p>2018-12-07</li><br/><li><span>陈斯佳</span> 👍（1） 💬（0）<p>第四十四课:解读CRI与容器运行时

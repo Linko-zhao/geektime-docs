@@ -76,7 +76,7 @@
 在系统 B 方法的实现体中，我们会在尽量不影响原有逻辑的情况下，考虑在方法一进来的时候，针对入参字段进行解密，接着把解密之后的值再次替换原来的密文，然后走后续逻辑，你可能会写出这样的代码。
 
 ```java
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // 1、用户查询服务接口
 // 2、在 saveUserInfo 保存用户信息的方法中，先解密入参数据，
 // 再把明文塞到入参 req 中，然后继续走后续业务逻辑。
@@ -87,30 +87,30 @@ public class UserQueryFacadeImpl implements UserQueryFacade {
 
     /** <h2>配置中心 AES 密钥的配置名称，通过该名称就能从配置中心拿到对应的密钥值</h2> **/
     public static final String CONFIG_CENTER_KEY_AES_SECRET = "CONFIG_CENTER_KEY_AES_SECRET";
-    
+
     @Override
     public SaveUserInfoResp saveUserInfo(SaveUserInfoReq req) {
-        ///////////////////////////////////////////////////                  
+        ///////////////////////////////////////////////////
         // 为解密入参数据，新增处理逻辑 start
-        ///////////////////////////////////////////////////    
+        ///////////////////////////////////////////////////
         // 从 OPS 配置中心里面获取到 aesSecretOpsKey 对应的密钥值
         String privateKey = OpsUtils.getAesSecret(CONFIG_CENTER_KEY_AES_SECRET);
-        
+
         // 将入参的 name、idNo 字段进行解密
         String plainName = AesUtils.decrypt(req.getName(), privateKey);
         String plainIdNo = AesUtils.decrypt(req.getIdNo(), privateKey);
-        
+
         // 然后将得到的明文 plainName、plainIdNo 再放回到入参 req 中去
         req.setName(plainName);
         req.setIdNo(plainIdNo);
-        
-        ///////////////////////////////////////////////////                  
+
+        ///////////////////////////////////////////////////
         // 为解密入参数据，新增处理逻辑 end
-        ///////////////////////////////////////////////////            
+        ///////////////////////////////////////////////////
 
         // 保存用户信息的核心逻辑
         doSaveUserInfo(req);
-        
+
         // 返回成功响应
         return buildSuccResp();
     }
@@ -156,7 +156,7 @@ public class UserQueryFacadeImpl implements UserQueryFacade {
 有了配置中心的介入，我们可以动态针对某个方法的部分字段进行解密处理了，看代码。
 
 ```java
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // 提供方：解密过滤器，仅在提供方有效，因为 @Activate 注解中设置的是 PROVIDER 侧
 // 功能：通过 “类名 + 方法名” 从配置中心获取解密配置，有值就执行解密操作，没值就跳过
 ///////////////////////////////////////////////////

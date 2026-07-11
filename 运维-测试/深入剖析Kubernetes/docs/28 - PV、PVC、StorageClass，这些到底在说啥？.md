@@ -157,7 +157,7 @@ Mount阶段完成后，这个Volume的宿主机目录就是一个“持久化”
 在这一步，kubelet需要作为client，将远端NFS服务器的目录（比如：“/”目录），挂载到Volume的宿主机目录上，即相当于执行如下所示的命令：
 
 ```
-$ mount -t nfs <NFS服务器地址>:/ /var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字> 
+$ mount -t nfs <NFS服务器地址>:/ /var/lib/kubelet/pods/<Pod的ID>/volumes/kubernetes.io~<Volume类型>/<Volume名字>
 ```
 
 通过这个挂载操作，Volume的宿主机目录就成为了一个远程NFS目录的挂载点，后面你在这个目录里写入的所有文件，都会被保存在远程NFS服务器上。所以，我们也就完成了对这个Volume宿主机目录的“持久化”。
@@ -371,8 +371,10 @@ No events.
 第一阶段由运行在master上的AttachDetachController负责，为这个PV完成 Attach 操作，为宿主机挂载远程磁盘；
 第二阶段是运行在每个节点上kubelet组件的内部，把第一步attach的远程磁盘 mount 到宿主机目录。这个控制循环叫VolumeManagerReconciler，运行在独立的Goroutine，不会阻塞kubelet主循环。
 
-完成这两步，PV对应的“持久化 Volume”就准备好了，POD可以正常启动，将“持久化 Volume”挂载在容器内指定的路径。</p>2018-10-26</li><br/><li><span>Geek_e2f5e1</span> 👍（40） 💬（1）<p>老师，如果我原先存储上就有数据需要挂载进去，那格式化操作岂不是不能满足我的需求？</p>2019-04-09</li><br/><li><span>vx:jiancheng_goon</span> 👍（33） 💬（1）<p>张老师，问一个比较空泛的问题。您之前是做paas平台的，今后的pass平台的发展方向是什么呢？当前做paas平台，最大的阻碍是什么？最大的价值又是什么呢？</p>2018-10-27</li><br/><li><span>tuxknight</span> 👍（22） 💬（1）<p>在公有云上使用 PV&#47;PVC 有个很重要的限制：块存储设备必须和实例在同一个可用区。在 Pod 没被创建的时候是不确定会被调度到哪个可用区，从而无法动态的创建出PV。这种问题要怎么处理？</p>2018-10-28</li><br/><li><span>Acter</span> 👍（17） 💬（3）<p>“所谓将一个 PV 与 PVC 进行“绑定”，其实就是将这个 PV 对象的名字，填在了 PVC 对象的 spec.volumeName 字段上。” 
-请问老师为什么在pvc的yaml文件中看不到这个字段呢？</p>2018-10-29</li><br/><li><span>坤</span> 👍（10） 💬（1）<p>如果采用ceph  rbd StorageClass，Pod所在的node宕机后，在调度到另外一台Node上，这个过程中，k8s是会新node上重新创建PV吗？</p>2020-03-04</li><br/><li><span>jkmzg</span> 👍（7） 💬（1）<p>请问下从同一个pod spec 创建出来的不同pod中，pvc相同，会不会冲突？k8s的机制是什么呢？</p>2018-11-13</li><br/><li><span>yuliz</span> 👍（7） 💬（3）<p>你好，我想请教下实际中的疑问点，如果我使用NFS作为共享存储，两个集群中的PV绑定NFS的同一目录，且这两个PV被pvc绑定，最终pod绑定pvc,当第二个pod绑定时会格式化nfs的目录，导致之前的pod数据丢失么？两个集群的pv能共用一个nfs目录和同一rbd么？</p>2018-10-30</li><br/><li><span>jssfy</span> 👍（6） 💬（1）<p>请问
+完成这两步，PV对应的“持久化 Volume”就准备好了，POD可以正常启动，将“持久化 Volume”挂载在容器内指定的路径。</p>2018-10-26</li><br/><li><span>Geek_e2f5e1</span> 👍（40） 💬（1）<p>老师，如果我原先存储上就有数据需要挂载进去，那格式化操作岂不是不能满足我的需求？</p>2019-04-09</li><br/><li><span>vx:jiancheng_goon</span> 👍（33） 💬（1）<p>张老师，问一个比较空泛的问题。您之前是做paas平台的，今后的pass平台的发展方向是什么呢？当前做paas平台，最大的阻碍是什么？最大的价值又是什么呢？</p>2018-10-27</li><br/><li><span>tuxknight</span> 👍（22） 💬（1）<p>在公有云上使用 PV&#47;PVC 有个很重要的限制：块存储设备必须和实例在同一个可用区。在 Pod 没被创建的时候是不确定会被调度到哪个可用区，从而无法动态的创建出PV。这种问题要怎么处理？</p>2018-10-28</li><br/><li><span>Acter</span> 👍（17） 💬（3）<p>“所谓将一个 PV 与 PVC 进行“绑定”，其实就是将这个 PV 对象的名字，填在了 PVC 对象的 spec.volumeName 字段上。”
+请问老师为什么在pvc的yaml文件中看不到这个字段呢？</p>2018-10-29</li><br/><li><span>坤</span> 👍（10） 💬（1）<p>如果采用ceph rbd StorageClass，Pod所在的node宕机后，在调度到另外一台Node上，这个过程中，k8s是会新node上重新创建PV吗？</p>2020-03-04</li><br/><li><span>jkmzg</span> 👍（7） 💬（1）<p>请问下从同一个pod spec 创建出来的不同pod中，pvc相同，会不会冲突？k8s的机制是什么呢？</p>2018-11-13</li><br/><li><span>yuliz</span> 👍（7） 💬（3）<p>你好，我想请教下实际中的疑问点，如果我使用NFS作为共享存储，两个集群中的PV绑定NFS的同一目录，且这两个PV被pvc绑定，最终pod绑定pvc,当第二个pod绑定时会格式化nfs的目录，导致之前的pod数据丢失么？两个集群的pv能共用一个nfs目录和同一rbd么？</p>2018-10-30</li><br/><li><span>jssfy</span> 👍（6） 💬（1）<p>请问
+
 1. 同一集群的多个pod可否同时挂载同一个pv的同一个subpath
 2. 如果pv写满了如何扩容</p>2018-11-25</li><br/><li><span>夕月</span> 👍（6） 💬（1）<p>所谓将一个 PV 与 PVC 进行“绑定”，其实就是将这个PV 对象的名字，填在了 PVC 对象的 spec.volumeName 字段上，这个好像在yaml文件里没有提现啊，只有storageClassName是一样的</p>2018-11-25</li><br/><li><span>IOVE.-Minn</span> 👍（5） 💬（1）<p>请问，现在的NFS也是有storageclass也是可以动态配置pv的啊，但是在官方，体现的是没有的啊？这个是第三方开发的么？provisioner: fuseim.pri&#47;ifs</p>2018-10-26</li><br/><li><span>初学者</span> 👍（2） 💬（3）<p>文中提到attach 阶段是将远程盘挂载到宿主机上，这个操作不是应该在node 上做更合适吗？为啥会放在AD controller 中？</p>2018-12-08</li><br/><li><span>阿川</span> 👍（2） 💬（1）<p>老师有一个问题需要请教，1、比如创建一个nfs的pv，但是nfs服务器不存在，此时pv也能创建成功。2、创建pvc也能跟pv关联。3、在真实创建pod使用该pvc会报错。这种情况有什么办法避免吗，比如在创建pv时就发现后端存储不存在</p>2018-11-04</li><br/><li><span>hhhhhh</span> 👍（2） 💬（1）<p>老师好，如果第二阶段肯定会格式化，那之前存储在volume中的数据不就丢失了？ </p>2018-11-03</li><br/><li><span>小白</span> 👍（1） 💬（1）<p>老师，scheduler里的volumezonechecker规则谷歌不到，可以贴个学习地址吗</p>2018-11-01</li><br/>
+
 </ul>

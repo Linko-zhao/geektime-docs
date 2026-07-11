@@ -80,11 +80,11 @@ tools = [
 def http_get(url, params=None):
     """
     通用的HTTP GET请求处理函数
-    
+   
     Args:
         url (str): 完整的请求URL
         params (dict, optional): URL参数字典
-    
+   
     Returns:
         dict: 包含success和data/message的响应结果
     """
@@ -107,7 +107,7 @@ def get_location_coordinate(keywords, region=None):
     }
     if region:
         params["region"] = region
-        
+       
     result = http_get(f"{AMAP_BASE_URL}/text", params)
     if result["success"] and result["data"].get("pois"):
         poi = result["data"]["pois"][0]
@@ -123,7 +123,7 @@ def search_nearby_pois(keywords, location=None):
     }
     if location:
         params["location"] = location
-        
+       
     result = http_get(f"{AMAP_BASE_URL}/around", params)
     if result["success"] and result["data"].get("pois"):
         results = []
@@ -158,7 +158,7 @@ def search_nearby_pois(keywords, location=None):
       "command": "node",
       "args": [
         "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
-        "-y", 
+        "-y",
         "@amap/amap-maps-mcp-server"],
       "env": {
         "AMAP_MAPS_API_KEY": "您在高德官网上申请的key"
@@ -252,6 +252,7 @@ Mac 用户的配置为：
 ---
 
 ### 1. **API列表是谁来定？**
+
 - 必须你来决定要接入哪些API。
 - 比如这个“API列表”可以包括高德地图、百度地图、腾讯地图，或者别的业务接口。
 - **MCP不会自动帮你找全世界的API，只是帮你管理、统一你选定要用&#47;要接入的API。**
@@ -259,21 +260,24 @@ Mac 用户的配置为：
 ---
 
 ### 2. **MCP的核心作用**
+
 - 把你选定的API“集中管理”起来，统一接口和数据流。
 - 让AI或你的前端应用可以通过“MCP的入口”，像点菜一样选择和调用这些API，无需再为每个API单独做适配。
 
 ---
 
 ### 3. **举个例子**
+
 - 你配置 MCP Hosts，比如加：
-    - `https:&#47;&#47;api.amap.com&#47;mcp`（高德的MCP服务）
-    - `https:&#47;&#47;api.map.qq.com&#47;mcp`（腾讯的MCP服务）
-    - `https:&#47;&#47;api.baidu.com&#47;mcp`（百度的MCP服务）
+  - `https:&#47;&#47;api.amap.com&#47;mcp`（高德的MCP服务）
+  - `https:&#47;&#47;api.map.qq.com&#47;mcp`（腾讯的MCP服务）
+  - `https:&#47;&#47;api.baidu.com&#47;mcp`（百度的MCP服务）
 - 以后AI需要用地图，只需要根据你在“可视化面板”里配置的这些地址去调用，**不用你再写怎么调用高德、腾讯、百度各家API的代码了**。
 
 ---
 
 ### 4. **底层API还是你说了算**
+
 - MCP不会自动给你找外部接口，**只有你列到MCP的“API菜单”上的接口，AI和你的应用才能用到**。
 - 好处是：你只配置一次，“上面的大模型&#47;AI”就能统一调用，有新API也只要点点鼠标就扩展上了。
 

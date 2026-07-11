@@ -370,48 +370,48 @@ sudo kubeadm reset
 ps -ef|grep kubelet
 sudo kill -9 进程id
 #删掉配置目录
-sudo rm -rf  &#47;etc&#47;kubernetes&#47;manifests&#47;
+sudo rm -rf &#47;etc&#47;kubernetes&#47;manifests&#47;
 </p>2022-11-17</li><br/><li><span>这里的人都叫我八进制</span> 👍（10） 💬（7）<p>work节点NotReady解决办法
 
 KubeletNotReady runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized
+
 1.  mkdir -p &#47;etc&#47;cni&#47;net.d
 
-2. vi 10-flannel.conflist
+2.  vi 10-flannel.conflist
 
 {
-  &quot;name&quot;: &quot;cbr0&quot;,
-  &quot;plugins&quot;: [
-    {
-      &quot;type&quot;: &quot;flannel&quot;,
-      &quot;delegate&quot;: {
-        &quot;hairpinMode&quot;: true,
-        &quot;isDefaultGateway&quot;: true
-      }
-    },
-    {
-      &quot;type&quot;: &quot;portmap&quot;,
-      &quot;capabilities&quot;: {
-        &quot;portMappings&quot;: true
-      }
-    }
-  ]
+&quot;name&quot;: &quot;cbr0&quot;,
+&quot;plugins&quot;: [
+{
+&quot;type&quot;: &quot;flannel&quot;,
+&quot;delegate&quot;: {
+&quot;hairpinMode&quot;: true,
+&quot;isDefaultGateway&quot;: true
 }
-
+},
+{
+&quot;type&quot;: &quot;portmap&quot;,
+&quot;capabilities&quot;: {
+&quot;portMappings&quot;: true
+}
+}
+]
+}
 
 3.
 
 systemctl daemon-reload
 
 systemctl restart kubelet</p>2022-08-19</li><br/><li><span>stark</span> 👍（6） 💬（1）<p>终于弄好了，坑不少 总结写在这里了 希望对朋友们有帮助https:&#47;&#47;blog.csdn.net&#47;xuezhiwu001&#47;article&#47;details&#47;128444657?spm=1001.2014.3001.5501</p>2022-12-26</li><br/><li><span>小林子</span> 👍（6） 💬（1）<p>老师为啥不用 Calico 网络插件了</p>2022-07-29</li><br/><li><span>星亦辰</span> 👍（4） 💬（1）<p>cat &lt;&lt;EOF | sudo tee &#47;etc&#47;yum.repos.d&#47;kubernetes.repo
-[kubernetes] 
-name=Kubernetes 
-baseurl=https:&#47;&#47;mirrors.aliyun.com&#47;kubernetes&#47;yum&#47;repos&#47;kubernetes-el7-x86_64 
-enabled=1 
-gpgcheck=0 
-repo_gpgcheck=0 
+[kubernetes]
+name=Kubernetes
+baseurl=https:&#47;&#47;mirrors.aliyun.com&#47;kubernetes&#47;yum&#47;repos&#47;kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
 EOF
 
-补充一个 Yum 的源 
+补充一个 Yum 的源
 </p>2022-08-01</li><br/><li><span>老荀</span> 👍（3） 💬（3）<p>master 节点能显示正常
 $ kubectl get node
 NAME     STATUS   ROLES                  AGE     VERSION
@@ -426,16 +426,16 @@ The connection to the server localhost:8080 was refused - did you specify the ri
 在运行https:&#47;&#47;github.com&#47;chronolaw&#47;k8s_study&#47;blob&#47;master&#47;admin&#47;master.sh的时候，一定要把注释掉的# --apiserver-advertise-address=192.168.10.210 换成自己的IP地址，并添加进去，否则会以10.0.x.x的IP运行。
 感谢罗老师，祝同学们学习顺利！</p>2022-08-22</li><br/><li><span>peter</span> 👍（3） 💬（2）<p>请教老师几个问题：
 Q1：脚本为什么对src_name两次赋值？
-       脚本的for循环里面有如下两行：
-       src_name=${name#k8s.gcr.io&#47;}    
+脚本的for循环里面有如下两行：
+src_name=${name#k8s.gcr.io&#47;}    
        src_name=${src_name#coredns&#47;}
-       为什么对同一个src_name两次赋值？
+为什么对同一个src_name两次赋值？
 
 Q2：同一个虚拟机上是否可以同时按照minikube和kubeadm？
 Q3：apiserver的IP应该是自己的虚拟机的IP，Pod地址段和虚拟机IP无关，采用私有地址段即可，
-        是这样吗？
-        文中提到：“apiserver 的服务地址是“192.168.10.210””，这个地址是作者自己虚拟机的IP，
-        读者应该换成自己虚拟机的IP，是这样吗？
-        文中提到：“我指定了 Pod 的地址段是“10.10.0.0&#47;16””，Pod的IP段和虚拟机无关，读者的环境
-        也可以采用，对吗？</p>2022-07-31</li><br/><li><span>Geek_8497e1</span> 👍（3） 💬（1）<p>请问，生产环境，老师建议用二进制还是kubeadmin</p>2022-07-29</li><br/><li><span>rexzhao</span> 👍（3） 💬（2）<p>kube-flannel.yml 文件是在哪个位置？是从哪来的？ 修改的内容对吗好像不是 yml 文件格式。</p>2022-07-29</li><br/>
+是这样吗？
+文中提到：“apiserver 的服务地址是“192.168.10.210””，这个地址是作者自己虚拟机的IP，
+读者应该换成自己虚拟机的IP，是这样吗？
+文中提到：“我指定了 Pod 的地址段是“10.10.0.0&#47;16””，Pod的IP段和虚拟机无关，读者的环境
+也可以采用，对吗？</p>2022-07-31</li><br/><li><span>Geek_8497e1</span> 👍（3） 💬（1）<p>请问，生产环境，老师建议用二进制还是kubeadmin</p>2022-07-29</li><br/><li><span>rexzhao</span> 👍（3） 💬（2）<p>kube-flannel.yml 文件是在哪个位置？是从哪来的？ 修改的内容对吗好像不是 yml 文件格式。</p>2022-07-29</li><br/>
 </ul>

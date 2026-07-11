@@ -369,7 +369,7 @@ internal class CoroutineScheduler(
     override fun execute(command: Runnable) = dispatch(command)
 
     fun dispatch(block: Runnable, taskContext: TaskContext = NonBlockingContext, tailDispatch: Boolean = false) {
-        trackTask() 
+        trackTask()
         // 1
         val task = createTask(block, taskContext)
         // 2
@@ -514,7 +514,7 @@ internal class DispatchedContinuation<in T>(
             val continuation = delegate.continuation
             withContinuationContext(continuation, delegate.countOrElement) {
                 val context = continuation.context
-                val state = takeState() 
+                val state = takeState()
                 val exception = getExceptionalResult(state)
 
                 val job = if (exception == null && resumeMode.isCancellableMode) context[Job] else null

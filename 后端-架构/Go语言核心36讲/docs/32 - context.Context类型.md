@@ -202,40 +202,40 @@ func coordinateWithContext() {
 package main
 
 import (
-	&quot;context&quot;
-	&quot;fmt&quot;
-	&quot;time&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+&quot;time&quot;
 )
 
 func main() {
-	ctx1, cancelFun := context.WithCancel(context.Background())
-	ctx2 := context.WithValue(ctx1, &quot;&quot;, &quot;&quot;)
-	ctx3, _ := context.WithCancel(ctx1)
+ctx1, cancelFun := context.WithCancel(context.Background())
+ctx2 := context.WithValue(ctx1, &quot;&quot;, &quot;&quot;)
+ctx3, _ := context.WithCancel(ctx1)
 
-	go watch(ctx1, &quot;ctx1&quot;)
-	go watch(ctx2, &quot;ctx2&quot;)
-	go watch(ctx3, &quot;ctx3&quot;)
+    go watch(ctx1, &quot;ctx1&quot;)
+    go watch(ctx2, &quot;ctx2&quot;)
+    go watch(ctx3, &quot;ctx3&quot;)
 
-	time.Sleep(2 * time.Second)
-	fmt.Println(&quot;可以了，通知监控停止&quot;)
-	cancelFun()
+    time.Sleep(2 * time.Second)
+    fmt.Println(&quot;可以了，通知监控停止&quot;)
+    cancelFun()
 
-	&#47;&#47;为了检测监控过是否停止，如果没有监控输出，就表示停止了
-	time.Sleep(5 * time.Second)
+    &#47;&#47;为了检测监控过是否停止，如果没有监控输出，就表示停止了
+    time.Sleep(5 * time.Second)
 
 }
 
 func watch(ctx context.Context, name string) {
-	for {
-		select {
-		case &lt;-ctx.Done():
-			fmt.Println(name,&quot;监控退出，停止了...&quot;)
-			return
-		default:
-			fmt.Println(name,&quot;goroutine监控中...&quot;)
-			time.Sleep(2 * time.Second)
-		}
-	}
+for {
+select {
+case &lt;-ctx.Done():
+fmt.Println(name,&quot;监控退出，停止了...&quot;)
+return
+default:
+fmt.Println(name,&quot;goroutine监控中...&quot;)
+time.Sleep(2 * time.Second)
+}
+}
 }
 </p>2022-02-11</li><br/><li><span>茴香根</span> 👍（4） 💬（1）<p>留言区很多人说Context 是深度优先，但是我在想每个goroutine 被调用的顺序都是不确定的，因此在编写goroutine 代码时，实际的撤销响应不能假定其父或子context 所在的goroutine一定先或者后结束。</p>2019-07-25</li><br/><li><span>Cutler</span> 👍（4） 💬（3）<p>cotext.backround()和cotext.todo()有什么区别</p>2019-04-09</li><br/><li><span>鲲鹏飞九万里</span> 👍（1） 💬（1）<p>老师，您还能看到我的留言吗，现在已经是2023年了。您看我下面的代码，比您的代码少了一句time.Sleep(time.Millisecond * 200)， 之后，打印的结果就是错的，只打印了12个数，您能给解释一下吗。（我运行环境是：go version go1.18.3 darwin&#47;amd64， 2.3 GHz 四核Intel Core i5）
 func main() {
@@ -244,41 +244,41 @@ func main() {
 }
 
 func coordinateWithContext() {
-	total := 12
-	var num int32
-	fmt.Printf(&quot;The number: %d [with context.Context]\n&quot;, num)
-	cxt, cancelFunc := context.WithCancel(context.Background())
-	for i := 1; i &lt;= total; i++ {
-		go addNum(&amp;num, i, func() {
-			&#47;&#47; 如果所有的addNum函数都执行完毕，那么就立即分发子任务的goroutine
-			&#47;&#47; 这里分发子任务的goroutine，就是执行 coordinateWithContext 函数的goroutine.
-			if atomic.LoadInt32(&amp;num) == int32(total) {
-				&#47;&#47; &lt;-cxt.Done() 针对该函数返回的通道进行接收操作。
-				&#47;&#47; cancelFunc() 函数被调用，针对该通道的接收会马上结束。
-				&#47;&#47; 所以，这样做就可以实现“等待所有的addNum函数都执行完毕”的功能
-				cancelFunc()
-			}
-		})
-	}
-	&lt;-cxt.Done()
-	fmt.Println(&quot;end.&quot;)
+total := 12
+var num int32
+fmt.Printf(&quot;The number: %d [with context.Context]\n&quot;, num)
+cxt, cancelFunc := context.WithCancel(context.Background())
+for i := 1; i &lt;= total; i++ {
+go addNum(&amp;num, i, func() {
+&#47;&#47; 如果所有的addNum函数都执行完毕，那么就立即分发子任务的goroutine
+&#47;&#47; 这里分发子任务的goroutine，就是执行 coordinateWithContext 函数的goroutine.
+if atomic.LoadInt32(&amp;num) == int32(total) {
+&#47;&#47; &lt;-cxt.Done() 针对该函数返回的通道进行接收操作。
+&#47;&#47; cancelFunc() 函数被调用，针对该通道的接收会马上结束。
+&#47;&#47; 所以，这样做就可以实现“等待所有的addNum函数都执行完毕”的功能
+cancelFunc()
+}
+})
+}
+&lt;-cxt.Done()
+fmt.Println(&quot;end.&quot;)
 }
 
 func addNum(numP *int32, id int, deferFunc func()) {
-	defer func() {
-		deferFunc()
-	}()
-	for i := 0; ; i++ {
-		currNum := atomic.LoadInt32(numP)
-		newNum := currNum + 1
-		&#47;&#47; time.Sleep(time.Millisecond * 200)
-		if atomic.CompareAndSwapInt32(numP, currNum, newNum) {
-			fmt.Printf(&quot;The number: %d [%d-%d]\n&quot;, newNum, id, i)
-			break
-		} else {
-			fmt.Printf(&quot;The CAS option failed. [%d-%d]\n&quot;, id, i)
-		}
-	}
+defer func() {
+deferFunc()
+}()
+for i := 0; ; i++ {
+currNum := atomic.LoadInt32(numP)
+newNum := currNum + 1
+&#47;&#47; time.Sleep(time.Millisecond * 200)
+if atomic.CompareAndSwapInt32(numP, currNum, newNum) {
+fmt.Printf(&quot;The number: %d [%d-%d]\n&quot;, newNum, id, i)
+break
+} else {
+fmt.Printf(&quot;The CAS option failed. [%d-%d]\n&quot;, id, i)
+}
+}
 }
 
 运行的结果为：
@@ -296,7 +296,6 @@ The number: 10 [6-0]
 The number: 11 [5-0]
 The number: 9 [8-0]
 end.
-
 
 </p>2023-01-09</li><br/><li><span>hunterlodge</span> 👍（1） 💬（1）<p>“由于Context类型实际上是一个接口类型，而context包中实现该接口的所有私有类型，都是基于某个数据类型的指针类型，所以，如此传播并不会影响该类型值的功能和安全。”
 请问老师，这句话中的「所以」二字怎么理解呢？指针不是会导致数据共享和竞争吗？为什么反而是安全的呢？谢谢！</p>2021-05-05</li><br/><li><span>moooofly</span> 👍（1） 💬（2）<p>“它会向它的所有子值（或者说子节点）传达撤销信号。这些子值会如法炮制，把撤销信号继续传播下去。最后，这个 Context 值会断开它与其父值之间的关联。”--这里有一个问题，我能理解，当在这个上下文树上的某个 node 上触发 cancel 信号时，以该 node 为根的子上下文树会从原来的树上断开；而文中又提到“撤销信号在被传播时，若遇到它们（调用 context.WithValue 函数得到的 Context 值）则会直接跨过” ，那么，这些被“跨过”的 node ，在上面说的子上下文树断开的过程里，是一起断开了？还是仍旧会和更上层的 node 节点有关联？</p>2019-09-30</li><br/><li><span>海盗船长</span> 👍（1） 💬（1）<p>实际使用中 http.ReverseProxy经常会报 proxy error：context canceled 请问老师有哪些原因可能导致这个问题</p>2019-09-02</li><br/><li><span>闫飞</span> 👍（1） 💬（1）<p>繁衍一词的翻译有些生硬，是否能换一个好理解一些的中文词汇</p>2019-07-16</li><br/><li><span>尚恩</span> 👍（0） 💬（1）<p>老师，你的图是用什么工具画的？

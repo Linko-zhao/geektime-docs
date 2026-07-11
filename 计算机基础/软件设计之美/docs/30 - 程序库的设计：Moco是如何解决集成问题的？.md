@@ -14,15 +14,15 @@ public void should_return_expected_response() {
   // 设置服务器访问的端口
   HttpServer server = httpServer(12306);
   // 访问/foo 这个 URI 时，返回 bar
-  server.request(by(uri("/foo"))).response("bar"); 
-  
+  server.request(by(uri("/foo"))).response("bar");
+
   // 开始执行测试
   running(server, new Runnable() {
     // 这里用了 Apache HTTP库访问模拟服务器，实际上，可以使用你的真实项目
     Content content = Request.Get("http://localhost:12306/foo")
       .execute()
       .returnContent();
-      
+
     // 对结果进行断言
     assertThat(content.asString(), is("bar"));
   });
@@ -170,7 +170,7 @@ interface ResponseHandler {
 server
   .request(by(uri("/record")))
   .response(record(group("foo")));
-  
+
 server
   .request(by(uri("/replay")))
   .response(replay(group("foo")));

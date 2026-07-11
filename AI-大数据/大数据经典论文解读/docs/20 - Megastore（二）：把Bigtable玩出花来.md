@@ -32,7 +32,7 @@ CREATE TABLE Photo {
 } PRIMARY KEY(user_id, photo_id),
   IN TABLE user,
   ENTITY GROUP KEY(user_id) REFERENCES User;
-  
+
 CREATE LOCAL INDEX PhotosByTime
   ON Photo(user_id, time);
 

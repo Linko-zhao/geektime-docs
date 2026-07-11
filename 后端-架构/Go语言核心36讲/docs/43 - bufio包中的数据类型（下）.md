@@ -119,27 +119,28 @@
 <li><span>授人以🐟，不如授人以渔</span> 👍（3） 💬（1）<p>郝老师，我通过阅读这部分的源代码感受到源代码作者的用心良苦，以及对 I&#47;O 读写控制的精细。我的疑问时：对于方法返回值的用途，以及在设计 API 时，特别是方法的返回值都有哪些需要注意的地方。</p>2021-04-17</li><br/><li><span>蓬蒿</span> 👍（2） 💬（1）<p>“ ReadSlice方法会先在其缓冲区的未读部分中寻找分隔符。如果未能找到，并且缓冲区未满，那么该方法会先通过调用fill方法对缓冲区进行填充，然后再次寻找，如此往复。”  虽然通过后续内容了解了ReadSlice方法只填满一次缓冲区，但是这里上下文中的 “如此反复” 一词容易让人产生和readbyte功能一样的误解。</p>2019-12-21</li><br/><li><span>jxs1211</span> 👍（0） 💬（1）<p>请教一个读代码是遇到的疑问，collectFragments方法中fullBuffers并没有提前声明，这样也可添加buff吗吗，另外注释中说这种方式可以减少调用时的内存开销和数据拷贝，是指这里分片拷贝后一次填充到一个切片中返回，就不用外部调用者自己去组装的意思吗</p>2021-10-09</li><br/><li><span>慢动作</span> 👍（0） 💬（3）<p>这几节感觉直接看api或源码就好，没有什么印象深刻的地方</p>2021-06-14</li><br/><li><span>xyz</span> 👍（20） 💬（1）<p>慢慢追上了（不过有些内容学的比较粗略……），感觉郝林老师的这个系列，特别是后面的内容更适合作为一个了解常用库的索引存在，有在实际工作中碰到了问题再来参考会更好理解。</p>2018-11-20</li><br/><li><span>wang jl</span> 👍（16） 💬（1）<p>我就想看bufio.Scanner才买的这个教程😓结果是思考题</p>2019-10-11</li><br/><li><span>moonfox</span> 👍（6） 💬（0）<p>可以把 io.Reader 或 strings.NewReader 想像成一个实际的存在于硬盘之上的文件IO对象，你要对这个文件进行读写操作，感觉这样比较生动具体，可以更好的理解bufio包的功能用途，bufio包可以有效的降低系统IO的读写次数，从而提高了程序的性能。 XD</p>2021-06-08</li><br/><li><span>趣学车</span> 👍（6） 💬（0）<p>bufio.Scanner 通过一个分隔函数，循环读取底层读取器中的内容，每次读取一段，使用Scanner.Scan() 读取， 通过Scanner.Text() 或 Scanner.Bytes() 获取读到的内容</p>2020-11-20</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（3） 💬（0）<p>「bufio.Reader类型的 Peek 方法有一个鲜明的特点，那就是：即使它读取了缓冲区中的数据，也不会更改已读计数的值。」这里需要说明的是 Peek 方法可能会修改 b.r 和 b.w 的值，但是对于 Peek 方法来说，其含义是并非是一种“真实”的读取，意味着接下来再用 ReadByte 还能读取到相同的数据。比如用下面的示例程序可以验证：
 
 func main() {
-	buf := bytes.NewBufferString(&quot;abcd&quot;)
-	reader := bufio.NewReader(buf)
+buf := bytes.NewBufferString(&quot;abcd&quot;)
+reader := bufio.NewReader(buf)
 
-	slice, err := reader.Peek(4)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf(&quot;%v.\n&quot;, slice)
+    slice, err := reader.Peek(4)
+    if err != nil {
+    	log.Fatal(err)
+    }
+    fmt.Printf(&quot;%v.\n&quot;, slice)
 
-	value, err := reader.ReadByte()
-	fmt.Printf(&quot;%v.\n&quot;, value)
+    value, err := reader.ReadByte()
+    fmt.Printf(&quot;%v.\n&quot;, value)
+
 }</p>2021-04-17</li><br/><li><span>乖，摸摸头</span> 👍（3） 💬（0）<p>好吧，看了源码， writer2.ReadFrom 只有缓冲区为0才会跨过缓冲区</p>2020-03-11</li><br/><li><span>张剑</span> 👍（3） 💬（0）<p>先学一遍 有个整体的分类和粗略了解 以后有用到还可回来找到</p>2019-08-19</li><br/><li><span>lesserror</span> 👍（0） 💬（0）<p>大家一定要看看老师写的示例代码，写的非常用心了。</p>2021-08-29</li><br/><li><span>乖，摸摸头</span> 👍（0） 💬（0）<p>basicWriter3 := &amp;strings.Builder{}
 reader2 := strings.NewReader(&quot;1234456789&quot;)
 writer2 := bufio.NewWriterSize(basicWriter3,3)
 writer2.WriteString(&quot;abcd&quot;)
 &#47;&#47;此时缓冲区中还有数据 d, basicWriter3的数据为 ”abc“
 writer2.ReadFrom(reader2) &#47;&#47;这一步不经过缓冲区
-&#47;&#47;basicWriter3.String()  数据理论上就应该是 abc123456789
+&#47;&#47;basicWriter3.String() 数据理论上就应该是 abc123456789
 &#47;&#47;实际我打印出来的数据为 abcd1234567
 writer2.Flush()
-&#47;&#47;应该是  abc123456789d 才对，但是实际打印出来并不是这样的
+&#47;&#47;应该是 abc123456789d 才对，但是实际打印出来并不是这样的
 
 </p>2020-03-11</li><br/><li><span>John</span> 👍（0） 💬（0）<p>打卡</p>2019-09-15</li><br/><li><span>jimmy</span> 👍（0） 💬（0）<p>坚持，加油</p>2019-08-05</li><br/>
 </ul>

@@ -73,7 +73,7 @@ public class HelloWorldClient {
         this.channel = channel;
         blockingStub = HelloServiceGrpc.newBlockingStub(channel);
     }
-    
+
     /**
     * 调用完手动关闭
     **/
@@ -81,7 +81,7 @@ public class HelloWorldClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
- 
+
     /**
     * 发送rpc请求
     **/
@@ -216,7 +216,7 @@ public class HelloWorldServer {
     server.start();
     server.blockUntilShutdown();
   }
-  
+
 }
 ```
 

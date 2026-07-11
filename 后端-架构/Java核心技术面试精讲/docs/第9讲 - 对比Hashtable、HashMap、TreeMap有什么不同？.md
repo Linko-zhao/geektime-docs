@@ -57,7 +57,7 @@ HashMap等其他Map实现则是都扩展了AbstractMap，里面包含了通用�
 
 ```
 import java.util.LinkedHashMap;
-import java.util.Map;  
+import java.util.Map;
 public class LinkedHashMapSample {
     public static void main(String[] args) {
         LinkedHashMap<String, String> accessOrderedMap = new LinkedHashMap<String, String>(16, 0.75F, true){
@@ -130,8 +130,8 @@ public V put(K key, V value) {
 从非拷贝构造函数的实现来看，这个表格（数组）似乎并没有在最初就初始化好，仅仅设置了一些初始值而已。
 
 ```
-public HashMap(int initialCapacity, float loadFactor){  
-    // ... 
+public HashMap(int initialCapacity, float loadFactor){
+    // ...
     this.loadFactor = loadFactor;
     this.threshold = tableSizeFor(initialCapacity);
 }
@@ -158,9 +158,9 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbent,
         tab[i] = newNode(hash, key, value, nll);
     else {
         // ...
-        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for first 
+        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for first
            treeifyBin(tab, hash);
-        //  ... 
+        //  ...
      }
 }
 
@@ -204,10 +204,10 @@ final Node<K,V>[] resize() {
     else if ((newCap = oldCap << 1) < MAXIMUM_CAPACIY &&
                 oldCap >= DEFAULT_INITIAL_CAPAITY)
         newThr = oldThr << 1; // double there
-       // ... 
+       // ...
     else if (oldThr > 0) // initial capacity was placed in threshold
         newCap = oldThr;
-    else {  
+    else {
         // zero initial threshold signifies using defaultsfults
         newCap = DEFAULT_INITIAL_CAPAITY;
         newThr = (int)(DEFAULT_LOAD_ATOR* DEFAULT_INITIAL_CAPACITY；
@@ -219,7 +219,7 @@ final Node<K,V>[] resize() {
     threshold = neThr;
     Node<K,V>[] newTab = (Node<K,V>[])new Node[newap];
     table = n；
-    // 移动到新的数组结构e数组结构 
+    // 移动到新的数组结构e数组结构
    }
 
 ```
@@ -307,11 +307,11 @@ Hi=RH1（key）  i=1，2，…，k
 建立公共溢出区
 这种方法的基本思想是：将哈希表分为基本表和溢出表两部分，凡是和基本表发生冲突的元素，一律填入溢出表。</p>2018-05-24</li><br/><li><span>Jerry银银</span> 👍（74） 💬（6）<p>为什么HashMap要树化？
 
-文章说『本质是个安全问题』，但是导致安全问题的本质其实是性能问题。哈希碰撞频繁，导致链表过长，查询时间陡升，黑客则会利用这个『漏洞』来攻击服务器，让服务器CPU被大量占用，从而引起了安全问题。 而树化(使用红黑树）能将时间复杂度降到O(logn)，从而避免查询时间过长。所以说，本质还是个性能问题。    
+文章说『本质是个安全问题』，但是导致安全问题的本质其实是性能问题。哈希碰撞频繁，导致链表过长，查询时间陡升，黑客则会利用这个『漏洞』来攻击服务器，让服务器CPU被大量占用，从而引起了安全问题。 而树化(使用红黑树）能将时间复杂度降到O(logn)，从而避免查询时间过长。所以说，本质还是个性能问题。
 
-----------
+---
+
 个人理解哈
-
 
 </p>2018-11-27</li><br/><li><span>鲤鱼</span> 👍（26） 💬（2）<p>读到最后链表树化刚准备开始飙车，结果突然跳车。树化讲细点更好</p>2018-05-29</li><br/><li><span>xinfangke</span> 👍（13） 💬（1）<p>老师 如果hashmap中不存在hash冲突 是不是就相当于一个数组结构呢 就不存在链表了呢</p>2018-05-29</li><br/><li><span>kevin</span> 👍（12） 💬（2）<p>看不太懂，讲的还不是不太浅显，既然是面试题，最好不要太浅，但也不要太深，你这个度掌握的不是很好</p>2018-09-27</li><br/><li><span>代码狂徒</span> 👍（7） 💬（1）<p>针对负载因子，您所指的存太满会影响性能是指什么？毕竟已经开辟了相应内存空间的，没什么不用呢？</p>2018-05-24</li><br/><li><span>沈琦斌</span> 👍（5） 💬（1）<p>老师，感觉最后讲为什么要树化的时候结尾有点突然。既然您说了树化本质上是个安全问题，那么树化以后怎么就解决安全问题了呢，这个我没有理解，谢谢。</p>2018-06-27</li><br/><li><span>鲲鹏飞九万里</span> 👍（4） 💬（1）<p>这个内容延展的好多，这要补多少天的功课，才能搞定😂</p>2018-06-02</li><br/><li><span>代码狂徒</span> 👍（3） 💬（1）<p>为什么不是一开始就树化，而是要等到一定程度再树化，链表一开始就是消耗查找性能啊？另外其实不太明白为什么是0.75的负载因子，如果是.08或者0.9会有什么影响吗？毕竟已经开辟了相关内存空间</p>2018-05-24</li><br/><li><span>Meteor</span> 👍（2） 💬（1）<p>hashCode() 和equals()两个方法之间什么关系</p>2018-08-24</li><br/><li><span>Yonei</span> 👍（2） 💬（1）<p>我感觉树化一个目的是防止hash冲突导致的resize时的死循环，还有就是减少查找遍历路径，毕竟树的查找不用遍历全部，特别像是平衡二叉树的遍历。</p>2018-07-05</li><br/><li><span>影随</span> 👍（2） 💬（1）<p>LinkedHashMapSample 那个示例，为什么
 

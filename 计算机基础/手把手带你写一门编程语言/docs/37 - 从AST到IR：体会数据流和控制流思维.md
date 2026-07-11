@@ -102,10 +102,10 @@ export abstract class DataNode extends IRNode{
     abstract get inputs():DataNode[];
 
     //使用该节点的节点，形成use-def链,自动维护
-    uses:DataNode[] = []; 
+    uses:DataNode[] = [];
 
     //数据类型
-    theType:Type;   
+    theType:Type;
 }
 ```
 
@@ -142,7 +142,7 @@ export abstract class ControlNode extends IRNode{
      abstract get successors():IRNode[];
 
      //前序节点列表,自动维护
-     predecessors:IRNode[] = []; 
+     predecessors:IRNode[] = [];
 }
 ```
 
@@ -156,7 +156,7 @@ export class IfNode extends ControlNode{
     thenBranch:Begin;
     elseBranch:Begin;
     condition:DataNode;  //If条件
-    
+
     constructor(condition:DataNode, thenBranch:Begin, elseBranch:End){
         super();
         this.condition = condition;

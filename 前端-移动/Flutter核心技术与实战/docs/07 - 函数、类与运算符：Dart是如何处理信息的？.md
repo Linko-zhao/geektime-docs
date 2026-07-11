@@ -21,7 +21,7 @@
 
 ```
 bool isZero(int number) { //判断整数是否为0
-  return number == 0; 
+  return number == 0;
 }
 
 void printInfo(int number,Function check) { //用check函数来判断整数是否为0
@@ -161,7 +161,7 @@ class Coordinate implements Point {
   void printInfo() => print('($x,$y)'); //成员函数需要重新声明实现
 }
 
-var xxx = Vector(); 
+var xxx = Vector();
 xxx
   ..x = 1
   ..y = 2

@@ -86,15 +86,15 @@ public class FixedThreadPool implements ThreadPool {
         String name = url.getParameter("threadname", (String) url.getAttribute("threadname", "Dubbo"));
         int threads = url.getParameter("threads", 200);
         int queues = url.getParameter("queues", 0);
-        
+
         // 调用创建线程池的构造方法
         return new ThreadPoolExecutor(
               // 核心线程数量：threads
-              threads, 
+              threads,
               // 最大线程数量：threads
-              threads, 
+              threads,
               // 非核心线程空闲时的存活时间等于0
-              0, 
+              0,
               // 非核心线程空闲时的存活时间等于0，单位：毫秒
               TimeUnit.MILLISECONDS,
               // 存放任务的阻塞队列
@@ -102,7 +102,7 @@ public class FixedThreadPool implements ThreadPool {
                               (queues < 0 ? new LinkedBlockingQueue<Runnable>()
                                       : new LinkedBlockingQueue<Runnable>(queues)),
               // 创建线程的工厂
-              new NamedInternalThreadFactory(name, true), 
+              new NamedInternalThreadFactory(name, true),
               // 带有导出线程堆栈的拒绝策略，内部继承了 AbortPolicy 抛异常策略
               new AbortPolicyWithReport(name, url)
         );
@@ -142,15 +142,15 @@ public class LimitedThreadPool implements ThreadPool {
         int cores = url.getParameter("corethreads", 0);
         int threads = url.getParameter("threads", 200);
         int queues = url.getParameter("queues", 0);
-        
+
         // 调用创建线程池的构造方法
         return new ThreadPoolExecutor(
               // 核心线程数量：cores
-              cores, 
+              cores,
               // 最大线程数量：threads
-              threads, 
+              threads,
               // 非核心线程空闲时的永久存活
-              Long.MAX_VALUE, 
+              Long.MAX_VALUE,
               // 非核心线程空闲时的存活时间，单位：毫秒
               TimeUnit.MILLISECONDS,
               // 存放任务的阻塞队列
@@ -158,7 +158,7 @@ public class LimitedThreadPool implements ThreadPool {
                               (queues < 0 ? new LinkedBlockingQueue<Runnable>()
                                       : new LinkedBlockingQueue<Runnable>(queues)),
               // 创建线程的工厂
-              new NamedInternalThreadFactory(name, true), 
+              new NamedInternalThreadFactory(name, true),
               // 带有导出线程堆栈的拒绝策略，内部继承了 AbortPolicy 抛异常策略
               new AbortPolicyWithReport(name, url)
         );
@@ -196,15 +196,15 @@ public class CachedThreadPool implements ThreadPool {
         int threads = url.getParameter("threads", Integer.MAX_VALUE);
         int queues = url.getParameter("queues", 0);
         int alive = url.getParameter("alive", 60 * 1000);
-        
+
         // 调用创建线程池的构造方法
         return new ThreadPoolExecutor(
               // 核心线程数量：cores
-              cores, 
+              cores,
               // 最大线程数量：threads
-              threads, 
+              threads,
               // 非核心线程空闲时的存活时间
-              alive, 
+              alive,
               // 非核心线程空闲时的存活时间，单位：毫秒
               TimeUnit.MILLISECONDS,
               // 存放任务的阻塞队列
@@ -212,7 +212,7 @@ public class CachedThreadPool implements ThreadPool {
                               (queues < 0 ? new LinkedBlockingQueue<Runnable>()
                                       : new LinkedBlockingQueue<Runnable>(queues)),
               // 创建线程的工厂
-              new NamedInternalThreadFactory(name, true), 
+              new NamedInternalThreadFactory(name, true),
               // 带有导出线程堆栈的拒绝策略，内部继承了 AbortPolicy 抛异常策略
               new AbortPolicyWithReport(name, url)
         );
@@ -274,14 +274,14 @@ public class EagerThreadPool implements ThreadPool {
 ///////////////////////////////////////////////////
 // org.apache.dubbo.common.threadpool.support.eager.TaskQueue#offer
 // 尝试添加任务至队列
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 @Override
 public boolean offer(Runnable runnable) {
     // 参数必要性检查，若线程池对象为 null 则抛出异常
     if (executor == null) {
         throw new RejectedExecutionException("The task queue does not have executor!");
     }
-    
+
     // 获取线程池中工作线程 worker 的数量
     int currentPoolThreadSize = executor.getPoolSize();
     // have free worker. put task into queue to let the worker deal with task.
@@ -291,7 +291,7 @@ public boolean offer(Runnable runnable) {
     if (executor.getActiveCount() < currentPoolThreadSize) {
         return super.offer(runnable);
     }
-    
+
     // return false to let executor create new worker.
     // 还能来到这里，说明目前所有的 worker 都在处于工作状态
     // 那么继续看 worker 的数量和最大线程数量想比，若偏小的话
@@ -300,7 +300,7 @@ public boolean offer(Runnable runnable) {
     if (currentPoolThreadSize < executor.getMaximumPoolSize()) {
         return false;
     }
-    
+
     // currentPoolThreadSize >= max
     // 还能来到这里，说明已经达到了最大线程数量了，
     // 那该放队列就放队列，队列放不下的的话，又没有非核心线程了，那就走拒绝策略了
@@ -315,13 +315,13 @@ public boolean offer(Runnable runnable) {
 // 原理：在 workQueue.offer(command) 返回 false 后继续走下面的
 //      else if (!addWorker(command, false)) 尝试添加 worker 工作线程，
 //      添加成功了，那就执行任务，添加不成功了，说明已达到了最大线程数量，走拒绝策略
-///////////////////////////////////////////////////  
+///////////////////////////////////////////////////
 public void execute(Runnable command) {
     // 若任务 command 对象为 null 的话，是不合法的，直接抛出 NPE 异常
     if (command == null)
         throw new NullPointerException();
     int c = ctl.get();
-    
+
     // 若工作线程的数量小于核心线程的数量的话
     if (workerCountOf(c) < corePoolSize) {
         // 则添加核心线程，addWorker(command, true) 中的 true 表示创建核心线程
@@ -330,7 +330,7 @@ public void execute(Runnable command) {
             return;
         c = ctl.get();
     }
-    
+
     // 若还能来到这里，说明工作线程数量已经达到了核心线程的数量了
     // 再来的任务就只能尝试添加至任务阻塞队列了
     // 调用队列的 offer 方法尝试看看能否添加至任务队列
@@ -343,7 +343,7 @@ public void execute(Runnable command) {
         else if (workerCountOf(recheck) == 0)
             addWorker(null, false);
     }
-    
+
     // 还能来到这里，说明线程池处于运行状态，但是尝试添加至队列 offer 失败了
     // 那么就再次尝试调用 addWorker(command, false) 来创建非核心线程来执行任务
     // 尝试添加失败的话，再走拒绝策略
@@ -386,7 +386,7 @@ ThreadPool threadPool = ExtensionLoader
           .getExtensionLoader(ThreadPool.class)
           // 然后获取指定扩展点名称的实现类，这里指定了拿默认的固定数量的线程池
           .getExtension("fixed");
-          
+
 // 然后调用实现类的 getExecutor 方法拿到对应的线程池对象
 Executor fixedExecutor = threadPool.getExecutor(...)
 ```
@@ -415,10 +415,10 @@ Executor fixedExecutor = threadPool.getExecutor(...)
 public class MonitorFixedThreadPool extends FixedThreadPool implements Runnable {
 
     private static final Set<ThreadPoolExecutor> EXECUTOR_SET = new HashSet<>();
-    
+
     /** <h2>高水位线阈值</h2> **/
     private static final double HIGH_WATER_MARK = 0.85;
-    
+
     // 默认的构造方法，借用该构造方法创建一个带有轮询机制的单线程池
     public MonitorFixedThreadPool() {
         Executors.newSingleThreadScheduledExecutor()
@@ -433,47 +433,47 @@ public class MonitorFixedThreadPool extends FixedThreadPool implements Runnable 
                         TimeUnit.SECONDS
                 );
     }
-    
+
     // 重写了父类的 FixedThreadPool 的 getExecutor 方法
     // 然后择机将返回值 executor 存储起来了
     @Override
     public Executor getExecutor(URL url) {
         // 通过 super 直接调用父类的方法，拿到结果
         Executor executor = super.getExecutor(url);
-        
+
         // 针对结果进行缓存处理
         if (executor instanceof ThreadPoolExecutor) {
             EXECUTOR_SET.add((ThreadPoolExecutor) executor);
         }
         return executor;
     }
-    
+
     @Override
     public void run() {
-        // 每隔 30 秒，这个 run 方法被触发执行一次    
+        // 每隔 30 秒，这个 run 方法被触发执行一次
         for (ThreadPoolExecutor executor : EXECUTOR_SET) {
-            // 循环检测每隔线程池是否超越高水位线        
+            // 循环检测每隔线程池是否超越高水位线
             doCheck(executor);
         }
-    }    
-    
+    }
+
     // 检测方法
     private void doCheck(ThreadPoolExecutor executor) {
         final int activeCount = executor.getActiveCount();
         int maximumPoolSize = executor.getMaximumPoolSize();
         double percent = activeCount / (maximumPoolSize * 1.0);
-        
+
         // 判断计算出来的值，是否大于高水位线
         if (percent > HIGH_WATER_MARK) {
             log.info("溢出高水位线：activeCount={}, maximumPoolSize={}, percent={}",
                     activeCount, maximumPoolSize, percent);
-                    
+
             // 记录打点，将该信息同步值 Cat 监控平台
             CatUtils.logEvent("线程池溢出高水位线",
                     executor.getClass().getName(),
                     "1", buildCatLogDetails(executor));
         }
-    }    
+    }
 }
 
 ///////////////////////////////////////////////////
@@ -535,7 +535,7 @@ public ProtocolConfig protocolConfig(){
 大体上逻辑也比较简单，看实现后的代码。
 
 ```java
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // 名称：路由编码集群扩展实现类
 // 功能：类比于 FailoverCluster 故障自动转移集群扩展器
 ///////////////////////////////////////////////////
@@ -547,7 +547,7 @@ public class RouteNoCluster extends AbstractCluster {
     }
 }
 
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // 名称：路由编码集群扩展实现类的 invoker 核心处理对象
 // 功能：将 invokers 按照 routeNo 进行分组得到一个 map，再从 map 中取出对应集合即可
 ///////////////////////////////////////////////////
@@ -573,14 +573,14 @@ public class RouteNoClusterInvoker<T> extends FailoverClusterInvoker<T> {
 // 消费方资源目录文件
 // 路径为：/META-INF/dubbo/org.apache.dubbo.rpc.cluster.Cluster
 ///////////////////////////////////////////////////
-routeNo=com.hmilyylimh.cloud.registry.cluster.RouteNoCluster 
+routeNo=com.hmilyylimh.cloud.registry.cluster.RouteNoCluster
 
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // dubbo.properties，直接指定 dubbo.provider.cluster 的值
 ///////////////////////////////////////////////////
 dubbo.provider.cluster=routeNo
 
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // 名称：路由编码容器过滤器
 // 功能：接收到前端请求后，将前端指定的路由编码设置到本地线程中，以方便后续逻辑使用
 ///////////////////////////////////////////////////
@@ -598,7 +598,7 @@ public class RouteNoContainerFilter implements Filter {
     }
 }
 
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // 名称：路由编码消费方过滤器
 // 功能：将本地线程的路由编码值取出来，然后发给提供方，这样提供方将来收到请求后继续路由选择具体的 invoker 对象进行调用
 ///////////////////////////////////////////////////
@@ -609,13 +609,13 @@ public class RouteNoConsumerFilter implements Filter, Filter.Listener {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         // 从本地线程对象中取出跟路由编码值
         String routeNo = RouteNoThreadLocalUtils.get();
-        
+
         // 然后将路由编码值设置到请求对象中
         invocation.getObjectAttachments().put("routeNo", routeNo);
         RpcContext.getClientAttachment().setObjectAttachment("routeNo", routeNo);
-        
+
         // 继续后面过滤器的调用
-        return invoker.invoke(invocation);    
+        return invoker.invoke(invocation);
     }
 }
 ```

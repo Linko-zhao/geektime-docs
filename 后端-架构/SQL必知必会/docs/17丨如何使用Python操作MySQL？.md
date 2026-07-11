@@ -40,10 +40,10 @@ db = mysql.connector.connect(
        host="localhost",
        user="root",
        passwd="XXX", # 写上你的数据库密码
-       database='wucai', 
+       database='wucai',
        auth_plugin='mysql_native_password'
 )
-# 获取操作游标 
+# 获取操作游标
 cursor = db.cursor()
 # 执行SQL语句
 cursor.execute("SELECT VERSION()")
@@ -58,7 +58,7 @@ db.close()
 运行结果：
 
 ```
-MySQL版本: 8.0.13 
+MySQL版本: 8.0.13
 ```
 
 上面这段代码中有两个重要的对象你需要了解下，分别是Connection和Cursor。
@@ -177,7 +177,7 @@ try:
 except Exception as e:
   # 打印异常信息
   traceback.print_exc()
-  # 回滚  
+  # 回滚
   db.rollback()
 finally:
   # 关闭数据库连接
@@ -208,34 +208,38 @@ import traceback
 import mysql.connector
 
 # 读取数据库链接配置文件
+
 with open(&#39;mysql.json&#39;, encoding=&#39;utf-8&#39;) as con_json:
-    con_dict = json.load(con_json)
+con_dict = json.load(con_json)
 
 # 打开数据库链接
+
 db = mysql.connector.connect(
-    host=con_dict[&#39;host&#39;],
-    user=con_dict[&#39;user&#39;],
-    passwd=con_dict[&#39;passwd&#39;],
-    database=con_dict[&#39;database&#39;],
-    auth_plugin=con_dict[&#39;auth_plugin&#39;],
+host=con_dict[&#39;host&#39;],
+user=con_dict[&#39;user&#39;],
+passwd=con_dict[&#39;passwd&#39;],
+database=con_dict[&#39;database&#39;],
+auth_plugin=con_dict[&#39;auth_plugin&#39;],
 )
 
 # 获取操作游标
+
 cursor = db.cursor()
 try:
-    sql = &#39;SELECT id, name, hp_max FROM heros WHERE hp_max&gt;6000&#39;
-    cursor.execute(sql)
-    data = cursor.fetchall()
-    print(cursor.rowcount, &#39;查询成功。&#39;)
-    for each_hero in data:
-        print(each_hero)
-except Exception as e:
-    # 打印异常信息
-    traceback.print_exc()
+sql = &#39;SELECT id, name, hp_max FROM heros WHERE hp_max&gt;6000&#39;
+cursor.execute(sql)
+data = cursor.fetchall()
+print(cursor.rowcount, &#39;查询成功。&#39;)
+for each_hero in data:
+print(each_hero)
+except Exception as e: # 打印异常信息
+traceback.print_exc()
 finally:
-    cursor.close()
-    db.close()
+cursor.close()
+db.close()
+
 # 建议吧数据库链接信息写到配置文件里，防止密码泄露。</p>2019-07-19</li><br/><li><span>一叶知秋</span> 👍（9） 💬（1）<p>sqlalchemy用习惯了。。。献丑来一段Python代码吧
+
 ```Python
 # -*- coding:utf-8 -*-
 from sqlalchemy import and_
@@ -283,6 +287,7 @@ if __name__ == &#39;__main__&#39;:
         print(&quot;id:{}, name:{}, hp_max:{}, mp_max:{}&quot;.format(hero_info.id, hero_info.name,
                                                             hero_info.hp_max, hero_info.mp_max))
 ```
+
 id:10000, name:夏侯惇, hp_max:7350.0, mp_max:1746.0
 id:10046, name:钟馗, hp_max:6280.0, mp_max:1988.0
 id:10048, name:鬼谷子, hp_max:7107.0, mp_max:1808.0
@@ -293,20 +298,22 @@ id:10056, name:达摩, hp_max:7140.0, mp_max:1694.0
 id:10057, name:孙悟空, hp_max:6585.0, mp_max:1760.0
 id:10058, name:刘备, hp_max:6900.0, mp_max:1742.0
 .....执行结果有点多字数限制了
-Process finished with exit code 0</p>2019-07-19</li><br/><li><span>mickey</span> 👍（6） 💬（1）<p># -*- coding: UTF-8 -*-
+Process finished with exit code 0</p>2019-07-19</li><br/><li><span>mickey</span> 👍（6） 💬（1）<p># -_- coding: UTF-8 -_-
 import mysql.connector
 import traceback
 
 # 打开数据库连接
+
 db = mysql.connector.connect(
-    host=&quot;localhost&quot;,
-    user=&quot;root&quot;,
-    passwd=&quot;123456&quot;,  # 写上你的数据库密码
-    database=&#39;nba&#39;,
-    auth_plugin=&#39;mysql_native_password&#39;
+host=&quot;localhost&quot;,
+user=&quot;root&quot;,
+passwd=&quot;123456&quot;, # 写上你的数据库密码
+database=&#39;nba&#39;,
+auth_plugin=&#39;mysql_native_password&#39;
 )
 
 # 获取操作游标
+
 cursor = db.cursor()
 
 try:
@@ -318,15 +325,22 @@ try:
     data = cursor.fetchall()
     for each_player in data:
         print(each_player)
+
 except Exception as e:
-  # 打印异常信息
-  traceback.print_exc()
-  # 回滚
-  db.rollback()
+
+# 打印异常信息
+
+traceback.print_exc()
+
+# 回滚
+
+db.rollback()
 finally:
-  # 关闭游标 &amp; 数据库连接
-  cursor.close()
-  db.close()
+
+# 关闭游标 &amp; 数据库连接
+
+cursor.close()
+db.close()
 
 输出：
 
@@ -383,53 +397,61 @@ data = cursor.fetchall()
 注意：val里面的元素后面必须要加英文逗号，不加或者中文逗号都会报错</p>2019-07-23</li><br/><li><span>victor666</span> 👍（2） 💬（1）<p>Python直接写SQL比Java方便多了</p>2020-03-22</li><br/><li><span>丁丁历险记</span> 👍（2） 💬（3）<p>当一些听着很虚的理论用于实战时，其威力是巨大的，例如信息的正交性。</p>2019-11-15</li><br/><li><span>taoist</span> 👍（1） 💬（1）<p>import pymysql
 import pymysql.cursors
 
-
 cfg = {
-    &quot;host&quot;: &quot;127.0.0.1&quot;,
-    &quot;user&quot;: &quot;root&quot;,
-    &quot;passwd&quot;: &quot;toor&quot;,
-    &quot;database&quot;: &quot;test&quot;,
-    &quot;charset&quot;: &quot;utf8mb4&quot;,
-    &quot;autocommit&quot;: True,
-    &#39;cursorclass&#39;:pymysql.cursors.DictCursor
+&quot;host&quot;: &quot;127.0.0.1&quot;,
+&quot;user&quot;: &quot;root&quot;,
+&quot;passwd&quot;: &quot;toor&quot;,
+&quot;database&quot;: &quot;test&quot;,
+&quot;charset&quot;: &quot;utf8mb4&quot;,
+&quot;autocommit&quot;: True,
+&#39;cursorclass&#39;:pymysql.cursors.DictCursor
 }
 
 db_con = pymysql.connect(**cfg)
 
 try:
-    with db_con.cursor() as cur:
-        cur.execute(&quot;SELECT id,name,hp_max FROM heros WHERE hp_max &gt; 6000 &quot;)
-        res = cur.fetchall()
+with db_con.cursor() as cur:
+cur.execute(&quot;SELECT id,name,hp_max FROM heros WHERE hp_max &gt; 6000 &quot;)
+res = cur.fetchall()
 
     for i in res:
         print(i)
+
 finally:
-    db_con.close()
+db_con.close()
 
 </p>2019-12-19</li><br/><li><span>胡</span> 👍（0） 💬（1）<p>__author__ = &#39;Administrator&#39;
 
-# -*- coding: UTF-8 -*-
+# -_- coding: UTF-8 -_-
+
 import traceback
 import json
 import mysql.connector
+
 # 打开数据库连接
+
 db = mysql.connector.connect(
-       host=&quot;localhost&quot;,
-       user=&quot;root&quot;,
-       passwd=&quot;hjf@2019&quot;, # 写上你的数据库密码
-       database=&#39;nba&#39;,
-       auth_plugin=&#39;mysql_native_password&#39;
+host=&quot;localhost&quot;,
+user=&quot;root&quot;,
+passwd=&quot;hjf@2019&quot;, # 写上你的数据库密码
+database=&#39;nba&#39;,
+auth_plugin=&#39;mysql_native_password&#39;
 )
+
 # 获取操作游标
+
 cursor = db.cursor()
+
 # 执行 SQL 语句
+
 #cursor.execute(&quot;SELECT VERSION()&quot;)
+
 # 获取一条数据
+
 #data = cursor.fetchone()
 #print(&quot;MySQL 版本: %s &quot; % data)
+
 # 关闭游标 &amp; 数据库连接
-
-
 
 # 插入新球员
 
@@ -441,26 +463,30 @@ print(cursor.rowcount, &quot; 记录插入成功。&quot;)
 
 cursor.close()
 db.close()</p>2019-08-21</li><br/><li><span>胡</span> 👍（0） 💬（1）<p>老师在插入数据的时候，漏掉了 player_id ?</p>2019-08-21</li><br/><li><span>发条</span> 👍（0） 💬（1）<p>使用8.0以上版本mysql的同学，在连接数据库的时候可能会受到quth_plugin不支持mysql_native_password的报错，
-可以用ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;root&#39;;语句把auth_plugin改掉</p>2019-07-26</li><br/><li><span>cricket1981</span> 👍（0） 💬（1）<p># -*- coding: UTF-8 -*-
+可以用ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;root&#39;;语句把auth_plugin改掉</p>2019-07-26</li><br/><li><span>cricket1981</span> 👍（0） 💬（1）<p># -_- coding: UTF-8 -_-
 
 import mysql.connector
+
 # 打开数据库连接
+
 db = mysql.connector.connect(
-       host=&quot;localhost&quot;,
-       user=&quot;root&quot;,
-       passwd=&quot;root&quot;, # 写上你的数据库密码
-       database=&#39;test&#39;, 
-       auth_plugin=&#39;mysql_native_password&#39;
+host=&quot;localhost&quot;,
+user=&quot;root&quot;,
+passwd=&quot;root&quot;, # 写上你的数据库密码
+database=&#39;test&#39;,
+auth_plugin=&#39;mysql_native_password&#39;
 )
-# 获取操作游标 
+
+# 获取操作游标
+
 cursor = db.cursor()
 sql = &#39;SELECT * FROM heros WHERE hp_max&gt;=6000&#39;
 cursor.execute(sql)
 data = cursor.fetchall()
 for each_hero in data:
-  print(each_hero)
+print(each_hero)
 cursor.close()
-db.close()</p>2019-07-22</li><br/><li><span>cricket1981</span> 👍（0） 💬（1）<p>python print语句出来的中文是乱码要怎么处理？python程序第一行加过 # -*- coding: UTF-8 -*-
+db.close()</p>2019-07-22</li><br/><li><span>cricket1981</span> 👍（0） 💬（1）<p>python print语句出来的中文是乱码要怎么处理？python程序第一行加过 # -_- coding: UTF-8 -_-
 (10003, u&#39;\u5b89\u5fb7\u70c8-\u5fb7\u62c9\u8499\u5fb7&#39;, 2.11)</p>2019-07-22</li><br/><li><span>华夏</span> 👍（0） 💬（1）<p>pip install mysql-connector之后连接数据库会报错，更新到最新版还是一样报错，pip install mysql-connector-python之后可以正常运行。大家如果有遇到这个问题的可以参考@林彦-广州-数据分析师 这个办法。</p>2019-07-20</li><br/><li><span>lmingzhi</span> 👍（0） 💬（1）<p>老师，你好，我一般使用SQLAlchemy连接数据库:
 from sqlalchemy import create_engine
 db = create_engine(&#39;mysql:&#47;&#47;root@localhost&#47;test_database&#39;)

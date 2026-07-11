@@ -19,8 +19,8 @@ CREATE TABLE `digit` (
 
 insert into digit values (0),(1),(2),(3),(4),(5),(6),(7),(8),(9);
 
-CREATE VIEW numbers AS 
-select a.a*1000 + b.a*100 + c.a*10 + d.a as n 
+CREATE VIEW numbers AS
+select a.a*1000 + b.a*100 + c.a*10 + d.a as n
 from digit a, digit b, digit c, digit d;
 
 -- 本章中大部分案例都使用tab表
@@ -34,13 +34,13 @@ CREATE TABLE `tab` (
   KEY `idx_abc` (`a`,`b`,`c`)
 ) ENGINE=InnoDB;
 
-insert into tab (a,b,c,padding) 
-select n%3, n, n%100, rpad('x', 100, 'x')  
+insert into tab (a,b,c,padding)
+select n%3, n, n%100, rpad('x', 100, 'x')
 from numbers where n < 10000;
 
 -- t_merge主要用于演示index_merge的几种情况
 create table t_merge(
-    id int not null auto_increment, 
+    id int not null auto_increment,
     a int not null,
     b int not null,
     c int not null,
@@ -82,11 +82,11 @@ FORMAT指定为TREE时，以树的形式显示执行计划，这种显示格式�
 下面这个测试SQL中，使用了NO\_SEMIJOIN提示，阻止优化器将子查询改写成表连接。你可以试一下，将提示去掉后，会使用怎样的执行计划。
 
 ```plain
-explain format=tree 
-select  /*+ NO_SEMIJOIN(@subq1)  */ * 
-from tab a 
-where id in ( 
-    select /*+ QB_NAME(subq1) */ id from tab b 
+explain format=tree
+select  /*+ NO_SEMIJOIN(@subq1)  */ *
+from tab a
+where id in (
+    select /*+ QB_NAME(subq1) */ id from tab b
 )
 ```
 
@@ -101,11 +101,11 @@ EXPLAIN: -> Filter: <in_optimizer>(a.id,<exists>(select #2))  (cost=1031.55 row
 FORMAT指定为JSON时，以JSON格式显示执行计划。JSON格式的执行计划中，可以看到一些成本的信息。
 
 ```plain
-explain format=json 
-select  /*+ NO_SEMIJOIN(@subq1)  */ * 
-from tab a 
-where id in ( 
-    select /*+ QB_NAME(subq1) */ id from tab b 
+explain format=json
+select  /*+ NO_SEMIJOIN(@subq1)  */ *
+from tab a
+where id in (
+    select /*+ QB_NAME(subq1) */ id from tab b
 )
 
 {
@@ -197,11 +197,11 @@ EXPLAIN的输出中包含以下字段：
 ID为查询单元的编号。主查询（顶层查询）的ID为1。同一层级内，如果有表连接，则它们的查询单元ID一样。子查询的嵌套层级越深，ID越大。下面的例子中，有2个子查询，子查询2嵌套在子查询1中。
 
 ```plain
-mysql> explain 
-select  /*+ NO_SEMIJOIN(@subq1 )  */ * 
+mysql> explain
+select  /*+ NO_SEMIJOIN(@subq1 )  */ *
 from tab ta, tab tx
-where ta.id in ( 
-    select /*+ QB_NAME(subq1) NO_SEMIJOIN(@subq2) */ id from tab tb 
+where ta.id in (
+    select /*+ QB_NAME(subq1) NO_SEMIJOIN(@subq2) */ id from tab tb
 	    where c in (select /*+ QB_NAME(subq2) */ c from tab tc)
 )
 and ta.id = tx.id
@@ -274,9 +274,9 @@ union查询出现在子查询中，并且union语句使用了非确定性函数�
 
 ```plain
 mysql> explain select distinct a from  (
-    select a from tab tb  
-    union all 
-    select c from tab tc where c > rand() 
+    select a from tab tb
+    union all
+    select c from tab tc where c > rand()
 ) tx;
 
 
@@ -291,8 +291,8 @@ mysql> explain select distinct a from  (
 
 ```plain
 mysql> explain select * from tab where exists (
-    select avg(b) from tab  
-    union all 
+    select avg(b) from tab
+    union all
     select b from tab where b > rand()
 );
 
@@ -326,7 +326,7 @@ mysql> explain select a, (select avg(b) from tab )  from tab t1;
 ```plain
 mysql> explain analyze select a, (select avg(b) from tab )  from tab t1\G
 *************************** 1. row ***************************
-EXPLAIN: 
+EXPLAIN:
 -> Covering index scan on t1 using idx_abc  (cost=1025 rows=10010) (actual time=0.108..2.54 rows=10000 loops=1)
 -> Select #2 (subquery in projection; run only once)
     -> Aggregate: avg(tab.b)  (cost=2026 rows=1) (actual time=3.79..3.79 rows=1 loops=1)
@@ -353,7 +353,7 @@ mysql> explain select a, (select avg(b) from tab where a=t1.a) from tab t1;
 ```plain
 mysql> explain  analyze select a, (select avg(b) from tab where a=t1.a) from tab t1\G
 *************************** 1. row ***************************
-EXPLAIN: 
+EXPLAIN:
 -> Covering index scan on t1 using idx_abc  (cost=1025 rows=10010) (actual time=0.0478..3.09 rows=10000 loops=1)
 -> Select #2 (subquery in projection; dependent)
     -> Aggregate: avg(tab.b)  (cost=669 rows=1) (actual time=1.39..1.39 rows=1 loops=10000)
@@ -391,10 +391,10 @@ mysql> show warnings;
 子查询出现在主查询的FROM子句的位置时，select\_type为DERIVED。
 
 ```plain
-mysql> explain select t1.* 
-    from tab t1, (select a, avg(b) as avgb from tab group by a) t2  
+mysql> explain select t1.*
+    from tab t1, (select a, avg(b) as avgb from tab group by a) t2
     where t1.a = t2.a;
-    
+
 +----+-------------+------------+-------+---------------+-------------+---------+----------+------+----------+-------------+
 | id | select_type | table      | type  | possible_keys | key         | key_len | ref      | rows | filtered | Extra       |
 +----+-------------+------------+-------+---------------+-------------+---------+----------+------+----------+-------------+
@@ -608,8 +608,8 @@ index\_merge会使用多个索引来查询数据，并将通过多个索引获�
 如果在执行计划中看到index\_merge访问路径，一般要考虑是否可以创建联合索引，将访问路径改成range或ref，或者将SQL改写为union查询。
 
 ```plain
-mysql> explain select * 
-  from t_merge 
+mysql> explain select *
+  from t_merge
   where (b=1 and d=1) or (c=1 and d between 3 and 5);
 +----+-------------+---------+-------------+---------------+---------------+---------+------+------+----------+----------------------------------------------+
 | id | select_type | table   | type        | possible_keys | key           | key_len | ref  | rows | filtered | Extra                                        |
@@ -640,9 +640,9 @@ select * from tab where col = outer.value and ...
 ```
 
 ```plain
-mysql> explain select /*+ NO_SEMIJOIN(@qb1) */ * from tab 
-  where a = 1 
-  and  b between 100 and 200  
+mysql> explain select /*+ NO_SEMIJOIN(@qb1) */ * from tab
+  where a = 1
+  and  b between 100 and 200
   and c in (select /*+ QB_NAME(qb1) */  a from tab where b=1  );
 
 +----+--------------------+-------+----------------+---------------+---------+---------+------------+------+----------+------------------------------------+
@@ -656,11 +656,11 @@ mysql> show warnings\G
 *************************** 1. row ***************************
   Level: Note
    Code: 1003
-Message: /* select#1 */ select /*+ NO_SEMIJOIN(@`qb1`) */ 
-    `rep`.`tab`.`id` AS `id`,`rep`.`tab`.`a` AS `a`,`rep`.`tab`.`b` AS `b`,`rep`.`tab`.`c` AS `c`,`rep`.`tab`.`padding` AS `padding` 
-from `rep`.`tab` 
-where ((`rep`.`tab`.`a` = 1) 
-and (`rep`.`tab`.`b` between 100 and 200) 
+Message: /* select#1 */ select /*+ NO_SEMIJOIN(@`qb1`) */
+    `rep`.`tab`.`id` AS `id`,`rep`.`tab`.`a` AS `a`,`rep`.`tab`.`b` AS `b`,`rep`.`tab`.`c` AS `c`,`rep`.`tab`.`padding` AS `padding`
+from `rep`.`tab`
+where ((`rep`.`tab`.`a` = 1)
+and (`rep`.`tab`.`b` between 100 and 200)
 and <in_optimizer>(`rep`.`tab`.`c`,<exists>(<index_lookup>(<cache>(`rep`.`tab`.`c`) in tab on idx_abc))))
 1 row in set (0.00 sec)
 ```
@@ -670,9 +670,9 @@ and <in_optimizer>(`rep`.`tab`.`c`,<exists>(<index_lookup>(<cache>(`rep`.`tab`.`
 unique\_subquery和index\_subquery类似，区别在于type为unique\_subquery时，子查询中的表使用主键或唯一索引来关联查询。
 
 ```plain
-mysql> explain select /*+ NO_SEMIJOIN(@qb1) */ * 
-  from tab 
-  where a=1 
+mysql> explain select /*+ NO_SEMIJOIN(@qb1) */ *
+  from tab
+  where a=1
   and id in (select /*+ QB_NAME(qb1) */  id from tab);
 
 +----+--------------------+-------+-----------------+---------------+---------+---------+-------+------+----------+-------------+
@@ -687,10 +687,10 @@ mysql> show warnings\G
 *************************** 1. row ***************************
   Level: Note
    Code: 1003
-Message: /* select#1 */ select /*+ NO_SEMIJOIN(@`qb1`) */ 
-    `rep`.`tab`.`id` AS `id`,`rep`.`tab`.`a` AS `a`,`rep`.`tab`.`b` AS `b`,`rep`.`tab`.`c` AS `c`,`rep`.`tab`.`padding` AS `padding` 
-  from `rep`.`tab` 
-  where ((`rep`.`tab`.`a` = 1) 
+Message: /* select#1 */ select /*+ NO_SEMIJOIN(@`qb1`) */
+    `rep`.`tab`.`id` AS `id`,`rep`.`tab`.`a` AS `a`,`rep`.`tab`.`b` AS `b`,`rep`.`tab`.`c` AS `c`,`rep`.`tab`.`padding` AS `padding`
+  from `rep`.`tab`
+  where ((`rep`.`tab`.`a` = 1)
   and <in_optimizer>(`rep`.`tab`.`id`,<exists>(<primary_index_lookup>(<cache>(`rep`.`tab`.`id`) in tab on PRIMARY))))
 
 ```

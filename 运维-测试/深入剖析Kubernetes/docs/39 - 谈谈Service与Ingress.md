@@ -232,14 +232,14 @@ cafe-ingress   cafe.example.com             80, 443   2h
 $ kubectl describe ingress cafe-ingress
 Name:             cafe-ingress
 Namespace:        default
-Address:          
+Address:
 Default backend:  default-http-backend:80 (<none>)
 TLS:
   cafe-secret terminates cafe.example.com
 Rules:
   Host              Path  Backends
   ----              ----  --------
-  cafe.example.com  
+  cafe.example.com
                     /tea      tea-svc:80 (<none>)
                     /coffee   coffee-svc:80 (<none>)
 Annotations:
@@ -316,19 +316,20 @@ Request ID: 32191f7ea07cb6bb44a1f43b8299415c
 可以看到，这个 Service 的唯一工作，就是将所有携带 ingress-nginx 标签的 Pod 的 80 和 433 端口bao lu出去。
 为啥需要创建一个svc呢？为啥需要bao lu80和443呢？</p>2020-03-11</li><br/><li><span>Holy</span> 👍（2） 💬（3）<p>K8s目前这几类负载均衡都属于服务端负载均衡，优点很明显，对客户端友好透明，无需额外的感知工作，缺点是在大流量高并发对性能有要求的场景，负载均衡器可能会变为单点瓶颈，不知道自己理解的对不对</p>2018-11-28</li><br/><li><span>陈小虎</span> 👍（2） 💬（1）<p>这种非系统类控制器本来就主要部署在work-node上吧：）</p>2018-11-21</li><br/><li><span>虎虎❤️</span> 👍（140） 💬（0）<p>思考题：
 spec:
-  rules:
-  - host: www.mysite.com
-    http:
-      paths:
-      - backend:
-          serviceName: site-svc
-          servicePort: 80
-  - host: forums.mysite.com
-    http:
-      paths:
-      - backend:
-          serviceName: forums-svc
-          servicePort: 80</p>2018-11-21</li><br/><li><span>mazhen</span> 👍（58） 💬（5）<p>总结一下，从集群外访问到服务，要经过3次代理：
+rules:
+
+- host: www.mysite.com
+  http:
+  paths:
+  - backend:
+    serviceName: site-svc
+    servicePort: 80
+- host: forums.mysite.com
+  http:
+  paths:
+  - backend:
+    serviceName: forums-svc
+    servicePort: 80</p>2018-11-21</li><br/><li><span>mazhen</span> 👍（58） 💬（5）<p>总结一下，从集群外访问到服务，要经过3次代理：
 
 访问请求到达任一宿主机，会根据NodePort生成的iptables规则，跳转到nginx反向代理，
 请求再按照nginx的配置跳转到后台service，nginx的配置是根据Ingress对象生成的，
@@ -336,9 +337,9 @@ spec:
 
 另外，如果想查看nginx-ingress-controller生成的nginx配置，可以这么做：
 
-$ kubectl get pods -n ingress-nginx 
-NAME                                        READY   STATUS    RESTARTS   AGE
-nginx-ingress-controller-85d94747dd-lsggm   1&#47;1     Running   0          3h45m
+$ kubectl get pods -n ingress-nginx
+NAME READY STATUS RESTARTS AGE
+nginx-ingress-controller-85d94747dd-lsggm 1&#47;1 Running 0 3h45m
 
 $ kubectl exec nginx-ingress-controller-85d94747dd-lsggm -it --namespace=&quot;ingress-nginx&quot; -- bash
 
@@ -365,7 +366,6 @@ LoadBalance：由公有云提供kubernetes服务自带的loadbalancer做负载�
 ExternalName：通过ExternalName或ExternalIp给Service挂在一个公有IP的地址或者域名，当访问这个公有IP地址时，就会转发到Service所代理的Pod服务上
 
 Ingress是用来给不同Service做负载均衡服务的，也就是Service的Service。
-
 
 </p>2020-12-05</li><br/><li><span>Dem</span> 👍（33） 💬（1）<p>Nginx Ingress Controller的mandatory.yaml地址改掉了。现在的命令：
 kubectl apply -f https:&#47;&#47;raw.githubusercontent.com&#47;kubernetes&#47;ingress-nginx&#47;master&#47;deploy&#47;static&#47;mandatory.yaml</p>2019-06-12</li><br/><li><span>海盗船长</span> 👍（13） 💬（1）<p>Nginx Ingress Controller的mandatory.yaml地址改掉了。现在的命令：

@@ -212,7 +212,7 @@ True
 
 **注释：#**
 
-注释在python中使用#，如果注释中有中文，一般会在代码前添加# -*- coding: utf-8 -*。
+注释在python中使用#，如果注释中有中文，一般会在代码前添加# -_- coding: utf-8 -_。
 
 如果是多行注释，使用三个单引号，或者三个双引号，比如：
 
@@ -220,7 +220,7 @@ True
 # -*- coding: utf-8 -*
 '''
 这是多行注释，用三个单引号
-这是多行注释，用三个单引号 
+这是多行注释，用三个单引号
 这是多行注释，用三个单引号
 '''
 ```
@@ -232,9 +232,9 @@ True
 import model_name
 # 导入多个模块
 import module_name1,module_name2
-# 导入包中指定模块 
+# 导入包中指定模块
 from package_name import moudule_name
-# 导入包中所有模块 
+# 导入包中所有模块
 from package_name import *
 ```
 
@@ -365,14 +365,14 @@ import scikie-learn
 方法一：用for循环
 sum=0
 for number in range(1,100,2):
-     sum = sum + number
+sum = sum + number
 print sum
 方法二：用while
 sum =0
 number = 1
 while number &lt; 100:
-        sum = sum + number
-        number = number +2
+sum = sum + number
+number = number +2
 print sum</p>2018-12-20</li><br/><li><span>拉我吃</span> 👍（19） 💬（1）<p>p1.
 要先安装库
 pip install -U scikit-learn
@@ -380,7 +380,7 @@ pip install -U scikit-learn
 代码里写
 import sklearn
 
-p2. 
+p2.
 代码 sum(range(1, 99, 2)) 直接求和
 print(sum(range(1, 99, 2))) 打印出来
 </p>2018-12-20</li><br/><li><span>Miracle</span> 👍（12） 💬（2）<p>sklearn库是机器学习领域好用到哭的一个库，数据清洗，各种机器学习算法都给写好了，我们可以直接使用，学习sklearn感觉最好的方式就是通过官方文档学习：https:&#47;&#47;scikit-learn.org&#47;stable&#47;，但是在这之前最好先跟着教程过一遍sklearn，至少知道什么问题应该用什么算法等，然后再通过查阅文档进行补充。 使用的时候也很简单，pip install安装，然后import sklearn 或者 from sklearn import 模块等。  关于学习Python，我觉得可以找一个简单的教程（B站上好多）跟一遍，掌握基础的语法和使用，然后就是刷题或者项目中提高代码编程能力，在这个途中遇到不懂得可以查阅Python的官方文档进行知识补充。 我觉得官方文档是最好的学习方式。</p>2020-01-23</li><br/><li><span>大萌</span> 👍（10） 💬（1）<p>1、安装完成后 import sklearn
@@ -419,11 +419,11 @@ print(sum(1))
 		pip list | grep sklearn		
 2）导入scikit-learn库
 	from sklearn import *
-	
+
 2.求1+3+5+7+…+99的求和，用Python该如何写？
 sum = 0
 for number in range(1, 100, 2):
-	sum += number
+sum += number
 print(&quot;1 + 3 + 5 + 7 + … + 99的求和为%d&quot; % sum)</p>2019-04-16</li><br/><li><span>小林子</span> 👍（4） 💬（1）<p>第一题：
 import sklearn
 
@@ -431,6 +431,6 @@ import sklearn
 sum([i for i in range(1,99,2)])</p>2018-12-20</li><br/><li><span>CHEN</span> 👍（3） 💬（1）<p>print(sum([i for i in range(1,100,2)]))</p>2020-07-08</li><br/><li><span>鱼鱼鱼培填</span> 👍（3） 💬（1）<p>看错题目了，第二题应该是：
 sum = 0
 for i in range(1, 100, 2):
-	sum += i
+sum += i
 print(sum)</p>2018-12-20</li><br/><li><span>nsyao</span> 👍（2） 💬（2）<p>关于ide选择部分，建议老师改一下。其实sunlime不合适新手，反而是anaconda套件更合适，spyder或jupyter对新手都很友好</p>2020-10-22</li><br/><li><span>土豆</span> 👍（2） 💬（1）<p>正好疫情在家封闭期间读完了 learning python英文版本，这本书虽然比较厚，1500页，但是是我读过的最好的python入门服务。所以我算是pyrhon入门了，回头再刷刷老师推荐的oj题目</p>2020-04-12</li><br/>
 </ul>

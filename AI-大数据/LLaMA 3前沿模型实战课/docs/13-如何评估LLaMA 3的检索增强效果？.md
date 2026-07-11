@@ -119,7 +119,7 @@ import ollama
 def evaluate_context_consistency_with_score(history_dialogue, user_query, generated_answer):
     # 构建历史对话和生成的回答作为上下文
     context = "\n".join(history_dialogue) + f"\n用户当前问题: {user_query}\n"
-    query = (context + 
+    query = (context +
             f"模型生成的回答: {generated_answer}\n\n"
             "请根据上下文与生成回答的逻辑一致性进行评估，并给出1-10的评分（1表示完全不一致，10表示完全一致）。"
             " 请解释评分的依据。")

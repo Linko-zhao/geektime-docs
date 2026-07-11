@@ -257,8 +257,8 @@ async fn main() -> Result<()> {
 
 这段文字，我还是没有很明白，所谓对于channel和mutex锁的区别，是不是可以这样理解？channel可以看成是一个队列(vec那样的)，然后channel这里就是一头写入一头消费，那么如果有并发的时候，就是对头尾进行加锁，并且会做多一些其他的辅助操作，例如队列满了或者空的时候各种安全检查判断等等，实际上channel就是对mutex+queue的抽象封装？ 多谢了</p>2021-12-05</li><br/><li><span>newzai</span> 👍（1） 💬（1）<p>go经常会使用 chan struct 来作为actor对象的退出信号，rust有什么建议不？不想和数据channel混合在一起。</p>2021-11-16</li><br/><li><span>千回百转无劫山</span> 👍（0） 💬（1）<p>读完本节有一个感悟，actor model是异步任务级别的“微服务”：发送信息给一个actor，然后从actor再接收信息，就类似于后端中发送一个请求给一个微服务，再接收响应。也就是说，一个actor对应一个“”微服务“”，不知道这种理解是否正确？还有就是，一个actor对应的是类似于tokio的一个task吗？</p>2021-11-16</li><br/><li><span>罗杰</span> 👍（0） 💬（1）<p>对，合理的使用 Channel，不应该死搬硬套。</p>2021-11-15</li><br/><li><span>GengTeng</span> 👍（0） 💬（2）<p>笨拙地用 Channel 叠加 Channel 来应对所有的场景?Go: 你直接说我名儿得了。</p>2021-11-15</li><br/><li><span>朱叶子</span> 👍（5） 💬（0）<p>工作线程中，缺了drop(started)，导致主线程无法获取mutex</p>2022-06-24</li><br/><li><span>Geek_e188ed</span> 👍（2） 💬（1）<p>老师，代码示例有点少啊，比如Channel这块，你的文字描述我都看懂了，但是没有使用Channel的代码示例，可能怎么调用我都不知道</p>2022-07-10</li><br/><li><span>Rex Wang</span> 👍（1） 💬（0）<p>Mutex使用lock方法生成Guard锁住数据，而Guard通过drop方法才能把数据解锁。老师的例子化用了doc中的例子，但因为没有对变量 started 显式使用drop方法，而使用loop阻塞了 started 自动调用drop，所以和预设的结果表现不同。</p>2023-09-08</li><br/><li><span>终生恻隐</span> 👍（1） 💬（0）<p>#[test]
 fn test_mpsc() {
-    let (a2btx, a2brx) = mpsc::channel();
-    let (b2atx, b2arx) = mpsc::channel();
+let (a2btx, a2brx) = mpsc::channel();
+let (b2atx, b2arx) = mpsc::channel();
 
     let threada = thread::spawn(move || {
         a2btx.send(&quot;hello world!&quot;.to_string()).unwrap();
@@ -279,14 +279,15 @@ fn test_mpsc() {
 
     thread::sleep(Duration::from_secs(10));
     return
+
 }</p>2021-11-15</li><br/><li><span>Geek_zbvt62</span> 👍（0） 💬（0）<p>golang也是有atomic，mutex，rwlock，cond的，而且各种三方库也是把这些原语用得飞起。只是官方一直在强烈建议使用channel来用在大多数场景，这可能就是文中说的“但不该营造一种气氛”?</p>2022-10-17</li><br/><li><span>进击的Lancelot</span> 👍（0） 💬（0）<p>思考题：https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=3604e3e575fd7dbc98c1e926c62583eb</p>2022-09-30</li><br/><li><span>一雄</span> 👍（0） 💬（0）<p>老师，前面发的代码，和小伙伴讨论了一下以后，知道问题在哪里了。在子线程上，lock需要在通知完了condvar之后，需要释放，那个lock。我想到的打补丁的方法是，加个大括号，和老师信息更新一下</p>2022-03-21</li><br/><li><span>一雄</span> 👍（0） 💬（2）<p>
 use std::sync::{Arc, Condvar, Mutex};
 use std::thread;
 use std::time::Duration;
 
 fn main() {
-    let pair = Arc::new((Mutex::new(false), Condvar::new()));
-    let pair2 = Arc::clone(&amp;pair);
+let pair = Arc::new((Mutex::new(false), Condvar::new()));
+let pair2 = Arc::clone(&amp;pair);
 
     thread::spawn(move || {
         let (lock, cvar) = &amp;*pair2;
@@ -308,6 +309,7 @@ fn main() {
         started = cvar.wait(started).unwrap();
     }
     eprintln!(&quot;Worker started!&quot;);
+
 }
 
 老师麻烦看一下，这个demo跑不起来，我尝试把loop拿掉发现是有效的，但没理解为什么加了loop就无效了</p>2022-03-21</li><br/>

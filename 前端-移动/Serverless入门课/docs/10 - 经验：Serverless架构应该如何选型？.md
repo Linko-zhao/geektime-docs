@@ -158,25 +158,26 @@ kubectl get svc -n knative-serving
 1. 创建Serverless Kubernetes时,推荐勾选上PrivateZone.
    我未勾选该选项,导致服务内无法通过`user.default.svc.cluster.local`互相访问
    后来我是kubectl exec -it xxx -- &#47;bin&#47;bash 进了pod,修改了`&#47;etc&#47;hosts`完成的配置.
-2. 需要参考文章[Knative On ASK 给您带来极致的 Serverless 体验](https:&#47;&#47;yq.aliyun.com&#47;articles&#47;759756)
+2. 需要参考文章[Knative On ASK 给您带来极致的 Serverless 体验](https://yq.aliyun.com/articles/759756)
    创建好集群后,在钉钉群中联系客服,帮忙开通Knative功能.
    注: 部署成功后,会多出一个SLB,也会多出`knative-serving`命名空间.
-       暂时还无法通过控制台的UI查看及操作Knative,只能通过命令行操作.
+   暂时还无法通过控制台的UI查看及操作Knative,只能通过命令行操作.
 3. 微调调试的部署yaml文件.
    比如添加一个注解,便于在pod上申请一个公网IP.
-      k8s.aliyun.com&#47;eci-with-eip: &quot;true&quot;
+   k8s.aliyun.com&#47;eci-with-eip: &quot;true&quot;
    由于我的k8s机器未创建NAT网关,默认的pod是无法访问公网,拉取镜像的.
    所有需要在每个pod上都申请一个公网IP.
-      目前NAT网关是12元&#47;天,而一个公网IP才0.02元&#47;小时的配置费用
+   目前NAT网关是12元&#47;天,而一个公网IP才0.02元&#47;小时的配置费用
 4. 查看服务的域名
-      kubectl get ksvc
+   kubectl get ksvc
 5. 配置域名解析
    需要解析到Knative的负载均衡SLB的公网IP上
 6. 验证部署效果
+
 </p>2020-05-12</li><br/><li><span>我来也</span> 👍（1） 💬（1）<p>感觉Knative还是太新了,目前还未出1.0版本.
 不过有了它,确实是可以方便的基于k8s环境,搭建属于自己的serverless平台做定制化.
 
 今天无意中看到一个IBM的免费视频讲堂,推荐给感兴趣的小伙伴.
-[Kubernetes 原生无服务器开源项目 Knative](https:&#47;&#47;developer.ibm.com&#47;cn&#47;os-academy-knative&#47;)
+[Kubernetes 原生无服务器开源项目 Knative](https://developer.ibm.com/cn/os-academy-knative/)
 </p>2020-05-10</li><br/><li><span>Geek_dn82ci</span> 👍（0） 💬（1）<p>现在云厂商都会基于kata或者rust-vmm来实现“serverless”式的容器服务，请问您怎么看？另外厂商一般使用virtual-kubelet来管理serverless容器产品，例如腾讯EKS，为什么不用原生的kubelet结合containerd来进行管理呢？</p>2020-08-25</li><br/><li><span>奕</span> 👍（0） 💬（1）<p>资源的物理机虚拟化 是什么意思的？ 是一份资源虚拟出多份资源使用吗？</p>2020-05-12</li><br/><li><span>奕</span> 👍（2） 💬（0）<p>阿里云 客服响应速度是一大亮点 ，这点我认同。哈哈，每次有问题提工单都能快速的响应</p>2020-05-12</li><br/>
 </ul>

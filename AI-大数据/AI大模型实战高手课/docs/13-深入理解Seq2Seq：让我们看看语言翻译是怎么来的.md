@@ -169,7 +169,7 @@ for epoch in range(num_epochs):
         total_loss += loss.item()
     avg_loss = total_loss / len(train_loader)
     print(f'Epoch {epoch + 1}/{num_epochs}, Average Loss: {avg_loss}')
-    
+
 ```
 
 我拿下面的素材举例，简单解释一下训练过程。

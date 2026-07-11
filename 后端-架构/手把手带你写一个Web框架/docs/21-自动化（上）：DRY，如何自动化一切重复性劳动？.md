@@ -616,17 +616,18 @@ func Routes(r *gin.Engine) {
 <li><span>zzq</span> 👍（0） 💬（1）<p>大佬， 在 framework&#47;command&#47;middleware.go 文件中缺少了    默认: 同中间件名称。 if folder == &quot;&quot; {folder = name}   </p>2021-12-01</li><br/><li><span>kkxue</span> 👍（3） 💬（0）<p>课程设计的好棒</p>2021-11-05</li><br/><li><span>qinsi</span> 👍（1） 💬（1）<p>中间件也要拷贝代码吗...是否可以安装以后在go.mod里replace呢？</p>2021-11-05</li><br/><li><span>taoist</span> 👍（0） 💬（0）<p>go-git 配置http代理：
 		res_url := &quot;https:&#47;&#47;github.com&#47;gin-contrib&#47;&quot; + repo + &quot;.git&quot;
 		fmt.Println(&quot;下载中间件 gin-contrib:&quot;, res_url)
-	
-		&#47;&#47;自定义 http proxy
-		proxy_url, _ := url.Parse(&quot;http:&#47;&#47;127.0.0.1:7890&quot;)
-		customHttp := &amp;http.Client{
-			Transport: &amp;http.Transport{
-				Proxy: http.ProxyURL(proxy_url),
-			},
-		}
-		client.InstallProtocol(&quot;https&quot;, githttp.NewClient(customHttp))
-		_, err := git.PlainClone(path.Join(middlewarePath, repo), false, &amp;git.CloneOptions{
-			URL:      res_url,
-			Progress: os.Stdout,
-		})</p>2024-01-20</li><br/>
+
+    	&#47;&#47;自定义 http proxy
+    	proxy_url, _ := url.Parse(&quot;http:&#47;&#47;127.0.0.1:7890&quot;)
+    	customHttp := &amp;http.Client{
+    		Transport: &amp;http.Transport{
+    			Proxy: http.ProxyURL(proxy_url),
+    		},
+    	}
+    	client.InstallProtocol(&quot;https&quot;, githttp.NewClient(customHttp))
+    	_, err := git.PlainClone(path.Join(middlewarePath, repo), false, &amp;git.CloneOptions{
+    		URL:      res_url,
+    		Progress: os.Stdout,
+    	})</p>2024-01-20</li><br/>
+
 </ul>

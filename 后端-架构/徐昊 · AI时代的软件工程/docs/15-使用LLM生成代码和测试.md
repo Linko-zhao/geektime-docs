@@ -6,7 +6,7 @@
 
 ## 命令行参数解析
 
-我们所使用的例子源自Robert C. Martin的 *Clean Code* 第十四章，也是我的测试驱动专栏[《TDD项目实战70讲》](https://time.geekbang.org/column/intro/100109401)讲过的第一个项目，需求描述如下：
+我们所使用的例子源自Robert C. Martin的 _Clean Code_ 第十四章，也是我的测试驱动专栏[《TDD项目实战70讲》](https://time.geekbang.org/column/intro/100109401)讲过的第一个项目，需求描述如下：
 
 > 我们中的大多数人都不得不时不时地解析一下命令行参数。如果我们没有一个方便的工具，那么我们就简单地处理一下传入main函数的字符串数组。有很多开源工具可以完成这个任务，但它们可能并不能完全满足我们的要求。所以我们再写一个吧。  
 >    
@@ -26,12 +26,14 @@
 
 首先，让我们直接将这段需求扔到LLM中，看看LLM会生成怎样的代码。当然在那之前我们需要将它转化为提示词模板：
 
-> 需求  
-> ====  
+> 需求
+> ====
+>
 > {requirement}  
 >    
-> 实现要求  
-> ====  
+> 实现要求
+> ====
+>
 > 使用Java语言实现上面的需求
 
 当然你可以将Java语言换成任何你所熟悉的技术栈。我在这里仅仅是用Java举例。ChatGPT给出的结果是这样的：
@@ -130,20 +132,20 @@ class CommandLineParserTest {
         assertEquals(true, result1.get("l"));
         assertEquals(8080, result1.get("p"));
         assertEquals("/usr/logs", result1.get("d"));
-        
+
         // 测试带有列表的命令行参数解析
         String[] args2 = {"-g", "this", "is", "a", "list", "-d", "1", "2", "-3", "5"};
         Map<String, Object> result2 = CommandLineParser.parseArgs(args2);
         assertEquals(List.of("this", "is", "a", "list"), result2.get("g"));
         assertEquals(List.of(1, 2, -3, 5), result2.get("d"));
-        
+
         // 测试默认值
         String[] args3 = {};
         Map<String, Object> result3 = CommandLineParser.parseArgs(args3);
         assertEquals(false, result3.get("l"));
         assertEquals(0, result3.get("p"));
         assertEquals("", result3.get("d"));
-        
+
         // 测试无效参数
         String[] args4 = {"-p", "abc"};
         assertThrows(NumberFormatException.class, () -> CommandLineParser.parseArgs(args4));
@@ -186,8 +188,8 @@ private static Object parseValues(List<Object> values) {
 > 执行测试的错误信息如下，请根据错误信息，修改CommandLineParser的代码：  
 >    
 > Expected :true  
-> Actual   :false  
->   
+> Actual   :false
+>
 >    
 > org.opentest4j.AssertionFailedError: expected: but was:  
 > at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)  
@@ -302,8 +304,8 @@ public class CommandLineParser {
 > 执行测试的错误信息如下，请根据错误信息，修改CommandLineParser的代码：  
 >    
 > Expected :8080  
-> Actual   :8080  
->   
+> Actual   :8080
+>
 >    
 > org.opentest4j.AssertionFailedError: expected: java.lang.Integer@1c5920df&lt;8080&gt; but was: java.lang.String@17f9d882&lt;8080&gt;  
 > at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)  
@@ -659,86 +661,90 @@ public class CommandLineParser {
 #include &lt;gtest&#47;gtest.h&gt;
 
 TEST(CC_parseCmdLineArgs, NullCmdLineArgs) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(0, NULL, &amp;CmdLineArgs));
+CC_CmdLineArgs_T CmdLineArgs;
+EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(0, NULL, &amp;CmdLineArgs));
 }
 
 TEST(CC_parseCmdLineArgs, NullCmdLineArgsPtr) {
-  EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(0, NULL, NULL));
+EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(0, NULL, NULL));
 }
 
 TEST(CC_parseCmdLineArgs, NoArgs) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = { (char *)&quot;test&quot; };
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(1, argv, &amp;CmdLineArgs));
-  EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
-  EXPECT_EQ(0, CmdLineArgs.RecvPort);
-  EXPECT_EQ(NULL, CmdLineArgs.pLogSavingDir);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = { (char *)&quot;test&quot; };
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(1, argv, &amp;CmdLineArgs));
+EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
+EXPECT_EQ(0, CmdLineArgs.RecvPort);
+EXPECT_EQ(NULL, CmdLineArgs.pLogSavingDir);
 }
 
 ...
 
 TEST(CC_parseCmdLineArgs, RecvPort) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = { (char *)&quot;test&quot;, (char *)&quot;-p&quot;, (char *)&quot;1234&quot; };
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
-  EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
-  EXPECT_EQ(1234, CmdLineArgs.RecvPort);
-  EXPECT_EQ(NULL, CmdLineArgs.pLogSavingDir);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = { (char *)&quot;test&quot;, (char *)&quot;-p&quot;, (char *)&quot;1234&quot; };
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
+EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
+EXPECT_EQ(1234, CmdLineArgs.RecvPort);
+EXPECT_EQ(NULL, CmdLineArgs.pLogSavingDir);
 }
 
 TEST(CC_parseCmdLineArgs, LogSavingDir) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = { (char *)&quot;test&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;tmp&quot; };
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
-  EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
-  EXPECT_EQ(0, CmdLineArgs.RecvPort);
-  EXPECT_STREQ(&quot;&#47;tmp&quot;, CmdLineArgs.pLogSavingDir);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = { (char *)&quot;test&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;tmp&quot; };
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
+EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
+EXPECT_EQ(0, CmdLineArgs.RecvPort);
+EXPECT_STREQ(&quot;&#47;tmp&quot;, CmdLineArgs.pLogSavingDir);
 }
 
 TEST(CC_parseCmdLineArgs, AllArgs) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = { (char *)&quot;test&quot;, (char *)&quot;-l&quot;, (char *)&quot;-p&quot;, (char *)&quot;1234&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;tmp&quot; };
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(7, argv, &amp;CmdLineArgs));
-  EXPECT_TRUE(CmdLineArgs.IsLoggingEnabled);
-  EXPECT_EQ(1234, CmdLineArgs.RecvPort);
-  EXPECT_STREQ(&quot;&#47;tmp&quot;, CmdLineArgs.pLogSavingDir);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = { (char *)&quot;test&quot;, (char *)&quot;-l&quot;, (char *)&quot;-p&quot;, (char *)&quot;1234&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;tmp&quot; };
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(7, argv, &amp;CmdLineArgs));
+EXPECT_TRUE(CmdLineArgs.IsLoggingEnabled);
+EXPECT_EQ(1234, CmdLineArgs.RecvPort);
+EXPECT_STREQ(&quot;&#47;tmp&quot;, CmdLineArgs.pLogSavingDir);
 }
 
 int main(int argc, char **argv) {
-  testing::InitGoogleTest(&amp;argc, argv);
-  return RUN_ALL_TESTS();
+testing::InitGoogleTest(&amp;argc, argv);
+return RUN_ALL_TESTS();
 }</p>2024-04-10</li><br/><li><span>术子米德</span> 👍（0） 💬（0）<p>&#47;&#47;BEGIN CODE&amp;COMMENT BY ME
 
 typedef enum {
-  CC_SUCCESS = 0,
-  CC_FAIL    = 1,
+CC_SUCCESS = 0,
+CC_FAIL = 1,
 } CC_Result_T;
 
 typedef struct {
-  bool IsLoggingEnabled;  &#47;&#47;-l
-  int RecvPort;           &#47;&#47;-p &lt;port&gt;
-  char *pLogSavingDir;    &#47;&#47;-d &lt;dir&gt;
+bool IsLoggingEnabled; &#47;&#47;-l
+int RecvPort; &#47;&#47;-p &lt;port&gt;
+char *pLogSavingDir; &#47;&#47;-d &lt;dir&gt;
 } CC_CmdLineArgs_T;
 
 &#47;**
- * @brief: Use CC_parseCmdLineArgs to parse command line arguments and save them in CC_CmdLingArgs_T.
- *
- * @param argc same as main
- * @param argv same as main
- * @param pCmdLineArgs pointer to CC_CmdLineArgs_T
- * @return CC_SUCCESS if successful, CC_FAIL otherwise in CC_Result_T
- *&#47;
-CC_Result_T CC_parseCmdLineArgs(int argc, char *argv[], CC_CmdLineArgs_T *pCmdLineArgs);
+
+- @brief: Use CC_parseCmdLineArgs to parse command line arguments and save them in CC_CmdLingArgs_T.
+-
+- @param argc same as main
+- @param argv same as main
+- @param pCmdLineArgs pointer to CC_CmdLineArgs_T
+- @return CC_SUCCESS if successful, CC_FAIL otherwise in CC_Result_T
+  *&#47;
+  CC_Result_T CC_parseCmdLineArgs(int argc, char *argv[], CC_CmdLineArgs_T *pCmdLineArgs);
+
 </p>2024-04-10</li><br/><li><span>aoe</span> 👍（0） 💬（1）<p>使用 AI 生成的测试通过 9 个，失败 7 个。在已有代码上修补，比自己从 0 到 1 实现快了非常多，这个只用了十几分钟！
 
 主要步骤：
+
 1. 15 课的例子扔给 coze 的 GPT4，得到的代码简单粗暴
 2. 使用 Optimize 功能优化一下 prompt
 3. 在优化的 prompt 上添加自己的想法
 4. 因返回 token 限制，需要多次对话完成结果
-  4.1 请给出 CommandLineParser 的完整代码
-  4.2 请给出完整测试代码
-  4.3 补全测试代码：测试用例可以继续增加，包括各种边界情况和无效输入
+   4.1 请给出 CommandLineParser 的完整代码
+   4.2 请给出完整测试代码
+   4.3 补全测试代码：测试用例可以继续增加，包括各种边界情况和无效输入
 5. 最终得到的代码虽然测试没跑通，但功能强大</p>2024-04-10</li><br/>
+
 </ul>

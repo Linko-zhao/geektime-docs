@@ -55,7 +55,7 @@ EOF是End of file。在Linux万物皆file的情况下，connection也可以是�
 下面这两句的意义是什么，第一行会阻塞第二句吗？
 
 ```plain
- _ = task_a.await.unwrap(); 
+ _ = task_a.await.unwrap();
  _ = task_b.await.unwrap();
 ```
 

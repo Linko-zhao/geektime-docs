@@ -34,7 +34,7 @@
 
 你或许已经发现，我在这里其实直接引用了ECMAScript对Null类型的描述？的确，ECMAScript就是这样约定了`null`值的出处，并且很不幸的是，它还约定了`null`值是一个原始值（Primitive values），这是ECMAScript的概念与我在前面的叙述中唯一冲突的地方。
 
-如果你“能/愿意”违逆ECMAScript对“语言类型（*Language types*）”的说明，稍稍“苟同”一下我上述的看法，那么下面的代码一定会让你觉得“豁然开朗”。这三行代码分别说明：
+如果你“能/愿意”违逆ECMAScript对“语言类型（_Language types_）”的说明，稍稍“苟同”一下我上述的看法，那么下面的代码一定会让你觉得“豁然开朗”。这三行代码分别说明：
 
 1. null是对象；
 2. 类可以派生自null；
@@ -104,7 +104,7 @@ null
 
 # 索引数组的属性
 > Object.getOwnPropertyDescriptors(a)
-{ length: 
+{ length:
    { value: 0,
      writable: true,
      enumerable: false,
@@ -158,7 +158,7 @@ null
 
 ```
 > class MyClass extends null {}
- 
+
 # 这是一个原子的函数类
 > Object.setPrototypeOf(MyClass, Function);
 
@@ -192,7 +192,7 @@ null
 > class MyClass {}
 > Object.setPrototypeOf(MyClass.prototype, null)
 > new MyClass
-{} 
+{}
 
 # 一般函数/构造器
 > function AClass() {}
@@ -231,12 +231,12 @@ null
 
 这配上示例代码，意思是说setPrototypeOf虽然字面上的意思是改变prototype但本质上只改变了super执行的对象? 我觉得不对吧？</p>2020-03-15</li><br/><li><span>卡尔</span> 👍（0） 💬（1）<p>老师，我记得有一本书里说，undefined派生于null。老师这句话怎么去理解，他俩到底是什么关系？有什么区别？</p>2021-01-12</li><br/><li><span>HoSalt</span> 👍（0） 💬（1）<p>class A {}
 class B extends A {}
-B.__proto__ === A &#47;&#47; true
+B.**proto** === A &#47;&#47; true
 
-B.__proto__.__proto__ === Function.prototype &#47;&#47; true
+B.**proto**.**proto** === Function.prototype &#47;&#47; true
 
 class MyClass extends null {}
 
-MyClass.__proto__ === Function.prototype &#47;&#47; true
+MyClass.**proto** === Function.prototype &#47;&#47; true
 老师继承自null的类的原型链直接指向了Function.prototype，而其它的是在中间加了一层，这是一种特殊处理？</p>2020-05-25</li><br/><li><span>新哥</span> 👍（0） 💬（0）<p>是时候讲一下 prototype和__proto__了😄</p>2020-06-21</li><br/><li><span>t86</span> 👍（0） 💬（0）<p>老师的功力真的是深，佩服</p>2020-01-16</li><br/><li><span>水木年华</span> 👍（0） 💬（0）<p>老师讲的真好，有体会有收获😄</p>2020-01-05</li><br/><li><span>许童童</span> 👍（0） 💬（0）<p>老师讲得太好了。</p>2019-12-24</li><br/>
 </ul>

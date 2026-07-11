@@ -76,10 +76,10 @@ metadata:
   name: maria-cm
 
 data:
-  DATABASE: 'db'
-  USER: 'wp'
-  PASSWORD: '123'
-  ROOT_PASSWORD: '123'
+  DATABASE: "db"
+  USER: "wp"
+  PASSWORD: "123"
+  ROOT_PASSWORD: "123"
 ```
 
 然后我们需要**把MariaDB由Pod改成Deployment的方式**，replicas设置成1个，template里面的Pod部分没有任何变化，还是要用 `envFrom`把配置信息以环境变量的形式注入Pod，相当于把Pod套了一个Deployment的“外壳”：
@@ -110,7 +110,7 @@ spec:
         - containerPort: 3306
 
         envFrom:
-        - prefix: 'MARIADB_'
+        - prefix: "MARIADB_"
           configMapRef:
             name: maria-cm
 ```
@@ -157,10 +157,10 @@ metadata:
   name: wp-cm
 
 data:
-  HOST: 'maria-svc'
-  USER: 'wp'
-  PASSWORD: '123'
-  NAME: 'db'
+  HOST: "maria-svc"
+  USER: "wp"
+  PASSWORD: "123"
+  NAME: "db"
 ```
 
 WordPress的Deployment写法和MariaDB也是一样的，给Pod套一个Deployment的“外壳”，replicas设置成2个，用字段“**envFrom**”配置环境变量：
@@ -191,7 +191,7 @@ spec:
         - containerPort: 80
 
         envFrom:
-        - prefix: 'WORDPRESS_DB_'
+        - prefix: "WORDPRESS_DB_"
           configMapRef:
             name: wp-cm
 ```
@@ -392,36 +392,36 @@ kubectl expose deploy wp-kic-dep --port=80,443 --type=NodePort --name=wp-kic-svc
 这一点文章中有提到，但是容易忽略。</p>2023-01-26</li><br/><li><span>YueShi</span> 👍（4） 💬（1）<p>改成DaemonSet只需要把kind的Deployment变成DeamonSet、把replicas注释掉就可以</p>2022-08-14</li><br/><li><span>peter</span> 👍（4） 💬（2）<p>老师，22讲最后一步，就是创建nginx controller失败，POD状态是“CrashLoopBackOff”。用logs命令查看，错误信息是：
 Error when getting IngressClass wp-ink: ingressclasses.networking.k8s.io &quot;wp-ink&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:nginx-ingress&quot; cannot get resource &quot;ingressclasses&quot; in API group &quot;networking.k8s.io&quot; at the cluster scope
 
-不知道是什么意思？不知道怎么修改？ （能看懂英文，但不知道说的是什么） （注：kic文件是拷贝老师的，https:&#47;&#47;github.com&#47;chronolaw&#47;k8s_study&#47;blob&#47;master&#47;ch3&#47;wp-kic.yml   完全拷贝，成功创建）</p>2022-08-11</li><br/><li><span>jason</span> 👍（3） 💬（2）<p>老师，wp.test这个域名需要指定ingress controller那个pod所在的节点ip，而ingress controller是通过deployment来管理的，pod重建时可能会被部署到别的节点，这样不是又要改host配置了吗？想问一下生产环境是怎样解决这个问题的。</p>2023-03-01</li><br/><li><span>笨晓孩</span> 👍（3） 💬（1）<p>老师，我部署完wp-svc之后，通过nodeIP:30088的方式没办法访问Wordpress页面，采用的是nodeport的方式</p>2022-10-27</li><br/><li><span>Geek_2ce074</span> 👍（3） 💬（1）<p>老师你好，Ingress Controller 对象，在哪个 Nginx 项目的示例 YAML 里有呀，根本找不到呀</p>2022-08-10</li><br/><li><span>romance</span> 👍（3） 💬（6）<p>老师，数据库配置没问题，svc也正常，但访问网站时提示 Error establishing a database connection，不知道什么原因</p>2022-08-10</li><br/><li><span>菲茨杰拉德</span> 👍（2） 💬（2）<p>配置hosts后，解析出来的还是ingress的ip，在七层负载不还是相当于用的ip来访问的吗？这个解析过程不是k8s做的吧。
+不知道是什么意思？不知道怎么修改？ （能看懂英文，但不知道说的是什么） （注：kic文件是拷贝老师的，https:&#47;&#47;github.com&#47;chronolaw&#47;k8s_study&#47;blob&#47;master&#47;ch3&#47;wp-kic.yml 完全拷贝，成功创建）</p>2022-08-11</li><br/><li><span>jason</span> 👍（3） 💬（2）<p>老师，wp.test这个域名需要指定ingress controller那个pod所在的节点ip，而ingress controller是通过deployment来管理的，pod重建时可能会被部署到别的节点，这样不是又要改host配置了吗？想问一下生产环境是怎样解决这个问题的。</p>2023-03-01</li><br/><li><span>笨晓孩</span> 👍（3） 💬（1）<p>老师，我部署完wp-svc之后，通过nodeIP:30088的方式没办法访问Wordpress页面，采用的是nodeport的方式</p>2022-10-27</li><br/><li><span>Geek_2ce074</span> 👍（3） 💬（1）<p>老师你好，Ingress Controller 对象，在哪个 Nginx 项目的示例 YAML 里有呀，根本找不到呀</p>2022-08-10</li><br/><li><span>romance</span> 👍（3） 💬（6）<p>老师，数据库配置没问题，svc也正常，但访问网站时提示 Error establishing a database connection，不知道什么原因</p>2022-08-10</li><br/><li><span>菲茨杰拉德</span> 👍（2） 💬（2）<p>配置hosts后，解析出来的还是ingress的ip，在七层负载不还是相当于用的ip来访问的吗？这个解析过程不是k8s做的吧。
 我原来理解的是七层负载走http，通过域名来访问。输入域名后，k8s解析然后找到四层的ip和端口然后请求。</p>2022-11-23</li><br/><li><span>lesserror</span> 👍（1） 💬（1）<p>如果你使用的是 minikube 来搭建本节的实验环境，可以参考这里来在macOS本地通过域名访问服务：https:&#47;&#47;github.com&#47;kubernetes&#47;minikube&#47;pull&#47;12089</p>2023-09-04</li><br/><li><span>chengyi</span> 👍（1） 💬（1）<p>不过 Ingress Controller 本身也是一个 Pod，想要把服务暴露到集群外部还是要依靠 Service。Service 支持 NodePort、LoadBalancer 等方式，但 NodePort 的端口范围有限，LoadBalancer 又依赖于云服务厂商，都不是很灵活。
 折中的办法是用少量 NodePort 暴露 Ingress Controller，用 Ingress 路由到内部服务，外部再用反向代理或者 LoadBalancer 把流量引进来。
 请问这两段话的区别是什么，不太理解。</p>2023-07-28</li><br/><li><span>kobe</span> 👍（1） 💬（5）<p>我加上ingress controller后启动，报了这个错，能帮看下是什么原因么：
 NGINX Ingress Controller Version=3.1.0 Commit=057c6d7e4f2361f5d2ddd897e9995bcb48ed7e32 Date=2023-03-27T10:15:43Z DirtyState=false Arch=linux&#47;amd64 Go=go1.20.2
-I0404 10:41:32.746481       1 flags.go:294] Starting with flags: [&quot;-nginx-configmaps=nginx-ingress&#47;nginx-config&quot; &quot;-ingress-class=wp-ink&quot;]
-I0404 10:41:32.761875       1 main.go:234] Kubernetes version: 1.23.3
-I0404 10:41:32.771440       1 main.go:380] Using nginx version: nginx&#47;1.23.3
-E0404 10:41:32.773053       1 main.go:753] Error getting pod: pods &quot;wp-kic-dep-7d46fd4f8d-mnxpk&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:nginx-ingress&quot; cannot get resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;nginx-ingress&quot;
+I0404 10:41:32.746481 1 flags.go:294] Starting with flags: [&quot;-nginx-configmaps=nginx-ingress&#47;nginx-config&quot; &quot;-ingress-class=wp-ink&quot;]
+I0404 10:41:32.761875 1 main.go:234] Kubernetes version: 1.23.3
+I0404 10:41:32.771440 1 main.go:380] Using nginx version: nginx&#47;1.23.3
+E0404 10:41:32.773053 1 main.go:753] Error getting pod: pods &quot;wp-kic-dep-7d46fd4f8d-mnxpk&quot; is forbidden: User &quot;system:serviceaccount:nginx-ingress:nginx-ingress&quot; cannot get resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;nginx-ingress&quot;
 2023&#47;04&#47;04 10:41:32 [emerg] 12#12: bind() to 0.0.0.0:80 failed (13: Permission denied)</p>2023-04-04</li><br/><li><span>kobe</span> 👍（1） 💬（2）<p>我这个ingress controller启动后没成功，一直在不断的创建pod，如下：
-wp-kic-dep-545dffd6d7-2n9cq    0&#47;1     SysctlForbidden   0          48s
-wp-kic-dep-545dffd6d7-2zkh2    0&#47;1     SysctlForbidden   0          65s
-wp-kic-dep-545dffd6d7-4f42q    0&#47;1     SysctlForbidden   0          20s
-wp-kic-dep-545dffd6d7-4vxlw    0&#47;1     SysctlForbidden   0          53s
-wp-kic-dep-545dffd6d7-6vshx    0&#47;1     SysctlForbidden   0          8s
-wp-kic-dep-545dffd6d7-6zgx7    0&#47;1     SysctlForbidden   0          60s
-wp-kic-dep-545dffd6d7-85mjh    0&#47;1     SysctlForbidden   0          46s
-wp-kic-dep-545dffd6d7-88jcn    0&#47;1     SysctlForbidden   0          55s
-wp-kic-dep-545dffd6d7-8mfjp    0&#47;1     SysctlForbidden   0          35s
-wp-kic-dep-545dffd6d7-8z5ps    0&#47;1     SysctlForbidden   0          72s
-wp-kic-dep-545dffd6d7-9bzgp    0&#47;1     SysctlForbidden   0          41s
-wp-kic-dep-545dffd6d7-9v86q    0&#47;1     SysctlForbidden   0          15s
-wp-kic-dep-545dffd6d7-c42rl    0&#47;1     SysctlForbidden   0          38s
-wp-kic-dep-545dffd6d7-c8zx8    0&#47;1     SysctlForbidden   0          57s
-wp-kic-dep-545dffd6d7-ccjfm    0&#47;1     SysctlForbidden   0          7s
-wp-kic-dep-545dffd6d7-chwt9    0&#47;1     SysctlForbidden   0          16s
-wp-kic-dep-545dffd6d7-crf4s    0&#47;1     SysctlForbidden   0          17s
-wp-kic-dep-545dffd6d7-cx8bx    0&#47;1     SysctlForbidden   0          20s
-wp-kic-dep-545dffd6d7-dc7w2    0&#47;1     SysctlForbidden   0          11s
-wp-kic-dep-545dffd6d7-dzvvx    0&#47;1     SysctlForbidden   0          73s
-wp-kic-dep-545dffd6d7-f72lj    0&#47;1     SysctlForbidden   0          66s
-wp-kic-dep-545dffd6d7-gjdkz    0&#47;1     SysctlForbidden   0          27s</p>2023-04-04</li><br/>
+wp-kic-dep-545dffd6d7-2n9cq 0&#47;1 SysctlForbidden 0 48s
+wp-kic-dep-545dffd6d7-2zkh2 0&#47;1 SysctlForbidden 0 65s
+wp-kic-dep-545dffd6d7-4f42q 0&#47;1 SysctlForbidden 0 20s
+wp-kic-dep-545dffd6d7-4vxlw 0&#47;1 SysctlForbidden 0 53s
+wp-kic-dep-545dffd6d7-6vshx 0&#47;1 SysctlForbidden 0 8s
+wp-kic-dep-545dffd6d7-6zgx7 0&#47;1 SysctlForbidden 0 60s
+wp-kic-dep-545dffd6d7-85mjh 0&#47;1 SysctlForbidden 0 46s
+wp-kic-dep-545dffd6d7-88jcn 0&#47;1 SysctlForbidden 0 55s
+wp-kic-dep-545dffd6d7-8mfjp 0&#47;1 SysctlForbidden 0 35s
+wp-kic-dep-545dffd6d7-8z5ps 0&#47;1 SysctlForbidden 0 72s
+wp-kic-dep-545dffd6d7-9bzgp 0&#47;1 SysctlForbidden 0 41s
+wp-kic-dep-545dffd6d7-9v86q 0&#47;1 SysctlForbidden 0 15s
+wp-kic-dep-545dffd6d7-c42rl 0&#47;1 SysctlForbidden 0 38s
+wp-kic-dep-545dffd6d7-c8zx8 0&#47;1 SysctlForbidden 0 57s
+wp-kic-dep-545dffd6d7-ccjfm 0&#47;1 SysctlForbidden 0 7s
+wp-kic-dep-545dffd6d7-chwt9 0&#47;1 SysctlForbidden 0 16s
+wp-kic-dep-545dffd6d7-crf4s 0&#47;1 SysctlForbidden 0 17s
+wp-kic-dep-545dffd6d7-cx8bx 0&#47;1 SysctlForbidden 0 20s
+wp-kic-dep-545dffd6d7-dc7w2 0&#47;1 SysctlForbidden 0 11s
+wp-kic-dep-545dffd6d7-dzvvx 0&#47;1 SysctlForbidden 0 73s
+wp-kic-dep-545dffd6d7-f72lj 0&#47;1 SysctlForbidden 0 66s
+wp-kic-dep-545dffd6d7-gjdkz 0&#47;1 SysctlForbidden 0 27s</p>2023-04-04</li><br/>
 </ul>

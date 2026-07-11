@@ -66,34 +66,34 @@
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-        targetNamespace="http://www.example.com/jobSchema" 
-        xmlns="http://www.example.com/jobSchema" 
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.example.com/jobSchema"
+        xmlns="http://www.example.com/jobSchema"
         elementFormDefault="qualified">
         <xsd:element name="TestJob">
             <xsd:complexType>
                         <xsd:choice minOccurs="0" maxOccurs="unbounded">
                             <xsd:element name="TestJob" type="TestJobType" minOccurs="1" maxOccurs="unbounded"/>
-                            <xsd:group ref="TestJobGeneralElements"/> 
-                            <xsd:group ref="TestJobElementsGroup"/>                 
-                        </xsd:choice>   
-                        <xsd:attributeGroup ref="TestJobGeneralAttributes"/>                        
-                </xsd:complexType>          
+                            <xsd:group ref="TestJobGeneralElements"/>
+                            <xsd:group ref="TestJobElementsGroup"/>
+                        </xsd:choice>
+                        <xsd:attributeGroup ref="TestJobGeneralAttributes"/>
+                </xsd:complexType>
         </xsd:element>
         <xsd:attributeGroup name="TestJobGeneralAttributes">
             <xsd:attribute name="name" type="xsd:string" use="required"/>
             <xsd:attribute name="description" type="xsd:string" use="required"/>
-            <xsd:attribute name="depends" type="xsd:string" use="optional"/> 
-            <xsd:attribute name="host" type="xsd:string" use="optional"/> 
-            <xsd:attribute name="timeout" type="xsd:nonNegativeInteger" use="optional"/> 
+            <xsd:attribute name="depends" type="xsd:string" use="optional"/>
+            <xsd:attribute name="host" type="xsd:string" use="optional"/>
+            <xsd:attribute name="timeout" type="xsd:nonNegativeInteger" use="optional"/>
       </xsd:attributeGroup>
       <xsd:group name="TestJobGeneralElements">
           <xsd:sequence>
-            <xsd:element name="JobInput" type="JobInputType" minOccurs="0" maxOccurs="unbounded"/>  
-            <xsd:element name="JobOutput" type="JobOutputType" minOccurs="0" maxOccurs="unbounded"/>   
-            <xsd:element name="TestData" type="TestDataType" minOccurs="0" maxOccurs="unbounded"/> 
-            </xsd:sequence>      
-        </xsd:group>    
+            <xsd:element name="JobInput" type="JobInputType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="JobOutput" type="JobOutputType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="TestData" type="TestDataType" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:group>
 </xsd:schema>
 ```
 
@@ -166,7 +166,7 @@ Job怎么跑呢？这个时候JobRunner需要解析上面代码里的@Dependency
 如果你用过Apache Ant这个构建管理工具的话，你一定对编写Build.xml不会陌生。编写build.xml就是做任务设计，先创建Compile、Package、Test的Task，声明它们的调用关系，然后运行下面的命令：
 
 ```plain
-ant -f build.xml 
+ant -f build.xml
 ```
 
 运行命令后，build.xml里定义的task就启动运行了。  
@@ -204,7 +204,7 @@ ant -f build.xml
 像Ant运行build.xml, Maven运行pom.xml一样，用JobRunner直接运行TestJobFile.xml, 运行命令如下，这样就能启动自动化测试执行了。
 
 ```plain
-JobRunner -f TestJobFile.xml 
+JobRunner -f TestJobFile.xml
 ```
 
 这样做主要有两个好处。第一，设计文件就是运行文件。Job开发完，需要更新设计文件，直接就可以运行，不存在设计和开发脱节的问题；第二，每个实体Job的运行都由JobRunner来驱动。这样一来，JobRunner就能判断出，Job有没有遵循它在设计文件里的承诺的Output，一旦Job的实现有了偏差，立刻就能发现。

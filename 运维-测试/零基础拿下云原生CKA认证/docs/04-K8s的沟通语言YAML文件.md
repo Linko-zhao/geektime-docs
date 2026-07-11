@@ -49,11 +49,11 @@ YAML 文件中的列表使用短横线（-）表示，每个列表项都在新�
 
 ```yaml
 list_key:
-- item1
-- item2
-- sub_list:
-  - sub_item1
-  - sub_item2
+  - item1
+  - item2
+  - sub_list:
+      - sub_item1
+      - sub_item2
 ```
 
 ### 嵌套结构

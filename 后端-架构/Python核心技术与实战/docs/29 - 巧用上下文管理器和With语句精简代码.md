@@ -11,9 +11,9 @@
 光说这些概念，你可能体会不到这一点，我们可以看看下面的例子：
 
 ```
-for x in range(10000000): 
+for x in range(10000000):
     f = open('test.txt', 'w')
-    f.write('hello') 
+    f.write('hello')
 ```
 
 这里我们一共打开了10000000个文件，但是用完以后都没有关闭它们，如果你运行该段代码，便会报错：
@@ -76,9 +76,9 @@ class FileManager:
     def __init__(self, name, mode):
         print('calling __init__ method')
         self.name = name
-        self.mode = mode 
+        self.mode = mode
         self.file = None
-        
+
     def __enter__(self):
         print('calling __enter__ method')
         self.file = open(self.name, self.mode)
@@ -89,11 +89,11 @@ class FileManager:
         print('calling __exit__ method')
         if self.file:
             self.file.close()
-            
+
 with FileManager('test.txt', 'w') as f:
     print('ready to write to file')
     f.write('hello world')
-    
+
 ## 输出
 calling __init__ method
 calling __enter__ method
@@ -133,12 +133,12 @@ calling __exit__ meth
 ```
 class Foo:
     def __init__(self):
-        print('__init__ called')        
+        print('__init__ called')
 
     def __enter__(self):
         print('__enter__ called')
         return self
-    
+
     def __exit__(self, exc_type, exc_value, exc_tb):
         print('__exit__ called')
         if exc_type:
@@ -147,7 +147,7 @@ class Foo:
             print(f'exc_traceback: {exc_tb}')
             print('exception handled')
         return True
-    
+
 with Foo() as obj:
     raise Exception('exception raised').with_traceback(None)
 
@@ -166,20 +166,20 @@ exception handled
 同样的，数据库的连接操作，也常常用上下文管理器来表示，这里我给出了比较简化的代码：
 
 ```
-class DBConnectionManager: 
-    def __init__(self, hostname, port): 
-        self.hostname = hostname 
-        self.port = port 
+class DBConnectionManager:
+    def __init__(self, hostname, port):
+        self.hostname = hostname
+        self.port = port
         self.connection = None
-  
-    def __enter__(self): 
-        self.connection = DBClient(self.hostname, self.port) 
+
+    def __enter__(self):
+        self.connection = DBClient(self.hostname, self.port)
         return self
-  
-    def __exit__(self, exc_type, exc_val, exc_tb): 
-        self.connection.close() 
-  
-with DBConnectionManager('localhost', '8080') as db_client: 
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
+
+with DBConnectionManager('localhost', '8080') as db_client:
 ```
 
 与前面FileManager的例子类似：
@@ -206,7 +206,7 @@ def file_manager(name, mode):
         yield f
     finally:
         f.close()
-        
+
 with file_manager('test.txt', 'w') as f:
     f.write('hello world')
 ```
@@ -240,7 +240,7 @@ TypeError: file_manager() missing 1 required positional argument: &#39;mode&#39;
 
 应该写成这样把，
 with file_manager(&#39;test.txt&#39;,&#39;w&#39;) as f:
-    f.write(&#39;hello world2&#39;)</p>2019-07-15</li><br/><li><span>ajodfaj</span> 👍（16） 💬（1）<p>with tf.Session() as sess</p>2019-07-15</li><br/><li><span>enjoylearning</span> 👍（15） 💬（0）<p>主要用于数据库连接</p>2019-07-15</li><br/><li><span>new</span> 👍（13） 💬（0）<p>打开文件时用最方便</p>2019-07-15</li><br/><li><span>LJK</span> 👍（8） 💬（2）<p>老师好，请问基于类的上下文，“__enter__“方法什么时候返回self呢？DBConnectionManager的例子中可以说明一下为什么是返回self不是返回self.connection么？</p>2019-07-15</li><br/><li><span>Geek_59f23e</span> 👍（4） 💬（1）<p>UnboundLocalError: local variable &#39;f&#39; referenced before assignment
+f.write(&#39;hello world2&#39;)</p>2019-07-15</li><br/><li><span>ajodfaj</span> 👍（16） 💬（1）<p>with tf.Session() as sess</p>2019-07-15</li><br/><li><span>enjoylearning</span> 👍（15） 💬（0）<p>主要用于数据库连接</p>2019-07-15</li><br/><li><span>new</span> 👍（13） 💬（0）<p>打开文件时用最方便</p>2019-07-15</li><br/><li><span>LJK</span> 👍（8） 💬（2）<p>老师好，请问基于类的上下文，“**enter**“方法什么时候返回self呢？DBConnectionManager的例子中可以说明一下为什么是返回self不是返回self.connection么？</p>2019-07-15</li><br/><li><span>Geek_59f23e</span> 👍（4） 💬（1）<p>UnboundLocalError: local variable &#39;f&#39; referenced before assignment
 最后一个例子有报错哦，基于生成器的上下文管理器那儿，提示说finally语句里的f变量没有先声明。</p>2019-07-16</li><br/><li><span>布凡</span> 👍（2） 💬（0）<p>这里with 的用法和C#中的using 一样，表示资源变量在一个块中有效，块结束后自动回收资源</p>2020-09-06</li><br/><li><span>Carl</span> 👍（2） 💬（2）<p>为什么平时使用 with open() as f 时可以畅通无阻呢?
-是因为open这个函数在源码里就用@contextmanager装饰了吗?</p>2019-10-21</li><br/><li><span>瞳梦</span> 👍（2） 💬（0）<p>请问数据库的那个例子，__enter__()中返回self.connection是不是更符合实际应用中的情况。 </p>2019-07-17</li><br/><li><span>张洪阆</span> 👍（1） 💬（0）<p>with限制了对象的作用域，相当于是个临时对象</p>2019-07-28</li><br/>
+是因为open这个函数在源码里就用@contextmanager装饰了吗?</p>2019-10-21</li><br/><li><span>瞳梦</span> 👍（2） 💬（0）<p>请问数据库的那个例子，**enter**()中返回self.connection是不是更符合实际应用中的情况。 </p>2019-07-17</li><br/><li><span>张洪阆</span> 👍（1） 💬（0）<p>with限制了对象的作用域，相当于是个临时对象</p>2019-07-28</li><br/>
 </ul>

@@ -167,8 +167,8 @@ return response.choices[0].message.content
 在和OpenAI进行对话时，我们有时会收到类似这样的一条Error。
 
 ```plain
-openai.RateLimitError: Error code: 429: 'Too Many Requests' Rate limit reached for gpt-4-turbo in organization XXXX on tokens per min. 
-Limit: 10000.000000 / min. Current: 10020.000000 / min. 
+openai.RateLimitError: Error code: 429: 'Too Many Requests' Rate limit reached for gpt-4-turbo in organization XXXX on tokens per min.
+Limit: 10000.000000 / min. Current: 10020.000000 / min.
 ```
 
 这就是速率限制被触发了。这并不一定是你调用的特别多，特别频繁，因为OpenAI对于每个账号的速率限额配置都是不同的。
@@ -219,7 +219,7 @@ def completion_with_backoff(**kwargs):
 # 使用该函数进行API调用
 try:
     response = completion_with_backoff(
-        model = "gpt-3.5-turbo", 
+        model = "gpt-3.5-turbo",
         messages = [{"role": "user",  "content": "从前有座山，"}]
     )
     print("API调用成功，响应内容：", response.choices[0].message.content)

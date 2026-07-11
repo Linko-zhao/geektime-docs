@@ -71,7 +71,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/76/af/76d425cde96d6709c42ayy6b62e660af.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 
@@ -109,7 +109,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/35/06/35054c8be5140f02d6c4486f8a1fc006.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 
@@ -161,7 +161,7 @@ CEO不就是这样，**很多技术人出来创业肯定想做很多技术什么
 
 　
 
-* * *
+---
 
 　
 
@@ -203,7 +203,7 @@ CEO不就是这样，**很多技术人出来创业肯定想做很多技术什么
 
 ![图片](https://static001.geekbang.org/resource/image/50/f4/50c112991bee0ae52e8eaf2a34a91ff4.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 

@@ -27,7 +27,7 @@ coupon-customer-serv就扮演了服务消费者的角色，它需要调用coupon
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-webflux</artifactId>
-</dependency>    
+</dependency>
 ```
 
 第一个依赖项你一定很熟悉了，它是Nacos服务治理的组件，我们在上一节课程中也添加了同款依赖项到coupon-template-impl和coupon-calculation-impl两个模块。
@@ -179,23 +179,23 @@ UpdateTask这个类隐藏得非常深，它是HostReactor
 public class UpdateTask implements Runnable {
 
     // ....省略部分代码
-    
+
     // 获取服务列表
     @Override
     public void run() {
         long delayTime = DEFAULT_DELAY;
-        
+
         try {
             // 根据service name获取到当前服务的信息，包括服务器地址列表
             ServiceInfo serviceObj = serviceInfoMap
                 .get(ServiceInfo.getKey(serviceName, clusters));
-            
+
             // 如果为空，则重新拉取最新的服务列表
             if (serviceObj == null) {
                 updateService(serviceName, clusters);
                 return;
             }
-            
+
             // 如果时间戳<=上次更新的时间，则进行更新操作
             if (serviceObj.getLastRefTime() <= lastRefTime) {
                 updateService(serviceName, clusters);
@@ -207,7 +207,7 @@ public class UpdateTask implements Runnable {
             }
             // 刷新服务的更新时间
             lastRefTime = serviceObj.getLastRefTime();
-            
+
             // 如果订阅被取消，则停止更新任务
             if (!notifier.isSubscribed(serviceName, clusters) && !futureMap
                     .containsKey(ServiceInfo.getKey(serviceName, clusters))) {
@@ -263,21 +263,22 @@ String ip = System.getProperty(&quot;com.alibaba.nacos.client.naming.local.ip&qu
 使用System.getProperty获取系统变量，而不是从application.yml中获取，如过获取不到就查找本机的网卡，由于本机有两块网卡，所有就选中了那块虚拟网卡的ip了。
 同时&#47;instance&#47;list请求的app参数也是System.getProperty(&quot;project.name&quot;);这样获取的，由于没有获取到&quot;project.name&quot;，所以就默认应用名是：unknown，然后我就在java启动服务加了这俩参数进行解决的。
 不只为什么这俩参数不在application.yml中配置呢？这俩参数在application.yml中配置这样多方便呀。
-				
 
 java -D&quot;com.alibaba.nacos.client.naming.local.ip&quot;=&quot;192.168.18.8&quot; -D&quot;project.name&quot;=&quot;customer&quot; -jar coupon-customer-impl-1.0-SNAPSHOT.jar</p>2022-02-03</li><br/><li><span>Avalon</span> 👍（4） 💬（1）<p>老师，我有两个疑问：
 1、为什么依赖注入的是 WebClient.Builder，而不直接注入 WebClient？
 2、bodyToMono 的返回值类型 Mono，“Mono”是什么意思？</p>2022-01-04</li><br/><li><span>Geek_e93c48</span> 👍（4） 💬（1）<p>老师，我发现UpdateTask通过当前类addTask()方法进行任务调度，顺着藤蔓一直摸上去：addTask()-&gt;scheduleUpdateIfAbsent()-&gt;NamingClientProxyDelegate.subscribe()-&gt;NacosNamingService.getAllInstances()-&gt;NamingFactory-&gt;App启动类加载时调用。</p>2022-01-04</li><br/><li><span>摊牌</span> 👍（2） 💬（1）<p>咨询老师个阅读源码的思路与技巧，比如nacos的服务发现，如何从应用的角度追溯到UpdateTask这个类呢，想了解nacos的服务发现底层逻辑，最繁琐的办法是得从头来，搭建nacos的调试环境，下载源码跟踪分析，有没有办法在应用的时候作为切入点去分析局部的底层逻辑呢</p>2023-08-17</li><br/><li><span>alex_lai</span> 👍（2） 💬（3）<p>根据目前项目里的service discovery setup 所有在一个group里的service都可以互相调用? customer service 也可以被另外两个子项目调用？所以nacos有可以设置service topo的相关设置么？
 大厂里PP也是有这个专门的architect和team 去review和维护吧</p>2022-01-21</li><br/><li><span>so long</span> 👍（2） 💬（1）<p>nacos服务发现正向顺藤摸瓜：主要靠NacosWatch实现SmartLifecycle，在spring容器初始化后开始进行服务发现
 NacosDiscoveryClientConfiguration-&gt;NacosWatch.start()-&gt;NamingService. subscribe(String serviceName, String groupName, List&lt;String&gt; clusters, EventListener listener)-&gt;HostReactor. subscribe(String serviceName, String clusters, EventListener eventListener)</p>2022-01-05</li><br/><li><span>6点无痛早起学习的和尚</span> 👍（2） 💬（1）<p>2 个问题：
+
 1. 项目 customer 上的注解：@LoadBalancerClient(value = &quot;coupon-template-serv&quot;, configuration = CanaryRuleConfiguration.class)，没有说明是啥作用
 2. 运行 customer 这个项目的时候会报错，Access to DialectResolutionInfo cannot be null when &#39;hibernate.dialect&#39; not set，
-Google 解决方式：加入spring:jpa:database-platform: org.hibernate.dialect.MySQLDialect</p>2022-01-03</li><br/><li><span>王鸿轩</span> 👍（1） 💬（2）<p>老师，以下这段代码似乎有问题（CouponCustomerServiceImpl -&gt; findCoupon）：
-Map&lt;Long, CouponTemplateInfo&gt; templateMap = webClientBuilder.build().get()
-                .uri(&quot;http:&#47;&#47;coupon-template-serv&#47;template&#47;getBatch?ids=&quot; + templateIds)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference&lt;Map&lt;Long, CouponTemplateInfo&gt;&gt;() {})
-                .block();
-好像不能在查询参数上直接拼接一个数组，要转化成xx=1,2,3...这样的形式</p>2022-02-15</li><br/><li><span>Geek_482132</span> 👍（0） 💬（1）<p>想问一下老师，客户端进行服务调用的时候使用的是本地缓存的服务端信息吗，还是再向nacos发送一次请求呢</p>2024-06-03</li><br/><li><span>在路上</span> 👍（0） 💬（1）<p>老师可以聊聊这个吗：通过WebClient非阻塞方式优化性能</p>2023-01-20</li><br/><li><span>Believe</span> 👍（0） 💬（1）<p> http:&#47;&#47;coupon-template-serv&#47;template&#47;getBatch?ids=%5B3,%201,%202,%204,%207%5D [DefaultWebClient]
-直接拼接参数ids=templateIds 是会出现问题的</p>2022-11-16</li><br/><li><span>被圣光照黑了</span> 👍（0） 💬（2）<p>启动报错了：Spring Cloud LoadBalancer is currently working with the default cache. You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.的警告。coupon-customer-serv没有注册到nacos里。百度了说引入Caffeine依赖就好，但还是不行</p>2022-01-04</li><br/><li><span>6点无痛早起学习的和尚</span> 👍（0） 💬（1）<p>再加一个问题，类UpdateTask是在HostReactor中，文中应该写错了不是在HostReactive中</p>2022-01-03</li><br/><li><span>安静的美男子</span> 👍（2） 💬（1）<p>UpdateTask里有一个serviceName，看起来是本机服务名，每个方法也都有这个，那应该只能获取到本机的注册信息才对，不能拿到同分组的其他服务注册信息呀，看了很久没没看懂怎么获取其他服务的？</p>2023-06-13</li><br/>
+   Google 解决方式：加入spring:jpa:database-platform: org.hibernate.dialect.MySQLDialect</p>2022-01-03</li><br/><li><span>王鸿轩</span> 👍（1） 💬（2）<p>老师，以下这段代码似乎有问题（CouponCustomerServiceImpl -&gt; findCoupon）：
+   Map&lt;Long, CouponTemplateInfo&gt; templateMap = webClientBuilder.build().get()
+   .uri(&quot;http:&#47;&#47;coupon-template-serv&#47;template&#47;getBatch?ids=&quot; + templateIds)
+   .retrieve()
+   .bodyToMono(new ParameterizedTypeReference&lt;Map&lt;Long, CouponTemplateInfo&gt;&gt;() {})
+   .block();
+   好像不能在查询参数上直接拼接一个数组，要转化成xx=1,2,3...这样的形式</p>2022-02-15</li><br/><li><span>Geek_482132</span> 👍（0） 💬（1）<p>想问一下老师，客户端进行服务调用的时候使用的是本地缓存的服务端信息吗，还是再向nacos发送一次请求呢</p>2024-06-03</li><br/><li><span>在路上</span> 👍（0） 💬（1）<p>老师可以聊聊这个吗：通过WebClient非阻塞方式优化性能</p>2023-01-20</li><br/><li><span>Believe</span> 👍（0） 💬（1）<p> http:&#47;&#47;coupon-template-serv&#47;template&#47;getBatch?ids=%5B3,%201,%202,%204,%207%5D [DefaultWebClient]
+   直接拼接参数ids=templateIds 是会出现问题的</p>2022-11-16</li><br/><li><span>被圣光照黑了</span> 👍（0） 💬（2）<p>启动报错了：Spring Cloud LoadBalancer is currently working with the default cache. You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.的警告。coupon-customer-serv没有注册到nacos里。百度了说引入Caffeine依赖就好，但还是不行</p>2022-01-04</li><br/><li><span>6点无痛早起学习的和尚</span> 👍（0） 💬（1）<p>再加一个问题，类UpdateTask是在HostReactor中，文中应该写错了不是在HostReactive中</p>2022-01-03</li><br/><li><span>安静的美男子</span> 👍（2） 💬（1）<p>UpdateTask里有一个serviceName，看起来是本机服务名，每个方法也都有这个，那应该只能获取到本机的注册信息才对，不能拿到同分组的其他服务注册信息呀，看了很久没没看懂怎么获取其他服务的？</p>2023-06-13</li><br/>
+
 </ul>

@@ -161,7 +161,7 @@ autowireConstructor 方法要创建实例，不仅需要知道是哪个构造器
 
 ```
 private Object instantiate(
-      String beanName, RootBeanDefinition mbd, Constructor<?> constructorToUse, Object[] argsToUse) 
+      String beanName, RootBeanDefinition mbd, Constructor<?> constructorToUse, Object[] argsToUse)
 ```
 
 那么上述方法中存储构造参数的 argsToUse 如何获取呢？换言之，当我们已经知道构造器ServiceImpl(String serviceName)，要创建出 ServiceImpl 实例，如何确定 serviceName 的值是多少？
@@ -309,7 +309,7 @@ public class HelloWorldController {
     public String hi(){
          return "helloworld, service is : " + getServiceImpl();
     };
- 
+
     public ServiceImpl getServiceImpl(){
         return applicationContext.getBean(ServiceImpl.class);
     }
@@ -324,7 +324,7 @@ public class HelloWorldController {
 ```
 @RestController
 public class HelloWorldController {
- 
+
     @RequestMapping(path = "hi", method = RequestMethod.GET)
     public String hi(){
          return "helloworld, service is : " + getServiceImpl();
@@ -333,7 +333,7 @@ public class HelloWorldController {
     @Lookup
     public ServiceImpl getServiceImpl(){
         return null;
-    }  
+    }
 
 }
 ```
@@ -376,7 +376,7 @@ public ServiceImpl getServiceImpl(){
     //下面的日志会输出么？
     log.info("executing this method");
     return null;
-}  
+}
 ```
 
 以上代码，添加了一行代码输出日志。测试后，我们会发现并没有日志输出。这也验证了，当使用 Lookup 注解一个方法时，这个方法的具体实现已并不重要。
@@ -445,32 +445,30 @@ proxyMode=ScopedProxyMode.TARGET_CLASS基于类的代理模式
 proxyMode=ScopedProxyMode.NO（默认）不进行代理</p>2021-05-06</li><br/><li><span>Monday</span> 👍（13） 💬（1）<p>亲测：
 1、@ComponentScan可以多个同时使用，且都生效。效果等同于@ComponentScans
 2、@ComponentScans不能与@ComponentScan一起使用</p>2021-06-15</li><br/><li><span>Bumblebee</span> 👍（9） 💬（0）<p>今日收获
-①  Spring默认扫描包是application类（@SpringBootApplication）所在的包，通过@ComponentScans或@ComponentScan直接可以指定需要扫码的包；
+① Spring默认扫描包是application类（@SpringBootApplication）所在的包，通过@ComponentScans或@ComponentScan直接可以指定需要扫码的包；
 
-
-②  Bean的定义缺少隐式依赖；
+② Bean的定义缺少隐式依赖；
 
 @Service
 public class ServiceImpl {
-    
+
     private String serviceName；
     public ServiceImpl(String serviceName){
         this.serviceName = serviceName;
     }
 
 }
-      1）上述代码中的serviceName如果不是Spring容器的Bean创建ServiceIml  Bean时会报错，因为Spring创建Bean时会调用AbstractAutowireCapableBeanFactory#createBeanInstance，他主要是通过反射获取构造器，通过构造器创建Bean，此时获取到的构造器是一个携带参数的构造，为了获取此构造器的参数serviceName，会从Spring容器中去获取，获取不到则报错；
-      2）需要Spring管理的类不能有多个构造函数，因为Spring在创建Bean时无法确定该调用那个构造函数，会报错；
+1）上述代码中的serviceName如果不是Spring容器的Bean创建ServiceIml Bean时会报错，因为Spring创建Bean时会调用AbstractAutowireCapableBeanFactory#createBeanInstance，他主要是通过反射获取构造器，通过构造器创建Bean，此时获取到的构造器是一个携带参数的构造，为了获取此构造器的参数serviceName，会从Spring容器中去获取，获取不到则报错；
+2）需要Spring管理的类不能有多个构造函数，因为Spring在创建Bean时无法确定该调用那个构造函数，会报错；
 
-③  原型Bean被固定；
-      1）被@Autowired修饰的成员变量会在所属Bean被创建后，执行BeanPostProcessor给属性注入值，只注入一次，因为对于被@Autowired修饰的原型Bean，每次想获取到一个全新的Bean，是不能达到目的的；
-       2）对于原型Bean每次想获取到一个全新的Bean可以从AppliactionContext获取，或者通过@LookUp注解获取，示例代码如下；
-    @Lookup
-    public ServiceImpl getServiceImpl(){
-        return null;
-    }  
+③ 原型Bean被固定；
+1）被@Autowired修饰的成员变量会在所属Bean被创建后，执行BeanPostProcessor给属性注入值，只注入一次，因为对于被@Autowired修饰的原型Bean，每次想获取到一个全新的Bean，是不能达到目的的；
+2）对于原型Bean每次想获取到一个全新的Bean可以从AppliactionContext获取，或者通过@LookUp注解获取，示例代码如下；
+@Lookup
+public ServiceImpl getServiceImpl(){
+return null;
+}  
 被@LookUp注解修饰的方法本身实现不重要
-
 
 </p>2022-05-25</li><br/><li><span>Geek_ca230e</span> 👍（9） 💬（1）<p>案例1 也可以用这样的方式显示指定扫描包：@SpringBootApplication(scanBasePackages = {&quot;com.xxx.xxxxx&quot;,&quot;com.xxx.xxx&quot;})</p>2021-05-08</li><br/><li><span>Sway</span> 👍（5） 💬（4）<p>想咨询一下，是怎么通过 ComponentScan 注解，找到 ComponentScanAnnotationParser 这个类的？在看其他的项目时，看到很多注解，但是想了解它具体做了什么工作，却无从下手。 （ 很可能项目并不能跑起来去 DEBUG ）</p>2021-04-21</li><br/><li><span>jzhongchen</span> 👍（4） 💬（3）<p>案例 3：原型 Bean 被固定
 设置scope为prototype的bean是每次调用的时候会产生一个新的bean，案例中由于controller没有设置scope，默认为singleton。每次请求的时候controller是同一个对象，当然service不会变。如果把controller的scope设置为prototype的话，就能够实现每次请求的时候service是一个新对象。
@@ -491,5 +489,6 @@ public class TestService {
     public String doSomething() {
         return serviceName;
     }
+
 }</p>2021-04-26</li><br/><li><span>云韵</span> 👍（1） 💬（0）<p>老师，你是根据这个@ComponentScan 注解的 basePackages() 就定位到 ComponentScanAnnotationParser#parse 这个方法的呢</p>2022-08-24</li><br/><li><span>Geek_13168b</span> 👍（1） 💬（1）<p>新版本的spring，对于案例二已经不能运行了，在项目运行之前就会报错</p>2022-04-12</li><br/><li><span>安迪密恩</span> 👍（1） 💬（0）<p>短短一篇专栏，补齐了5个知识点。太值了。</p>2022-03-07</li><br/>
 </ul>

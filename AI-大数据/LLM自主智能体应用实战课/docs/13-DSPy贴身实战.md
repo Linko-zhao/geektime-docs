@@ -21,30 +21,30 @@ import dspy
 import fire
 
 qwen7b = dspy.LM(
-    'ollama_chat/qwen2.5', 
-    api_base='http://localhost:11434', 
-    api_key='', 
+    'ollama_chat/qwen2.5',
+    api_base='http://localhost:11434',
+    api_key='',
     temperature=1.0,
     num_retries=1000)
 
 qwen7b_math = dspy.LM(
-    'ollama_chat/qwen2-math', 
-    api_base='http://localhost:11434', 
-    api_key='', 
+    'ollama_chat/qwen2-math',
+    api_base='http://localhost:11434',
+    api_key='',
     temperature=1.0,
     num_retries=1000)
 
 o1_mini = dspy.LM(
-    'openai/o1-mini', 
+    'openai/o1-mini',
     api_key='sk-xxxxxx',
     temperature=1.0,
     max_tokens=5000,
     num_retries=1000)
 
 model_dict = {
-    "qwen7b": qwen7b, 
-    "qwen7b_math": qwen7b_math, 
-    "o1_mini": o1_mini, 
+    "qwen7b": qwen7b,
+    "qwen7b_math": qwen7b_math,
+    "o1_mini": o1_mini,
 }
 
 def main(model="o1_mini", point_list="1,3,6,11"):
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
 - 我配置了 3 个基础 LLM：使用 ollama 部署的 qwen2.5、qwen2-math 和位于云端的 OpenAI 公司的 o1-mini。你还可以自行添加更多的 LLM。
 - 使用 OpenAI 公司的 LLM 需要注册 OpenAI 公司的账号，给账号充值并创建一个 api\_key。运行程序之前还要先解决 Linux 主机科学上网的问题，这里不便详谈。上面代码中 o1-mini 模型的参数 api\_key=‘sk-xxxxxx’ 需要替换为你自己 OpenAI 账号的 api\_key，max\_tokens 必须设置为 &gt;= 5000。
-- 我没有使用第 4 课中部署的 qwen2.5-math，而是使用了一个新的模型 qwen2-math。这是因为第 4 课中部署的 qwen2.5-math 对 JSON 格式输出支持的不够好，无法与 dspy.ChainOfThought 模块配合工作。使用 ollama 部署 qwen2-math 的方法是 ```ollama run``qwen``2-math```。
+- 我没有使用第 4 课中部署的 qwen2.5-math，而是使用了一个新的模型 qwen2-math。这是因为第 4 课中部署的 qwen2.5-math 对 JSON 格式输出支持的不够好，无法与 dspy.ChainOfThought 模块配合工作。使用 ollama 部署 qwen2-math 的方法是 `ollama run``qwen``2-math`。
 - LLM 的 temperature 参数必须设置为 1.0，因为需要进行精确的数学推理和计算，不需要 LLM 有任何天马行空的创造性。
 - LLM 的 num\_retries 参数应设置为一个很大的值，例如 1000。这样当 DSPy 与 基础 LLM 交互发生错误时（尤其是与网络访问相关的错误），可以自动重试，默认情况下不会重试。
 
@@ -143,7 +143,7 @@ vi math.py
 教程 [Tutorial: Math Reasoning](https://dspy.ai/tutorials/math/) 中说道：
 
 > 最后，让我们来优化我们的模块。 由于我们需要强大的推理能力，我们将使用大型 gpt-4o 作为教师模型（用于在优化时引导小型 LM 的推理），但不作为处理提示词的模型（用于制作指令）或（训练后）执行任务的模型。 gpt-4o 将只被调用少量次数。直接参与优化和生成（优化）程序的模型将是 gpt-4o-mini。
-> 
+>
 > 我们还将指定 max\_bootstrapped\_demos=4，这意味着我们希望在提示中最多使用四个引导示例；指定 max\_labeled\_demos=4，这意味着在引导示例和预标签示例之间，我们希望最多使用四个示例。
 
 这个教程的例子代码中使用了两个 LLM：OpenAI 的 gpt-4o 和 gpt-4o-mini。我对教程的代码做了一些修改，将其中的 gpt-4o 和 gpt-4o-mini 分别改成了 o1-mini 和 qwen2.5。因为在前面我对 o1-mini 给出 24 点表达式的表现非常满意，所以我希望使用 o1-mini 来指导 dspy.ChainOfThought 模块 + qwen2.5 的优化。
@@ -156,15 +156,15 @@ import dspy
 from dspy.datasets import MATH
 
 qwen7b = dspy.LM(
-    'ollama_chat/qwen2.5', 
-    api_base='http://localhost:11434', 
-    api_key='', 
+    'ollama_chat/qwen2.5',
+    api_base='http://localhost:11434',
+    api_key='',
     temperature=1.0,
     cache=False,
     num_retries=1000)
 
 o1_mini = dspy.LM(
-    'openai/o1-mini', 
+    'openai/o1-mini',
     api_key='sk-xxxxxx',
     temperature=1.0,
     max_tokens=5000,
@@ -220,9 +220,9 @@ import dspy
 import fire
 
 qwen7b = dspy.LM(
-    'ollama_chat/qwen2.5', 
-    api_base='http://localhost:11434', 
-    api_key='', 
+    'ollama_chat/qwen2.5',
+    api_base='http://localhost:11434',
+    api_key='',
     temperature=1.0,
     num_retries=1000)
 

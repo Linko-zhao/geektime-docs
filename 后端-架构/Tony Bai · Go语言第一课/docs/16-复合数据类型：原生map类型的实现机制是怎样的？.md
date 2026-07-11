@@ -89,8 +89,8 @@ m1 := map[int][]string{
     7: []string{"val7_1"},
 }
 
-type Position struct { 
-    x float64 
+type Position struct {
+    x float64
     y float64
 }
 
@@ -170,7 +170,7 @@ m := map[string]int {
 }
 
 fmt.Println(len(m)) // 2
-m["key3"] = 3  
+m["key3"] = 3
 fmt.Println(len(m)) // 3
 ```
 
@@ -236,7 +236,7 @@ fmt.Println(m) // map[key1:1]
 
 ```plain
 package main
-  
+
 import "fmt"
 
 func main() {
@@ -263,7 +263,7 @@ func main() {
 如果我们只关心每次迭代的键，我们可以使用下面的方式对map进行遍历：
 
 ```plain
-for k, _ := range m { 
+for k, _ := range m {
 	// 使用k
 }
 ```
@@ -290,7 +290,7 @@ for _, v := range m {
 
 ```plain
 package main
-  
+
 import "fmt"
 
 func doIteration(m map[int]int) {
@@ -336,7 +336,7 @@ func main() {
 
 ```plain
 package main
-  
+
 import "fmt"
 
 func foo(m map[string]int) {
@@ -350,9 +350,9 @@ func main() {
         "key2": 2,
     }
 
-    fmt.Println(m) // map[key1:1 key2:2]  
+    fmt.Println(m) // map[key1:1 key2:2]
     foo(m)
-    fmt.Println(m) // map[key1:11 key2:12] 
+    fmt.Println(m) // map[key1:11 key2:12]
 }
 ```
 
@@ -367,7 +367,7 @@ m := make(map[keyType]valType, capacityhint) → m := runtime.makemap(maptype, c
 // 插入新键值对或给键重新赋值
 m["key"] = "value" → v := runtime.mapassign(maptype, m, "key") v是用于后续存储value的空间的地址
 
-// 获取某键的值 
+// 获取某键的值
 v := m["key"]      → v := runtime.mapaccess1(maptype, m, "key")
 v, ok := m["key"]  → v, ok := runtime.mapaccess2(maptype, m, "key")
 
@@ -417,7 +417,7 @@ type maptype struct {
     elemsize   uint8  // size of elem slot
     bucketsize uint16 // size of bucket
     flags      uint32
-} 
+}
 ```
 
 我们可以看到，这个实例包含了我们需要的map类型中的所有"元信息"。我们前面提到过，编译器会把语法层面的map操作重写成运行时对应的函数调用，这些运行时函数都有一个共同的特点，那就是第一个参数都是maptype指针类型的参数。
@@ -568,76 +568,79 @@ map类型对key元素的类型是有约束的，它要求key元素的类型必�
 	mu.RLock()
 	defer mu.RUnlock()
 
-	keys := []int{}
+    keys := []int{}
 
-	for k := range m {
-		keys = append(keys, k)
-	}
+    for k := range m {
+    	keys = append(keys, k)
+    }
 
-	sort.SliceStable(keys, func(x, y int) bool {
-		return x &lt; y
-	})
+    sort.SliceStable(keys, func(x, y int) bool {
+    	return x &lt; y
+    })
 
-	for _, k := range keys {
-		fmt.Printf(&quot;[%d, %d] &quot;, k, m[k])
-	}
+    for _, k := range keys {
+    	fmt.Printf(&quot;[%d, %d] &quot;, k, m[k])
+    }
 
-	fmt.Println()
+    fmt.Println()
+
 }
 
 func doWrite(m map[int]int) {
-	mu.Lock()
-	defer mu.Unlock()
+mu.Lock()
+defer mu.Unlock()
 
-	for k, v := range m {
-		m[k] = v + 1
-	}
+    for k, v := range m {
+    	m[k] = v + 1
+    }
+
 }
 
 ==&gt; 对并发示例代码的稳定排序输出 (原例1000次输出太多，输出前10个作为说明)：
-[1, 11] [2, 12] [3, 13] 
-[1, 12] [2, 13] [3, 14] 
-[1, 13] [2, 14] [3, 15] 
-[1, 14] [2, 15] [3, 16] 
-[1, 15] [2, 16] [3, 17] 
-[1, 16] [2, 17] [3, 18] 
-[1, 17] [2, 18] [3, 19] 
-[1, 18] [2, 19] [3, 20] 
-[1, 19] [2, 20] [3, 21] 
-[1, 20] [2, 21] [3, 22] 
+[1, 11] [2, 12] [3, 13]
+[1, 12] [2, 13] [3, 14]
+[1, 13] [2, 14] [3, 15]
+[1, 14] [2, 15] [3, 16]
+[1, 15] [2, 16] [3, 17]
+[1, 16] [2, 17] [3, 18]
+[1, 17] [2, 18] [3, 19]
+[1, 18] [2, 19] [3, 20]
+[1, 19] [2, 20] [3, 21]
+[1, 20] [2, 21] [3, 22]
 。。。</p>2021-11-17</li><br/><li><span>邹志鹏.Joey ⁷⁷⁷</span> 👍（2） 💬（1）<p>既切片之后, 应该是 &quot;继切片之后&quot;?</p>2023-01-18</li><br/><li><span>不说话装糕手</span> 👍（2） 💬（1）<p>关于老师并发读写map的示例，做了如下修改
-	&#47;&#47;go func() {
-	&#47;&#47;	for i := 0; i &lt; 1000; i++ {
-	&#47;&#47;		doIteration(m)
-	&#47;&#47;	}
-	&#47;&#47;}()
+&#47;&#47;go func() {
+&#47;&#47; for i := 0; i &lt; 1000; i++ {
+&#47;&#47; doIteration(m)
+&#47;&#47; }
+&#47;&#47;}()
 
-	go func() {
-		for i := 0; i &lt; 10000; i++ {
-			doWrite(m)
-		}
-	}()
+    go func() {
+    	for i := 0; i &lt; 10000; i++ {
+    		doWrite(m)
+    	}
+    }()
 
-	time.Sleep(5 * time.Second)
-	fmt.Println(m)
-	
+    time.Sleep(5 * time.Second)
+    fmt.Println(m)
+
 output:
 map[1:10011 2:10012 3:10013]
 进程 已完成，退出代码为 0
 
 我本地是1.16版本，看起来是可以并发写的？</p>2022-10-20</li><br/><li><span>pythonbug</span> 👍（2） 💬（1）<p>func sortMap(m map[string]int) {
-	&#47;&#47; 存key
-	var s []string
-	for k, _ := range m {
-		s = append(s, k)
-	}
+&#47;&#47; 存key
+var s []string
+for k, _ := range m {
+s = append(s, k)
+}
 
-	&#47;&#47; 对s进行排序
-	sort.Strings(s)
+    &#47;&#47; 对s进行排序
+    sort.Strings(s)
 
-	&#47;&#47; 遍历输出
-	for _, v := range s {
-		fmt.Println(v, m[v])
-	}
+    &#47;&#47; 遍历输出
+    for _, v := range s {
+    	fmt.Println(v, m[v])
+    }
+
 }</p>2022-10-09</li><br/>
 </ul>

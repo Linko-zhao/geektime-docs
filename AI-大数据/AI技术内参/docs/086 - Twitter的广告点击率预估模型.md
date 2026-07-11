@@ -49,6 +49,7 @@ Twitter的工程师们在这篇论文里介绍的也是在信息流里投放的�
 **参考文献**
 
 1. Cheng Li, Yue Lu, Qiaozhu Mei, Dong Wang, and Sandeep Pandey. Click-through Prediction for Advertising in Twitter Timeline. Proceedings of the 21th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD '15). ACM, New York, NY, USA, 1959-1968, 2015.
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>艾熊</span> 👍（1） 💬（0）<p>我觉得也可以tune一下树模型用树模型呀，树模型也可以融合多目标也可以适用于pair对的目标呀！</p>2018-06-20</li><br/><li><span>yy</span> 👍（1） 💬（0）<p>是不是因为树模型不太适合用户id和广告id当特征，而信息流又希望把这些算成实时的，所以不太适合</p>2018-06-20</li><br/>
 </ul>

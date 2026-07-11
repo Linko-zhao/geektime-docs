@@ -199,7 +199,7 @@ int Applier_module::applier_thread_handle() {
 
         break;
       default:
-        assert(0); 
+        assert(0);
     }
 
     delete packet;

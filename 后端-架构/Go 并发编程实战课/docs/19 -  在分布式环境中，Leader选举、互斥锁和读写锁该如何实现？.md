@@ -278,7 +278,7 @@ var (
 
 func main() {
     flag.Parse()
-    
+
     rand.Seed(time.Now().UnixNano())
     // etcd地址
     endpoints := strings.Split(*addr, ",")

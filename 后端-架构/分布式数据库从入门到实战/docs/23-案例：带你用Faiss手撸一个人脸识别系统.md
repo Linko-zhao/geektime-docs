@@ -81,7 +81,7 @@ index = faiss.IndexIDMap(faiss.IndexFlatL2(d))
 # 读取不到人脸或者超过1个人脸的都过滤掉
 if len(face_encodings) == 1:
     index.add_with_ids(np.array(face_encodings), np.array(file_name.split("_")[0]))
-    
+
 ```
 
 ### 人脸检索
@@ -106,7 +106,7 @@ def recognize_face_file():
     similar_face_id = I[0][0]
     # 返回结果
     return jsonify({'result': str(similar_face_id)})
-    
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 ```

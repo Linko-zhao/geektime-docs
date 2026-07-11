@@ -32,7 +32,7 @@ print("Python 说答案是:", python_answer)
 输出结果：
 
 ```plain
-OpenAI API 说答案是: 
+OpenAI API 说答案是:
 352 x 493 = 174,336
 Python 说答案是: 173536
 ```
@@ -211,10 +211,10 @@ def transform_func(inputs: dict) -> dict:
     text = inputs["output"]
     return {"weather_info" : parse_weather_info(text)}
 
-transformation_chain = TransformChain(input_variables=["output"], 
+transformation_chain = TransformChain(input_variables=["output"],
                                       output_variables=["weather_info"], transform=transform_func)
 
-final_chain = SequentialChain(chains=[requests_chain, transformation_chain], 
+final_chain = SequentialChain(chains=[requests_chain, transformation_chain],
                               input_variables=["query", "url"], output_variables=["weather_info"])
 final_result = final_chain.run(inputs)
 print(final_result)
@@ -288,7 +288,7 @@ print(result)
 问题：
 
 ```plain
-question = "请问你们的退货政策是怎么样的？" 
+question = "请问你们的退货政策是怎么样的？"
 result = faq_chain.run(question)
 print(result)
 ```
@@ -345,14 +345,14 @@ Extracted:&lt;answer or &quot;找不到&quot;&gt;
 Extracted:&quot;&quot;&quot;
 
 PROMPT = PromptTemplate(
-    input_variables=[&quot;query&quot;, &quot;requests_result&quot;],
-    template=template,
+input_variables=[&quot;query&quot;, &quot;requests_result&quot;],
+template=template,
 )
 requests_chain = LLMRequestsChain(llm_chain = LLMChain(llm=OpenAI(temperature=0), prompt=PROMPT),verbose=True)
 question = &quot;今天上海的天气怎么样？&quot;
 inputs = {
-    &quot;query&quot;: question,
-    &quot;url&quot;: &quot;https:&#47;&#47;www.google.com&#47;search?q=&quot; + question.replace(&quot; &quot;, &quot;+&quot;)
+&quot;query&quot;: question,
+&quot;url&quot;: &quot;https:&#47;&#47;www.google.com&#47;search?q=&quot; + question.replace(&quot; &quot;, &quot;+&quot;)
 }
 result=requests_chain(inputs)
 print(result)
@@ -369,7 +369,6 @@ print(result[&#39;output&#39;])
 所有提示词都能远程执行任意python代码...
 
 老师好，看微博有人说这个问题，请问影响大吗？</p>2023-04-16</li><br/><li><span>榕</span> 👍（0） 💬（2）<p>老师好，通过langchain等武器库确实给了我们使用大语言模型很大的想象空间，但前提得有大语言模型支持。对于地区限制访问的问题，那对于国内的个人或企业要真正落地这些能力，目前是通过哪些方式来做呢？谢谢</p>2023-04-13</li><br/><li><span>一叶</span> 👍（0） 💬（1）<p>老师这段代码里面:
-
 
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS

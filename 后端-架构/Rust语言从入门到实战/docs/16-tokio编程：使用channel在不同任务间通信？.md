@@ -131,7 +131,7 @@ async fn main() {
     _ = task_a.await.unwrap();
     _ = task_b.await.unwrap();
 }
-// 输出 
+// 输出
 in task_a 1
 in task_b
 got = 100
@@ -333,11 +333,11 @@ async fn main() {
     }
     println!("{:?}", outputs);
 }
-// 输出 
+// 输出
 iterate task result..
 in task_a
 in task_b
-in task_c   // 在这之后会等待 3 秒，然后继续打印 
+in task_c   // 在这之后会等待 3 秒，然后继续打印
 iterate task result..
 iterate task result..
 [1, 2, 3]
@@ -464,9 +464,11 @@ std::mpsc::sync_channel(n)
 不带背压的 channel
 tokio::mpsc::unbounded_channel();
 std::mpsc::channel();</p>2024-01-26</li><br/><li><span>Aaaaaaaaaaayou</span> 👍（1） 💬（1）<p>join 和 select 类似于 JavaScript 中的 Promise.all 和 Promise.race</p>2024-01-26</li><br/><li><span>superggn</span> 👍（0） 💬（1）<p>思考题
+
 - Arc::new(Mutex::new(target_var));
 - res = join_handler.await.unwrap();
 - channel
+
 </p>2023-12-25</li><br/><li><span>superggn</span> 👍（0） 💬（1）<p>捉虫： `等待所有任务一起返回`  main 前面少个 fn</p>2023-12-25</li><br/><li><span>刘永臣</span> 👍（0） 💬（1）<p>.await()类似于等待组吧？ channel的四种模式也是go channel常用的四种场景。</p>2023-11-28</li><br/><li><span>学水</span> 👍（0） 💬（1）<p>如果通道都没有任何生产者消息，select语句中的消费者是堵塞在那里还是会之间进入下一个语句呢</p>2023-11-25</li><br/><li><span>老大</span> 👍（0） 💬（1）<p>为啥我按照你写的，运行不起来呢？</p>2023-11-24</li><br/><li><span>PEtFiSh</span> 👍（0） 💬（1）<p>从任务收集返回结果的方式有：
 1、任务直接返回值，然后通过handler取回，比如：a = task_a.await.unwrap();
 2、通过锁的方式直接写在目标位置

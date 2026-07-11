@@ -6,14 +6,14 @@
 static class ResourceServlet extends HttpServlet {
 
     private Application application;
-    
+
     private Providers providers;
-    
+
     public ResourceServlet(Application application, Providers providers) {
         this.application = application;
         this.providers = providers;
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Stream<Class<?>> rootResources = application.getClasses().stream().filter(c -> c.isAnnotationPresent(Path.class));
@@ -21,7 +21,7 @@ static class ResourceServlet extends HttpServlet {
         MessageBodyWriter<Object> writer = (MessageBodyWriter<Object>) providers.getMessageBodyWriter(result.getClass(), null, null, null);
         writer.writeTo(result, null, null, null, null, null, resp.getOutputStream());
     }
-    
+
     Object dispatch(HttpServletRequest req, Stream<Class<?>> rootResources) {
         try {
             Class<?> rootClass = rootResources.findFirst().get();

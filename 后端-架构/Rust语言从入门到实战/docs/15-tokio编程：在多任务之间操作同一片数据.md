@@ -189,7 +189,7 @@ use tokio::task;
 #[tokio::main]
 async fn main() {
     let mut db: Vec<u32> = vec![1,2,3,4,5,6,7,8,9,10];
-    
+
     let task_a = task::spawn(async move {
         db[4] = 50;
     });
@@ -352,7 +352,7 @@ async fn main() {
         assert_eq!(*r1, 5);
         assert_eq!(*r2, 5);
     } // 在这一句结束时，两个读锁都释放掉了
-    
+
     // 同时只能存在一个写锁
     {
         let mut w = lock.write().await;
@@ -381,7 +381,7 @@ fn main() {
     // 创建
     let atomic_forty_two = AtomicU32::new(42);
     let arc_data = Arc::new(atomic_forty_two);
-    
+
     let mut some_var = AtomicU32::new(10);
     // 更新
     *some_var.get_mut() = 5;
@@ -426,7 +426,7 @@ fn main() {
 
 同步场景都用 std::sync 底下的东西吗？</p>2023-12-21</li><br/><li><span>superggn</span> 👍（0） 💬（1）<p>思考题
 意义： 等执行完了再打印， 对齐一下子， 别任务没跑完主进程就完事儿了
-到 await 这块儿就是同步了， 这俩 await 是顺序执行， 
+到 await 这块儿就是同步了， 这俩 await 是顺序执行，
 如果 task_a 没执行完， task_b 已经执行完了， 就会卡在 task_a 这里， task_a 这行完事儿了在执行 task_b 的 await, 这会儿 task_b 因为已经完事儿了， 所以第2个 await 不会卡
 </p>2023-12-21</li><br/><li><span>-Hedon🍭</span> 👍（0） 💬（1）<p>task_a.await.unwrap() 是阻塞等待任务结果，所以 task_a.await.unwrap() 会阻塞 task_b.await.unwrap() ，但是 task_a 不会阻塞 task_b，spwan 并发执行的。</p>2023-12-20</li><br/><li><span>Geek_e5eb33</span> 👍（0） 💬（1）<p>请问老师，rust 中不建议使用全局变量。那如果我想进行模块化开发，在 A 模块中定义的变量(比如缓存了用户信息)，怎么供其他模块使用呢，目前能想到的是都定义到 main 里。</p>2023-12-15</li><br/><li><span>Taozi</span> 👍（0） 💬（1）<p>关于arc里面为何需要套lock才能修改值，当然是为了在运行时保证内存安全。为什么说在运行时，因为还有对应的在静态时。还记得最开始我们说rust中每个值都有一个owner，这是为了保证ower在其作用域结束时释放值，这是可以通过代码静态分析出来的。对于所有权不能静态确定的情况，就需要arc来这个第三方来持有所有权，然后动态的决定何时释放值。原理也很简单，就是引用计数。同样最开始我们也说一个值只能同时存在一个可变借用或者多个不可变借用，这也是可以通过静态分析保证的，但是在arc这里只能通过加锁在运行时保证这点。</p>2023-11-22</li><br/>
 </ul>

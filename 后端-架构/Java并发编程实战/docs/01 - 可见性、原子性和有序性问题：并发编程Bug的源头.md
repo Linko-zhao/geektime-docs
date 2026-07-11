@@ -216,17 +216,18 @@ io操作不占用cpu，读文件，是设备驱动干的事，cpu只管发命令
 
 现行的比较通用的做法就是采用静态内部类的方式来实现。
 public class MySingleton {
-	
-	&#47;&#47;内部类
-	private static class MySingletonHandler{
-		private static MySingleton instance = new MySingleton();
-	} 
-	
-	private MySingleton(){}
-	 
-	public static MySingleton getInstance() { 
-		return MySingletonHandler.instance;
-	}
+
+    &#47;&#47;内部类
+    private static class MySingletonHandler{
+    	private static MySingleton instance = new MySingleton();
+    }
+
+    private MySingleton(){}
+
+    public static MySingleton getInstance() {
+    	return MySingletonHandler.instance;
+    }
+
 }</p>2019-02-28</li><br/><li><span>阿根一世</span> 👍（108） 💬（10）<p>对于双重锁检查那个例子，我有一个疑问，A如果没有完成实例的初始化，锁应该不会释放的，B是拿不到锁的，怎么还会出问题呢？</p>2019-02-28</li><br/><li><span>MARK</span> 👍（85） 💬（5）<p>刚看过《java并发实战》，又是看了个开始就看不下去了😂😂，希望订阅专栏可以跟老师和其他童鞋一起坚持学习并发编程😄😄
 
 思考题：在32位的机器上对long型变量进行加减操作存在并发隐患的说法是正确的。
@@ -255,9 +256,9 @@ Implementations of the Java Virtual Machine are encouraged to avoid splitting 64
 
 1.  操作系统是以进程为单位共享资源 ，以线程单位进行调用 。 多个线程共享一个进程的资源 。 一个java应用占一个进程（jvm的内存模型的资源也在这个进程中） ，一个进程占一个cpu ， 所以老师所说的多核cpu缓存，每个cpu有自己的缓存 ，AB两个线程在不同的cpu上操作不太理解 ， 一个应用的AB两个线程是不是应该处在同个cpu上面 ？？？
 
-2. 如果按照老师所说不同线程在不同cpu上运行 ， 是不是有个叫并行和并发的概念 。 单个cpu的时候多线程实际上是模拟并发的并行，实际上cpu只能一次执行一个线程，两个线程交替执行。 而到了多核中，可以真正的将两个线程AB同时分给cpu1 .cpu2同时执行，称之为并发？？
+2.  如果按照老师所说不同线程在不同cpu上运行 ， 是不是有个叫并行和并发的概念 。 单个cpu的时候多线程实际上是模拟并发的并行，实际上cpu只能一次执行一个线程，两个线程交替执行。 而到了多核中，可以真正的将两个线程AB同时分给cpu1 .cpu2同时执行，称之为并发？？
 
-3. 我感觉老师第二点原子性中也有包含可见性问题，由于时间片到了， 当把资源读到自己的工作线程中时，由于不可见性，以为自己是最新的导致值不准确，这个也对应了第一个问题 ， 两个线程是否在同个进程内共享资源
+3.  我感觉老师第二点原子性中也有包含可见性问题，由于时间片到了， 当把资源读到自己的工作线程中时，由于不可见性，以为自己是最新的导致值不准确，这个也对应了第一个问题 ， 两个线程是否在同个进程内共享资源
 
 问题有点多 ， 可能自己的理解有偏差 ，希望老师指正
 </p>2019-02-28</li><br/><li><span>我会得到</span> 👍（17） 💬（1）<p>零点一过刚好看到更新，果断一口气读完，带劲！可见性，原子性，有序性，操作系统作为基础，内存模型，机器指令，编译原理，一个都不能少，开始有点意思了👍</p>2019-02-28</li><br/>

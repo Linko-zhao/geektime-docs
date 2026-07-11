@@ -11,7 +11,7 @@ poll是除了select之外，另一种普遍使用的I/O多路复用技术，和s
 下面是poll函数的原型：
 
 ```
-int poll(struct pollfd *fds, unsigned long nfds, int timeout); 
+int poll(struct pollfd *fds, unsigned long nfds, int timeout);
 　　　
 返回值：若有就绪描述符则为其数目，若超时则为0，若出错则为-1
 ```

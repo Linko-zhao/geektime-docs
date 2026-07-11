@@ -6,7 +6,7 @@
 
 ## 入门介绍
 
-Bjarne Stroustrup, *A Tour of C++*, 2nd ed. Addison-Wesley, 2018
+Bjarne Stroustrup, _A Tour of C++_, 2nd ed. Addison-Wesley, 2018
 
 中文版：王刚译，《C++ 语言导学》(第二版）。机械工业出版社，2019
 
@@ -16,7 +16,7 @@ Bjarne Stroustrup, *A Tour of C++*, 2nd ed. Addison-Wesley, 2018
 
 这是唯一一本较为浅显的全面介绍现代 C++ 的入门书。书虽然较薄，但 C++ 之父的功力在那里（这不是废话么😂），时有精妙之论。书的覆盖面很广，介绍了 C++ 的基本功能和惯用法。这本书的讲授方式，也体现了他的透过高层抽象来教授 C++ 的理念。
 
-* * *
+---
 
 Michael Wong 和 IBM XL 编译器中国开发团队，《深入理解 C++11：C++11 新特性解析与应用》。机械工业出版社，2013
 
@@ -26,29 +26,29 @@ Michael Wong 和 IBM XL 编译器中国开发团队，《深入理解 C++11：C+
 
 ## 最佳实践
 
-Scott Meyers, *Effective C++: 55 Specific Ways to Improve Your Programs and Designs*, 3rd ed. Addison-Wesley, 2005
+Scott Meyers, _Effective C++: 55 Specific Ways to Improve Your Programs and Designs_, 3rd ed. Addison-Wesley, 2005
 
 中文版：侯捷译《Effective C++ 中文版》（第三版）。电子工业出版社，2011
 
 推荐指数：★★★★
 
-* * *
+---
 
-Scott Meyers, *Effective STL: 50 Specific Ways to Improve Your Use of the Standard Template Library*. Addison-Wesley, 2001
+Scott Meyers, _Effective STL: 50 Specific Ways to Improve Your Use of the Standard Template Library_. Addison-Wesley, 2001
 
 中文版：潘爱民、陈铭、邹开红译《Effective STL 中文版》。清华大学出版社，2006
 
 推荐指数：★★★★
 
-* * *
+---
 
-Scott Meyers, *Effective Modern C++: 42 Specific Ways to Improve Your Use of C++11 and C++14*. O’Reilly, 2014
+Scott Meyers, _Effective Modern C++: 42 Specific Ways to Improve Your Use of C++11 and C++14_. O’Reilly, 2014
 
 中文版：高博译《Effective Modern C++ 中文版》。中国电力出版社，2018
 
 推荐指数：★★★★★
 
-C++ 的大牛中有三人尤其让我觉得高山仰止，Scott Meyers 就是其中之一——Bjarne 让人感觉是睿智，而 Scott Meyers、Andrei Alexandrescu 和 Herb Sutter 则会让人感觉智商被碾压。Scott 对 C++ 语言的理解无疑是非常深入的，并以良好的文笔写出了好几代的 C++ 最佳实践。我读过他整个 Effective 系列四本书，每一本都是从头看到尾，收获巨大。（之所以不推荐第二本 *More Effective C++*，是因为那本没有出过新版，1996 年的内容有点太老了。）
+C++ 的大牛中有三人尤其让我觉得高山仰止，Scott Meyers 就是其中之一——Bjarne 让人感觉是睿智，而 Scott Meyers、Andrei Alexandrescu 和 Herb Sutter 则会让人感觉智商被碾压。Scott 对 C++ 语言的理解无疑是非常深入的，并以良好的文笔写出了好几代的 C++ 最佳实践。我读过他整个 Effective 系列四本书，每一本都是从头看到尾，收获巨大。（之所以不推荐第二本 _More Effective C++_，是因为那本没有出过新版，1996 年的内容有点太老了。）
 
 这几本书讨论的都是最佳实践，因此，如果你没有实际做过 C++ 项目，感触可能不会那么深。做过实际项目的一定会看到，哦，原来我也犯了这个错误啊……如果你不想一下子看三本，至少最后一本属于必修课。
 
@@ -56,7 +56,7 @@ C++ 的大牛中有三人尤其让我觉得高山仰止，Scott Meyers 就是其
 
 ## 深入学习
 
-Herb Sutter, *Exceptional C++: 47 Engineering Puzzles, Programming Problems, and Solutions*. Addison-Wesley, 1999
+Herb Sutter, _Exceptional C++: 47 Engineering Puzzles, Programming Problems, and Solutions_. Addison-Wesley, 1999
 
 中文版：卓小涛译《Exceptional C++ 中文版》。中国电力出版社，2003
 
@@ -64,9 +64,9 @@ Herb Sutter, *Exceptional C++: 47 Engineering Puzzles, Programming Problems, and
 
 我已经说过，我认为 Herb Sutter 是 C++ 界最聪明的三人之一。在这本书里，Herb 用提问、回答的形式讨论了很多 C++ 里的难点问题。虽然这本书有点老了，但我认为你一定可以从中学到很多东西。
 
-* * *
+---
 
-Herb Sutter and Andrei Alexandrescu, *C++ Coding Standards: 101 Rules, Guidelines, and Best Practices*. Addison-Wesley, 2004
+Herb Sutter and Andrei Alexandrescu, _C++ Coding Standards: 101 Rules, Guidelines, and Best Practices_. Addison-Wesley, 2004
 
 中文版：刘基诚译《C++编程规范：101条规则准则与最佳实践》。人民邮电出版社，2006
 
@@ -74,7 +74,7 @@ Herb Sutter and Andrei Alexandrescu, *C++ Coding Standards: 101 Rules, Guideline
 
 两个牛人制定的 C++ 编码规范。与其盲目追随网上的编码规范（比如，Google 的），不如仔细看看这两位大牛是怎么看待编码规范方面的问题的。
 
-* * *
+---
 
 侯捷，《STL 源码剖析》。华中科技大学出版社，2002
 
@@ -86,21 +86,21 @@ Herb Sutter and Andrei Alexandrescu, *C++ Coding Standards: 101 Rules, Guideline
 
 ## 高级专题
 
-Alexander A. Stepanov and Daniel E. Rose, *From Mathematics to Generic Programming*. Addison-Wesley, 2014
+Alexander A. Stepanov and Daniel E. Rose, _From Mathematics to Generic Programming_. Addison-Wesley, 2014
 
 中文版：爱飞翔译《数学与泛型编程：高效编程的奥秘》。机械工业出版社，2017
 
 推荐指数：★★★★★
 
-Alexander Stepanov 是 STL 之父，这本书写的却不是具体的编程技巧或某个库，而是把泛型编程和抽象代数放在一起讨论了。说来惭愧，我是读了这本书之后才对群论稍稍有了点理解：之前看到的介绍材料都过于抽象，没能理解。事实上，Alexander 之前还写了一本同一题材、但使用公理推导风格的 *Elements of Programming*（裘宗燕译《编程原本》），那本就比较抽象艰深，从受欢迎程度上看远远不及这一本。我也只是买了放在书架上没看多少页😝。​
+Alexander Stepanov 是 STL 之父，这本书写的却不是具体的编程技巧或某个库，而是把泛型编程和抽象代数放在一起讨论了。说来惭愧，我是读了这本书之后才对群论稍稍有了点理解：之前看到的介绍材料都过于抽象，没能理解。事实上，Alexander 之前还写了一本同一题材、但使用公理推导风格的 _Elements of Programming_（裘宗燕译《编程原本》），那本就比较抽象艰深，从受欢迎程度上看远远不及这一本。我也只是买了放在书架上没看多少页😝。​
 
 回到这本书本身。这本书用的编程语言是 C++，并引入了“概念”——虽然作者写这本书时并没有真正的 C++ 概念可用。书中讨论了数学、编程，还介绍了很多大数学家的生平。相对来说（尤其跟《编程原本》比），通过这本书是可以比较轻松地学习到泛型的威力的。哦，对了，我之前提到使用高精度整数算 RSA 就是拿这本书里描述的内容做练习。计算 RSA，从抽象的角度，只不过就是求幂和最大公约数而已……
 
 除非抽象代数和模板编程你都已经了然于胸，否则这本书绝对会让你对编程的理解再上一个层次。相信我！
 
-* * *
+---
 
-Andrei Alexandrescu, *Modern C++ Design: Generic Programming and Design Patterns Applied*. Addison-Wesley, 2001
+Andrei Alexandrescu, _Modern C++ Design: Generic Programming and Design Patterns Applied_. Addison-Wesley, 2001
 
 中文版：侯捷、於春景译《C++ 设计新思维》。华中科技大学出版社，2003
 
@@ -110,9 +110,9 @@ Andrei Alexandrescu, *Modern C++ Design: Generic Programming and Design Patterns
 
 对了，注意到英文书名中的 Modern C++ 了吗？现代 C++ 这一提法就是从他开始的，虽然那是在 C++11 发布之前十年了。可以说他倡导了新的潮流。在今天，这本书的内容当然是略老了，但它仍然是不可替代的经典作品。书里的技巧有些已经过时了（我也不推荐大家今天去使用 Loki 库），但理念没有过时，对思维的训练也仍然有意义。
 
-* * *
+---
 
-Anthony Williams, *C++ Concurrency in Action*, 2nd ed. Manning, 2019
+Anthony Williams, _C++ Concurrency in Action_, 2nd ed. Manning, 2019
 
 中文译本只有第一版，且有人评论“机器翻译的都比这个好”。因而不推荐中文版。
 
@@ -122,9 +122,9 @@ C++ 在并发上出名的书似乎只此一本。这也不算奇怪：作者是 
 
 除非你为一些老式的嵌入式系统开发 C++ 程序，完全不需要接触并发，否则我推荐你阅读这本书。
 
-* * *
+---
 
-Ivan Čukić, *Functional Programming in C++*. Manning, 2019
+Ivan Čukić, _Functional Programming in C++_. Manning, 2019
 
 中文版：程继洪、孙玉梅、娄山佑译《C++ 函数式编程》。机械工业出版社，2020
 
@@ -136,7 +136,7 @@ Ivan Čukić, *Functional Programming in C++*. Manning, 2019
 
 ## 参考书
 
-Bjarne Stroustrup, *The C++ Programming Language*, 4th ed. Addison-Wesley, 2013
+Bjarne Stroustrup, _The C++ Programming Language_, 4th ed. Addison-Wesley, 2013
 
 中文版：王刚、杨巨峰译《C++ 程序设计语言》。机械工业出版社， 2016
 
@@ -144,9 +144,9 @@ Bjarne Stroustrup, *The C++ Programming Language*, 4th ed. Addison-Wesley, 2013
 
 没什么可多说的，C++ 之父亲自执笔写的 C++ 语言。主要遗憾是没有覆盖 C++14/17 的内容。中文版分为两卷出版，内容实在是有点多了。不过，如果你没有看过之前的版本，并且对 C++ 已经有一定经验的话，这个新版还是会让你觉得，姜还是老的辣！
 
-* * *
+---
 
-Nicolai M. Josuttis, *The C++ Standard Library: A Tutorial and Reference*, 2nd ed. Addison-Wesley, 2012
+Nicolai M. Josuttis, _The C++ Standard Library: A Tutorial and Reference_, 2nd ed. Addison-Wesley, 2012
 
 中文版：侯捷译《C++ 标准库》。电子工业出版社，2015
 
@@ -156,7 +156,7 @@ Nicolai 写的这本经典书被人称为既完备又通俗易懂，也是殊为
 
 ## C++ 的设计哲学
 
-Bjarne Stroustrup, *The Design and Evolution of C++*. Addison-Wesley, 1994
+Bjarne Stroustrup, _The Design and Evolution of C++_. Addison-Wesley, 1994
 
 中文版：裘宗燕译《C++ 语言的设计与演化》。科学出版社， 2002
 
@@ -164,11 +164,11 @@ Bjarne Stroustrup, *The Design and Evolution of C++*. Addison-Wesley, 1994
 
 这本书不是给所有的 C++ 开发者准备的。它讨论的是为什么 C++ 会成为今天（1994 年）这个样子。如果你对 C++ 的设计思想感兴趣，那这本书会比较有用些。如果你对历史不感兴趣，那这本书不看也不会有很大问题。
 
-* * *
+---
 
-Bruce Eckel, *Thinking in C++, Vol. 1: Introduction to Standard C++*, 2nd ed. Prentice-Hall, 2000
+Bruce Eckel, _Thinking in C++, Vol. 1: Introduction to Standard C++_, 2nd ed. Prentice-Hall, 2000
 
-Bruce Eckel and Chuck Allison, *Thinking in C++, Vol. 2: Practical Programming*. Pearson, 2003
+Bruce Eckel and Chuck Allison, _Thinking in C++, Vol. 2: Practical Programming_. Pearson, 2003
 
 中文版：刘宗田等译《C++ 编程思想》。机械工业出版社，2011
 
@@ -178,11 +178,11 @@ Bruce Eckel and Chuck Allison, *Thinking in C++, Vol. 2: Practical Programming*.
 
 ## 非 C++ 的经典书目
 
-W. Richard Stevens, *TCP/IP Illustrated Volume 1: The Protocols*. Addison-Wesley, 1994
+W. Richard Stevens, _TCP/IP Illustrated Volume 1: The Protocols_. Addison-Wesley, 1994
 
-Gary R. Wright and W. Richard Stevens, *TCP/IP Illustrated Volume 2: The Implementation*. Addison-Wesley, 1995
+Gary R. Wright and W. Richard Stevens, _TCP/IP Illustrated Volume 2: The Implementation_. Addison-Wesley, 1995
 
-W. Richard Stevens, *TCP/IP Illustrated Volume 3: TCP for Transactions, HTTP, NNTP and the Unix Domain Protocols*. Addison-Wesley 1996
+W. Richard Stevens, _TCP/IP Illustrated Volume 3: TCP for Transactions, HTTP, NNTP and the Unix Domain Protocols_. Addison-Wesley 1996
 
 中文版翻译不佳，不推荐。
 
@@ -190,9 +190,9 @@ W. Richard Stevens, *TCP/IP Illustrated Volume 3: TCP for Transactions, HTTP, NN
 
 不是所有的书都是越新越好，《TCP/IP 详解》就是其中一例。W. Richard Stevens 写的卷一比后人补写的卷一第二版评价更高，就是其中一例。关于 TCP/IP 的编程，这恐怕是难以超越的经典了。不管你使用什么语言开发，如果你的工作牵涉到网络协议的话，这套书恐怕都值得一读——尤其是卷一。
 
-* * *
+---
 
-W. Richard Stevens and Stephen A. Rago, *Advanced Programming in the UNIX Environment*, 3rd ed. Addison-Wesley, 2013
+W. Richard Stevens and Stephen A. Rago, _Advanced Programming in the UNIX Environment_, 3rd ed. Addison-Wesley, 2013
 
 中文版： 戚正伟、张亚英、尤晋元译《UNIX环境高级编程》。人民邮电出版社，2014
 
@@ -200,9 +200,9 @@ W. Richard Stevens and Stephen A. Rago, *Advanced Programming in the UNIX Enviro
 
 从事 C/C++ 编程应当对操作系统有深入的了解，而这本书就是讨论 Unix 环境下的编程的。鉴于 Windows 下都有了 Unix 的编程环境，Unix 恐怕是开发人员必学的一课了。这本书是经典，而它的第三版至少没有损坏前两版的名声。
 
-* * *
+---
 
-Erich Gamma, Richard Helm, Ralph Johson, John Vlissides, and Grady Booch, *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley, 1994
+Erich Gamma, Richard Helm, Ralph Johson, John Vlissides, and Grady Booch, _Design Patterns: Elements of Reusable Object-Oriented Software_. Addison-Wesley, 1994
 
 中文版：李英军、马晓星、蔡敏、刘建中等译《设计模式》。机械工业出版社，2000
 
@@ -210,9 +210,9 @@ Erich Gamma, Richard Helm, Ralph Johson, John Vlissides, and Grady Booch, *Desig
 
 经典就是经典，没什么可多说的。提示：如果你感觉这本书很枯燥、没用，那就等你有了更多的项目经验再回过头来看一下，也许就有了不同的体验。
 
-* * *
+---
 
-Eric S. Raymond, *The Art of UNIX Programming*. Addison-Wesley, 2003
+Eric S. Raymond, _The Art of UNIX Programming_. Addison-Wesley, 2003
 
 中文版：姜宏、何源、蔡晓骏译《UNIX 编程艺术》。电子工业出版社，2006
 
@@ -220,9 +220,9 @@ Eric S. Raymond, *The Art of UNIX Programming*. Addison-Wesley, 2003
 
 抱歉，这仍然是一本 Unix 相关的经典。如果你对 Unix 设计哲学有兴趣的话，那这本书仍然无可替代。如果你愿意看英文的话，这本书的英文一直是有在线免费版本的。
 
-* * *
+---
 
-Pete McBreen, *Software Craftsmanship: The New Imperative*. Addison-Wesley, 2001
+Pete McBreen, _Software Craftsmanship: The New Imperative_. Addison-Wesley, 2001
 
 中文版：熊节译《软件工艺》。人民邮电出版社，2004
 
@@ -230,9 +230,9 @@ Pete McBreen, *Software Craftsmanship: The New Imperative*. Addison-Wesley, 2001
 
 这本书讲的是软件开发的过程，强调的是软件开发中人的作用。相比其他的推荐书，这本要“软”不少。但不等于这本书不重要。如果你之前只关注纯技术问题的话，那现在是时间关注一下软件开发中人的问题了。
 
-* * *
+---
 
-Paul Graham, *Hackers &amp; Painters: Big Ideas From The Computer Age*. O’Reilly, 2008
+Paul Graham, _Hackers &amp; Painters: Big Ideas From The Computer Age_. O’Reilly, 2008
 
 中文版：阮一峰译《黑客与画家》。人民邮电出版社，2011
 
@@ -240,9 +240,9 @@ Paul Graham, *Hackers &amp; Painters: Big Ideas From The Computer Age*. O’Reil
 
 这本讲的是一个更玄的问题：黑客是如何工作的。作者 Paul Graham 也是一名计算机界的大神了，用 Lisp 写出了被 Yahoo! 收购的网上商店，然后又从事风险投资，创办了著名的孵化器公司 Y Combinator。这本书是他的一本文集，讨论了黑客——即优秀程序员——的爱好、动机、工作方法等等。你可以从中学习一下，一个优秀的程序员是如何工作的，包括为什么脚本语言比静态类型语言受欢迎😁……
 
-* * *
+---
 
-Robert C. Martin, *Clean Code: A Handbook of Agile Software Craftsmanship*. Prentice Hall, 2008
+Robert C. Martin, _Clean Code: A Handbook of Agile Software Craftsmanship_. Prentice Hall, 2008
 
 中文版：韩磊译《代码整洁之道》。人民邮电出版社，2010
 

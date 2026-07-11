@@ -160,7 +160,7 @@ function toggle(){
       setTimeout(()=>{
         showModal.value = false
       },1500)
-      return 
+      return
     }
     todos.value.push({
       title: title.value,
@@ -288,7 +288,7 @@ function toggle(){
 <template>
 
     ...清单应用其他代码
-    
+
       <transition-group name="flip-list" tag="ul">
         <li v-for="(todo,i) in todos" :key="todo.title">
           <input type="checkbox" v-model="todo.done" />
@@ -297,7 +297,7 @@ function toggle(){
             ❌
           </span>
         </li>
-      </transition-group> 
+      </transition-group>
 </template>
 <script>
   function removeTodo(e,i){
@@ -419,95 +419,96 @@ function removeTodo(e,i){
          需求，大大的提高了我们的开发效率。
 
          很神奇，有需求的同学可以看看源码，看看怎么实现的，应该能学到不少知识。</p>2021-11-05</li><br/><li><span>我叫兽儿…</span> 👍（20） 💬（4）<p>动手实现清单删除动画的时候，踩了一个小坑，在此记录一下，代码如下：
+
 &lt;ul v-if=&quot;todolist.length&quot;&gt;
-      &lt;transition-group name=&quot;list&quot; tag=&quot;ul&quot;&gt;
-        &lt;li v-for=&quot;(item, index) in todolist&quot; :key=&quot;index&quot;&gt;
-          &lt;input type=&quot;checkbox&quot; v-model=&quot;item.checked&quot; &#47;&gt;
-          &lt;span&gt;{{ item.title }}&lt;&#47;span&gt;
-          &lt;span @click=&quot;deleteItem($event, index)&quot; class=&quot;delete&quot;&gt;x&lt;&#47;span&gt;
-        &lt;&#47;li&gt;
-      &lt;&#47;transition-group&gt;
-    &lt;&#47;ul&gt;
+&lt;transition-group name=&quot;list&quot; tag=&quot;ul&quot;&gt;
+&lt;li v-for=&quot;(item, index) in todolist&quot; :key=&quot;index&quot;&gt;
+&lt;input type=&quot;checkbox&quot; v-model=&quot;item.checked&quot; &#47;&gt;
+&lt;span&gt;{{ item.title }}&lt;&#47;span&gt;
+&lt;span @click=&quot;deleteItem($event, index)&quot; class=&quot;delete&quot;&gt;x&lt;&#47;span&gt;
+&lt;&#47;li&gt;
+&lt;&#47;transition-group&gt;
+&lt;&#47;ul&gt;
 这里for循环我使用了index作为key，导致删除某一个li时，动画总是作用到最后一个li上。看了半天发现index会随着li的删除而变化，比如：我删除了第三个li，但是第四个会立马补上变成第三个，后面的li会依次向前补位，导致动画错乱。解决方式就是使用唯一的不会变的值作为key，比如id.
 
 愿共同学习，共同进步！</p>2021-11-07</li><br/><li><span>Justin</span> 👍（12） 💬（5）<p>想請問一下
 
 function enter(el,done){
-     document.body.offsetHeight 
-     el.style.transform = `translate(0,0)` 
-     el.addEventListener(&#39;transitionend&#39;, done)
+document.body.offsetHeight
+el.style.transform = `translate(0,0)`
+el.addEventListener(&#39;transitionend&#39;, done)
 }
- document.body.offsetHeight 這一行的作用是什麼？
+document.body.offsetHeight 這一行的作用是什麼？
 感謝</p>2021-11-05</li><br/><li><span>Geek_0c8aff</span> 👍（8） 💬（5）<p>&#47;&#47; bug, 删除todo的最后一项，加入垃圾桶的动画位置不对（0,0），以下是我的修改。
 function removeTodo(e: any, i: number) {
-      animate.el = e.target
-      animate.show = true
-      setTimeout(()=&gt;{
-        todos.value.splice(i, 1)
-      },100)
-    }</p>2021-11-21</li><br/><li><span>柒月</span> 👍（8） 💬（7）<p>页面切换动画的时候，要求路由组件必须要有个根元素包裹，不然动画不生效的。
+animate.el = e.target
+animate.show = true
+setTimeout(()=&gt;{
+todos.value.splice(i, 1)
+},100)
+}</p>2021-11-21</li><br/><li><span>柒月</span> 👍（8） 💬（7）<p>页面切换动画的时候，要求路由组件必须要有个根元素包裹，不然动画不生效的。
 https:&#47;&#47;stackoverflow.com&#47;questions&#47;65553121&#47;vue-3-transition-renders-non-element-root-node-that-cannot-be-animated</p>2021-11-09</li><br/><li><span>雪狼</span> 👍（6） 💬（1）<p>课程非常棒，在学习过程中提几个建议
 
 1、部分代码能加点注释更方便理解，比如enter函数
 2、css没有写全，比如垃圾筐的，这倒也不是大问题
 3、如果每讲，最后能有一个本讲完整的实例代码贴到最后，更方便查看
 4、动画需要一个root节点包裹才能生效，课程中没有体现出来的</p>2021-12-20</li><br/><li><span>Zachy</span> 👍（6） 💬（2）<p>&#47;&#47; 强迫症下把删除动画精准还原到垃圾桶位置，暂时没加抛物线，否则效果更佳。
-const {animate,beforeEnter, enter, afterEnter,removeTodo}  = useAnimation();
+const {animate,beforeEnter, enter, afterEnter,removeTodo} = useAnimation();
 
 function useAnimation(){
-  let animate = reactive({
-    show: false,
-    el: null,
-  });
-  const dustbin ={ 
-    el:null,
-    pos:[],
-    init(queryStr){
-      this.el = document.querySelector(queryStr);
-      this.getPos();
-    },
-    getPos(){
-      const { left, top} = this.el.getBoundingClientRect();
-      this.pos[0] = left;
-      this.pos[1] = top;
-    }
-  }
-  function beforeEnter(el) {
-    let dom = animate.el;
-    let rect = dom.getBoundingClientRect();
-    const  aniEl=  document.querySelector(&#39;.animate&#39;);
-    &#47;&#47;动画元素 调整到dustbin的位置,也可以css直接写精准位置
-    aniEl.style.left = `${dustbin.pos[0]}px`; 
-    aniEl.style.top= `${dustbin.pos[1]}px`;
-    &#47;&#47;计算并赋值偏移量
-    let dx = dustbin.pos[0] - rect.left;
-    let dy = dustbin.pos[1] - rect.top;
-    el.style.transform = `translate(-${dx}px, ${dy*-1}px)`;
-  }
-  function enter(el, done) {
-    document.body.offsetHeight;
-    el.style.transform = `translate(0,0)`;
-    el.addEventListener(&quot;transitionend&quot;, done);
-  }
-  function afterEnter(el) {
-    animate.show = false;
-    el.style.display = &quot;none&quot;;
-  }
+let animate = reactive({
+show: false,
+el: null,
+});
+const dustbin ={
+el:null,
+pos:[],
+init(queryStr){
+this.el = document.querySelector(queryStr);
+this.getPos();
+},
+getPos(){
+const { left, top} = this.el.getBoundingClientRect();
+this.pos[0] = left;
+this.pos[1] = top;
+}
+}
+function beforeEnter(el) {
+let dom = animate.el;
+let rect = dom.getBoundingClientRect();
+const aniEl= document.querySelector(&#39;.animate&#39;);
+&#47;&#47;动画元素 调整到dustbin的位置,也可以css直接写精准位置
+aniEl.style.left = `${dustbin.pos[0]}px`;
+aniEl.style.top= `${dustbin.pos[1]}px`;
+&#47;&#47;计算并赋值偏移量
+let dx = dustbin.pos[0] - rect.left;
+let dy = dustbin.pos[1] - rect.top;
+el.style.transform = `translate(-${dx}px, ${dy*-1}px)`;
+}
+function enter(el, done) {
+document.body.offsetHeight;
+el.style.transform = `translate(0,0)`;
+el.addEventListener(&quot;transitionend&quot;, done);
+}
+function afterEnter(el) {
+animate.show = false;
+el.style.display = &quot;none&quot;;
+}
 function removeTodo(e,i){
-      animate.el = e.target
-      animate.show = true
-      todos.value.splice(i, 1);
-      dustbin.init(&#39;.dustbin&#39;);
-    }
-  return {animate,beforeEnter,enter,afterEnter,removeTodo}
+animate.el = e.target
+animate.show = true
+todos.value.splice(i, 1);
+dustbin.init(&#39;.dustbin&#39;);
+}
+return {animate,beforeEnter,enter,afterEnter,removeTodo}
 }</p>2021-11-28</li><br/><li><span>bugu</span> 👍（6） 💬（5）<p>问一个问题：列表动画那一部分transition-group ，设置 tag 的作用是什么呢？我尝试去掉tag，没有看出什么差异。
 还有下面move的动画设定
 .flip-list-move {
-  transition: transform 2s ease;
+transition: transform 2s ease;
 }
 我尝试修改和删除，也没有看出什么差异。
 
-请帮忙指定一下，谢谢老师和各位同学</p>2021-11-05</li><br/><li><span>微妙</span> 👍（4） 💬（1）<p>el.style.transform = `translate(-${x}px, ${y}px)` 
+请帮忙指定一下，谢谢老师和各位同学</p>2021-11-05</li><br/><li><span>微妙</span> 👍（4） 💬（1）<p>el.style.transform = `translate(-${x}px, ${y}px)`
 模板字符串中当x为负数时会被识别为 --xpx，导致transform识别不出而变为 translate(0px, 0px);
 应先计算好x、y的值，然后在模板字符串内赋值</p>2021-11-08</li><br/><li><span>Geek_1ecc87</span> 👍（3） 💬（2）<p>为什么要在v-for li中指定key添加任务的时候动画才会生效？</p>2022-01-14</li><br/><li><span>于三妮</span> 👍（2） 💬（1）<p>请问那个红叉叉是什么格式的，这种图片要哪里找</p>2021-11-16</li><br/><li><span>小胖</span> 👍（2） 💬（2）<p>反馈个bug,最近一条todo删除，y坐标的值会为0</p>2021-11-14</li><br/><li><span>小胖</span> 👍（2） 💬（1）<p>大圣老师，问下，在enter函数里面为什么需要添加一行document.body.offsetHeight，我尝试，不添加这句动画就不会生效；
 </p>2021-11-14</li><br/><li><span>笑叹尘世</span> 👍（2） 💬（1）<p>let x = window.innerWidth - rect.left - 60

@@ -49,7 +49,7 @@ Logger.Level feignLogger() {
  ---> POST http://coupon-calculation-serv/calculator/simulate HTTP/1.1
  Content-Length: 458
  Content-Type: application/json
- 
+
  {"products":[{"productId":null,"price":3000, xxxx省略请求参数
  ---> END HTTP (458-byte body)
  <--- HTTP/1.1 200 (29ms)
@@ -58,7 +58,7 @@ Logger.Level feignLogger() {
  date: Sat, 27 Nov 2021 15:11:26 GMT
  keep-alive: timeout=60
  transfer-encoding: chunked
- 
+
  {"bestCouponId":26,"couponToOrderPrice":{"26":15000}}
  <--- END HTTP (53-byte body)
 ```
@@ -258,20 +258,20 @@ feign:
 
 但是换种方式就可以生效：
 spring:
-  cloud:
-    openfeign:
-      client:
-        config:
-          default:
-            connect-timeout: 8000
-            read-timeout: 8000
-          coupon-template-serv:
-            connect-timeout: 1000
-            read-timeout: 2000
+cloud:
+openfeign:
+client:
+config:
+default:
+connect-timeout: 8000
+read-timeout: 8000
+coupon-template-serv:
+connect-timeout: 1000
+read-timeout: 2000
 
 springcloud 用的版本是 2022.0.0， 对应的 spring-cloud-starter-openfeign 的版本是 4.0.0</p>2023-12-22</li><br/><li><span>简</span> 👍（1） 💬（1）<p>我有点不明白，这个项目结构单独的把API给抽离出来了，如果说引入了第三方的API JAR包后，为什么不能直接使用这个API呢？这个引入的第三方API和我们实现的 @FeignClients 接口几乎一模一样，能利用起来吗？</p>2022-04-12</li><br/><li><span>春</span> 👍（0） 💬（1）<p>老师你文档里面没有写
 feign:
-  circuitbreaker:
-    enabled: true    &#47;&#47;开启服务降级</p>2023-05-17</li><br/><li><span>春</span> 👍（0） 💬（1）<p>网上有人说用ErrorDecoder配置错误处理，但是我配了根本没生效是怎么回事</p>2023-05-17</li><br/><li><span>楚翔style</span> 👍（0） 💬（1）<p>老师,整个项目有github链接吗? 想clone下来跑跑看</p>2022-10-28</li><br/><li><span>一个想偷懒的程序坑</span> 👍（0） 💬（3）<p>“FULL：在 HEADERS 级别的基础上，还记录了服务请求和服务响应中的 Body 和 metadata，FULL 级别记录了最完成的调用信息。”，这句话中应该是“记录了最完整的调用信息”吧。</p>2022-02-27</li><br/><li><span>珠穆写码</span> 👍（0） 💬（2）<p>按步骤配置了fallback, 且customer服务配置了feign.circuitbreaker.enabled=true 
+circuitbreaker:
+enabled: true &#47;&#47;开启服务降级</p>2023-05-17</li><br/><li><span>春</span> 👍（0） 💬（1）<p>网上有人说用ErrorDecoder配置错误处理，但是我配了根本没生效是怎么回事</p>2023-05-17</li><br/><li><span>楚翔style</span> 👍（0） 💬（1）<p>老师,整个项目有github链接吗? 想clone下来跑跑看</p>2022-10-28</li><br/><li><span>一个想偷懒的程序坑</span> 👍（0） 💬（3）<p>“FULL：在 HEADERS 级别的基础上，还记录了服务请求和服务响应中的 Body 和 metadata，FULL 级别记录了最完成的调用信息。”，这句话中应该是“记录了最完整的调用信息”吧。</p>2022-02-27</li><br/><li><span>珠穆写码</span> 👍（0） 💬（2）<p>按步骤配置了fallback, 且customer服务配置了feign.circuitbreaker.enabled=true
 template模块里面让线程sleep之后，还是之前readTimeout 没有触发降级。这是缺少了啥么？</p>2022-01-21</li><br/>
 </ul>

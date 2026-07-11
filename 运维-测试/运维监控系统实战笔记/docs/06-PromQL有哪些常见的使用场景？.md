@@ -43,7 +43,7 @@ node_load1{host=~"host0.*"}
 大括号里写过滤条件，主要是针对标签过滤，操作符除了等于号和正则匹配之外，还有不等于 `!=` 和正则非 `!~`。这个比较容易理解，不过多介绍了。需要注意的是，metric name 也是一个非常重要的过滤条件，可以写到大括号里，比如我想同时查看上海机器的 load1、load5、load15 三个指标，可以对 `__name__`，也就是 metric 名字做正则过滤。
 
 ```yaml
-{__name__=~"node_load.*", zone="sh"}
+{ __name__=~"node_load.*", zone="sh" }
 ```
 
 上面的例子中，我给出的3条PromQL都叫做即时查询（Instant Query），返回的内容叫做即时向量（ Instant Vector）。
@@ -94,7 +94,7 @@ irate(net_sent_bytes_total{zone="beijing"}[1m]) * 8 / 1024 / 1024 > 700
 
 ```yaml
 groups:
-- name: host
+  - name: host
   rules:
   - alert: MemUtil
     expr: mem_available{app="clickhouse"} / mem_total{app="clickhouse"} * 100 < 20
@@ -196,8 +196,8 @@ kube_pod_labels{
 
 ```plain
 sum(
-  rate(http_request_count{code=~"^(?:5..)$"}[5m])) by (pod)  
-* 
+  rate(http_request_count{code=~"^(?:5..)$"}[5m])) by (pod)
+*
 on (pod) group_left(label_version) kube_pod_labels
 ```
 
@@ -318,9 +318,9 @@ absent不适合这个场景，因为absent表示指标的有无（存在与否�
 这个是表示 每秒http请求增长数量？还是每秒http请求增长率？</p>2023-03-20</li><br/><li><span>penng</span> 👍（0） 💬（1）<p>PromQL查询能够限制时间戳吗？比如我有些指标是1个月前的，在查询时会把他查出来，我现在不想查询它。结果为空就好</p>2023-02-14</li><br/><li><span>hello</span> 👍（0） 💬（2）<p>老师您好，我们的业务指标用的prometheus + grafana，是这样的我们每天都有一个活跃uv统计，使用 counter 类型记入prometheus指标，我一直在寻找怎么看过去一周每天的uv总数，如果我使用1d的位移，grafana默认取每天8点的 value，而我想取的是每天最后一刻的值，直到我看到您这篇文章 我改成了 max_over_time(total_uv[1d]) ,  但是又引入了一个新的问题，每个横坐标日期展示的是前一天的指标值，不知道我是否有描述清楚，您是否有遇到这样的问题，有没有解决方案？ 总结一下，就是每天一个counter，取每天末最大的counter 绘图</p>2023-02-07</li><br/><li><span>那时刻</span> 👍（0） 💬（1）<p>思考题：如果我想对 100 台机器的 node_load1 做数据缺失告警，应该如何配置。
 
 count(
-  group(
-    last_over_time(node_label1[10m])
-  ) by (instance)
+group(
+last_over_time(node_label1[10m])
+) by (instance)
 ) &lt; 100
 
 对于node label最近10分钟的数据按照 instance进行 group计数，如果数量小于 100，则报警。当然这个10分钟可以按需调节。</p>2023-02-02</li><br/><li><span>Dowen Liu</span> 👍（4） 💬（0）<p>能不能提供下 prometheus 的 tsdb snapshot 啊。可以本地导入做下实验，有问题也可以以统一的数据基础反馈提问。</p>2023-01-28</li><br/><li><span>lei</span> 👍（1） 💬（0）<p>可不可以讲下prometheus 如何做动态扩展，保证高可用？如果需要数据可迁移，是不是就要搭建两个实例，然后这两个实例需要互通吗？谢谢</p>2023-01-22</li><br/>

@@ -58,7 +58,7 @@ It works!
 # 并发100个请求测试Nginx性能，总共测试1000个请求
 $ ab -c 100 -n 1000 http://192.168.0.10:10000/
 This is ApacheBench, Version 2.3 <$Revision: 1706008 $>
-Copyright 1996 Adam Twiss, Zeus Technology Ltd, 
+Copyright 1996 Adam Twiss, Zeus Technology Ltd,
 ...
 Requests per second:    87.86 [#/sec] (mean)
 Time per request:       1138.229 [ms] (mean)
@@ -369,47 +369,49 @@ watch -n 1 -d &quot;ps -A -ostat,pid,ppid,cmd | grep -i &#39;^r&#39; | grep -v p
 
 下面是输出：
 
-Every 1.0s: ps -A -ostat,pid,ppid,cmd | grep -i &#39;^r&#39; | grep -v ps       Wed Mar 20 02:39:50 2019
+Every 1.0s: ps -A -ostat,pid,ppid,cmd | grep -i &#39;^r&#39; | grep -v ps Wed Mar 20 02:39:50 2019
 
-R+   13308 13307 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
-R+   13313 13312 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
-R+   13314 13311 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
-R+   13319 13317 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
-R+   13320 13318 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1</p>2019-03-20</li><br/><li><span>刘韦菠</span> 👍（2） 💬（1）<p>我的perf record 里面 random 函数调用占比不是最高的, 最高的是一个叫做hoghdd 的函数, 这个函数里面包含了一些内存段错误和换页的函数. 这个是为什么呢? 
+R+ 13308 13307 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
+R+ 13313 13312 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
+R+ 13314 13311 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
+R+ 13319 13317 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1
+R+ 13320 13318 &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1</p>2019-03-20</li><br/><li><span>刘韦菠</span> 👍（2） 💬（1）<p>我的perf record 里面 random 函数调用占比不是最高的, 最高的是一个叫做hoghdd 的函数, 这个函数里面包含了一些内存段错误和换页的函数. 这个是为什么呢?
 我的机器是mac, 然后这个批次的mac ssd 性能有问题, 官方曾经给我发过返厂维修的通知邮件, 但是因为是公司的电脑, 所以我并没有弄去维修. hog hdd 是不是 占用hdd硬盘的意思呢?
 
--   57.30%     0.03%  stress           stress                    [.] main                                                                                                                                  ▒
-   - main                                                                                                                                                                                                  ▒
-      + 21.77% hoghdd                                                                                                                                                                                      ▒
-      + 16.12% random_r                                                                                                                                                                                    ▒
-      + 12.09% random                                                                                                                                                                                      ▒</p>2019-03-05</li><br/><li><span>Wind～</span> 👍（2） 💬（1）<p>之前给老师留言的问题已经自己搞定了，在后续的实验中我发现我的实验有些不太一样，还是希望老师看到后可以再指点一二，老师的ps和pidstat都没有输出，而我的则是有输出，但是分析的结果导向是一致的——线索都指向了stress
+- 57.30% 0.03% stress stress [.] main ▒
+- main ▒
+  - 21.77% hoghdd ▒
+  - 16.12% random_r ▒
+  - 12.09% random ▒</p>2019-03-05</li><br/><li><span>Wind～</span> 👍（2） 💬（1）<p>之前给老师留言的问题已经自己搞定了，在后续的实验中我发现我的实验有些不太一样，还是希望老师看到后可以再指点一二，老师的ps和pidstat都没有输出，而我的则是有输出，但是分析的结果导向是一致的——线索都指向了stress
 
 ----通过pidstat
 [wind@aaa ~]$ pidstat -p 39945
-Linux 3.10.0-862.el7.x86_64 (aaa)     2019年01月14日     _x86_64_    (1 CPU)
+Linux 3.10.0-862.el7.x86_64 (aaa) 2019年01月14日 _x86_64_ (1 CPU)
 
-06时31分09秒   UID       PID    %usr %system  %guest    %CPU   CPU  Command
-06时31分09秒     1     89962    0.00    0.00    0.00    0.00     0  php-fpm
-[wind@aaa ~]$ 
+06时31分09秒 UID PID %usr %system %guest %CPU CPU Command
+06时31分09秒 1 89962 0.00 0.00 0.00 0.00 0 php-fpm
+[wind@aaa ~]$
 
 ----通过ps aux
 [wind@aaa ~]$ ps aux | grep 39945
 bin       39945  1.3  0.7 336684  7688 pts&#47;2    S+   06:36   0:01 php-fpm: pool www
 wind      54077  0.0  0.0 112704   664 pts&#47;3    R+   06:38   0:00 grep --color=auto 39945
-[wind@aaa ~]$ 
+[wind@aaa ~]$
 
 ----再通过ps -efl
 [wind@aaa ~]$ ps -lef | grep 121267
-0 S bin       58233 121267  0  80   0 -  1070 do_wai 07:00 pts&#47;2    00:00:00 sh -c &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1 2&gt;&amp;1
-0 S wind      58250  42935  0  80   0 - 28180 pipe_w 07:00 pts&#47;3    00:00:00 grep --color=auto 121267
-5 S bin      121267  75443  1  80   0 - 84171 pipe_w 06:52 pts&#47;2    00:00:06 php-fpm: pool www
+0 S bin 58233 121267 0 80 0 - 1070 do_wai 07:00 pts&#47;2 00:00:00 sh -c &#47;usr&#47;local&#47;bin&#47;stress -t 1 -d 1 2&gt;&amp;1
+0 S wind 58250 42935 0 80 0 - 28180 pipe_w 07:00 pts&#47;3 00:00:00 grep --color=auto 121267
+5 S bin 121267 75443 1 80 0 - 84171 pipe_w 06:52 pts&#47;2 00:00:06 php-fpm: pool www
 
 ----但是我的实验中有些不同的地方是，php-fpm的京城并不会发生改变但是基本上都处于S状态很少会有R状态出现，但是如果出现R状态的话，那么在过0.5秒后，就必然会出现一个Z进程
 ----并且在后续的perf report 中占比最高的也没有random函数
--   66.20%     0.00%  stress           stress                          [.] 0x000000000000168d                                       ▒
-   - 0x168d                                                                                                                         ▒
-      - 5.49% 0x2f25                                                                                                                ▒
-         - 3.75% 0xffffffffba116768                                                                                                 ▒
-            - 3.74% 0xffffffffba11a925                                                                                              ▒
-               - 2.94% 0xffffffffba11a597</p>2019-01-13</li><br/>
+
+- 66.20% 0.00% stress stress [.] 0x000000000000168d ▒
+- 0x168d ▒
+  - 5.49% 0x2f25 ▒
+    - 3.75% 0xffffffffba116768 ▒
+      - 3.74% 0xffffffffba11a925 ▒
+        - 2.94% 0xffffffffba11a597</p>2019-01-13</li><br/>
+
 </ul>

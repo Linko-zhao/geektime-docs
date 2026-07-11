@@ -78,7 +78,7 @@ externalNativeBuild {
 2.由于源码里没有附带上一些第三方的库，所以现在编译会出现异常，我们需要下载lss库到Breakpad源码目录src/third\_party下面。
 
 ```
-git clone https://chromium.googlesource.com/linux-syscall-support 
+git clone https://chromium.googlesource.com/linux-syscall-support
 ```
 
 3.然后在源码目录下执行。
@@ -121,7 +121,7 @@ MODULE Linux arm64 322FCC26DA8ED4D7676BD9A174C299630 libcrash-lib.so
 3.完成上面的步骤后，就可以来解析Crash日志了，执行minidump\_stackwalk命令。
 
 ```
-minidump_stackwalk crash.dmp ./Symbol > dump.txt 
+minidump_stackwalk crash.dmp ./Symbol > dump.txt
 ```
 
 4.这样我们获取的crash日志就会有符号表了，对应一下之前没有符号表时候的日志记录。

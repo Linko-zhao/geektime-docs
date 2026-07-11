@@ -117,14 +117,14 @@ sudo tcpdump -i lo port 443 -w a.pcap
 抓出的包也可以用tcpdump直接查看，用“-r”指定包的名字：
 
 ```
-tcpdump -r a.pcap 
+tcpdump -r a.pcap
 tcpdump -r 08-1.pcapng -A
 ```
 
 不过在命令行界面下可以用一个更好的工具——tshark，它是Wireshark的命令行版本，用法和tcpdump差不多，但更易读，功能也更丰富一些。
 
 ```
-tshark -r 08-1.pcapng 
+tshark -r 08-1.pcapng
 tshark -r 08-1.pcapng -V
 tshark -r 08-1.pcapng -O tcp|less
 tshark -r 08-1.pcapng -O http|less
@@ -169,25 +169,27 @@ tcpdump、tshark和Linux里的许多工具一样，参数繁多、功能强大�
 <li><span>浪里淘沙的小法师</span> 👍（25） 💬（1）<p>讲一下用M1芯片 mac 搭建搭建环境的遇到的问题和解决方法。
 
 1. 运行 .&#47;run.sh start 报错 &#47;usr&#47;local&#47;bin&#47;openresty: command not found
-这是因为 M1 芯片mac 的 homebrew 安装软件的位置与以往不同，先通过 which openresty 查询 openresty 的位置 &#47;opt&#47;homebrew&#47;bin&#47;openresty，然后打开 run.sh 脚本替换一下老师写的位置
-if [ $os != &quot;Linux&quot; ] ; then
+   这是因为 M1 芯片mac 的 homebrew 安装软件的位置与以往不同，先通过 which openresty 查询 openresty 的位置 &#47;opt&#47;homebrew&#47;bin&#47;openresty，然后打开 run.sh 脚本替换一下老师写的位置
+   if [ $os != &quot;Linux&quot; ] ; then
     openresty=&quot;&#47;usr&#47;local&#47;bin&#47;openresty&quot;
 fi
 替换成
 if [ $os != &quot;Linux&quot; ] ; then
-    openresty=&quot;&#47;opt&#47;homebrew&#47;bin&#47;openresty&quot;
-fi
+   openresty=&quot;&#47;opt&#47;homebrew&#47;bin&#47;openresty&quot;
+   fi
 
 2. 再运行 .&#47;run.sh start 报错 nginx: [emerg] could not build server_names_hash, you should increase server_names_hash_bucket_size: 32
-网上查寻了一下，放大 bucket_size 即可，打开 www&#47;conf&#47;nginx.conf 文件添加这一句server_names_hash_bucket_size 64; 即可
+   网上查寻了一下，放大 bucket_size 即可，打开 www&#47;conf&#47;nginx.conf 文件添加这一句server_names_hash_bucket_size 64; 即可
+
 # http conf
+
 http {
-    #include     http&#47;common.conf;
-    #include     http&#47;cache.conf;
-    #include     http&#47;resty.conf;
-    #include     http&#47;mime.types;
-    server_names_hash_bucket_size 64;
-    
+#include http&#47;common.conf;
+#include http&#47;cache.conf;
+#include http&#47;resty.conf;
+#include http&#47;mime.types;
+server_names_hash_bucket_size 64;
+
     include     http&#47;*.conf;
 
     include     http&#47;servers&#47;*.conf;
@@ -206,7 +208,7 @@ openresty -v
 nginx version: openresty&#47;1.11.2.2
 
 在~&#47;git&#47;http_study&#47;www目录下执行
- .&#47;run.sh start
+.&#47;run.sh start
 Password:
 nginx: [emerg] &quot;&#47;Users&#47;xiaodong&#47;git&#47;http_study&#47;www&#47;conf&#47;ssl&#47;ticket.key&quot; must be 48 bytes in &#47;Users&#47;xiaodong&#47;git&#47;http_study&#47;www&#47;conf&#47;nginx.conf:34
 报了这个错误，在网上google没找到解决方法。

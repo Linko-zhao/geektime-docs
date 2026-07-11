@@ -27,7 +27,7 @@ Secret最典型的使用场景，莫过于存放数据库的Credential信息，�
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-projected-volume 
+  name: test-projected-volume
 spec:
   containers:
   - name: test-secret-volume
@@ -277,7 +277,7 @@ Volumes:
 这样，一旦Pod创建完成，容器里的应用就可以直接从这个默认ServiceAccountToken的挂载目录里访问到授权信息和文件。这个容器内的路径在Kubernetes里是固定的，即：/var/run/secrets/kubernetes.io/serviceaccount ，而这个Secret类型的Volume里面的内容如下所示：
 
 ```
-$ ls /var/run/secrets/kubernetes.io/serviceaccount 
+$ ls /var/run/secrets/kubernetes.io/serviceaccount
 ca.crt namespace  token
 ```
 
@@ -561,8 +561,8 @@ spec:
 原文：“相信你一定有过这样的想法：我现在有了一个 Pod，我能不能在这个 Pod 里安装一个 Kubernetes 的Client，这样就可以从容器里直接访问并且操作这个 Kubernetes 的 API 了呢？”
 
 1. 这里可以举个简单例子吗？
-2.“kubernetes的client”指的是什么？
-3. 操作“kubernetes的API”这里的API由指什么？
+   2.“kubernetes的client”指的是什么？
+2. 操作“kubernetes的API”这里的API由指什么？
 
 小白问题，过不了这关，听得有点晕。见谅
 </p>2018-09-27</li><br/><li><span>Pixar</span> 👍（9） 💬（2）<p>复习了下容器的检查探针, 有几个点还是没太明白, 还望老师能解答下:

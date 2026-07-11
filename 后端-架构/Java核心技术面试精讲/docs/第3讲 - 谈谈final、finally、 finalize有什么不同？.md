@@ -57,7 +57,7 @@ try {
 ```
  final List<String> strList = new ArrayList<>();
  strList.add("Hello");
- strList.add("world");  
+ strList.add("world");
  List<String> unmodifiableStrList = List.of("hello", "world");
  unmodifiableStrList.add("again");
 ```
@@ -93,7 +93,7 @@ finalize还会掩盖资源回收时的出错信息，我们看下面一段JDK的
  private void runFinalizer(JavaLangAccess jla) {
  //  ... 省略部分代码
  try {
-    Object finalizee = this.get(); 
+    Object finalizee = this.get();
     if (finalizee != null && !(finalizee instanceof java.lang.Enum)) {
        jla.invokeFinalize(finalizee);
        // Clear stack slot containing this variable, to decrease
@@ -101,7 +101,7 @@ finalize还会掩盖资源回收时的出错信息，我们看下面一段JDK的
        finalizee = null;
     }
   } catch (Throwable x) { }
-    super.clear(); 
+    super.clear();
  }
 ```
 
@@ -121,7 +121,7 @@ Java平台目前在逐步使用java.lang.ref.Cleaner来替换掉原有的finaliz
 public class CleaningExample implements AutoCloseable {
         // A cleaner, preferably one shared within a library
         private static final Cleaner cleaner = <cleaner>;
-        static class State implements Runnable { 
+        static class State implements Runnable {
             State(...) {
                 // initialize State needed for cleaning action
             }
@@ -163,35 +163,35 @@ public class CleaningExample implements AutoCloseable {
 
 @Test
 public void test() throws NoSuchFieldException, IllegalAccessException {
-    util util = new util();
-    Field field = util.getClass().getDeclaredField(&quot;info&quot;);
-    field.setAccessible(true);
-    field.set(util,789);
-    System.out.println(field.get(util));
-    System.out.println(util.info);
+util util = new util();
+Field field = util.getClass().getDeclaredField(&quot;info&quot;);
+field.setAccessible(true);
+field.set(util,789);
+System.out.println(field.get(util));
+System.out.println(util.info);
 }
 这里final修饰的被改了，如果不加accessible这句会报错，刚刚试了几个，似乎是基本数据类型改不了，封装类型都能改，请杨老师解答下我的疑惑，感谢。</p>2018-05-10</li><br/><li><span>ls</span> 👍（13） 💬（1）<p>Java中有说：finalize 有一种用途：在 Java 中调用非 Java 代码，在非 Java 代码中若调用了C的 malloc 来分配内存，如果不调用 C 的free 函数，会导致内存泄露。所以需要在 finalize 中调用它。
 
 面试中会有问：为什么 String 会设计成不可变？想听听老师的解释</p>2018-05-13</li><br/><li><span>Do</span> 👍（7） 💬（1）<p>final修饰变量参数的时候，其实理解为内存地址的绑定，这样理解是不是更直观，基本类型指向栈中，引用类型指向堆中。老师后期文章能不能说下java堆栈的区别，还有变量局部变量的生命周期，最好能附上图，加深理解。</p>2018-05-12</li><br/><li><span>张勇</span> 👍（6） 💬（1）<p>匿名内部类为什么访问外部类局部变量必须是final的？private Animator createAnimatorView(final View view, final int position) {
-    MyAnimator animator = new MyAnimator();
-    animator.addListener(new AnimatorListener() {
-        @Override
-        public void onAnimationEnd(Animator arg0) {
-            Log.d(TAG, &quot;position=&quot; + position); 
-        }
-    });
-    return animator;
+MyAnimator animator = new MyAnimator();
+animator.addListener(new AnimatorListener() {
+@Override
+public void onAnimationEnd(Animator arg0) {
+Log.d(TAG, &quot;position=&quot; + position);
+}
+});
+return animator;
 }</p>2018-05-11</li><br/><li><span>Dee1024</span> 👍（4） 💬（1）<p>Cleaner机制没有Finalizer机制那样危险，但仍然是不可预测，也是运行缓慢，同样不能保证他们能够及时执行。所以，尽量避免使用。
 正确的关闭资源的打开方式应该是，使用JDK1.7或者以上版本，里面提供的 AutoCloseable 接口，实现该接口以达目的</p>2018-09-13</li><br/><li><span>loveluckystar</span> 👍（4） 💬（1）<p>个人理解，finalize本身就是为了提供类似c或c++析构函数产生的，由于java中gc本身就是自动进行的，是不希望被干扰的，(就像System.gc()，并不一定起作用)所以与其费心研究如何使用这个，不如老老实实在finally中把该做的事情做了来的实惠。</p>2018-05-10</li><br/><li><span>老胡</span> 👍（3） 💬（1）<p>Cleaner机制会对jvm回收造成负担，因为gc回收的时候需要检测这个对象十分是Cleaner，然后处理。如果处理过长，十分影响gc的效率。好点方案，容器管理对象，比如spring的sopce，或者对象单利等等，gc负担是一个致命问题，所以Cleaner谨慎使用，甚至应该禁止</p>2018-05-11</li><br/><li><span>haoz</span> 👍（1） 💬（1）<p>List.of()方法我的jdk1.8中没有 网上也没有相关资料。是不是老师写错了呢?还望老师多多指教！</p>2018-05-16</li><br/><li><span>程序猿的小浣熊</span> 👍（1） 💬（1）<p>关于copy_on_write实现getter方法可以有例子吗？因为我理解的该原则是懒修改策略，但是不变类不应该不做任何修改么？希望可以解答一下。</p>2018-05-15</li><br/><li><span>FF</span> 👍（1） 💬（1）<p>请教杨老师一个异常处理的问题，我们使用 eclipse 的同学通常这样处理异常：
 try{
 。。。。
 }catch(Exception ex){
-throw ex;  &#47;&#47;这里抛出异常，
+throw ex; &#47;&#47;这里抛出异常，
 }
 
-但方法并没有声明 throws Exception，而  eclipse  通常也能编译执行，这不是违反了基本语法了吗，为何 eclipse 里面没有任何问题的？
+但方法并没有声明 throws Exception，而 eclipse 通常也能编译执行，这不是违反了基本语法了吗，为何 eclipse 里面没有任何问题的？
 
-这是什么原因？但这样的代码在使用 IntellIj  IDEA  的同学那里是完全没法编译执行的，直接就提示语法错误了
+这是什么原因？但这样的代码在使用 IntellIj IDEA 的同学那里是完全没法编译执行的，直接就提示语法错误了
 
 很困惑，网上没找到相关答案，望解答，感谢！</p>2018-05-10</li><br/><li><span>mongo</span> 👍（1） 💬（1）<p>final修饰引用类型的话，引用值不能被修改。但是引用值指向的内容可以被修改，这样看来修饰引用类型并不是线程安全的。什么场景下会使用final修饰引用类型呢？</p>2018-05-10</li><br/><li><span>曲水流觞TechRill</span> 👍（0） 💬（1）<p>关于匿名内部类访问局部变量必须final的原因，还有一个关键是匿名内部类的生命周期可能比外部类要长，而如果外部类已经被垃圾回收了，那内部类访问的就是一个空变量。final可以防止被回收，老师对么？</p>2018-05-17</li><br/>
 </ul>

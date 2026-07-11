@@ -43,7 +43,7 @@ if(rs1 != rs2) pc = pc + 符号扩展（imm << 1）
 beq_ins:
     beq a0，a1，imm_l1          #a0==a1，跳转到imm_l1地址处开始运行
     mv a0，zero                 #a0=0
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 imm_l1:
     addi a0，zero，1            #a0=1
     jr ra                       #函数返回
@@ -52,10 +52,10 @@ imm_l1:
 bne_ins:
     bne a0，a1，imm_l2          #a0!=a1，跳转到imm_l2地址处开始运行
     mv a0，zero                 #a0=0
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 imm_l2:
     addi a0，zero，1            #a0=1
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 ```
 
 我们先看代码里的 **beq\_ins函数**完成了什么操作，如果a0和a1相等，则跳转到imm\_l1处，将a0置1并返回，否则继续顺序执行，将a0置0并返回。然后，我们再看下 **bne\_ins函数**的操作，如果a0和a1不相等则跳转到imm\_l2处，将a0置1并返回，否则继续顺序执行将a0置0并返回。
@@ -123,7 +123,7 @@ if((无符号)rs1 < (无符号)rs2) pc = pc + 符号扩展（imm << 1）
 blt_ins:
     blt a0，a1，imm_l3          #a0<a1，跳转到imm_l3地址处开始运行
     mv a0，zero                 #a0=0
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 imm_l3:
     addi a0，zero，1            #a0=1
     jr ra                       #函数返回
@@ -132,10 +132,10 @@ imm_l3:
 bltu_ins:
     bltu a0，a1，imm_l4         #a0<a1，跳转到imm_l4地址处开始运行
     mv a0，zero                 #a0=0
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 imm_l4:
     addi a0，zero，1            #a0=1
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 ```
 
 blt\_ins函数都做了什么呢？如果a0小于a1，则跳转到imm\_l3处，将a0置1并返回，否则继续顺序执行将a0置0并返回。
@@ -207,19 +207,19 @@ if((无符号)rs1 >= (无符号)rs2) pc = pc + 符号扩展（imm << 1）
 bge_ins:
     bge a0，a1，imm_l5          #a0>=a1，跳转到imm_l5地址处开始运行
     mv a0，zero                 #a0=0
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 imm_l5:
     addi a0，zero，1            #a0=1
     jr ra                       #函数返回
-    
+
 .global bgeu_ins
 bgeu_ins:
     bgeu a0，a1，imm_l6         #a0>=a1，跳转到imm_l6地址处开始运行
     mv a0，zero                 #a0=0
-    jr ra                       #函数返回    
+    jr ra                       #函数返回
 imm_l6:
     addi a0，zero，1            #a0=1
-    jr ra                       #函数返回        
+    jr ra                       #函数返回
 ```
 
 结合上面的代码，我们依次来看看bge\_ins函数和bgeu\_ins函数都做了什么。先看bge\_ins函数，如果a0大于等于a1，则跳转到imm\_l5处将a0置1并返回，否则就会继续顺序执行，将a0置0并返回。

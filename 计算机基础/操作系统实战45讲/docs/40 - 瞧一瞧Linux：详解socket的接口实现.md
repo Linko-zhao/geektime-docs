@@ -99,7 +99,7 @@ asmlinkage long sysbind (bind, int, fd, struct sockaddr __user *, umyaddr, int, 
 	struct socket *sock;
 	struct sockaddr_storage address;
 	int err, fput_needed;
- 
+
 	/*
 	 * 获取socket实例。
 	 */
@@ -134,7 +134,7 @@ asmlinkage long sysbind (bind, int, fd, struct sockaddr __user *, umyaddr, int, 
 int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
 {
     struct sockaddr_in *addr = (struct sockaddr_in *)uaddr;
-    struct sock *sk = sock->sk;  
+    struct sock *sk = sock->sk;
     struct inet_sock *inet = inet_sk(sk);
     unsigned short snum;
     int chk_addr_ret;
@@ -491,7 +491,7 @@ A、状态变为TCP_CLOSE_WAIT
 -&gt;-&gt;-&gt;sock_set_flag(sk, SOCK_DONE);
 -&gt;-&gt;-&gt;case TCP_ESTABLISHED:
 -&gt;-&gt;-&gt;tcp_set_state(sk, TCP_CLOSE_WAIT); 修改状态
--&gt;-&gt;inet_csk(sk)-&gt;icsk_ack.pending |= ICSK_ACK_NOW;  ACS是否立即发送
+-&gt;-&gt;inet_csk(sk)-&gt;icsk_ack.pending |= ICSK_ACK_NOW; ACS是否立即发送
 
 B、发送ACK包
 【tcp_protocol.handler】tcp_v4_rcv-&gt;tcp_v4_do_rcv-&gt;tcp_rcv_established【接上面】
@@ -503,7 +503,7 @@ B、发送ACK包
 -&gt;tcp_set_state(sk, TCP_FIN_WAIT2);
 -&gt;tcp_time_wait(sk, TCP_FIN_WAIT2, tmo);
 -&gt;-&gt;tw = inet_twsk_alloc(sk, tcp_death_row, state);
--&gt;-&gt;-&gt;tw-&gt;tw_state = TCP_TIME_WAIT;   
+-&gt;-&gt;-&gt;tw-&gt;tw_state = TCP_TIME_WAIT;  
 -&gt;-&gt;-&gt;tw-&gt;tw_substate = TCP_FIN_WAIT2;
 -&gt;-&gt;-&gt;timer_setup(&amp;tw-&gt;tw_timer, tw_timer_handler, TIMER_PINNED);
 

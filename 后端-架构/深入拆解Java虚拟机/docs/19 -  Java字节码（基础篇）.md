@@ -254,17 +254,17 @@ Java字节码可以划分为很多种类型，如加载常量指令，操作数�
 
 这听起来挺抽象的，老师能具体讲讲它们的区别？
 
-是字节码执行的时候有区别的吗？  还是说字节码本身就有区别？</p>2019-12-28</li><br/><li><span>饭粒</span> 👍（3） 💬（0）<p>图文并茂，总结详尽！感觉这篇放在前面可能更好。</p>2019-12-23</li><br/><li><span>啸疯</span> 👍（2） 💬（0）<p>看的真爽，了解了很多字节码层面的细节，例如常量相加后赋值给变量，那么在字节码层面其实直接就是相加后的值，再比如两个string的相加，字节码层面其实也是调用stringbuiler不断append后tostring来实现的</p>2021-12-28</li><br/><li><span>魏全运</span> 👍（2） 💬（0）<p>
-  public void foo() {
-    Object o = new Object();
-  }
-  &#47;&#47; 对应的字节码如下：
-  public void foo();
-    0  new java.lang.Object [3]
-    3  dup
-    4  invokespecial java.lang.Object() [8]
-    7  astore_1 [o]
-    8  return
+是字节码执行的时候有区别的吗？ 还是说字节码本身就有区别？</p>2019-12-28</li><br/><li><span>饭粒</span> 👍（3） 💬（0）<p>图文并茂，总结详尽！感觉这篇放在前面可能更好。</p>2019-12-23</li><br/><li><span>啸疯</span> 👍（2） 💬（0）<p>看的真爽，了解了很多字节码层面的细节，例如常量相加后赋值给变量，那么在字节码层面其实直接就是相加后的值，再比如两个string的相加，字节码层面其实也是调用stringbuiler不断append后tostring来实现的</p>2021-12-28</li><br/><li><span>魏全运</span> 👍（2） 💬（0）<p>
+public void foo() {
+Object o = new Object();
+}
+&#47;&#47; 对应的字节码如下：
+public void foo();
+0 new java.lang.Object [3]
+3 dup
+4 invokespecial java.lang.Object() [8]
+7 astore_1 [o]
+8 return
 
 通过对象创建的字节码就能明白对象的创建不是原子操作，所以需要双重检查锁保证单例安全</p>2020-03-11</li><br/><li><span>师爷</span> 👍（2） 💬（0）<p>某些方法阻塞会不会导致弹栈阻塞呢</p>2019-09-25</li><br/><li><span>李鑫磊</span> 👍（2） 💬（0）<p>笔记：https:&#47;&#47;www.jianshu.com&#47;p&#47;b395ed905e0d</p>2018-11-19</li><br/><li><span>YIFENG</span> 👍（2） 💬（3）<p>64位虚拟机中long和double也都是占用两个栈单元吗？</p>2018-09-03</li><br/><li><span>　素丶　　</span> 👍（1） 💬（0）<p>可以配合美团的这篇文章一起观看
 https:&#47;&#47;tech.meituan.com&#47;2019&#47;09&#47;05&#47;java-bytecode-enhancement.html</p>2022-02-24</li><br/>

@@ -221,37 +221,41 @@ IntegerCache只能缓存事先指定好的整型对象，那我们是否可以�
 按照这个思路设计IntegerCache类的话，如下
 private static class IntegerCache {
 
-    public static final WeakHashMap&lt;Integer, WeakReference&lt;Integer&gt;&gt; cache = 
+    public static final WeakHashMap&lt;Integer, WeakReference&lt;Integer&gt;&gt; cache =
         new WeakHashMap&lt;Integer, WeakReference&lt;Integer&gt;&gt;(); &#47;&#47;也可以提前分配容量
 
     private IntegerCache(){}
+
 }
 
-public static Integer valueOf(int i) { 
-    final WeakReference&lt;Integer&gt; cached = IntegerCache.cache.get(i);
-    if (cached != null) {
-        final Integer value = cached.get(i);
-        if (value != null) {
-            return value;
-        }
-    }
-    WeakReference&lt;Integer&gt; val = new WeakReference&lt;Integer&gt;(i);
-    IntegerCache.cache.put(i, val);
-    return val.get(); 
+public static Integer valueOf(int i) {
+final WeakReference&lt;Integer&gt; cached = IntegerCache.cache.get(i);
+if (cached != null) {
+final Integer value = cached.get(i);
+if (value != null) {
+return value;
+}
+}
+WeakReference&lt;Integer&gt; val = new WeakReference&lt;Integer&gt;(i);
+IntegerCache.cache.put(i, val);
+return val.get();
 }</p>2020-03-09</li><br/><li><span>辣么大</span> 👍（48） 💬（7）<p>谢谢各位的讨论，今天学到了软引用，弱引用，和WeakHashMap。内存吃紧的时候可以考虑使用WeakHashMap。
 https:&#47;&#47;www.baeldung.com&#47;java-weakhashmap
 https:&#47;&#47;www.baeldung.com&#47;java-soft-references
 https:&#47;&#47;www.baeldung.com&#47;java-weak-reference</p>2020-03-11</li><br/><li><span>李小四</span> 👍（32） 💬（0）<p>设计模式_55:
+
 # 作业
+
 原来还有个WeakHashMap，学习了。
 
 # 感想
+
 自己尝试了写了一个，然后分别测试了10,000次、100,000次，1,000,000次创建，value从1-100，100-200，10000-10100，发现不管哪个场景，总是JVM的Integer时间更短，我写的要3倍左右的时间，不禁感叹，Java二十几年了，大部分的优化应该都做了，不要期望自己花20分钟能改出超过JVM的性能。</p>2020-03-17</li><br/><li><span>3Spiders</span> 👍（25） 💬（1）<p>课后题。因为整型对象长度固定，且内容固定，可以直接申请一块连续的内存地址，可以加快访问，节省内存？而String类不行。</p>2020-03-09</li><br/><li><span>Geek_41d472</span> 👍（14） 💬（0）<p>我勒个擦 ,这好像是我碰到的两道面试题,包装和拆箱这道题简直就是个坑,有踩坑的举个手</p>2020-03-10</li><br/><li><span>webmin</span> 👍（10） 💬（1）<p>抛砖引玉实现了一个有限范围的缓存（-128~2048383(127 * 127 * 127)）
 public class IntegerCache {
-    private static final int bucketSize = 127;
-    private static final int level1Max = bucketSize * bucketSize;
-    private static final int max = bucketSize * bucketSize * bucketSize;
-    private static final WeakHashMap&lt;Integer, WeakHashMap&lt;Integer, WeakHashMap&lt;Integer,WeakReference&lt;Integer&gt;&gt;&gt;&gt; CACHE = new WeakHashMap&lt;&gt;();
+private static final int bucketSize = 127;
+private static final int level1Max = bucketSize * bucketSize;
+private static final int max = bucketSize * bucketSize * bucketSize;
+private static final WeakHashMap&lt;Integer, WeakHashMap&lt;Integer, WeakHashMap&lt;Integer,WeakReference&lt;Integer&gt;&gt;&gt;&gt; CACHE = new WeakHashMap&lt;&gt;();
 
     public static Integer intern(int integer) {
         if (integer &lt;= 127) {
@@ -297,31 +301,32 @@ public class IntegerCache {
             return sum;
         }
     }
+
 }</p>2020-03-09</li><br/><li><span>Eden Ma</span> 👍（9） 💬（2）<p>突然理解OC中NSString等也用到了享元设计模式.</p>2020-03-09</li><br/><li><span>，</span> 👍（7） 💬（9）<p>补充 深入理解java虚拟机 里的两道有意思的题,请思考输出结果:
 自动装箱 拆箱:
- public static void main(String[] args){
-        Integer a = 1;
-        Integer b = 2;
-        Integer c = 3;
-        Integer d = 3;
-        Integer e = 321;
-        Integer f = 321;
-        Long g = 3L;
-        System.out.println(c==d);
-        System.out.println(e==f);
-        System.out.println(c==(a+b));
-        System.out.println(c.equals(a+b));
-        System.out.println(g ==(a+b));
-        System.out.println(g.equals(a+b));
-    }
+public static void main(String[] args){
+Integer a = 1;
+Integer b = 2;
+Integer c = 3;
+Integer d = 3;
+Integer e = 321;
+Integer f = 321;
+Long g = 3L;
+System.out.println(c==d);
+System.out.println(e==f);
+System.out.println(c==(a+b));
+System.out.println(c.equals(a+b));
+System.out.println(g ==(a+b));
+System.out.println(g.equals(a+b));
+}
 
 考察知识点:Integer缓存,equals和==
 字符串:
- public static void main(String[] args) {
-        String str1 = new StringBuilder(&quot;计算机&quot;).append(&quot;软件&quot;).toString();
-        System.out.println(str1==str1.intern());
-        String str2 = new StringBuilder(&quot;ja&quot;).append(&quot;va&quot;).toString();
-        System.out.println(str2==str2.intern());
-    }
+public static void main(String[] args) {
+String str1 = new StringBuilder(&quot;计算机&quot;).append(&quot;软件&quot;).toString();
+System.out.println(str1==str1.intern());
+String str2 = new StringBuilder(&quot;ja&quot;).append(&quot;va&quot;).toString();
+System.out.println(str2==str2.intern());
+}
 考察知识点:1.intern的作用;2.玩</p>2020-03-09</li><br/><li><span>柠檬C</span> 👍（5） 💬（0）<p>可以使用weakReference，当没有其他变量引用时，被JVM回收</p>2020-03-14</li><br/><li><span>Jackey</span> 👍（5） 💬（0）<p>这节的例子可以拿来做笔试的题目😃</p>2020-03-09</li><br/><li><span>Q罗</span> 👍（4） 💬（0）<p>享元模式讲解很透彻，赞👍</p>2020-03-24</li><br/><li><span>李德政</span> 👍（3） 💬（0）<p>终于明白了Python中[-5,256)之间的整数的地址id都是一样的</p>2020-06-19</li><br/>
 </ul>

@@ -176,10 +176,10 @@ Google曾经在2007年到2012年间做过一个对于1PB数据的大规模排序
 这是我的想法，请老师指正。</p>2019-04-17</li><br/><li><span>TKbook</span> 👍（10） 💬（1）<p>在评论在看到Consistent hashing，特地去搜索看了下，终于明白了。评论干货很多。。</p>2019-04-17</li><br/><li><span>JensonYao</span> 👍（8） 💬（1）<p>MapReduce是从纷繁复杂的业务逻辑中，为我们抽象出了 Map 和 Reduce这样足够通用的编程模型。
 缺点：
 1、复杂度高
-	当你构造更为复杂的处理架构时，往往进行任务划分，而且每一步都可能出错。而且往往比认为的复杂的多。
+当你构造更为复杂的处理架构时，往往进行任务划分，而且每一步都可能出错。而且往往比认为的复杂的多。
 2、时间性能达不到用户要求
-	Google500 多页的 MapReduce 性能优化手册
-	1PB的排序从12小时优化到0.5小时花了5年
+Google500 多页的 MapReduce 性能优化手册
+1PB的排序从12小时优化到0.5小时花了5年
 
 思考题：如果你在 Facebook 负责处理例子中的用户数据，你会选择什么分片函数，来保证均匀分布的数据分片?
 由于没有过相关的经验，从网上查了下资料，常见的数据分片有1、hash 2、consistent hash without virtual node 3、consistent hash with virtual node 4、range based

@@ -35,9 +35,9 @@ Properties props = new Properties();
 …
 props.put("max.poll.interval.ms", 5000);
 consumer.subscribe(Arrays.asList("test-topic"));
- 
+
 while (true) {
-    ConsumerRecords<String, String> records = 
+    ConsumerRecords<String, String> records =
 		consumer.poll(Duration.ofSeconds(1));
     // 使用Thread.sleep模拟真实的消息处理逻辑
     Thread.sleep(6000L);
@@ -85,8 +85,7 @@ Okay，现在我们已经说完了关于CommitFailedException异常的经典发�
 <li><span>ban</span> 👍（43） 💬（1）<p>老师，1、请问Standalone Consumer 的独立消费者一般什么情况会用到
 2、Standalone Consumer 的独立消费者 使用跟普通消费者组有什么区别的。</p>2019-07-16</li><br/><li><span>胡小禾</span> 👍（34） 💬（2）<p>“当消息处理的总时间超过预设的 max.poll.interval.ms 参数值时，Kafka Consumer 端会抛出 CommitFailedException 异常”。
 
-
-其实逻辑是这样：消息处理的总时间超过预设的 max.poll.interval.ms 参数值  导致了 Rebalance‘；
+其实逻辑是这样：消息处理的总时间超过预设的 max.poll.interval.ms 参数值 导致了 Rebalance‘；
 rebalance导致了 partition assgined 的consumer member变了；
 导致原来的consumer 想要commit都没法commit 。（因为元信息,比如连的broker都变了）.
 
@@ -97,7 +96,7 @@ rebalance导致了 partition assgined 的consumer member变了；
      TopicPartition partition0 = new TopicPartition(topic, 0);
      TopicPartition partition1 = new TopicPartition(topic, 1);
      consumer.assign(Arrays.asList(partition0, partition1));
- 
+
 Once assigned, you can call poll in a loop, just as in the preceding examples to consume records. The group that the consumer specifies is still used for committing offsets, but now the set of partitions will only change with another call to assign. Manual partition assignment does not use group coordination, so consumer failures will not cause assigned partitions to be rebalanced. Each consumer acts independently even if it shares a groupId with another consumer. To avoid offset commit conflicts, you should usually ensure that the groupId is unique for each consumer instance.
 
 老师 standalone mode 是上面这段内容吗？</p>2019-07-31</li><br/><li><span>Li Shunduo</span> 👍（9） 💬（1）<p>假如broker集群整个挂掉了，过段时间集群恢复后，consumer group会自动恢复消费吗？还是需要手动重启consumer机器？</p>2019-07-16</li><br/><li><span>有时也，命也，运也，如之奈何？</span> 👍（6） 💬（1）<p>老师kafka死信该怎么去实现的？

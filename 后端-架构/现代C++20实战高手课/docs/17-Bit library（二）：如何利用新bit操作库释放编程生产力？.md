@@ -778,12 +778,13 @@ inline constexpr uint8_t ComputeByteOrder2() {
     else {
         return 0;
     }
+
 }
 
 enum class endian
 {
-    little,
-    big,
-    native = ComputeByteOrder2()
+little,
+big,
+native = ComputeByteOrder2()
 };</p>2024-01-21</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请问：C++20的位操作比以前版本的性能有多少提升？</p>2023-03-02</li><br/>
 </ul>

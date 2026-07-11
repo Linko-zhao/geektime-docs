@@ -55,10 +55,10 @@ TextStyle redStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color:
 Text.rich(
     TextSpan(
         children: <TextSpan>[
-          TextSpan(text:'文本是视图系统中常见的控件，它用来显示一段特定样式的字符串，类似', style: redStyle), //第1个片段，红色样式 
-          TextSpan(text:'Android', style: blackStyle), //第1个片段，黑色样式 
-          TextSpan(text:'中的', style:redStyle), //第1个片段，红色样式 
-          TextSpan(text:'TextView', style: blackStyle) //第1个片段，黑色样式 
+          TextSpan(text:'文本是视图系统中常见的控件，它用来显示一段特定样式的字符串，类似', style: redStyle), //第1个片段，红色样式
+          TextSpan(text:'Android', style: blackStyle), //第1个片段，黑色样式
+          TextSpan(text:'中的', style:redStyle), //第1个片段，红色样式
+          TextSpan(text:'TextView', style: blackStyle) //第1个片段，黑色样式
         ]),
   textAlign: TextAlign.center,
 );
@@ -168,7 +168,7 @@ FlatButton(
     color: Colors.yellow, //设置背景色为黄色
     shape:BeveledRectangleBorder(borderRadius: BorderRadius.circular(20.0)), //设置斜角矩形边框
     colorBrightness: Brightness.light, //确保文字按钮为深色
-    onPressed: () => print('FlatButton pressed'), 
+    onPressed: () => print('FlatButton pressed'),
     child: Row(children: <Widget>[Icon(Icons.add), Text("Add")],)
 )；
 ```
@@ -212,16 +212,16 @@ UI控件是构建一个视图的基本元素，而文本、图片和按钮则是
 Text参数分类：
 
 - **控制整体文本布局的参数**
-	- textAlign
-	- textDirection
-	- maxLines
-	- overflow
-	- ...
+  - textAlign
+  - textDirection
+  - maxLines
+  - overflow
+  - ...
 - **控制文本展示样式的参数**
-	- fontFamily
-	- fontSize
-	- color
-	- shadows
+  - fontFamily
+  - fontSize
+  - color
+  - shadows
 
 通过TextSpan来对Text继续分片样式处理。
 
@@ -234,6 +234,7 @@ Text参数分类：
 - 加载网络图片
 
 高级版本的Image
+
 - FadeInImage（支持占位图、加载动态等）
 - CacheNetworkImage（支持缓存到文件系统，更加强大的加载过程占位和加载错误占位）
 
@@ -244,16 +245,17 @@ Text参数分类：
 - RaisedButton（凸起的按钮）
 
 两个最重要的参数：
+
 - onPressed（用于设置点击回调）
 - child（用于设置按钮的内容）</p>2019-10-03</li><br/><li><span>杨闯</span> 👍（7） 💬（1）<p>你好，我在使用控件的时候有一个疑问：对于一个字符串，我想在定宽的时候计算出它将会占据多大的高度，因为我们现在的项目是要根据高度进行特殊的处理，不知道您是否有什么解决办法</p>2019-07-25</li><br/><li><span>我想静静</span> 👍（6） 💬（1）<p>在用Text或者Icon控件显示竖直方向居中时总会有一点偏下，设置了各种属性都没有修正，最后还是给控件加了paddingBottom强行改变了内容区域的空间才正常，这是什么原因？</p>2019-08-17</li><br/><li><span>李耀</span> 👍（4） 💬（1）<p>flutter 打包之后就简单一个页面，apk包感觉比正常的大号好多</p>2019-07-29</li><br/><li><span>烘哄轰、</span> 👍（2） 💬（1）<p>Image.asset(‘images&#47;logo.png’)；的路径需要在配置文件里配置，当时被这个问题坑了好久😂</p>2019-08-03</li><br/><li><span>江宁彭于晏</span> 👍（2） 💬（1）<p>Text、Image、FadeInImage、FlatButton、RaisedBUTTON
-都由SingleChildRenderObjectWidget承载视觉
-并且这些Widget都隐式的定义了 Semantics ，因为他们可能都直接或者间接的在 Screen Reader 引擎中被使用</p>2019-07-25</li><br/><li><span>🌻Arvin</span> 👍（1） 💬（1）<p>FlatButton(
-    color: Colors.yellow, &#47;&#47; 设置背景色为黄色
-    shape:BeveledRectangleBorder(borderRadius: BorderRadius.circular(20.0)), &#47;&#47; 设置斜角矩形边框
-    colorBrightness: Brightness.light, &#47;&#47; 确保文字按钮为深色
-    onPressed: () =&gt; print(&#39;FlatButton pressed&#39;), 
-    child: Row(children: &lt;Widget&gt;[Icon(Icons.add), Text(&quot;Add&quot;)],)
-)；
+  都由SingleChildRenderObjectWidget承载视觉
+  并且这些Widget都隐式的定义了 Semantics ，因为他们可能都直接或者间接的在 Screen Reader 引擎中被使用</p>2019-07-25</li><br/><li><span>🌻Arvin</span> 👍（1） 💬（1）<p>FlatButton(
+  color: Colors.yellow, &#47;&#47; 设置背景色为黄色
+  shape:BeveledRectangleBorder(borderRadius: BorderRadius.circular(20.0)), &#47;&#47; 设置斜角矩形边框
+  colorBrightness: Brightness.light, &#47;&#47; 确保文字按钮为深色
+  onPressed: () =&gt; print(&#39;FlatButton pressed&#39;),
+  child: Row(children: &lt;Widget&gt;[Icon(Icons.add), Text(&quot;Add&quot;)],)
+  )；
 
 好像是版本更新了,背景色color细化成backgroundColor</p>2019-08-06</li><br/><li><span>sixgod</span> 👍（0） 💬（1）<p>老师有个问题 为什么container或者sizedbox有时候设置宽高不生效 在外面包裹一个align就生效了</p>2019-11-20</li><br/><li><span>微笑美男😄</span> 👍（0） 💬（1）<p>老师 怎么加载本地的图片。我设置好了之后 在pubspec.yaml中一直报警告,The asset images&#47;fapiaoshenhe.png does not exist.
 Try creating the file or fixing the path to the file.

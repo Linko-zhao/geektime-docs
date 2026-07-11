@@ -400,7 +400,7 @@ public static <T> Comparator<T> comparable() {
 
 ```
 public class ComparableComparator<T extends Comparable<T>> implements Comparator<T> {
- 
+
    public static final ComparableComparator INSTANCE = new ComparableComparator();
 
    @Override
@@ -479,21 +479,22 @@ public class AopConfig {
 
 @Service
 public class ElectricService {
- 
+
     public void charge() {
         doCharge();
     }
     public void doCharge() {
         System.out.println(&quot;Electric charging ...&quot;);
     }
+
 }</p>2021-06-22</li><br/><li><span>松松</span> 👍（3） 💬（1）<p>直觉上@Around和@Before是各干各的，容易把优先级理解成“先用@Around包一圈然后把@Before挂前头”，实际上同一个切面配置类里是捆在一起然后判断执行顺序的。
 若干切面配置类之间的Order则是优先级高（数字小）的越外层（@Around和@Before先执行），优先级低的在内层。
 怎么说呢，有点儿反直觉，特别是后者，圆环套圆环直觉上来说优先级越高越靠近本体来着。
-把@Around、@Before、@After拆到三个优先级从高到低的配置类中，那么会变成@Around-&gt;@Before-&gt;proceed()-&gt;@After-&gt;@Around的顺序，和放在同一个配置类中的@Around-&gt;@Before-&gt;proceed()-&gt;@Around()-&gt;@After是不一样的。</p>2021-12-11</li><br/><li><span>尘灬</span> 👍（2） 💬（0）<p>spring5.3.x版本之前的顺序是上面这样的 
+把@Around、@Before、@After拆到三个优先级从高到低的配置类中，那么会变成@Around-&gt;@Before-&gt;proceed()-&gt;@After-&gt;@Around的顺序，和放在同一个配置类中的@Around-&gt;@Before-&gt;proceed()-&gt;@Around()-&gt;@After是不一样的。</p>2021-12-11</li><br/><li><span>尘灬</span> 👍（2） 💬（0）<p>spring5.3.x版本之前的顺序是上面这样的
 之后的顺序是
-around前置，before 目标方法 afterreturning&#47;afterthrowing  after  around后置</p>2022-08-15</li><br/><li><span>小飞同学</span> 👍（2） 💬（1）<p>思考题：切面实现Order接口或者增加@Ordered注解
-AspectJAwareAdvisorAutoProxyCreator#sortAdvisors  --&gt;  
-AnnotationAwareOrderComparator.sort(advisors)    AnnotationAwareOrderComparator
+around前置，before 目标方法 afterreturning&#47;afterthrowing after around后置</p>2022-08-15</li><br/><li><span>小飞同学</span> 👍（2） 💬（1）<p>思考题：切面实现Order接口或者增加@Ordered注解
+AspectJAwareAdvisorAutoProxyCreator#sortAdvisors --&gt;  
+AnnotationAwareOrderComparator.sort(advisors) AnnotationAwareOrderComparator
 
 另外有个小问题：PartialOrder.sort(partiallyComparableAdvisors) 这段代码是在干啥，没看明白。
 </p>2021-05-06</li><br/><li><span>安迪密恩</span> 👍（1） 💬（0）<p>师傅领进门，修行在个人。

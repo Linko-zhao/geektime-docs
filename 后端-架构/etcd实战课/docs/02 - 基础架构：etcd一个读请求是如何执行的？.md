@@ -41,9 +41,9 @@ go get github.com/mattn/goreman
 启动完etcd集群后，当你用etcd的客户端工具etcdctl执行一个get hello命令（如下）时，对应到图中流程一，etcdctl是如何工作的呢？
 
 ```
-etcdctl get hello --endpoints http://127.0.0.1:2379  
-hello  
-world  
+etcdctl get hello --endpoints http://127.0.0.1:2379
+hello
+world
 ```
 
 首先，etcdctl会对命令中的参数进行解析。我们来看下这些参数的含义，其中，参数“get”是请求的方法，它是KVServer模块的API；“hello”是我们查询的key名；“endpoints”是我们后端的etcd地址，通常，生产环境下中需要配置多个endpoints，这样在etcd节点出现故障后，client就可以自动重连到其它正常的节点，从而保证请求的正常执行。
@@ -76,16 +76,16 @@ etcd提供了丰富的metrics、日志、请求行为检查等机制，可记录
 etcd server定义了如下的Service KV和Range方法，启动的时候它会将实现KV各方法的对象注册到gRPC Server，并在其上注册对应的拦截器。下面的代码中的Range接口就是负责读取etcd key-value的的RPC接口。
 
 ```
-service KV {  
-  // Range gets the keys in the range from the key-value store.  
-  rpc Range(RangeRequest) returns (RangeResponse) {  
-      option (google.api.http) = {  
-        post: "/v3/kv/range"  
-        body: "*"  
-      };  
-  }  
+service KV {
+  // Range gets the keys in the range from the key-value store.
+  rpc Range(RangeRequest) returns (RangeResponse) {
+      option (google.api.http) = {
+        post: "/v3/kv/range"
+        body: "*"
+      };
+  }
   ....
-}  
+}
 ```
 
 拦截器提供了在执行一个请求前后的hook能力，除了我们上面提到的debug日志、metrics统计、对etcd Learner节点请求接口和参数限制等能力，etcd还基于它实现了以下特性:
@@ -223,11 +223,11 @@ etcd在执行读请求过程中涉及磁盘IO吗？如果涉及，是什么模�
 5，版本号
 您说是一个递增的全局ID， revision{2, 0}，ID指的是2还是0？ 版本号的格式是怎样的，另一个数字代表什么？
 
-6,  bucket
+6, bucket
 请问一个 bucket 相当于一整个 B+ tree 索引树吗？还是相当于 B+ tree 中一个节点？</p>2021-01-26</li><br/><li><span>小军</span> 👍（24） 💬（1）<p>请问老师，当Readindex结束并等待本节点的状态机apply的时候，key又被最新的更新请求给更新了怎么办，这个时候读取到的value是不是又是旧值了</p>2021-01-26</li><br/><li><span>chapin</span> 👍（11） 💬（1）<p>没有基础，学习这个，可能会比较吃力。</p>2021-01-26</li><br/><li><span>站在树上的松鼠</span> 👍（7） 💬（5）<p>老师，下面这句话没有理解到，麻烦解答下呢，谢谢！
 在client 3.4之前的版本中，负载均衡算法有一个严重的Bug：如果第一个节点异常了，可能会导致你的client访问etcd server异常。
-	（1）这里第一个节点怎么理解呢？ 是指的负载均衡刚好选中的那个etcd server节点异常吗？
-	（2）如果访问的节点异常了，是client库中会做重试机制，还是业务代码需要做重试呢？
+（1）这里第一个节点怎么理解呢？ 是指的负载均衡刚好选中的那个etcd server节点异常吗？
+（2）如果访问的节点异常了，是client库中会做重试机制，还是业务代码需要做重试呢？
 </p>2021-01-22</li><br/><li><span>jeffery</span> 👍（7） 💬（1）<p>干货太多需要慢慢消化！老师能把课程代码放到github上吗……谢谢老师</p>2021-01-22</li><br/><li><span>Want less</span> 👍（5） 💬（4）<p>当收到一个线性读请求时，它首先会从 Leader 获取集群最新的已提交的日志索引 (committed index)。
 所有的client请求不是应该都通过leader下发至follower吗？</p>2021-01-27</li><br/><li><span>Alery</span> 👍（5） 💬（1）<p>请教一个问题，在treeIndex中查询key对应的版本号，这里是会返回当前key的所有版本号吗？</p>2021-01-26</li><br/><li><span>yayiyaya</span> 👍（4） 💬（2）<p>问答： etcd 在执行读请求过程中涉及磁盘 IO 吗？
 答： 涉及到磁盘， 当读请求从treeIndex获取到用户的 key 和相关版本号信息后，去查询value值时， 没有命中 buffer， 会从boltdb获取数据， 这个时候就涉及到了磁盘。</p>2021-02-04</li><br/><li><span>于途</span> 👍（4） 💬（1）<p>如果你的 client 版本 &lt;= 3.3，那么当你配置多个 endpoint 时，负载均衡算法仅会从中选择一个 IP 并创建一个连接（Pinned endpoint）

@@ -31,7 +31,7 @@
 - Persistent层，负责与持久化数据交互，命名规则为XXXDAO，比如OrderDAO；
   - 使用Java实现，DAO使用DTO为主的数据对象；
   - DAO通过MyBatis的Mapper实现
- 
+
 工序说明
 =======
   - 如果功能要求使用到HTTP interface层，那么：
@@ -80,9 +80,9 @@ import org.junit.Test;
 
 public class ProductsAPITest {
   private ProductsAPI productsAPI;
-  
+
   private OrderService orderServiceMock;
-  
+
   @Before
   public void setUp() {
     // 创建 OrderService 的 Mock 对象
@@ -112,7 +112,7 @@ public class ProductsAPITest {
       assertEquals(mockProductCatalogList.get(i).getName(), actualProductCatalogList.get(i).getName());
     }
   }
-  
+
   @Test
   public void testGetEmptyProductCatalogList() {
     // 模拟 OrderService 返回空的产品目录列表
@@ -150,7 +150,7 @@ import org.junit.Test;
 public class OrderServiceTest {
   private OrderService orderService;
   private OrderDAO orderDAOMock;
-  
+
   @Before
   public void setUp() {
     // 创建 OrderDAO 的 Mock 对象
@@ -314,9 +314,9 @@ import java.sql.Statement;
 
 public class OrderDAOTest {
   private static JdbcDataSource dataSource;
-  
+
   private static OrderDAO orderDAO;
-  
+
   @BeforeClass
   public static void setupDatabase() throws SQLException {
     // 设置H2数据库
@@ -328,7 +328,7 @@ public class OrderDAOTest {
     // 初始化OrderDAO
     orderDAO = new OrderDAO(dataSource);
   }
-  
+
   @AfterClass
   public static void tearDownDatabase() throws SQLException {
     // 清空数据库
@@ -345,7 +345,7 @@ public class OrderDAOTest {
     // 测试获取产品目录列表
     assertEquals(2, orderDAO.getProductCatalog().size());
   }
-  
+
   @Test
   public void testGetProductCatalogWhenEmpty() {
     // 测试空产品目录列表情况

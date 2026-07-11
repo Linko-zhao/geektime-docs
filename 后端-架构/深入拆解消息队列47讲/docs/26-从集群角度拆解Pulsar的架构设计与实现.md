@@ -20,7 +20,7 @@
 还是从实现的角度，Pulsar 的全部元数据都持久化存储在 ZooKeeper 中，同时 Broker 也会缓存一部分数据。Pulsar 在 ZooKeeper 中主要存储了包括集群管控，存储层的Bookie、Ledgers，计算层LoadBalance、Bundle，周边功能Schema、Stream、Function等信息。ZooKeeper中的节点结构如下所示：
 
 ```plain
-[admin, bookies, counters, ledgers, loadbalance, managed-ledgers, 
+[admin, bookies, counters, ledgers, loadbalance, managed-ledgers,
 namespace, pulsar, schemas, stream, zookeeper]
 ```
 
@@ -63,7 +63,7 @@ public interface MetadataStore extends AutoCloseable {
 
     CompletableFuture<Boolean> exists(String path);
 
-    CompletableFuture<Stat> put(String path, byte[] value, 
+    CompletableFuture<Stat> put(String path, byte[] value,
                                 Optional<Long> expectedVersion);
 
     CompletableFuture<Void> delete(String path,

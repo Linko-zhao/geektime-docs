@@ -151,7 +151,7 @@ Rust 社区里就有大量的学习资料供我们使用。
 我记得当时学习 Deref trait 时，官方文档这段文字直接把我看懵了：
 
 > Rust does deref coercion when it finds types and trait implementations in three cases:
-> 
+>
 > - From &amp;T to &amp;U when T: Deref&lt;Target=U&gt;
 > - From &amp;mut T to &amp;mut U when T: DerefMut&lt;Target=U&gt;
 > - From &amp;mut T to &amp;U when T: Deref&lt;Target=U&gt;

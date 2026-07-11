@@ -784,6 +784,7 @@ fun <T : Any> KtCall<T>.asFlow(): Flow<T> = callbackFlow {
     // }
 }
 ```
+
 <div><strong>精选留言（8）</strong></div><ul>
 <li><span>PoPlus</span> 👍（5） 💬（1）<p>网络请求是一次性事件，我都改用 Flow 的话合适吗？</p>2022-03-14</li><br/><li><span>魏全运</span> 👍（1） 💬（2）<p>awaitClose感觉有等待协程执行结束的作用，等待老师的专业解答</p>2022-03-16</li><br/><li><span>白泽丶</span> 👍（0） 💬（1）<p>是不是和 delay() 一样，在外部取消时抛出 CancellationException 异常并从而让协程退出呢</p>2022-04-12</li><br/><li><span>魏全运</span> 👍（0） 💬（1）<p>去掉awaitClose后程序有异常了。
 java.lang.IllegalStateException: &#39;awaitClose { yourCallbackOrListener.cancel() }&#39; should be used in the end of callbackFlow block.

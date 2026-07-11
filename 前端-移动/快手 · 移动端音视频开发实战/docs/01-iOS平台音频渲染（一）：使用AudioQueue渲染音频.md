@@ -220,8 +220,8 @@ iOS平台的音频格式是ASBD（AudioStreamBasicDescription），用来描述�
 struct AudioStreamBasicDescription
 {
     AudioFormatID       mFormatID;
-    Float64             mSampleRate;    
-    UInt32              mChannelsPerFrame;    
+    Float64             mSampleRate;
+    UInt32              mChannelsPerFrame;
     UInt32              mFramesPerPacket;
     AudioFormatFlags    mFormatFlags;
     UInt32              mBytesPerPacket;
@@ -292,9 +292,9 @@ AudioUnit是iOS中最底层的音频框架，对音频能够实现更高程度�
 3. 请问有什么情况mFramesPerPacket这个值设置为非1呢
 感谢老师有空时帮忙解答，刚接触音视频不久，常常为参数问题所困顿，所以问题稍微有点细，如果有一些理解错误的地方拜托老师多多指正，谢谢展老师</p>2022-12-03</li><br/><li><span>data</span> 👍（1） 💬（2）<p>是否案例都有demo可以跑一跑😌</p>2022-08-01</li><br/><li><span>data</span> 👍（0） 💬（1）<p>老师,我想咨询一下 我使用 AudioQueue 来录音,然后封装成rtp包进行发送,里面 有个时间戳 timestamp,我没找到 里面有方法可以获取到这个时间戳的?
 
- int32_t t = ((float)timestamp.value &#47; timestamp.timescale) * 1000;
- if(start_t == 0) start_t = t;
- header.ts = t - start_t;
+int32_t t = ((float)timestamp.value &#47; timestamp.timescale) * 1000;
+if(start_t == 0) start_t = t;
+header.ts = t - start_t;
 
 </p>2022-08-03</li><br/>
 </ul>

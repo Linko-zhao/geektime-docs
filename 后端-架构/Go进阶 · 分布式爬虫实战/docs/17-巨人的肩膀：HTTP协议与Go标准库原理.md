@@ -49,7 +49,7 @@ Go语言提供的HTTP库对HTTP协议进行了深度封装，这样开发者就�
 下面我用curl命令访问外部网站，帮助你在这个过程中更好地理解HTTP协议。
 
 ```plain
-» curl www.baidu.com -vvv                                                                                                                                      
+» curl www.baidu.com -vvv
 *   Trying 110.242.68.3...
 * TCP_NODELAY set
 * Connected to www.baidu.com (110.242.68.3) port 80 (#0)
@@ -174,7 +174,7 @@ func (t *Transport) dialConn(ctx context.Context, cm connectMethod) (pconn *pers
   // buffer
 	pconn.br = bufio.NewReaderSize(pconn, t.readBufferSize())
 	pconn.bw = bufio.NewWriterSize(persistConnWriter{pconn}, t.writeBufferSize())
-	
+
 	// 创建读写通道，writeLoop用于发送request，readLoop用于接收响应。roundTrip函数中会通过chan给writeLoop发送
     // pconn.br给readLoop使用，pconn.bw给writeLoop使用
 	go pconn.readLoop()

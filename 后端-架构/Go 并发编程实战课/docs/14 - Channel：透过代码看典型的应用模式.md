@@ -133,7 +133,7 @@ func main() {
 
     //首先把令牌交给第一个worker
     chs[0] <- struct{}{}
-  
+
     select {}
 }
 ```
@@ -167,11 +167,11 @@ func main() {
 	// 处理CTRL+C等中断信号
 	termChan := make(chan os.Signal)
 	signal.Notify(termChan, syscall.SIGINT, syscall.SIGTERM)
-	<-termChan 
+	<-termChan
 
 	// 执行退出之前的清理动作
     doCleanup()
-	
+
 	fmt.Println("优雅退出")
 }
 ```
@@ -446,7 +446,7 @@ func fanInReflect(chans ...<-chan interface{}) <-chan interface{} {
                 Chan: reflect.ValueOf(c),
             })
         }
-        
+
         // 循环，从cases中选择一个可用的
         for len(cases) > 0 {
             i, v, ok := reflect.Select(cases)
@@ -702,118 +702,123 @@ func main() {
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>润豪</span> 👍（11） 💬（2）<p>channel 来实现互斥锁，优势是 trylock，timeout 吧，因为mutex 没有这些功能。否则的话，是不是用回 mutex 呢</p>2020-11-14</li><br/><li><span>茶澜子</span> 👍（5） 💬（5）<p>老师好，我在测试扇出的例子的时候，在异步运行的时候出现了 panic: send on closed channel 的错误
 
-&#47;&#47; 扇出模式 
+&#47;&#47; 扇出模式
 func FunOut(ch &lt;-chan int, n int, async bool) []chan int {
-	var outs []chan int
-	for i := 0; i &lt; n; i++ {
-		outs = append(outs, make(chan int))
-	}
-
-	go func() {
-		defer func() {
-			for i := 0; i &lt; len(outs); i++ {
-				close(outs[i])
-			}
-		}()
-
-		for v := range ch {
-			v := v
-			for i := 0; i &lt; n; i++ {
-				i := i
-				if async {
-					go func() {
-						outs[i] &lt;- v
-					}()
-				} else {
-					outs[i] &lt;- v
-				}
-			}
-		}
-	}()
-
-	return outs
+var outs []chan int
+for i := 0; i &lt; n; i++ {
+outs = append(outs, make(chan int))
 }
 
+    go func() {
+    	defer func() {
+    		for i := 0; i &lt; len(outs); i++ {
+    			close(outs[i])
+    		}
+    	}()
+
+    	for v := range ch {
+    		v := v
+    		for i := 0; i &lt; n; i++ {
+    			i := i
+    			if async {
+    				go func() {
+    					outs[i] &lt;- v
+    				}()
+    			} else {
+    				outs[i] &lt;- v
+    			}
+    		}
+    	}
+    }()
+
+    return outs
+
+}
 
 &#47;&#47; TestFunOut 异步操作 扇入模式
 func TestFunOutAsync(t *testing.T) {
-	dataStreams := []int{13, 44, 56, 99, 9, 45, 67, 90, 78, 23}
+dataStreams := []int{13, 44, 56, 99, 9, 45, 67, 90, 78, 23}
 
-	inputChan := gen(dataStreams...) &#47;&#47; 将数据写入一个channel
+    inputChan := gen(dataStreams...) &#47;&#47; 将数据写入一个channel
 
-	ch := sq(inputChan) &#47;&#47; 将所有的数据平方，再重新放入channel
+    ch := sq(inputChan) &#47;&#47; 将所有的数据平方，再重新放入channel
 
-	outArray := FunOut(ch, 3,true)
-	length := len(outArray)
-	t.Log(&quot;length of out channel:&quot;, length)
-	var wg sync.WaitGroup
-	wg.Add(length)
-	for i := 0; i &lt; length; i++ {
-		c:=len(outArray[i])
-		fmt.Println(&quot;输入chan len&quot;, i, c)
-		go func(in &lt;-chan int, index int) {
-			sum:=0
-			for item:=range in{
-				fmt.Println(&quot;item&quot;, index, item)
-				sum+=item
-			}
-			fmt.Println(&quot;worker&quot;, index, sum)
+    outArray := FunOut(ch, 3,true)
+    length := len(outArray)
+    t.Log(&quot;length of out channel:&quot;, length)
+    var wg sync.WaitGroup
+    wg.Add(length)
+    for i := 0; i &lt; length; i++ {
+    	c:=len(outArray[i])
+    	fmt.Println(&quot;输入chan len&quot;, i, c)
+    	go func(in &lt;-chan int, index int) {
+    		sum:=0
+    		for item:=range in{
+    			fmt.Println(&quot;item&quot;, index, item)
+    			sum+=item
+    		}
+    		fmt.Println(&quot;worker&quot;, index, sum)
 
-			wg.Done()
-		}(outArray[i], i)
-	}
-	wg.Wait()
+    		wg.Done()
+    	}(outArray[i], i)
+    }
+    wg.Wait()
+
 }
 
 老师，我没看明白是哪里出错了？</p>2020-11-17</li><br/><li><span>斯蒂芬.赵</span> 👍（1） 💬（1）<p>老师想问一下上面所讲的击鼓传花的案例(流水线模式)的应用场景是？感觉就是按照顺序串行的话执行某些任务逻辑，不用goroutine的话也可以吧</p>2021-11-15</li><br/><li><span>myrfy</span> 👍（1） 💬（1）<p>老师好，我有两个问题
 1、关于or done或者fan in模式，我之前在sof上看到过类似的问题，其中的高赞回答是说，启动与ch数量相等的goroutine，每个goroutine监听一个ch并把读到的结果放入一个收集ch的模式效率要比反射高，并且给出了测评数据，现在手机码字，不太好找到。但想和老师确认一下是不是后面go某个版本对反射做了优化呢？
 2、fanout模式里提到可以同步或者异步启动任务。在老师给出的示例代码中，异步启动的优势是什么呢？我猜老师想表达的是不是启动任务前可能还有一些耗时的准备操作？如果是这样的话，建议增加一个注释，否则感觉启动一个goroutine只是为了写一个ch，好像异步效率会更低</p>2020-11-11</li><br/><li><span>Geek_290bf5</span> 👍（0） 💬（1）<p>&#47;&#47; asStream 函数
 func asStream(done &lt;-chan struct{}, values ...interface{}) &lt;-chan interface{} {
-	s := make(chan interface{})
+s := make(chan interface{})
 
-	go func() {
-		defer close(s)
-		for _, v := range values {
-			select {
-			case &lt;-done:
-				return
-			case s &lt;- v:
-			}
-		}
-	}()
+    go func() {
+    	defer close(s)
+    	for _, v := range values {
+    		select {
+    		case &lt;-done:
+    			return
+    		case s &lt;- v:
+    		}
+    	}
+    }()
 
-	return s
+    return s
+
 }
 
-对于这个函数，其中使用 go func() 来执行values值的读取，因为是子 goroutine，会不会出现执行结束返回了，go func() 还未执行完毕的情况?为什么作者的很多函数中，都直接使用 go func()却没有等待其执行完毕的情况呢？</p>2024-10-20</li><br/><li><span>wu526</span> 👍（0） 💬（1）<p>晁老师，这是我用多个goroutine 实现的 OrDone，但是有一个问题是在  执行close(orDone)是可能会引发panic，引发panic的原因是因为可能多次关闭一个chan, 请问我这个需要如何改才能不引发panic呢?
+对于这个函数，其中使用 go func() 来执行values值的读取，因为是子 goroutine，会不会出现执行结束返回了，go func() 还未执行完毕的情况?为什么作者的很多函数中，都直接使用 go func()却没有等待其执行完毕的情况呢？</p>2024-10-20</li><br/><li><span>wu526</span> 👍（0） 💬（1）<p>晁老师，这是我用多个goroutine 实现的 OrDone，但是有一个问题是在 执行close(orDone)是可能会引发panic，引发panic的原因是因为可能多次关闭一个chan, 请问我这个需要如何改才能不引发panic呢?
 
 func or3(channels ...&lt;-chan interface{}) &lt;-chan interface{} {
-	if len(channels) == 0 {
-		return nil
-	}
+if len(channels) == 0 {
+return nil
+}
 
-	orDone := make(chan interface{})
-	for _, c := range channels {
+    orDone := make(chan interface{})
+    for _, c := range channels {
 
-		go func(ch &lt;-chan interface{}) {
-			&lt;-ch
-			close(orDone) &#47;&#47; 可能会引发panic
-		}(c)
+    	go func(ch &lt;-chan interface{}) {
+    		&lt;-ch
+    		close(orDone) &#47;&#47; 可能会引发panic
+    	}(c)
 
-	}
-	return orDone
+    }
+    return orDone
+
 }</p>2022-11-19</li><br/><li><span>A9</span> 👍（0） 💬（1）<p>一个基于 TCP 网络的分布式的 Channel ，请问这个有git仓库吗，想学习下</p>2022-09-13</li><br/><li><span>Geek_a6104e</span> 👍（0） 💬（1）<p>请问一下最后一段代码里面case &lt;-done: 有什么用呢？</p>2022-07-31</li><br/><li><span>པག་ཏོན་།</span> 👍（0） 💬（1）<p>老师您好，在看Marcio Castilho 在 使用 Go 每分钟处理百万请求的例子的时候我很困惑，我认为双层管道是没有意义的，生产者直接发送job给消费者，额定数量的消费者直接进行并发接收并处理就可以达到同样控制并发的效果。为什么非要消费者把一个管道交给生产者，生产者在把job通过管道传递给消费者。我想请问一下这个步骤的作用是什么？</p>2021-10-10</li><br/><li><span>davix</span> 👍（0） 💬（1）<p>請問老師，channel這些模式都適合哪些塲景使用，能哪些優缺點能講講嗎</p>2021-10-06</li><br/><li><span>科科</span> 👍（0） 💬（1）<p>老师，请问下为什么在createCase函数里面，我们在创建一个SelectCase变量的时候，要使用reflect.ValueOf重新初始化一个的channel?</p>2021-05-20</li><br/><li><span>Le Incredible Sulk</span> 👍（0） 💬（1）<p>老师，请问一下channel适不适用于传输大文件？还有就是传输大文件的性能情况是怎样的？（刚遇到的面试题）</p>2021-05-12</li><br/><li><span>AFreeCoder</span> 👍（0） 💬（1）<p>orDone 模式的代码没看明白。如果channel数是一个，直接返回这个channel，如果大于等于2个，就会返回被close的orDone，两种情况下返回的channel含义不一样，这是为什么呢</p>2021-04-19</li><br/><li><span>大恒</span> 👍（0） 💬（1）<p>实现观察者为何不使用类似java的接口回调、go的函数回调，而要用扇出模式呢</p>2020-12-10</li><br/><li><span>difoil</span> 👍（0） 💬（1）<p>```go
 &#47;&#47; 加入一个超时的设置
 func (m *Mutex) LockTimeout(timeout time.Duration) bool {
-    timer := time.NewTimer(timeout)    
-      select {    
-         case &lt;-m.ch:        
-             timer.Stop()      
-             return true    
-         case &lt;-timer.C:    
-       }    
-       return false
+timer := time.NewTimer(timeout)  
+select {  
+case &lt;-m.ch:  
+timer.Stop()  
+return true  
+case &lt;-timer.C:  
+}  
+return false
 }
+
 ```
 这里是不是返回值写反了？</p>2020-12-06</li><br/>
 </ul>
+```

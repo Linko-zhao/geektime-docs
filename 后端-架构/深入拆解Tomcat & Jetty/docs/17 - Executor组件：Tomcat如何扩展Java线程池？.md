@@ -99,9 +99,9 @@ Tomcat线程池扩展了原生的ThreadPoolExecutor，通过重写execute方法�
 
 ```
 public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor {
-  
+
   ...
-  
+
   public void execute(Runnable command, long timeout, TimeUnit unit) {
       submittedCount.incrementAndGet();
       try {
@@ -118,7 +118,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
                       //如果缓冲队列也满了，插入失败，执行拒绝策略。
                       throw new RejectedExecutionException("...");
                   }
-              } 
+              }
           }
       }
 }
@@ -165,24 +165,24 @@ public class TaskQueue extends LinkedBlockingQueue<Runnable> {
   public boolean offer(Runnable o) {
 
       //如果线程数已经到了最大值，不能创建新线程了，只能把任务添加到任务队列。
-      if (parent.getPoolSize() == parent.getMaximumPoolSize()) 
+      if (parent.getPoolSize() == parent.getMaximumPoolSize())
           return super.offer(o);
-          
+
       //执行到这里，表明当前线程数大于核心线程数，并且小于最大线程数。
       //表明是可以创建新线程的，那到底要不要创建呢？分两种情况：
-      
+
       //1. 如果已提交的任务数小于当前线程数，表示还有空闲线程，无需创建新线程
-      if (parent.getSubmittedCount()<=(parent.getPoolSize())) 
+      if (parent.getSubmittedCount()<=(parent.getPoolSize()))
           return super.offer(o);
-          
+
       //2. 如果已提交的任务数大于当前线程数，线程不够用了，返回false去创建新线程
-      if (parent.getPoolSize()<parent.getMaximumPoolSize()) 
+      if (parent.getPoolSize()<parent.getMaximumPoolSize())
           return false;
-          
+
       //默认情况下总是把任务添加到任务队列
       return super.offer(o);
   }
-  
+
 }
 ```
 
@@ -230,5 +230,5 @@ public class TaskQueue extends LinkedBlockingQueue<Runnable> {
 
 这么看逻辑好像是：再来任务的话，如果线程数少于maximumPoolSize时，都会优先使用线程，而不会入队</p>2019-10-14</li><br/><li><span>沐</span> 👍（4） 💬（3）<p>平时开发的Web系统通常都有大量的 IO 操作，比方说查询数据库、查询缓存等等。任务在执行 IO 操作的时候 CPU就空闲了下来，这时如果增加执行任务的线程数而不是把任务暂存在队列中，就可以在单位时间内执行更多的任务，大大提高了任务执行的吞吐量。
 Tomcat 使用的线程池就不是 JDK 原生的线程池，而是做了一些改造，当线程数超过 coreThreadCount 之后会优先创建线程，直到线程数到达 maxThreadCount，这样就比较适合于 Web 系统大量 IO 操作的场景了
-                                                                                                                               --摘自《高并发系统40问》</p>2021-11-01</li><br/>
+--摘自《高并发系统40问》</p>2021-11-01</li><br/>
 </ul>

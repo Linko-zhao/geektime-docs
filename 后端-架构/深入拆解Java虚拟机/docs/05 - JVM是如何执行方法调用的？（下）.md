@@ -156,12 +156,13 @@ public abstract class Passenger {
   }
 }
 class ChinesePassenger extends Passenger {
-  @Override void passThroughImmigration() {} 
+  @Override void passThroughImmigration() {}
 }
 class ForeignerPassenger extends Passenger {
   @Override void passThroughImmigration() {}
 }
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>啊一大狗</span> 👍（26） 💬（0）<p>这套课很好，谢谢！</p>2018-07-31</li><br/><li><span>Tony</span> 👍（69） 💬（1）<p>同提建议，代码使用英文。刚学java基础时，有老师为了便于理解用中文命名。现在都来学jvm，对java很熟悉了，看到中文不仅不会觉得通俗易懂，反而特别别扭。</p>2018-07-30</li><br/><li><span>C_love</span> 👍（25） 💬（1）<p>提个小建议，能否在代码中都使用英文？毕竟使用中文作对象名不值得提倡</p>2018-07-30</li><br/><li><span>奕</span> 👍（18） 💬（2）<p>老师问一个概念性的问题： 虚方法 到底在指什么样的 方法？
 也就是什么样的方法，才叫做虚方法？</p>2019-12-22</li><br/><li><span>左岸🌸开</span> 👍（18） 💬（8）<p>为什么调用超类非私有实例方法会属于静态绑定呢？</p>2018-07-30</li><br/><li><span>MARK</span> 👍（10） 💬（1）<p>没用过中文写代码，居然认为中文会编译错误T﹏T

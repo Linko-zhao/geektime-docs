@@ -159,7 +159,7 @@ JavaScript在创建函数对象时，会为它分配一个称为“allocKind”�
 
 > Let realmF be the value of F’s \[\[Realm]] internal slot.  
 > Let **scope** be realmF.\[\[GlobalEnv]].  
-> Perform *FunctionInitialize*(F, Normal, parameters, body, **scope**).
+> Perform _FunctionInitialize_(F, Normal, parameters, body, **scope**).
 
 它们是什么意思呢？
 
@@ -229,22 +229,19 @@ undefined
 
 > NOTE：编辑同学说还有一个“结束语”，我真不知道怎么写。不过，如果你觉得意犹未尽的话，到时候请打开听听吧（或许还有好货叱）。  
 > by aimingoo.
+
 <div><strong>精选留言（10）</strong></div><ul>
 <li><span>独钓寒江雪</span> 👍（8） 💬（1）<p>今天读完了专栏必学内容的最后一讲，跟着老师的步伐一路走来，很艰辛，同时也收获很多，通过一行极简的代码去洞悉一门语言的核心原理，也是我一直梦想着能做到的事，向老师致敬！
 
 其实，可以说，看这种底层的东西，每一讲都很吃力，要想有更深入的理解，必须再花时间回过头反复研读；其实，阅读专栏，很多时候也是一种思维的提升，比如以前只知道变量提升，却没想过为什么要提升；知道...运算符，却说不出为什么可以用它来展开对象。。。
 
-或许专栏短期内对开发能力不会有多么显著的提升，但我相信，因为对语言本质的洞悉而产生的自信以及思想层面的提升，将会使我在前端走的更远。衷心的感谢🙏</p>2020-01-03</li><br/><li><span>行问</span> 👍（4） 💬（2）<p>new Function(x)  vs  Function(x) 没什么区别。如果是“类化”的话，也是没什么区别吗？在使用 class 声明一个类时，new class 与 class 直接调用。
-
+或许专栏短期内对开发能力不会有多么显著的提升，但我相信，因为对语言本质的洞悉而产生的自信以及思想层面的提升，将会使我在前端走的更远。衷心的感谢🙏</p>2020-01-03</li><br/><li><span>行问</span> 👍（4） 💬（2）<p>new Function(x) vs Function(x) 没什么区别。如果是“类化”的话，也是没什么区别吗？在使用 class 声明一个类时，new class 与 class 直接调用。
 
 函数是对象的概念比较清晰，明了。这让我想起之前的 &quot;null&quot;，请教个问题，在通常的开发中，会把一些变量释放空间，把值置为 null, 那么如果是置为 {} 呢？如下：
 
-
 var a = null 和 var a = {}，是否有大差异？
 
-
 我的理解是 {} 会存放在“堆空间”占据内存，但同时它是一个空对象，null 也是一个什么都没有的空对象，但 null 也是其它对象的原型，所以也会有 Object.create(null)
-
 
 不知道周大能否看懂我的逻辑？
 

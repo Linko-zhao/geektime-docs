@@ -91,9 +91,9 @@ struct Node
 {
     // 至少需要向右、向下指针
     Node* right;
-    Node* down;  
+    Node* down;
     int val;
-    Node(Node *right, Node *down, int val) 
+    Node(Node *right, Node *down, int val)
       : right(right), down(down), val(val){}
 };
 ```
@@ -119,7 +119,7 @@ struct Node
                 p = p->down;
             }
             else
-            {   
+            {
                 //找到目标值，结束
                 return true;
             }
@@ -194,7 +194,7 @@ struct Node
         {
             // 向右找到次小于num的p
             while (p->right && p->right->val < num)
-            { 
+            {
                 p = p->right;
             }
             pathList.push_back(p);
@@ -210,16 +210,16 @@ struct Node
             Node *insert = pathList.back();
             pathList.pop_back();
             // add新结点
-            insert->right = new Node(insert->right,downNode,num); 
+            insert->right = new Node(insert->right,downNode,num);
             // 把新结点赋值为downNode
-            downNode = insert->right; 
-            // 50%概率   
+            downNode = insert->right;
+            // 50%概率
             insertUp = (rand()&1)==0;
             // cout << " while new node " << num << " insertUp " << insertUp << endl;
         }
         // 插入新的头结点，加层
         if(insertUp)
-        {  
+        {
             // cout << " insertUp new node " << num << endl;
             head = new Node(new Node(NULL,downNode,num), head, -1);
         }

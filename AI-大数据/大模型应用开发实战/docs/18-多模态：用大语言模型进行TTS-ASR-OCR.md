@@ -123,7 +123,7 @@ encoded_frames, audio_output = extract_frames_and_audio(VIDEO_FILE, interval=2)
 
 ```plain
 MoviePy - Writing audio in Good_Driver.mp3
-                                                                                                                       
+
 MoviePy - Done.
 提取了 17 帧
 音频提取到 Good_Driver.mp3

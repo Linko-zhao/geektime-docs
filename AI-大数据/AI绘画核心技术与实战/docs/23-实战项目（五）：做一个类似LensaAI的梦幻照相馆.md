@@ -218,7 +218,7 @@ cd facechain
 git checkout bd1ff6ffad16e11febd4d319817c70dcc391964d
 
 # 创建图像文件夹
-mkdir -p images/upload_source 
+mkdir -p images/upload_source
 ```
 
 然后，我们需要安装运行facechain的运行环境。以Anaconda虚拟环境的使用为例，在你的命令行环境下，需要依次执行后面的指令。
@@ -228,7 +228,7 @@ conda create -n facechain python=3.8    # Verified environments: 3.8 and 3.10
 conda activate facechain
 
 pip3 install -r requirements.txt
-pip3 install -U openmim 
+pip3 install -U openmim
 mim install mmcv-full==1.7.0
 ```
 
@@ -242,7 +242,7 @@ mim install mmcv-full==1.7.0
 接下来，我们在facechain路径下创建一个名为image\_processing.py的文件，并拷贝后面的代码。这段代码的主要作用是统一上传图片的格式，并使用BLIP2模型生成prompt。
 
 ```python
-import os 
+import os
 from PIL import Image
 from glob import glob
 from facechain.train_text_to_image_lora import get_rot, data_process_fn
@@ -254,7 +254,7 @@ if __name__ == "__main__":
 
     # 确保提供3~10张训练图片
     if len(instance_images) == 0:
-        raise Exception 
+        raise Exception
 
     # 将图片格式和命名统一
     output_dataset_dir = "images/train_images"

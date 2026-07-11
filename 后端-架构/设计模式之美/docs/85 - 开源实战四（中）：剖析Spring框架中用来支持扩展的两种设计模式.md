@@ -99,12 +99,12 @@ public interface ApplicationListener<E extends ApplicationEvent> extends EventLi
 ```
 public abstract class AbstractApplicationContext extends ... {
   private final Set<ApplicationListener<?>> applicationListeners;
-  
+
   public AbstractApplicationContext() {
     this.applicationListeners = new LinkedHashSet();
     //...
   }
-  
+
   public void publishEvent(ApplicationEvent event) {
     this.publishEvent(event, (ResolvableType)null);
   }
@@ -140,20 +140,20 @@ public abstract class AbstractApplicationContext extends ... {
       }
     }
   }
-  
+
   public void addApplicationListener(ApplicationListener<?> listener) {
     Assert.notNull(listener, "ApplicationListener must not be null");
     if (this.applicationEventMulticaster != null) {
     this.applicationEventMulticaster.addApplicationListener(listener);
     } else {
       this.applicationListeners.add(listener);
-    }  
+    }
   }
-  
+
   public Collection<ApplicationListener<?>> getApplicationListeners() {
     return this.applicationListeners;
   }
-  
+
   protected void registerListeners() {
     Iterator var1 = this.getApplicationListeners().iterator();
 
@@ -227,7 +227,7 @@ Spring Bean的创建过程，可以大致分为两大步：对象的创建和对
 ```
 public class DemoClass {
   //...
-  
+
   public void initDemo() {
     //...初始化..
   }
@@ -245,7 +245,7 @@ Spring提供了另外一个定义初始化函数的方法，那就是让类实�
 public class DemoClass implements InitializingBean{
   @Override
   public void afterPropertiesSet() throws Exception {
-    //...初始化...      
+    //...初始化...
   }
 }
 

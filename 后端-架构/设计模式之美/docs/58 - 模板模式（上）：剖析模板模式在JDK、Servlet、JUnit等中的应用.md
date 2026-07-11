@@ -25,7 +25,7 @@ public abstract class AbstractClass {
     method2();
     //...
   }
-  
+
   protected abstract void method1();
   protected abstract void method2();
 }
@@ -35,7 +35,7 @@ public class ConcreteClass1 extends AbstractClass {
   protected void method1() {
     //...
   }
-  
+
   @Override
   protected void method2() {
     //...
@@ -47,7 +47,7 @@ public class ConcreteClass2 extends AbstractClass {
   protected void method1() {
     //...
   }
-  
+
   @Override
   protected void method2() {
     //...
@@ -73,7 +73,7 @@ Java IO类库中，有很多类的设计用到了模板模式，比如InputStrea
 ```
 public abstract class InputStream implements Closeable {
   //...省略其他代码...
-  
+
   public int read(byte b[], int off, int len) throws IOException {
     if (b == null) {
       throw new NullPointerException();
@@ -102,13 +102,13 @@ public abstract class InputStream implements Closeable {
     }
     return i;
   }
-  
+
   public abstract int read() throws IOException;
 }
 
 public class ByteArrayInputStream extends InputStream {
   //...省略其他代码...
-  
+
   @Override
   public synchronized int read() {
     return (pos < count) ? (buf[pos++] & 0xff) : -1;
@@ -150,7 +150,7 @@ public class HelloServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     this.doPost(req, resp);
   }
-  
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     resp.getWriter().write("Hello World.");
@@ -265,7 +265,7 @@ public abstract class TestCase extends Assert implements Test {
     }
     if (exception != null) throw exception;
   }
-  
+
   /**
   * Sets up the fixture, for example, open a network connection.
   * This method is called before a test is executed.
@@ -305,7 +305,7 @@ public abstract class AbstractClass {
     method2();
     //...
   }
-  
+
   public final void templateMethod2() {
     //...
     method3();
@@ -313,7 +313,7 @@ public abstract class AbstractClass {
     method4();
     //...
   }
-  
+
   protected abstract void method1();
   protected abstract void method2();
   protected abstract void method3();
@@ -331,10 +331,10 @@ public abstract class AbstractClass {
 
 继承抽象方法的基类 Base
 public class Base extends AbstractClass {
-    @Override
-    protected void method1() {
-        System.out.println(&quot;1&quot;);
-    }
+@Override
+protected void method1() {
+System.out.println(&quot;1&quot;);
+}
 
     @Override
     protected void method2() {
@@ -350,6 +350,7 @@ public class Base extends AbstractClass {
     protected void method4() {
         System.out.println(&quot;4&quot;);
     }
+
 }
 
 子类 A 需要重写 method1 方法
@@ -365,6 +366,7 @@ public class SubA extends Base {
         Base A = new SubA();
         A.templateMethod1();
     }
+
 }
 
 输出结果为
@@ -378,7 +380,7 @@ public class SubA extends Base {
 
 二. 如果可以修改框架代码的情况下：
 1.templateMethod1与templateMethod2相关：可以将不需要调用的方法修改成protected并提供默认空实现。
-2.templateMethod1与templateMethod2不相关：接口隔离原则，考虑将AbstractClass拆分成两个类分别定义两个方法。</p>2020-03-16</li><br/><li><span>宁锟</span> 👍（6） 💬（1）<p>定义两个抽象类，继承模板类，分别给不需要的方法定义空实现</p>2020-03-16</li><br/><li><span>Gopher</span> 👍（5） 💬（0）<p>不会java 所以一下没看懂模版方法模式  看了其他资料才明白 所以记录一下
+2.templateMethod1与templateMethod2不相关：接口隔离原则，考虑将AbstractClass拆分成两个类分别定义两个方法。</p>2020-03-16</li><br/><li><span>宁锟</span> 👍（6） 💬（1）<p>定义两个抽象类，继承模板类，分别给不需要的方法定义空实现</p>2020-03-16</li><br/><li><span>Gopher</span> 👍（5） 💬（0）<p>不会java 所以一下没看懂模版方法模式 看了其他资料才明白 所以记录一下
 
 我们把装修房子这件事比做模版方法，装修房子的大流程事固定不变
 把安装水电，收纳柜，电视墙这些细节比做可以被子类实现的抽象方法

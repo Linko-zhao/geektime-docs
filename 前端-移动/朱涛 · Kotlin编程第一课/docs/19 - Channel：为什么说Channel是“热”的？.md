@@ -291,7 +291,7 @@ fun main() = runBlocking {
         channel.send(4) // 被丢弃
         println("Send: 4")
         channel.send(5) // 被丢弃
-        println("Send: 5") 
+        println("Send: 5")
 
         channel.close()
     }
@@ -651,7 +651,7 @@ public interface Channel<E> : SendChannel<E>, ReceiveChannel<E> {}
 ```plain
 // 代码段18
 
-public interface SendChannel<in E> 
+public interface SendChannel<in E>
     public val isClosedForSend: Boolean
 
     public suspend fun send(element: E)
@@ -769,37 +769,37 @@ fun main() = runBlocking {
 3、接收协程... ... ...</p>2022-04-10</li><br/><li><span>Geek_8a5ee1</span> 👍（3） 💬（1）<p>可以讲一下viewModelScope的区别吗</p>2022-03-07</li><br/><li><span>êｗěｎ</span> 👍（3） 💬（2）<p>Recieve的cancel是清空channel中的消息，但不会close吧？ 像go中如果在consumer 中关闭，会导致sender的panic。感觉kotlin也有这种陷阱。</p>2022-03-02</li><br/><li><span>Paul Shan</span> 👍（2） 💬（1）<p>对于接收方而言，热的Channel状态是时刻改变的，数据之间是强依赖。简单的情况还好，如果Channel的数据级联了几次之后，调试就成了噩梦，这和滥用EventBus一样。
 </p>2022-03-24</li><br/><li><span>白乾涛</span> 👍（2） 💬（1）<p>以上代码看起来是可以正常工作了。但是，我仍然不建议你用这种方式。因为，当你为管道指定了 capacity 以后，以上的判断方式将会变得不可靠！原因是目前的 1.6.10 版本的协程库，运行这样的代码会崩溃，如下所示：
 
--------------
+---
 
 这是现象，而不是原因呀，具体原因是什么呢？</p>2022-03-12</li><br/><li><span>魏全运</span> 👍（1） 💬（2）<p>为什么例子中是ReceiveChannel 在send？</p>2022-03-08</li><br/><li><span>Xs.Ten</span> 👍（0） 💬（1）<p>老师好，请问Channel 里面 Sender 和 Receiver 的身份可以发生互换么？</p>2022-03-26</li><br/><li><span>梁中华</span> 👍（0） 💬（3）<p>public fun &lt;E&gt; Channel(
-    capacity: Int = RENDEZVOUS,
-    onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
-    onUndeliveredElement: ((E) -&gt; Unit)? = null
+capacity: Int = RENDEZVOUS,
+onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
+onUndeliveredElement: ((E) -&gt; Unit)? = null
 ): Channel&lt;E&gt;
 
 Channel居然也是个方法，为啥方法名是大写字母开头的? 难道是因为它是顶层方法?</p>2022-03-21</li><br/><li><span>梁中华</span> 👍（0） 💬（2）<p>val channel: ReceiveChannel by ::_channel
- private val _channel: Channel = Channel()
+private val _channel: Channel = Channel()
 
 Channel既然是个接口，为啥还能直接实例化？</p>2022-03-21</li><br/><li><span>学习中...</span> 👍（0） 💬（1）<p>协程库最新不是1.6.0吗，怎么有1.6.10呢
 https:&#47;&#47;github.com&#47;Kotlin&#47;kotlinx.coroutines&#47;releases</p>2022-03-15</li><br/><li><span>白乾涛</span> 👍（0） 💬（2）<p>老师好，我又重新发了一遍哈
 
 代码段12
 发送【奇数】条数据的时候正常，发送【偶数】条数据的时候就会异常崩溃
-例如   (1..2)   (1..4)   (1..6) 都会异常
+例如 (1..2) (1..4) (1..6) 都会异常
 这是什么原因呢？
 
 fun main() = runBlocking {
-    val channel: ReceiveChannel&lt;Int&gt; = produce {
-        (1..2).forEach { &#47;&#47; 发送【奇数】条数据时是正常的，发送【偶数】条数据时就会崩溃
-            send(it)
-            println(&amp;#34;Send: $it&amp;#34;)
+val channel: ReceiveChannel&lt;Int&gt; = produce {
+(1..2).forEach { &#47;&#47; 发送【奇数】条数据时是正常的，发送【偶数】条数据时就会崩溃
+send(it)
+println(&amp;#34;Send: $it&amp;#34;)
         }
     }
     while (!channel.isClosedForReceive) {
         val i = channel.receive()
         println(&amp;#34;Receive: $i&amp;#34;)
-    }
-    println(&amp;#34;end&amp;#34;)
+}
+println(&amp;#34;end&amp;#34;)
 }
 
 代码接报错信息如下图：

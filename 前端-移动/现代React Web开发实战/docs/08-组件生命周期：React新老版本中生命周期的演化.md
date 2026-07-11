@@ -21,23 +21,22 @@
 ```javascript
 class LegacyKanbanCard extends React.Component {
   constructor(props) {
-    super(props);
-    // ...省略
-  }
+    super(props); // ...省略
+  }
 
-  componentDidMount() {
+  componentDidMount() {
     // ...省略
-  }
+  }
 
   // ...其他生命周期方法
 
-  componentWillUnmount() {
+  componentWillUnmount() {
     // ...省略
-  }
+  }
 
-  render() {
-    return (<div>KanbanCard {this.props.title}</div>);
-  }
+  render() {
+    return <div>KanbanCard {this.props.title}</div>;
+  }
 }
 ```
 
@@ -174,7 +173,7 @@ const KanbanCard = ({ title, status }) => {
   useEffect(() => {
     const updateDisplayTime = () => {
       const timePassed = new Date() - new Date(status);
-      let relativeTime = '刚刚';
+      let relativeTime = "刚刚";
       if (MINUTE <= timePassed && timePassed < HOUR) {
         relativeTime = `${Math.ceil(timePassed / MINUTE)} 分钟前`;
       } else if (HOUR <= timePassed && timePassed < DAY) {
@@ -195,7 +194,14 @@ const KanbanCard = ({ title, status }) => {
   return (
     <li css={kanbanCardStyles}>
       <div css={kanbanCardTitleStyles}>{title}</div>
-      <div css={css`/*省略*/`} title={status}>{displayTime}</div>
+      <div
+        css={css`
+          /*省略*/
+        `}
+        title={status}
+      >
+        {displayTime}
+      </div>
     </li>
   );
 };

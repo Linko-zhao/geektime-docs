@@ -17,8 +17,8 @@ Sample的实现思路其实也很简单，有两种方案。
 下一步会遇到的问题是，想要获取atrace的日志，就需要设置好atrace的category tag才能获取到。我们从源码中可以得知，判断tag是否开启，是通过atrace\_enabled\_tags &amp; tag来计算的，如果大于0则认为开启，等于0则认为关闭。下面我贴出了部分atrace\_tag的值，你可以看到，判定一个tag是否是开启的，只需要tag值的左偏移数的位值和atrace\_enabled\_tags在相同偏移数的位值是否同为1。其实也就是说，我将atrace\_enabled\_tags的所有位都设置为1，那么在计算时候就能匹配到任何的atrace tag。
 
 ```
-#define ATRACE_TAG_NEVER            0      
-#define ATRACE_TAG_ALWAYS           (1<<0)  
+#define ATRACE_TAG_NEVER            0
+#define ATRACE_TAG_ALWAYS           (1<<0)
 #define ATRACE_TAG_GRAPHICS         (1<<1)
 #define ATRACE_TAG_INPUT            (1<<2)
 #define ATRACE_TAG_VIEW             (1<<3)

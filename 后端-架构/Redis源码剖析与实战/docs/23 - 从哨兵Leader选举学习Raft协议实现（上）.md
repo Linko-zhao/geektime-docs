@@ -63,7 +63,7 @@ void sentinelHandleDictOfRedisInstances(dict *instances) 
 void sentinelTimer(void) {
     ...
     //将当前哨兵监听的主节点作为参数传入sentinelHandleDictOfRedisInstances函数
-    sentinelHandleDictOfRedisInstances(sentinel.masters); 
+    sentinelHandleDictOfRedisInstances(sentinel.masters);
     ...
 }
 ```
@@ -76,7 +76,7 @@ void sentinelHandleDictOfRedisInstances(dict *instances) {
    di = dictGetIterator(instances); //获取哈希表的迭代器
    while((de = dictNext(di)) != NULL) {
       //从哈希表中取出一个实例
-      sentinelRedisInstance *ri = dictGetVal(de); 
+      sentinelRedisInstance *ri = dictGetVal(de);
       //调用sentinelHandleRedisInstance处理实例
       sentinelHandleRedisInstance(ri);
       ...
@@ -154,7 +154,7 @@ if (ri->flags & SRI_MASTER) {
 
 ```plain
 void sentinelTimer(void) {
-    sentinelCheckTiltCondition(); 
+    sentinelCheckTiltCondition();
     sentinelHandleDictOfRedisInstances(sentinel.masters);
     sentinelRunPendingScripts();
     sentinelCollectTerminatedScripts();
@@ -178,7 +178,7 @@ sentinelReconnectInstance函数的主要作用是**判断哨兵实例和主节�
 ```plain
 typedef struct instanceLink {
 ...
-redisAsyncContext *cc; //用于发送命令的连接 
+redisAsyncContext *cc; //用于发送命令的连接
 redisAsyncContext *pc; //用于发送pub-sub消息的连接
 ...
 }
@@ -223,8 +223,8 @@ else if (ri->link->disconnected) //如果哨兵和主节点的连接断开了，
 当上面这两个条件有一个满足时，哨兵就判定主节点为主观下线了。然后，哨兵就会调用sentinelEvent函数发送“+sdown”事件信息。下面的代码展示了这部分的判断逻辑，你可以看下。
 
 ```plain
- if (elapsed > ri->down_after_period || 
-  (ri->flags & SRI_MASTER && ri->role_reported == SRI_SLAVE 
+ if (elapsed > ri->down_after_period ||
+  (ri->flags & SRI_MASTER && ri->role_reported == SRI_SLAVE
    &&  mstime() - ri->role_reported_time > (ri->down_after_period+SENTINEL_INFO_PERIOD*2)))
  {
         //判断主节点为主观下线
@@ -271,12 +271,12 @@ server.hz = CONFIG_DEFAULT_HZ + rand() % CONFIG_DEFAULT_HZ;
 
 5、严格来说，Raft 算法的核心流程是这样的：
 
-1) 集群正常情况下，Leader 会持续给 Follower 发心跳消息，维护 Leader 地位
-2) 如果 Follower 一段时间内收不到 Leader 心跳消息，则变为 Candidate 发起选举
-3) Candidate 先给自己投一票，然后向其它节点发送投票请求
-4) Candidate 收到超过半数确认票，则提升为新的 Leader，新 Leader 给其它 Follower 发心跳消息，维护新的 Leader 地位
-5) Candidate 投票期间，收到了 Leader 心跳消息，则自动变为 Follower
-6) 投票结束后，没有超过半数确认票的实例，选举失败，会再次发起选举
+1. 集群正常情况下，Leader 会持续给 Follower 发心跳消息，维护 Leader 地位
+2. 如果 Follower 一段时间内收不到 Leader 心跳消息，则变为 Candidate 发起选举
+3. Candidate 先给自己投一票，然后向其它节点发送投票请求
+4. Candidate 收到超过半数确认票，则提升为新的 Leader，新 Leader 给其它 Follower 发心跳消息，维护新的 Leader 地位
+5. Candidate 投票期间，收到了 Leader 心跳消息，则自动变为 Follower
+6. 投票结束后，没有超过半数确认票的实例，选举失败，会再次发起选举
 
 6、但哨兵的选举没有按照严格按照 Raft 实现，因为多个哨兵之间是「对等」关系，没有 Leader 和 Follower 角色，只有当 Redis 实例发生故障时，哨兵才选举领导者进行切换，选举 Leader 的过程是按照 Raft 算法步骤 3-6 实现的
 
@@ -287,10 +287,10 @@ server.hz 表示执行定时任务函数 serverCron 的频率，哨兵在最后�
 
 总结：
 本篇文章老师主要介绍了，redis在Raft协议上的实现，Redis本身不是完全按照Raft协议实现的，其中最主要的原因就是每个哨兵节点都是对等的，而Raft协议逻辑主要如下：
-        1、在稳定系统中只有 Leader 和 Follower 两种节点，并且 Leader 会向 Follower 发送心跳消息。
-        2、如果某个Follower 在一定时间没收到Leader的心跳，那么他会变成Candidate 并且可以发起选举。
-        3、Candidate 会先投自己一票，然后等待其他follower的投票。
-        4、如果投票结果能选出Leader则新的Leader上位，否则再进行一轮选举。
+1、在稳定系统中只有 Leader 和 Follower 两种节点，并且 Leader 会向 Follower 发送心跳消息。
+2、如果某个Follower 在一定时间没收到Leader的心跳，那么他会变成Candidate 并且可以发起选举。
+3、Candidate 会先投自己一票，然后等待其他follower的投票。
+4、如果投票结果能选出Leader则新的Leader上位，否则再进行一轮选举。
 
 而Redis是哨兵是对等的，所以每个哨兵都会监听当前Redis的Leader的心跳，当前Redis的Leader如果发生异常，哨兵会开始发起选举直到第一个Leader被选举出来并通知每个哨兵。
 

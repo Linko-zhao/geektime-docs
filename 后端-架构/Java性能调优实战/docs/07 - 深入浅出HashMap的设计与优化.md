@@ -153,7 +153,7 @@ Entry数组的Threshold是通过初始容量和LoadFactor计算所得，在初�
 
                     if ((e = p.next) == null) {
                         p.next = newNode(hash, key, value, null);
-                        if (binCount >= TREEIFY_THRESHOLD - 1) 
+                        if (binCount >= TREEIFY_THRESHOLD - 1)
 // 插入成功后，要判断是否需要转换为红黑树，因为插入后链表长度加1，而binCount并不包含新节点，所以判断时要将临界阈值减1
                             treeifyBin(tab, hash);
 //当新长度满足转换条件时，调用treeifyBin方法，将该链表转换为红黑树

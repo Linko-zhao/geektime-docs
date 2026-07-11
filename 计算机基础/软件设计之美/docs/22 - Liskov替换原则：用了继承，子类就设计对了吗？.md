@@ -33,7 +33,7 @@ void handle(final Handler handler) {
     ((ReportHandler)handler).report();
     return;
   }
-  
+
   if (handler instanceof NotificationHandler) {
     // 发送通知
     ((NotificationHandler)handler).sendNotification();
@@ -54,17 +54,17 @@ void handle(final Handler handler) {
 class Rectangle {
   private int height;
   private int width;
-  
+
   // 设置长度
   public void setHeight(int height) {
     this.height = height;
   }
-  
+
   // 设置宽度
   public void setWidth(int width) {
     this.width = width;
   }
-  
+
   //
   public int area() {
     return this.height * this.width;
@@ -78,7 +78,7 @@ class Square extends Rectangle {
     this.setWidth(side);
 t
   }
-  
+
   @Override
   public void setHeight(int height) {
     this.setSide(height);

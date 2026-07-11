@@ -23,7 +23,7 @@
 虽然只是简单的一行配置，但这一行配置等同于下面这样的配置，也就是说Tomcat给我们设置了很多默认参数，这些参数都跟集群通信有关。
 
 ```
-<!-- 
+<!--
   SimpleTcpCluster是用来复制Session的组件。复制Session有同步和异步两种方式：
   同步模式下，向浏览器的发送响应数据前，需要先将Session拷贝到其他节点完；
   异步模式下，无需等待Session拷贝完成就可响应。异步模式更高效，但是同步模式
@@ -40,12 +40,12 @@
     BackupManager－集群下的某一节点的Session，将复制到一个备份节点。
     DeltaManager－ 集群下某一节点的Session，将复制到所有其他节点。
     DeltaManager是Tomcat默认的集群Manager。
-    
+
     expireSessionsOnShutdown－设置为true时，一个节点关闭时，
     将导致集群下的所有Session失效
     notifyListenersOnReplication－集群下节点间的Session复制、
     删除操作，是否通知session listeners
-    
+
     maxInactiveInterval－集群下Session的有效时间(单位:s)。
     maxInactiveInterval内未活动的Session，将被Tomcat回收。
     默认值为1800(30min)
@@ -76,7 +76,7 @@
          port="45564"
          frequency="500"
          dropTime="3000"/>
-     
+
      <!--
        Receiver用于各个节点接收其他节点发送的数据。
        接收器分为两种：BioReceiver(阻塞式)、NioReceiver(非阻塞式)
@@ -110,18 +110,18 @@
             同时向其他所有节点发送数据而互不影响。
            -->
           <Transport className="org.apache.catalina.tribes.
-          transport.nio.PooledParallelSender"/>     
+          transport.nio.PooledParallelSender"/>
        </Sender>
-       
+
        <!--
          Interceptor : Cluster的拦截器
          TcpFailureDetector－TcpFailureDetector可以拦截到某个节点关闭
          的信息，并尝试通过TCP连接到此节点，以确保此节点真正关闭，从而更新集
-         群可用节点列表                 
+         群可用节点列表
         -->
        <Interceptor className="org.apache.catalina.tribes.group.
        interceptors.TcpFailureDetector"/>
-       
+
        <!--
          MessageDispatchInterceptor－查看Cluster组件发送消息的
          方式是否设置为Channel.SEND_OPTIONS_ASYNCHRONOUS，如果是，
@@ -134,13 +134,13 @@
 
   <!--
     Valve : Tomcat的拦截器，
-    ReplicationValve－在处理请求前后打日志；过滤不涉及Session变化的请求。                 
+    ReplicationValve－在处理请求前后打日志；过滤不涉及Session变化的请求。
     -->
   <Valve className="org.apache.catalina.ha.tcp.ReplicationValve"
     filter=""/>
   <Valve className="org.apache.catalina.ha.session.
   JvmRouteBinderValve"/>
- 
+
   <!--
     Deployer用于集群的farm功能，监控应用中文件的更新，以保证集群中所有节点
     应用的一致性，如某个用户上传文件到集群中某个节点的应用程序目录下，Deployer
@@ -160,7 +160,7 @@
     -->
   <ClusterListener className="org.apache.catalina.ha.session.
   ClusterSessionListener"/>
-  
+
 </Cluster>
 ```
 
@@ -178,17 +178,17 @@
                    expireSessionsOnShutdown="false"
                    notifyListenersOnReplication="true"
                    mapSendOptions="6"/>
-         
+
      <Channel className="org.apache.catalina.tribes.group.
      GroupChannel">
-     
+
      <Membership className="org.apache.catalina.tribes.membership.
      McastService"
        address="228.0.0.4"
        port="45564"
        frequency="500"
        dropTime="3000"/>
-       
+
      <Receiver className="org.apache.catalina.tribes.transport.nio.
      NioReceiver"
        address="auto"
@@ -201,13 +201,13 @@
           <Transport className="org.apache.catalina.tribes.transport.
           nio.PooledParallelSender"/>
      </Sender>
-     
+
      <Interceptor className="org.apache.catalina.tribes.group.
      interceptors.TcpFailureDetector"/>
-     
+
      <Interceptor className="org.apache.catalina.tribes.group.
      interceptors.MessageDispatchInterceptor"/>
-     
+
      <Interceptor className="org.apache.catalina.tribes.group.
      interceptors.ThroughputInterceptor"/>
    </Channel>
@@ -301,6 +301,6 @@ Tomcat继续接收发往Tomcat A的请求，Session 1设置为失效。请注意
 我的问题是游戏服务器之间的数据同步是否也可以采用类似的机制呢？其中有两个挑战：一是玩家数据比较大，二是事务如何处理</p>2019-07-30</li><br/><li><span>-W.LI-</span> 👍（1） 💬（1）<p>好老师哈。那些操作一般不会涉及session变化。BackupManager实现高可用，和好多中间件的原理差不多。以前都是接入层一致性hash，没有启用session集群。这个session集群同步开销高么?一次只同步一个seesion还是批量打包的?Tomcat支持把session放在redis么?我项目是token+redis。</p>2019-07-26</li><br/><li><span>a、</span> 👍（1） 💬（1）<p>今天的问题:我觉得因为一般静态资源不会涉及到session更新，所以就不需要拦截。还有个问题我想问下老师，如果我有四台机器A,B,C,D,设置了BackupManager，那A的备份机器会不会是B，B的备份机器是C，C的备份机器是D，D的备份机器是A？还是说如果A的备份机器是B，那C只能选择D做备份机器？</p>2019-07-25</li><br/><li><span>旭东(Frank)</span> 👍（3） 💬（1）<p>这个集群感觉只是教学版，不工程版。应该很少用于生产</p>2019-08-16</li><br/><li><span>业余草</span> 👍（3） 💬（3）<p>这些方法感觉有些过时了。比如我们可以自己实现一致性哈希算法，也就是说，针对不同的会话，我们给他算一个hash，让它分配到同一个tomcat上。</p>2019-07-30</li><br/><li><span>你的头发还好吗</span> 👍（1） 💬（0）<p>针对 ReplicationValve 设置 filter值，这些静态文件不会改变 session 状态，不需要进行session同步操作。
 翻阅源码：
 if (!isRequestWithoutSessionChange(uri)) {
-   sendMessage(session,manager);
+sendMessage(session,manager);
 }</p>2022-04-05</li><br/><li><span>James</span> 👍（1） 💬（0）<p>小集群或者一开始没集群但是很久后流量较大或者保证可用性&#47;防止部署时单点故障时可以使用，不过大部分或者一开始就是集群都是redis session集群</p>2021-03-22</li><br/><li><span>maybe</span> 👍（1） 💬（0）<p>这些静态资源不涉及session，直接过滤就好</p>2020-08-17</li><br/><li><span>shen</span> 👍（0） 💬（0）<p>可以利用ngnix ip hash负载均衡，让请求定位到对应的tomcat上做本地的session，集中存储的session放到redis上</p>2021-01-09</li><br/><li><span>Liam</span> 👍（0） 💬（0）<p>避免复制的时候提及文件这类大数据吧？</p>2019-07-26</li><br/><li><span>Geek_xbye50</span> 👍（0） 💬（0）<p>思考题应该是静态资源不会更新session值吧！请问老师我也有跟neohope一样的一问，集群分裂的情况tomcat的处理方式</p>2019-07-25</li><br/>
 </ul>

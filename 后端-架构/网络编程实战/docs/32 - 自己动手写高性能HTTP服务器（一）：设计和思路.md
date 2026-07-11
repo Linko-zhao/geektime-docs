@@ -342,13 +342,14 @@ if (channel1-&gt;events &amp; EVENT_READ) {
     }
 
     return (0);
+
 }
 老师，fd不一定是连续的吧，这样会浪费内存存储空间吧？</p>2021-06-07</li><br/><li><span>谁家内存泄露了</span> 👍（1） 💬（1）<p>老师好，请问您的代码中关于锁的使用，我想知道您关于每个loop都设计了一个锁，可是这几个mutex都是局部变量吧？他们的作用范围是什么样的呢？这里想不清楚，请指点一下！</p>2021-04-12</li><br/><li><span>Steiner</span> 👍（1） 💬（1）<p>如果Channel是一个管道，他连接着哪两个对象？</p>2021-02-18</li><br/><li><span>漠博嵩</span> 👍（0） 💬（1）<p>感觉就是仿照netty框架做的</p>2022-05-24</li><br/><li><span>菜鸡</span> 👍（0） 💬（1）<p>第二个问题有点疑问。channel_map中元素的空间大小是与fd的值正相关的，而不是跟当前在线的连接数量正相关，这样做是不是有点浪费内存？比如经历了很多次连接、断开之后，fd返回的值比较大，而此时只有几个未断开的连接，那么channel_map有必要申请那么大的内存空间嘛？</p>2022-05-08</li><br/><li><span>群书</span> 👍（0） 💬（1）<p>用sock对通知 唤醒会不会增加逻辑线程或主线程的系统调用次数 限制了吞吐量呢</p>2021-11-12</li><br/><li><span>Steiner</span> 👍（0） 💬（1）<p>我看了下定义，channel_element就像是个链表节点，为什么不用C++来做这块呢？</p>2021-02-18</li><br/><li><span>YUAN</span> 👍（0） 💬（1）<p>老师请问这个channel就相当于libevent中的event结构体吧？</p>2020-11-05</li><br/><li><span>spark</span> 👍（0） 💬（2）<p>盛老师好: 为什么要在下面这个函数中lock和unlock? 不是每个线程都对应一个自己的event_loop吗?
 这样的话event_loop就不是shared resource。
 int event_loop_handle_pending_channel(struct event_loop *eventLoop) {
-    &#47;&#47;get the lock
-    pthread_mutex_lock(&amp;eventLoop-&gt;mutex);
-    eventLoop-&gt;is_handle_pending = 1;
+&#47;&#47;get the lock
+pthread_mutex_lock(&amp;eventLoop-&gt;mutex);
+eventLoop-&gt;is_handle_pending = 1;
 
     struct channel_element *channelElement = eventLoop-&gt;pending_head;
     while (channelElement != NULL) {
@@ -372,5 +373,6 @@ int event_loop_handle_pending_channel(struct event_loop *eventLoop) {
     pthread_mutex_unlock(&amp;eventLoop-&gt;mutex);
 
     return 0;
+
 }</p>2020-09-25</li><br/><li><span>衬衫的价格是19美元</span> 👍（0） 💬（2）<p>channel_map这里map-&gt;entries是一个数组，数组的下标是fd,数组的元素是channel的地址，如果新增的fd跳变很大的话比如从3变成了100，会不会浪费了很多的空间</p>2020-07-23</li><br/><li><span>胤</span> 👍（0） 💬（1）<p>问个c语言的问题，比如event_loop_handle_pending_channel这个函数，返回值是int类型，但是除了函数最后是个return 0，其他地方没有错误处理，为什么要返回0？还是就是一种习惯？</p>2020-05-04</li><br/>
 </ul>

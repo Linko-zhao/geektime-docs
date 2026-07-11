@@ -364,13 +364,14 @@ let time_fmt = format_description!(&quot;[year]-[month]-[day]T[hour]:[minute]:[s
 let timer = OffsetTime::new(offset!(+8), time_fmt);
 
 
-&#47;&#47; init 
+&#47;&#47; init
 tracing_subscriber::fmt().with_max_level(Level::TRACE).with_timer(timer).init();
 
 
 &#47;&#47; use
 tracing::info!(&quot;listening on {}&quot;, listener.local_addr().unwrap());
 ```
+
 </p>2024-01-11</li><br/><li><span>一只</span> 👍（2） 💬（1）<p>第一个例子 hello-world 需要使用链接中的依赖版本才能运行，应该是库的接口发生变更了。
 或者使用 官方最新例子
 ```rust
@@ -378,8 +379,8 @@ use axum::{response::Html, routing::get, Router};
 
 #[tokio::main]
 async fn main() {
-    &#47;&#47; build our application with a route
-    let app = Router::new().route(&quot;&#47;&quot;, get(handler));
+&#47;&#47; build our application with a route
+let app = Router::new().route(&quot;&#47;&quot;, get(handler));
 
     &#47;&#47; run it
     let listener = tokio::net::TcpListener::bind(&quot;127.0.0.1:3000&quot;)
@@ -387,13 +388,16 @@ async fn main() {
         .unwrap();
     println!(&quot;listening on {}&quot;, listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
+
 }
 
 async fn handler() -&gt; Html&lt;&amp;&#39;static str&gt; {
-    Html(&quot;&lt;h1&gt;Hello, World!&lt;&#47;h1&gt;&quot;)
+Html(&quot;&lt;h1&gt;Hello, World!&lt;&#47;h1&gt;&quot;)
 }
+
 ```</p>2023-12-11</li><br/><li><span>buoge</span> 👍（1） 💬（1）<p>日志部分配合这个看会更佳
-使用 tracing 记录日志：https:&#47;&#47;course.rs&#47;logs&#47;tracing.html</p>2023-12-20</li><br/><li><span>土土人</span> 👍（0） 💬（1）<p>Axum ctrl c退出为啥会报错？还有启动线程不会按核数自动分配吗？</p>2024-02-28</li><br/><li><span>Geek_e72251</span> 👍（0） 💬（2）<p>tracing输出的日志时区不对，怎么设置时区啊？</p>2023-12-16</li><br/><li><span>Carlsama</span> 👍（0） 💬（1）<p>内容已经调整到0.7了吗？看了评论有点不敢跟着抄写代码，等都更完再一块看</p>2023-12-12</li><br/><li><span>My dream</span> 👍（0） 💬（1）<p>怎么用这个框架实现读取、导出xls或者pdf文件啊？</p>2023-12-12</li><br/><li><span>雍和</span> 👍（0） 💬（1）<p>老师，文中说的evn_logger是不是笔误了呢？实际是env_logger？</p>2023-12-11</li><br/><li><span>-</span> 👍（0） 💬（2）<p>咋没有用最新版的0.7版本啊？</p>2023-12-11</li><br/><li><span>刘丹</span> 👍（0） 💬（1）<p>错别字： 
+使用 tracing 记录日志：https:&#47;&#47;course.rs&#47;logs&#47;tracing.html</p>2023-12-20</li><br/><li><span>土土人</span> 👍（0） 💬（1）<p>Axum ctrl c退出为啥会报错？还有启动线程不会按核数自动分配吗？</p>2024-02-28</li><br/><li><span>Geek_e72251</span> 👍（0） 💬（2）<p>tracing输出的日志时区不对，怎么设置时区啊？</p>2023-12-16</li><br/><li><span>Carlsama</span> 👍（0） 💬（1）<p>内容已经调整到0.7了吗？看了评论有点不敢跟着抄写代码，等都更完再一块看</p>2023-12-12</li><br/><li><span>My dream</span> 👍（0） 💬（1）<p>怎么用这个框架实现读取、导出xls或者pdf文件啊？</p>2023-12-12</li><br/><li><span>雍和</span> 👍（0） 💬（1）<p>老师，文中说的evn_logger是不是笔误了呢？实际是env_logger？</p>2023-12-11</li><br/><li><span>-</span> 👍（0） 💬（2）<p>咋没有用最新版的0.7版本啊？</p>2023-12-11</li><br/><li><span>刘丹</span> 👍（0） 💬（1）<p>错别字：
 carge add tracing-subscriber
 </p>2023-12-11</li><br/><li><span>刘丹</span> 👍（0） 💬（2）<p>老师，请问能否介绍最新版本的 axum ?</p>2023-12-11</li><br/><li><span>安石</span> 👍（0） 💬（0）<p>并发性能好像没有node的好。。。。</p>2024-06-26</li><br/>
 </ul>
+```

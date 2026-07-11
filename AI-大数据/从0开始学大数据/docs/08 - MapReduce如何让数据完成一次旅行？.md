@@ -72,9 +72,9 @@ JobTracker进程和TaskTracker进程是主从关系，主服务器通常只有�
 map输出的&lt;Key, Value&gt;shuffle到哪个Reduce进程是这里的关键，它是由Partitioner来实现，MapReduce框架默认的Partitioner用Key的哈希值对Reduce任务数量取模，相同的Key一定会落在相同的Reduce任务ID上。从实现上来看的话，这样的Partitioner代码只需要一行。
 
 ```
- /** Use {@link Object#hashCode()} to partition. */ 
-public int getPartition(K2 key, V2 value, int numReduceTasks) { 
-    return (key.hashCode() & Integer.MAX_VALUE) % numReduceTasks; 
+ /** Use {@link Object#hashCode()} to partition. */
+public int getPartition(K2 key, V2 value, int numReduceTasks) {
+    return (key.hashCode() & Integer.MAX_VALUE) % numReduceTasks;
  }
 ```
 

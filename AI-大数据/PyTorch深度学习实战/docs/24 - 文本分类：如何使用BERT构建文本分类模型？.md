@@ -48,7 +48,7 @@ BERT的全称是Bidirectional Encoder Representation from Transformers，即双�
 
 ![图片](https://static001.geekbang.org/resource/image/ae/84/aeed42d94750436f1dyye31f92c96584.jpg?wh=1920x700)
 
-用过Word2Vec的小伙伴应该比较清楚，在Word2Vec中，对于同一个词语，它的向量表示是固定的，这也就是为什么会有那个经典的“*国王-男人+女人=皇后*”计算式了。
+用过Word2Vec的小伙伴应该比较清楚，在Word2Vec中，对于同一个词语，它的向量表示是固定的，这也就是为什么会有那个经典的“_国王-男人+女人=皇后_”计算式了。
 
 但是有一个问题，“苹果”这个词，有可能是水果的苹果，也可能是电子产品的品牌，如果还是用同一个向量表示，这样就有可能产生偏差。而在BERT中则不一样，根据上下文的不同，对于同一个token给出的词向量是动态变化的，更加灵活。
 

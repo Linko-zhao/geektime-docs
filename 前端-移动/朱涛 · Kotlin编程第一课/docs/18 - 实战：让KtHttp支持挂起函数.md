@@ -171,7 +171,7 @@ private fun <T: Any> invoke(path: String, method: Method, args: Array<Any>): Any
 
     val call = okHttpClient.newCall(request)
     val genericReturnType = getTypeArgument(method)
-    
+
     // 变化在这里
     return KtCall<T>(call, gson, genericReturnType)
 }
@@ -341,12 +341,12 @@ public suspend inline fun <T> suspendCoroutine(crossinline block: (Continuation<
 
 ```plain
 /*
-注意这里                   
+注意这里
    ↓                                */
 suspend fun <T: Any> KtCall<T>.await(): T = suspendCoroutine{
     continuation ->
     //   ↑
-    // 注意这里 
+    // 注意这里
 }
 ```
 
@@ -500,8 +500,8 @@ suspend fun <T : Any> KtCall<T>.await(): T =
 /*
 suspendCoroutine结果：
 
-Time cancel: 536   
-Request success!   
+Time cancel: 536
+Request success!
 invokeOnCompletion!
 Time exception: 3612  // ①
 Catch exception:kotlinx.coroutines.JobCancellationException: DeferredCoroutine was cancelled; job=DeferredCoroutine{Cancelled}@6043cd28
@@ -590,6 +590,7 @@ suspend fun <T : Any> KtCall<T>.await(): T =
 //        }
     }
 ```
+
 <div><strong>精选留言（14）</strong></div><ul>
 <li><span>迩、卜懂莪</span> 👍（4） 💬（1）<p>Kthttp系列实战 像是简易版的retrofit2 对学习 retrofit的源码有很大帮助</p>2022-03-15</li><br/><li><span>神秘嘉Bin</span> 👍（3） 💬（3）<p>思考题：
 （1）执行async可认为一瞬间就到了suspendCancellableCoroutine的await扩展方法，即协程被挂起。
@@ -598,47 +599,47 @@ suspend fun <T : Any> KtCall<T>.await(): T =
 （4.1）网络IO比deferred.await()早，那么deferred.await()会拿到异常，并catch
 （4.2）网络IO比deferred.await()晚，那么deferred.await()会立刻返回，没有异常
 
-
-以上都是我猜的，没有实际运行  -.- </p>2022-03-02</li><br/><li><span>荒原</span> 👍（1） 💬（1）<p>KtHttpV3.invoke()方法返回值这样写会将同步请求的返回值转成了一个异步的KtCall
+以上都是我猜的，没有实际运行 -.- </p>2022-03-02</li><br/><li><span>荒原</span> 👍（1） 💬（1）<p>KtHttpV3.invoke()方法返回值这样写会将同步请求的返回值转成了一个异步的KtCall
 return if (isKtCallReturn(method)){
-            KtCall&lt;T&gt;(
-                client.newCall(request),
-                gson,
-                getTypeArgument(method)
-            )
-        }else{
-            val response = client.newCall(request).execute()
-          &#47;&#47;这里转成了一个KtCall对象
-            gson.fromJson(
-                response.body?.string(),
-                method.genericReturnType
-            )
-        }
+KtCall&lt;T&gt;(
+client.newCall(request),
+gson,
+getTypeArgument(method)
+)
+}else{
+val response = client.newCall(request).execute()
+&#47;&#47;这里转成了一个KtCall对象
+gson.fromJson(
+response.body?.string(),
+method.genericReturnType
+)
+}
 而这样写就不会
 if (isKtCallReturn(method)){
-            return KtCall&lt;T&gt;(
-                client.newCall(request),
-                gson,
-                getTypeArgument(method)
-            )
-        }else{
-            val response = client.newCall(request).execute()
+return KtCall&lt;T&gt;(
+client.newCall(request),
+gson,
+getTypeArgument(method)
+)
+}else{
+val response = client.newCall(request).execute()
 
             return gson.fromJson(
                 response.body?.string(),
                 method.genericReturnType
             )
         }
+
 这是为什么呢</p>2022-05-21</li><br/><li><span>王安泽</span> 👍（1） 💬（1）<p>请问为什么Async的写法response返回后程序没有结束呢？ </p>2022-04-14</li><br/><li><span>better</span> 👍（1） 💬（1）<p>第一，它可以避免不必要的挂起，提升运行效率 ；请问老师，这一条指的是？
 思考题：
 网络请求还是会执行，第一点避免了，但是二点没有避免。</p>2022-02-24</li><br/><li><span>Allen</span> 👍（1） 💬（1）<p>问题二：像 suspendCoroutine 这一类系统所提供的挂起函数底层到底实现了什么，才使得其具有挂起的功能？是内部自己实现了 Callback 吗？为啥我们自己实现的 suspend 函数必须调用系统提供的挂起函数才能生效？</p>2022-02-23</li><br/><li><span>Allen</span> 👍（0） 💬（1）<p>涛哥，问两个问题哈。如果上面例子中的网络请求是运行在当前线程，是不是这里的挂起实际上也没有什么用，因为其还是会阻塞当前线程（像下面的代码一样）？
 
 suspend fun testSuspendFunc() {
-    suspendCancellableCoroutine&lt;Unit&gt; {
-        &#47;&#47; stimulate the network request
-        Thread.sleep(5000)
-        it.resumeWith(Result.success(Unit))
-    }
+suspendCancellableCoroutine&lt;Unit&gt; {
+&#47;&#47; stimulate the network request
+Thread.sleep(5000)
+it.resumeWith(Result.success(Unit))
+}
 }</p>2022-02-23</li><br/><li><span>Allen</span> 👍（0） 💬（3）<p>思考题的执行结果和 suspendCoroutine 的执行结果是一样的。取消了监听 invokeOnCancellation 的方法后，suspendCancellableoroutine 和 suspendCoroutine 本质上是一回事。</p>2022-02-23</li><br/><li><span>梦佳</span> 👍（0） 💬（0）<p>已经实践于项目，协程包装原来网络请求，一行代码获取数据</p>2024-03-09</li><br/><li><span>jack</span> 👍（0） 💬（0）<p>思考题的运行结果参考：
 Time cancel: 697
 invokeOnCompletion!
@@ -651,16 +652,16 @@ Request success!</p>2023-10-13</li><br/><li><span>常正午</span> 👍（0） �
 2. 取消协程不一定能catch到cancel exception。
 3. 如果网络请求在defer.await()之前返回，则协程正常返回，没有异常。否则，协程被取消的异常被catch。
 
-
 注意两点
+
 1. 本课的协程输出受delay时间影响。出现了request未被发送， request发送未返回和request发送返回 多种不同状态。
 2. main函数执行完成后，process不能马上exit。因为okhttp创建了一个非daemon的线程。在timeout结束后process可以正常结束。</p>2022-08-11</li><br/><li><span>银河</span> 👍（0） 💬（0）<p>思考题结果：
-Time cancel: 301
-invokeOnCompletion!
-Time exception: 301
-Catch exception:kotlinx.coroutines.JobCancellationException: DeferredCoroutine was cancelled; job=DeferredCoroutine{Cancelled}@41c2284a
-Time total: 301
-Request success!
+   Time cancel: 301
+   invokeOnCompletion!
+   Time exception: 301
+   Catch exception:kotlinx.coroutines.JobCancellationException: DeferredCoroutine was cancelled; job=DeferredCoroutine{Cancelled}@41c2284a
+   Time total: 301
+   Request success!
 
 不难看出，suspendCancellableCoroutine函数是asyc被cancel后await立即恢复，不阻塞了，监听的是外部async的生命周期，而suspendCoroutine靠手动也就是监听网络请求call的返回结果</p>2022-08-01</li><br/>
 </ul>

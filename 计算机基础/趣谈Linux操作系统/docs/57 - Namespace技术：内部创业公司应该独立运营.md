@@ -121,7 +121,7 @@ root     58244 58212  0 01:43 ?        00:00:00 nginx: master process nginx -g d
 在/proc/pid/ns里面，我们能够看到这个进程所属于的6种namespace。我们拿出两个进程来，应该可以看出来，它们属于同一个namespace。
 
 ```
-# ls -l /proc/58212/ns 
+# ls -l /proc/58212/ns
 lrwxrwxrwx 1 root root 0 Jul 16 19:19 ipc -> ipc:[4026532278]
 lrwxrwxrwx 1 root root 0 Jul 16 19:19 mnt -> mnt:[4026532276]
 lrwxrwxrwx 1 root root 0 Jul 16 01:43 net -> net:[4026532281]
@@ -129,7 +129,7 @@ lrwxrwxrwx 1 root root 0 Jul 16 19:19 pid -> pid:[4026532279]
 lrwxrwxrwx 1 root root 0 Jul 16 19:19 user -> user:[4026531837]
 lrwxrwxrwx 1 root root 0 Jul 16 19:19 uts -> uts:[4026532277]
 
-# ls -l /proc/58253/ns 
+# ls -l /proc/58253/ns
 lrwxrwxrwx 1 33 tape 0 Jul 16 19:20 ipc -> ipc:[4026532278]
 lrwxrwxrwx 1 33 tape 0 Jul 16 19:20 mnt -> mnt:[4026532276]
 lrwxrwxrwx 1 33 tape 0 Jul 16 19:20 net -> net:[4026532281]
@@ -150,7 +150,7 @@ root@f604f0e34bc2:/# ip addr
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-23: eth0@if24: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+23: eth0@if24: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
     link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff
     inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0
        valid_lft forever preferred_lft forever
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     stack = malloc(STACK_SIZE);
     if (stack == NULL)
     {
-        perror("malloc"); 
+        perror("malloc");
         exit(1);
     }
     stackTop = stack + STACK_SIZE;
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
     pid = clone(childFunc, stackTop, CLONE_NEWNS|CLONE_NEWPID|CLONE_NEWNET|SIGCHLD, NULL);
     if (pid == -1)
     {
-        perror("clone"); 
+        perror("clone");
         exit(1);
     }
     printf("clone() returned %ld\n", (long) pid);
@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
 
     if (waitpid(pid, NULL, 0) == -1)
     {
-        perror("waitpid"); 
+        perror("waitpid");
         exit(1);
     }
     printf("child has terminated\n");
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 # ps aux | grep bash | grep -v grep
 root     64267  0.0  0.0 115572  2176 pts/0    Ss   16:53   0:00 -bash
 
-# ./a.out           
+# ./a.out
 clone() returned 64360
 In child process.
 
@@ -287,7 +287,7 @@ In child process.
 exit
 child has terminated
 
-# echo $$           
+# echo $$
 64267
 ```
 

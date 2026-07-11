@@ -150,7 +150,7 @@ fn main() {
 
 运行时可能会根据其配置和使用情况生成线程。多线程调度器会生成线程来调度任务以及处理 `spawn_blocking` 调用。
 
-同样，也有应用到测试上的属性 ```#[tokio::tes``t``]```：
+同样，也有应用到测试上的属性 `#[tokio::tes``t``]`：
 
 ```rust
 #[tokio::test]
@@ -175,10 +175,10 @@ async fn my_test() -> std::io::Result<()> {
 或者，更正式地来说：
 
 > 在以下两个假设条件下：
-> 
+>
 > 1. 存在某个数 MAX\_TASKS，使得运行时在任何特定时间点的任务总数永远不会超过 MAX\_TASKS。
 > 2. 存在某个数 MAX\_SCHEDULE，使得对运行时上生成的任何任务调用 poll 都会在 MAX\_SCHEDULE 个时间单位内返回。
-> 
+>
 > 那么，存在某个数 MAX\_DELAY，使得当一个任务被唤醒时，它将在 MAX\_DELAY 个时间单位内被运行时调度。
 
 这里，`MAX_TASKS` 和 `MAX_SCHEDULE` 可以是任何数字，运行时的用户可以选择它们。`MAX_DELAY` 数字由运行时控制，并取决于 `MAX_TASKS` 和 `MAX_SCHEDULE` 的值。

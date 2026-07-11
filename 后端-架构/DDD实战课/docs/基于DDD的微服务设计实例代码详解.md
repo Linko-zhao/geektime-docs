@@ -42,7 +42,7 @@ public class Leave {
     long duration;
     int leaderMaxLevel; //审批领导的最高级别
     ApprovalInfo currentApprovalInfo;
-    List<ApprovalInfo> historyApprovalInfos; 
+    List<ApprovalInfo> historyApprovalInfos;
 
     public long getDuration() {
         return endTime.getTime() - startTime.getTime();
@@ -53,7 +53,7 @@ public class Leave {
             historyApprovalInfos = new ArrayList<>();
         this.historyApprovalInfos.add(approvalInfo);
         return this;
-    } 
+    }
 
     public Leave create(){
         this.setStatus(Status.APPROVING);
@@ -212,7 +212,7 @@ public class PersonDomainService {
 
 ```
 public class PersonDomainService {
-   
+
    public Person findNextApprover(String currentApproverId, int leaderMaxLevel) {
    PersonPO leaderPO = personRepository.findLeaderByPersonId(currentApproverId);
    if (leaderPO.getRoleLevel() > leaderMaxLevel) {
@@ -280,7 +280,7 @@ leaveRepositoryInterface.saveEvent(leaveFactory.createLeaveEventPO(event));
 第四步：完成领域事件发布。
 
 ```
-eventPublisher.publish(event); 
+eventPublisher.publish(event);
 ```
 
 以上领域事件处理逻辑代码详见LeaveDomainService中submitApproval领域服务，里面有请假提交审批事件的完整处理逻辑。
@@ -300,7 +300,7 @@ leaveRepositoryInterface.saveEvent(leaveFactory.createLeaveEventPO(event))。
 ```
 public class LeaveEventPO {
     @Id
-    @GenericGenerator(name = "idGenerator", strategy = "uuid") 
+    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
     int id;
     @Enumerated(EnumType.STRING)
@@ -358,7 +358,7 @@ public class Approver {
 ```
 public class LeavePO {
     @Id
-    @GenericGenerator(name="idGenerator", strategy="uuid") 
+    @GenericGenerator(name="idGenerator", strategy="uuid")
     @GeneratedValue(generator="idGenerator")
     String id;
     String applicantId;
@@ -414,7 +414,7 @@ public class LeaveRepositoryImpl implements LeaveRepositoryInterface {
     @Autowired
     LeaveEventDao leaveEventDao;
 
-    public void save(LeavePO leavePO) { 
+    public void save(LeavePO leavePO) {
         leaveDao.save(leavePO);
         approvalInfoDao.saveAll(leavePO.getHistoryApprovalInfoPOList());
     }
@@ -506,7 +506,7 @@ public void createLeave(Leave leave, int leaderMaxLevel, Approver approver) {
 
 ```
 public class LeaveFactory {
-   
+
    public LeavePO createLeavePO(Leave leave) {
    LeavePO leavePO = new LeavePO();
    leavePO.setId(UUID.randomUUID().toString());
@@ -571,7 +571,7 @@ public class LeaveApplicationService{
     PersonDomainService personDomainService;
     @Autowired
     ApprovalRuleDomainService approvalRuleDomainService;
-    
+
     public void createLeaveInfo(Leave leave){
     //get approval leader max level by rule
     int leaderMaxLevel = approvalRuleDomainService.getLeaderMaxLevel(leave.getApplicant().getPersonType(), leave.getType().toString(), leave.getDuration());
@@ -589,7 +589,7 @@ public class LeaveApplicationService{
     Person approver = personDomainService.findNextApprover(leave.getApprover().getPersonId(), leave.getLeaderMaxLevel());
     leaveDomainService.submitApproval(leave, Approver.fromPerson(approver));
     }
-    
+
     public Leave getLeaveInfo(String leaveId){
         return leaveDomainService.getLeaveInfo(leaveId);
     }
@@ -655,7 +655,7 @@ createLeaveInfo应用服务的代码如下：
 
 ```
 public void createLeaveInfo(Leave leave){
-    
+
     //get approval leader max level by rule
     int leaderMaxLevel = approvalRuleDomainService.getLeaderMaxLevel(leave.getApplicant().getPersonType(), leave.getType().toString(), leave.getDuration());
     //find next approver
@@ -695,7 +695,7 @@ public class PersonApplicationService {
 
   @Autowired
   PersonDomainService personDomainService;
-  
+
   public Person findFirstApprover(String applicantId, int leaderMaxLevel) {
   return personDomainService.findFirstApprover(applicantId, leaderMaxLevel);
   }
@@ -709,7 +709,7 @@ public class PersonApplicationService {
 @RequestMapping("/person")
 @Slf4j
 public class PersonApi {
-  
+
   @Autowired
   @GetMapping("/findFirstApprover")
   public Response findFirstApprover(@RequestParam String applicantId, @RequestParam int leaderMaxLevel) {
@@ -730,14 +730,14 @@ public class PersonApi {
 facade接口可以是一个门面接口实现类，也可以是门面接口加一个门面接口实现类。项目可以根据前端的复杂度进行选择，由于请假微服务前端功能相对简单，我们就直接用一个门面接口实现类来实现就可以了。
 
 ```
-public class LeaveApi {   
+public class LeaveApi {
   @PostMapping
   public Response createLeaveInfo(LeaveDTO leaveDTO){
           Leave leave = LeaveAssembler.toDO(leaveDTO);
           leaveApplicationService.createLeaveInfo(leave);
           return Response.ok();
   }
-  
+
   @PostMapping("/query/applicant/{applicantId}")
   public Response queryByApplicant(@PathVariable String applicantId){
   List<Leave> leaveList = leaveApplicationService.queryLeaveInfosByApplicant(applicantId);
@@ -828,6 +828,7 @@ public class LeaveDTO {
 例如取消订单的场景，我其实只需要更新order的状态等少数几个字段，但是如果调用repository的save方法，就会把订单其他字段以及订单明细数据都更新一次，这样就会造成性能影响，以及数据冲突的问题。
 
 针对这个问题，我想到两种解决方案：
+
 1. 在repository增加只更新部分字段的方法，例如只更新订单状态和取消时间 saveOrderCancelInfo（），但这样会对repository有一定的污染，并且感觉saveOrderCancelInfo掺杂了业务逻辑
 2. 在repository的save方法中，通过技术手段，找出聚合根对象被修改的数据，然后只对这些数据字段做更改。
 

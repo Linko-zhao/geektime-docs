@@ -57,6 +57,7 @@
 **参考文献**
 
 1. **ImageNet Classification with Deep Convolutional Neural Networks**, Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton, NIPS, 2012.
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>皮特尔</span> 👍（1） 💬（0）<p>线性整流函数、多GPU并行计算、数据增强、Dropout……
 这些开创性的方法，充分证明了“创新”在科技发展过程中的重要性。</p>2020-06-05</li><br/><li><span>草裡菌</span> 👍（0） 💬（0）<p>非科班的程序员，表示硬着头皮看，效果甚微。😂</p>2020-03-25</li><br/>

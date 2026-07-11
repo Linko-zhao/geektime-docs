@@ -72,7 +72,7 @@ agent.run("目前市场上玫瑰花的平均价格是多少？如果我在此基
 在Debug过程中，你可以观察prompt，也就是提示的具体内容，这里我把这个提示Copy出来，你可以看一下。
 
 ```plain
-0: StringPromptValue(text='Answer the following questions as best you can. You have access to the following tools:\n\nSearch: A search engine. Useful for when you need to answer questions about current events. Input should be a search query.\nCalculator: Useful for when you need to answer questions about math.\n\nUse the following format:\n\nQuestion: the input question you must answer\nThought: you should always think about what to do\nAction: the action to take, should be one of [Search, Calculator]\nAction Input: the input to the action\nObservation: the result of the action\n... (this Thought/Action/Action Input/Observation can repeat N times)\nThought: I now know the final answer\nFinal Answer: the final answer to the original input question\n\nBegin!\n\nQuestion: 目前市场上玫瑰花的平均价格是多少？如果我在此基础上加价15%卖出，应该如何定价？\nThought: 
+0: StringPromptValue(text='Answer the following questions as best you can. You have access to the following tools:\n\nSearch: A search engine. Useful for when you need to answer questions about current events. Input should be a search query.\nCalculator: Useful for when you need to answer questions about math.\n\nUse the following format:\n\nQuestion: the input question you must answer\nThought: you should always think about what to do\nAction: the action to take, should be one of [Search, Calculator]\nAction Input: the input to the action\nObservation: the result of the action\n... (this Thought/Action/Action Input/Observation can repeat N times)\nThought: I now know the final answer\nFinal Answer: the final answer to the original input question\n\nBegin!\n\nQuestion: 目前市场上玫瑰花的平均价格是多少？如果我在此基础上加价15%卖出，应该如何定价？\nThought:
 ```
 
 我来给你详细拆解一下这个prompt。注意，下面的解释文字不是原始提示，而是我添加的说明。
@@ -122,8 +122,8 @@ agent.run("目前市场上玫瑰花的平均价格是多少？如果我在此基
 在Debug过程中，我们发现调用模型之后的outputs中包含下面的内容。
 
 ```plain
-0: LLMResult(generations=[[Generation(text=' I need to find the current market price of roses and then calculate the new price with a 15% markup.\n 
-Action: Search\nAction Input: "Average price of roses"', generation_info={'finish_reason': 'stop', 'logprobs': None})]], 
+0: LLMResult(generations=[[Generation(text=' I need to find the current market price of roses and then calculate the new price with a 15% markup.\n
+Action: Search\nAction Input: "Average price of roses"', generation_info={'finish_reason': 'stop', 'logprobs': None})]],
 llm_output={'token_usage': {'completion_tokens': 36, 'total_tokens': 294, 'prompt_tokens': 258}, 'model_name': 'gpt-3.5-turbo-instruct'}, run=None)
 ```
 
@@ -391,6 +391,7 @@ AgentExecutor中最重要的方法是步骤处理方法，\_take\_next\_step方�
 
 1. 代码，AgentExecutor类的[实现细节](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/agents/agent.py)
 2. 代码，LLMChain类的[实现细节](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/chains/llm.py)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>刘旺旺</span> 👍（18） 💬（1）<p>各位同学可以尝试在测试脚本中添加一段代码:
 ```python
@@ -404,16 +405,17 @@ Memory和Tool是基于此的支撑？
 
 人类一思考，上帝就发笑。大模型一循环思考，我就忍俊不住要惊呼点赞！
 
-话说第一张图Tack是写错了吗？应该是Task？</p>2023-09-27</li><br/><li><span>漏网之渔</span> 👍（2） 💬（1）<p>agent执行的过程中，prompt是不断累计的么，会出现token上限的情况吗</p>2023-10-08</li><br/><li><span>Geek_085d59</span> 👍（1） 💬（2）<p>请问调用数学计算工具时，为什么是llm在做计算，我理解的不应该是让大模型返回工具名称和参数，然后langchain本地调用python工具计算吗</p>2023-11-18</li><br/><li><span>Kevin</span> 👍（1） 💬（1）<p>debug的详细过程能不能也专门出一节课，整个判断的思路形成过程特别重要，谢谢啦~</p>2023-09-29</li><br/><li><span>Geek_339c29</span> 👍（0） 💬（1）<p>大佬，我们公司现在在计划做一个AI产品核心，形成自己的core产品，后续接到具体的客户订单的时候，可以直接基于core做一些定制化的开发以此来快速完成各种项目。不知道我理解的对不对，目前有个fastgpt开源项目，是不是做了可视化的chain组装最后生成的是agent？ 如果我们要做这样的一个core产品，是不是也是这样一个类似的东西，有哪些东西值得做在这个core里面？</p>2023-12-24</li><br/><li><span>SH</span> 👍（0） 💬（4）<p>老师， 看你本次的分析中，都会重复的出现 那个 思考-行动-观察的步骤，每一轮得到一个结果，再重复执行之前的步骤时，把上一步的结果代入到新的任务，有点不理解， 在这里为什么基于上次的逻辑里面，在需要的结果处继续往下执行的呢？而且重新思考一轮呢？  这样是不是会很浪费 token ?</p>2023-11-05</li><br/><li><span>iLeGeND</span> 👍（0） 💬（1）<p>chain中决策走哪一个分支,和代理中选择用哪一个代理, 本质上是一回事吗</p>2023-09-30</li><br/><li><span>骨汤鸡蛋面</span> 👍（0） 💬（1）<p>从  AgentType.ZERO_SHOT_REACT_DESCRIPTION  可以看到，不同的 AgentType 实质是prompt 不同？</p>2023-09-27</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p>运行了课程代码，测试了 LangChain的Debug和Verbose 的不同：
+话说第一张图Tack是写错了吗？应该是Task？</p>2023-09-27</li><br/><li><span>漏网之渔</span> 👍（2） 💬（1）<p>agent执行的过程中，prompt是不断累计的么，会出现token上限的情况吗</p>2023-10-08</li><br/><li><span>Geek_085d59</span> 👍（1） 💬（2）<p>请问调用数学计算工具时，为什么是llm在做计算，我理解的不应该是让大模型返回工具名称和参数，然后langchain本地调用python工具计算吗</p>2023-11-18</li><br/><li><span>Kevin</span> 👍（1） 💬（1）<p>debug的详细过程能不能也专门出一节课，整个判断的思路形成过程特别重要，谢谢啦~</p>2023-09-29</li><br/><li><span>Geek_339c29</span> 👍（0） 💬（1）<p>大佬，我们公司现在在计划做一个AI产品核心，形成自己的core产品，后续接到具体的客户订单的时候，可以直接基于core做一些定制化的开发以此来快速完成各种项目。不知道我理解的对不对，目前有个fastgpt开源项目，是不是做了可视化的chain组装最后生成的是agent？ 如果我们要做这样的一个core产品，是不是也是这样一个类似的东西，有哪些东西值得做在这个core里面？</p>2023-12-24</li><br/><li><span>SH</span> 👍（0） 💬（4）<p>老师， 看你本次的分析中，都会重复的出现 那个 思考-行动-观察的步骤，每一轮得到一个结果，再重复执行之前的步骤时，把上一步的结果代入到新的任务，有点不理解， 在这里为什么基于上次的逻辑里面，在需要的结果处继续往下执行的呢？而且重新思考一轮呢？ 这样是不是会很浪费 token ?</p>2023-11-05</li><br/><li><span>iLeGeND</span> 👍（0） 💬（1）<p>chain中决策走哪一个分支,和代理中选择用哪一个代理, 本质上是一回事吗</p>2023-09-30</li><br/><li><span>骨汤鸡蛋面</span> 👍（0） 💬（1）<p>从 AgentType.ZERO_SHOT_REACT_DESCRIPTION 可以看到，不同的 AgentType 实质是prompt 不同？</p>2023-09-27</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p>运行了课程代码，测试了 LangChain的Debug和Verbose 的不同：
 
-* 设置为 langchain.verbose = True ：
-重要事件记录：Verbose模式会记录“重要”事件的输入和输出，而不是所有事件。这使得开发者可以看到应用程序执行的关键步骤，而不被过多的信息淹没。
-用途：适用于需要监控应用程序运行过程的场景，帮助开发者理解代理如何处理请求，并在必要时进行性能优化。
+- 设置为 langchain.verbose = True ：
+  重要事件记录：Verbose模式会记录“重要”事件的输入和输出，而不是所有事件。这使得开发者可以看到应用程序执行的关键步骤，而不被过多的信息淹没。
+  用途：适用于需要监控应用程序运行过程的场景，帮助开发者理解代理如何处理请求，并在必要时进行性能优化。
 
-* 设置为 langchain.debug = True ：
-Debug 模式
-详细日志记录：Debug模式是最详细的日志记录设置，会记录所有事件的输入和输出。这包括所有链、模型、代理、工具和检索器的详细信息。
-用途：适用于需要全面了解应用程序执行的每一个细节的场景，尤其是在复杂应用程序中进行问题诊断时。</p>2024-08-08</li><br/><li><span>Geek_7ee455</span> 👍（1） 💬（0）<p>如果我想新增一个工具,有办法吗</p>2023-11-23</li><br/><li><span>极客星星</span> 👍（0） 💬（0）<p>“是以最有帮助的方式描述这些工具”
-想问下，这个体现在代码里哪一步？比如langchain怎么知道serpapi是搜索引擎?下面这个代码里，并没有告诉langchain这个i信息？
-tools = load_tools([&quot;serpapi&quot;, &quot;llm-math&quot;], llm=llm)</p>2024-09-16</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第12讲打卡~</p>2024-07-17</li><br/>
+- 设置为 langchain.debug = True ：
+  Debug 模式
+  详细日志记录：Debug模式是最详细的日志记录设置，会记录所有事件的输入和输出。这包括所有链、模型、代理、工具和检索器的详细信息。
+  用途：适用于需要全面了解应用程序执行的每一个细节的场景，尤其是在复杂应用程序中进行问题诊断时。</p>2024-08-08</li><br/><li><span>Geek_7ee455</span> 👍（1） 💬（0）<p>如果我想新增一个工具,有办法吗</p>2023-11-23</li><br/><li><span>极客星星</span> 👍（0） 💬（0）<p>“是以最有帮助的方式描述这些工具”
+  想问下，这个体现在代码里哪一步？比如langchain怎么知道serpapi是搜索引擎?下面这个代码里，并没有告诉langchain这个i信息？
+  tools = load_tools([&quot;serpapi&quot;, &quot;llm-math&quot;], llm=llm)</p>2024-09-16</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第12讲打卡~</p>2024-07-17</li><br/>
+
 </ul>

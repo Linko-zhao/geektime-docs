@@ -21,7 +21,7 @@
 非受控的意思就是不使用 state，直接对从宿主组件上将文本的值同步到 JavaScript。一个非受控的 UncontrolledTextInput 组件示例如下：
 
 ```plain
-const UncontrolledTextInput = () => <TextInput /> 
+const UncontrolledTextInput = () => <TextInput />
 ```
 
 只要这一行代码，用户就可以输入文字了。在 UncontrolledTextInput 组件中， TextInput 元素是不受 state 控制，但在 JavaScript 代码中却并不知道用户输入的是什么，因此还要一个变量来存储用户输入的值。
@@ -280,6 +280,5 @@ $ xed .
 完整代码: https:&#47;&#47;gist.github.com&#47;AEPKILL&#47;3557c4b5b621a3aec36e7e3cd8571e56</p>2022-04-15</li><br/><li><span>小天儿</span> 👍（3） 💬（1）<p>老师，TextInput 间进行跳转时，键盘总是会先收起再弹出，而在某些应用中，多个输入框之间跳转是不会收起键盘的，如何解决这个问题呢？</p>2022-05-16</li><br/><li><span>dao</span> 👍（0） 💬（3）<p>1， 新手，代码 https:&#47;&#47;github.com&#47;hdouhua&#47;hybrid-mobile-app&#47;tree&#47;main&#47;AwesomeProject&#47;src&#47;c07。
 2，不知道怎么的，在文档里找不到 TextInput 的方法 onChangeSync</p>2022-04-17</li><br/><li><span>见字如晤</span> 👍（2） 💬（0）<p>还有一个特别重要的细节是，输入框与键盘的位置。键盘弹起的时候，是否有遮盖输入框的表现；如果没有，键盘会不会把整个页面往上顶起；Android和iOS表现这方面表现是否一致</p>2022-05-17</li><br/><li><span>Zeke</span> 👍（0） 💬（0）<p>并没有 `onChangeSync` 这个方法，从 RN 官网没有找到有这个，只有 onChange 和 onChangeText </p>2024-10-13</li><br/><li><span>demoker</span> 👍（0） 💬（0）<p>下载的demo在iPhone上运行报错呢？Invariant Violation: requireNativeComponent: &quot;RTNCustomView&quot; was not found in the UIManager.</p>2023-12-21</li><br/><li><span>Wcly👺</span> 👍（0） 💬（0）<p>要做一个文本编辑器，怎么控制光标适中在可视区域，就是横向输入长文本到输入框的时候能自动横向滚动，垂直换行的时候能自动垂直滚动，类似vscode的编辑页面。</p>2022-11-21</li><br/><li><span>郭浩</span> 👍（0） 💬（0）<p>TextInput是不是没法禁止它复制粘贴？在Android上不生效</p>2022-08-10</li><br/><li><span>大神博士</span> 👍（0） 💬（0）<p>“但是 Fabric 之后（包括 Fabric 预览版），setNativeProps 就不能用了。”
 
-有传送门吗？</p>2022-07-05</li><br/><li><span>下一刻。</span> 👍（0） 💬（0）<p>老师问一下：TextInput如何插入图片（自定义表情），如何使不同段的文字颜色不一样（话题）。</p>2022-06-13</li><br/><li><span>小天儿</span> 👍（0） 💬（0）<p>1. 代码：https:&#47;&#47;snack.expo.dev&#47;@sh-winter&#47;textinput
-2. onChnage 与 onChangeSync 的区别：个人认为 onChangeSync 比 onChange 响应的更快，适用于更高优先级的场景；Fabric 同步的特性与 react 18 结合将带来并发渲染，可中断渲染等新特性，实现在大规模 UI 更新时保持响应</p>2022-05-16</li><br/>
+有传送门吗？</p>2022-07-05</li><br/><li><span>下一刻。</span> 👍（0） 💬（0）<p>老师问一下：TextInput如何插入图片（自定义表情），如何使不同段的文字颜色不一样（话题）。</p>2022-06-13</li><br/><li><span>小天儿</span> 👍（0） 💬（0）<p>1. 代码：https:&#47;&#47;snack.expo.dev&#47;@sh-winter&#47;textinput 2. onChnage 与 onChangeSync 的区别：个人认为 onChangeSync 比 onChange 响应的更快，适用于更高优先级的场景；Fabric 同步的特性与 react 18 结合将带来并发渲染，可中断渲染等新特性，实现在大规模 UI 更新时保持响应</p>2022-05-16</li><br/>
 </ul>

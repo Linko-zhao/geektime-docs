@@ -227,7 +227,7 @@ async def connect_to_sse_server(server_url: str):
             print("Listing tools...")
             response = await session.list_tools()
             tools = response.tools
-            print("\nConnected to server with tools:", [tool.name for tool in tools]) 
+            print("\nConnected to server with tools:", [tool.name for tool in tools])
 
             # call a tool
             score = await session.call_tool(name="get_score_by_name",arguments={"name": "张三"})
@@ -244,7 +244,7 @@ async def main():
     if len(sys.argv) < 2:
         print("Usage: uv run client.py <URL of SSE MCP server (i.e. http://localhost:8080/sse)>")
         sys.exit(1)
-    
+   
     await connect_to_sse_server(server_url=sys.argv[1])
 
 if __name__ == "__main__":
@@ -285,9 +285,9 @@ uv run client-sse.py http://localhost:18080/sse
 应该是客户端调用“&#47;sse” 服务端因为Starlette设置了routes，所以会调用handle_sse？是这个意思吗？handle_sse 异步调用SseServerTransport？SseServerTransport调用&quot;&#47;messages&#47;&quot;?,进而通过Starlette的路由调用sse.handle_post_message吗？handle_post_message这个函数是干什么用的？调用之后是什么作用。
 还有这个client是通过命令行调用的吧？如何让大模型调用呢？</p>2025-04-10</li><br/><li><span>笃定</span> 👍（1） 💬（1）<p>目前已经越来越多的应用和服务支持 MCP 协议了，从目前的发展情况来看。MCP 应该不会是昙花一现，发展不起来。所以有个问题想问一下老师。之后在 Agent 开发层面，是否现在这些 Agent 开发框架，例如 Langchain，或者不使用开发框架，手撸 Agent，以后的趋势，对于调用常用的服务，是否都将在 Agent 代码里直接使用 MCP Client 对接大模型，Client 对 MCP Server 发请求调工具就行，不会再自己去写 Tool 了？相当于将 Agent Tools 代码 -&gt; 替换为 MCP Client 代码？</p>2025-05-18</li><br/><li><span>笃定</span> 👍（1） 💬（1）<p>我使用的 MCP Host 插件是 Roo Code (prev. Roo Cline) 。配置好 postgres MCP 后，查看了一下主机进程，发现其进程信息如下：
 
-(base) ➜  ~ ps -ef | grep &#39;npx&#39;
-  501 18076 18053   0 Sat09AM ??         0:00.15 node &#47;Users&#47;mac&#47;.npm&#47;_npx&#47;cd1ce99963b5e8b1&#47;node_modules&#47;.bin&#47;mcp-server-postgres postgresql:&#47;&#47;postgres:postgres@127.0.0.1:5432&#47;achievement
-  501 85164 85140   0 Fri04PM ??         0:00.09 node &#47;Users&#47;mac&#47;.npm&#47;_npx&#47;cd1ce99963b5e8b1&#47;node_modules&#47;.bin&#47;mcp-server-postgres postgresql:&#47;&#47;postgres:postgres@127.0.0.1:5432&#47;achievement
+(base) ➜ ~ ps -ef | grep &#39;npx&#39;
+501 18076 18053 0 Sat09AM ?? 0:00.15 node &#47;Users&#47;mac&#47;.npm&#47;_npx&#47;cd1ce99963b5e8b1&#47;node_modules&#47;.bin&#47;mcp-server-postgres postgresql:&#47;&#47;postgres:postgres@127.0.0.1:5432&#47;achievement
+501 85164 85140 0 Fri04PM ?? 0:00.09 node &#47;Users&#47;mac&#47;.npm&#47;_npx&#47;cd1ce99963b5e8b1&#47;node_modules&#47;.bin&#47;mcp-server-postgres postgresql:&#47;&#47;postgres:postgres@127.0.0.1:5432&#47;achievement
 
 通过 ps 命令输出的进程号信息，发现它们并无关联，不是父子进程关系呀，我个人认为它目前使用的应该不是 Stdio 方式，应该是 SSE 方式</p>2025-05-18</li><br/><li><span>Geek_c559a0</span> 👍（1） 💬（1）<p>可以在一个StdioServerParameters 里边配置多个server吗 还是每次只能通过一个StdioServerParameters配置单个server。</p>2025-05-09</li><br/><li><span>锋芒</span> 👍（1） 💬（1）<p>请问 PyCharm market中没有Roo Code应该怎么处理呢 ？</p>2025-05-05</li><br/><li><span>轩爷</span> 👍（1） 💬（1）<p>SSE 已经被抛弃，取而代之的是Streamable HTTP</p>2025-04-27</li><br/><li><span>JoeTsai</span> 👍（1） 💬（1）<p>没懂为什么会有MCP和Agent二分天下的看法, MCP 本质上不是为了解决Agent里的tools能力而生的么? 那其实是Agent的一部分吧</p>2025-03-29</li><br/><li><span>林龍</span> 👍（1） 💬（3）<p>sse 中的server的代码是在git中的哪个目录路径下，没有找到</p>2025-03-28</li><br/><li><span>夏落de烦恼</span> 👍（1） 💬（1）<p>盲猜Sdtio😂</p>2025-03-28</li><br/><li><span>maybe</span> 👍（0） 💬（1）<p>Roo Code 等 IDE 用的是 Stdio。</p>2025-05-19</li><br/><li><span>笃定</span> 👍（0） 💬（1）<p>但是，看 postgres mcp 官方的源代码，没有看到有 sse 相关的代码呀？难道还是 Stdio 方式。。。。
 https:&#47;&#47;github.com&#47;modelcontextprotocol&#47;servers&#47;blob&#47;main&#47;src&#47;postgres&#47;index.ts
@@ -296,19 +296,19 @@ https:&#47;&#47;github.com&#47;modelcontextprotocol&#47;servers&#47;blob&#47;mai
 ImportError: cannot import name &#39;ClientSession&#39; from partially initialized module &#39;mcp&#39; (most likely due to a circular import) (&#47;Library&#47;Frameworks&#47;Python.framework&#47;Versions&#47;3.12&#47;lib&#47;python3.12&#47;site-packages&#47;mcp&#47;__init__.py)
 </p>2025-05-14</li><br/><li><span>吴珊珊1</span> 👍（0） 💬（1）<p>windows mcp client stdio方式执行client.py报错
 
-D:\workspace\python\DeepseekInAction\mcp-client-achievement\.venv\Scripts\python.exe D:\workspace\python\DeepseekInAction\mcp-client-achievement\client.py 
+D:\workspace\python\DeepseekInAction\mcp-client-achievement\.venv\Scripts\python.exe D:\workspace\python\DeepseekInAction\mcp-client-achievement\client.py
 Tools: meta=None nextCursor=None tools=[Tool(name=&#39;get_score_by_name&#39;, description=&#39;根据员工的姓名获取该员工的绩效得分&#39;, inputSchema={&#39;properties&#39;: {&#39;name&#39;: {&#39;title&#39;: &#39;Name&#39;, &#39;type&#39;: &#39;string&#39;}}, &#39;required&#39;: [&#39;name&#39;], &#39;title&#39;: &#39;get_score_by_nameArguments&#39;, &#39;type&#39;: &#39;object&#39;})]
-score:  meta=None content=[TextContent(type=&#39;text&#39;, text=&#39;name: 张三 绩效评分: 85.9&#39;, annotations=None)] isError=False
-[04&#47;30&#47;25 11:31:17] INFO     Processing request of type           server.py:534
-                             ListToolsRequest                                  
-                    INFO     Processing request of type           server.py:534
-                             CallToolRequest                                   
-Exception ignored in: &lt;function BaseSubprocessTransport.__del__ at 0x0000023C43264FE0&gt;
+score: meta=None content=[TextContent(type=&#39;text&#39;, text=&#39;name: 张三 绩效评分: 85.9&#39;, annotations=None)] isError=False
+[04&#47;30&#47;25 11:31:17] INFO Processing request of type server.py:534
+ListToolsRequest  
+INFO Processing request of type server.py:534
+CallToolRequest  
+Exception ignored in: &lt;function BaseSubprocessTransport.**del** at 0x0000023C43264FE0&gt;
 Traceback (most recent call last):
-  File &quot;D:\software\miniforge3\Lib\asyncio\base_subprocess.py&quot;, line 125, in __del__
-    _warn(f&quot;unclosed transport {self!r}&quot;, ResourceWarning, source=self)
-                               ^^^^^^^^
-  File &quot;D:\software\miniforge3\Lib\asyncio\base_subprocess.py&quot;, line 78, in __repr__
-    info.append(f&#39;stdout={stdout.pipe}&#39;)</p>2025-04-30</li><br/><li><span>完美坚持</span> 👍（0） 💬（2）<p>为什么我这边运行了uv run client.py，一点反应都没有
+File &quot;D:\software\miniforge3\Lib\asyncio\base_subprocess.py&quot;, line 125, in **del**
+_warn(f&quot;unclosed transport {self!r}&quot;, ResourceWarning, source=self)
+^^^^^^^^
+File &quot;D:\software\miniforge3\Lib\asyncio\base_subprocess.py&quot;, line 78, in **repr**
+info.append(f&#39;stdout={stdout.pipe}&#39;)</p>2025-04-30</li><br/><li><span>完美坚持</span> 👍（0） 💬（2）<p>为什么我这边运行了uv run client.py，一点反应都没有
 我是在命令行运行的，</p>2025-04-24</li><br/>
 </ul>

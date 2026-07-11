@@ -111,7 +111,7 @@ def create_assistant(instructions):
         assistant = client.beta.assistants.create(
             name="Sales Data Analyst",
             instructions=instructions,
-            model="gpt-4-turbo", 
+            model="gpt-4-turbo",
             tools=[{"type": "file_search"}],
         )
         return assistant
@@ -127,16 +127,16 @@ def create_vector_store(name, file_paths):
     try:
         # 创建一个新的Vector Store
         vector_store = client.beta.vector_stores.create(name=name)
-        
+       
         # 准备要上传到OpenAI的文件
         file_streams = [open(path, "rb") for path in file_paths]
-        
+       
         # 使用SDK的上传和轮询辅助方法来上传文件,将它们添加到Vector Store中,
         # 并轮询文件批次的状态直到完成
         file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
             vector_store_id=vector_store.id, files=file_streams
         )
-        
+       
         # 打印批次的状态和文件计数,查看此操作的结果
         logger.info(f"文件批次状态: {file_batch.status}")  
         logger.info(f"文件计数: {file_batch.file_counts}")
@@ -172,7 +172,7 @@ def create_thread(user_message, file_id):
         thread = client.beta.threads.create(
             messages=[
                 {
-                    "role": "user", 
+                    "role": "user",
                     "content": user_message,
                     "attachments": [
                         { "file_id": file_id, "tools": [{"type": "file_search"}] }  
@@ -192,15 +192,15 @@ def create_thread(user_message, file_id):
 ```plain
 def run_assistant(thread_id, assistant_id, instructions):
     try:
-        # 使用create_and_poll SDK辅助方法创建run并轮询状态直到完成 
+        # 使用create_and_poll SDK辅助方法创建run并轮询状态直到完成
         run = client.beta.threads.runs.create_and_poll(
             thread_id=thread_id, assistant_id=assistant_id,
-            instructions=instructions 
+            instructions=instructions
         )
 
         # 获取run生成的消息
         messages = list(client.beta.threads.messages.list(thread_id=thread_id, run_id=run.id))
-        
+       
         # 提取消息的文本内容
         message_content = messages[0].content[0].text
         annotations = message_content.annotations
@@ -210,12 +210,12 @@ def run_assistant(thread_id, assistant_id, instructions):
         for index, annotation in enumerate(annotations):
             message_content.value = message_content.value.replace(annotation.text, f"[{index}]")
             if file_citation := getattr(annotation, "file_citation", None):
-                cited_file = client.files.retrieve(file_citation.file_id) 
+                cited_file = client.files.retrieve(file_citation.file_id)
                 citations.append(f"[{index}] {cited_file.filename}")
 
         print(message_content.value)
         print("\n".join(citations))
-        
+       
     except Exception as e:
         logger.error(f"运行Assistant失败: {e}")
         raise e
@@ -230,7 +230,7 @@ def poll_run_status(client, thread_id, run_id, interval=5):
     while True:
         run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
         logger.info(f"Run轮询状态: {run.status}")
-        
+
         if run.status in ['requires_action', 'completed']:
             return run
         time.sleep(interval)
@@ -251,7 +251,7 @@ def get_assistant_reply(thread_id):
                 logger.info(f"Assistant回复: {reply}")
                 return reply
 
-        logger.warning("Assistant没有生成有效回复") 
+        logger.warning("Assistant没有生成有效回复")
         return None
     except Exception as e:
         logger.error(f"获取Assistant回复失败: {e}")
@@ -265,7 +265,7 @@ def get_assistant_reply(thread_id):
 ```plain
 def main():
     instructions = "你是一位销售数据分析助手。请利用提供的销售数据,尽可能准确完整地回答用户的问题。"
-    
+   
     # 创建启用了file_search工具的Assistant
     assistant = create_assistant(instructions)
     logger.info(f"创建Assistant成功,ID: {assistant.id}")  
@@ -276,9 +276,9 @@ def main():
 
     # 将新的Vector Store关联到Assistant  
     assistant = update_assistant_vector_store(assistant.id, vector_store.id)
-    
+   
     user_message = "请分析一下各种花卉的销售情况,哪个品种卖得最好,哪个卖得最差?对于销量不佳的品种,有什么推广建议吗?"
-    
+   
     # 获取Vector Store中的文件列表
     files = list(client.beta.vector_stores.files.list(vector_store.id))
     file_id = files[0].id  # 获取第一个文件的ID
@@ -288,7 +288,7 @@ def main():
     logger.info(f"创建Thread成功,ID: {thread.id}")
  
     # 在Thread上运行Assistant
-    run_instructions = "以花店店长的身份回答问题。" 
+    run_instructions = "以花店店长的身份回答问题。"
     run_assistant(thread.id, assistant.id, run_instructions)
 
 if __name__ == "__main__":

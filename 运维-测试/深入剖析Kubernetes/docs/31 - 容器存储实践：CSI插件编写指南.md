@@ -36,8 +36,8 @@ provisioner: com.digitalocean.csi.dobs
 其实，一个CSI插件的代码结构非常简单，如下所示：
 
 ```
-tree $GOPATH/src/github.com/digitalocean/csi-digitalocean/driver  
-$GOPATH/src/github.com/digitalocean/csi-digitalocean/driver 
+tree $GOPATH/src/github.com/digitalocean/csi-digitalocean/driver
+$GOPATH/src/github.com/digitalocean/csi-digitalocean/driver
 ├── controller.go
 ├── driver.go
 ├── identity.go
@@ -53,15 +53,15 @@ $GOPATH/src/github.com/digitalocean/csi-digitalocean/driver
 // Run starts the CSI plugin by communication over the given endpoint
 func (d *Driver) Run() error {
  ...
- 
+
  listener, err := net.Listen(u.Scheme, addr)
  ...
- 
+
  d.srv = grpc.NewServer(grpc.UnaryInterceptor(errHandler))
  csi.RegisterIdentityServer(d.srv, d)
  csi.RegisterControllerServer(d.srv, d)
  csi.RegisterNodeServer(d.srv, d)
- 
+
  d.ready = true // we're now ready to go!
  ...
  return d.srv.Serve(listener)
@@ -107,20 +107,20 @@ func (d *Driver) GetPluginInfo(ctx context.Context, req *csi.GetPluginInfoReques
 ```
 func (d *Driver) CreateVolume(ctx context.Context, req *csi.CreateVolumeRequest) (*csi.CreateVolumeResponse, error) {
  ...
- 
+
  volumeReq := &godo.VolumeCreateRequest{
   Region:        d.region,
   Name:          volumeName,
   Description:   createdByDO,
   SizeGigaBytes: size / GB,
  }
- 
+
  ...
- 
+
  vol, _, err := d.doClient.Storage.CreateVolume(ctx, volumeReq)
- 
+
  ...
- 
+
  resp := &csi.CreateVolumeResponse{
   Volume: &csi.Volume{
    Id:            vol.ID,
@@ -134,7 +134,7 @@ func (d *Driver) CreateVolume(ctx context.Context, req *csi.CreateVolumeRequest)
    },
   },
  }
- 
+
  return resp, nil
 }
 ```
@@ -146,30 +146,30 @@ func (d *Driver) CreateVolume(ctx context.Context, req *csi.CreateVolumeRequest)
 ```
 func (d *Driver) ControllerPublishVolume(ctx context.Context, req *csi.ControllerPublishVolumeRequest) (*csi.ControllerPublishVolumeResponse, error) {
  ...
- 
+
   dropletID, err := strconv.Atoi(req.NodeId)
-  
+
   // check if volume exist before trying to attach it
   _, resp, err := d.doClient.Storage.GetVolume(ctx, req.VolumeId)
- 
+
  ...
- 
+
   // check if droplet exist before trying to attach the volume to the droplet
   _, resp, err = d.doClient.Droplets.Get(ctx, dropletID)
- 
+
  ...
- 
+
   action, resp, err := d.doClient.StorageActions.Attach(ctx, req.VolumeId, dropletID)
 
  ...
- 
+
  if action != nil {
   ll.Info("waiting until volume is attached")
  if err := d.waitAction(ctx, req.VolumeId, action.ID); err != nil {
   return nil, err
   }
   }
-  
+
   ll.Info("volume is attached")
  return &csi.ControllerPublishVolumeResponse{}, nil
 }
@@ -187,10 +187,10 @@ type VolumeAttachmentSpec struct {
  // Attacher indicates the name of the volume driver that MUST handle this
  // request. This is the name returned by GetPluginName().
  Attacher string
- 
+
  // Source represents the volume that should be attached.
  Source VolumeAttachmentSource
- 
+
  // The node that the volume should be attached to.
  NodeName string
 }
@@ -223,16 +223,16 @@ CSI Node服务对应的，是Volume管理流程里的“Mount阶段”。它的�
 ```
 func (d *Driver) NodeStageVolume(ctx context.Context, req *csi.NodeStageVolumeRequest) (*csi.NodeStageVolumeResponse, error) {
  ...
- 
+
  vol, resp, err := d.doClient.Storage.GetVolume(ctx, req.VolumeId)
- 
+
  ...
- 
+
  source := getDiskSource(vol.Name)
  target := req.StagingTargetPath
- 
+
  ...
- 
+
  if !formatted {
   ll.Info("formatting the volume for staging")
   if err := d.mounter.Format(source, fsType); err != nil {
@@ -241,7 +241,7 @@ func (d *Driver) NodeStageVolume(ctx context.Context, req *csi.NodeStageVolumeRe
  } else {
   ll.Info("source device is already formatted")
  }
- 
+
 ...
 
  if !mounted {
@@ -251,7 +251,7 @@ func (d *Driver) NodeStageVolume(ctx context.Context, req *csi.NodeStageVolumeRe
  } else {
   ll.Info("source device is already mounted to the target path")
  }
- 
+
  ...
  return &csi.NodeStageVolumeResponse{}, nil
 }
@@ -266,11 +266,11 @@ func (d *Driver) NodePublishVolume(ctx context.Context, req *csi.NodePublishVolu
  ...
  source := req.StagingTargetPath
  target := req.TargetPath
- 
+
  mnt := req.VolumeCapability.GetMount()
  options := mnt.MountFlag
     ...
-    
+
  if !mounted {
   ll.Info("mounting the volume")
   if err := d.mounter.Mount(source, target, fsType, options...); err != nil {
@@ -279,7 +279,7 @@ func (d *Driver) NodePublishVolume(ctx context.Context, req *csi.NodePublishVolu
  } else {
   ll.Info("volume is already mounted")
  }
- 
+
  return &csi.NodePublishVolumeResponse{}, nil
 }
 ```
@@ -502,7 +502,7 @@ spec:
 
 例：
 
-当用户创建了一个PVC之后，External Provisioner会监听到这个PVC的诞生，然后调用同一个Pod里的CSI插件的CSI Controller服务的CreateVolume方法，为你创建出对应的PV。这时候，运行在Kubernetes Master节点上的Volume Controller就会通过PersistentVolumeController控制循环，发现这对新创建出来的PV和PVC，并且看到它们声明的是同一个StorageClass。所以，它会把这一对PV和PVC绑定，使PVC进入Bound状态。然后，用户创建一个声明使用上述PVC的Pod，并且这个Pod被调度到了宿主机A上，这时，Volume Controller的AttachDetachController控制循环就会发现，上述PVC对应的Volume，需要被Attach到宿主机A上。所以，AttachDetachController就会创建一个VolumeAttachment对象，这个对象携带了宿主机A和待处理的Volume名字。External  Attacher监听到VolumeAttachment对象的诞生。于是，它就会使用这个对象里的宿主机和Volume名字，调用同一个Pod里的CSI插件的CSI Controller服务的ControllerPublishVolume，完成Attach阶段。上述过程完成后，运行在宿主机A的kubelet，就会通过VolumeManagerReconciler控制循环，发现当前宿主机上有一个Volume对应的存储设备（比如磁盘）已经被Attach到了某个设备目录下。于是kubelet就会调用同一宿主机上的CSI插件的CSI Node服务的NodeStageVolume和NodePublishVolume完成这个Volume的“Mount阶段”。至此，一个完成的持久化Volume的创建和挂载就结束了。
+当用户创建了一个PVC之后，External Provisioner会监听到这个PVC的诞生，然后调用同一个Pod里的CSI插件的CSI Controller服务的CreateVolume方法，为你创建出对应的PV。这时候，运行在Kubernetes Master节点上的Volume Controller就会通过PersistentVolumeController控制循环，发现这对新创建出来的PV和PVC，并且看到它们声明的是同一个StorageClass。所以，它会把这一对PV和PVC绑定，使PVC进入Bound状态。然后，用户创建一个声明使用上述PVC的Pod，并且这个Pod被调度到了宿主机A上，这时，Volume Controller的AttachDetachController控制循环就会发现，上述PVC对应的Volume，需要被Attach到宿主机A上。所以，AttachDetachController就会创建一个VolumeAttachment对象，这个对象携带了宿主机A和待处理的Volume名字。External Attacher监听到VolumeAttachment对象的诞生。于是，它就会使用这个对象里的宿主机和Volume名字，调用同一个Pod里的CSI插件的CSI Controller服务的ControllerPublishVolume，完成Attach阶段。上述过程完成后，运行在宿主机A的kubelet，就会通过VolumeManagerReconciler控制循环，发现当前宿主机上有一个Volume对应的存储设备（比如磁盘）已经被Attach到了某个设备目录下。于是kubelet就会调用同一宿主机上的CSI插件的CSI Node服务的NodeStageVolume和NodePublishVolume完成这个Volume的“Mount阶段”。至此，一个完成的持久化Volume的创建和挂载就结束了。
 </p>2020-10-29</li><br/><li><span>拉欧</span> 👍（14） 💬（0）<p>老师对k8s的理解真心让人敬佩</p>2019-11-16</li><br/><li><span>初学者</span> 👍（13） 💬（0）<p>一般来说一个块存储在被宿主机使用之前，需要先将该块存储load 到宿主机的&#47;dev 下成为linux 的设备文件，然后format还设备文件，然后挂载到一个目录下就可以使用了，我觉得nodestagevolume这步挂载操作更像是为了同一台宿主机上的pod 可以共享一块盘</p>2018-11-07</li><br/><li><span>朱东辉</span> 👍（5） 💬（0）<p>张大佬真的天花板一样的存储，二刷依然收获满满，多谢大佬提供的这么好的学习资料</p>2021-03-31</li><br/><li><span>xfan</span> 👍（4） 💬（0）<p>找到了，文中有出现。是在 https:&#47;&#47;raw.githubusercontent.com&#47;digitalocean&#47;csi-digitalocean
 </p>2019-01-24</li><br/><li><span>silver</span> 👍（4） 💬（0）<p>块处理设备从挂载到staging，到挂载到宿主机目录具体做了哪些预处理呢？我和前面几位一样，对需要分两部挂载不是很理解</p>2018-11-05</li><br/><li><span>🍊 🐱</span> 👍（2） 💬（0）<p>有的同学跟我有一样的疑惑，就是 staging 这一步为什么需要再格式化后挂载到一个临时目录，而不是直接留给 publish 阶段挂在到 pod 中，根据作者给其他小伙伴的回复和我阅读 sample 代码的理解如下：kubelet 的 VolumeManagerReconciler 分两步 mount 的原因是假如直接一步 format 的过程非常久，可能会导致 reconciler 阻塞，而分开两步可以解决这个问题，另外在第一步 staging 后挂载到临时目录（由 req 获取）的目的是方便 reconciler 判断 volum（通过传给第一步 req 的临时目录） 是否 format 完毕，可以进入第二步挂载到 pod 中。如果理解错了还希望作者指出。</p>2022-10-25</li><br/>
 </ul>

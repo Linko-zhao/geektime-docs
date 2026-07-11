@@ -93,7 +93,7 @@ LangChain中的具体组件包括：
 
 ### **应用1：情人节玫瑰宣传语**
 
-*情人节到啦，你的花店需要推销红色玫瑰，那么咱们让大语言模型做的第一个应用，就是给咱们生成简短的宣传语。*
+_情人节到啦，你的花店需要推销红色玫瑰，那么咱们让大语言模型做的第一个应用，就是给咱们生成简短的宣传语。_
 
 这个需求极为简单，你直接去ChatGPT网站，或者用文心一言、星火认知等大模型，都做得到。不过，怎样通过LangChain来用程序的方式实现呢？也很容易。
 
@@ -122,7 +122,7 @@ print(text)
 
 ### **应用2：海报文案生成器**
 
-*你已经制作好了一批鲜花的推广海报，想为每一个海报的内容，写一两句话，然后post到社交平台上，以期图文并茂。*
+_你已经制作好了一批鲜花的推广海报，想为每一个海报的内容，写一两句话，然后post到社交平台上，以期图文并茂。_
 
 这个需求，特别适合让AI帮你批量完成，不过，ChatGPT网页可不能读图。下面，我们就用LangChain的“代理”调用“工具”来完成自己做不到的事情。
 
@@ -179,7 +179,7 @@ class ImageCapTool(BaseTool):
         # 获取字幕
         caption = processor.decode(out[0], skip_special_tokens=True)
         return caption
-    
+   
     def _arun(self, query: str):
         raise NotImplementedError("This tool does not support async")
 

@@ -174,7 +174,7 @@ Radix Tree的基本操作函数都是在[rax.c](https://github.com/redis/redis/t
 该函数的原型如下，它会调用rax\_malloc函数分配一个新的rax结构体空间。
 
 ```
-rax *raxNew(void) 
+rax *raxNew(void)
 ```
 
 rax结构体的定义如下所示，其中包含了Radix Tree中的key个数、节点个数，以及指向头节点的指针，而raxNew函数会调用raxNewNode函数来创建头节点。
@@ -192,7 +192,7 @@ typedef struct rax {
 该函数的原型如下，用来创建一个新的非压缩节点。它的参数children表示该非压缩节点的子节点个数，参数datafield表示是否要为value指针分配空间。
 
 ```
-raxNode *raxNewNode(size_t children, int datafield) 
+raxNode *raxNewNode(size_t children, int datafield)
 ```
 
 这里，你需要注意的是，压缩节点的创建并不是通过raxNewNode函数来完成的，而是通过raxCompressNode函数来实现的。
@@ -202,7 +202,7 @@ raxNode *raxNewNode(size_t children, int datafield)
 该函数原型如下，用来向Radix Tree中插入一个长度为len的字符串s。
 
 ```
-int raxGenericInsert(rax *rax, unsigned char *s, size_t len, void *data, void **old, int overwrite) 
+int raxGenericInsert(rax *rax, unsigned char *s, size_t len, void *data, void **old, int overwrite)
 ```
 
 - **raxLowWalk函数**
@@ -218,7 +218,7 @@ static inline size_t raxLowWalk(rax *rax, unsigned char *s, size_t len, raxNode 
 这两个函数的原型如下所示，它们分别用来获得raxNode中保存的value指针，以及设置raxNode中保存的value指针。
 
 ```
-void *raxGetData(raxNode *n) 
+void *raxGetData(raxNode *n)
 void raxSetData(raxNode *n, void *data)
 ```
 
@@ -294,30 +294,30 @@ Stream 在存消息时，推荐使用默认自动生成的「时间戳+序号」
 【我分为以下几个问题自问自答带出我的想法和思考的角度】
 
 问题一：B+树和跳跃表有什么关联？
-	答： 
-		1、B+树和跳跃表这两种数据结构在本身设计上是有亲缘关系的，其实如果把B+树拉直来看不难发现其结构和跳跃表很相似，甚至B+树的父亲结点其实类似跳跃表的level层级。
-		2、在当前计算机硬件存储设计上，B+树能比跳表存储更大量级的数据，因为跳表需要通过增加层高来提高索引效率，而B+树只需要增加树的深度。此外B+树同一叶子的连续性更加符合当代计算机的存储结构。然而跳表的层高具有随机性，当层高较大的时候磁盘插入会带来一定的开销，且不利于分块。
+答：
+1、B+树和跳跃表这两种数据结构在本身设计上是有亲缘关系的，其实如果把B+树拉直来看不难发现其结构和跳跃表很相似，甚至B+树的父亲结点其实类似跳跃表的level层级。
+2、在当前计算机硬件存储设计上，B+树能比跳表存储更大量级的数据，因为跳表需要通过增加层高来提高索引效率，而B+树只需要增加树的深度。此外B+树同一叶子的连续性更加符合当代计算机的存储结构。然而跳表的层高具有随机性，当层高较大的时候磁盘插入会带来一定的开销，且不利于分块。
 
 问题二：那么为什么Redis不使用B+树呢而选择跳表呢？
-	答：因为数据有序性的实现B+树不如跳表，跳表的时间性能是优于B+树的（B+树不是二叉树，二分的效率是比较高的）。此外跳表最低层就是一条链表，对于需要实现范围查询的功能是比较有利的，而且Redis是基于内存设计的，无需考虑海量数据的场景。
+答：因为数据有序性的实现B+树不如跳表，跳表的时间性能是优于B+树的（B+树不是二叉树，二分的效率是比较高的）。此外跳表最低层就是一条链表，对于需要实现范围查询的功能是比较有利的，而且Redis是基于内存设计的，无需考虑海量数据的场景。
 
 问题三：Radix Tree优势在哪？
-	答：
-		1、当存储大量key字符串很长的时候跳表不如前缀树，甚至不利于实现这种场景，因为跳表层高有最大限制，此外跳表不能很好的标识key的字符串顺序，不像前缀树可以从根目录下路就是字符顺序。
-		2、在内存环境下，前缀树是二叉树，而B+树不是，这样一来当对于key的索引效果来说，前缀树会比B+树索引效果更好（类比：新华字典目录越丰富，通过目录快速定位到目标字的概率更高）。
+答：
+1、当存储大量key字符串很长的时候跳表不如前缀树，甚至不利于实现这种场景，因为跳表层高有最大限制，此外跳表不能很好的标识key的字符串顺序，不像前缀树可以从根目录下路就是字符顺序。
+2、在内存环境下，前缀树是二叉树，而B+树不是，这样一来当对于key的索引效果来说，前缀树会比B+树索引效果更好（类比：新华字典目录越丰富，通过目录快速定位到目标字的概率更高）。
 
 问题四：Radix Tree劣势在哪？
-	答：
-		1、Radix Tree能保证在索引key的前缀顺序，但是在保证数据顺序且连续性上不如跳表。
-		2、查询性能上存在欠缺，虽然是二叉树但是当访问一个key的时候每次都需要依次访问前缀字符，不如hash表对整个key的直接索引。
-		3、不适合存储像UUID等，非对称结构的key（而且使用时候建议让Redis自动生成）。</p>2021-08-11</li><br/><li><span>可怜大灰狼</span> 👍（3） 💬（4）<p>最后一个图有点懵。listpack那里不应该画listpack内存结构么？然后listpack的master entry放key，后面的entry放value。我怎么感觉又是一个raxNode。</p>2021-08-10</li><br/><li><span>惘 闻</span> 👍（2） 💬（0）<p>一方面，Radix Tree 非叶子节点，要不然是压缩节点，只指向单个子节点，要不然是非压缩节点，指向多个子节点，但每个子节点只表示一个字符。所以，非叶子节点无法同时指向表示单个字符的子节点和表示合并字符串的子节点。
+答：
+1、Radix Tree能保证在索引key的前缀顺序，但是在保证数据顺序且连续性上不如跳表。
+2、查询性能上存在欠缺，虽然是二叉树但是当访问一个key的时候每次都需要依次访问前缀字符，不如hash表对整个key的直接索引。
+3、不适合存储像UUID等，非对称结构的key（而且使用时候建议让Redis自动生成）。</p>2021-08-11</li><br/><li><span>可怜大灰狼</span> 👍（3） 💬（4）<p>最后一个图有点懵。listpack那里不应该画listpack内存结构么？然后listpack的master entry放key，后面的entry放value。我怎么感觉又是一个raxNode。</p>2021-08-10</li><br/><li><span>惘 闻</span> 👍（2） 💬（0）<p>一方面，Radix Tree 非叶子节点，要不然是压缩节点，只指向单个子节点，要不然是非压缩节点，指向多个子节点，但每个子节点只表示一个字符。所以，非叶子节点无法同时指向表示单个字符的子节点和表示合并字符串的子节点。
 这句话如何得到的结论，看了几遍没看明白因果关系。</p>2022-01-07</li><br/><li><span>Miroticwillbeforever</span> 👍（1） 💬（1）<p>这一篇文章讲的很透彻！！！
 第一次看就被惊艳到了。。好东西！</p>2021-08-13</li><br/><li><span>飞鱼</span> 👍（0） 💬（0）<p>
-“它们本身就已经包含了子节点代表的字符或合并字符串。而对于它们的子节点来说，也都属于非压缩或压缩节点，所以，子节点本身又会保存，子节点的子节点所代表的字符或合并字符串。 ” 这句有点绕，我想知道的是，压缩节点d ,那幅图片里面，本身的d字符串是存储在那里？是在HDR 中所谓的合并字符串里面吗 ？相当于d不单独存储，而是在合并字符串里面 ？</p>2024-09-02</li><br/><li><span>anqi</span> 👍（0） 💬（0）<p>stream value中存的是 dict, 类似于field1:value1  field2:value2
-因为field基本都一样,所以可以开启压缩:  分别存储field和value
+“它们本身就已经包含了子节点代表的字符或合并字符串。而对于它们的子节点来说，也都属于非压缩或压缩节点，所以，子节点本身又会保存，子节点的子节点所代表的字符或合并字符串。 ” 这句有点绕，我想知道的是，压缩节点d ,那幅图片里面，本身的d字符串是存储在那里？是在HDR 中所谓的合并字符串里面吗 ？相当于d不单独存储，而是在合并字符串里面 ？</p>2024-09-02</li><br/><li><span>anqi</span> 👍（0） 💬（0）<p>stream value中存的是 dict, 类似于field1:value1 field2:value2
+因为field基本都一样,所以可以开启压缩: 分别存储field和value
 
-存field:   id1:field1  id2: field2 id3:field3
-存value:    id2:value2, 利用id去简化field的存储. (一个int类型肯定比字符串的field要小很多,这个int值不大,还在listpack中压缩存储,占用空间很小)
+存field: id1:field1 id2: field2 id3:field3
+存value: id2:value2, 利用id去简化field的存储. (一个int类型肯定比字符串的field要小很多,这个int值不大,还在listpack中压缩存储,占用空间很小)
 甚至如果开启 认为所有消息的field一样, 那么存value的时候,还可以省略id, 按照类似于数组的方式存value.其index即为field的id.
 https:&#47;&#47;github.com&#47;zpoint&#47;Redis-Internals&#47;blob&#47;5.0&#47;Object&#47;streams&#47;streams.md</p>2022-11-17</li><br/><li><span>🤐</span> 👍（0） 💬（0）<p>可以维持插入有序 因为我最近在搞内存数据库 再用两个指针维护所有的key 这样就是插入有序了</p>2022-07-24</li><br/><li><span>🤐</span> 👍（0） 💬（1）<p>看到最后发现不能排序 有点失望 </p>2022-07-24</li><br/><li><span>无风</span> 👍（0） 💬（4）<p>为什么每个raxNode要存子节点的字符呢？为什么不能自己存自己？</p>2021-08-17</li><br/><li><span>Ethan New</span> 👍（0） 💬（3）<p>这个课的内容之前不太了解，得多看几遍才能理解，我太菜了。。。</p>2021-08-10</li><br/>
 </ul>

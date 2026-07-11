@@ -74,7 +74,7 @@ CSR的原理就是，把Vue.js的模板语法代码或JSX语法代码，编译�
 
 ```typescript
 // vue-ssr-app.ts
-import { createElementVNode, ref, toDisplayString } from 'vue';
+import { createElementVNode, ref, toDisplayString } from "vue";
 const Counter = {
   setup() {
     const num = ref(0);
@@ -82,34 +82,33 @@ const Counter = {
       num.value += 1;
     };
     return () => {
-      return createElementVNode('div', { class: 'v-counter' }, [
+      return createElementVNode("div", { class: "v-counter" }, [
         createElementVNode(
-          'div',
-          { class: 'v-text' },
-          toDisplayString(num.value)
+          "div",
+          { class: "v-text" },
+          toDisplayString(num.value),
         ),
         createElementVNode(
-          'button',
-          { class: 'v-btn', onClick: click },
-          '点击加1'
-        )
+          "button",
+          { class: "v-btn", onClick: click },
+          "点击加1",
+        ),
       ]);
     };
-  }
+  },
 };
 
 export default Counter;
-
 ```
 
 把Vue.js可执行的JavaScript代码，在Node.js转化成HTML：
 
 ```typescript
-//  ./vue-ssr.ts 
-import { createSSRApp } from 'vue';
-import { renderToString } from 'vue/server-renderer';
+//  ./vue-ssr.ts
+import { createSSRApp } from "vue";
+import { renderToString } from "vue/server-renderer";
 
-import App from './vue-ssr-app';
+import App from "./vue-ssr-app";
 
 async function getAppSSRHTML() {
   // 将编译后或非编译模式的Vue.js组件或者页面进行SSR App转换
@@ -125,7 +124,6 @@ async function main() {
 }
 
 main();
-
 ```
 
 在这个例子中，我们使用的Vue.js代码，是可以在浏览器执行的JavaScript代码，之后通过Vue.js官方的两个API来处理转化HTML：
@@ -145,10 +143,10 @@ main();
 
 ```typescript
 // vue-ssr-server.ts
-import Koa from 'koa';
-import { createSSRApp } from 'vue';
-import { renderToString } from 'vue/server-renderer';
-import App from './vue-ssr-app';
+import Koa from "koa";
+import { createSSRApp } from "vue";
+import { renderToString } from "vue/server-renderer";
+import App from "./vue-ssr-app";
 
 // 初始化 Koa.js 应用
 const servre = new Koa();
@@ -162,9 +160,8 @@ servre.use(async (ctx) => {
 });
 
 servre.listen(6001, () => {
-  console.log('SSR 服务已经启动，浏览器打开 http://127.0.0.1:6001/');
+  console.log("SSR 服务已经启动，浏览器打开 http://127.0.0.1:6001/");
 });
-
 ```
 
 上述代码中，我用Koa.js搭建了一个简单的Web服务，并写了一个中间件来渲染Vue.js组件的HTML内容。
@@ -172,20 +169,19 @@ servre.listen(6001, () => {
 要特别注意的是，**在实现SSR的过程中，需要做好浏览器和Node.js各自独有的JavaScript API的判断隔离**。如果Vue.js组件或者应用代码里有浏览器的JavaScript API，在Node.js环境运行是会报错的，例如这个Vue.js的JavaScript代码：
 
 ```typescript
-import { createElementVNode, ref, toDisplayString } from 'vue';
+import { createElementVNode, ref, toDisplayString } from "vue";
 
 const Counter = {
   setup() {
-  
     // 这是浏览器创建DOM的 JavaScript API
     // Node.js环境不存在
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     console.log(div);
 
     return () => {
-      return createElementVNode('div', { class: 'v-counter' }, '测试');
+      return createElementVNode("div", { class: "v-counter" }, "测试");
     };
-  }
+  },
 };
 
 export default Counter;
@@ -290,6 +286,7 @@ SSR适合SEO场景，例如运营推广类的活动页面宣传。但是要考�
 欢迎积极留言参与讨论，我们下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/18)
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>初烬</span> 👍（1） 💬（1）<p>类似于智慧城市这种有地图和数据模型渲染的场景可以采用SSR吗？</p>2023-01-28</li><br/><li><span>静心</span> 👍（0） 💬（1）<p>SSR感觉也不一定一定能减少白屏时间。比如，如果SSR时服务端渲染较慢，页面也同样不能快速显示出来。另外，页面渲染的性能应该主要取取决于FP、FCP。</p>2023-01-04</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-19</li><br/>
 </ul>

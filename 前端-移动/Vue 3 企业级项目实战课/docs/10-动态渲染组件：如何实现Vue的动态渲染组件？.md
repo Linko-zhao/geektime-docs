@@ -42,10 +42,10 @@
 而动态渲染组件整个生命周期，最核心的就是“动态挂载”和“动态卸载”两个步骤，所以API的设计，可以直接围绕着“挂载”和“卸载”两个来设计，最简单的可以设计成如下代码：
 
 ```typescript
-import { Module } from 'xxxx'
+import { Module } from "xxxx";
 
 // 动态组件挂载
-Module.open({  /* 组件参数 */ });
+Module.open({/* 组件参数 */});
 
 // 动态组件卸载
 Module.close();
@@ -54,19 +54,17 @@ Module.close();
 如果考虑到组件不是单例的，而是多实例共存的，可以这么设计API：
 
 ```typescript
-import { Module } from 'xxxx'
+import { Module } from "xxxx";
 
 // 创建动态组件 mod1
-const mod1 = Module.create({  /* 组件参数 */ });
+const mod1 = Module.create({/* 组件参数 */});
 // 挂载渲染 mod1
 mod1.open();
 // 卸载动态组件 mod1
 mod1.close();
 
-
-
 // 创建动态组件 mod2
-const mod2 = Module.create({  /* 组件参数 */ });
+const mod2 = Module.create({/* 组件参数 */});
 // 挂载渲染 mod2
 mod2.open();
 // 卸载动态组件 mod2
@@ -76,14 +74,14 @@ mod2.close();
 如果动态组件在其生命周期还需要添加一些节点，可以这么来设计：
 
 ```typescript
-import { Module } from 'xxxx'
+import { Module } from "xxxx";
 
 // 创建动态组件 mod1
-const mod1 = Module.create({  /* 组件参数 */ });
+const mod1 = Module.create({/* 组件参数 */});
 // 挂载渲染 mod1
 mod1.open();
 // 更新组 mod1 件内容
-mod1.update({ /* 更新内容参数 */ })
+mod1.update({/* 更新内容参数 */});
 // 卸载动态组件 mod1
 mod1.close();
 ```
@@ -144,7 +142,7 @@ export const createModule = () => {
 上面封装的一个最简单的动态渲染组件，可以这么使用：
 
 ```typescript
-import { createModule } from './xxxx';
+import { createModule } from "./xxxx";
 
 // 创建和渲染组件
 const mod = createModule();
@@ -185,14 +183,13 @@ mod.close();
 
 ```typescript
 // ./types.ts
-export type MessageType = 'info' | 'success' | 'warn' | 'error';
+export type MessageType = "info" | "success" | "warn" | "error";
 
 export interface MessageParams {
   text: string;
   type?: MessageType;
   duration?: number;
 }
-
 ```
 
 进入第一步，也就是用Vue.js 3.x模板语法先实现Message的模板组件，实现代码如下所示：
@@ -281,9 +278,9 @@ export default Message;
 到了第三步，就是基于已有open函数来返回close函数，代码如下所示：
 
 ```typescript
-import { createApp, h } from 'vue';
-import MessageComponent from './message.vue';
-import type { MessageParams } from './types';
+import { createApp, h } from "vue";
+import MessageComponent from "./message.vue";
+import type { MessageParams } from "./types";
 
 const Message = {
   open(params: MessageParams) {
@@ -291,7 +288,7 @@ const Message = {
 
     // 封装内部关闭函数
     const internalClose = () => {
-      msg.component?.exposed?.['closeMessage']?.();
+      msg.component?.exposed?.["closeMessage"]?.();
       app.unmount();
       dom.remove();
     };
@@ -302,7 +299,7 @@ const Message = {
         internalClose();
       }, duration);
     }
-    
+
     // 最后返回可控制Message关闭的close函数
     return {
       close: () => {
@@ -311,9 +308,9 @@ const Message = {
           timer = null;
         }
         internalClose();
-      }
+      },
     };
-  }
+  },
 };
 
 export default Message;
@@ -322,14 +319,14 @@ export default Message;
 最后，第四步封装定时器到open函数中来控制挂载渲染这个模板语法的Message组件，最终实现代码所示：
 
 ```typescript
-import { createApp, h } from 'vue';
-import MessageComponent from './message.vue';
-import type { MessageParams } from './types';
+import { createApp, h } from "vue";
+import MessageComponent from "./message.vue";
+import type { MessageParams } from "./types";
 
 const Message = {
   open(params: MessageParams) {
-    const dom = document.createElement('div');
-    const body = document.querySelector('body') as HTMLBodyElement;
+    const dom = document.createElement("div");
+    const body = document.querySelector("body") as HTMLBodyElement;
     let duration: number | undefined = params.duration;
     if (duration === undefined) {
       duration = 3000;
@@ -337,17 +334,17 @@ const Message = {
     body.appendChild(dom);
     const msg = h(MessageComponent, {
       text: params.text,
-      type: params.type
+      type: params.type,
     });
     const app = createApp({
       render() {
         return msg;
-      }
+      },
     });
     app.mount(dom);
 
     const internalClose = () => {
-      msg.component?.exposed?.['closeMessage']?.();
+      msg.component?.exposed?.["closeMessage"]?.();
       app.unmount();
       dom.remove();
     };
@@ -366,36 +363,32 @@ const Message = {
           timer = null;
         }
         internalClose();
-      }
+      },
     };
-  }
+  },
 };
 
 export default Message;
-
 ```
 
 最终可以这么来使用：
 
 ```typescript
-import Message from './message';
+import Message from "./message";
 
 // 自动关闭
 Message.open({
-  text: '这是一个success类型的消息提醒组件，5秒后自动关闭',
-  type: 'success',
-  duration: 5000
-})
-
-
+  text: "这是一个success类型的消息提醒组件，5秒后自动关闭",
+  type: "success",
+  duration: 5000,
+});
 
 const msg = Message.open({
-  text: '这是一个success类型的消息提醒组件，不会自动关闭',
-  type: 'success',
-  duration: 0
-})
+  text: "这是一个success类型的消息提醒组件，不会自动关闭",
+  type: "success",
+  duration: 0,
+});
 // 如果要关闭，就执行 msg.close() 来关闭这个组件
-
 ```
 
 至此，我们就已经学会了用动态渲染组件开发思路，来实现一个消息提示的功能组件Message。
@@ -533,20 +526,20 @@ export const DialogComponent = defineComponent({
 以下是封装了函数方法调用的动态渲染组件的方式：
 
 ```typescript
-import { createApp, h } from 'vue';
-import { DialogComponent } from './dialog';
+import { createApp, h } from "vue";
+import { DialogComponent } from "./dialog";
 
 function createDialog(params: { text: string; onOk: () => void }) {
-  const dom = document.createElement('div');
-  const body = document.querySelector('body') as HTMLBodyElement;
+  const dom = document.createElement("div");
+  const body = document.querySelector("body") as HTMLBodyElement;
   body.appendChild(dom);
   const app = createApp({
     render() {
       return h(DialogComponent, {
         text: params.text,
-        onOnOk: params.onOk
+        onOnOk: params.onOk,
       });
-    }
+    },
   });
   app.mount(dom);
 
@@ -554,12 +547,12 @@ function createDialog(params: { text: string; onOk: () => void }) {
     close: () => {
       app.unmount();
       dom.remove();
-    }
+    },
   };
 }
 
 const Dialog: { createDialog: typeof createDialog } = {
-  createDialog
+  createDialog,
 };
 
 export default Dialog;
@@ -587,6 +580,7 @@ Vue.js 3.x 动态渲染组件是通过创建一个新的Vue.js应用来渲染组
 欢迎在留言区分享你的想法，参与讨论，如果对今天的内容有疑问，也欢迎留言，下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/10)
+
 <div><strong>精选留言（10）</strong></div><ul>
 <li><span>文艺理科生</span> 👍（1） 💬（1）<p>如果写一个成熟的弹窗组件是不太容易的，可以参考popper js，简单的一个组件，做了很多事情</p>2022-12-27</li><br/><li><span>初烬</span> 👍（1） 💬（1）<p>老师，你好问一下，这边为什么在挂载dom的时候选择createApp。而不是是用telport</p>2022-12-19</li><br/><li><span>刘大夫</span> 👍（0） 💬（1）<p>前辈您好，想问一下，在 vue3 中，想实现 vue2 里动态组件 component 和 v-bind=&quot;$listeners&quot;  的功能该怎么做呢，我看文档，component 被划到了选项式 api 的范畴，那用组合式 api 的方式，该怎么去实现呀</p>2023-02-20</li><br/><li><span>Anne</span> 👍（0） 💬（1）<p>有个问题请老师解惑，多个应用实例之间数据能否共享，如何共享？比如主应用引入ant design vue组件库，副应用如何共享使用？
 </p>2023-01-18</li><br/><li><span>沧海一粟</span> 👍（0） 💬（1）<p>在创建应用实例的时候为啥不直接使用要作为根组件的而是要多包一层组件</p>2023-01-08</li><br/><li><span>珍爱学习账号</span> 👍（0） 💬（1）<p>整个过程，我们可以用最简单的 Vue.js 3.x 代码实现：

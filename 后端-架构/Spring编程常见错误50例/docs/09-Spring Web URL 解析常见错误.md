@@ -15,8 +15,8 @@ public class HelloWorldController {
     @RequestMapping(path = "/hi1/{name}", method = RequestMethod.GET)
     public String hello1(@PathVariable("name") String name){
         return name;
-        
-    };  
+
+    };
 }
 ```
 
@@ -163,8 +163,8 @@ private AntPathMatcher antPathMatcher = new AntPathMatcher();
 public String hi1(HttpServletRequest request){
     String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     //matchPattern 即为"/hi1/**"
-    String matchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE); 
-    return antPathMatcher.extractPathWithinPattern(matchPattern, path); 
+    String matchPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+    return antPathMatcher.extractPathWithinPattern(matchPattern, path);
 };
 ```
 
@@ -606,30 +606,30 @@ public String hi2(@RequestParam("name") String name){
 源码如下：
 
 public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-		if (source == null) {
-			return null;
-		}
-		Collection&lt;?&gt; sourceCollection = (Collection&lt;?&gt;) source;
-		if (sourceCollection.isEmpty()) {
-			return &quot;&quot;;
-		}
-		StringBuilder sb = new StringBuilder();
-		int i = 0;
-		for (Object sourceElement : sourceCollection) {
-			if (i &gt; 0) {
-				sb.append(DELIMITER);
-			}
-			Object targetElement = this.conversionService.convert(
-					sourceElement, sourceType.elementTypeDescriptor(sourceElement), targetType);
-			sb.append(targetElement);
-			i++;
-		}
-		return sb.toString();
-	}</p>2021-07-03</li><br/><li><span>Geek_21673e</span> 👍（4） 💬（0）<p>@DateTimeFormat 只会在GET请求中生效,对于请求体中的转换无能为力,这个时候需要@JsonFormat</p>2022-07-04</li><br/><li><span>萧</span> 👍（3） 💬（1）<p>虽然熟悉，但看下来收获很大</p>2021-05-12</li><br/><li><span>蝴蝶</span> 👍（1） 💬（0）<p>我 debug 了下代码.发现这个是tomcat 处理得到的String[],然后 Spring 再处理成&quot;,&quot;分割的 String,见org.apache.catalina.connector.Request#getParameterValues方法</p>2022-02-10</li><br/><li><span>子夜枯灯</span> 👍（1） 💬（0）<p>运行程序后，结果是xiaoming,hanmeimei
+if (source == null) {
+return null;
+}
+Collection&lt;?&gt; sourceCollection = (Collection&lt;?&gt;) source;
+if (sourceCollection.isEmpty()) {
+return &quot;&quot;;
+}
+StringBuilder sb = new StringBuilder();
+int i = 0;
+for (Object sourceElement : sourceCollection) {
+if (i &gt; 0) {
+sb.append(DELIMITER);
+}
+Object targetElement = this.conversionService.convert(
+sourceElement, sourceType.elementTypeDescriptor(sourceElement), targetType);
+sb.append(targetElement);
+i++;
+}
+return sb.toString();
+}</p>2021-07-03</li><br/><li><span>Geek_21673e</span> 👍（4） 💬（0）<p>@DateTimeFormat 只会在GET请求中生效,对于请求体中的转换无能为力,这个时候需要@JsonFormat</p>2022-07-04</li><br/><li><span>萧</span> 👍（3） 💬（1）<p>虽然熟悉，但看下来收获很大</p>2021-05-12</li><br/><li><span>蝴蝶</span> 👍（1） 💬（0）<p>我 debug 了下代码.发现这个是tomcat 处理得到的String[],然后 Spring 再处理成&quot;,&quot;分割的 String,见org.apache.catalina.connector.Request#getParameterValues方法</p>2022-02-10</li><br/><li><span>子夜枯灯</span> 👍（1） 💬（0）<p>运行程序后，结果是xiaoming,hanmeimei
 两个同名请求参数name被放到Stiring[]中，Spring转换器转换String[]-&gt;String时，用“，”分隔符拼接后返回。</p>2022-01-27</li><br/><li><span>Monday</span> 👍（1） 💬（0）<p>
 @RequestMapping(path = &quot;&#47;hi6&quot;, method = RequestMethod.GET)
 public String hi6(@RequestParam(&quot;Date&quot;) Date date){
-    return &quot;date is &quot; + date ;
+return &quot;date is &quot; + date ;
 };
 
 http:&#47;&#47;localhost:8080&#47;hi6?date=2021-5-1 20:26:53
@@ -644,7 +644,7 @@ RequestParamMapMethodArgumentResolver#resolveArgument  134行，相同参数只�
 
 回到 AbstractNamedValueMethodArgumentResolver#resolveArgument，在 125 行寻找类型转换器，最后走到了 CollectionToStringConverter#convert 将 String[] 数组 join 了。</p>2024-05-06</li><br/><li><span>Geek_d5ed3d</span> 👍（0） 💬（0）<p>课程中的SpringBoot是哪个版本呢，用新的sprigboot，源码不一样</p>2022-11-15</li><br/><li><span>🇳 江⃮⃯⃗</span> 👍（0） 💬（0）<p>xiaoming,hanmeimei:
 StringJoiner sj = new StringJoiner(&quot;,&quot;);
-                Iterator var6 = sourceCollection.iterator();
+Iterator var6 = sourceCollection.iterator();
 
                 while(var6.hasNext()) {
                     Object sourceElement = var6.next();
@@ -653,4 +653,5 @@ StringJoiner sj = new StringJoiner(&quot;,&quot;);
                 }
 
                 return sj.toString();</p>2022-05-30</li><br/><li><span>程序员人生</span> 👍（0） 💬（0）<p>看到request.getParameterValues(name)，我仿佛回到了十几年前，刚毕业那会</p>2021-05-18</li><br/><li><span>Yuuuuu</span> 👍（0） 💬（1）<p>对于RequestParam和RequestBody的使用也有一些疑惑，哪些参数可以被RequestParam获取，哪些可以被RequestBody获取?</p>2021-05-12</li><br/>
+
 </ul>

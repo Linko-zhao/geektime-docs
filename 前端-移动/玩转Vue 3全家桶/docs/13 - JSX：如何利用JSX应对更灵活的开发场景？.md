@@ -32,23 +32,24 @@
 在下面的代码中, 我们使用defineComponent定义一个组件，组件内部配置了props和setup。这里的setup函数返回值是一个函数，就是我们所说的render函数。render函数返回h函数的执行结果，h函数的第一个参数就是标签名，我们可以很方便地使用字符串拼接的方式，实现和上面代码一样的需求。像这种连标签名都需要动态处理的场景，就需要通过手写h函数来实现**。**
 
 ```javascript
-import { defineComponent, h } from 'vue'
+import { defineComponent, h } from "vue";
 
 export default defineComponent({
   props: {
     level: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props, { slots }) {
-    return () => h(
-      'h' + props.level, // 标签名
-      {}, // prop 或 attribute
-      slots.default() // 子节点
-    )
-  }
-})
+    return () =>
+      h(
+        "h" + props.level, // 标签名
+        {}, // prop 或 attribute
+        slots.default(), // 子节点
+      );
+  },
+});
 ```
 
 然后，在文件src/About.vue中，我们使用下面代码中的import语法来引入Heading，之后使用level传递标签的级别。这样，之后在浏览器里访问 [http://localhost:9094/#/about](http://localhost:9094/#/about) 时，就可以直接看到Heading组件渲染到浏览器之后的结果。
@@ -74,13 +75,13 @@ import Heading from './components/Head.jsx'
 我们先来了解一下JSX是什么，JSX来源自React框架，下面这段代码就是JSX的语法，我们给变量title赋值了一个h1标签。
 
 ```javascript
-const element = <h1 id="app">Hello, Geekbang!</h1>
+const element = <h1 id="app">Hello, Geekbang!</h1>;
 ```
 
 **这种在JavaScript里面写HTML的语法，就叫做JSX**，算是对JavaScript语法的一个扩展。上面的代码直接在JavaScript环境中运行时，会报错。JSX的本质就是下面代码的语法糖，h函数内部也是调用createVnode来返回虚拟DOM。在之后的课程中，对于那些创建虚拟DOM的函数，我们统一称为h函数。
 
 ```javascript
-const element = createVnode('h1',{id:"app"}, 'hello Geekbakg')
+const element = createVnode("h1", { id: "app" }, "hello Geekbakg");
 ```
 
 在从JSX到createVNode函数的转化过程中，我们需要安装一个JSX插件。在项目的根目录下，打开命令行，执行下面的代码来安装插件：
@@ -92,12 +93,12 @@ npm install @vitejs/plugin-vue-jsx -D
 插件安装完成后，我们进入根目录下，打开vite.config.js文件去修改vite配置。在vite.config.js文件中，我们加入下面的代码。这样，在加载JSX插件后 ，现在的页面中就可以支持JSX插件了。
 
 ```javascript
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx';
+import vue from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
 
 export default defineConfig({
-  plugins: [vue(),vueJsx()]
-})
+  plugins: [vue(), vueJsx()],
+});
 ```
 
 然后，我们进入src/componentns/Heading.jsx中，把setup函数的返回函数改成下面代码中所示的内容，这里我们使用变量tag计算出标签类型，直接使用渲染，使用一个大括号把默认插槽包起来就可以了。
@@ -114,31 +115,38 @@ export default defineConfig({
 我们进入到src/components下面新建文件Todo.jsx，在下面的代码中，我们使用JSX实现了一个简单版本的清单应用。我们首先使用defineComponent的方式来定义组件，在setup返回的JSX中，使用vModel取代v-model，并且使用单个大括号包裹的形式传入变量title.value ，然后使用onClick取代@click。循环渲染清单的时候，使用.map映射取代v-for，使用三元表达式取代v-if。
 
 ```javascript
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   setup(props) {
-    let title = ref('')
-    let todos = ref([{ title: "学习 Vue 3", done: true },{ title: "睡觉", done: false }]);
-    function addTodo(){
-        todos.value.push({
-            title:title.value
-        })
-        title.value = ''
+    let title = ref("");
+    let todos = ref([
+      { title: "学习 Vue 3", done: true },
+      { title: "睡觉", done: false },
+    ]);
+    function addTodo() {
+      todos.value.push({
+        title: title.value,
+      });
+      title.value = "";
     }
-    return () => <div>
+    return () => (
+      <div>
         <input type="text" vModel={title.value} />
         <button onClick={addTodo}>click</button>
         <ul>
-            {
-                todos.value.length ? todos.value.map(todo=>{
-                    return <li>{todo.title}</li>
-                }): <li>no data</li>
-            }
+          {todos.value.length ? (
+            todos.value.map((todo) => {
+              return <li>{todo.title}</li>;
+            })
+          ) : (
+            <li>no data</li>
+          )}
         </ul>
-    </div>
-  }
-})
+      </div>
+    );
+  },
+});
 ```
 
 通过这个例子，你应该能够认识到，**使用JSX的本质，还是在写JavaScript**。在Element3组件库设计中，我们也有很多组件需要用到JSX，比如时间轴Timeline、分页Pagination、表格Table等等。
@@ -146,16 +154,16 @@ export default defineComponent({
 就像在TimeLine组件的[源码](https://github.com/hug-sun/element3/blob/master/packages/element3/packages/timeline/Timeline.vue#L35)中，有一个reverse的属性来决定是否倒序渲染，我们在下面写出了类似的代码。代码中的Timeline是一个数组，数组中的两个元素都是JSX，我们可以通过数组的reverse方法直接进行数组反转，实现逆序渲染。类似这种动态性要求很高的场景，template是较难实现的。
 
 ```javascript
-export const Timeline = (props)=>{
-    const timeline = [
-        <div class="start">8.21 开始自由职业</div>,
-        <div class="online">10.18 专栏上线</div>
-    ]
-    if(props.reverse){
-        timeline.reverse()
-    }
-    return <div>{timeline}</div>
-}
+export const Timeline = (props) => {
+  const timeline = [
+    <div class="start">8.21 开始自由职业</div>,
+    <div class="online">10.18 专栏上线</div>,
+  ];
+  if (props.reverse) {
+    timeline.reverse();
+  }
+  return <div>{timeline}</div>;
+};
 ```
 
 ## JSX和Template
@@ -195,24 +203,48 @@ export const Timeline = (props)=>{
 比如在p标签上，使用8这个数字标记当前标签时，只有props是动态的。而在虚拟DOM计算Diff的过程中，可以忽略掉class和文本的计算，这也是Vue 3的虚拟DOM能够比Vue 2快的一个重要原因。
 
 ```javascript
-import { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue"
+import {
+  toDisplayString as _toDisplayString,
+  createElementVNode as _createElementVNode,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from "vue";
 
-const _hoisted_1 = { id: "app" }
-const _hoisted_2 = /*#__PURE__*/_createElementVNode("h1", null, "技术摸鱼", -1 /* HOISTED */)
-const _hoisted_3 = ["id"]
+const _hoisted_1 = { id: "app" };
+const _hoisted_2 = /*#__PURE__*/ _createElementVNode(
+  "h1",
+  null,
+  "技术摸鱼",
+  -1 /* HOISTED */,
+);
+const _hoisted_3 = ["id"];
 
 export function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (_openBlock(), _createElementBlock("div", _hoisted_1, [
-    _createElementVNode("div", {
-      onClick: _cache[0] || (_cache[0] = ()=>_ctx.console.log(_ctx.xx)),
-      name: "hello"
-    }, _toDisplayString(_ctx.name), 1 /* TEXT */),
-    _hoisted_2,
-    _createElementVNode("p", {
-      id: _ctx.name,
-      class: "app"
-    }, "极客时间", 8 /* PROPS */, _hoisted_3)
-  ]))
+  return (
+    _openBlock(),
+    _createElementBlock("div", _hoisted_1, [
+      _createElementVNode(
+        "div",
+        {
+          onClick: _cache[0] || (_cache[0] = () => _ctx.console.log(_ctx.xx)),
+          name: "hello",
+        },
+        _toDisplayString(_ctx.name),
+        1 /* TEXT */,
+      ),
+      _hoisted_2,
+      _createElementVNode(
+        "p",
+        {
+          id: _ctx.name,
+          class: "app",
+        },
+        "极客时间",
+        8 /* PROPS */,
+        _hoisted_3,
+      ),
+    ])
+  );
 }
 
 // Check the console for the AST
@@ -262,16 +294,17 @@ JSX的语法来源于React，在Vue 3中会直接解析成h函数执行，所以
          要说殊途同归，框架最终还是一样，用JS在浏览器上操纵DOM；这里有几个点，JS，浏览
          器，DOM；你看这几个怎么联系起来？很神奇，vue-devtools，上节课的 devtools，这
          是不是 callback 呢。</p>2021-11-15</li><br/><li><span>关关君</span> 👍（3） 💬（1）<p>今天跟着老师的代码做练习的时候控制台报错说没有 defineConfig 一看版本vite才是1.0的，如果遇到和我一样的问题的同学先卸载 &quot;npm un vite&quot; 然后重新安装新版本的vite  &quot;npm install vite@latest -D&quot;</p>2021-11-19</li><br/><li><span>gongshun</span> 👍（2） 💬（1）<p>&lt;component :is=&quot;&#39;h&#39;+ level&quot;&gt;&lt;&#47;component&gt; 这样就可以实现了，jsx是多余</p>2021-11-16</li><br/><li><span>mixiuu</span> 👍（1） 💬（1）<p>老师，我想问下，在cli创建的vue3中，使用setup+jsx的方式会报错（TypeError: Cannot read properties of undefined (reading &#39;$createElement&#39;)），我在babel.config.js中已添加： &quot;plugins&quot;: [&quot;@vue&#47;babel-plugin-jsx&quot;]，这是为什么呢</p>2021-11-16</li><br/><li><span>酱汁</span> 👍（1） 💬（3）<p>想问下老师开源组件库种中 这种组合方式  jsx怎么实现的
- &lt;tabs&gt;
-   &lt;tab-pane&gt; 内容1  &lt;&#47;tab-pane&gt;
-   &lt;tab-pane&gt; 内容2 &lt;&#47;tab-pane&gt;
-   &lt;tab-pane&gt; 内容3 &lt;&#47;tab-pane&gt;
- &lt;&#47;tabs&gt;</p>2021-11-15</li><br/><li><span>张飞蓬</span> 👍（0） 💬（2）<p>然后是 @click 函数增加了一个 cache 缓存层，这样实现出来的效果也是和静态提升类似，尽可能高效地利用缓存。最后是，由于在下面代码中的属性里，那些带冒号的属性是动态属性，因而存在使用一个数字去标记标签的动态情况。比如在 p 标签上，使用 8 这个数字标记当前标签时，只有 props 是动态的。而在虚拟 DOM 计算 Diff 的过程中，可以忽略掉 class 和文本的计算，这也是 Vue 3 的虚拟 DOM 能够比 Vue 2 快的一个重要原因。
 
-没看懂这个啥缓存层呢</p>2022-01-12</li><br/><li><span>百事可乐</span> 👍（0） 💬（3）<p>大圣老师。 我怎么从vue 文件向  jsx文件中传递参数呢？
-&lt;Todolist :valueData=&#39;123&#39;&#47;&gt; 
+&lt;tabs&gt;
+&lt;tab-pane&gt; 内容1 &lt;&#47;tab-pane&gt;
+&lt;tab-pane&gt; 内容2 &lt;&#47;tab-pane&gt;
+&lt;tab-pane&gt; 内容3 &lt;&#47;tab-pane&gt;
+&lt;&#47;tabs&gt;</p>2021-11-15</li><br/><li><span>张飞蓬</span> 👍（0） 💬（2）<p>然后是 @click 函数增加了一个 cache 缓存层，这样实现出来的效果也是和静态提升类似，尽可能高效地利用缓存。最后是，由于在下面代码中的属性里，那些带冒号的属性是动态属性，因而存在使用一个数字去标记标签的动态情况。比如在 p 标签上，使用 8 这个数字标记当前标签时，只有 props 是动态的。而在虚拟 DOM 计算 Diff 的过程中，可以忽略掉 class 和文本的计算，这也是 Vue 3 的虚拟 DOM 能够比 Vue 2 快的一个重要原因。
+
+没看懂这个啥缓存层呢</p>2022-01-12</li><br/><li><span>百事可乐</span> 👍（0） 💬（3）<p>大圣老师。 我怎么从vue 文件向 jsx文件中传递参数呢？
+&lt;Todolist :valueData=&#39;123&#39;&#47;&gt;
 setup(props) {
-        console.log(props);
-}    这个 props  是这个空对象 </p>2021-11-19</li><br/><li><span>小余GUNDAM</span> 👍（0） 💬（1）<p>老师 vue3的 jsx能享受 编译优化 例如静态节点跳过diff吗 </p>2021-11-19</li><br/><li><span>uncle 邦</span> 👍（0） 💬（1）<p>vue2 可以使用jsx么？</p>2021-11-15</li><br/><li><span>tequ1lAneio</span> 👍（0） 💬（2）<p>为什么我的input用jsx的话无论是keyup还是keydown都绑定不上事件？</p>2021-11-15</li><br/><li><span>台灯下的我</span> 👍（12） 💬（0）<p>我的理解是优先使用template，如果当用template的时候感觉很麻烦很繁琐的时候，这个时候可以考虑下jsx能不能更方便一点</p>2021-11-19</li><br/><li><span>cwang</span> 👍（4） 💬（0）<p>补充了解：https:&#47;&#47;v3.cn.vuejs.org&#47;guide&#47;render-function.html</p>2021-12-02</li><br/><li><span>海阔天空</span> 👍（2） 💬（0）<p>template 和 JSX 都有各自的优点，template 算是vue的标配吧，因为其中规中矩（标签化），所以在vue页面或是主要架构，动态性比较低的场景下使用。而JSX则更适合来做小组件和公共组件这些动态性比较高的组件。
+console.log(props);
+} 这个 props 是这个空对象 </p>2021-11-19</li><br/><li><span>小余GUNDAM</span> 👍（0） 💬（1）<p>老师 vue3的 jsx能享受 编译优化 例如静态节点跳过diff吗 </p>2021-11-19</li><br/><li><span>uncle 邦</span> 👍（0） 💬（1）<p>vue2 可以使用jsx么？</p>2021-11-15</li><br/><li><span>tequ1lAneio</span> 👍（0） 💬（2）<p>为什么我的input用jsx的话无论是keyup还是keydown都绑定不上事件？</p>2021-11-15</li><br/><li><span>台灯下的我</span> 👍（12） 💬（0）<p>我的理解是优先使用template，如果当用template的时候感觉很麻烦很繁琐的时候，这个时候可以考虑下jsx能不能更方便一点</p>2021-11-19</li><br/><li><span>cwang</span> 👍（4） 💬（0）<p>补充了解：https:&#47;&#47;v3.cn.vuejs.org&#47;guide&#47;render-function.html</p>2021-12-02</li><br/><li><span>海阔天空</span> 👍（2） 💬（0）<p>template 和 JSX 都有各自的优点，template 算是vue的标配吧，因为其中规中矩（标签化），所以在vue页面或是主要架构，动态性比较低的场景下使用。而JSX则更适合来做小组件和公共组件这些动态性比较高的组件。
 </p>2021-11-15</li><br/><li><span>猹子哥一个月要瘦十斤</span> 👍（1） 💬（1）<p>我觉得做动态表单的时候用jsx更舒服一点</p>2022-08-12</li><br/><li><span>Spike Jim.Fun</span> 👍（1） 💬（1）<p>export default defineComponent({ 这里可以不需要使用defineComponent</p>2022-05-22</li><br/>
 </ul>

@@ -425,11 +425,12 @@ apiGroup: rbac.authorization.k8s.io
 前面的朋友写的问题在于，default应该是serciveacount</p>2018-11-28</li><br/><li><span>蹦蹦</span> 👍（14） 💬（4）<p>kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io&#47;v1
 metadata:
-  name: readonly-all-default
+name: readonly-all-default
 subjects:
+
 - kind: ServiceAccount
   name: default
-roleRef:
+  roleRef:
   kind: ClusterRole
   name: view
   apiGroup: rbac.authorization.k8s.io

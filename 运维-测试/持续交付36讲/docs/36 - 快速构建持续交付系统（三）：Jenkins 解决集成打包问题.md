@@ -153,7 +153,7 @@ node {
 
    #启动sonar检查，允许junit单元测试，获取编译产物，并更新Merge request的状态
    stage('Results') {
-      // Run sonar 
+      // Run sonar
       sh “'${mvnHome}/bin/mvn' org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar”
       junit '**/target/surefire-reports/TEST-*.xml'
       archive 'target/*.war'

@@ -174,13 +174,13 @@ print(result)
 To find the total price of 3 kg of apples and 2 kg of bananas, I need to know the unit prices of both fruits. I will first ask for the price of apples and then for the price of bananas.
 
 Action: ask_fruit_unit_price  
-Action Input: "apple"  
+Action Input: "apple" 
 Apple unit price is 10/kg
 
 Now that I have the unit price of apples, I need to ask for the unit price of bananas.
 
 Action: ask_fruit_unit_price  
-Action Input: "banana"  
+Action Input: "banana" 
 Banana unit price is 6/kg
 
 Now that I have the unit prices of both fruits (10/kg for apples and 6/kg for bananas), I can calculate the total price for 3 kg of apples and 2 kg of bananas.
@@ -287,21 +287,23 @@ def clean_tool_input(func):
 @tool
 @clean_tool_input
 def calculate(what: str) -&gt; float:
-    &quot;&quot;&quot;Runs a calculation and returns the number - uses Python so be sure to use floating point syntax if necessary&quot;&quot;&quot;
-    return eval(what)
+&quot;&quot;&quot;Runs a calculation and returns the number - uses Python so be sure to use floating point syntax if necessary&quot;&quot;&quot;
+return eval(what)
 
 @tool
 @clean_tool_input
 def ask_fruit_unit_price(fruit: str) -&gt; str:
-    &quot;&quot;&quot;Asks the user for the price of a fruit&quot;&quot;&quot;
-    if fruit.casefold() == &quot;apple&quot;:
-        return &quot;Apple unit price is 10&#47;kg&quot;
-    elif fruit.casefold() == &quot;banana&quot;:
-        return &quot;Banana unit price is 6&#47;kg&quot;
-    else:
-        return &quot;{} unit price is 20&#47;kg&quot;.format(fruit)
+&quot;&quot;&quot;Asks the user for the price of a fruit&quot;&quot;&quot;
+if fruit.casefold() == &quot;apple&quot;:
+return &quot;Apple unit price is 10&#47;kg&quot;
+elif fruit.casefold() == &quot;banana&quot;:
+return &quot;Banana unit price is 6&#47;kg&quot;
+else:
+return &quot;{} unit price is 20&#47;kg&quot;.format(fruit)
+
 ```
 
 完整代码在此：https:&#47;&#47;github.com&#47;groklab&#47;misc&#47;blob&#47;main&#47;geektime-llm-zhengye-column&#47;lec14.ipynb</p>2024-12-02</li><br/><li><span>张申傲</span> 👍（4） 💬（0）<p>第14讲打卡~
 LangChain 内置了大量开箱即用的工具，可以参考：https:&#47;&#47;python.langchain.com&#47;docs&#47;integrations&#47;tools&#47;</p>2025-01-24</li><br/>
 </ul>
+```

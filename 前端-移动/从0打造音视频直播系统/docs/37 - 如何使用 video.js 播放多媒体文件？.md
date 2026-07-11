@@ -138,7 +138,7 @@ npm install video.js
 在使用 video.js 播放 HLS 媒体流之前，我们需要先创建一个 HTML5 文件，如 play\_hls.html，在 HTML5 文件中的内容如下：
 
 ```
-//引入 video.js 库 
+//引入 video.js 库
 <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
 <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
 

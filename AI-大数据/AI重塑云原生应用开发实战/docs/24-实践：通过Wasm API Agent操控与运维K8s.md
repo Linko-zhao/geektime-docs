@@ -63,7 +63,7 @@ tinygo build -o main.wasm -scheduler=none -target=wasi -gc=custom -tags='customm
 
 ```yaml
 tinygo build -o agent.wasm -scheduler=none -target=wasi -gc=custom
- -tags='custommalloc nottinygc_finalizer' .
+-tags='custommalloc nottinygc_finalizer' .
 ```
 
 ## 测试
@@ -94,54 +94,54 @@ GET /pods/events 获取指定pod的事件
 由于ginTools可能需要操作集群级别的资源，我们选择使用ClusterRole/ClusterRoleBinding来为服务账户赋权。以下是具体的YAML配置：
 
 ```yaml
-apiVersion: v1                                                                                                                                                           
-kind: ServiceAccount                                                                                                                                                     
-metadata:                                                                                                                                                                
-  labels:                                                                                                                                                                
-    app: example                                                                                                                                                         
-  name: sa-example                                                                                                                                                       
-  namespace: default                                                                                                                                                     
----                                                                                                                                                                      
-apiVersion: rbac.authorization.k8s.io/v1                                                                                                                                 
-kind: ClusterRoleBinding                                                                                                                                                 
-metadata:                                                                                                                                                                
-  labels:                                                                                                                                                                
-    app: example                                                                                                                                                         
-  name: sa-example                                                                                                                                                       
-roleRef:                                                                                                                                                                 
-  apiGroup: rbac.authorization.k8s.io                                                                                                                                    
-  kind: ClusterRole                                                                                                                                                      
-  name: sa-example                                                                                                                                                       
-subjects:                                                                                                                                                                
-  - kind: ServiceAccount                                                                                                                                                 
-    name: sa-example                                                                                                                                                     
-    namespace: default                                                                                                                                                   
----                                                                                                                                                                      
-apiVersion: rbac.authorization.k8s.io/v1                                                                                                                                 
-kind: ClusterRole                                                                                                                                                        
-metadata:                                                                                                                                                                
-  labels:                                                                                                                                                                
-    app: example                                                                                                                                                         
-  name: sa-example                                                                                                                                                       
-rules:                                                                                                                                                                   
-  - apiGroups:                                                                                                                                                           
-      - ""                                                                                                                                                               
-    resources:                                                                                                                                                           
-      - pods                                                                                                                                                             
-      - pods/log                                                                                                                                                         
-      - services                                                                                                                                                         
-      - events                                                                                                                                                           
-    verbs:                                                                                                                                                               
-      - get                                                                                                                                                              
-      - list                                                                                                                                                             
-      - delete 
-      - create                                                                                                                                                                                                                                                                                                                     
-  - apiGroups:                                                                                                                                                           
-      - ""                                                                                                                                                               
-    resources:                                                                                                                                                           
-      - namespaces                                                                                                                                                       
-    verbs:                                                                                                                                                               
-      - get                                                                                                                                                              
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: example
+  name: sa-example
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: example
+  name: sa-example
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sa-example
+subjects:
+  - kind: ServiceAccount
+    name: sa-example
+    namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: example
+  name: sa-example
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/log
+      - services
+      - events
+    verbs:
+      - get
+      - list
+      - delete
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
       - list
 ```
 
@@ -150,40 +150,40 @@ rules:
 接下来是 ginTools 的部署 YAML：
 
 ```yaml
----                                                                                                                                                                      
-apiVersion: apps/v1                                                                                                                                                      
-kind: Deployment                                                                                                                                                         
-metadata:                                                                                                                                                                
-  name: gintools                                                                                                                                                         
-  namespace: default  # Deployment 所 在 的 命 名 空 间                                                                                                                         
-spec:                                                                                                                                                                    
-  replicas: 1                                                                                                                                                            
-  selector:                                                                                                                                                              
-    matchLabels:                                                                                                                                                         
-      app: gintools                                                                                                                                                      
-  template:                                                                                                                                                              
-    metadata:                                                                                                                                                            
-      labels:                                                                                                                                                            
-        app: gintools                                                                                                                                                    
-    spec:                                                                                                                                                                
-      serviceAccountName: sa-example  # 使 用 指 定 的  ServiceAccount                                                                                                        
-      containers:                                                                                                                                                        
-      - name: gintools                                                                                                                                                   
-        image: registry.cn-hangzhou.aliyuncs.com/aitools/gintools:v1.1                                                                                                   
-        ports:                                                                                                                                                           
-        - containerPort: 8080                                                                                                                                            
----                                                                                                                                                                      
-apiVersion: v1                                                                                                                                                           
-kind: Service                                                                                                                                                            
-metadata:                                                                                                                                                                
-  name: gintools-service                                                                                                                                                 
-  namespace: default  # Service 所 在 的 命 名 空 间                                                                                                                            
-spec:                                                                                                                                                                    
-  type: ClusterIP                                                                                                                                                        
-  ports:                                                                                                                                                                 
-  - port: 38880                                                                                                                                                          
-    targetPort: 8080                                                                                                                                                     
-  selector:                                                                                                                                                              
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gintools
+  namespace: default # Deployment 所 在 的 命 名 空 间
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gintools
+  template:
+    metadata:
+      labels:
+        app: gintools
+    spec:
+      serviceAccountName: sa-example # 使 用 指 定 的  ServiceAccount
+      containers:
+        - name: gintools
+          image: registry.cn-hangzhou.aliyuncs.com/aitools/gintools:v1.1
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gintools-service
+  namespace: default # Service 所 在 的 命 名 空 间
+spec:
+  type: ClusterIP
+  ports:
+    - port: 38880
+      targetPort: 8080
+  selector:
     app: gintools
 ```
 
@@ -241,7 +241,7 @@ Agent 的配置主要包含 API 和 LLM 两个部分，我先写一个示例，�
 
 ```yaml
 apis:
-- api: |-
+  - api: |-
     openapi: 3.1.0
     info:
       title: k8s资源管理系统
@@ -307,7 +307,7 @@ promptTemplate:
 在 apis 部分，配置外部工具。此处可以配置多个服务商的工具，例如可以同时配置高德地图 + 心知天气的 API Tools。在这里我们就先配置本地的 ginTools 工具。在OpenAPI 文档中，url 即为服务的 service 地址。在 apiProvider 部分，由于是本地服务，没有 APIKey，因此没有如下关于 apiKey 的配置：
 
 ```yaml
-apiKey: 
+apiKey:
   in: query
   name: key
   value: xxxxxxxxxxxxxxx
@@ -328,33 +328,33 @@ llm 部分就是 Agent 从第二轮对话开始所使用的大模型的服务商
 补充完 watch 权限的 YAML如下：
 
 ```yaml
----                                                                                                                                                                      
-apiVersion: rbac.authorization.k8s.io/v1                                                                                                                                 
-kind: ClusterRole                                                                                                                                                        
-metadata:                                                                                                                                                                
-  labels:                                                                                                                                                                
-    app: example                                                                                                                                                         
-  name: sa-example                                                                                                                                                       
-rules:                                                                                                                                                                   
-  - apiGroups:                                                                                                                                                           
-      - ""                                                                                                                                                               
-    resources:                                                                                                                                                           
-      - pods                                                                                                                                                             
-      - pods/log                                                                                                                                                         
-      - services                                                                                                                                                         
-      - events                                                                                                                                                           
-    verbs:                                                                                                                                                               
-      - get                                                                                                                                                              
-      - list                                                                                                                                                             
-      - delete 
-      - create  
-      - watch                                                                                                                                                                                                                                                                                                                   
-  - apiGroups:                                                                                                                                                           
-      - ""                                                                                                                                                               
-    resources:                                                                                                                                                           
-      - namespaces                                                                                                                                                       
-    verbs:                                                                                                                                                               
-      - get                                                                                                                                                              
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: example
+  name: sa-example
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/log
+      - services
+      - events
+    verbs:
+      - get
+      - list
+      - delete
+      - create
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
       - list
 ```
 
@@ -371,10 +371,8 @@ rules:
 最后，我们测一下 JSON Mode 的效果，首先不自定义 JSON Schema。在 agent 配置中新增如下配置：
 
 ```yaml
-apis:
- ...
-llm:
- ...
+apis: ...
+llm: ...
 jsonResp:
   enable: true
 ```

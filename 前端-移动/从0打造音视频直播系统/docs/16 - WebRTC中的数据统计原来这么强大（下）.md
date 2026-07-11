@@ -37,7 +37,7 @@ var sender = pc.getSenders()[0];
 
 ...
 
-//调用sender的 getStats 方法    
+//调用sender的 getStats 方法
 sender.getStats()
     .then(reports => { //得到相关的报告
         reports.forEach(report =>{ //遍历每个报告
@@ -88,10 +88,10 @@ dictionary RTCCodecStats : RTCStats {
              unsigned long payloadType; //数据负载类型
              RTCCodecType  codecType;   //编解码类型
              DOMString     transportId; //传输ID
-             DOMString     mimeType;    
+             DOMString     mimeType;
              unsigned long clockRate;   //采样时钟频率
              unsigned long channels;    //声道数，主要用于音频
-             DOMString     sdpFmtpLine; 
+             DOMString     sdpFmtpLine;
              DOMString     implementation;
 };
 ```
@@ -108,13 +108,13 @@ dictionary RTCInboundRtpStreamStats : RTCReceivedRtpStreamStats {
              double               framesPerSecond;//每秒帧数
              ...
              unsigned long long   bytesReceived;  //接收到的字节数
-             .... 
+             ....
              unsigned long        packetsDuplicated; //重复的包数
              ...
              unsigned long        nackCount;         //丢包数
-             .... 
+             ....
              double               jitterBufferDelay; //缓冲区延迟
-             .... 
+             ....
              unsigned long        framesReceived;    //接收的帧数
              unsigned long        framesDropped;     //丢掉的帧数
              ...
@@ -132,14 +132,14 @@ dictionary RTCOutboundRtpStreamStats : RTCSentRtpStreamStats {
              unsigned long long   retransmittedBytesSent; //重传字节数
              double               targetBitrate;  //目标码率
              ...
-.             
+.
              unsigned long        frameWidth;  //帧的宽度
              unsigned long        frameHeight; //帧的高度
              double               framesPerSecond; //每秒帧数
              unsigned long        framesSent; //发送的总帧数
              ...
              unsigned long        nackCount; //丢包数
-             .... 
+             ....
 };
 ```
 
@@ -189,7 +189,7 @@ dictionary RTCOutboundRtpStreamStats : RTCSentRtpStreamStats {
   <body>
   ...
   <script src="js/client.js"></script>
-  
+
   //引入第三方库 graph.js
   <script src="js/third_party/graph.js"></script>
   ...
@@ -251,7 +251,7 @@ window.setInterval(() => {
       let packets;
 
       //我们只对 outbound-rtp 型的 Report 做处理
-      if (report.type === 'outbound-rtp') { 
+      if (report.type === 'outbound-rtp') {
         if (report.isRemote) { //只对本地的做处理
           return;
         }
@@ -263,7 +263,7 @@ window.setInterval(() => {
         //因为计算的是每秒与上一秒的数据的对比，所以这里要做个判断
         //如果是第一次就不进行绘制
         if (lastResult && lastResult.has(report.id)) {
-          
+
           //计算这一秒与上一秒之间发送数据的差值
           var mybytes= (bytes - lastResult.get(report.id).bytesSent);
           //计算走过的时间，因为定时器是秒级的，而时间戳是豪秒级的

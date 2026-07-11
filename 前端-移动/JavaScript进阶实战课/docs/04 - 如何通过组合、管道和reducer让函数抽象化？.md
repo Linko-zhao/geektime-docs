@@ -40,15 +40,15 @@ var isOdd = (x) => equalsToOne(remainderOfTwo(x));
 
 ```javascript
 var dividedBy = (y) => {
-    return function forX(x) {
-        return x % y;
-    }
-}
+  return function forX(x) {
+    return x % y;
+  };
+};
 var equalsTo = (y) => {
-    return function forX(x) {
-        return x === y;
-    }
-}
+  return function forX(x) {
+    return x === y;
+  };
+};
 ```
 
 然后，在dividedBy和equalsToOne的基础上，我们就可以创建两个Point-Free的函数，remainderOfTwo和equalsToOne。
@@ -74,11 +74,11 @@ var isOdd = (x) => equalsToOne(remainderOfTwo(x));
 
 ```javascript
 function compose(...fns) {
-    return fns.reverse().reduce( function reducer(fn1,fn2){
-        return function composed(...args){
-            return fn2( fn1( ...args ) );
-        };
-    } );
+  return fns.reverse().reduce(function reducer(fn1, fn2) {
+    return function composed(...args) {
+      return fn2(fn1(...args));
+    };
+  });
 }
 ```
 
@@ -129,12 +129,12 @@ $ ls -1 | grep "js$" | wc -l
 
 ```javascript
 function reverseArgs(fn) {
-    return function argsReversed(...args){
-        return fn( ...args.reverse() );
-    };
+  return function argsReversed(...args) {
+    return fn(...args.reverse());
+  };
 }
 
-var pipe = reverseArgs( compose );
+var pipe = reverseArgs(compose);
 ```
 
 然后我们可以测试下管道是否“畅通”。这次，我们把remainderOfTwo和equalsToOne按照比较直观的方式进行排序。
@@ -175,8 +175,8 @@ var newArray = oldArray
   .map(double)
   .filter(passSixty)
   .map(addFive);
-  
-console.log (newArray); // 返回：[77,97]
+
+console.log(newArray); // 返回：[77,97]
 ```
 
 在这个例子里，我们对一组数组进行了一系列的操作，先是筛选出奇数，再乘以二，之后筛出大于六十的值，最后加上五。在这个过程中，会不断生成中间数组。
@@ -203,9 +203,9 @@ var newArray = composeReducer(oldArray, [
   mapTR(double),
   filterTR(passSixty),
   mapTR(addFive),
-]); 
+]);
 
-console.log (newArray); // 返回：[77,97]
+console.log(newArray); // 返回：[77,97]
 ```
 
 总而言之，从上面的例子中，我们可以看出来composeReducer用的就是一个类似组合的功能。
@@ -232,7 +232,7 @@ console.log (newArray); // 返回：[77,97]
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>鐘</span> 👍（10） 💬（3）<p>靜下心來重看一次, 好像看懂了, 以下是我對於 composeReducer 的實作：
 
-```
+````
 const { filterTR, mapTR, composeReducer } = (() =&gt; {
 	function applyTypeForFunction(fn, type) {
 		fn.type = type;
@@ -327,7 +327,7 @@ var newArray = composeReducer(oldArray, [
   mapTR(double),
   filterTR(passSixty),
   mapTR(addfive),
-]); 
+]);
 
 console.log (newArray); &#47;&#47; 返回：[77,97]
 
@@ -342,7 +342,8 @@ function compose(...fns) {
         };
     } );
 }
-```
+````
+
 这里 reverse 是不是多余了。。</p>2022-10-16</li><br/><li><span>CondorHero</span> 👍（0） 💬（1）<p>Point-Free 这个例子是不是不对，毕竟 x 参数被显示定义了。
 &#47;&#47; Not point-free - `x` is an explicit argument
 var isOdd = (x) =&gt; equalsToOne(remainderOfTwo(x));

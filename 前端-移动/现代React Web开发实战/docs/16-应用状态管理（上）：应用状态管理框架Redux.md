@@ -18,9 +18,9 @@
 
 比如一个购物车HTTP服务，在服务器端临时保存了当前登录用户的session信息，用户先后两次请求都会读写这个session，那这个HTTP服务就是**有状态服务**；另一个商品列表HTTP服务，并不关心用户是否登录，仅凭用户发过来的HTTP请求里包含的参数就可以完成工作，把结果作为HTTP响应返回给用户，那么它就是**无状态服务**。
 
-这两个服务相减，得出“*服务器端临时保存的登录用户的session信息*”就是我们需要关注的应用状态（至于session保存在内存里还是数据库里，我们这里暂时不讨论）。
+这两个服务相减，得出“_服务器端临时保存的登录用户的session信息_”就是我们需要关注的应用状态（至于session保存在内存里还是数据库里，我们这里暂时不讨论）。
 
-**越是“富JS”的浏览器端应用，越是倾向于把服务器端的应用状态转移到浏览器端**。于是就有了“*浏览器端临时保存的登录用户的session信息*”，这样提供给前端JS使用的应用状态。
+**越是“富JS”的浏览器端应用，越是倾向于把服务器端的应用状态转移到浏览器端**。于是就有了“_浏览器端临时保存的登录用户的session信息_”，这样提供给前端JS使用的应用状态。
 
 ![图片](https://static001.geekbang.org/resource/image/01/6a/01b6a0efdecf1807f165c7a89d6d766a.png?wh=1503x1224)
 
@@ -47,27 +47,27 @@ npm install redux
 我们先看一段为 `cardList` 写的样例代码：
 
 ```javascript
-import { createStore } from 'redux';
+import { createStore } from "redux";
 
 function cardListReducer(state = [], action) {
-  switch (action.type) {
-    case 'card/add':
-      return [action.newCard, ...state];
-    case 'card/remove':
-      return state.filter(card => card.title !== action.title);
-    default:
-      return state;
-  }
+  switch (action.type) {
+    case "card/add":
+      return [action.newCard, ...state];
+    case "card/remove":
+      return state.filter((card) => card.title !== action.title);
+    default:
+      return state;
+  }
 }
 
 const store = createStore(cardListReducer);
 store.subscribe(() => console.log(store.getState()));
 
-store.dispatch({ type: 'card/add', newCard: { title: '开发任务-1' } });
+store.dispatch({ type: "card/add", newCard: { title: "开发任务-1" } });
 // [{ title: '开发任务-1' }]
-store.dispatch({ type: 'card/add', newCard: { title: '测试任务-2' } });
+store.dispatch({ type: "card/add", newCard: { title: "测试任务-2" } });
 // [{ title: '测试任务-2' }, { title: '开发任务-1' }]
-store.dispatch({ type: 'card/remove', title: '开发任务-1' });
+store.dispatch({ type: "card/remove", title: "开发任务-1" });
 // [{ title: '测试任务-2' }]
 ```
 
@@ -115,35 +115,37 @@ npm install @reduxjs/toolkit
 以下是用Redux Toolkit改写的前面Redux的代码：
 
 ```javascript
-import { createSlice, configureStore } from '@reduxjs/toolkit';
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 const cardListSlice = createSlice({
-  name: 'cardList',
-  initialState: [],
-  reducers: {
+  name: "cardList",
+  initialState: [],
+  reducers: {
     addCard(state, action) {
       state.unshift(action.payload.newCard);
     },
     removeCard(state, action) {
-      const index = state.findIndex(card => card.title === action.payload.title); 
+      const index = state.findIndex(
+        (card) => card.title === action.payload.title,
+      );
       if (index !== -1) {
         state.splice(index, 1);
       }
     },
-  },
+  },
 });
 export const { addCard, removeCard } = cardListSlice.actions;
 
 const store = configureStore({
-  reducer: cardListSlice.reducer
+  reducer: cardListSlice.reducer,
 });
 store.subscribe(() => console.log(store.getState()));
 
-store.dispatch(addCard({ newCard: { title: '开发任务-1' } }));
+store.dispatch(addCard({ newCard: { title: "开发任务-1" } }));
 // [{ title: '开发任务-1' }]
-store.dispatch(addCard({ newCard: { title: '测试任务-2' } }));
+store.dispatch(addCard({ newCard: { title: "测试任务-2" } }));
 // [{ title: '测试任务-2' }, { title: '开发任务-1' }]
-store.dispatch(removeCard({ title: '开发任务-1' }));
+store.dispatch(removeCard({ title: "开发任务-1" }));
 // [{ title: '测试任务-2' }]
 ```
 
@@ -174,36 +176,36 @@ Redux Toolkit新引入了一个概念 `slice` ，即切片。切片是一组相�
 MobX是以透明的**函数式响应编程（Transparent Functional Reactive Programming，TFRP）**的方式，实现状态管理。以下是来自MobX官方文档的样例代码：
 
 ```javascript
-import React from "react"
-import ReactDOM from "react-dom"
-import { makeAutoObservable } from "mobx"
-import { observer } from "mobx-react"
+import React from "react";
+import ReactDOM from "react-dom";
+import { makeAutoObservable } from "mobx";
+import { observer } from "mobx-react";
 
 // 对应用状态进行建模。
 class Timer {
-    secondsPassed = 0
-    constructor() {
-        makeAutoObservable(this)
-    }
-    increase() {
-        this.secondsPassed += 1
-    }
-    reset() {
-        this.secondsPassed = 0
-    }
+  secondsPassed = 0;
+  constructor() {
+    makeAutoObservable(this);
+  }
+  increase() {
+    this.secondsPassed += 1;
+  }
+  reset() {
+    this.secondsPassed = 0;
+  }
 }
 
-const myTimer = new Timer()
+const myTimer = new Timer();
 // 构建一个使用 observable 状态的“用户界面”。
 const TimerView = observer(({ timer }) => (
-    <button onClick={() => timer.reset()}>已过秒数：{timer.secondsPassed}</button>
-))
-ReactDOM.render(<TimerView timer={myTimer} />, document.body)
+  <button onClick={() => timer.reset()}>已过秒数：{timer.secondsPassed}</button>
+));
+ReactDOM.render(<TimerView timer={myTimer} />, document.body);
 
 // 每秒更新一次‘已过秒数：X’中的文本。
 setInterval(() => {
-    myTimer.increase()
-}, 1000)
+  myTimer.increase();
+}, 1000);
 ```
 
 如果你是先上手Immer，之后才接触MobX的话，会发现它们的思路很像，都鼓励你用熟悉的JS类型和方法修改数据，由框架来界定前后的变更。这并不意外，因为MobX（[官网](https://zh.mobx.js.org/)）跟前面用到的Immer框架是同一个作者，MobX比Immer还早面世3年。
@@ -213,31 +215,33 @@ setInterval(() => {
 这个XState框架比起Redux和MobX来说更加硬核一些。它本身就是一个**有限状态机**（[维基百科](https://zh.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA)）的JS/TS实现，且遵守了[W3C的XCXML规范](https://www.w3.org/TR/scxml/)。以下是来自XState官方Github，在React中使用XState的样例代码：
 
 ```javascript
-import { useMachine } from '@xstate/react';
-import { createMachine } from 'xstate';
+import { useMachine } from "@xstate/react";
+import { createMachine } from "xstate";
 
 const toggleMachine = createMachine({
-  id: 'toggle',
-  initial: 'inactive',
-  states: {
-    inactive: {
-      on: { TOGGLE: 'active' }
-    },
-    active: {
-      on: { TOGGLE: 'inactive' }
-    }
-  }
+  id: "toggle",
+  initial: "inactive",
+  states: {
+    inactive: {
+      on: { TOGGLE: "active" },
+    },
+    active: {
+      on: { TOGGLE: "inactive" },
+    },
+  },
 });
 
 export const Toggler = () => {
-  const [state, send] = useMachine(toggleMachine);
-  return (
-    <button onClick={() => send('TOGGLE')}>
-      {state.value === 'inactive'
-        ? 'Click to activate'
-        : 'Active! Click to deactivate'}
-    </button>
-  );
+  const [state, send] = useMachine(toggleMachine);
+  return (
+    <button onClick={() => send("TOGGLE")}>
+           {" "}
+      {state.value === "inactive"
+        ? "Click to activate"
+        : "Active! Click to deactivate"}
+         {" "}
+    </button>
+  );
 };
 ```
 

@@ -131,7 +131,7 @@ x = x
 x = GetValue(x)
 ```
 
-来执行的。而JavaScript识别两个x的不同的方法，就称为“手性”，即是所谓“左手端(*lhs, left hand side*)”和“右手端(*rhs*)”。它本来是用来描述自然语言的语法中，一个修饰词应该是放在它的主体的前面或是后面的。而在程序设计语言中，它用来说明一个记号（Token）是放在了赋值符号（例如“=”号）的左边或是右边。作为一个简单的结论，区别上例中的两个x的方法就是：
+来执行的。而JavaScript识别两个x的不同的方法，就称为“手性”，即是所谓“左手端(_lhs, left hand side_)”和“右手端(_rhs_)”。它本来是用来描述自然语言的语法中，一个修饰词应该是放在它的主体的前面或是后面的。而在程序设计语言中，它用来说明一个记号（Token）是放在了赋值符号（例如“=”号）的左边或是右边。作为一个简单的结论，区别上例中的两个x的方法就是：
 
 > 如果x放在左边作为lhs，那么它是引用；如果放在右边作为rhs，那么就是值。
 
@@ -216,11 +216,11 @@ delete null 返回true
 delete undefined 返回false 为啥啊？不都是值吗？
 
 4. 还想知道昨天提问的1和2两条是不是漏洞百出啊，就想知道个结果😁。</p>2019-11-19</li><br/><li><span>海绵薇薇</span> 👍（68） 💬（9）<p>hello 老师好，感谢老师之前的回答：）
-突然想到，访问不存在的变量x报ReferenceError错误，其实是对x表达式的的Result引用做getValue的时候报的错误，然后为啥typeof x和delete x不报错，因为这两个操作没有求值。</p>2019-11-22</li><br/><li><span>潇潇雨歇</span> 👍（33） 💬（4）<p>1、如果x根本不存在，delete x什么也不做，返回true
-2、如果x只读，delete object.x不能删除掉x属性，返回false；如果在严格模式下，会报错：TypeError: Cannot delete property &#39;c&#39;</p>2019-11-11</li><br/><li><span>潇潇雨歇</span> 👍（25） 💬（7）<p>关于delete的知识，大家可以看下MDN的讲解：https:&#47;&#47;developer.mozilla.org&#47;zh-CN&#47;docs&#47;Web&#47;JavaScript&#47;Reference&#47;Operators&#47;delete
-以及这篇深入delete博客：http:&#47;&#47;perfectionkills.com&#47;understanding-delete&#47;</p>2019-11-11</li><br/><li><span>SOneDiGo</span> 👍（21） 💬（1）<p>想问下老师如何理解用delete处理array element实际上在底层是如何操作的?
-例如：array = [1,2,&#39;1&#39;]
-为什么 delete array[2] 后数组就成了[1,2,undefined&#47;empty]?</p>2019-11-22</li><br/><li><span>海绵薇薇</span> 👍（20） 💬（3）<p>感谢老师指点😁
+   突然想到，访问不存在的变量x报ReferenceError错误，其实是对x表达式的的Result引用做getValue的时候报的错误，然后为啥typeof x和delete x不报错，因为这两个操作没有求值。</p>2019-11-22</li><br/><li><span>潇潇雨歇</span> 👍（33） 💬（4）<p>1、如果x根本不存在，delete x什么也不做，返回true
+   2、如果x只读，delete object.x不能删除掉x属性，返回false；如果在严格模式下，会报错：TypeError: Cannot delete property &#39;c&#39;</p>2019-11-11</li><br/><li><span>潇潇雨歇</span> 👍（25） 💬（7）<p>关于delete的知识，大家可以看下MDN的讲解：https:&#47;&#47;developer.mozilla.org&#47;zh-CN&#47;docs&#47;Web&#47;JavaScript&#47;Reference&#47;Operators&#47;delete
+   以及这篇深入delete博客：http:&#47;&#47;perfectionkills.com&#47;understanding-delete&#47;</p>2019-11-11</li><br/><li><span>SOneDiGo</span> 👍（21） 💬（1）<p>想问下老师如何理解用delete处理array element实际上在底层是如何操作的?
+   例如：array = [1,2,&#39;1&#39;]
+   为什么 delete array[2] 后数组就成了[1,2,undefined&#47;empty]?</p>2019-11-22</li><br/><li><span>海绵薇薇</span> 👍（20） 💬（3）<p>感谢老师指点😁
 
 ref：语法上的引用
 
@@ -262,26 +262,30 @@ obj.a 也是一个ref（{referencedName: &#39;a&#39;, base: obj}），然后计�
 delete 操作符用于删除对象的属性，它接收一个表达式，该表达式应返回对象属性的引用。
 
 1. 如果表达式返回的结果是引用：
-当该引用是 let 或 const 定义的，delete 执行结果总是 false；
-当引用作为对象的属性不存在时，delete 对象的属性，执行结果为 true，表示未处理；
-当该引用为 window 对象的属性且是 var 定义的，delete window 对象的属性，执行结果为 false，表示处理失败（获取属性描述符时为不可配置）；
-如果在全局环境下显示定义一个属性描述符为可配置的全局属性，执行 delete，结果是 true，表示操作成功；
-当该引用为非 window 对象的属性且是 var 定义的，delete 非 window 对象的属性，执行结果为 true，表示处理成功（获取属性描述符时为可配置）。
+   当该引用是 let 或 const 定义的，delete 执行结果总是 false；
+   当引用作为对象的属性不存在时，delete 对象的属性，执行结果为 true，表示未处理；
+   当该引用为 window 对象的属性且是 var 定义的，delete window 对象的属性，执行结果为 false，表示处理失败（获取属性描述符时为不可配置）；
+   如果在全局环境下显示定义一个属性描述符为可配置的全局属性，执行 delete，结果是 true，表示操作成功；
+   当该引用为非 window 对象的属性且是 var 定义的，delete 非 window 对象的属性，执行结果为 true，表示处理成功（获取属性描述符时为可配置）。
 
 2. 如果表达式返回的结果是值，如数字、字符串等，delete 执行结果为 true，表示未处理。</p>2019-11-11</li><br/><li><span>隔夜果酱</span> 👍（14） 💬（1）<p>既然delete这么鸡肋,只能删除对象的成员.
-那么后来的版本中为什么不进行改进呢?
-比如限定其只能用delete obj.x这种语法格式.
-或者加入trycatch,对删除value的操作直接报错呢?</p>2019-11-11</li><br/><li><span>渭河</span> 👍（13） 💬（3）<p>这句话要怎么理解呀 
-所谓值类型中的字符串是按照引用来赋值和传递引用（而不是传递值）的</p>2019-11-21</li><br/><li><span>桃翁</span> 👍（12） 💬（3）<p>我突然 明白了 (obj.func=obj.func)()这种方式会丢掉obj里面的this，因为等号右边的obj.func是值，所以得到的仅仅是个函数这个值，而不是引用。 老师我理解得是对的吗？</p>2020-03-19</li><br/><li><span>余文郁</span> 👍（12） 💬（5）<p>老师，JS是基于对象的语言，不是面象对象的语言吧，感觉第二段这有点不妥，虽然ES6增加了class语法，但只是原型的语法糖而已
+   那么后来的版本中为什么不进行改进呢?
+   比如限定其只能用delete obj.x这种语法格式.
+   或者加入trycatch,对删除value的操作直接报错呢?</p>2019-11-11</li><br/><li><span>渭河</span> 👍（13） 💬（3）<p>这句话要怎么理解呀
+   所谓值类型中的字符串是按照引用来赋值和传递引用（而不是传递值）的</p>2019-11-21</li><br/><li><span>桃翁</span> 👍（12） 💬（3）<p>我突然 明白了 (obj.func=obj.func)()这种方式会丢掉obj里面的this，因为等号右边的obj.func是值，所以得到的仅仅是个函数这个值，而不是引用。 老师我理解得是对的吗？</p>2020-03-19</li><br/><li><span>余文郁</span> 👍（12） 💬（5）<p>老师，JS是基于对象的语言，不是面象对象的语言吧，感觉第二段这有点不妥，虽然ES6增加了class语法，但只是原型的语法糖而已
+
 </p>2019-11-11</li><br/><li><span>ssala</span> 👍（10） 💬（2）<p>关于delete，搜集了一些资料，结合代码测试，我目前是这样理解的：delete为一元操作符，其操作数为一个表达式，如果表达式的求值结果是一个值，那么`delete 值`直接返回true，表示该操作没有异常。如果表达式求值结果是一个引用，那么`delete 引用`则会有如下表现，如果引用是可删除的，则直接删除该引用，返回true，否则返回false。
 
 关于属性&#47;property的可删除特性，参照这篇文章：http:&#47;&#47;perfectionkills.com&#47;understanding-delete&#47;
 
 关于引用和值的理解，我用段代码说明，如下：
+
 ```
 var x = {a: 20}
 ```
+
 代码中，x是引用，它&quot;指向&quot;执行系统中{a: 20}的一个对象，而{2: 20}则是值，它对应执行系统中内存上的一块区域。x.a是引用，它&quot;指向&quot;执行系统中内存20这个值，而20是值，它也对应执行系统中内存上的一块区域。因此：
+
 ```
 delete x &#47;&#47; `false` ，x为表达式，求值结果为global.x，且该属性是用var来声明的，其特性是不可删除
 

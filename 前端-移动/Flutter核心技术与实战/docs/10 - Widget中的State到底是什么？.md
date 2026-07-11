@@ -54,7 +54,7 @@ document.querySelector("#demo").innerHTML = "Hello World!";
 接下来，我以Text的部分源码为例，和你说明StatelessWidget的构建过程。
 
 ```
-class Text extends StatelessWidget {     
+class Text extends StatelessWidget {
   //构造方法及属性声明部分
   const Text(this.data, {
     Key key,
@@ -65,13 +65,13 @@ class Text extends StatelessWidget {
   }) : assert(data != null),
      textSpan = null,
      super(key: key);
-     
+
   final String data;
   final TextAlign textAlign;
   final TextDirection textDirection;
   //其他属性
   ...
-  
+
   @override
   Widget build(BuildContext context) {
     ...
@@ -131,7 +131,7 @@ class Image extends StatefulWidget {
   final ImageProvider image;
   //其他属性
   ...
-  
+
   @override
   _ImageState createState() => _ImageState();
   ...

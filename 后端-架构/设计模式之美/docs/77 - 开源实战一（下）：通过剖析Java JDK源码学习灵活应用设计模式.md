@@ -20,10 +20,10 @@ public class Demo {
 
     Collections.sort(students, new AgeAscComparator());
     print(students);
-    
+
     Collections.sort(students, new NameAscComparator());
     print(students);
-    
+
     Collections.sort(students, new ScoreDescComparator());
     print(students);
   }
@@ -182,10 +182,10 @@ public class Runtime {
   public static Runtime getRuntime() {
     return currentRuntime;
   }
-  
+
   /** Don't let anyone else instantiate this class */
   private Runtime() {}
-  
+
   //....
   public void addShutdownHook(Thread hook) {
     SecurityManager sm = System.getSecurityManager();
@@ -240,12 +240,14 @@ public class Runtime {
 </p>2020-05-04</li><br/><li><span>Jxin</span> 👍（5） 💬（1）<p>1.会，写多场景可以采用分治思想降低锁冲突，数据量不大且写少场景就采用cow拿空间换时间。
 
 2.有这个change字段可能导致丢失通知的情况。并发多个线程发送通知，保障至少一个线程发送通知的场景可以用。</p>2020-04-29</li><br/><li><span>Edward Lee</span> 👍（4） 💬（1）<p>课后思考
+
 1. 使用 CopyOnWriteArrayList snapshot 方式提高性能
 2. changed 变量是多此一举，在共享同一个 Observable 对象时，并发情况下甚至会出现通知丢失，这是因为 setChanged() 和 notifyObservers(args) 并不具备原子性，所以多个线程在 setChanged() 后都会被阻塞在 notifyObservers() 方法内，最终所有阻塞的线程都会全部通知失效。很多时候，像注册后通知就必须要能够通知到注册者，因此也不能容忍通知丢失的情况。</p>2020-05-28</li><br/><li><span>Heaven</span> 👍（3） 💬（0）<p>
-1.肯定降低了性能,而通常优化的手段,是更小粒度的锁或者使用乐观锁,在这个方法中已经将notifyObservers方法原本的大锁,利用一个复制技术缩小到一小点了,也是一种版本控制的方式,这里先给出一个尝试优化,使用原子类Boolean来替换setChanged这个大锁,并且使用copyonwriteArrayList来替换我们的数组
-2.如果没有多并发的任何情况,changed的设计就是多此一举了,但是如果出现了高并发,那么直接去尝试直接执行更新操作可能会是一个非常漫长的等待,于是利用一个简单的标识位,并加上了锁来进行了修改,在高并发的情况下,无可厚非</p>2020-04-29</li><br/><li><span>test</span> 👍（3） 💬（0）<p>1.会影响，如果要优化，可以使用CopyOnWriteArrayList；
-2.有必要，如果没有change，则需要观察者知道被观测者什么时候会有状态改变。</p>2020-04-29</li><br/><li><span>面向百度编程</span> 👍（2） 💬（0）<p>change是必须的，控制开关，并发控制。必须要锁啊，有并发，而且现在锁不是优化了么，偏向锁，自旋锁。真的影响很大么</p>2020-05-11</li><br/><li><span>steve</span> 👍（2） 💬（0）<p>2、changed 是在高并发的情况下减少重复通知的概率吧，不过也没法完全避免，是这样吗？</p>2020-05-06</li><br/><li><span>不能忍的地精</span> 👍（2） 💬（0）<p>1. 加同步关键字的方法操作内容简单,都是对容器进行操作和更改状态,所以影响有限,优化的方法可以是线程隔离.避免多线程操作共享变量的问题
+   1.肯定降低了性能,而通常优化的手段,是更小粒度的锁或者使用乐观锁,在这个方法中已经将notifyObservers方法原本的大锁,利用一个复制技术缩小到一小点了,也是一种版本控制的方式,这里先给出一个尝试优化,使用原子类Boolean来替换setChanged这个大锁,并且使用copyonwriteArrayList来替换我们的数组
+   2.如果没有多并发的任何情况,changed的设计就是多此一举了,但是如果出现了高并发,那么直接去尝试直接执行更新操作可能会是一个非常漫长的等待,于是利用一个简单的标识位,并加上了锁来进行了修改,在高并发的情况下,无可厚非</p>2020-04-29</li><br/><li><span>test</span> 👍（3） 💬（0）<p>1.会影响，如果要优化，可以使用CopyOnWriteArrayList；
+   2.有必要，如果没有change，则需要观察者知道被观测者什么时候会有状态改变。</p>2020-04-29</li><br/><li><span>面向百度编程</span> 👍（2） 💬（0）<p>change是必须的，控制开关，并发控制。必须要锁啊，有并发，而且现在锁不是优化了么，偏向锁，自旋锁。真的影响很大么</p>2020-05-11</li><br/><li><span>steve</span> 👍（2） 💬（0）<p>2、changed 是在高并发的情况下减少重复通知的概率吧，不过也没法完全避免，是这样吗？</p>2020-05-06</li><br/><li><span>不能忍的地精</span> 👍（2） 💬（0）<p>1. 加同步关键字的方法操作内容简单,都是对容器进行操作和更改状态,所以影响有限,优化的方法可以是线程隔离.避免多线程操作共享变量的问题
 
-2. changed变量不是多此一举,存在一种情况,就是被观察者行动了,但是条件不满足,但是不需要通知观察者的情况</p>2020-04-29</li><br/><li><span>罗 乾 林</span> 👍（2） 💬（0）<p>1、会影响并发性能,synchronized主要保证Vector线程安全，高并发下会影响加入集合的速度，可以使用并发性好的无锁化容器
-2、当多个线程同时发起notifyObservers时保证只通知Observer一次</p>2020-04-29</li><br/>
+3. changed变量不是多此一举,存在一种情况,就是被观察者行动了,但是条件不满足,但是不需要通知观察者的情况</p>2020-04-29</li><br/><li><span>罗 乾 林</span> 👍（2） 💬（0）<p>1、会影响并发性能,synchronized主要保证Vector线程安全，高并发下会影响加入集合的速度，可以使用并发性好的无锁化容器
+   2、当多个线程同时发起notifyObservers时保证只通知Observer一次</p>2020-04-29</li><br/>
+
 </ul>

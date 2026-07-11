@@ -71,11 +71,11 @@ class Cache<K,V> {
 class Cache<K,V> {
   final Map<K, V> m =
     new HashMap<>();
-  final ReadWriteLock rwl = 
+  final ReadWriteLock rwl =
     new ReentrantReadWriteLock();
   final Lock r = rwl.readLock();
   final Lock w = rwl.writeLock();
- 
+
   V get(K key) {
     V v = null;
     //读缓存
@@ -88,7 +88,7 @@ class Cache<K,V> {
     //缓存中存在，返回
     if(v != null) {   ④
       return v;
-    }  
+    }
     //缓存中不存在，查询数据库
     w.lock();         ⑤
     try {
@@ -103,7 +103,7 @@ class Cache<K,V> {
     } finally{
       w.unlock();
     }
-    return v; 
+    return v;
   }
 }
 ```
@@ -143,11 +143,11 @@ class CachedData {
   volatile boolean cacheValid;
   final ReadWriteLock rwl =
     new ReentrantReadWriteLock();
-  // 读锁  
+  // 读锁
   final Lock r = rwl.readLock();
   //写锁
   final Lock w = rwl.writeLock();
-  
+
   void processCachedData() {
     // 获取读锁
     r.lock();
@@ -157,7 +157,7 @@ class CachedData {
       // 获取写锁
       w.lock();
       try {
-        // 再次检查状态  
+        // 再次检查状态
         if (!cacheValid) {
           data = ...
           cacheValid = true;
@@ -167,11 +167,11 @@ class CachedData {
         r.lock(); ①
       } finally {
         // 释放写锁
-        w.unlock(); 
+        w.unlock();
       }
     }
     // 此处仍然持有读锁
-    try {use(data);} 
+    try {use(data);}
     finally {r.unlock();}
   }
 }
@@ -204,7 +204,6 @@ class CachedData {
 
 1、有些同学认为读锁没有用，他们的理由是：读操作又不会修改数据，想读就读呗，无论读的是就值还是新值，反正能读到。
 
-
 2、也有同学认为读锁是为了防止多线程读到的数据不一致。
 
 我认为不是这个原因，只需要问两个问题就知道了，首先问不一致的是什么？然后反问不一致会导致什么问题呢？
@@ -217,10 +216,11 @@ class CachedData {
 
 任何锁表面上是互斥，但本质是都是为了避免原子性问题（如果程序没有原子性问题，那只用volatile来避免可见性和有序性问题就可以了，效率更高），读锁自然也是为了避免原子性问题，比如一个long型参数的写操作并不是原子性的，如果允许同时读和写，那读到的数很可能是就是写操作的中间状态，比如刚写完前32位的中间状态。long型数都如此，而实际上一般读的都是复杂的对象，那中间状态的情况就更多了。
 
-所以读锁是防止读到写操作的中间状态的值。</p>2020-07-10</li><br/><li><span>crazypokerk</span> 👍（29） 💬（5）<p>老师，可不可以这样理解，ReadWirteLock不支持锁的升级，指的是：在不释放读锁的前提下，无法继续获取写锁，但是如果在释放了读锁之后，是可以升级为写锁的。锁的降级就是：在不释放写锁的前提下，获取读锁是可以的。请老师指正，感谢。</p>2019-04-06</li><br/><li><span>WhoAmI</span> 👍（20） 💬（4）<p>一般都说线程池有界队列使用ArrayBlockingQueue，无界队列使用LinkedBlockingQueue，我很奇怪，有界无界不是取决于创建的时候传不传capacity参数么，我现在想创建线程池的时候，new LinkedBlockingQueue(2000)这样定义有界队列，请问可以吗？</p>2019-04-06</li><br/><li><span>WL</span> 👍（17） 💬（1）<p>老师我们现在的项目全都是集群部署, 感觉在这种情况下是不是单机的Lock,和Synchronized都用不上, 只能采用分布式锁的方案? 那么这种情况下, 如何提高每个实例的并发效率?</p>2019-04-09</li><br/><li><span>探索无止境</span> 👍（11） 💬（5）<p>老师你好，我们在项目开发中，如果要实现缓存，会直接采用Redis，感觉更合适，所以不太清楚，实际中ReadWriteLock可以解决哪些问题？</p>2019-08-26</li><br/><li><span>文灏</span> 👍（10） 💬（5）<p>王老师你好，有个问题想请教一下。既然允许多个线程同时读，那么这个时候的读锁意义在哪里？</p>2019-05-22</li><br/><li><span>随风而逝</span> 👍（9） 💬（2）<p>缓存一致性问题，我们都是双删缓存。老师，读写锁的降级和单独使用有什么区别？或者说有什么优势？</p>2019-04-22</li><br/><li><span>刘志兵</span> 👍（9） 💬（2）<p>这里讲的读写锁和丁奇老师讲的mysql中的mdl锁和ddl锁原理好像是一样的，就是读写互斥，写写互斥，读读不互斥，老师讲的这个应该是读写锁的基本原理，mysql是这个锁的一种典型应用吧</p>2019-04-08</li><br/><li><span>无言的约定</span> 👍（8） 💬（3）<p>王老师，&quot;&quot;如果一个写线程正在执行写操作，此时禁止读线程读共享变量&quot;&quot;  这句话反过来也成立，是不是意味着读操作和写操作是互斥的，不能同时进行？</p>2019-12-05</li><br/><li><span>老杨同志</span> 👍（7） 💬（4）<p>老师，如果读锁的持有时间较长，读操作又比较多，会不会一直拿不到写锁？</p>2019-04-06</li><br/><li><span>密码123456</span> 👍（6） 💬（1）<p>系统停止了响应，说明线程可能被占满了。cpu利用率低为什么会推断出，是读锁升级为写锁？是因为锁升级后，线程都是等待状态吗？是不是cpu高是锁竞争？还有怎么验证读锁升级为写锁？</p>2019-04-06</li><br/><li><span>guihaiyizhu</span> 👍（4） 💬（1）<p>看了下juc的源码，尝试着分析一波 为啥为啥ReentrantReadWriteLock不能锁的降低不能锁的降低，但是可以锁的升级。
+所以读锁是防止读到写操作的中间状态的值。</p>2020-07-10</li><br/><li><span>crazypokerk</span> 👍（29） 💬（5）<p>老师，可不可以这样理解，ReadWirteLock不支持锁的升级，指的是：在不释放读锁的前提下，无法继续获取写锁，但是如果在释放了读锁之后，是可以升级为写锁的。锁的降级就是：在不释放写锁的前提下，获取读锁是可以的。请老师指正，感谢。</p>2019-04-06</li><br/><li><span>WhoAmI</span> 👍（20） 💬（4）<p>一般都说线程池有界队列使用ArrayBlockingQueue，无界队列使用LinkedBlockingQueue，我很奇怪，有界无界不是取决于创建的时候传不传capacity参数么，我现在想创建线程池的时候，new LinkedBlockingQueue(2000)这样定义有界队列，请问可以吗？</p>2019-04-06</li><br/><li><span>WL</span> 👍（17） 💬（1）<p>老师我们现在的项目全都是集群部署, 感觉在这种情况下是不是单机的Lock,和Synchronized都用不上, 只能采用分布式锁的方案? 那么这种情况下, 如何提高每个实例的并发效率?</p>2019-04-09</li><br/><li><span>探索无止境</span> 👍（11） 💬（5）<p>老师你好，我们在项目开发中，如果要实现缓存，会直接采用Redis，感觉更合适，所以不太清楚，实际中ReadWriteLock可以解决哪些问题？</p>2019-08-26</li><br/><li><span>文灏</span> 👍（10） 💬（5）<p>王老师你好，有个问题想请教一下。既然允许多个线程同时读，那么这个时候的读锁意义在哪里？</p>2019-05-22</li><br/><li><span>随风而逝</span> 👍（9） 💬（2）<p>缓存一致性问题，我们都是双删缓存。老师，读写锁的降级和单独使用有什么区别？或者说有什么优势？</p>2019-04-22</li><br/><li><span>刘志兵</span> 👍（9） 💬（2）<p>这里讲的读写锁和丁奇老师讲的mysql中的mdl锁和ddl锁原理好像是一样的，就是读写互斥，写写互斥，读读不互斥，老师讲的这个应该是读写锁的基本原理，mysql是这个锁的一种典型应用吧</p>2019-04-08</li><br/><li><span>无言的约定</span> 👍（8） 💬（3）<p>王老师，&quot;&quot;如果一个写线程正在执行写操作，此时禁止读线程读共享变量&quot;&quot; 这句话反过来也成立，是不是意味着读操作和写操作是互斥的，不能同时进行？</p>2019-12-05</li><br/><li><span>老杨同志</span> 👍（7） 💬（4）<p>老师，如果读锁的持有时间较长，读操作又比较多，会不会一直拿不到写锁？</p>2019-04-06</li><br/><li><span>密码123456</span> 👍（6） 💬（1）<p>系统停止了响应，说明线程可能被占满了。cpu利用率低为什么会推断出，是读锁升级为写锁？是因为锁升级后，线程都是等待状态吗？是不是cpu高是锁竞争？还有怎么验证读锁升级为写锁？</p>2019-04-06</li><br/><li><span>guihaiyizhu</span> 👍（4） 💬（1）<p>看了下juc的源码，尝试着分析一波 为啥为啥ReentrantReadWriteLock不能锁的降低不能锁的降低，但是可以锁的升级。
 ReentrantReadWriteLock 实现了 ReadWriteLock 的结构。所以会有读锁和写锁两个方法来获取对应的锁。
 
 先说下 JUC 锁的一般讨论：
+
 1. status 表示状态，比如：status 大于0 表示线程可以获得锁，线程等于0 表示需等待其他线程释放锁
 2. 等待队列： 获取不到锁的线程会丢到等待队列。
 3. LockSuppert.park &#47; unpark: 来作用线程的通信。
@@ -232,38 +232,37 @@ ReentrantReadWriteLock 实现了 ReadWriteLock 的结构。所以会有读锁和
 基于此，我们来看ReentrantReadWriteLock 里面读锁写锁的设计了：
 
 先给出状态定义的代码
-static final int SHARED_SHIFT   = 16;
-static final int SHARED_UNIT    = (1 &lt;&lt; SHARED_SHIFT);
-static final int MAX_COUNT      = (1 &lt;&lt; SHARED_SHIFT) - 1;
+static final int SHARED_SHIFT = 16;
+static final int SHARED_UNIT = (1 &lt;&lt; SHARED_SHIFT);
+static final int MAX_COUNT = (1 &lt;&lt; SHARED_SHIFT) - 1;
 static final int EXCLUSIVE_MASK = (1 &lt;&lt; SHARED_SHIFT) - 1;
-static int sharedCount(int c)    { return c &gt;&gt;&gt; SHARED_SHIFT; }
+static int sharedCount(int c) { return c &gt;&gt;&gt; SHARED_SHIFT; }
 static int exclusiveCount(int c) { return c &amp; EXCLUSIVE_MASK; }
 
 给出结论：status 低16位用来做 排它锁的状态，高16位用来做共享锁的状态
 
 WriteLock:
-        protected final boolean tryAcquire(int acquires) {
-            Thread current = Thread.currentThread();
-            int c = getState();
-            &#47;&#47; 获取写锁的status
-            int w = exclusiveCount(c);
-            if (c != 0) {
-                &#47;&#47; 如果 c ！= 0 &amp;&amp; w == 0. 说明这个RWLock 被其他写锁占着，所有不会锁的升级
-                if (w == 0 || current != getExclusiveOwnerThread())
-                    return false;
-            }
-        }
-
+protected final boolean tryAcquire(int acquires) {
+Thread current = Thread.currentThread();
+int c = getState();
+&#47;&#47; 获取写锁的status
+int w = exclusiveCount(c);
+if (c != 0) {
+&#47;&#47; 如果 c ！= 0 &amp;&amp; w == 0. 说明这个RWLock 被其他写锁占着，所有不会锁的升级
+if (w == 0 || current != getExclusiveOwnerThread())
+return false;
+}
+}
 
 ReadLock:
-        protected final int tryAcquireShared(int unused) {
-            Thread current = Thread.currentThread();
-            int c = getState();
-            &#47;&#47; 排它状态不等0 且 current 不是写锁的线程 才不能持有锁，
-            if (exclusiveCount(c) != 0 &amp;&amp;
-                getExclusiveOwnerThread() != current)
-                return -1;
-            &#47;&#47; ...
-            return fullTryAcquireShared(current);
-        }</p>2020-06-17</li><br/>
+protected final int tryAcquireShared(int unused) {
+Thread current = Thread.currentThread();
+int c = getState();
+&#47;&#47; 排它状态不等0 且 current 不是写锁的线程 才不能持有锁，
+if (exclusiveCount(c) != 0 &amp;&amp;
+getExclusiveOwnerThread() != current)
+return -1;
+&#47;&#47; ...
+return fullTryAcquireShared(current);
+}</p>2020-06-17</li><br/>
 </ul>

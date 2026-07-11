@@ -231,7 +231,7 @@ public class MainReactor implements Runnable{
                 // 进行事件选择
                 selector.select(1000);
                 // 经过事件选择后已经就绪的事件
-                ops = selector.selectedKeys(); 
+                ops = selector.selectedKeys();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -270,12 +270,12 @@ public class SubReactorThreadGroup {
     // 线程池IO线程的数量
     private final int ioThreadCount;  
     // 业务线程池大小
-    private final int businessTheadCout; 
+    private final int businessTheadCout;
     private static final int DEFAULT_NIO_THREAD_COUNT;
     // IO线程池数组
     private SubReactorThread[] ioThreads;
     //业务线程池
-    private ExecutorService businessExecutePool; 
+    private ExecutorService businessExecutePool;
 ​
     static {
         DEFAULT_NIO_THREAD_COUNT = 4;
@@ -389,7 +389,7 @@ public class SubReactorThread extends Thread{
                 it.remove();
                 try {
                      // 通道写事件就绪，说明可以继续往通道中写数据
-                    if (key.isWritable()) { 
+                    if (key.isWritable()) {
                         SocketChannel clientChannel = (SocketChannel) key.channel();
                         // 获取上次未写完的数据
                         ByteBuffer buf = (ByteBuffer) key.attachment();
@@ -440,7 +440,7 @@ public class SubReactorThread extends Thread{
                                 if(wc < 1 && byteBuffer.hasRemaining()) { // 说明写缓存区已满，需要注册写事件
                                     sc.register(selector, task.getOp(), task.getData());
                                     continue;
-                                } 
+                                }
                                 byteBuffer = null;//释放内存
                             } else {
                                 sc.register(selector, task.getOp());

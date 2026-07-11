@@ -66,8 +66,14 @@ const Component = ({ a, b }) => {
   const [n, setN] = useState(b); // 另一个Hook
   return (
     <ul>
-      <li>{m}<button onClick={() => setM(m + 1)}>+</button></li>
-      <li>{n}<button onClick={() => setN(n + 1)}>+</button></li>
+      <li>
+        {m}
+        <button onClick={() => setM(m + 1)}>+</button>
+      </li>
+      <li>
+        {n}
+        <button onClick={() => setN(n + 1)}>+</button>
+      </li>
     </ul>
   );
 };
@@ -91,15 +97,15 @@ const Component = ({ a, b }) => {
 
 其他Hooks，有些是上面基础Hooks的变体，有些虽然用途不同，但与基础Hooks共享底层实现。包括十个：
 
-01. useReducer
-02. useMemo
-03. useCallback
-04. useRef
-05. useImperativeHandle
-06. useLayoutEffect
-07. useDebugValue
-08. useDeferredValue
-09. useTransition
+1.  useReducer
+2.  useMemo
+3.  useCallback
+4.  useRef
+5.  useImperativeHandle
+6.  useLayoutEffect
+7.  useDebugValue
+8.  useDeferredValue
+9.  useTransition
 10. useId
 
 此外还有为第三方库作者提供的 `useSyncExternalStore` 和 `useInsertionEffect` 。虽然React API中提供了这么多Hooks，但并不意味着你每个Hook都要精通。
@@ -172,8 +178,8 @@ setTodoList([...todoList, aNewTodoItem]);
 这时函数参数的作用就体现出来了，只要改为下面的方式，就可以保证**更新函数使用最新的state来计算新state值**：
 
 ```javascript
-setShowAdd(prevState => !prevState);
-setTodoList(prevState => {
+setShowAdd((prevState) => !prevState);
+setTodoList((prevState) => {
   return [...prevState, aNewTodoItem];
 });
 ```
@@ -215,21 +221,20 @@ function App() {
 
 ```javascript
 function App() {
-  const [showAdd, setShowAdd] = useState(false);
-  const [todoList, setTodoList] = useState([/*省略*/]);
+  const [showAdd, setShowAdd] = useState(false);
+  const [todoList, setTodoList] = useState([/*省略*/]);
   // ...省略
-  const handleSubmit = (title) => {
-    setTodoList(currentTodoList => [
-      { title, status: new Date().toString() },
-      ...currentTodoList
-    ]);
-    setShowAdd(false);
-  };
-  // ...省略
-  return (
-    <div className="App">
-      {/*省略*/}
-      {showAdd && <KanbanNewCard onSubmit={handleSubmit} />}
+  const handleSubmit = (title) => {
+    setTodoList((currentTodoList) => [
+      { title, status: new Date().toString() },
+      ...currentTodoList,
+    ]);
+    setShowAdd(false);
+  }; // ...省略
+  return (
+    <div className="App">
+            {/*省略*/}     {" "}
+      {showAdd && <KanbanNewCard onSubmit={handleSubmit} />}
       {/*省略*/}
     </div>
   );
@@ -253,19 +258,22 @@ const Search = () => {
   const handleSearchClick = () => {
     // 模拟调用服务器端接口搜索"吉林"
     setTimeout(() => {
-      setProvince('吉林');
-      setCities(['长春', '吉林']);
+      setProvince("吉林");
+      setCities(["长春", "吉林"]);
     }, 1000);
   };
   return (
     <>
       <button onClick={handleSearchClick}>搜索</button>
       <ul>
-        <li>{province}<ul>
-          {cities.map(city => (
-            <li>{city}</li>
-          ))}
-        </ul></li>
+        <li>
+          {province}
+          <ul>
+            {cities.map((city) => (
+              <li>{city}</li>
+            ))}
+          </ul>
+        </li>
       </ul>
     </>
   );
@@ -318,7 +326,7 @@ const Component = () => {
   // 更新可变值
   myRef.current = newValue;
 
-  return (<div></div>);
+  return <div></div>;
 };
 ```
 
@@ -369,9 +377,10 @@ https:&#47;&#47;zh-hans.reactjs.org&#47;docs&#47;hooks-rules.html
 因为本质是链表。在各种判断中写 Hook 会导致节点错乱。
 
 2. useRef 中值变化是不会触发重新渲染。useState 中则是会触发渲染。</p>2022-09-12</li><br/><li><span>joel</span> 👍（2） 💬（1）<p>useRef 来代替 useState 吗?
-不能，这两个是不同的使用场景，usestate 是可以出发react 的协调过程，useref 不能</p>2022-09-15</li><br/><li><span>01</span> 👍（1） 💬（1）<p>18 批处理依托的 它的调度器。 可中断。  进入commit 阶段 则不可中断。  是否只渲染一次 这个不一定吧</p>2022-09-20</li><br/><li><span>__Initial</span> 👍（1） 💬（1）<p>我想问一下：在state自动批处理时，为什么使用函数参数就可以保证更新函数使用最新的state</p>2022-09-19</li><br/><li><span>风太大太大</span> 👍（1） 💬（1）<p>1. 函数组件之外的一个普通函数中调用 useState 不会生效
-2. 函数组件内部加一个 if 条件语句，在满足条件时才去调用 useState 不会生效。
-3. 在这个函数内部调用 useState，再在函数组件内调用这个函数。  useState 不会生效
+   不能，这两个是不同的使用场景，usestate 是可以出发react 的协调过程，useref 不能</p>2022-09-15</li><br/><li><span>01</span> 👍（1） 💬（1）<p>18 批处理依托的 它的调度器。 可中断。 进入commit 阶段 则不可中断。 是否只渲染一次 这个不一定吧</p>2022-09-20</li><br/><li><span>__Initial</span> 👍（1） 💬（1）<p>我想问一下：在state自动批处理时，为什么使用函数参数就可以保证更新函数使用最新的state</p>2022-09-19</li><br/><li><span>风太大太大</span> 👍（1） 💬（1）<p>1. 函数组件之外的一个普通函数中调用 useState 不会生效
+3. 函数组件内部加一个 if 条件语句，在满足条件时才去调用 useState 不会生效。
+4. 在这个函数内部调用 useState，再在函数组件内调用这个函数。 useState 不会生效
+
 </p>2022-09-16</li><br/><li><span>学习前端-react</span> 👍（0） 💬（1）<p>隔了好久，回答第二个问题。
 useRef 的使用方式是用用会存放一个最新的值即 current，每次修改也不会触发当前组件的render，这个应该就区别于 useState 了，因为setState 会触发当前组件的render。</p>2022-09-17</li><br/><li><span>奕晨</span> 👍（1） 💬（0）<p>Hook 在使用中都会有哪些限制：
 1. 在函数组件之外的一个普通函数中调用 useState；
@@ -381,7 +390,6 @@ useRef 的使用方式是用用会存放一个最新的值即 current，每次�
 3. 在函数组件内部定义一个函数，在这个函数内部调用 useState，再在函数组件内调用这个函数。
     不能
 只能在React函数中调用Hook。
-
 
 可以用 useRef 来代替 useState 吗？
 不可以，useState会重新渲染，useRef 值发生变化，不会重新渲染。</p>2023-01-11</li><br/><li><span>huangnan0709</span> 👍（0） 💬（0）<p>useState的set函数，无论是使用表达式，还是函数返回值更新状态，都能在下一次重新渲染之前，在set函数的回调函数参数获取最新值</p>2024-05-27</li><br/>

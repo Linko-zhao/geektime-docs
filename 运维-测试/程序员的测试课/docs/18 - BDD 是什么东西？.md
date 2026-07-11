@@ -46,14 +46,14 @@ Gherkin 语言这层只提供了业务描述，作为程序员我们很清楚，
 ```
 public class TodoItemStepDefinitions ... {
   private RestTemplate restTemplate;
-  
+
   public TodoItemStepDefinitions() {
     ...
-    
+
     Given("todo item {string} is added", (String content) ->
       addTodoItem(content)
     );
-    
+
     ...
   }
 

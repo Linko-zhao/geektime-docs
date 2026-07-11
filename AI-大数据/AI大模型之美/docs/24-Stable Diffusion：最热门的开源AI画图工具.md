@@ -527,8 +527,9 @@ already allocated; 10.81 MiB free; 13.46 GiB reserved in total by PyTorch) If re
 memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and 
 PYTORCH_CUDA_ALLOC_CONF   老师，colab gpu不够了，默认的16g不够，是不是需要购买更大的gpu</p>2023-05-08</li><br/><li><span>Oli张帆</span> 👍（0） 💬（2）<p>请教一下老师，结合您之前讲的HuggingFace，我可以通过HuggingFace，免费调用Stable Diffusion的接口，来产生大量的图片。那这整个流程中需要的大量算力，是谁来买单的呢？</p>2023-05-06</li><br/><li><span>Toni</span> 👍（0） 💬（10）<p>1. 使用 GPU 无疑会加快图像的生成，但实在没有办法使用 GPU 时，就用 CPU，只要将下面代码中的 &quot;cuda&quot; 改成 &quot;cpu&quot; 即可，慢比没有强。
 
-pipeline.to(&quot;cuda&quot;) =&gt; pipeline.to(&quot;cpu&quot;) 
+pipeline.to(&quot;cuda&quot;) =&gt; pipeline.to(&quot;cpu&quot;)
 ---------------------
+
 from diffusers import DiffusionPipeline
 pipeline = DiffusionPipeline.from_pretrained(&quot;runwayml&#47;stable-diffusion-v1-5&quot;)
 pipeline.to(&quot;cpu&quot;)
@@ -536,11 +537,12 @@ pipeline.to(&quot;cpu&quot;)
 image = pipeline(&quot;Sports car, road, rural areas, blue sky, white clouds, endless grassland in the background&quot;).images[0]
 image
 
---------------
+---
+
 生成上面的图在 cpu 条件下约10分钟。
 
 2. 描述图像的 prompt 如果太长会报错， 比如
-Token indices sequence length is longer than the specified maximum sequence length for this model (161 &gt; 77). 
+   Token indices sequence length is longer than the specified maximum sequence length for this model (161 &gt; 77).
 
 程序会继续运行，但输出结果是黑板。
 Potential NSFW content was detected in one or more images. A black image will be returned instead. Try again with a different prompt and&#47;or seed.

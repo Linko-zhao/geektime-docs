@@ -40,7 +40,7 @@ val extractFields: Seq[Row] => Seq[(String, Int)] = {
 ```
 //实现方案2 —— 正例
 val extractFields: Seq[Row] => Seq[(String, Int)] = {
-  (rows: Seq[Row]) => 
+  (rows: Seq[Row]) =>
     rows.map(row => (row.getString(2), row.getInt(4))).toSeq
 }
 
@@ -58,15 +58,15 @@ val extractFields: Seq[Row] => Seq[(String, Int)] = {
 e.g. ("2021-01-01", "2021-01-31")
 */
 val pairDF: DataFrame = _
- 
+
 /**
 (dim1, dim2, dim3, eventDate, value)
 e.g. ("X", "Y", "Z", "2021-01-15", 12)
 */
 val factDF: DataFrame = _
- 
+
 // Storage root path
-val rootPath: String = _ 
+val rootPath: String = _
 
 ```
 
@@ -89,13 +89,13 @@ val instanceDF = factDF
 .agg(sum("value") as "sum_value")
 instanceDF
 }
- 
+
 pairDF.collect.foreach{
 case (startDate: String, endDate: String) =>
 val instance = createInstance(factDF, startDate, endDate)
 val outPath = s"${rootPath}/endDate=${endDate}/startDate=${startDate}"
 instance.write.parquet(outPath)
-} 
+}
 ```
 
 首先，他们是以factDF、开始时间和结束时间为形参定义createInstance函数。在函数体中，先根据Event date对factDF进行过滤，然后从4个维度分组汇总统计量，最后将汇总结果返回。定义完createInstance函数之后，收集pairDF到Driver端并逐条遍历每一个时间对，然后以factDF、开始时间、结束时间为实参调用createInstance函数，来获取满足过滤要求的汇总结果。最后，以Parquet的形式将结果落盘。
@@ -110,7 +110,7 @@ val instances = factDF
 .join(pairDF, factDF("eventDate") > pairDF("startDate") && factDF("eventDate") <= pairDF("endDate"))
 .groupBy("dim1", "dim2", "dim3", "eventDate", "startDate", "endDate")
 .agg(sum("value") as "sum_value")
- 
+
 instances.write.partitionBy("endDate", "startDate").parquet(rootPath)
 ```
 
@@ -147,7 +147,6 @@ instances.write.partitionBy("endDate", "startDate").parquet(rootPath)
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Will</span> 👍（19） 💬（5）<p>第二个例子，可以利用map join，让小数据分发到每个worker上，这样不用shuffle数据</p>2021-03-15</li><br/><li><span>Fendora范东_</span> 👍（18） 💬（4）<p>请问磊哥，spark里面nested loop join和cartesian product jion有什么区别？</p>2021-03-31</li><br/><li><span>西南偏北</span> 👍（13） 💬（3）<p>1. 其实有很多，比如用foreach算子将数据写入到外部数据库，导致每条数据的写入都会建立连接，另外单条写入也比批量写入的性能差很多。建议使用foreachPartition()，每个分区建立一个连接，同时可以批量写入，性能会好很多。
 2. 一般来讲，小表与大表的关联操作，首先要考虑Broadcast Join
-
 
 另外，关于Nested Loop Join的原理：https:&#47;&#47;www.geeksforgeeks.org&#47;join-algorithms-in-database&#47;amp&#47;
 </p>2021-05-01</li><br/><li><span>TaoInsight</span> 👍（12） 💬（6）<p>如果pai rDF的startDate和endDate范围有限，可以把日期范围展开，将非等值join转成等值join</p>2021-03-17</li><br/><li><span>慢慢卢</span> 👍（7） 💬（3）<p>老师，我把第二个例子自己试了一遍，有个问题不理解：两个df都只有一条数据，sparkui上第二个stage有200个task，为什么shuffle之后的stage的task有200个，虽然说shuffle之后reduce默认并行度是200，但我只有一条数据，实际上只需要一个task啊，其他的task是怎么产生的？</p>2021-06-17</li><br/><li><span>Elon</span> 👍（5） 💬（1）<p>函数式的副作用指的是不修改入参吧？在函数内部是可以定义变量、修改变量的。因此fields变量在函数内部，应该不算副作用吧？</p>2021-03-22</li><br/><li><span>葛聂</span> 👍（4） 💬（4）<p>Case 1为什么性能差一倍呢</p>2021-03-16</li><br/><li><span>fsc2016</span> 👍（3） 💬（6）<p>请问老师，这个课程需要哪些基础，我平时使用过pysaprk 做过一些机器学习相关数据处理练习，对于我这种使用spark不多的，可以消化吸收嘛</p>2021-03-18</li><br/><li><span>浩然</span> 👍（2） 💬（1）<p>简单啊。那个时间区间的，罗列出来，广播一下就完事了。从nest loop到hash join的跨越。

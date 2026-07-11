@@ -38,7 +38,7 @@ Nginx Ingress Controller 组件也是部署在 K8s 集群中，我们可以直�
 HTTP request sent, awaiting response... 200 OK
 Length: 16136 (16K) [text/plain]
 Saving to: ‘deploy.yaml’
-100%[============================================================================================>] 16,136      15.6KB/s   in 1.0s   
+100%[============================================================================================>] 16,136      15.6KB/s   in 1.0s
 2024-06-23 19:11:45 (15.6 KB/s) - ‘deploy.yaml’ saved [16136/16136]
 ```
 
@@ -111,16 +111,16 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: myapp.address.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: my-service
-            port:
-              number: 80
+    - host: myapp.address.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 80
 ```
 
 - **host：**指定主机域名，可以是精确匹配（例如 “myapp.address.com”）或者使用通配符来匹配（例如 “\*.address.com”）。
@@ -251,9 +251,9 @@ kubectl create secret tls myapp-address-com-secret --cert=./myapp.address.com.pe
 spec:
   ingressClassName: nginx
   tls:
-  - hosts:
-    - myapp.address.com
-    secretName: myapp-address-com-secret
+    - hosts:
+        - myapp.address.com
+      secretName: myapp-address-com-secret
 ...
 ```
 
@@ -301,16 +301,16 @@ error: failed to create ingress: Internal error occurred: failed calling webhook
 NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps&#47;ingress-nginx-controller   1&#47;1     1            1           41m
 
-NAME                                         TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
-service&#47;ingress-nginx-controller             LoadBalancer   10.103.29.35   &lt;pending&gt;     80:30257&#47;TCP,443:32431&#47;TCP   41m
-service&#47;ingress-nginx-controller-admission   ClusterIP      10.106.98.61   &lt;none&gt;        443&#47;TCP 
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+service&#47;ingress-nginx-controller LoadBalancer 10.103.29.35 &lt;pending&gt; 80:30257&#47;TCP,443:32431&#47;TCP 41m
+service&#47;ingress-nginx-controller-admission ClusterIP 10.106.98.61 &lt;none&gt; 443&#47;TCP
 
 [root@k8s-master ~]# kubectl get svc
-NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-kubernetes   ClusterIP   10.96.0.1     &lt;none&gt;        443&#47;TCP        67m
-my-service   NodePort    10.108.8.79   &lt;none&gt;        80:30001&#47;TCP   35m
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+kubernetes ClusterIP 10.96.0.1 &lt;none&gt; 443&#47;TCP 67m
+my-service NodePort 10.108.8.79 &lt;none&gt; 80:30001&#47;TCP 35m
 
-运行service：http:&#47;&#47;120.27.143.120:30001&#47;   成功
-运行ingress：http:&#47;&#47;myapp.address.com:32431&#47;   失败</p>2024-07-27</li><br/><li><span>Y</span> 👍（0） 💬（1）<p>用命令可以正常访问Nginx，用my-ingress.yaml文件不行(访问308，404)。my-ingress.yaml里面不知道哪个地方有问题。</p>2024-07-23</li><br/><li><span>抱紧我的小鲤鱼</span> 👍（0） 💬（1）<p>ingress controller 的service 需要暴露 443，用来处理https请求
+运行service：http:&#47;&#47;120.27.143.120:30001&#47; 成功
+运行ingress：http:&#47;&#47;myapp.address.com:32431&#47; 失败</p>2024-07-27</li><br/><li><span>Y</span> 👍（0） 💬（1）<p>用命令可以正常访问Nginx，用my-ingress.yaml文件不行(访问308，404)。my-ingress.yaml里面不知道哪个地方有问题。</p>2024-07-23</li><br/><li><span>抱紧我的小鲤鱼</span> 👍（0） 💬（1）<p>ingress controller 的service 需要暴露 443，用来处理https请求
 deployment 的pod 层面并不需要暴露 443，加解密其实在ingress 层处理，pod只需要叫监听内部配置的端口，然后将service 的流量转发到这个端口</p>2024-07-19</li><br/>
 </ul>

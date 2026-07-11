@@ -236,9 +236,11 @@ GPT-4o1 的能力和思维链之间的关系是什么？欢迎你把思考后的
 对应课程代码，有些地方稍作修改，使得能运行成功或者更顺畅：
 
 # 1、修改所有example中 response 的获取方式
+
 response[&#39;content&#39;] -&gt; response[&#39;message&#39;][&#39;content&#39;]
 
 # 2、example4 中添加step判断，减少循环次数
+
 if step == &#39;&#39;:
-    continue</p>2024-10-23</li><br/>
+continue</p>2024-10-23</li><br/>
 </ul>

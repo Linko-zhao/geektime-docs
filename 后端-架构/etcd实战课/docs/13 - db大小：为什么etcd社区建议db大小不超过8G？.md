@@ -31,7 +31,7 @@
 首先，我通过一系列如下[benchmark](https://github.com/etcd-io/etcd/tree/v3.4.9/tools/benchmark)命令，向一个8核32G的3节点的集群写入120万左右key。key大小为32，value大小为256到10K，用以分析大db集群案例中的各个影响面。
 
 ```
-./benchmark put --key-size 32 --val-size 10240 --total 
+./benchmark put --key-size 32 --val-size 10240 --total
 1000000 --key-space-size 2000000 --clients 50 --conns 50
 ```
 

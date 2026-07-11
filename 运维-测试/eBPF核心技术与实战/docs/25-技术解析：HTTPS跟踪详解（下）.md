@@ -17,7 +17,7 @@
 ```plain
 $ ldd /usr/sbin/nginx | grep ssl
 	libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3 (0x000079ffab4f7000)
- 
+
 $ ldd /usr/bin/curl | grep ssl
 	libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3 (0x00007574d135c000)
 ```

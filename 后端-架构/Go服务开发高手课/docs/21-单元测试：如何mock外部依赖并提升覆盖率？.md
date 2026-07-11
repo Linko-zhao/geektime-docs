@@ -203,28 +203,28 @@ go tool cover -html=coverage.out -o coverage.html
 ```shell
 # 定义用于运行CI任务的Docker镜像，这里选择最新的Go语言镜像
 # 该镜像将提供运行Go项目测试所需的环境
-image: golang:latest  
+image: golang:latest
 
 # 定义CI/CD的阶段，这里只设置了一个test阶段用于执行单元测试
-stages:  
-  - test  
+stages:
+  - test
 
 # test阶段的具体配置
-test:  
+test:
   # 此阶段名称为test，用于执行单元测试任务
-  stage: test  
-  script:  
+  stage: test
+  script:
     # 更新项目的依赖项，确保所有依赖都是最新且正确的
-    - go mod tidy  
+    - go mod tidy
     # 运行单元测试，并将覆盖率信息输出到coverage.out文件中
-    - go test -coverprofile=coverage.out  
+    - go test -coverprofile=coverage.out
     # 提取并检查覆盖率信息
     # 首先，使用go tool cover -func=coverage.out命令获取覆盖率的详细信息
     # 然后，通过grep命令筛选出包含“total:”及覆盖率数值的行
     # 接着，使用awk命令提取出覆盖率数值
     # 最后，再次使用awk命令检查覆盖率是否低于80%，如果低于则使脚本以非零状态码退出，导致CI任务失败
-    - go tool cover -func=coverage.out | grep -E "total:.*\d+.\d+%" | awk '{print $3}' | awk -F '%' '{if ($1 < 80) {exit 1}}'  
-  allow_failure: false  
+    - go tool cover -func=coverage.out | grep -E "total:.*\d+.\d+%" | awk '{print $3}' | awk -F '%' '{if ($1 < 80) {exit 1}}'
+  allow_failure: false
   # 设置为false表示此阶段任务不允许失败，如果单元测试失败或覆盖率不达标，整个CI流程将失败
 ```
 

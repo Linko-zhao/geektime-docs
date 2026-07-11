@@ -117,17 +117,17 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 	int idx1 = GetVertexIdx(tmpv1);
 	if (idx1 == -1) //开始顶点不存在
 		return false;
-	
+
 	int idx2 = GetVertexIdx(tmpv2);
 	if (idx2 == -1) //结束顶点不存在
 		return false;
-	
+
 	if (idx1 == idx2)
 	{
 		cout <<"开始顶点和结束顶点不可以相同！"<< endl;
 		return false;
 	}
-	
+
 	int** pdist = new int* [m_numVertices];
 	int** ppath = new int* [m_numVertices];
 	for (int i = 0; i < m_numVertices; ++i)
@@ -135,7 +135,7 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 		pdist[i] = new int[m_numVertices];
 		ppath[i] = new int[m_numVertices];
 	} //end for
-	
+
 	//二维数组初始化
 	for (int i = 0; i < m_numVertices; ++i)
 	{
@@ -145,7 +145,7 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 			ppath[i][j] = -1;
 		}//end j
 	} //end i
-	
+
 	//用三重循环实现弗洛伊德（Floyd）算法
 	for (int v = 0; v < m_numVertices; ++v)//依次把各个顶点放入图中，顶点下标是v
 	{
@@ -155,7 +155,7 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 			{
 				if (i == j || v == i || v == j)
 					continue;
-				
+
 				if (pdist[i][v] == INT_MAX_MY || pdist[v][j] == INT_MAX_MY) //因为这两个数字将做加法操作，所以每个值都必须不能是INT_MAX_MY
 				{
 					continue;
@@ -168,7 +168,7 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 			} //end j
 		} //end i
 	} //end v
-		
+
 	//显示两个顶点之间最短路径信息
 	if (pdist[idx1][idx2] == INT_MAX_MY )
 	{
@@ -179,7 +179,7 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 		cout <<"从顶点"<< pm_VecticesList[idx1] <<"到顶点"<< pm_VecticesList[idx2] <<"最短路径长度("<< pdist[idx1][idx2] <<")，最短路径：";
 		Disp_FloydPath(ppath,idx1,idx2); //采用一个递归函数来显示最短路径信息
 	}
-	
+
 	//释放内存
 	for (int i = 0; i < m_numVertices; ++i)
 	{
@@ -190,7 +190,7 @@ bool ShortestPath_Floyd(const T& tmpv1, const T& tmpv2) //tmpv1：开始顶点�
 	delete[] ppath;
 	return true;
 }
-	
+
 //显示弗洛伊德（Floyd）算法找到的两点之间最小路径（递归函数）
 void Disp_FloydPath(int** ppath,int u,int v)
 {

@@ -231,13 +231,13 @@ public abstract class AbstractQueuedSynchronizer
 ```
 class Singleton {
     private static Singleton instance;
-    
+
     public int a;
-    
+
     private Singleton() {
       a = 1;
     }
-    
+
     public static Singleton getInstance() {
         if (instance == null)
             instance = new Singleton();
@@ -278,12 +278,12 @@ class Singleton {
 ```
 class Singleton {
     private static Singleton instance = new Singleton();
-    
+
     public int a;
     private Singleton() {
         a = 1;
     }
-    
+
     public static Singleton getInstance() {
         return instance;
     }
@@ -299,7 +299,7 @@ class Singleton {
 ```
 class Singleton {
     // 非核心代码略
-    
+
     public static Singleton getInstance() {
         if (instance == null) {
             synchronized (Singleton.class) {
@@ -380,18 +380,16 @@ class Main {
 1.加锁保证多线程的串行
 2.操作变成原子操作，如使用并发包下的原子类
 
-
-
 老师能不能以后讲讲cpu之上的内存模型呢？比如arm</p>2021-12-08</li><br/><li><span>送过快递的码农</span> 👍（0） 💬（2）<p>我尝试对之前的知识和今天的文章我来梳理一下。volatile 关键字修饰的变量要遵循happen-bofore模型。由于cpu缓存的情况，我们会出现读滞后数据的情况。前面的知识，cpu通过缓存一致性协议，对缓存状态进行管理，一旦失效，会通过总线同步给其他核心。但是由于，这样性能成本太高，所以出现写缓存区+失效队列+内存屏障来进行补充？又由于我理解这个是jmm内存模型提出的规范，由于不同平台，不同cpu缓存架构不一样，cpu所提供的内存屏障实现也不一样。volatile关键字，虽说是可见性，但是也是集cpu，操作系统，jvm这些在不同层级上做自己的事情，方能实现。感觉也是现代计算机知识体系的一个精华（由于，前面很多看了不懂不懂，所以麻烦老师看看我的理解对不对，感觉这个也是要多刷的，不然越学越废）</p>2021-12-09</li><br/><li><span>raisecomer</span> 👍（0） 💬（2）<p>“happen-before模型”的表格中“对volatile的写操作在对该变量的读操作之前执行”，太令人费解了</p>2021-12-08</li><br/><li><span>李二木</span> 👍（0） 💬（1）<p>volatile 只能保证可见性和有序性。不能保证原子性。</p>2021-12-08</li><br/><li><span>anqi</span> 👍（2） 💬（0）<p>volatile 可以保证可见性，但无法保证原子性
 因为数据可能在 寄存器或者 （store buffer + cpu cache + memory）组成的内存子系统中，
 当在寄存器中时，如果发生中断，另一个线程仍然可以在上面的内存子系统中读到同样的值， 造成两次操作都是基于一个值做了自增操作，虽然刷新回内存的操作可以保证可见性，但已经于事无补了。</p>2022-05-30</li><br/><li><span>AriseFX</span> 👍（1） 💬（0）<p>思考题
- 
+
 public void run() {
-        long sumOffset = UNSAFE.staticFieldOffset(Main.class.getDeclaredField(&quot;sum&quot;));
-        for (int i = 0; i &lt; 40000; i++) {
-            UNSAFE.getAndAddInt(Main.class, sumOffset, 1);
-        }
-    }</p>2022-02-16</li><br/><li><span>卖藥郎</span> 👍（0） 💬（0）<p>volatile 能替代锁（或者 CAS 操作）的能力吗？
+long sumOffset = UNSAFE.staticFieldOffset(Main.class.getDeclaredField(&quot;sum&quot;));
+for (int i = 0; i &lt; 40000; i++) {
+UNSAFE.getAndAddInt(Main.class, sumOffset, 1);
+}
+}</p>2022-02-16</li><br/><li><span>卖藥郎</span> 👍（0） 💬（0）<p>volatile 能替代锁（或者 CAS 操作）的能力吗？
 答：不能。比如 i++，实际会包含读改写三个操作，T1从主存中读取值之后，由于没有原子性限制，主存中的值可能会在此刻发生变化。
 不知道这样理解的对不对，望老师指正</p>2022-03-31</li><br/><li><span>苏志辉</span> 👍（0） 💬（1）<p>怎么理解程序顺序规则和控制流依赖、数据流依赖，程序顺序规则不会让有数据依赖的禁止重排吗？</p>2022-02-12</li><br/><li><span>榕</span> 👍（0） 💬（1）<p>而 Arm 上，由于存在单向的 barrier，所以 LoadLoad 和 LoadStore barrier 就可以使用 acquire load 代替，LoadStore 和 StoreStore barrier 也可以使用 release store 代替，而 StoreLoad barrier 就只能使用 dmb 代替了。
 

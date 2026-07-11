@@ -81,21 +81,21 @@ module forwarding (
   wire [1:0] forward_rs1_sel = (exMemRw & (rs1 == exMemRd) & (exMemRd != 5'b0)) ? 2'b01
                               :(memWBRw & (rs1 == memWBRd) & (memWBRd != 5'b0)) ? 2'b10
                               : 2'b00;
-                  
+
   wire [1:0] forward_rs2_sel = (exMemRw & (rs2 == exMemRd) & (exMemRd != 5'b0)) ? 2'b01
                               :(memWBRw & (rs2 == memWBRd) & (memWBRd != 5'b0)) ? 2'b10
                               : 2'b00;
 
-  wire [31:0] regWData = mem_wb_ctrl_data_toReg ? mem_wb_readData : mem_wb_data_result; 
+  wire [31:0] regWData = mem_wb_ctrl_data_toReg ? mem_wb_readData : mem_wb_data_result;
 
   //根据数据冒险的类型选择前递的数据
   assign forward_rs1_data = (forward_rs1_sel == 2'b00) ? id_ex_data_regRData1 :
                             (forward_rs1_sel == 2'b01) ? ex_mem_data_result   :
-                            (forward_rs1_sel == 2'b10) ? regWData : 32'h0; 
+                            (forward_rs1_sel == 2'b10) ? regWData : 32'h0;
 
   assign forward_rs2_data = (forward_rs2_sel == 2'b00) ? id_ex_data_regRData2 :
                             (forward_rs2_sel == 2'b01) ? ex_mem_data_result   :
-                            (forward_rs2_sel == 2'b10) ? regWData : 32'h0; 
+                            (forward_rs2_sel == 2'b10) ? regWData : 32'h0;
 endmodule
 ```
 
@@ -108,7 +108,7 @@ endmodule
   wire [1:0] forward_rs1_sel = (exMemRw & (rs1 == exMemRd) & (exMemRd != 5'b0)) ? 2'b01
                               :(memWBRw & (rs1 == memWBRd) & (memWBRd != 5'b0)) ? 2'b10
                               : 2'b00;
-                  
+
   wire [1:0] forward_rs2_sel = (exMemRw & (rs2 == exMemRd) & (exMemRd != 5'b0)) ? 2'b01
                               :(memWBRw & (rs2 == memWBRd) & (memWBRd != 5'b0)) ? 2'b10
                               : 2'b00;
@@ -124,11 +124,11 @@ endmodule
   //根据数据冒险的类型选择前递的数据
   assign forward_rs1_data = (forward_rs1_sel == 2'b00) ? id_ex_data_regRData1 :
                             (forward_rs1_sel == 2'b01) ? ex_mem_data_result   :
-                            (forward_rs1_sel == 2'b10) ? regWData : 32'h0; 
+                            (forward_rs1_sel == 2'b10) ? regWData : 32'h0;
 
   assign forward_rs2_data = (forward_rs2_sel == 2'b00) ? id_ex_data_regRData2 :
                             (forward_rs2_sel == 2'b01) ? ex_mem_data_result   :
-                            (forward_rs2_sel == 2'b10) ? regWData : 32'h0; 
+                            (forward_rs2_sel == 2'b10) ? regWData : 32'h0;
 ```
 
 我们先把目光聚焦到id\_ex\_data\_regRData1和id\_ex\_data\_regRData2这两个信号上。它们来自于指令译码之后读出通用寄存器的两个操作数，这是流水线不发生数据冒险时，流水线正常选择的数据通路。
@@ -162,42 +162,42 @@ module ex_mem_ctrl(
   output       out_wb_ctrl_regWrite
 );
 
-  reg  reg_mem_ctrl_memRead; 
-  reg  reg_mem_ctrl_memWrite; 
-  reg [1:0] reg_mem_ctrl_maskMode; 
-  reg  reg_mem_ctrl_sext; 
-  reg  reg_wb_ctrl_toReg; 
-  reg  reg_wb_ctrl_regWrite; 
+  reg  reg_mem_ctrl_memRead;
+  reg  reg_mem_ctrl_memWrite;
+  reg [1:0] reg_mem_ctrl_maskMode;
+  reg  reg_mem_ctrl_sext;
+  reg  reg_wb_ctrl_toReg;
+  reg  reg_wb_ctrl_regWrite;
 
-  assign out_mem_ctrl_memRead = reg_mem_ctrl_memRead; 
-  assign out_mem_ctrl_memWrite = reg_mem_ctrl_memWrite; 
-  assign out_mem_ctrl_maskMode = reg_mem_ctrl_maskMode; 
-  assign out_mem_ctrl_sext = reg_mem_ctrl_sext; 
-  assign out_wb_ctrl_toReg = reg_wb_ctrl_toReg; 
-  assign out_wb_ctrl_regWrite = reg_wb_ctrl_regWrite; 
-  
+  assign out_mem_ctrl_memRead = reg_mem_ctrl_memRead;
+  assign out_mem_ctrl_memWrite = reg_mem_ctrl_memWrite;
+  assign out_mem_ctrl_maskMode = reg_mem_ctrl_maskMode;
+  assign out_mem_ctrl_sext = reg_mem_ctrl_sext;
+  assign out_wb_ctrl_toReg = reg_wb_ctrl_toReg;
+  assign out_wb_ctrl_regWrite = reg_wb_ctrl_regWrite;
+
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_mem_ctrl_memRead <= 1'h0; 
-    end else if (flush) begin 
-      reg_mem_ctrl_memRead <= 1'h0; 
-    end else begin 
-      reg_mem_ctrl_memRead <= in_mem_ctrl_memRead; 
+    if (reset) begin
+      reg_mem_ctrl_memRead <= 1'h0;
+    end else if (flush) begin
+      reg_mem_ctrl_memRead <= 1'h0;
+    end else begin
+      reg_mem_ctrl_memRead <= in_mem_ctrl_memRead;
     end
   end
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_mem_ctrl_memWrite <= 1'h0; 
-    end else if (flush) begin 
-      reg_mem_ctrl_memWrite <= 1'h0; 
-    end else begin 
-      reg_mem_ctrl_memWrite <= in_mem_ctrl_memWrite; 
+    if (reset) begin
+      reg_mem_ctrl_memWrite <= 1'h0;
+    end else if (flush) begin
+      reg_mem_ctrl_memWrite <= 1'h0;
+    end else begin
+      reg_mem_ctrl_memWrite <= in_mem_ctrl_memWrite;
     end
   end
-  
+
   …………  //由于代码较长，结构相似，这里省略了一部分，完整代码你可以从Gitee上获取
-  
+
 endmodule
 ```
 
@@ -229,56 +229,56 @@ module ex_mem(
   output [31:0] data_result,
   output [31:0] data_pc
 );
-  reg [4:0] reg_regWAddr; 
-  reg [31:0] reg_regRData2; 
-  reg [31:0] reg_result; 
-  reg [31:0] reg_pc; 
+  reg [4:0] reg_regWAddr;
+  reg [31:0] reg_regRData2;
+  reg [31:0] reg_result;
+  reg [31:0] reg_pc;
 
   wire [31:0] resulet_w = (ex_result_sel == 2'h0) ? alu_result :
                           (ex_result_sel == 2'h1) ? id_ex_data_imm :
                           (ex_result_sel == 2'h2) ? (in_pc +32'h4) : 32'h0;
-  assign data_regWAddr = reg_regWAddr; 
-  assign data_regRData2 = reg_regRData2; 
-  assign data_result = reg_result; 
-  assign data_pc = reg_pc; 
+  assign data_regWAddr = reg_regWAddr;
+  assign data_regRData2 = reg_regRData2;
+  assign data_result = reg_result;
+  assign data_pc = reg_pc;
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_regWAddr <= 5'h0; 
-    end else if (flush) begin 
-      reg_regWAddr <= 5'h0; 
-    end else begin 
-      reg_regWAddr <= in_regWAddr; 
+    if (reset) begin
+      reg_regWAddr <= 5'h0;
+    end else if (flush) begin
+      reg_regWAddr <= 5'h0;
+    end else begin
+      reg_regWAddr <= in_regWAddr;
     end
   end
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_regRData2 <= 32'h0; 
-    end else if (flush) begin 
-      reg_regRData2 <= 32'h0; 
-    end else begin 
-      reg_regRData2 <= in_regRData2; 
+    if (reset) begin
+      reg_regRData2 <= 32'h0;
+    end else if (flush) begin
+      reg_regRData2 <= 32'h0;
+    end else begin
+      reg_regRData2 <= in_regRData2;
     end
   end
 
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_result <= 32'h0; 
-    end else if (flush) begin 
-      reg_result <= 32'h0; 
-    end else begin 
-      reg_result <= resulet_w; 
+    if (reset) begin
+      reg_result <= 32'h0;
+    end else if (flush) begin
+      reg_result <= 32'h0;
+    end else begin
+      reg_result <= resulet_w;
     end
   end
-  
+
   always @(posedge clk or posedge reset) begin
-    if (reset) begin 
-      reg_pc <= 32'h0; 
-    end else if (flush) begin 
-      reg_pc <= 32'h0; 
-    end else begin 
-      reg_pc <= in_pc; 
+    if (reset) begin
+      reg_pc <= 32'h0;
+    end else if (flush) begin
+      reg_pc <= 32'h0;
+    end else begin
+      reg_pc <= in_pc;
     end
   end
 endmodule

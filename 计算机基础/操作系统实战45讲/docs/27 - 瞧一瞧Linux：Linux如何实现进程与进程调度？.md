@@ -18,9 +18,9 @@ Linux系统下，把运行中的应用程序抽象成一个数据结构task\_str
 
 ```
 struct task_struct {
-    struct thread_info thread_info;//处理器特有数据 
-    volatile long   state;       //进程状态 
-    void            *stack;      //进程内核栈地址 
+    struct thread_info thread_info;//处理器特有数据
+    volatile long   state;       //进程状态
+    void            *stack;      //进程内核栈地址
     refcount_t      usage;       //进程使用计数
     int             on_rq;       //进程是否在运行队列上
     int             prio;        //动态优先级
@@ -31,7 +31,7 @@ struct task_struct {
     struct sched_entity         se;//普通进程的调度实体
     struct sched_rt_entity      rt;//实时进程的调度实体
     struct sched_dl_entity      dl;//采用EDF算法调度实时进程的调度实体
-    struct sched_info       sched_info;//用于调度器统计进程的运行信息 
+    struct sched_info       sched_info;//用于调度器统计进程的运行信息
     struct list_head        tasks;//所有进程的链表
     struct mm_struct        *mm;  //指向进程内存结构
     struct mm_struct        *active_mm;
@@ -43,7 +43,7 @@ struct task_struct {
     u64             utime;   //用于记录进程在用户态下所经过的节拍数
     u64             stime;   //用于记录进程在内核态下所经过的节拍数
     u64             gtime;   //用于记录作为虚拟机进程所经过的节拍数
-    unsigned long           min_flt;//缺页统计 
+    unsigned long           min_flt;//缺页统计
     unsigned long           maj_flt;
     struct fs_struct        *fs;    //进程相关的文件系统信息
     struct files_struct     *files;//进程打开的所有文件
@@ -81,7 +81,7 @@ static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int node)
 
 static inline struct task_struct *alloc_task_struct_node(int node)
 {
-    return kmem_cache_alloc_node(task_struct_cachep, GFP_KERNEL, node);//在task_struct_cachep内存对象中分配一个task_struct结构休对象 
+    return kmem_cache_alloc_node(task_struct_cachep, GFP_KERNEL, node);//在task_struct_cachep内存对象中分配一个task_struct结构休对象
 }
 static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
 {
@@ -142,14 +142,14 @@ struct mm_struct {
         unsigned long task_size;    //进程虚拟地址空间大小
         pgd_t * pgd;        //指向MMU页表
         atomic_t mm_users; //多个进程共享这个mm_struct
-        atomic_t mm_count; //mm_struct结构本身计数 
+        atomic_t mm_count; //mm_struct结构本身计数
         atomic_long_t pgtables_bytes;//页表占用了多个页
         int map_count;      //多少个VMA
         spinlock_t page_table_lock; //保护页表的自旋锁
         struct list_head mmlist; //挂入mm_struct结构的链表
-        //进程应用程序代码开始、结束地址，应用程序数据的开始、结束地址 
+        //进程应用程序代码开始、结束地址，应用程序数据的开始、结束地址
         unsigned long start_code, end_code, start_data, end_data;
-        //进程应用程序堆区的开始、当前地址、栈开始地址 
+        //进程应用程序堆区的开始、当前地址、栈开始地址
         unsigned long start_brk, brk, start_stack;
         //进程应用程序参数区开始、结束地址
         unsigned long arg_start, arg_end, env_start, env_end;
@@ -203,7 +203,7 @@ fail_nomem:
 
 ```
 struct files_struct {
- 
+
     atomic_t count;//自动计数
     struct fdtable __rcu *fdt;
     struct fdtable fdtab;
@@ -272,7 +272,7 @@ struct sched_entity {
     u64 sum_exec_runtime;//当前实体总执行时间
     u64 prev_sum_exec_runtime;//截止到上次统计，进程执行的时间
     u64 vruntime;//当前实体的虚拟时间
-    u64 nr_migrations;//实体执行迁移的次数 
+    u64 nr_migrations;//实体执行迁移的次数
     struct sched_statistics statistics;//统计信息包含进程的睡眠统计、等待延迟统计、CPU迁移统计、唤醒统计等。
 #ifdef CONFIG_FAIR_GROUP_SCHED
     int depth;// 表示当前实体处于调度组中的深度
@@ -310,7 +310,7 @@ struct rq {
     struct task_struct  *stop;//这个运行队列的停止进程
     struct mm_struct    *prev_mm;//这个运行队列上一次运行进程的mm_struct
     unsigned int        clock_update_flags;//时钟更新标志
-    u64         clock; //运行队列的时间 
+    u64         clock; //运行队列的时间
     //后面的代码省略
 };
 ```
@@ -328,7 +328,7 @@ struct cfs_rq {
     struct load_weight  load;//cfs_rq上所有调度实体的负载总和
     unsigned int nr_running;//cfs_rq上所有的调度实体不含调度组中的调度实体
     unsigned int h_nr_running;//cfs_rq上所有的调度实体包含调度组中所有调度实体
-    u64         exec_clock;//当前 cfs_rq 上执行的时间 
+    u64         exec_clock;//当前 cfs_rq 上执行的时间
     u64         min_vruntime;//最小虚拟运行时间
     struct rb_root_cached   tasks_timeline;//所有调度实体的根
     struct sched_entity *curr;//当前调度实体
@@ -547,12 +547,12 @@ static inline u64 calc_delta_fair(u64 delta, struct sched_entity *se)
 static void update_curr(struct cfs_rq *cfs_rq)
 {
     struct sched_entity *curr = cfs_rq->curr;
-    u64 now = rq_clock_task(rq_of(cfs_rq));//获取当前时间 
+    u64 now = rq_clock_task(rq_of(cfs_rq));//获取当前时间
     u64 delta_exec;
-    delta_exec = now - curr->exec_start;//间隔时间 
+    delta_exec = now - curr->exec_start;//间隔时间
     curr->exec_start = now;
-    curr->sum_exec_runtime += delta_exec;//累计运行时间 
-    curr->vruntime += calc_delta_fair(delta_exec, curr);//计算进程的虚拟时间 
+    curr->sum_exec_runtime += delta_exec;//累计运行时间
+    curr->vruntime += calc_delta_fair(delta_exec, curr);//计算进程的虚拟时间
     update_min_vruntime(cfs_rq);//更新运行队列中的最小虚拟时间，这是新建进程的虚拟时间，避免一个新建进程因为虚拟时间太小而长时间占用CPU
 }
 static void entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)
@@ -566,7 +566,7 @@ static void entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int qu
 static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
 {
     struct cfs_rq *cfs_rq;
-    struct sched_entity *se = &curr->se;//获取当前进程的调度实体 
+    struct sched_entity *se = &curr->se;//获取当前进程的调度实体
     for_each_sched_entity(se) {//仅对当前进程的调度实体
         cfs_rq = cfs_rq_of(se);//获取当前进程的调度实体对应运行队列
         entity_tick(cfs_rq, se, queued);
@@ -632,7 +632,7 @@ static void __sched notrace __schedule(bool preempt)
     int cpu;
     cpu = smp_processor_id();
     rq = cpu_rq(cpu);//获取当前CPU的运行队列
-    prev = rq->curr; //获取当前进程 
+    prev = rq->curr; //获取当前进程
     rq_lock(rq, &rf);//运行队列加锁
     update_rq_clock(rq);//更新运行队列时钟
     switch_count = &prev->nivcsw;
@@ -745,7 +745,7 @@ static struct sched_entity *pick_next_entity(struct cfs_rq *cfs_rq, struct sched
     struct sched_entity *se;
     if (!left || (curr && entity_before(curr, left)))
         left = curr;//可能当前进程主动放弃CPU，它的虚拟时间比红黑树上的还小，所以left指向当前进程调度实体
-    se = left; 
+    se = left;
     if (cfs_rq->skip == se) { //如果选择的调度实体是要跳过的调度实体
         struct sched_entity *second;
         if (se == curr) {//如果是当前调度实体

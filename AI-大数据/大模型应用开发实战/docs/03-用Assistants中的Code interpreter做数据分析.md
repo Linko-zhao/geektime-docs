@@ -249,7 +249,7 @@ def main():
     """
 
     file_path = r"01_Assitants\CodeIntepreter\flower_sales.csv"
-    
+   
     with open(file_path, "rb") as file:
         file_obj = client.files.create(file=file, purpose='assistants')
         file_id = file_obj.id
@@ -417,7 +417,8 @@ if __name__ == "__main__":
         file_ids=[file_id]
     )
     return assistant
-老师这里的file_ids好像应该去掉吧？ 查看文档 https:&#47;&#47;platform.openai.com&#47;docs&#47;api-reference&#47;assistants&#47;createAssistant  这里如果是tool 为 file_search的场景的话 用tool_resources读取文件向量 
+
+老师这里的file_ids好像应该去掉吧？ 查看文档 https:&#47;&#47;platform.openai.com&#47;docs&#47;api-reference&#47;assistants&#47;createAssistant 这里如果是tool 为 file_search的场景的话 用tool_resources读取文件向量
 请老师指教下 是不是我理解错了？
 </p>2024-06-10</li><br/>
 </ul>

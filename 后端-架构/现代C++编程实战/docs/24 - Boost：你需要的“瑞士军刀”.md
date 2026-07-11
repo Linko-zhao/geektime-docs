@@ -581,7 +581,7 @@ assert(r == "char: x"s);
 
 \[1] Boost C++ Libraries. [https://www.boost.org/](https://www.boost.org/)
 
-\[2] David Abarahams and Aleksey Gurtovoy, *C++ Template Metaprogramming*. Addison-Wesley, 2004. 有中文版（荣耀译，机械工业出版社，2010 年）
+\[2] David Abarahams and Aleksey Gurtovoy, _C++ Template Metaprogramming_. Addison-Wesley, 2004. 有中文版（荣耀译，机械工业出版社，2010 年）
 <div><strong>精选留言（7）</strong></div><ul>
 <li><span>风羽星泉</span> 👍（7） 💬（1）<p>老师的文章里提到：“实现类似（Boost.ScopeExit）的功能在 C++11 里相当容易“。能教我怎么实现吗？</p>2020-01-20</li><br/><li><span>Geek_Frank</span> 👍（1） 💬（3）<p>您好，POCO库您觉得怎么样？</p>2020-03-05</li><br/><li><span>tt</span> 👍（1） 💬（1）<p>老师，通过看某些源代码来学习现代C++，看Boost库的，是一个好的开始不？</p>2020-01-20</li><br/><li><span>小一日一</span> 👍（0） 💬（1）<p>使用低版本的 G++ 编译器编译老师提供的 Hana 例子，需要加 -std=c++17</p>2024-04-07</li><br/><li><span>Ben</span> 👍（0） 💬（1）<p>吴老师，我希望分享一个踩坑经历。在mac brew 安装之后大概率要使用pkg-config 这个命令告诉编译器 Armadillo的位置。要不然安装之后cmake 找不到。</p>2022-08-26</li><br/><li><span>weing</span> 👍（0） 💬（1）<p>老师，有推荐的C++ 内存池库吗？
 想在C++代码里使用内存池进行内存管理</p>2022-02-11</li><br/><li><span>Sochooligan</span> 👍（0） 💬（0）<p>来了，来了。</p>2020-01-20</li><br/>

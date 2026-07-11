@@ -327,7 +327,7 @@ func RunGRPCServer(MasterService *master.Master, logger *zap.Logger, reg registr
 查看etcd中的资源，发现资源已经成功写入了etcd，而且其中分配的Worker节点信息与HTTP接口返回的信息相同。
 
 ```plain
-» docker exec etcd-gcr-v3.5.6 /bin/sh -c "/usr/local/bin/etcdctl get /resources/task-test-4" 
+» docker exec etcd-gcr-v3.5.6 /bin/sh -c "/usr/local/bin/etcdctl get /resources/task-test-4"
 /resources/task-test-4
 {"ID":"1604109125694787584","Name":"task-test-4","AssignedNode":"go.micro.server.worker-2|192.168.0.107:9089","CreationTime":1671284393144648000}
 ```

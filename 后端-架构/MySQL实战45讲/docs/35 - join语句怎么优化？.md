@@ -21,7 +21,7 @@ begin
     insert into t1 values(i, 1001-i, i);
     set i=i+1;
   end while;
-  
+
   set i=1;
   while(i<=1000000)do
     insert into t2 values(i, i, i);
@@ -109,7 +109,7 @@ NLJ算法执行的逻辑是：从驱动表t1，一行行地取出a的值，再�
 
 图5 Batched Key Access流程
 
-图中，我在join\_buffer中放入的数据是P1~P100，表示的是只会取查询需要的字段。当然，如果join buffer放不下P1~P100的所有数据，就会把这100行数据分成多段执行上图的流程。
+图中，我在join\_buffer中放入的数据是P1~~P100，表示的是只会取查询需要的字段。当然，如果join buffer放不下P1~~P100的所有数据，就会把这100行数据分成多段执行上图的流程。
 
 那么，这个BKA算法到底要怎么启用呢？
 
@@ -169,7 +169,7 @@ select * from t1 join t2 on (t1.b=t2.b) where t2.b>=1 and t2.b<=2000;
 
 1. 把表t1的所有字段取出来，存入join\_buffer中。这个表只有1000行，join\_buffer\_size默认值是256k，可以完全存入。
 2. 扫描表t2，取出每一行数据跟join\_buffer中的数据进行对比，
-   
+
    - 如果不满足t1.b=t2.b，则跳过；
    - 如果满足t1.b=t2.b, 再判断其他条件，也就是是否满足t2.b处于\[1,2000]的条件，如果是，就作为结果集的一部分返回，否则跳过。
 
@@ -298,12 +298,13 @@ a是索引列，如果这句索引有order by a，不使用MRR 优化，查询�
 老师您在评论中说到，三表join不会是前两个表join后得到结果集，再和第三张表join。
 针对这句话，我的理解是：
 假设我们不考虑BKA，就按照一行行数据来判断的话，流程应该如下（我会将server端和innodb端分的很清楚）：
-表是t1 ,t2 ,t3。  t1 straight_join t2 straight_join t3，这样的join顺序。
+表是t1 ,t2 ,t3。 t1 straight_join t2 straight_join t3，这样的join顺序。
+
 1. 调用innodb接口，从t1中取一行数据，数据返回到server端。
 2. 调用innodb接口，从t2中取满足条件的数据，数据返回到server端。
 3. 调用innodb接口，从t3中取满足条件的数据，数据返回到server端。
-上面三步之后，驱动表 t1的一条数据就处理完了，接下来重复上述过程。
-（如果采用BKA进行优化，可以理解为不是一行行数据的提取，而是一个范围内数据的提取）。
+   上面三步之后，驱动表 t1的一条数据就处理完了，接下来重复上述过程。
+   （如果采用BKA进行优化，可以理解为不是一行行数据的提取，而是一个范围内数据的提取）。
 
 按照我上面的描述，确实没有前两表先join得结果集，然后再join第三张表的过程。
 不知道我上面的描述的流程对不对？（我个人觉得，将innodb的处理和server端的处理分隔清晰，对于sql语句的理解，会透彻很多）</p>2019-02-02</li><br/><li><span>天王</span> 👍（34） 💬（4）<p>join语句的优化，NLJ算法的优化，MRR优化器会在join_buffer进行主键的排序，然后去主键索引树上一个个的查找，因为按照主键顺序去主键索引树上查找，性能会比较高，MRR优化接近顺序读，性能会比较高。BKA算法是对NLJ算法的优化，一次取出一批数据的字段到join_buffer中，然后批量join，性能会比较好。BKA算法依赖于MRR，因为批量join找到被驱动表的非聚集索引字段通过MRR去查找行数据</p>2019-02-13</li><br/><li><span>郭健</span> 👍（33） 💬（3）<p>老师，有几个问题还需要请教一下:
@@ -320,26 +321,27 @@ a是索引列，如果这句索引有order by a，不使用MRR 优化，查询�
 1、【1-B】和【2-B】由于select *要返回所有列数据，不敢肯定join buffer里是回表的整行数据还是索引（c,a)的数据，需要老师解答一下；不过值得警惕的是，返回的数据列对sql的执行策略有非常大的影响。
 2、在有join查询时，被驱动表是先做join连接查询，还是先筛选数据再从筛选后的临时表做join连接？这将影响上述的理由【2-C】和【3-C】
 
-使用straight_join强制指定驱动表，我会改写成这样:select * from t2 STRAIGHT_JOIN t1 on(t1.a=t2.a) STRAIGHT_JOIN t3 on (t2.b=t3.b)  where t1.c&gt;=X and t2.c&gt;=Y and t3.c&gt;=Z;
+使用straight_join强制指定驱动表，我会改写成这样:select * from t2 STRAIGHT_JOIN t1 on(t1.a=t2.a) STRAIGHT_JOIN t3 on (t2.b=t3.b) where t1.c&gt;=X and t2.c&gt;=Y and t3.c&gt;=Z;
 考虑因素包括：
 1、驱动表使用过滤条件筛选后的数据量，使其成为小表，上面的改写也是基于t2是小表
 2、因为t2是跟t1,t3都有关联查询的，这样的话我猜测对t1,t3的查询是不是可以并行执行，而如果使用t1,t3作为主表的话，是否会先跟t2生成中间表，是个串行的过程？
 3、需要给t1加（a,c)索引，给t2加（c,a,b）索引。</p>2019-02-02</li><br/><li><span>WL</span> 👍（18） 💬（2）<p>请教老师两个问题:
+
 1. 通过主键索引找到的数据会会不会先在内存中查询, 如果没有再去磁盘查询?
 2. 为什么在通过主键索引查询数据时, 符合条件的数据以单条数据的方式读到内存中而不是以一整个数据页的方式读到内存中? </p>2019-02-11</li><br/><li><span>涛哥哥</span> 👍（15） 💬（1）<p>老师，对于现在的固态硬盘，这样类似顺序读写的数据库优化，不就不起作用了啊？</p>2019-03-20</li><br/><li><span>TKbook</span> 👍（12） 💬（1）<p>BNL 算法效率低，建议你都尽量转成 BKA 算法。优化的方向就是给驱动表的关联字段加上索引；
-老师最后总结的时候，这句话后面那句，应该是给被驱动表的关联字段加上索引吧。</p>2019-02-01</li><br/><li><span>憶海拾貝</span> 👍（11） 💬（8）<p>节后开工宜补课.
+   老师最后总结的时候，这句话后面那句，应该是给被驱动表的关联字段加上索引吧。</p>2019-02-01</li><br/><li><span>憶海拾貝</span> 👍（11） 💬（8）<p>节后开工宜补课.
 
 按照文中说明的MRR设计思路, 是否可以反推出: 被驱动表使用非递增主键(比如UUID作为主键),就没有必要开启MRR?</p>2019-02-13</li><br/><li><span>dzkk</span> 👍（11） 💬（1）<p>老师，记得我之前看mysql的join是和版本有关系的，另外NLJ是一个统称，被分为了SNLJ(Simple Nested-Loop Join，5.5版本之前采用的，当被驱动表上没有索引的时候使用，该方法比较粗暴，所以后来通过BNLJ进行了优化)、INLJ(Index Nested-Loop Join，被驱动表上有索引)、BNLJ(Block Nested-Loop Join，被驱动表上没有索引)，另外了解到mariadb是支持了hash join的Block Nested Loop Hash (BNLH) join，没有使用过，不知道效果怎么样。不知道我了解的信息对不对。</p>2019-02-01</li><br/><li><span>poppy</span> 👍（9） 💬（2）<p>select * from t1 join t2 on(t1.a=t2.a) join t3 on (t2.b=t3.b) where t1.c&gt;=X and t2.c&gt;=Y and t3.c&gt;=Z;
-老师，我的理解是真正做join的三张表的大小实际上是t1.c&gt;=X、t2.c&gt;=Y、t3.c&gt;=Z对应满足条件的行数，为了方便快速定位到满足条件的数据，t1、t2和t3的c字段最好都建索引。对于join操作，按道理mysql应该会优先选择join之后数量比较少的两张表先来进行join操作，例如满足t1.a=t2.a的行数小于满足t2.b=t3.b的行数，那么就会优先将t1和t2进行join，选择t1.c&gt;=X、t2.c&gt;=Y中行数少的表作为驱动表，另外一张作为被驱动表，在被驱动表的a的字段上建立索引，这样就完成了t1和t2的join操作并把结果放入join_buffer准备与t3进行join操作，则在作为被驱动表的t3的b字段上建立索引。不知道举的这个例子分析得是否正确，主要是这里不知道t1、t2、t3三张表的数据量，以及满足t1.c&gt;=X ，t2.c&gt;=Y ，t3.c&gt;=Z的数据量，还有各个字段的区分度如何，是否适合建立索引等。</p>2019-02-01</li><br/><li><span>读书看报</span> 👍（8） 💬（2）<p>order by cjsj desc limit 0,20 explain  Extra只是显示 Using where ，执行时间 7秒钟
-order by cjsj desc limit 5000,20 explain  Extra只是显示 Using index condition; Using where; Using filesort,  执行时间 0.1 秒
+老师，我的理解是真正做join的三张表的大小实际上是t1.c&gt;=X、t2.c&gt;=Y、t3.c&gt;=Z对应满足条件的行数，为了方便快速定位到满足条件的数据，t1、t2和t3的c字段最好都建索引。对于join操作，按道理mysql应该会优先选择join之后数量比较少的两张表先来进行join操作，例如满足t1.a=t2.a的行数小于满足t2.b=t3.b的行数，那么就会优先将t1和t2进行join，选择t1.c&gt;=X、t2.c&gt;=Y中行数少的表作为驱动表，另外一张作为被驱动表，在被驱动表的a的字段上建立索引，这样就完成了t1和t2的join操作并把结果放入join_buffer准备与t3进行join操作，则在作为被驱动表的t3的b字段上建立索引。不知道举的这个例子分析得是否正确，主要是这里不知道t1、t2、t3三张表的数据量，以及满足t1.c&gt;=X ，t2.c&gt;=Y ，t3.c&gt;=Z的数据量，还有各个字段的区分度如何，是否适合建立索引等。</p>2019-02-01</li><br/><li><span>读书看报</span> 👍（8） 💬（2）<p>order by cjsj desc limit 0,20 explain Extra只是显示 Using where ，执行时间 7秒钟
+order by cjsj desc limit 5000,20 explain Extra只是显示 Using index condition; Using where; Using filesort, 执行时间 0.1 秒
 有些许的凌乱了@^^@</p>2019-02-01</li><br/><li><span>bluefantasy3</span> 👍（7） 💬（4）<p>请教老师一个问题：innodb的Buffer Pool的内存是innodb自己管理还是使用OS的page cache? 我理解应该是innodb自己管理。我在另一个课程里看到如果频繁地把OS的&#47;proc&#47;sys&#47;vm&#47;drop_caches 改成 1会影响MySQL的性能，如果buffer pool是MySQL自己管理，应该不受这个参数影响呀？请解答。</p>2019-02-02</li><br/><li><span>库淘淘</span> 👍（6） 💬（1）<p>set optimizer_switch=&#39;mrr=on,mrr_cost_based=off,batched_key_access=on&#39;;
 create index idx_c on t2(c);
 create index idx_a_c on t1(a,c);
 create index idx_b_c on t3(b,c);
-mysql&gt; explain select * from t2 
-    -&gt; straight_join t1 on(t1.a=t2.a)
-    -&gt; straight_join t3 on(t2.b=t3.b)   
-    -&gt; where t1.c&gt; 800 and t2.c&gt;=600 and t3.c&gt;=500;
+mysql&gt; explain select * from t2
+-&gt; straight_join t1 on(t1.a=t2.a)
+-&gt; straight_join t3 on(t2.b=t3.b)  
+-&gt; where t1.c&gt; 800 and t2.c&gt;=600 and t3.c&gt;=500;
 +----+-------------+-------+------------+---------------------------------------
 | id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra +----------------------------------------
 | 1 | SIMPLE | t2 | NULL | range | idx_c | idx_c | 5 | NULL | 401 | 100.00 | Using index condition; Using where; Using MRR |

@@ -6,7 +6,7 @@
 
 无论你是 FE、Android 还是 iOS，相信基建篇的内容都能让你大有收获，甚至帮助你在公司中晋级。好了，下面我们正式开启基建篇的学习。
 
-* * *
+---
 
 你好，我是况众文，是 58RN 负责Android 端的同学。接下来基础设施建设篇中移动端相关的几讲，将由我和我的同事，负责iOS 端的同学朴惠姝一起来讲解。
 
@@ -166,7 +166,7 @@ implementation(name:'react-native-0.68.0-rc.3', ext:'aar')
 ```plain
 dependencies {
     implementation(name:'react-native-0.68.0-rc.3', ext:'aar')
-    
+
     implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
     implementation 'javax.inject:javax.inject:1'
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -311,11 +311,11 @@ ReactInstanceManagerBuilder builder = ReactInstanceManager.builder();
 // 设置 application 上下文
 builder.setApplication((Application) context.getApplicationContext());
 
-// 添加包，一个 package 由多个组件构成，上述代码中的 MainReactPackage 是 RN 内置的 package 
+// 添加包，一个 package 由多个组件构成，上述代码中的 MainReactPackage 是 RN 内置的 package
 builder.addPackage(new MainReactPackage());
 
 // JS 异常回调处理实现，在这个实现中我们可以打印 JS 异常日志，上报错误
-builder.setRedBoxHandler(mRedBoxHandler); 
+builder.setRedBoxHandler(mRedBoxHandler);
 
 // native module 异常回调处理实现，在这个实现中我们可以打印 native module 异常日志，上报错误
 builder.setNativeModuleCallExceptionHandler(mNativeModuleExceptionHandler);
@@ -327,7 +327,7 @@ builder.setJSMainModulePath("index");
 builder.setUseDeveloperSupport(true);
 
 // 设置创建时机
-builder.setInitialLifecycleState(LifecycleState.BEFORE_CREATE); 
+builder.setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
 
 // 设置 JS 引擎，如果想使用 Hermes 引擎，可以这样设置，需要引入 Hermes 相关的 so 库
 // builder.setJavaScriptExecutorFactory(new HermesExecutorFactory());
@@ -355,15 +355,15 @@ iOS 端初始化载体页比较简单，只需要下面几个步骤。
 首先，我们要创建一个 Bridge。在 React Native 中，通过 Bridge 实现了 JavaScript 与原生框架之间的通信，调用 React Native 提供的 API ，就相当于通过 Bridge 调用原生的API。因此，我们需要创建一个 Bridge，与载体页一对一绑定。
 
 ```plain
- RCTBridge *carrierBridge = [[RCTBridge alloc] initWithDelegate:self 
+ RCTBridge *carrierBridge = [[RCTBridge alloc] initWithDelegate:self
                                                launchOptions:nil];
 ```
 
 接下来，我们需要创建一个 RCTRootView，用于展示 React Native 视图的组件RCTRootView，在 JavaScript 代码中 render() 部分的 UI 组件均会渲染到该 View 中，创建方式如下：
 
 ```plain
- RCTRootView *rctView = [[RCTRootView alloc] initWithBridge:bridge 
-                                             moduleName:moduleName 
+ RCTRootView *rctView = [[RCTRootView alloc] initWithBridge:bridge
+                                             moduleName:moduleName
                                              initialProperties:nil];
  [self.view addSubview:rctView];
 ```
@@ -448,10 +448,10 @@ catalystInstance.setGlobalVariable("xxx", xxx)
       //手动注入一些业务参数
       NSString *string = ";this.__xxx___ = 'yyy';"
       NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding];
-      
+
       NSMutableData *newData = [NSMutableData dataWithData:stringData];
       [newData appendData:source.data];
-      
+
       //生成新的Source去加载
       RCTSource * newSource = [RCTJavaScriptLoader getNewRCTSourceURL:source.url data:newData];
       loadCallback(error,newSource);
@@ -480,7 +480,7 @@ ReactInstanceManagerBuilder builder = ReactInstanceManager.builder();
 builder.setApplication((Application) context.getApplicationContext())
        .setRedBoxHandler(mExceptionHandler)
        .setNativeModuleCallExceptionHandler(mExceptionHandler);
-        
+
 private static class ExceptionHandler implements NativeModuleCallExceptionHandler, RedBoxHandler {
 
   @Override
@@ -492,12 +492,12 @@ private static class ExceptionHandler implements NativeModuleCallExceptionHandle
   public void handleRedbox(String s, StackFrame[] stackFrames, ErrorType errorType) {
     // 处理 JS 异常
   }
-  
+
   @Override
   public boolean isReportEnabled() {
     return false;
   }
-  
+
   @Override
   public void reportRedbox(Context context, String s, StackFrame[] stackFrames, String s1, ReportCompletedListener reportCompletedListener) {
   }

@@ -21,7 +21,7 @@
 ```
 public class Transporter {
   private HttpClient httpClient;
-  
+
   public Transporter(HttpClient httpClient) {
     this.httpClient = httpClient;
   }
@@ -51,8 +51,8 @@ public class SecurityTransporter extends Transporter {
   }
 }
 
-public class Demo {    
-  public void demoFunction(Transporter transporter) {    
+public class Demo {
+  public void demoFunction(Transporter transporter) {
     Reuqest request = new Request();
     //...省略设置request中数据值的代码...
     Response response = transporter.sendRequest(request);

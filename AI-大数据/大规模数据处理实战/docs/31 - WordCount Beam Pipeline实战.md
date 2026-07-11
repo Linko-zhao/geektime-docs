@@ -186,7 +186,7 @@ static class ExtractWordsFn extends DoFn<String, String> {
       lineLenDist.update(element.length());
       if (element.trim().isEmpty()) {
         emptyLines.inc();
-      
+
 
       // Split the line into words.
       String[] words = element.split(“[^\\p{L}]+”, -1);

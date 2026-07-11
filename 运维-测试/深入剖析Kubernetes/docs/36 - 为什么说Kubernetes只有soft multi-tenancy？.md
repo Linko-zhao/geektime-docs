@@ -168,10 +168,10 @@ spec:
 for dstIP := range 所有被networkpolicy.spec.podSelector选中的Pod的IP地址
   for srcIP := range 所有被ingress.from.podSelector选中的Pod的IP地址
     for port, protocol := range ingress.ports {
-      iptables -A KUBE-NWPLCY-CHAIN -s $srcIP -d $dstIP -p $protocol -m $protocol --dport $port -j ACCEPT 
+      iptables -A KUBE-NWPLCY-CHAIN -s $srcIP -d $dstIP -p $protocol -m $protocol --dport $port -j ACCEPT
     }
   }
-} 
+}
 ```
 
 可以看到，这是一条最基本的、通过匹配条件决定下一步动作的iptables规则。
@@ -315,12 +315,13 @@ iptables设置的是IP包被过滤处理的规则，而bridge是二层设备，�
 和老师确认一下对应图例10.233.2.0&#47;24应该是10.233.1.0&#47;24吧</p>2019-02-01</li><br/><li><span>blackpiglet</span> 👍（1） 💬（0）<p>apiVersion: extensions&#47;v1beta1
 kind: NetworkPolicy
 metadata:
-  name: my-network-policy
-  namespace: my-namespace
+name: my-network-policy
+namespace: my-namespace
 spec:
-  podSelector: {}
-  policyTypes:
-  - Ingress
+podSelector: {}
+policyTypes:
+
+- Ingress
 
 我只能想到一种情况：随机数生成器，因为要保证产生的随机数不受任何干扰，所以可以禁掉所有内网访问，只要把产生的结果发送出去就可以。</p>2018-11-14</li><br/>
 </ul>

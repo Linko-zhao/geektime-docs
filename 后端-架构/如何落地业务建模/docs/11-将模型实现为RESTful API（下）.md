@@ -81,7 +81,7 @@ Roy Fielding将互联网定义为**分布式超媒体信息获取系统**（Dist
 <article>
     <title>订单详情</title>
     <p>....</p>
-    <link href="http://payment.com/12358921" rel="payment"/>    
+    <link href="http://payment.com/12358921" rel="payment"/>
     <link href="http://payment.geekbang.org/bank.js" rel="payment-client"/>
 </article>
 ```
@@ -152,7 +152,7 @@ Content-Type: application/hal+json
 {
     "_links": {
         "self": { "href": "/users/19" },
-        "subscriptions": { "href": "/users/19/subscriptions" } 
+        "subscriptions": { "href": "/users/19/subscriptions" }
     },
     "username": "爱学习的鱼玄机",
     ...
@@ -177,14 +177,14 @@ subscriptions表示了聚合关系User-Subscriptions，也就是指示了如何�
                     "self": "/users/18"
                 },
                 "username" : "会聊骚的黄庭坚",
-                ...                
+                ...
             },
             {
                 "_links": {
                     "self": "/users/19"
                 },
                 "username" : "爱学习的鱼玄机",
-                ...                                
+                ...
             },
             ...
         ]

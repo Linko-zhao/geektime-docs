@@ -72,7 +72,7 @@ Julia的IR主要承担了两方面的任务。
 另外，你还可以查看一下传给emit\_function函数的Julia IR是什么样子的。在LLDB里，你可以用下面的命令来显示src参数的值（其中，`jl_(obj)`是Julia为了调试方便提供的一个函数，它能够更好地[显示Julia对象的信息](https://docs.julialang.org/en/v1/devdocs/debuggingtips/#Displaying-Julia-variables-1)，注意显示是在julia窗口中）。src参数里面包含了要编译的Julia代码的信息。
 
 ```
-(lldb) expr jl_(src)  
+(lldb) expr jl_(src)
 ```
 
 为了让你能更容易看懂，我稍微整理了一下输出的信息的格式：
@@ -198,6 +198,7 @@ LLVM强调全生命周期优化的概念。那么我们来思考一个有趣的�
 3. [Working with LLVM](https://docs.julialang.org/en/v1/devdocs/llvm/)：Julia的开发者文档中，有对如何使用LLVM的介绍。
 4. [LLVM’s Analysis and Transform Passes](https://llvm.org/docs/Passes.html)：对LLVM中的各种Pass的介绍。要想使用好LLVM，你就要熟悉这些Pass和它们的使用场景。
 5. 在《编译原理之美》的[第25讲](https://time.geekbang.org/column/article/153192)和[第26讲](https://time.geekbang.org/column/article/154438)，我对LLVM后端及其命令行工具做了介绍，并且还手工调用LLVM的API，示范了针对不同的语法结构（比如if结构）应该如何生成LLVM IR，最后即时编译并运行。你可以去参考看看。
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>鱼_XueTr</span> 👍（2） 💬（0）<p>jinpeng.d@Mac$ lldb
 (lldb) attach --name julia

@@ -122,7 +122,7 @@ matrix:
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test 
+            - ubuntu-toolchain-r-test
           packages:
             - libstdc++6
             - fonts-droid

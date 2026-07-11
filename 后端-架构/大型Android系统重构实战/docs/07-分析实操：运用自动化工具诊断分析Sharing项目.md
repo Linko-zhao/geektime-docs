@@ -132,7 +132,7 @@ public static final ArchRule function_should_not_dependOn_feature =
 public static final ArchRule account_bundle_should_not_dependOn_other_bundle =
         target_package_not_dependOn_other_package(ACCOUNT_BUNDLE, FILE_BUNDLE, MESSAGE_BUNDLE);
 
-//规则4：file包下的类不能依赖account或者message包下的类       
+//规则4：file包下的类不能依赖account或者message包下的类
 @ArchTest
 public static final ArchRule file_bundle_should_not_dependOn_other_feature =
         target_package_not_dependOn_other_package(FILE_BUNDLE, MESSAGE_BUNDLE, ACCOUNT_BUNDLE);
@@ -181,5 +181,5 @@ Q1：用Dependencies时怎么增加scope？
 我用AS4.1，操作顺序：菜单Analyze  Dependencies。点击后AS开始执行Dependencies扫描，然后出现扫描结果的界面；此界面分为左右两个部分。我在此界面尝试多次，没有找到在哪里可以添加scope。（注：我的界面和文中的界面相同。）
 
 Q2：“热更新”、“热修复”的理解是否对？
-A“热更新”：用户安装了版本1，现在出了版本2，用户不需要先卸载版本1然后重新安装版本2，而是在版本1的基础上直接更新为版本2。   B“热修复”：与版本无关，用户安装了某一个版本，该版本有bug，在线直接打补丁来修复。  我的理解对吗？</p>2023-02-24</li><br/><li><span>Aā 阳～</span> 👍（0） 💬（1）<p>如果模块之间存在页面复用怎么办呢，这种怎么做到不横向依赖？</p>2023-09-05</li><br/><li><span>稻草人的忧桑</span> 👍（0） 💬（1）<p>这里按照包结构的写完约束，之后按照组件重构，约束规则是不是还得调整</p>2023-03-23</li><br/><li><span>稻草人的忧桑</span> 👍（0） 💬（1）<p>示例项目的archutil依赖版本，能否做一下更新</p>2023-03-06</li><br/><li><span>中世纪的knight</span> 👍（0） 💬（1）<p>github 上Sharing项目希望老师可以保留一份重构前分支，每次重构切一次分支。</p>2023-02-28</li><br/><li><span>Lihyper</span> 👍（1） 💬（0）<p>模型数据以及消息事件可以详细解说一下吗？</p>2024-11-20</li><br/>
+A“热更新”：用户安装了版本1，现在出了版本2，用户不需要先卸载版本1然后重新安装版本2，而是在版本1的基础上直接更新为版本2。 B“热修复”：与版本无关，用户安装了某一个版本，该版本有bug，在线直接打补丁来修复。 我的理解对吗？</p>2023-02-24</li><br/><li><span>Aā 阳～</span> 👍（0） 💬（1）<p>如果模块之间存在页面复用怎么办呢，这种怎么做到不横向依赖？</p>2023-09-05</li><br/><li><span>稻草人的忧桑</span> 👍（0） 💬（1）<p>这里按照包结构的写完约束，之后按照组件重构，约束规则是不是还得调整</p>2023-03-23</li><br/><li><span>稻草人的忧桑</span> 👍（0） 💬（1）<p>示例项目的archutil依赖版本，能否做一下更新</p>2023-03-06</li><br/><li><span>中世纪的knight</span> 👍（0） 💬（1）<p>github 上Sharing项目希望老师可以保留一份重构前分支，每次重构切一次分支。</p>2023-02-28</li><br/><li><span>Lihyper</span> 👍（1） 💬（0）<p>模型数据以及消息事件可以详细解说一下吗？</p>2024-11-20</li><br/>
 </ul>

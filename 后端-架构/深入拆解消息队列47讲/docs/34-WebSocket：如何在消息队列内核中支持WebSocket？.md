@@ -132,7 +132,7 @@ URI 表示 WebSocket Server 的地址，Body 是请求内容，可以发现跟 H
 接下来，我们来看一下生产请求的协议设计，示例如下：
 
 ```plain
-URI: 
+URI:
     wss://mqserver.com/send/ns1/tp1
 body：
 {
@@ -201,7 +201,7 @@ public static void StartWebServer() throws InterruptedException {
 class MyWebSocketServerHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        if (frame instanceof TextWebSocketFrame) { 
+        if (frame instanceof TextWebSocketFrame) {
             String request = ((TextWebSocketFrame) frame).text();
             ctx.channel().writeAndFlush(new TextWebSocketFrame("receive: " + request));
         }

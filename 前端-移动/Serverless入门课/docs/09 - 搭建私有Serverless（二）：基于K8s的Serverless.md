@@ -258,7 +258,8 @@ kubectl get svc istio-ingressgateway -n istio-system
    可能是`knative-myapp`
    代码仓库中后来重命名为了 knative-myapp
 
-----------------------------
+---
+
 之前在阿里云k8s上看到了&quot;应用目录&quot;&quot;服务网格&quot;选项,后来也逐步的尝试了helm,istio.
 虽然之前也看到了&quot;Knative(公测)&quot;选项,但一直未尝试.
 直到看了老师这篇文章,才知道原来是做这个的.正好这次把它用起来.

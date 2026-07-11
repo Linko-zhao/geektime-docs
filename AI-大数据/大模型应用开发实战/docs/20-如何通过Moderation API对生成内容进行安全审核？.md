@@ -15,7 +15,7 @@ OpenAI 提供的 Moderation API 为这一问题提供了一套简洁有效的解
 ```plain
 import openai
 
-openai.api_key = "YOUR_API_KEY"  
+openai.api_key = "YOUR_API_KEY"
 
 response = openai.Moderation.create(
     input="Some text for moderation goes here."

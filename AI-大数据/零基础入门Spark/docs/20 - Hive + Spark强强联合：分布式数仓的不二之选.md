@@ -231,11 +231,11 @@ Query ID = root_20211031144450_fc398bef-8f94-4a07-a678-cdeef464b128
 Total jobs = 1
 Launching Job 1 out of 1
 In order to change the average load for a reducer (in bytes):
-  set hive.exec.reducers.bytes.per.reducer=&lt;number&gt;
+set hive.exec.reducers.bytes.per.reducer=&lt;number&gt;
 In order to limit the maximum number of reducers:
-  set hive.exec.reducers.max=&lt;number&gt;
+set hive.exec.reducers.max=&lt;number&gt;
 In order to set a constant number of reducers:
-  set mapreduce.job.reduces=&lt;number&gt;
+set mapreduce.job.reduces=&lt;number&gt;
 Starting Spark Job = 75d07aa7-a98f-43b5-8fe5-de4158f454a7
 Job hasn&#39;t been submitted after 61s. Aborting it.
 Possible reasons include network issues, errors in remote driver or the cluster has no available resources, etc.
@@ -250,8 +250,8 @@ FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.spark
 我在本地配置 %SPARK_HOME%&#47;conf&#47;hive-site.xml，内容如下：
 &lt;configuration&gt;
 &lt;property&gt;
-  &lt;name&gt;hive.metastore.uris&lt;&#47;name&gt;
-  &lt;value&gt;thrift:&#47;&#47;xxx:9083&lt;&#47;value&gt;  
+&lt;name&gt;hive.metastore.uris&lt;&#47;name&gt;
+&lt;value&gt;thrift:&#47;&#47;xxx:9083&lt;&#47;value&gt;  
 &lt;&#47;property&gt;
 &lt;&#47;configuration&gt;
 

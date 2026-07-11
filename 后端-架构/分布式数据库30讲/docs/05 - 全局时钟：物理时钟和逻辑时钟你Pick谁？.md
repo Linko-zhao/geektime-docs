@@ -169,8 +169,8 @@ STP与 TSO一样都是单时间源，但通过增加更多的授时点，避免�
 
 ## 学习资料
 
-Daniel Peng and Frank Dabek: [*Large-scale Incremental Processing Using Distributed Transactions and Notifications*](https://www.cs.princeton.edu/courses/archive/fall10/cos597B/papers/percolator-osdi10.pdf)  
-Sandeep S. Kulkarni et al.: [*Logical Physical Clocks and Consistent Snapshots in Globally Distributed Databases*](https://cse.buffalo.edu/~demirbas/publications/hlc.pdf)
+Daniel Peng and Frank Dabek: [_Large-scale Incremental Processing Using Distributed Transactions and Notifications_](https://www.cs.princeton.edu/courses/archive/fall10/cos597B/papers/percolator-osdi10.pdf)  
+Sandeep S. Kulkarni et al.: [_Logical Physical Clocks and Consistent Snapshots in Globally Distributed Databases_](https://cse.buffalo.edu/~demirbas/publications/hlc.pdf)
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>KayGuoWhu</span> 👍（15） 💬（1）<p>全局时钟的目的是，生成全局唯一的时间戳。和全局唯一ID的区别和作用，有什么差异？</p>2021-03-27</li><br/><li><span>朱海昆</span> 👍（11） 💬（1）<p>工作中分布式数据库落地的还是相对少。目前项目各种分布式服务，一般都依赖于一个序列号生成器，一般采用雪花或者雪花变种的一些算法实现。为了保证序列号的唯一或者进一步保证递增，依赖于时钟的同步。现在的做法一般都是结合业务场景，对时钟进行一定的校验，同时对于时钟回拨做一些容错等处理解决问题。
 目前主流还是用应用层的方案来解决分布式的各种问题，如果将来分布式数据库成熟了，应用解决方案会大大简化。</p>2020-08-19</li><br/><li><span>扩散性百万咸面包</span> 👍（9） 💬（2）<p>老师能不能再多解释一下关于多时间源的意思？

@@ -93,7 +93,7 @@ protected void onCreate(Bundle savedInstanceState) {
             result.error("UNAVAILABLE", "没有安装应用市场", null);
           }
         }else {
-          //方法名暂不支持 
+          //方法名暂不支持
           result.notImplemented();
         }
       }
@@ -182,46 +182,46 @@ handleButtonClick() async {
 
 Android 端：
 if (call.method == &quot;openAppMarket&quot;) {
-                    if (call.hasArgument(&quot;appId&quot;)) {
-                        &#47;&#47;获取 appId
-                        call.argument&lt;String&gt;(&quot;appId&quot;)
-                    }
-                    if (call.hasArgument(&quot;packageName&quot;)) {
-                        &#47;&#47;获取包名
-                        call.argument&lt;String&gt;(&quot;packageName&quot;)
-                    }
-                }</p>2019-10-14</li><br/><li><span>矮个子先生😝</span> 👍（4） 💬（1）<p>看了下Flutter提供的api,动手实现了下,native调flutter的方法
+if (call.hasArgument(&quot;appId&quot;)) {
+&#47;&#47;获取 appId
+call.argument&lt;String&gt;(&quot;appId&quot;)
+}
+if (call.hasArgument(&quot;packageName&quot;)) {
+&#47;&#47;获取包名
+call.argument&lt;String&gt;(&quot;packageName&quot;)
+}
+}</p>2019-10-14</li><br/><li><span>矮个子先生😝</span> 👍（4） 💬（1）<p>看了下Flutter提供的api,动手实现了下,native调flutter的方法
 Future&lt;String&gt; nativeCallFlutter(int a) async {
-  print(&#39;success $a&#39;);
-  return &#39;success&#39;;
+print(&#39;success $a&#39;);
+return &#39;success&#39;;
 }
 
 platform.setMethodCallHandler((MethodCall call) async {
-    if (call.method == &#39;nativeCallFlutter&#39;) {
-     return await nativeCallFlutter(call.arguments);
-    }
-    return &#39;none&#39;;
-  });
+if (call.method == &#39;nativeCallFlutter&#39;) {
+return await nativeCallFlutter(call.arguments);
+}
+return &#39;none&#39;;
+});
 
 在iOS端调用:
-[channel invokeMethod:@&quot;nativeCallFlutter&quot; arguments:@1 result:^(id  _Nullable result) {
-        NSLog(@&quot;result = %@&quot;,result);
-    }];</p>2019-08-27</li><br/><li><span>寂寞不点烟</span> 👍（1） 💬（1）<p>而原生代码在处理方法调用请求时，如果涉及到异步或非主线程切换，需要确保回调过程是在原生系统的 UI 线程（也就是 Android 和 iOS 的主线程）。在Android中UI现线程不一定是主线程。</p>2019-12-10</li><br/><li><span>菜头</span> 👍（0） 💬（1）<p>如果是获取系统相册直接获取 图片对象
+[channel invokeMethod:@&quot;nativeCallFlutter&quot; arguments:@1 result:^(id _Nullable result) {
+NSLog(@&quot;result = %@&quot;,result);
+}];</p>2019-08-27</li><br/><li><span>寂寞不点烟</span> 👍（1） 💬（1）<p>而原生代码在处理方法调用请求时，如果涉及到异步或非主线程切换，需要确保回调过程是在原生系统的 UI 线程（也就是 Android 和 iOS 的主线程）。在Android中UI现线程不一定是主线程。</p>2019-12-10</li><br/><li><span>菜头</span> 👍（0） 💬（1）<p>如果是获取系统相册直接获取 图片对象
 Dart 支持各个平台的 image 对象类型吗</p>2019-11-03</li><br/><li><span>辉哥</span> 👍（0） 💬（1）<p>问一下,Flutter和原生应用应该不处于同一个进程吧</p>2019-09-24</li><br/><li><span>江宁彭于晏</span> 👍（0） 💬（1）<p>&#47;&#47; 声明 MethodChannel
 const platform = MethodChannel(&#39;samples.chenhang&#47;utils&#39;);
 
 &#47;&#47; 处理按钮点击
 handleButtonClick(Map paramDic) async{
-  int result;
-  &#47;&#47; 异常捕获
-  try {
-    &#47;&#47; 异步等待方法通道的调用结果,Map 中插入appid和包名，跳转链接等信息
-    result = await platform.invokeMethod(&#39;openAppMarket&#39;, [paramDic]);
-  }
-  catch (e) {
-    result = -1;
-  }
-  print(&quot;Result：$result&quot;);
+int result;
+&#47;&#47; 异常捕获
+try {
+&#47;&#47; 异步等待方法通道的调用结果,Map 中插入appid和包名，跳转链接等信息
+result = await platform.invokeMethod(&#39;openAppMarket&#39;, [paramDic]);
+}
+catch (e) {
+result = -1;
+}
+print(&quot;Result：$result&quot;);
 }
 </p>2019-09-11</li><br/><li><span>小水滴</span> 👍（0） 💬（1）<p>iOS系统创建多份FlutterViewController会有什么问题吗</p>2019-08-30</li><br/><li><span>ptlCoder</span> 👍（0） 💬（1）<p>methodChannelWithName:@&quot;samples.chenhang&#47;utils&quot; 
 这个通道名称有什么要求嘛？还是说见名知意就好？
@@ -231,12 +231,12 @@ platform.invokeMethod(&#39;openAppStore&#39;, {&quot;appId&quot;: &quot;com.tenc
 
 native层：
 String appId = call.argument(&quot;appId&quot;);
-                            try {
-                                Uri uri = Uri.parse(&quot;market:&#47;&#47;details?id=&quot; + appId);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                result.error(&quot;UNAVAILABLE&quot;, &quot;没有安装应用市场&quot;, null);
-                            }</p>2019-08-27</li><br/><li><span>张训博-forrest</span> 👍（1） 💬（0）<p>result.success(0); 这个换了 现在参数要是map了</p>2020-04-24</li><br/><li><span>yu</span> 👍（1） 💬（0）<p>調用原生能力使得 flutter 如虎添翼，並不是要完全取代原生開發，而是採取共生共存的概念。利用原生龐大的生態系，第三方開源組件，為初生的 flutter 提供了擴充，原生調用的功能。使得很多原生開源組件的解決方案可以很好的引入 flutter，這是喜歡 flutter 的其中一個原因。</p>2019-08-27</li><br/><li><span>Geek_4571a3</span> 👍（0） 💬（0）<p>可以使用pigeon: ^21.2.0这个库进行通信，更加类型安全</p>2024-08-20</li><br/><li><span>Barry</span> 👍（0） 💬（0）<p>对比原生，使用方法通道性能怎么样，是否可能有明显的性能折损</p>2022-09-21</li><br/><li><span>吴开</span> 👍（0） 💬（0）<p>文章漏了点东西，FlutterStreamHandler这个监听，当原生经过某项事件后，回调给flutter</p>2021-06-17</li><br/>
+try {
+Uri uri = Uri.parse(&quot;market:&#47;&#47;details?id=&quot; + appId);
+Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+startActivity(intent);
+} catch (Exception e) {
+result.error(&quot;UNAVAILABLE&quot;, &quot;没有安装应用市场&quot;, null);
+}</p>2019-08-27</li><br/><li><span>张训博-forrest</span> 👍（1） 💬（0）<p>result.success(0); 这个换了 现在参数要是map了</p>2020-04-24</li><br/><li><span>yu</span> 👍（1） 💬（0）<p>調用原生能力使得 flutter 如虎添翼，並不是要完全取代原生開發，而是採取共生共存的概念。利用原生龐大的生態系，第三方開源組件，為初生的 flutter 提供了擴充，原生調用的功能。使得很多原生開源組件的解決方案可以很好的引入 flutter，這是喜歡 flutter 的其中一個原因。</p>2019-08-27</li><br/><li><span>Geek_4571a3</span> 👍（0） 💬（0）<p>可以使用pigeon: ^21.2.0这个库进行通信，更加类型安全</p>2024-08-20</li><br/><li><span>Barry</span> 👍（0） 💬（0）<p>对比原生，使用方法通道性能怎么样，是否可能有明显的性能折损</p>2022-09-21</li><br/><li><span>吴开</span> 👍（0） 💬（0）<p>文章漏了点东西，FlutterStreamHandler这个监听，当原生经过某项事件后，回调给flutter</p>2021-06-17</li><br/>
 </ul>

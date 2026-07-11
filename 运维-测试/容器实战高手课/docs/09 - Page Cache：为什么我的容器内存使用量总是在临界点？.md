@@ -193,7 +193,7 @@ working_set = memory.usage_in_bytes - total_inactive_file</p>2020-12-07</li><br/
 1 cgroup底下的memory.stat文件中inactive_file 是否在oom时能回收，因为这边看到代码里描述workset = memory.usage-inactive_file这个值获得的，而这边看到在评论区里有大佬提到Memory Cgroup OOM会以working set为标准
 2 在查看某个容器的时候发现container_memory_working_set_bytes远小于container_memory_rss指标，原因是因为inactive_file的值非常大，因此这个时候内存监控的时候用container_memory_working_set_bytes似乎看不出来是否马上就要oom这样，因此比较困惑如果想要监控内存的使用率判断oom该使用哪个指标？
 下面是查看cgroup的情况：
-cat &#47;sys&#47;fs&#47;cgroup&#47;memory&#47;memory.stat 
+cat &#47;sys&#47;fs&#47;cgroup&#47;memory&#47;memory.stat
 ....
 rss 2666110976
 ...
@@ -204,5 +204,5 @@ active_file 7667712
 ....
 total_cache 2596864
 total_rss 2666110976
-total_rss_huge 276824064</p>2021-04-13</li><br/><li><span>笃定</span> 👍（2） 💬（1）<p>老师，如果新程序申请的内存大小是大于之前进程的page cache内存大小的；是不是就会发生oom？</p>2021-03-30</li><br/><li><span>上邪忘川</span> 👍（2） 💬（1）<p>看了这篇文章，对于linux内存的机制和free的使用有了很大的认识</p>2020-12-06</li><br/><li><span>流浪地球</span> 👍（2） 💬（1）<p>请问文中提到rss包括共享内存的大小，那pss呢，pss和rss的区别不是 是否包括共享内存的大小码？</p>2020-12-05</li><br/><li><span>仲玄</span> 👍（0） 💬（1）<p>老师,  page cache 如果都被回收了, 会不会没办法使用page cache 导致磁盘很慢?</p>2021-08-11</li><br/><li><span>Q～Q</span> 👍（0） 💬（1）<p>请问老师： 容器内file-backed过大导致容器oom这个案例有遇到过吗 我现在遇到过一个现象 容器内由于读取的是宿主机的proc&#47;meminfo 导致cache没办法回收 </p>2021-07-30</li><br/><li><span>BertGeek</span> 👍（0） 💬（1）<p>docker容器内存资源限制有了新的认知</p>2021-07-01</li><br/><li><span>13549804879</span> 👍（0） 💬（1）<p>老师，我看过一些liunx的书，看了很容易就忘记了。如何能做到与实践想结合，或者用代码演示kernel的代码。这样可能会容易理解。请问有什么相关的案例书籍推荐。</p>2021-05-13</li><br/><li><span>alpha</span> 👍（0） 💬（2）<p>老师，你好 最近我们在迁移docker时发现当应用第一次去使用到swap的内存时，应用会有几秒的响应延迟？这个问题如何解决？</p>2021-04-11</li><br/><li><span>刘浩</span> 👍（3） 💬（1）<p>我遇见过会因为page cache高OOM的··如果我运行一个定期清cache的就不会OOM，所以容器的cache高真的不会被杀进程吗</p>2022-09-23</li><br/>
+total_rss_huge 276824064</p>2021-04-13</li><br/><li><span>笃定</span> 👍（2） 💬（1）<p>老师，如果新程序申请的内存大小是大于之前进程的page cache内存大小的；是不是就会发生oom？</p>2021-03-30</li><br/><li><span>上邪忘川</span> 👍（2） 💬（1）<p>看了这篇文章，对于linux内存的机制和free的使用有了很大的认识</p>2020-12-06</li><br/><li><span>流浪地球</span> 👍（2） 💬（1）<p>请问文中提到rss包括共享内存的大小，那pss呢，pss和rss的区别不是 是否包括共享内存的大小码？</p>2020-12-05</li><br/><li><span>仲玄</span> 👍（0） 💬（1）<p>老师, page cache 如果都被回收了, 会不会没办法使用page cache 导致磁盘很慢?</p>2021-08-11</li><br/><li><span>Q～Q</span> 👍（0） 💬（1）<p>请问老师： 容器内file-backed过大导致容器oom这个案例有遇到过吗 我现在遇到过一个现象 容器内由于读取的是宿主机的proc&#47;meminfo 导致cache没办法回收 </p>2021-07-30</li><br/><li><span>BertGeek</span> 👍（0） 💬（1）<p>docker容器内存资源限制有了新的认知</p>2021-07-01</li><br/><li><span>13549804879</span> 👍（0） 💬（1）<p>老师，我看过一些liunx的书，看了很容易就忘记了。如何能做到与实践想结合，或者用代码演示kernel的代码。这样可能会容易理解。请问有什么相关的案例书籍推荐。</p>2021-05-13</li><br/><li><span>alpha</span> 👍（0） 💬（2）<p>老师，你好 最近我们在迁移docker时发现当应用第一次去使用到swap的内存时，应用会有几秒的响应延迟？这个问题如何解决？</p>2021-04-11</li><br/><li><span>刘浩</span> 👍（3） 💬（1）<p>我遇见过会因为page cache高OOM的··如果我运行一个定期清cache的就不会OOM，所以容器的cache高真的不会被杀进程吗</p>2022-09-23</li><br/>
 </ul>

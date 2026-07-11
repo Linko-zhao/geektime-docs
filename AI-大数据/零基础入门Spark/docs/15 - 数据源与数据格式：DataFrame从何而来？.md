@@ -385,19 +385,18 @@ rdd=sc.parallelize(seq)
 column = [&#39;name&#39;,&#39;age&#39;]
 dataframe=spark.createDataFrame(seq,column)
 
-
 seq=[(&#39;Bob&#39;,14),(&#39;Alice&#39;,18)]
 rdd=sc.parallelize(seq)
 column = [&#39;name&#39;,&#39;age&#39;]
-df2=rdd.toDF(column)  
+df2=rdd.toDF(column)
 
 csvFilePath=&#39;file:&#47;&#47;&#47;home&#47;ray&#47;DataSet&#47;learn-spark&#47;chapter15&#47;info.txt&#39;
 df=spark.read.format(&#39;csv&#39;).option(&#39;header&#39;,True).load(csvFilePath)
 
 from pyspark.sql.types import (StringType,StructField,StringType,IntegerType)
 schema = StructType([
-    StructField(&quot;name&quot;, StringType(), True),
-    StructField(&quot;age&quot;, IntegerType(), True),
+StructField(&quot;name&quot;, StringType(), True),
+StructField(&quot;age&quot;, IntegerType(), True),
 ])
 
 df2=spark.read.format(&#39;csv&#39;).option(&#39;header&#39;,True).load(csvFilePath)
@@ -406,7 +405,9 @@ df3=spark.read.format(&#39;csv&#39;).schema(schema).option(&#39;header&#39;,True
 
 parquetFilePath=&#39;file:&#47;&#47;&#47;home&#47;RawData&#47;lucky&#47;batchNum=201705&#47;part-00000-a4ecpy.parquet&#39;
 df1=spark.read.format(&#39;parquet&#39;).load(parquetFilePath)
+
 # or
+
 df2=spark.read.parquet(parquetFilePath)
 
 from pyspark import SparkContext, SparkConf
@@ -422,10 +423,10 @@ java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check th
 java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;select * from HaoDF_article limit 2000 WHERE 1=0&#39; at line 1</p>2021-10-29</li><br/><li><span>王璀璨</span> 👍（0） 💬（1）<p>老师请问一下spark.default.parallelism和numPartitions分别是什么意思，我看都有分块的意思，但是不懂其中的原理。</p>2021-10-29</li><br/><li><span>东围居士</span> 👍（0） 💬（1）<p>我在 spark-shell 中使用 failFast 模式的时候，并不会在 load 语句处出错，而是在执行 df.show 的时候才会报错</p>2021-10-29</li><br/><li><span>Geek_995b78</span> 👍（0） 💬（1）<p>老师，我在用spark sql 读取mysql数据的时候，会在sql后默认加 where 1=0语句，导致程序报错，这个怎么解决呢？</p>2021-10-18</li><br/><li><span>czuo03</span> 👍（0） 💬（1）<p>permissive会将six替换为null
 val df: DataFrame = spark.read.format(&quot;csv&quot;).schema(schema).option(&quot;header&quot;, true).option(&quot;mode&quot;, &quot;permissive&quot;).load(csvFilePath)
 +------+----+
-|  name| age|
+| name| age|
 +------+----+
-| alice|  18|
-|   bob|  14|
+| alice| 18|
+| bob| 14|
 |cassie|null|
 +------+----+
 
@@ -435,7 +436,7 @@ val df: DataFrame = spark.read.format(&quot;csv&quot;).schema(schema).option(&qu
 | name|age|
 +-----+---+
 |alice| 18|
-|  bob| 14|
+| bob| 14|
 +-----+---+
 
 failFast无法生成DataFrame并提示SparkException

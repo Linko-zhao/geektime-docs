@@ -88,7 +88,7 @@ Webpack和Vite的定位是不一样的，这个连Vite的作者尤雨溪老师�
   height: 32px;
   min-width: 80px;
   cursor: pointer;
-} 
+}
 </style>
 
 ```
@@ -96,11 +96,11 @@ Webpack和Vite的定位是不一样的，这个连Vite的作者尤雨溪老师�
 以下是 src/index.js 项目的入口文件源码：
 
 ```javascript
-import { createApp } from 'vue';
-import App from './app.vue';
+import { createApp } from "vue";
+import App from "./app.vue";
 
 const app = createApp(App);
-app.mount('#app');
+app.mount("#app");
 ```
 
 当你完成了步骤一的项目目录的结构设计和源码准备后，就可以进行**第二步，安装依赖的npm模块了，也就是安装项目所需要的npm模块**。
@@ -146,46 +146,41 @@ npm i --save-dev css-loader mini-css-extract-plugin vue-loader webpack webpack-c
 **当你完成了步骤二的项目依赖安装后，接下来就是这节课配置的关键内容，步骤三的Webpack配置。**在此，我先将完整的Webpack配置内容贴出来，后面再跟你详细讲解每个配置项的作用，你先看看完整的代码：
 
 ```javascript
-const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader/dist/index')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const { VueLoaderPlugin } = require("vue-loader/dist/index");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  mode: 'production',
+  mode: "production",
   entry: {
-    'index' : path.join(__dirname, 'src/index.js'),
+    index: path.join(__dirname, "src/index.js"),
   },
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js',
+    path: path.join(__dirname, "dist"),
+    filename: "[name].js",
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        use: [
-          'vue-loader'
-        ]
+        use: ["vue-loader"],
       },
-      {  
+      {
         test: /\.(css|less)$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-        ]
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
-    ]
+    ],
   },
   plugins: [
-    new VueLoaderPlugin(), 
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[name].css'
-    })
+      filename: "[name].css",
+    }),
   ],
   externals: {
-    'vue': 'window.Vue'
-  }
-}
+    vue: "window.Vue",
+  },
+};
 ```
 
 我们从上到下一步步分析。
@@ -217,7 +212,38 @@ module.exports = {
 执行完代码后，会在当前项目的 dist 目录文件夹里，生成最终的Vue.js 3编译结果代码 index.js 和 index.css 文件。其中index.js文件就是核心的Vue.js3源码文件的编译结果，结果如下：
 
 ```javascript
-(()=>{"use strict";const e=window.Vue,t={class:"demo"},n={class:"text"},c={__name:"app",setup(c){const o=(0,e.reactive)({count:0}),a=()=>{o.count++};return(c,s)=>((0,e.openBlock)(),(0,e.createElementBlock)("div",t,[(0,e.createElementVNode)("div",n,"Count: "+(0,e.toDisplayString)(o.count),1),(0,e.createElementVNode)("button",{class:"btn",onClick:a},"Add")]))}};(0,e.createApp)(c).mount("#app")})();
+(() => {
+  "use strict";
+  const e = window.Vue,
+    t = { class: "demo" },
+    n = { class: "text" },
+    c = {
+      __name: "app",
+      setup(c) {
+        const o = (0, e.reactive)({ count: 0 }),
+          a = () => {
+            o.count++;
+          };
+        return (c, s) => (
+          (0, e.openBlock)(),
+          (0, e.createElementBlock)("div", t, [
+            (0, e.createElementVNode)(
+              "div",
+              n,
+              "Count: " + (0, e.toDisplayString)(o.count),
+              1,
+            ),
+            (0, e.createElementVNode)(
+              "button",
+              { class: "btn", onClick: a },
+              "Add",
+            ),
+          ])
+        );
+      },
+    };
+  (0, e.createApp)(c).mount("#app");
+})();
 ```
 
 你可以从上述代码中看到，由于我把vue模块给external出来成为window.Vue，让编译后的代码变得更加精简。后续代码运行的时候，我们只要在页面加入 Vue.js 3的全局变量脚本，就可以把 node\_modules/vue/dist/vue.runtion.global.js 这个文件复制出来引用了。
@@ -280,7 +306,7 @@ npm i --save-dev webpack-dev-server
 ```javascript
 {
   // 其它 Webpack配置代码
-  devtool: 'inline-cheap-module-source-map', 
+  devtool: 'inline-cheap-module-source-map',
   // 其它 Webpack配置代码
 }
 ```
@@ -302,23 +328,18 @@ npm i --save-dev html-webpack-plugin
   // 其它 Webpack配置代码
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Hello Vue',
-      filename: 'index.html',
-      template:'./index.html',
+      title: "Hello Vue",
+      filename: "index.html",
+      template: "./index.html",
       minify: false,
       inject: false,
       templateParameters: {
         publicPath: path.join(__dirname),
-        js: [
-          './node_modules/vue/dist/vue.runtime.global.js',
-          './index.js'
-        ],
-        css: [
-          './index.css'
-        ],
+        js: ["./node_modules/vue/dist/vue.runtime.global.js", "./index.js"],
+        css: ["./index.css"],
       },
-    })
-  ]
+    }),
+  ];
   // 其它 Webpack配置代码
 }
 ```
@@ -354,7 +375,7 @@ npm run dev
 生产模式最重要的是**代码编译完后要进行压缩处理，减少体积**。这里我们就需要压缩JavaScript和CSS的结果代码，你可以选择安装Webpack生态里的压缩代码插件，具体有压缩JavaScript代码的插件TerserPlugin和压缩CSS代码的插件 CssMinimizerPlugin，这几个插件是Webpack官方文档的推荐插件，可以执行如下安装命令：
 
 ```shell
-npm i --save-dev css-minimizer-webpack-plugin terser-webpack-plugin 
+npm i --save-dev css-minimizer-webpack-plugin terser-webpack-plugin
 ```
 
 然后再进行webpack.config.js 文件的配置：
@@ -379,23 +400,21 @@ npm i --save-dev css-minimizer-webpack-plugin terser-webpack-plugin
   // 其它 Webpack配置代码
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Hello Vue',
-      filename: 'index.html',
-      template:'./index.html',
+      title: "Hello Vue",
+      filename: "index.html",
+      template: "./index.html",
       minify: false,
       inject: false,
       templateParameters: {
         publicPath: path.join(__dirname),
         js: [
-          'https://unpkg.com/vue@3.2.37/dist/vue.runtime.global.js',
-          './index.js'
+          "https://unpkg.com/vue@3.2.37/dist/vue.runtime.global.js",
+          "./index.js",
         ],
-        css: [
-          './index.css'
-        ],
+        css: ["./index.css"],
       },
-    })
-  ]
+    }),
+  ];
   // 其它 Webpack配置代码
 }
 ```
@@ -407,58 +426,53 @@ npm i --save-dev css-minimizer-webpack-plugin terser-webpack-plugin
 最终配置结果如下所示：
 
 ```javascript
-const path = require('path');
-const webpackMerge = require('webpack-merge').default;
-const { VueLoaderPlugin } = require('vue-loader/dist/index')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const webpackMerge = require("webpack-merge").default;
+const { VueLoaderPlugin } = require("vue-loader/dist/index");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const baseConfig = {
   mode: process.env.NODE_ENV,
   entry: {
-    'index' : path.join(__dirname, 'src/index.js'),
+    index: path.join(__dirname, "src/index.js"),
   },
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js',
+    path: path.join(__dirname, "dist"),
+    filename: "[name].js",
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        use: [
-          'vue-loader'
-        ]
+        use: ["vue-loader"],
       },
-      {  
+      {
         test: /\.(css|less)$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-        ]
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
-      { 
+      {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-      }
-    ]
+        type: "asset/resource",
+      },
+    ],
   },
   plugins: [
-    new VueLoaderPlugin(), 
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[name].css'
-    }),  
+      filename: "[name].css",
+    }),
   ],
   externals: {
-    'vue': 'window.Vue'
-  }
-}
+    vue: "window.Vue",
+  },
+};
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
   config = webpackMerge(baseConfig, {
-    devtool: 'inline-cheap-module-source-map', 
+    devtool: "inline-cheap-module-source-map",
     devServer: {
       static: {
         directory: path.join(__dirname),
@@ -469,52 +483,42 @@ if (process.env.NODE_ENV === 'development') {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'Hello Vue',
-        filename: 'index.html',
-        template:'./index.html',
+        title: "Hello Vue",
+        filename: "index.html",
+        template: "./index.html",
         minify: false,
         inject: false,
         templateParameters: {
           publicPath: path.join(__dirname),
-          js: [
-            './node_modules/vue/dist/vue.runtime.global.js',
-            './index.js'
-          ],
-          css: [
-            './index.css'
-          ],
+          js: ["./node_modules/vue/dist/vue.runtime.global.js", "./index.js"],
+          css: ["./index.css"],
         },
-      })
-    ]
-  })
+      }),
+    ],
+  });
 } else {
   config = webpackMerge(baseConfig, {
     optimization: {
-      minimizer: [
-        new TerserPlugin({}),
-        new CssMinimizerPlugin({}),
-      ],
+      minimizer: [new TerserPlugin({}), new CssMinimizerPlugin({})],
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'Hello Vue',
-        filename: 'index.html',
-        template:'./index.html',
+        title: "Hello Vue",
+        filename: "index.html",
+        template: "./index.html",
         minify: false,
         inject: false,
         templateParameters: {
           publicPath: path.join(__dirname),
           js: [
-            'https://unpkg.com/vue@3.2.37/dist/vue.runtime.global.js',
-            './index.js'
+            "https://unpkg.com/vue@3.2.37/dist/vue.runtime.global.js",
+            "./index.js",
           ],
-          css: [
-            './index.css'
-          ],
+          css: ["./index.css"],
         },
-      })
-    ]
-  })
+      }),
+    ],
+  });
 }
 
 module.exports = config;
@@ -539,6 +543,7 @@ Webpack从诞生到现在这么久，核心也迭代了很多大版本，那不�
 期待你的分享。如果今天的课程让你有所收获，欢迎你把文章分享给有需要的朋友，我们下节课再见！
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/02)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Geek_b640fe</span> 👍（9） 💬（1）<p>‘NODE_ENV’ 不是内部或外部命令，也不是可运行的程序或批处理文件
 windows 环境必须安装 cross-env 模块，并在启动命令前安装
@@ -548,10 +553,12 @@ npm i -D cross-env
         &quot;dev&quot;: &quot;cross-env NODE_ENV=development webpack serve -c .&#47;webpack.config.js&quot;,
         &quot;build&quot;: &quot;cross-env NODE_ENV=production webpack -c .&#47;webpack.config.js&quot;
     },</p>2022-12-07</li><br/><li><span>风太大太大</span> 👍（5） 💬（1）<p>Webpack 3 4 5每个版本差异还挺大的，plugin变更，语法变更，对缓存的使用程度，打包构建加速那个版本的方案都不同，版本越高越方便</p>2022-11-23</li><br/><li><span>ZR-rd</span> 👍（4） 💬（1）<p>老师，大厂一般都是使用 CDN 来导入 Vue 等第三方库的吗？为什么不是直接打包到 bundle 中呢？这样有什么优缺点呢？</p>2022-12-01</li><br/><li><span>丫头</span> 👍（2） 💬（3）<p>webpack.default.js
+
 webpack.dev.js
 webpack.prod.js
 不同环境独立文件，会不会更清晰些</p>2022-12-05</li><br/><li><span>健牌哥.</span> 👍（0） 💬（1）<p>dev配置的devServer把static.directory修改成 path.join(__dirname, &#39;public&#39;)，本地node_modules的vue运行时文件就加载不成功了，index.html已放在public文件夹里。请问下这个怎么解决呢？</p>2023-01-16</li><br/><li><span>定宇</span> 👍（0） 💬（1）<p>想問一下，如果在webpack輸出檔案有加hash值的話
 ex:
+
 ```
 output: {
       path: path.join(__dirname, &#39;..&#47;dist&#39;),

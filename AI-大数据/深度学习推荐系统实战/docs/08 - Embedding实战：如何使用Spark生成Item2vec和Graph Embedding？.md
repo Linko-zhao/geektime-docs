@@ -89,7 +89,7 @@ def trainItem2vec(samples : RDD[Seq[String]]): Unit ={
   for((synonym, cosineSimilarity) <- synonyms) {
     println(s"$synonym $cosineSimilarity")
   }
- 
+
   //保存模型
   val embFolderPath = this.getClass.getResource("/webroot/sampledata/")
   val file = new File(embFolderPath.getPath + "embedding.txt")
@@ -166,7 +166,7 @@ def graphEmb(samples : RDD[Seq[String]], sparkSession: SparkSession): Unit ={
       transferMatrix(item1)(item2) = count
       itemCount(item1) = itemCount.getOrElse[Long](item1, 0) + count
     }
-  
+
 
 ```
 
@@ -192,7 +192,7 @@ def randomWalk(transferMatrix : scala.collection.mutable.Map[String, scala.colle
   //每个样本的长度
   val sampleLength = 10
   val samples = scala.collection.mutable.ListBuffer[Seq[String]]()
-  
+
   //物品出现的总次数
   var itemTotalCount:Long = 0
   for ((k,v) <- itemCount) itemTotalCount += v
@@ -289,7 +289,7 @@ def oneRandomWalk(transferMatrix : scala.collection.mutable.Map[String, scala.co
 
 &#47;Users&#47;leeco&#47;github&#47;wzhe06&#47;SparrowRecSys&#47;src&#47;main&#47;java&#47;com&#47;wzhe&#47;sparrowrecsys&#47;offline&#47;spark&#47;embedding&#47;Embedding.scala:34:43
 No TypeTag available for scala.collection.Seq[String]
-    val sortUdf: UserDefinedFunction = udf((rows: Seq[Row]) =&gt; {</p>2020-10-26</li><br/><li><span>tuomasiii</span> 👍（3） 💬（1）<p>想请问下老师如果新的user&#47;item加入，embedding matrix形状变大。如果每天都end2end train from scratch，是不是太expensive了？
+val sortUdf: UserDefinedFunction = udf((rows: Seq[Row]) =&gt; {</p>2020-10-26</li><br/><li><span>tuomasiii</span> 👍（3） 💬（1）<p>想请问下老师如果新的user&#47;item加入，embedding matrix形状变大。如果每天都end2end train from scratch，是不是太expensive了？
 如果是手动扩容embedding再initialize with昨日的checkpoint继续训练新的user-item interactions，然后时间久一点再train from scratch，行得通吗？
 </p>2021-02-23</li><br/><li><span>Capricornus</span> 👍（3） 💬（2）<p>userSeq.select(&quot;movieIdStr&quot;).rdd.map(r =&gt; r.getAs[String](&quot;movieIdStr&quot;).split(&quot; &quot;).toSeq)
 老师这里为什么需要转陈Seq，而不使用Array？

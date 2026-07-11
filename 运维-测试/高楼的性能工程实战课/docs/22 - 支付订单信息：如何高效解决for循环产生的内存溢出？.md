@@ -40,7 +40,7 @@
 [root@k8s-master-2 ~]# kubectl get pods -o wide | grep worker-1
 mysql-min-6685c9ff76-4m5xr                  1/1     Running     0          4d23h   10.100.230.14    k8s-worker-1   <none>           <none>
 skywalking-es-init-ls7j5                    0/1     Completed   0          4d11h   10.100.230.18    k8s-worker-1   <none>           <none>
-[root@k8s-master-2 ~]# 
+[root@k8s-master-2 ~]#
 ```
 
 可以看到，有两个服务在这个worker上跑着，一个是初始化容器，另一个是MySQL。初始化容器已经是完成的状态，那CPU使用率高肯定是因为MySQL了。因此，我们就进到容器中，执行下top，看看资源消耗到什么程度。
@@ -137,7 +137,7 @@ Sort mrg pass       0       0/s
 
 ```
 [root@svc-mall-order-568bd9b79-twhcw /]# jstat -gcutil 1 1s
-  ​S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT  
+  ​S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
 100.00   0.00 100.00 100.00  95.06  92.82   1182   34.966   495 3279.704 3314.670
 100.00   0.00 100.00 100.00  95.06  92.82   1182   34.966   495 3279.704 3314.670
 100.00   0.00 100.00 100.00  95.06  92.82   1182   34.966   495 3279.704 3314.670
@@ -204,13 +204,13 @@ Tasks:   4 total,   1 running,   3 sleeping,   0 stopped,   0 zombie
 %Cpu4  : 50.5 us,  8.0 sy,  0.0 ni, 41.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 %Cpu5  : 50.2 us,  3.1 sy,  0.0 ni, 46.1 id,  0.0 wa,  0.0 hi,  0.7 si,  0.0 st
 KiB Mem : 16265992 total,   171760 free,  9077080 used,  7017152 buff/cache
-KiB Swap:        0 total,        0 free,        0 used.  6676508 avail Mem 
+KiB Swap:        0 total,        0 free,        0 used.  6676508 avail Mem
 
 
-  ​PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                                                 
-    ​1 root      20   0 8788300   4.2g  13860 S 127.9 27.1 115:17.15 java                                                                                                                    
-  ​575 root      20   0   11828   1776   1328 S   0.0  0.0   0:00.01 sh                                                                                                                      
-  ​789 root      20   0   11964   1980   1484 S   0.0  0.0   0:00.02 bash                                                                                                                    
+  ​PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+    ​1 root      20   0 8788300   4.2g  13860 S 127.9 27.1 115:17.15 java
+  ​575 root      20   0   11828   1776   1328 S   0.0  0.0   0:00.01 sh
+  ​789 root      20   0   11964   1980   1484 S   0.0  0.0   0:00.02 bash
   ​802 root      20   0   56232   2012   1432 R   0.0  0.0   0:00.05 to
 
 
@@ -224,12 +224,12 @@ Threads:  85 total,   1 running,  84 sleeping,   0 stopped,   0 zombie
 %Cpu4  : 21.2 us,  9.2 sy,  0.0 ni, 69.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 %Cpu5  : 45.6 us, 10.1 sy,  0.3 ni, 43.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.3 st
 KiB Mem : 16265992 total,   197656 free,  9071444 used,  6996892 buff/cache
-KiB Swap:        0 total,        0 free,        0 used.  6681848 avail Mem 
+KiB Swap:        0 total,        0 free,        0 used.  6681848 avail Mem
 
 
-  ​PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                                                  
-    ​7 root      20   0 8788300   4.2g  13836 R 96.0 27.1  70:13.42 VM Thread                                                                                                                
-   ​26 root      20   0 8788300   4.2g  13836 S  0.7 27.1   0:05.70 VM Periodic Tas                                                                                                        
+  ​PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
+    ​7 root      20   0 8788300   4.2g  13836 R 96.0 27.1  70:13.42 VM Thread
+   ​26 root      20   0 8788300   4.2g  13836 S  0.7 27.1   0:05.70 VM Periodic Tas
 ```
 
 执行了上面两个命令之后，你有没有注意到只有一个线程在消耗CPU？根据我们前面查看的GC状态，这个线程应该在忙着做FullGC。我们打印栈信息来确认一下，果然是它！
@@ -317,7 +317,7 @@ jmap -dump:format=b,file=文件名 pid
 
 ```
 [root@svc-mall-order-f7b6d6f7-xl2kp /]# jstat -gcutil 1 1s
-  ​S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT  
+  ​S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
   ​0.00   5.44 100.00  96.03  95.03  93.17  43710 1044.757   161   83.635 1128.39
   ​0.00   3.18  82.83  96.21  95.03  93.17  43713 1044.797   161   83.635 1128.43
   ​2.09   0.00   4.54  96.21  95.03  93.17  43718 1044.850   161   83.635 1128.48
@@ -398,29 +398,28 @@ jmap -dump:format=b,file=文件名 pid
 oracel：
     ②分析awr报告
 
-
 2、
 《1》定位堆栈
 1、命令
-    （1）保存堆dump文件，打开dump文件，根据16进制线程号，查找代码的行号定位堆栈：
-a. jmap -histo:live 进程pid | more      &#47;  jmap -histo pid|more） 通过进程号(jps -l)看线程调用堆栈
-    jmap -dump:format=b,file=文件名 进程pid；     （b二进制格式）
-b. jstack   进程pid &gt;&gt;thread.dump ;          
+（1）保存堆dump文件，打开dump文件，根据16进制线程号，查找代码的行号定位堆栈：
+a. jmap -histo:live 进程pid | more &#47; jmap -histo pid|more） 通过进程号(jps -l)看线程调用堆栈
+jmap -dump:format=b,file=文件名 进程pid； （b二进制格式）
+b. jstack 进程pid &gt;&gt;thread.dump ;  
 c. jcmd 进程pid GC.heap_dump &#47;filepath.hprof（二进制格式dump）
 d. ①配置java参数：（java -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=&lt;file-or-dir-path&gt;）自动抓取堆dump文件：java_pid.hprof
-   ②使用Jconsole工具将操作调用的serVMOption参数：HeapDumpOnOutOfMemoryError 值设置为true
-    （2）不保存dump文件，定位堆栈:
+②使用Jconsole工具将操作调用的serVMOption参数：HeapDumpOnOutOfMemoryError 值设置为true
+（2）不保存dump文件，定位堆栈:
 a. 通过 perf record 命令录制进程一段时间，通过 perf report 分析堆栈
-b. jstack 进程pid | grep 线程pid   ：top，top -Hp 进程pid，printf &quot;%x\n&quot; 线程pid，jstack 进程pid | grep 16进制线程pid
+b. jstack 进程pid | grep 线程pid ：top，top -Hp 进程pid，printf &quot;%x\n&quot; 线程pid，jstack 进程pid | grep 16进制线程pid
 
 2、图形化工具：
-        ①jvm右键java进程选择线程dump生成快照或打开dump文件
-        ②使用IBM Thread and Monitor Dump Analyzer for Java分析dump文件
-        ③jconsole
-        ④使用MAT打开dump.hprof文件，查看可疑的内存消耗点的详情，查看对象以及它的依赖  dominator_tree
+①jvm右键java进程选择线程dump生成快照或打开dump文件
+②使用IBM Thread and Monitor Dump Analyzer for Java分析dump文件
+③jconsole
+④使用MAT打开dump.hprof文件，查看可疑的内存消耗点的详情，查看对象以及它的依赖 dominator_tree
 
 《2》分析源码：
-        查看代码行，分析所有调用该方法的代码逻辑，分析代码对应的SQL
+查看代码行，分析所有调用该方法的代码逻辑，分析代码对应的SQL
 
 《3》沟通：与开发沟通，是否存在定时任务，执行定时任务的数据量大小，有无加limit，线程数</p>2021-05-16</li><br/><li><span>jy</span> 👍（0） 💬（1）<p>请问，容器里面如何执行mysqlreport 呢？ 生成的数据如何拿出来？谢谢老师</p>2021-10-14</li><br/>
 </ul>

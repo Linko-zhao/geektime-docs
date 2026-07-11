@@ -53,7 +53,7 @@ video_path = export_to_video(video_frames, output_video_path="video4.mp4")
 from moviepy.editor import VideoFileClip
 
 def convert_mp4_to_gif(input_file, output_file, start_time, end_time):
-    """ 
+    """
     Convert mp4 video to gif.
 
     Parameters:
@@ -61,7 +61,7 @@ def convert_mp4_to_gif(input_file, output_file, start_time, end_time):
     output_file (str): The path of the output gif file.
     start_time (int): The start time (in seconds) for gif.
     end_time (int): The end time (in seconds) for gif.
-    
+
     Returns:
     None
     """

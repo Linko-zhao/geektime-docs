@@ -8,7 +8,7 @@
 
 我们一起来看看，大家都提出什么问题。
 
-* * *
+---
 
 **1.老师你好！我语义化标签用得很少，多数用到的是header、footer、 nav等语义化标签，想问老师section和div混合使用，会不会效果不好呢？**
 
@@ -69,7 +69,7 @@ o2.myfunc();
 
 **5.我对于JavaScript中Number安全整数有个疑问。**
 
-**MDN中是（-(2^53-1)~(2^53-1)）, 犀牛书中是（-2^53~2^53）感觉都有道理。**
+**MDN中是（-(2^53-1)~~(2^53-1)）, 犀牛书中是（-2^53~~2^53）感觉都有道理。**
 
 **JavaScript中采用IEEE754浮点数标准进行存储， 1个符号位，11位指数位， 52位尾数位。**
 
@@ -131,26 +131,31 @@ console.log('sync2');
 最终显示顺序是这样的。
 
 - **宏任务1**
-  
+
   - 微任务1
-    
+
     - sync 1
     - promise
     - sync 2
+
   - 微任务2
-    
+
     - pro\_then
+
 - **宏任务2**
-  
+
   - setTimeout1
+
 - **宏任务3**
-  
+
   - setTimeoutPromise
+
 - **宏任务4**
-  
+
   - last\_setTimeout
+
 - **宏任务5**
-  
+
   - pro\_timeout
 
 **7.为什么 promise.then中的settimeout是最后打印的？不用管是宏任务依次执行吗？**
@@ -274,62 +279,62 @@ function str2num (str) {
     }
   }
 
-  &#47;&#47; handle fraction
-  if (f) {
-    result += str2num(f) &#47; (10 ** f.length)
-  }
+&#47;&#47; handle fraction
+if (f) {
+result += str2num(f) &#47; (10 ** f.length)
+}
 
-  &#47;&#47; handle exponent
-  if (e) {
-    let exponent
-    let sign = 1
-    if (e[0] === &#39;-&#39;) {
-      sign = -1
-      exponent = str2num(e.slice(1))
-    } else if (e[0] === &#39;+&#39;) {
-      exponent = str2num(e.slice(1))
-    } else {
-      exponent = str2num(e)
-    }
-    if (sign === -1) {
-      result &#47;= 10 ** exponent
-    } else {
-      result *= 10 ** exponent
-    }
-  }
+&#47;&#47; handle exponent
+if (e) {
+let exponent
+let sign = 1
+if (e[0] === &#39;-&#39;) {
+sign = -1
+exponent = str2num(e.slice(1))
+} else if (e[0] === &#39;+&#39;) {
+exponent = str2num(e.slice(1))
+} else {
+exponent = str2num(e)
+}
+if (sign === -1) {
+result &#47;= 10 ** exponent
+} else {
+result *= 10 ** exponent
+}
+}
 
-  &#47;&#47; handle sign
-  result *= sign
-  return result
+&#47;&#47; handle sign
+result *= sign
+return result
 }
 
 function c2n (char) {
-  const n = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9][char]
-  if (n == null) throw new Error(`unknown char: &quot;${char}&quot;`)
-  return n
+const n = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9][char]
+if (n == null) throw new Error(`unknown char: &quot;${char}&quot;`)
+return n
 }
 
 function assert (input) {
-  let output = str2num(input)
-  let expect = Number(input)
-  if (output !== expect) {
-    throw new Error(`input ${input}, got ${output}, while expect ${expect}`)
-  }
+let output = str2num(input)
+let expect = Number(input)
+if (output !== expect) {
+throw new Error(`input ${input}, got ${output}, while expect ${expect}`)
+}
 }
 
 void function test () {
-  assert(&#39;13.4e-7&#39;)
-  assert(&#39;.4e+7&#39;)
-  assert(&#39;-.2e+1&#39;)
-  assert(&#39;+.6e+0&#39;)
-  assert(&#39;0&#39;)
-  assert(&#39;-0e-0&#39;)
-  assert(&#39;0e0&#39;)
-  assert(&#39;123&#39;)
-  assert(&#39;2e1&#39;)
-  assert(&#39;2e-0&#39;)
-  assert(&#39;.1&#39;)
-  console.log(&#39;All right.&#39;)
+assert(&#39;13.4e-7&#39;)
+assert(&#39;.4e+7&#39;)
+assert(&#39;-.2e+1&#39;)
+assert(&#39;+.6e+0&#39;)
+assert(&#39;0&#39;)
+assert(&#39;-0e-0&#39;)
+assert(&#39;0e0&#39;)
+assert(&#39;123&#39;)
+assert(&#39;2e1&#39;)
+assert(&#39;2e-0&#39;)
+assert(&#39;.1&#39;)
+console.log(&#39;All right.&#39;)
 }()
 </p>2019-03-30</li><br/><li><span>自由之翼</span> 👍（3） 💬（1）<p>一般都是缓存 数据 吧 ,个人感觉 缓存 js css 纯属没事儿找事儿.</p>2019-04-03</li><br/><li><span>Geek_c43534</span> 👍（2） 💬（2）<p>老师，jquery ajax 同步请求的原理是?目前用axios库，不支持同步请求，如果希望执行同步请求有什么解决办法？</p>2019-04-01</li><br/><li><span>weineel</span> 👍（2） 💬（2）<p>老师您好，把JS代码缓存在 localStorage 中，从 localStorage 取出后怎么执行？ 如果缓存的是 css 呢？</p>2019-03-30</li><br/><li><span>EmilyLucky</span> 👍（1） 💬（0）<p>好像对异步任务的分类又多了一点理解。异步中任务分为宏任务和微任务，微任务是后来出现的，它其实是JS引擎内部的机制，而宏任务是宿主环境下的异步。老师，这么理解对吗？那么设计微任务的初衷仅仅就是为了让JS引擎内部有异步么？</p>2020-05-12</li><br/><li><span>xiaolu289</span> 👍（1） 💬（0）<p>js如果取出来是字符串，目前我想到一个方案是用eval去执行，不过感觉直接用localstrage存储js代码这种操作可能会有安全问题，毕竟locastrage在浏览器是随便我怎么改都行的....
 css的话，直接插一个style不就好了嘛....js其实也可以插一个script....所以具体什么场景采用什么方案，还得根据业务场景来决定

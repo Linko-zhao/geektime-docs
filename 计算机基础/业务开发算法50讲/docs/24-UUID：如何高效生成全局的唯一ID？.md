@@ -120,7 +120,7 @@ public static UUID nameUUIDFromBytes(byte[] name)
 两个版本的使用都很简单：
 
 ```scala
-UUID uuid = UUID.randomUUID(); 
+UUID uuid = UUID.randomUUID();
 UUID uuid_ = UUID.nameUUIDFromBytes(nbyte);
 ```
 
@@ -203,7 +203,7 @@ public class Snowflake {
         if(currentTimestamp < lastTimestamp) {
             throw new IllegalStateException("Invalid System Clock!");
         }
-        
+
         // 同一个时间戳，我们需要递增序号
         if (currentTimestamp == lastTimestamp) {
             sequence = (sequence + 1) & maxSequence;
@@ -242,7 +242,7 @@ public class Snowflake {
         return currentTimestamp;
     }
 
-    // 默认基于mac地址生成节点ID 
+    // 默认基于mac地址生成节点ID
     private long createNodeId() {
         long nodeId;
         try {

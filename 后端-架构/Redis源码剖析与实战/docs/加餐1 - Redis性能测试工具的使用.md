@@ -228,5 +228,6 @@ redis-benchmark工具本身提供了一些常见命令的测试，比如SET、GE
 - 进程绑核
 - CPU 绑定网卡队列
 - Redis 内存碎片
-- 不使用 Swap</p>2021-09-04</li><br/><li><span>命运女神在微笑</span> 👍（2） 💬（1）<p>redislab 提供了一款开源的压测工具，同原生的压测工具相比，加入了线程数的超参数，可以有效的提高redis的负载，在单机的时候就能压的很高。 地址如下 https:&#47;&#47;github.com&#47;RedisLabs&#47;memtier_benchmark</p>2021-09-08</li><br/><li><span>风向北吹</span> 👍（0） 💬（0）<p>压测完成后，那些测试数据多久会清理掉呢？</p>2022-10-18</li><br/><li><span>追风筝的人</span> 👍（0） 💬（0）<p>老师测了下 Redis 集群 主要瓶颈在CPU</p>2022-06-27</li><br/><li><span>追风筝的人</span> 👍（0） 💬（0）<p>老师  redis-benchmark工具有性能瓶颈， 没有测出系统的系统瓶颈时候，redis-benchmark已经达到cpu瓶颈了，需要开启多个redis-benchmark客户端，测redis集群性能的时候至少开启2个redis-benchmark客户端窗口， 例如  3主3从开启3个redis-benchmark 客户端</p>2022-06-27</li><br/>
+- 不使用 Swap</p>2021-09-04</li><br/><li><span>命运女神在微笑</span> 👍（2） 💬（1）<p>redislab 提供了一款开源的压测工具，同原生的压测工具相比，加入了线程数的超参数，可以有效的提高redis的负载，在单机的时候就能压的很高。 地址如下 https:&#47;&#47;github.com&#47;RedisLabs&#47;memtier_benchmark</p>2021-09-08</li><br/><li><span>风向北吹</span> 👍（0） 💬（0）<p>压测完成后，那些测试数据多久会清理掉呢？</p>2022-10-18</li><br/><li><span>追风筝的人</span> 👍（0） 💬（0）<p>老师测了下 Redis 集群 主要瓶颈在CPU</p>2022-06-27</li><br/><li><span>追风筝的人</span> 👍（0） 💬（0）<p>老师 redis-benchmark工具有性能瓶颈， 没有测出系统的系统瓶颈时候，redis-benchmark已经达到cpu瓶颈了，需要开启多个redis-benchmark客户端，测redis集群性能的时候至少开启2个redis-benchmark客户端窗口， 例如 3主3从开启3个redis-benchmark 客户端</p>2022-06-27</li><br/>
+
 </ul>

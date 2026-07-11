@@ -139,10 +139,10 @@ metadata:
   name: wp-cm
 
 data:
-  HOST: 'maria-sts-0.maria-svc'  #注意这里
-  USER: 'wp'
-  PASSWORD: '123'
-  NAME: 'db'
+  HOST: "maria-sts-0.maria-svc" #注意这里
+  USER: "wp"
+  PASSWORD: "123"
+  NAME: "db"
 ```
 
 改完这两个YAML，我们就可以逐个创建MariaDB、WordPress、Ingress等对象了。
@@ -347,7 +347,6 @@ metadata:
   namespace: kubernetes-dashboard
 
 ---
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -357,7 +356,7 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
+  - kind: ServiceAccount
   name: admin-user
   namespace: kubernetes-dashboard
 ```
@@ -407,30 +406,34 @@ maria-svc.yml内容如下：
 apiVersion: v1
 kind: Service
 metadata:
-  name: maria-svc
+name: maria-svc
 
 spec:
-  selector:
-    app: maria-sts
+selector:
+app: maria-sts
 
-  ports:
-  - port: 3306
-    protocol: TCP
-    targetPort: 3306</p>2023-03-14</li><br/><li><span>Geek_515a78</span> 👍（0） 💬（1）<p>老师，kubectl apply -f dashboard.yaml拉镜像，科学上网后pod一直加载失败到不了runing状态，是什么原因啊</p>2024-06-11</li><br/><li><span>Geek_1d8cd9</span> 👍（0） 💬（1）<p>老师，我成功部署Wordpress后却发现伴随着每次虚拟机的重启，我之前在博客上上传的图片都会消失或者被破坏，但我写的文章却可以保存，所以我猜可能图片保存到了Wordpress这个Pod里，因为博客图片的保存路径为 &#47;var&#47;www&#47;html&#47;wp-content&#47;uploads，所以我就想在wp-dep.yaml里再加一个PVC动态存储，把Pod里的&#47;var&#47;www&#47;html&#47;wp-content&#47;uploads 挂载到 我创建的nfs 挂载目录 &#47;app&#47;nfs下，但这样做并没有成功，是我哪部分的方向有问题吗？</p>2023-10-27</li><br/><li><span>未来已来</span> 👍（0） 💬（1）<p>1. 部署 dashboard 过程中被科学搞了一下，顺便删了 &#47;etc&#47;cni&#47;net.d 下的 10-flannel.conflist 后发现成功了
+ports:
+
+- port: 3306
+  protocol: TCP
+  targetPort: 3306</p>2023-03-14</li><br/><li><span>Geek_515a78</span> 👍（0） 💬（1）<p>老师，kubectl apply -f dashboard.yaml拉镜像，科学上网后pod一直加载失败到不了runing状态，是什么原因啊</p>2024-06-11</li><br/><li><span>Geek_1d8cd9</span> 👍（0） 💬（1）<p>老师，我成功部署Wordpress后却发现伴随着每次虚拟机的重启，我之前在博客上上传的图片都会消失或者被破坏，但我写的文章却可以保存，所以我猜可能图片保存到了Wordpress这个Pod里，因为博客图片的保存路径为 &#47;var&#47;www&#47;html&#47;wp-content&#47;uploads，所以我就想在wp-dep.yaml里再加一个PVC动态存储，把Pod里的&#47;var&#47;www&#47;html&#47;wp-content&#47;uploads 挂载到 我创建的nfs 挂载目录 &#47;app&#47;nfs下，但这样做并没有成功，是我哪部分的方向有问题吗？</p>2023-10-27</li><br/><li><span>未来已来</span> 👍（0） 💬（1）<p>1. 部署 dashboard 过程中被科学搞了一下，顺便删了 &#47;etc&#47;cni&#47;net.d 下的 10-flannel.conflist 后发现成功了
+
 2. 通过 dashboard 发现了两个 pod 在 terminating，一个 worker 挂掉了，处理后全绿了，666</p>2023-09-17</li><br/><li><span>拓山</span> 👍（0） 💬（2）<p>k8s.test需要再kubetcl里配置吗？
-这个点很困惑</p>2023-04-17</li><br/><li><span>Lorry</span> 👍（0） 💬（1）<p>老师，按照流程，最后通过Ingress是可以访问到（https）的dashboard页面，但是页面是为空，看title以及页面源码确实有dashboard字样，但是没有具体内容，显示为空白页面。
+   这个点很困惑</p>2023-04-17</li><br/><li><span>Lorry</span> 👍（0） 💬（1）<p>老师，按照流程，最后通过Ingress是可以访问到（https）的dashboard页面，但是页面是为空，看title以及页面源码确实有dashboard字样，但是没有具体内容，显示为空白页面。
 
 会是什么原因导致的呢？</p>2023-02-26</li><br/><li><span>Geek_674ea8</span> 👍（0） 💬（1）<p>老师，为dashboard配置ingress时，配置好后还是无法通过浏览器使用域名访问（已在hosts添加），浏览器报503：gateway time-out，查看ingress-controller日志显示如下：
 Host is unreachable) while connecting to upstream, client: 10.10.1.1, server: k8s.test, request: &quot;GET &#47; HTTP&#47;2.0&quot;, upstream: &quot;https:&#47;&#47;10.10.0.19:8443&#47;&quot;
 其中upstream的地址 10.10.0.19为kubernetes-dashbord的pod地址。
 请问这种问题是什么原因造成的啊？</p>2023-02-03</li><br/><li><span>nc_ops</span> 👍（0） 💬（1）<p>为什么kubernetes-dashboard的那些对象要处于2个不同的名字空间呢？有什么用吗</p>2022-12-16</li><br/><li><span>dao</span> 👍（0） 💬（1）<p>分享我遇到的问题：
+
 1. 搭建 dashboard ，访问时一直有这个错误 “Client sent an HTTP request to an HTTPS server”，原因是 ingress 没有加上 nginx.org&#47;ssl-services annotation（老师已经提醒了）
-参考文档 https:&#47;&#47;docs.nginx.com&#47;nginx-ingress-controller&#47;configuration&#47;ingress-resources&#47;advanced-configuration-with-annotations&#47;#backend-services-upstreams
+   参考文档 https:&#47;&#47;docs.nginx.com&#47;nginx-ingress-controller&#47;configuration&#47;ingress-resources&#47;advanced-configuration-with-annotations&#47;#backend-services-upstreams
 
 2. 搭建 wordpress 时，ingress 有端口号，浏览器打开页面无法正常显示，比如主页 https:&#47;&#47;wp.test:30443&#47; ，加载页面资源时会变成 https:&#47;&#47;wp.test&#47;xxxx ，丢失了端口号。这个问题不知道该如何解，请老师&#47;同学帮忙解答，谢谢！
-（为了验证自己的想法，手动去改了 ingress controller pod 里 nginx 配置，强制设置“ proxy_set_header Host $host:430443; ”，可以凑效。）</p>2022-10-06</li><br/><li><span>TableBear</span> 👍（0） 💬（4）<p>请教老师一个问题：
-文章后面的给Dashboard绑定Ingrss的时候，IngressClass的名字空间是kubernetes-dashboard，IngressController的名字空间是nginx-ingress。IngressClass和IngressConroller绑定的时候是不是忽略名字空间的？那是不是意味着IngressClass的name必须全局唯一？</p>2022-09-08</li><br/><li><span>Da Vinci</span> 👍（0） 💬（2）<p>按照老师的课程步骤去部署dashboard，但是最后访问的时候返回404，不知道为啥</p>2022-09-06</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师几个问题：
-Q1：Prometheus和Skywalking是一类产品吗？
-Q2：对于常见的CI&#47;CD(持续集成、部署)，k8s等同于CD吗？
-Q3：用openssl”生成的自签名证书，可以应用于生成环境吗？</p>2022-09-06</li><br/><li><span>邓嘉文</span> 👍（0） 💬（0）<p>第一</p>2022-09-05</li><br/>
+   （为了验证自己的想法，手动去改了 ingress controller pod 里 nginx 配置，强制设置“ proxy_set_header Host $host:430443; ”，可以凑效。）</p>2022-10-06</li><br/><li><span>TableBear</span> 👍（0） 💬（4）<p>请教老师一个问题：
+   文章后面的给Dashboard绑定Ingrss的时候，IngressClass的名字空间是kubernetes-dashboard，IngressController的名字空间是nginx-ingress。IngressClass和IngressConroller绑定的时候是不是忽略名字空间的？那是不是意味着IngressClass的name必须全局唯一？</p>2022-09-08</li><br/><li><span>Da Vinci</span> 👍（0） 💬（2）<p>按照老师的课程步骤去部署dashboard，但是最后访问的时候返回404，不知道为啥</p>2022-09-06</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师几个问题：
+   Q1：Prometheus和Skywalking是一类产品吗？
+   Q2：对于常见的CI&#47;CD(持续集成、部署)，k8s等同于CD吗？
+   Q3：用openssl”生成的自签名证书，可以应用于生成环境吗？</p>2022-09-06</li><br/><li><span>邓嘉文</span> 👍（0） 💬（0）<p>第一</p>2022-09-05</li><br/>
+
 </ul>

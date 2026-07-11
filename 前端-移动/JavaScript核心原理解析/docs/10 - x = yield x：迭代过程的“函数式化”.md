@@ -37,7 +37,7 @@ console.log(
   /*return */{done: false, value: 3}.value,
   /*return */{done: false, value: 2}.value,
   /*return */{done: false, value: 1}.value
-);          
+);
 ```
 
 在形式上，类似上面这样的例子也可以展开来，表现它作为“多个值”的输出过程。

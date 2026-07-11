@@ -87,7 +87,7 @@ promise = rtcPeerConnection.getStats(selector)
 ```
 ...
 //获得速个连接的统计信息
-pc.getStats().then( 
+pc.getStats().then(
     //在一个连接中有很多 report
     reports => {
         //遍历每个 report
@@ -100,7 +100,7 @@ pc.getStats().then(
     	console.error(err);
     });
 );
-...  
+...
 ```
 
 在上面的代码中，通过调用 RTCPeerConnecction 对象的 getStats 方法，就可以获取到你想得到的所有统计信息了。

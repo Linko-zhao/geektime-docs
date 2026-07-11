@@ -117,7 +117,7 @@ fun <T> create(service: Class<T>): T {
             }
         }
     ) as T
-}    
+}
 ```
 
 在上面的代码当中，我们在create()方法当中，直接返回了Proxy.newProxyInstance()这个方法的返回值，最后再将其转换成了T类型。
@@ -127,7 +127,7 @@ fun <T> create(service: Class<T>): T {
 ```java
 public static Object newProxyInstance(ClassLoader loader,
                                           Class<?>[] interfaces,
-                                          InvocationHandler h){ 
+                                          InvocationHandler h){
         ...
 }
 
@@ -347,7 +347,7 @@ interface GitHubService {
 fun main() {
     KtHttpV1.baseUrl = "https://api.github.com"
     //       换一个接口名即可                  换一个接口名即可
-    //              ↓                             ↓                
+    //              ↓                             ↓
     val api: GitHubService = KtHttpV1.create(GitHubService::class.java)
     val data: User = api.search(id = "JetBrains")
 }
@@ -627,17 +627,17 @@ object KtHttpV1 {
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>白乾涛</span> 👍（8） 💬（1）<p>勉强能看明白，但这代码谁能手写的出来呀？
 
-就算写出来了，谁保证没 bug？谁能保证别人能看明白？谁能保证后续能维护？</p>2022-02-19</li><br/><li><span>木易杨</span> 👍（3） 💬（1）<p>Kotlin这语法越写越变态。Java啰嗦吧，起码能看懂，没那么多语法题</p>2022-01-24</li><br/><li><span>$Kotlin</span> 👍（3） 💬（1）<p>动图看起来不太方便，不能暂停，而且这个动图好长。</p>2022-01-24</li><br/><li><span>syz</span> 👍（2） 💬（1）<p>动态代理的那张动图，播放中不能暂停，要懂这样过一遍没毛病。建议将每一次停顿变成带序号的标注，贴代码上来感觉会好点。</p>2022-03-09</li><br/><li><span>面无表情的生鱼片</span> 👍（2） 💬（1）<p>请教老师，如果 method.genericType 是 kotlin 的 Basic Type 的话（例如：String、Int），要怎么做兼容比较好呢？</p>2022-02-12</li><br/><li><span>阿康</span> 👍（2） 💬（3）<p>Lambda 表达式当中的返回语法 能讲下吗？或者给个相关的博客连接</p>2022-01-24</li><br/><li><span>河山</span> 👍（1） 💬（1）<p>请问老师 像如下代码 
+就算写出来了，谁保证没 bug？谁能保证别人能看明白？谁能保证后续能维护？</p>2022-02-19</li><br/><li><span>木易杨</span> 👍（3） 💬（1）<p>Kotlin这语法越写越变态。Java啰嗦吧，起码能看懂，没那么多语法题</p>2022-01-24</li><br/><li><span>$Kotlin</span> 👍（3） 💬（1）<p>动图看起来不太方便，不能暂停，而且这个动图好长。</p>2022-01-24</li><br/><li><span>syz</span> 👍（2） 💬（1）<p>动态代理的那张动图，播放中不能暂停，要懂这样过一遍没毛病。建议将每一次停顿变成带序号的标注，贴代码上来感觉会好点。</p>2022-03-09</li><br/><li><span>面无表情的生鱼片</span> 👍（2） 💬（1）<p>请教老师，如果 method.genericType 是 kotlin 的 Basic Type 的话（例如：String、Int），要怎么做兼容比较好呢？</p>2022-02-12</li><br/><li><span>阿康</span> 👍（2） 💬（3）<p>Lambda 表达式当中的返回语法 能讲下吗？或者给个相关的博客连接</p>2022-01-24</li><br/><li><span>河山</span> 👍（1） 💬（1）<p>请问老师 像如下代码
 fun &lt;T&gt; Int.toType():T{
-    return (this as T)
+return (this as T)
 }
 class Animal{}
 fun main() {
-    println(100.toType&lt;Animal&gt;())
+println(100.toType&lt;Animal&gt;())
 }
-这个不应该有类型转换异常吗 为什么我运行没有报异常 而且会输出100  但是debug模式 去运行100.toType&lt;Animal&gt;()  这个表达式 却的确会提示类型转换异常 老师 为什么运行没问题啊 </p>2022-03-09</li><br/><li><span>PoPlus</span> 👍（0） 💬（3）<p>操作符太多了，日常写业务不常用的话很快就忘了。不知道老师是如何知道这么多没听过的操作符（filterIsInstance、fold）🥲。</p>2022-02-27</li><br/><li><span>山河入梦</span> 👍（0） 💬（1）<p>&#47;&#47; 这种写法是有问题的，但这节课我们先不管。
+这个不应该有类型转换异常吗 为什么我运行没有报异常 而且会输出100 但是debug模式 去运行100.toType&lt;Animal&gt;() 这个表达式 却的确会提示类型转换异常 老师 为什么运行没问题啊 </p>2022-03-09</li><br/><li><span>PoPlus</span> 👍（0） 💬（3）<p>操作符太多了，日常写业务不常用的话很快就忘了。不知道老师是如何知道这么多没听过的操作符（filterIsInstance、fold）🥲。</p>2022-02-27</li><br/><li><span>山河入梦</span> 👍（0） 💬（1）<p>&#47;&#47; 这种写法是有问题的，但这节课我们先不管。
 我想问下老师，这种写法的问题在哪，因为我一直这样写来着，从昨天看了文章，就一直纠结着</p>2022-02-16</li><br/><li><span>jim</span> 👍（0） 💬（1）<p>kotlin确实很优雅，有时候写着写着看不懂了！</p>2022-02-15</li><br/><li><span>梦佳</span> 👍（0） 💬（3）<p>运行不起来</p>2022-01-31</li><br/><li><span>只为你停留</span> 👍（0） 💬（3）<p>mapIndexed { index, it -&gt; Pair(it, args[index]) }
-这个函数中 it -&gt; Pair(it, args[index] 怎么理解呢，尤其不理解 it -&gt;</p>2022-01-28</li><br/><li><span>l-zesong</span> 👍（0） 💬（1）<p>return@newProxyInstance  是什么意思啊？没看懂</p>2022-01-25</li><br/><li><span>sunlight</span> 👍（0） 💬（2）<p>有个地方疑惑，动态代理一般会有两种使用方式吗？
+这个函数中 it -&gt; Pair(it, args[index] 怎么理解呢，尤其不理解 it -&gt;</p>2022-01-28</li><br/><li><span>l-zesong</span> 👍（0） 💬（1）<p>return@newProxyInstance 是什么意思啊？没看懂</p>2022-01-25</li><br/><li><span>sunlight</span> 👍（0） 💬（2）<p>有个地方疑惑，动态代理一般会有两种使用方式吗？
 
 方式一 create()方法中会多传个被代理对象，通过method.invoke(被代理对象)，实现拦截。外层返回代理对象
 方式二 create()方法中只会有接口，没有手动实现被代理对象。因为我们不关心接口的具体实现，只关心接口中的注解参数，拦截获取到参数即可

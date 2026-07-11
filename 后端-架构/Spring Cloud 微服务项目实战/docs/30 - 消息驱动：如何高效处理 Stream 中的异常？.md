@@ -154,7 +154,6 @@ channel error; protocol method: #method&lt;channel.close&gt;(reply-code=406, rep
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>javaadu</span> 👍（4） 💬（1）<p>事务消息是针对发送者的，消费者要确保做好异常处理和重试逻辑。
 
-
 基于RocketMQ或Kafka的事务消息，实现分布式事务：
 （1）订单系统在消息队列上开启一个事务
 （2）订单系统给消息服务器发送一个“半消息”，半消息和普通消息的唯一区别是，在事务提交之前，对于消费者来说，这个消息是不可见的。

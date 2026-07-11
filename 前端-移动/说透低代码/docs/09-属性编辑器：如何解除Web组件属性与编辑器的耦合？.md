@@ -115,11 +115,11 @@ class Property {
 class SVD {
   properties: Property[];
   html() {
-    const prop = this.properties.map(p => p.property()).join(' ');
+    const prop = this.properties.map((p) => p.property()).join(" ");
     return `<jigsaw-table ${prop}></jigsaw-table>`;
   }
   script() {
-    return this.properties.map(p => p.script()).join('\n');
+    return this.properties.map((p) => p.script()).join("\n");
   }
 }
 ```
@@ -134,9 +134,9 @@ class SVD {
 
 ```typescript
 class Property {
-  name = '';
-  value = '';
-  member = 'tableData';
+  name = "";
+  value = "";
+  member = "tableData";
   property() {
     return `[${this.name}]="${member}"`;
   }
@@ -156,9 +156,9 @@ class Property {
 ```typescript
 class SVD {
   properties: Property[];
-  selector = '';
+  selector = "";
   html() {
-    const prop = this.properties.map(p => p.property()).join(' ');
+    const prop = this.properties.map((p) => p.property()).join(" ");
     return `<${this.selector} ${prop}></${this.selector}>`;
   }
   script() {
@@ -176,19 +176,19 @@ class SVD {
 ```typescript
 // 初始化2个类
 const dataProp = new Property();
-dataProp.name = 'data';
+dataProp.name = "data";
 dataProp.value = {
-    header: ['列1', '列2', '列3', '列4'],
-    field = ['field1', 'field2', 'field3', 'field4'],
-    data = [
-        ['cell11', 'cell12', 'cell13', 'cell14'], // 第1行
-        ['cell21', 'cell22', 'cell23', 'cell24'], // 第2行
-        // ...
-    ]
-}
+  header: ["列1", "列2", "列3", "列4"],
+  field = ["field1", "field2", "field3", "field4"],
+  data = [
+    ["cell11", "cell12", "cell13", "cell14"], // 第1行
+    ["cell21", "cell22", "cell23", "cell24"], // 第2行
+    // ...
+  ],
+};
 const tableSvd = new SVD();
 tableSvd.properties = [dataProp];
-tableSvd.selector = 'jigsaw-table';
+tableSvd.selector = "jigsaw-table";
 
 // 执行并得到代码
 const html = tableSvd.html(); // <jigsaw-table ...></jigsaw-table>
@@ -205,18 +205,18 @@ const script = tableSvd.script(); // const tableData = new TableData...
 abstract class Property {
   // 这是一个抽象函数，只有声明，无法实现
   abstract script();
-  
-  name = '';
-  value = '';
-  member = '';
+
+  name = "";
+  value = "";
+  member = "";
   property() {
     return `[${this.name}]="${member}"`;
   }
 }
 
 class DataProperty extends Property {
-  name = 'data';
-  member = 'tableData';
+  name = "data";
+  member = "tableData";
   // 在子类中，script函数就知道如何实现了
   script() {
     // ...
@@ -224,8 +224,8 @@ class DataProperty extends Property {
 }
 
 class ColumnsProperty extends Property {
-  name = 'columns';
-  member = 'tableColumns';
+  name = "columns";
+  member = "tableColumns";
   // 各个子类需要生成不同的脚本
   script() {
     return `
@@ -242,9 +242,11 @@ class ColumnsProperty extends Property {
 
 ```typescript
 const tableSvd = new SVD();
-tableSvd.selector = 'jigsaw-table';
+tableSvd.selector = "jigsaw-table";
 tableSvd.properties = [
-  new DataProperty(), new ColumnsProperty(), new XxxProperty()
+  new DataProperty(),
+  new ColumnsProperty(),
+  new XxxProperty(),
 ];
 ```
 
@@ -259,7 +261,7 @@ tableSvd.properties = [
 ```typescript
 abstract class SVD {
   properties: Property[];
-  selector = '';
+  selector = "";
   // 能在基类里实现的方法都尽量在基类提供实现，这样子类直接复用就好了
   html() {
     // ...
@@ -274,9 +276,11 @@ abstract class SVD {
 ```typescript
 class JigsawTable extends SVD {
   properties: Property[] = [
-    new DataProperty(), new ColumnsProperty(), new XxxProperty()
+    new DataProperty(),
+    new ColumnsProperty(),
+    new XxxProperty(),
   ];
-  selector = 'jigsaw-table';
+  selector = "jigsaw-table";
   script() {
     // ...
   }
@@ -287,10 +291,8 @@ class JigsawTable extends SVD {
 
 ```typescript
 class JigsawSelect extends SVD {
-  properties: Property[] = [
-    new DataProperty(), new ValueProperty()
-  ];
-  selector = 'jigsaw-select';
+  properties: Property[] = [new DataProperty(), new ValueProperty()];
+  selector = "jigsaw-select";
   script() {
     // ...
   }
@@ -315,10 +317,10 @@ class JigsawSelect extends SVD {
 abstract class Property {
   // 这是一个抽象函数，只有声明，无法实现
   abstract script(): string;
-  
-  name: string = '';
-  value: string = '';
-  member: string = '';
+
+  name: string = "";
+  value: string = "";
+  member: string = "";
   property(): string {
     // ...
   }
@@ -327,7 +329,7 @@ abstract class SVD {
   // 和Property类似，基类里不知道如何实现的方法，都只声明，不实现
   abstract script(): string;
   properties: Property[];
-  selector: string = '';
+  selector: string = "";
   // 能在基类里实现的方法都尽量在基类提供实现，这样子类直接复用就好了
   html(): string {
     // ...

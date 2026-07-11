@@ -13,7 +13,7 @@
 在该文件的第一行，就定义了名为 ENGLISH\_REACT\_COMPLETION\_PROMPT\_TEMPLATES 的模板变量。内容如下：
 
 ````
-ENGLISH_REACT_COMPLETION_PROMPT_TEMPLATES = """Respond to the human as helpfully and accurately as possible. 
+ENGLISH_REACT_COMPLETION_PROMPT_TEMPLATES = """Respond to the human as helpfully and accurately as possible.
 
 {{instruction}}
 

@@ -8,7 +8,7 @@
 
 ```
 //限流器流速：2个请求/秒
-RateLimiter limiter = 
+RateLimiter limiter =
   RateLimiter.create(2.0);
 //执行任务的线程池
 ExecutorService es = Executors
@@ -147,7 +147,7 @@ class SimpleLimiter {
   long next = System.nanoTime();
   //发放令牌间隔：纳秒
   long interval = 1000_000_000;
-  
+
   //请求时间在下一令牌产生时间之后,则
   // 1.重新计算令牌桶中的令牌数
   // 2.将下一个令牌发放时间重置为当前时间
@@ -156,7 +156,7 @@ class SimpleLimiter {
       //新产生的令牌数
       long newPermits=(now-next)/interval;
       //新令牌增加到令牌桶
-      storedPermits=min(maxPermits, 
+      storedPermits=min(maxPermits,
         storedPermits + newPermits);
       //将下一个令牌发放时间重置为当前时间
       next = now;
@@ -210,6 +210,7 @@ class SimpleLimiter {
 next 变量的意思是下一个令牌的生成时间，可以理解为当前线程请求的令牌的生成时刻，如第一张图所示：线程 T1 的令牌的生成时刻是第三秒。
 
 线程 T 请求时，存在三种场景：
+
 1. 桶里有剩余令牌。
 2. 刚创建令牌，线程同时请求。
 3. 桶里无剩余令牌。
@@ -222,8 +223,8 @@ next 变量的意思是下一个令牌的生成时间，可以理解为当前线
 
 角标分别对应 resync 方法内的代码：
 ¹: long newPermits=(now-next)&#47;interval;
-²: storedPermits=min(maxPermits, 
-        storedPermits + newPermits);
+²: storedPermits=min(maxPermits,
+storedPermits + newPermits);
 ³: next = now;</p>2019-08-09</li><br/><li><span>花儿少年</span> 👍（27） 💬（7）<p>很精髓的就是reserve方法，我来试着稍微解释一下
 首先肯定是计算令牌桶里面的令牌数量
 然后取令牌桶中的令牌数量storedPermits 与当前的需要的令牌数量 1 做比较，大于等于 1，说明令牌桶至少有一个令牌，此时下一令牌的获取是不需要等待的，表现为 next 不需要变化；而当令牌桶中的令牌没有了即storedPermits等于 0 时，next 就会变化为下一个令牌的获取时间，注意 nr 的值变化</p>2019-06-18</li><br/><li><span>梦倚栏杆</span> 👍（19） 💬（4）<p>有个疑问：高并发情况下单独一个线程维护一个队列放令牌，性能上扛不住，那么获取令牌时每次加锁去计算性能就可以抗的主？是根据什么依据来判断性能的呢？</p>2019-12-13</li><br/><li><span>Darren</span> 👍（17） 💬（2）<p>老师，请教一下，限流器和信号量为什么感觉一样的，那为什么2个还都存在？是因为业务场景不同吗？请老师解惑下</p>2019-05-26</li><br/><li><span>zsh0103</span> 👍（8） 💬（1）<p>老师好，问个问题。文中代码b=3，r=1&#47;s时，如果在next之后同时来了3个请求，应该时都可以获得令牌的对吧。就是说这3个请求都可以执行。那岂不是违背了r=1&#47;s的限制吗。

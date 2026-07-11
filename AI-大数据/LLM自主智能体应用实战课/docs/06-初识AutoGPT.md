@@ -35,24 +35,24 @@ AutoGPT 发展得很快，新版本（称作 AutoGPT Platform）与老版本（�
 在这篇文章中，作者将 AutoGPT 中的组件划分为 Agent（智能体）、Workflow（工作流）、Block（构建块）三个层次。作者写道：
 
 > 智能体本质上是一种自动化的工作流，由您设计来执行特定的任务或流程。 重要的是，虽然我们的平台擅长人工智能驱动的自动化，但您的智能体并不局限于人工智能任务。 智能体可以是任何自动化流程，包括：
-> 
+>
 > - 数据处理和分析
 > - 任务调度和管理
 > - 通信和通知系统
 > - 不同软件工具之间的集成
 > - 人工智能驱动的决策制定和内容生成
 > - … 很多其他的任务
-> 
+>
 > 这种灵活性使您可以在同一个强大的平台上实现各种业务流程的自动化，无论是否包含人工智能组件。
 
 > AutoGPT 平台中的构建块代表行动（Action）。 这些是您用来构建工作流的构件。 构建块可包括：
-> 
+>
 > - 连接外部服务（如电子邮件提供商、客户关系管理或社交媒体平台）
 > - 数据处理工具
 > - 用于各种任务的 AI 模型
 > - 自定义脚本或函数
 > - 条件逻辑和决策组件
-> 
+>
 > 通过组合这些构建块，您可以创建无缝集成多种工具和服务的智能体，将原本需要人工干预的复杂流程自动化。
 
 从上述内容，我们可以理解 Agent、Workflow、Block 的定义和它们之间的关系。三者的关系可以简单理解为：Agent 基于（包含）Workflow，Workflow 基于（包含）Block。AutoGPT 中的一个 Agent 相当于 MetaGPT 中的一个 Role，一个 Block 相当于 MetaGPT 中的一个 Action，而一个 Workflow 则由多个 Block 组合而成。
@@ -60,7 +60,7 @@ AutoGPT 发展得很快，新版本（称作 AutoGPT Platform）与老版本（�
 作者还写道：
 
 > AutoGPT 平台预先集成了大量先进的 LLM，使您可以在自动化工作流中利用人工智能的强大功能。 这些 LLM 可以作为构建块轻松集成到您的代理中，实现自然语言处理、内容生成、情感分析等任务。 以下是我们平台上目前可用的 LLM 集成列表：
-> 
+>
 > - OpenAI
 > - Anthropic
 > - Groq
@@ -201,7 +201,7 @@ sudo systemctl restart redis
 ```plain
 cd ~/work/AutoGPT/autogpt_platform/backend
 cp .env.example .env
-vi .env 
+vi .env
 ```
 
 1. 将 DB\_PORT 参数值中（运行 PostgreSQL 数据库）的端口号 5432 改为 54322。这个端口号从之前启动 Supabase 后备份信息中的 DB URL（“postgresql://postgres:postgres@127.0.0.1:54322/postgres”）中可以获得。
@@ -298,53 +298,62 @@ AutoGPT 新版本的 B/S 架构设计有何优缺点？
 <div><strong>精选留言（9）</strong></div><ul>
 <li><span>糍粑不是饭</span> 👍（1） 💬（1）<p>老师，您好。我对您的脚本顺序进行了调整。可以跑通了：
 
-
 brew install supabase&#47;tap&#47;supabase
 cd ~&#47;work&#47;AutoGPT&#47;autogpt_platform&#47;backend
 supabase init
 
 # 插入以下修复脚本
+
 cp .env.example .env
-# 仅 修改 DB_PORT, DB_PASS, SUPABASE_URL  三个项目即可
+
+# 仅 修改 DB_PORT, DB_PASS, SUPABASE_URL 三个项目即可
+
 vi .env
+
 # 就后面的代码提前了：
+
 cd ~&#47;work&#47;AutoGPT&#47;autogpt_platform&#47;backend
 PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring poetry install
 poetry run prisma generate --schema schema.prisma
 poetry run prisma migrate dev --schema schema.prisma
 
 # 最后执行这行 脚本
+
 cp ..&#47;supabase&#47;supabase&#47;seed.sql supabase&#47;
 sudo supabase start</p>2025-02-19</li><br/><li><span>糍粑不是饭</span> 👍（1） 💬（1）<p>我跑通了，但感觉还是用docker方便些。 跑一下简单demo的话，这个过程有点漫长。 </p>2025-02-07</li><br/><li><span>晓波</span> 👍（0） 💬（1）<p>### apt 采用默认源安装 docker 和 docker-compose【不推荐】
 
 # 更新安装源
+
 sudo apt update
 
 # 采用apt 安装 docker 和 docker-compose 以及所有Docekr相关的package
+
 sudo apt install docker.io docker-compose
 
 # 启动docker
+
 sudo systemctl enable docker
 sudo systemctl start docker
 
 # 将当前用户加入到docker，使得当前环境可以使用docker服务
-sudo usermod -aG docker $USER
 
+sudo usermod -aG docker $USER
 
 在 Ubuntu 22.04 LTS 版本采用apt 安装docker-compose 的版本过低 &lt;= 1.29.2 ，存在兼容的问题（有些docker-compose的yaml配置选项不支持）。不建议用此方式安装
 ubuntu@VM-0-136-ubuntu:~&#47;work&#47;AutoGPT&#47;autogpt_platform$ docker-compose up -d --build
 ERROR: The Compose file &#39;&#47;home&#47;ubuntu&#47;work&#47;AutoGPT&#47;autogpt_platform&#47;docker-compose.platform.yml&#39; is invalid because:
 Unsupported config option for services.executor: &#39;develop&#39;
 
-
 ### apt 采用官方源安装 docker 和 docker-compose【推荐】
 
 参考资料： Ubuntu | Docker Docs ： https:&#47;&#47;docs.docker.com&#47;engine&#47;install&#47;ubuntu&#47;
 
 ## 卸载就的apt安装包
+
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove -y $pkg; done
 
 # Add Docker&#39;s official GPG key:
+
 sudo apt-get update
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d &#47;etc&#47;apt&#47;keyrings
@@ -352,40 +361,52 @@ sudo curl -fsSL https:&#47;&#47;download.docker.com&#47;linux&#47;ubuntu&#47;gpg
 sudo chmod a+r &#47;etc&#47;apt&#47;keyrings&#47;docker.asc
 
 # Add the repository to Apt sources:
+
 echo \
-  &quot;deb [arch=$(dpkg --print-architecture) signed-by=&#47;etc&#47;apt&#47;keyrings&#47;docker.asc] https:&#47;&#47;download.docker.com&#47;linux&#47;ubuntu \
+&quot;deb [arch=$(dpkg --print-architecture) signed-by=&#47;etc&#47;apt&#47;keyrings&#47;docker.asc] https:&#47;&#47;download.docker.com&#47;linux&#47;ubuntu \
   $(. &#47;etc&#47;os-release &amp;&amp; echo &quot;${UBUNTU_CODENAME:-$VERSION_CODENAME}&quot;) stable&quot; | \
-  sudo tee &#47;etc&#47;apt&#47;sources.list.d&#47;docker.list &gt; &#47;dev&#47;null
+sudo tee &#47;etc&#47;apt&#47;sources.list.d&#47;docker.list &gt; &#47;dev&#47;null
 sudo apt-get update
 
 # 安装 docker 和 docker-compose
+
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # 启动docker
+
 sudo systemctl enable docker
 sudo systemctl start docker
 
 # 将当前用户加入到docker，使得当前环境可以使用docker服务
+
 sudo usermod -aG docker $USER</p>2025-02-20</li><br/><li><span>糍粑不是饭</span> 👍（0） 💬（2）<p>failed to send batch: ERROR: relation &quot;meetups&quot; does not exist (SQLSTATE 42P01)
 ------------------------------------
+
 请问老师, meetups 表是在哪一步生成的呢? 我看看可以不可以自己创建一下</p>2025-02-19</li><br/><li><span>糍粑不是饭</span> 👍（0） 💬（1）<p>老师您好，有个小错误， 安装brew的脚本中右括号是中文字符，直接复制不行。我复制后一直报错：
+
 ```shell
 -bash: &#47;home&#47;an&#47;.profile: line 28: unexpected EOF while looking for matching `&quot;&#39;
 ```
+
 将这行：
+
 ```
 echo &#39;eval &quot;$(&#47;home&#47;linuxbrew&#47;.linuxbrew&#47;bin&#47;brew shellenv）&quot;&#39; &gt;&gt; ~&#47;.profile
 ```
 
 替换为：
+
 ```
-echo &#39;eval &quot;$(&#47;home&#47;linuxbrew&#47;.linuxbrew&#47;bin&#47;brew shellenv)&quot;&#39; &gt;&gt; ~&#47;.profile 
+echo &#39;eval &quot;$(&#47;home&#47;linuxbrew&#47;.linuxbrew&#47;bin&#47;brew shellenv)&quot;&#39; &gt;&gt; ~&#47;.profile
 ```
+
 后好了。</p>2025-02-18</li><br/><li><span>天敌</span> 👍（0） 💬（2）<p>老师，注册(signup)的时候显示
 The provided email may not be allowed to sign up.
+
 - AutoGPT Platform is currently in closed beta. You can jointhe waitlist here.
 - Make sure you use the same email address you used to sign up for the waitlist.
 - You can self host the platform, visit ourGitHub repository.
+
 </p>2025-02-06</li><br/><li><span>小叶</span> 👍（0） 💬（6）<p>执行sudo supabase start --debug 启动失败，抛异常，不存在meetup表。我看seed.sql 脚步里确实只有insert into meetups 语句，没有建表语句。这个需要怎么处理呢，大家有遇到吗？错误日志如下：
 2025&#47;01&#47;23 17:54:05 PG Send: {&quot;Type&quot;:&quot;Parse&quot;,&quot;Name&quot;:&quot;lrupsc_1_3&quot;,&quot;Query&quot;:&quot;insert into meetups\n  (title, country, launch_week, start_at, is_published)\nvalues\n  (&#39;New York&#39;, &#39;USA&#39;, &#39;lw12&#39;, now(), true),\n  (&#39;London&#39;, &#39;UK&#39;, &#39;lw12&#39;, now(), true),\n  (&#39;Singapore&#39;, &#39;Singapore&#39;, &#39;lw12&#39;, now(), true)&quot;,&quot;ParameterOIDs&quot;:null}
 2025&#47;01&#47;23 17:54:05 PG Send: {&quot;Type&quot;:&quot;Describe&quot;,&quot;ObjectType&quot;:&quot;S&quot;,&quot;Name&quot;:&quot;lrupsc_1_3&quot;}

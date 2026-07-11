@@ -102,7 +102,7 @@ spec:
 **接下来**，我们就可以使用kubect create来创建这个PV，如下所示：
 
 ```
-$ kubectl create -f local-pv.yaml 
+$ kubectl create -f local-pv.yaml
 persistentvolume/example-pv created
 
 $ kubectl get pv
@@ -168,7 +168,7 @@ volumeBindingMode: WaitForFirstConsumer
 在明白了这个机制之后，我们就可以创建StorageClass了，如下所示：
 
 ```
-$ kubectl create -f local-sc.yaml 
+$ kubectl create -f local-sc.yaml
 storageclass.storage.k8s.io/local-storage created
 ```
 
@@ -193,7 +193,7 @@ spec:
 现在，我们来创建这个PVC：
 
 ```
-$ kubectl create -f local-pvc.yaml 
+$ kubectl create -f local-pvc.yaml
 persistentvolumeclaim/example-local-claim created
 
 $ kubectl get pvc
@@ -231,7 +231,7 @@ spec:
 而我们一旦使用kubectl create创建这个Pod，就会发现，我们前面定义的PVC，会立刻变成Bound状态，与前面定义的PV绑定在了一起，如下所示：
 
 ```
-$ kubectl create -f local-pod.yaml 
+$ kubectl create -f local-pod.yaml
 pod/example-pv-pod created
 
 $ kubectl get pvc
@@ -260,9 +260,9 @@ test.txt
 而如果你重新创建这个Pod的话，就会发现，我们之前创建的测试文件，依然被保存在这个持久化Volume当中：
 
 ```
-$ kubectl delete -f local-pod.yaml 
+$ kubectl delete -f local-pod.yaml
 
-$ kubectl create -f local-pod.yaml 
+$ kubectl create -f local-pod.yaml
 
 $ kubectl exec -it example-pv-pod -- /bin/sh
 # ls /usr/share/nginx/html
@@ -291,19 +291,19 @@ $ kubectl get pv
 NAME                CAPACITY    ACCESSMODES   RECLAIMPOLICY   STATUS      CLAIM     STORAGECLASS    REASON    AGE
 local-pv-ce05be60   1024220Ki   RWO           Delete          Available             local-storage             26s
 
-$ kubectl describe pv local-pv-ce05be60 
+$ kubectl describe pv local-pv-ce05be60
 Name:  local-pv-ce05be60
 ...
 StorageClass: local-storage
 Status:  Available
-Claim:  
+Claim:
 Reclaim Policy: Delete
 Access Modes: RWO
 Capacity: 1024220Ki
 NodeAffinity:
   Required Terms:
       Term 0:  kubernetes.io/hostname in [node-1]
-Message: 
+Message:
 Source:
     Type: LocalVolume (a persistent volume backed by local storage on a node)
     Path: /mnt/disks/vol1
@@ -337,7 +337,6 @@ Source:
 </p>2018-10-29</li><br/><li><span>xfan</span> 👍（18） 💬（0）<p>思考题：
 因为dynamic provision机制不知道pod需要在哪个node下运行，而提前就创建好了，，</p>2019-01-23</li><br/><li><span>张三</span> 👍（7） 💬（0）<p>Dynamic Provisioning 提供的是自动创建PV的机制，会根据PVC来创建PV并绑定，而我们的延迟绑定是需要在调度的时候综合考虑所有的调度条件来进行PVC和PV的绑定并调度Pod到PV所在的节点，二者有冲突</p>2020-05-12</li><br/><li><span>拉欧</span> 👍（7） 💬（0）<p>Dynamic Provisioning 是通过pvc 创建指定规格的pv, 而Local Persistent Volume 是先创建pv, 在创建pvc, 然后在pod创建的时候绑定pv和pvc；从语义上讲，Dynamic Provisioning 就不太可能支持延迟这种效果</p>2019-11-16</li><br/><li><span>djfhchdh</span> 👍（5） 💬（0）<p>因为Dynamic Provisioning会自动创建PV，也就是说，在PVC创建后就根据StorageClass去自动创建PV并绑定了，而“延迟绑定”发生在调度Pod时，此时PVC已经创建了。因此二者是矛盾的~~</p>2019-11-13</li><br/><li><span>大星星</span> 👍（3） 💬（1）<p>手动删除pv的步骤中，1234步骤，为什么不是1342呢</p>2019-03-14</li><br/><li><span>海。</span> 👍（2） 💬（3）<p>如果不是Local Persistent Volume， 而使用云块存储 aws ebs ， “延迟绑定”和 Dynamic Provisioning 可以不冲突吧？ 我看https:&#47;&#47;github.com&#47;kubernetes-sigs&#47;aws-ebs-csi-driver&#47;blob&#47;master&#47;examples&#47;kubernetes&#47;dynamic-provisioning&#47;specs&#47;storageclass.yaml 的volumeBindingMode也是 WaitForFirstConsumer</p>2020-07-10</li><br/><li><span>勤奋的辣牛肉</span> 👍（1） 💬（0）<p>Static Provisioner  和 local-volume-provisioner  是一个东西么?</p>2022-04-09</li><br/><li><span>johnson.skiii</span> 👍（1） 💬（2）<p>liuchjlu
 请教一个问题，当使用Local Persistent Volume的时候，pv中声明的local path如果所在节点没有这个目录会不会自动创建？
-
 
 我的理解是：pv无论是使用NAS或者其他的存储，还是local persistent volume，都是infra的童鞋帮忙先规划好的存储区域。那么你在写这个pv的时候，要确保这块存储可用，比如目录存在。</p>2018-12-09</li><br/><li><span>liuchjlu</span> 👍（1） 💬（1）<p>请教一个问题，当使用Local Persistent Volume的时候，pv中声明的local path如果所在节点没有这个目录会不会自动创建？</p>2018-11-03</li><br/><li><span>silver</span> 👍（1） 💬（1）<p>&#39;一个 PV 一块盘&#39;能再解释下么，如果直接写宿主机上的本地磁盘目录只要把每个container所消耗的硬盘空间都加个cap就能防止磁盘被写满吧？</p>2018-10-30</li><br/><li><span>Geek_0cd726</span> 👍（0） 💬（0）<p>你好，请问一般用什么方法测试容器中PV的性能，可以直接使用fio在容器内测试吗？如何评判性能的优劣，是否有业界普遍的benchmark方法？</p>2025-01-07</li><br/>
 </ul>

@@ -85,8 +85,8 @@ React/React Native 选择的是基于组件的架构模式，它有三个好处�
 ```plain
 import {Text} from 'react-native';
 
-const element1 = <Text>苹果</Text> // JSX 
-const element2 = <Text>火龙果</Text> // JSX 
+const element1 = <Text>苹果</Text> // JSX
+const element2 = <Text>火龙果</Text> // JSX
 ```
 
 你看啊，在这段用 JavaScript 书写的代码中，使用了**类似 HTML 的声明式语法，JSX**。我们先从 react-native 框架中引入了 Text 组件，然后通过 JSX 语法，用一对单闭合标签将 Text 组件进行实例化，生成 Text 元素 element1。当 element1 这个元素渲染到手机屏幕上，就是文字“苹果”了，element2 就是文字“火龙果”。
@@ -96,7 +96,7 @@ const element2 = <Text>火龙果</Text> // JSX
 现在，你已经有了构建静态页面的宿主组件了，接下来你需要用这些宿主组件，搭建你自己事先拆好的自定义组件了，包括：
 
 - ProductTable 商品列表组件
-  
+
   - Category 类别组件
   - Product 商品组件
 
@@ -161,8 +161,8 @@ export default function ProductTable({products}){
   // ...
   <Category category={products[i].category}
   // ...
-  <Product product={products[i]} 
-  // ...  
+  <Product product={products[i]}
+  // ...
 }
 
 // Category.js
@@ -230,10 +230,10 @@ $ npm start
 error Failed to install the app. Make sure you have the Android development environment set up: https:&#47;&#47;reactnative.dev&#47;docs&#47;environment-setup.
 Error: Command failed: .&#47;gradlew app:installDebug -PreactNativeDevServerPort=8081
 
- info Run CLI with --verbose flag for more details.
+info Run CLI with --verbose flag for more details.
 error Command failed with exit code 1.
 info Visit https:&#47;&#47;yarnpkg.com&#47;en&#47;docs&#47;cli&#47;run for documentation about this command.
 
-这是什么原因呀？</p>2022-06-14</li><br/><li><span>worm</span> 👍（0） 💬（2）<p>老师您好，registerComponent() 第二个参数为什么设计为传入一个函数(ComponentProvider)？这样比设计为直接传入 Component 的好处是什么呢？ 
+这是什么原因呀？</p>2022-06-14</li><br/><li><span>worm</span> 👍（0） 💬（2）<p>老师您好，registerComponent() 第二个参数为什么设计为传入一个函数(ComponentProvider)？这样比设计为直接传入 Component 的好处是什么呢？
 </p>2022-05-09</li><br/><li><span>山丘smith18651579836</span> 👍（0） 💬（2）<p>ProductTable.js中不需要通过数组的map函数来循环生成生成列表吗？</p>2022-04-01</li><br/>
 </ul>

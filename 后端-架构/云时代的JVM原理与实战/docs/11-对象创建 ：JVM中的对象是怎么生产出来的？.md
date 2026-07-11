@@ -9,7 +9,7 @@
 如果我们把JVM比作是创建对象的工厂，那么首先让我们来参观下JVM工厂中日常创建对象的标准流水线。之所以称之为标准，是因为这并不是JVM内部创建对象的唯一一条流水线，另一条流水线我会在后面为你介绍。现在让我们先把目光聚焦在这条标准的流水线上。
 
 ```plain
-Book  book = new Book(); 
+Book  book = new Book();
 ```
 
 我们可以把上面这行代码看作是流水线收到的一笔订单。当JVM收到这笔订单时，它知道客户需要定制一个Book对象，这时候流水线开始启动。
@@ -133,7 +133,7 @@ JVM 是如何做到的呢？我们来看一下。
 
 ```plain
 public Book EscapeExample() {
-    return new Book("Java Book"); 
+    return new Book("Java Book");
 }
 ```
 
@@ -141,8 +141,8 @@ public Book EscapeExample() {
 
 ```plain
 public String EscapeExample() {
-    Book book = new Book("Java Book"); 
-    return book.name 
+    Book book = new Book("Java Book");
+    return book.name
 }
 ```
 
@@ -162,8 +162,8 @@ public String EscapeExample() {
 
 ```plain
 public String EscapeExample() {
-    Book book = new Book("Book"); 
-    return book.name 
+    Book book = new Book("Book");
+    return book.name
 }
 ```
 

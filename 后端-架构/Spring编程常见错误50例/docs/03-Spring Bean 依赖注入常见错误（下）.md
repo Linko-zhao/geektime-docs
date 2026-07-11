@@ -41,7 +41,7 @@ public Student student(){
 ```
 //注册正常字符串
 @Value("我是字符串")
-private String text; 
+private String text;
 
 //注入系统参数、环境变量或者配置文件中的值
 @Value("${ip}")
@@ -71,7 +71,7 @@ public class ValueTestController {
     private String username;
     @Value("${password}")
     private String password;
- 
+
     @RequestMapping(path = "user", method = RequestMethod.GET)
     public String getUser(){
        return username + ":" + password;
@@ -103,7 +103,7 @@ public Object doResolveDependency(DependencyDescriptor descriptor, @Nullable Str
                   getMergedBeanDefinition(beanName) : null);
             value = evaluateBeanDefinitionString(strVal, bd);
          }
-         
+
          //转化Value解析的结果到装配的类型
          TypeConverter converter = (typeConverter != null ? typeConverter : getTypeConverter());
          try {
@@ -126,7 +126,7 @@ public Object doResolveDependency(DependencyDescriptor descriptor, @Nullable Str
 ```
 @Nullable
 protected Object findValue(Annotation[] annotationsToSearch) {
-   if (annotationsToSearch.length > 0) {  
+   if (annotationsToSearch.length > 0) {
       AnnotationAttributes attr = AnnotatedElementUtils.getMergedAnnotationAttributes(
             AnnotatedElementUtils.forAnnotations(annotationsToSearch), this.valueAnnotationType);
       //valueAnnotationType即为@Value
@@ -160,7 +160,7 @@ public class UUIDEditor extends PropertyEditorSupport {
       }
    }
    //省略其他非关代码
-  
+
 }
 ```
 
@@ -175,7 +175,7 @@ String strVal = resolveEmbeddedValue((String) value);
 ![](https://static001.geekbang.org/resource/image/25/40/25d4242bc0dae8fa730663b9122b7840.png?wh=1683%2A269)
 
 ```
-[ConfigurationPropertySourcesPropertySource {name='configurationProperties'}, 
+[ConfigurationPropertySourcesPropertySource {name='configurationProperties'},
 StubPropertySource {name='servletConfigInitParams'}, ServletContextPropertySource {name='servletContextInitParams'}, PropertiesPropertySource {name='systemProperties'}, OriginAwareSystemEnvironmentPropertySource {name='systemEnvironment'}, RandomValuePropertySource {name='random'},
 OriginTrackedMapPropertySource {name='applicationConfig: classpath:/application.properties]'},
 MapPropertySource {name='devtools'}]
@@ -190,12 +190,12 @@ protected <T> T getProperty(String key, Class<T> targetValueType, boolean resolv
       for (PropertySource<?> propertySource : this.propertySources) {
          Object value = propertySource.getProperty(key);
          if (value != null) {
-         //查到value即退出  
+         //查到value即退出
          return convertValueIfNecessary(value, targetValueType);
          }
       }
    }
- 
+
    return null;
 }
 ```
@@ -279,7 +279,7 @@ public List<Student> students(){
     Student student3 = createStudent(3, "liu");
     Student student4 = createStudent(4, "fu");
     return Arrays.asList(student3, student4);
-} 
+}
 ```
 
 为了好记，这里我们不妨将上面这种方式命名为“直接装配方式”，而将之前的那种命名为“收集方式”。

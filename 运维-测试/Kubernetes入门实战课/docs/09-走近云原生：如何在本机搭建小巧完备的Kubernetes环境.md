@@ -146,7 +146,7 @@ kubectl version
 不过这条命令还不能直接用，因为使用minikube自带的kubectl有一点形式上的限制，要在前面加上minikube的前缀，后面再有个 `--`，像这样：
 
 ```bash
-minikube kubectl -- version 
+minikube kubectl -- version
 ```
 
 为了避免这个不大不小的麻烦，我建议你使用Linux的“**alias**”功能，为它创建一个别名，写到当前用户目录下的 `.bashrc` 里，也就是这样：

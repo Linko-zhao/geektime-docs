@@ -125,7 +125,7 @@ with Pool(count*2) as p:
 pids = set()
 while not queue.empty():
     pids.add(queue.get())
-    
+
 print(f'用到的进程id是: {pids}')
 ```
 
@@ -169,7 +169,7 @@ pids变量是集合数据类型，集合是一个无序的不重复元素序列�
 我把核心实现代码写在下面供你参考。
 
 ```
-# 并行计算时间统计 
+# 并行计算时间统计
 with Pool(4) as p:
     # 并行计算
     time1 = time.time()
@@ -235,14 +235,14 @@ from multiprocessing.dummy import Pool
 from multiprocessing import Pool
 from functools import partial
 import inspect
- 
+
 def parallal_task(func, iterable, cpu_count = 4):
- 
+
     with open(f&#39;.&#47;tmp_func.py&#39;, &#39;w&#39;) as file:
         file.write(inspect.getsource(func).replace(func.__name__, &quot;task&quot;))
- 
+
     from tmp_func import task
- 
+
     if __name__ == &#39;__main__&#39;:
         func = partial(task)
         pool = Pool(cpu_count * 2)
@@ -253,30 +253,28 @@ def parallal_task(func, iterable, cpu_count = 4):
         raise &quot;Not in Jupyter Notebook&quot;
 
 # 计算平方
+
 def def_f(x):
-    return x * x
+return x * x
 
 for res in parallal_task(def_f, range(1, 101)):
-    print(f&#39;计算平方的结果是:{res}&#39;)</p>2021-12-08</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-09</li><br/><li><span>坚果</span> 👍（0） 💬（0）<p>这一章有没有windows并行计算参考资料，我一个程序都没有调试成功，一运行就堵塞</p>2022-03-27</li><br/><li><span>坚果</span> 👍（0） 💬（0）<p>
+print(f&#39;计算平方的结果是:{res}&#39;)</p>2021-12-08</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-07-09</li><br/><li><span>坚果</span> 👍（0） 💬（0）<p>这一章有没有windows并行计算参考资料，我一个程序都没有调试成功，一运行就堵塞</p>2022-03-27</li><br/><li><span>坚果</span> 👍（0） 💬（0）<p>
 通过临时文件方式，读取并使用并行计算，为什么要通过临时文件使用并行计算？</p>2022-03-27</li><br/><li><span>聪少 Jeff</span> 👍（0） 💬（0）<p>为了初步本次课程的小伙伴想我遇到相同的问题（即是：进程池相关代码应放在if__name__ == &#39;main&quot;的报错）解决方法参考，这个问题已经在十一哈哈学员的提醒下发现的，为了直观一些提供以下代码参考一下。
 
 [示例代码]
 from multiprocessing import Pool
+
 # 1-100平方模拟程序
 
-
-def f(x):
-    # 计算平方
-    return x * x
-
+def f(x): # 计算平方
+return x * x
 
 def test():
-    with Pool(8) as p:
-        res = p.map(f, range(1, 101))
-        print(f&#39;计算平方的结果是:{res}&#39;)
+with Pool(8) as p:
+res = p.map(f, range(1, 101))
+print(f&#39;计算平方的结果是:{res}&#39;)
 
-
-if __name__ == &#39;__main__&#39;:
-    test()
+if **name** == &#39;**main**&#39;:
+test()
 </p>2021-10-16</li><br/><li><span>栾~龟虽寿！</span> 👍（0） 💬（0）<p>打卡学习了</p>2021-05-07</li><br/>
 </ul>

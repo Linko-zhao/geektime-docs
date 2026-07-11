@@ -1,6 +1,6 @@
 你好，我是王争。春节假期进入尾声了。你现在是否已经准备返回工作岗位了呢？今天更新的是测试题的第五篇，我们继续来复习。
 
-* * *
+---
 
 ## 关于二叉树和堆的7个必知必会的代码实现
 
@@ -43,7 +43,7 @@
 
 中文版：[https://leetcode-cn.com/problems/path-sum/](https://leetcode-cn.com/problems/path-sum/)
 
-* * *
+---
 
 做完题目之后，你可以点击“请朋友读”，把测试题分享给你的朋友。
 
@@ -124,26 +124,28 @@ public boolean hasPathSum(TreeNode root, int sum) {
         return hasPathSum(root.left, root.left.val + tmp, sum) ||
                 hasPathSum(root.right, root.right.val + tmp, sum);
     }</p>2019-02-09</li><br/><li><span>啵啵啵</span> 👍（0） 💬（1）<p>作者可以提供pdf版的课程资料吗，不然我觉得不值，因为不能大量复制，不能形成书面笔记，毕竟我付费了。</p>2019-10-06</li><br/><li><span>虎虎❤️</span> 👍（0） 💬（1）<p>Golang max depth
+
 &#47;**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- *&#47;
-func maxDepth(root *TreeNode) int {
-    
-    if root == nil {
-        return 0
-    }
-         
-    if root.Left == nil &amp;&amp; root.Right == nil {
-         return 1
-    }
-        
-    return int(math.Max(float64(maxDepth(root.Left)), float64(maxDepth(root.Right)))) + 1
-    
+
+- Definition for a binary tree node.
+- type TreeNode struct {
+-     Val int
+-     Left *TreeNode
+-     Right *TreeNode
+- }
+  *&#47;
+  func maxDepth(root *TreeNode) int {
+
+  if root == nil {
+  return 0
+  }
+
+  if root.Left == nil &amp;&amp; root.Right == nil {
+  return 1
+  }
+
+  return int(math.Max(float64(maxDepth(root.Left)), float64(maxDepth(root.Right)))) + 1
+
 }</p>2019-02-09</li><br/><li><span>黄丹</span> 👍（0） 💬（1）<p>王争老师新年的第五天快乐！
 放上今天LeetCode四题的代码和思路
 解题思路：对于树，这个结构很特殊，树是由根节点，根节点的左子树，根节点的右子树组成的，定义的时候就是一个递归的定义。因此在解决与树相关的问题的时候，经常会用到递归。今天的四题都不例外。
@@ -201,30 +203,29 @@ public class TreeTraversal {
 </p>2019-02-11</li><br/><li><span>kai</span> 👍（2） 💬（0）<p>树的前中后序遍历-非递归实现：
 import java.util.Stack;
 
-
 public class TreeTraversal {
-    public static class Node {
-        public int value;
-        public Node left;
-        public Node right;
-        public Node(int value) {
-            this.value = value;
-        }
-    }
-    &#47;&#47; 二叉树的非递归遍历
-    public static void preOrder(Node head) {
-        System.out.print(&quot;pre-order: &quot;);
-        if (head == null) {
-            return;
-        }
-        Stack&lt;Node&gt; s = new Stack&lt;&gt;();
-        s.push(head);
-        while (!s.isEmpty()) {
-            head = s.pop();
-            System.out.print(head.value + &quot; &quot;);
-            if (head.right != null) {
-                s.push(head.right);
-            }
+public static class Node {
+public int value;
+public Node left;
+public Node right;
+public Node(int value) {
+this.value = value;
+}
+}
+&#47;&#47; 二叉树的非递归遍历
+public static void preOrder(Node head) {
+System.out.print(&quot;pre-order: &quot;);
+if (head == null) {
+return;
+}
+Stack&lt;Node&gt; s = new Stack&lt;&gt;();
+s.push(head);
+while (!s.isEmpty()) {
+head = s.pop();
+System.out.print(head.value + &quot; &quot;);
+if (head.right != null) {
+s.push(head.right);
+}
 
             if (head.left != null) {
                 s.push(head.left);
@@ -281,6 +282,7 @@ public class TreeTraversal {
 
         System.out.println();
     }
+
 }
 </p>2019-02-11</li><br/><li><span>星夜</span> 👍（1） 💬（0）<p>二叉查找树节点删除逻辑，不知道对不对：
     public boolean removeNode(int val) {
@@ -321,6 +323,7 @@ public class TreeTraversal {
         cur.right = null;
         return res;
     }</p>2020-11-27</li><br/><li><span>Abner</span> 👍（1） 💬（0）<p>java实现二叉树前序、中序、后序和层次遍历
+
 代码如下：
 package tree;
 
@@ -328,22 +331,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BinaryTree {
-    
+
     private Node root = null;
-    
+
     public static class Node {
-        
+
         private String data;
         private Node left;
         private Node right;
-        
+
         public Node(String data, Node left, Node right) {
             this.data = data;
             this.left = left;
             this.right = right;
         }
     }
-    
+
     public void preOrder(Node root) {
         if (null == root) {
             return ;
@@ -352,7 +355,7 @@ public class BinaryTree {
         preOrder(root.left);
         preOrder(root.right);
     }
-    
+
     public void inOrder(Node root) {
         if (null == root) {
             return ;
@@ -361,7 +364,7 @@ public class BinaryTree {
         System.out.print(root.data + &quot; &quot;);
         inOrder(root.right);
     }
-    
+
     public void postOrder(Node root) {
         if (null == root) {
             return ;
@@ -370,7 +373,7 @@ public class BinaryTree {
         postOrder(root.right);
         System.out.print(root.data + &quot; &quot;);
     }
-    
+
     public void traverseByLayer(Node root) {
         if (null == root) {
             return ;
@@ -389,6 +392,7 @@ public class BinaryTree {
             }
         }
     }
+
 }
 </p>2019-02-14</li><br/><li><span>kai</span> 👍（1） 💬（0）<p>今天看了一下这一节的题目，发现校招面试的时候都考过，今天又刷了一下，总结了一波，相应的知识点也总结了一下~</p>2019-02-10</li><br/><li><span>纯洁的憎恶</span> 👍（1） 💬（0）<p>今天的题目很适合递归实现，当然递归公式离代码实现还是存在一定距离。
 1.翻转二叉树（T）｛
@@ -423,63 +427,65 @@ T的值小于等于右最小值，并且大于等于左最大值时，最大值=
 ｝
 计算路径和（T，0）返回true时则存在于目标值相同的路径之和；</p>2019-02-10</li><br/><li><span>mgxian</span> 👍（1） 💬（0）<p>二叉树的最大深度 go 语言实现
 &#47;**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- *&#47;
-func maxDepth(root *TreeNode) int {
-    if root == nil {
-        return 0
-    }
-    
-    leftDepth :=0
-    rightDepth :=0
-    if root.Left != nil {
-        leftDepth = maxDepth(root.Left)
-    }
-    
-    if root.Right != nil {
-        rightDepth = maxDepth(root.Right)
-    }
-    
-    if leftDepth &gt;= rightDepth {
-        return leftDepth + 1
-    } else {
-        return rightDepth + 1
-    }
-}</p>2019-02-09</li><br/><li><span>杨建斌(young)</span> 👍（0） 💬（0）<p>路径总和
-private static boolean deep(TreeNode treeNode, int targetSum, int curr) {
-        if (treeNode == null &amp;&amp; curr == targetSum) {
-            return true;
-        }
-        if (treeNode == null) {
-            return false;
-        }
-        if (curr &gt;= targetSum) {
-            return false;
-        }
-        return deep(treeNode.left, targetSum, curr + treeNode.val) || deep(treeNode.right, targetSum, curr + treeNode.val);
-    }</p>2023-07-03</li><br/><li><span>杨建斌(young)</span> 👍（0） 💬（0）<p>验证二叉查找树
-private static boolean deep(TreeNode treeNode) {
-        if (treeNode == null) {
-            return true;
-        }
-        int val = treeNode.val;
-        if (treeNode.left != null &amp;&amp; treeNode.left.val &gt; val) {
-            return false;
-        }
-        if (treeNode.right != null &amp;&amp; treeNode.right.val &lt; val) {
-            return false;
-        }
-        return deep(treeNode.left) &amp;&amp; deep(treeNode.right);
-    }</p>2023-07-03</li><br/><li><span>杨建斌(young)</span> 👍（0） 💬（0）<p>最大深度
-private static int deep(TreeNode treeNode, int dep) {
-        if (treeNode == null) {
-            return dep;
-        }
-        return Math.max(deep(treeNode.left, dep + 1), deep(treeNode.right, dep + 1));
-    }</p>2023-07-03</li><br/>
+
+- Definition for a binary tree node.
+- type TreeNode struct {
+-     Val int
+-     Left *TreeNode
+-     Right *TreeNode
+- }
+  *&#47;
+  func maxDepth(root *TreeNode) int {
+  if root == nil {
+  return 0
+  }
+
+  leftDepth :=0
+  rightDepth :=0
+  if root.Left != nil {
+  leftDepth = maxDepth(root.Left)
+  }
+
+  if root.Right != nil {
+  rightDepth = maxDepth(root.Right)
+  }
+
+  if leftDepth &gt;= rightDepth {
+  return leftDepth + 1
+  } else {
+  return rightDepth + 1
+  }
+  }</p>2019-02-09</li><br/><li><span>杨建斌(young)</span> 👍（0） 💬（0）<p>路径总和
+  private static boolean deep(TreeNode treeNode, int targetSum, int curr) {
+  if (treeNode == null &amp;&amp; curr == targetSum) {
+  return true;
+  }
+  if (treeNode == null) {
+  return false;
+  }
+  if (curr &gt;= targetSum) {
+  return false;
+  }
+  return deep(treeNode.left, targetSum, curr + treeNode.val) || deep(treeNode.right, targetSum, curr + treeNode.val);
+  }</p>2023-07-03</li><br/><li><span>杨建斌(young)</span> 👍（0） 💬（0）<p>验证二叉查找树
+  private static boolean deep(TreeNode treeNode) {
+  if (treeNode == null) {
+  return true;
+  }
+  int val = treeNode.val;
+  if (treeNode.left != null &amp;&amp; treeNode.left.val &gt; val) {
+  return false;
+  }
+  if (treeNode.right != null &amp;&amp; treeNode.right.val &lt; val) {
+  return false;
+  }
+  return deep(treeNode.left) &amp;&amp; deep(treeNode.right);
+  }</p>2023-07-03</li><br/><li><span>杨建斌(young)</span> 👍（0） 💬（0）<p>最大深度
+  private static int deep(TreeNode treeNode, int dep) {
+  if (treeNode == null) {
+  return dep;
+  }
+  return Math.max(deep(treeNode.left, dep + 1), deep(treeNode.right, dep + 1));
+  }</p>2023-07-03</li><br/>
+
 </ul>

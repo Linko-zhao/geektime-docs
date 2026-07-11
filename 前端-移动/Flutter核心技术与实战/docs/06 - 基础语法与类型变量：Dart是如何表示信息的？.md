@@ -12,19 +12,19 @@
 
 ```
 printInteger(int a) {
-  print('Hello world, this is $a.'); 
+  print('Hello world, this is $a.');
 }
 
 main() {
-  var number = 2019; 
-  printInteger(number); 
+  var number = 2019;
+  printInteger(number);
 }
 ```
 
 然后，在编辑器中点击“run”按钮，命令行就会输出：
 
 ```
-Hello world, this is 2019. 
+Hello world, this is 2019.
 ```
 
 和绝大多数编译型语言一样，Dart要求以main函数作为执行的入口。
@@ -114,12 +114,12 @@ var arr1 = ["Tom", "Andy", "Jack"];
 var arr2 = List.of([1,2,3]);
 arr2.add(499);
 arr2.forEach((v) => print('${v}'));
-  
-var map1 = {"name": "Tom", 'sex': 'male'}; 
+
+var map1 = {"name": "Tom", 'sex': 'male'};
 var map2 = new Map();
 map2['name'] = 'Tom';
 map2['sex'] = 'male';
-map2.forEach((k,v) => print('${k}: ${v}')); 
+map2.forEach((k,v) => print('${k}: ${v}'));
 ```
 
 容器里的元素也需要有类型，比如上述代码中arr2的类型是**List&lt;int&gt;**，map2的类型则为**Map&lt;String, String&gt;**。Dart会自动根据上下文进行类型推断，所以你后续往容器内添加的元素也必须遵照这一类型。
@@ -143,7 +143,7 @@ var map1 = <String, String>{'name': 'Tom','sex': 'male',};
 var map2 = new Map<String, String>();
 map2['name'] = 'Tom';
 map2['sex'] = 'male';
-map2.forEach((k,v) => print('${k}: ${v}')); 
+map2.forEach((k,v) => print('${k}: ${v}'));
 print(map2 is Map<String, String>); // true
 ```
 
@@ -160,7 +160,7 @@ print(map2 is Map<String, String>); // true
 final name = 'Andy';
 const count = 3;
 
-var x = 70;  
+var x = 70;
 var y = 30;
 final z = x / y;
 ```
@@ -191,9 +191,9 @@ final z = x / y;
 Dart 是支持泛型的，所以可以使用形如 List&lt;dynamic&gt; 和 Map&lt;String, dynamic&gt; 为集合添加不同类型的元素，遍历时判断类型用 is 关键字。</p>2019-07-11</li><br/><li><span>davidzhou</span> 👍（14） 💬（1）<p>所有皆为对象，就可以通过反射机制获取对象的类型，不过，list和map不做类型约束的话，在读取里面数据会有很多坑，代码也不够健壮</p>2019-07-14</li><br/><li><span>七分呗轻唱</span> 👍（7） 💬（1）<p>runtimeType 判断</p>2019-07-11</li><br/><li><span>于留月</span> 👍（4） 💬（1）<p>可以使用List&lt;dynamic&gt; 和 Map&lt;dynamic&gt;支持多种类型内部元素，遍历集合时，可以根据泛型确认数据类型</p>2019-07-11</li><br/><li><span>晓冰</span> 👍（3） 💬（1）<p>对于Map和List  我在写swift时也是需要指定确定类型的，同一个字典或者数组类型一般都要一样，如果不一样处理起来麻烦，自己的程序就不要给自己挖坑了 哈哈。 只有在一种情况下我才会使用Any 就是提交服务器数据的时候，由于配置的数据类型不可能完全一样。</p>2019-08-29</li><br/><li><span>Qilin Lou</span> 👍（3） 💬（2）<p>抛砖引玉哈，直接拿各个item的runtimeType属性，简单代码如下
 
 main() {
-  var arr = [1,2,&#39;s&#39;];
-  arr.forEach(
-    (v) =&gt; print(&#39;The value is ${v}, and the type is ${v.runtimeType}&#39;)
-  );
+var arr = [1,2,&#39;s&#39;];
+arr.forEach(
+(v) =&gt; print(&#39;The value is ${v}, and the type is ${v.runtimeType}&#39;)
+);
 }</p>2019-07-11</li><br/><li><span>薛敬飞</span> 👍（1） 💬（1）<p>帮忙解释一下评论区中Dynamic？为啥不建议用这个？</p>2019-07-13</li><br/><li><span>Young</span> 👍（1） 💬（1）<p>类，方法参数，返回值都可以指定泛型，判断单个元素的类型可以使用is</p>2019-07-11</li><br/><li><span>cv0cv0</span> 👍（0） 💬（1）<p>Dart 支持扩展函数吗？</p>2019-12-13</li><br/><li><span>moran</span> 👍（0） 💬（1）<p>老师好，const和final可不可以理解为赋值后，值就不可更改？</p>2019-11-12</li><br/><li><span>sixgod</span> 👍（0） 💬（2）<p>用dynamic类型和object有什么区别吗</p>2019-10-12</li><br/><li><span>陶先森来了</span> 👍（0） 💬（1）<p>我用Android Studio安装了Dart的安装包，版本是2.2.1的，但是我的项目是2.2.2以上的，请问如何升级Dart呢？还有就是能否单独安装Dart SDK?</p>2019-09-02</li><br/><li><span>Eagle~</span> 👍（0） 💬（1）<p>文中的“实际上，你打开官方文档或查看源码，就会发现这些常见的运算符也是继承自 num：”不是很理解，为什么运算符能继承呢？</p>2019-08-16</li><br/><li><span>lf</span> 👍（0） 💬（1）<p>老师，flutter源码中构造函数都是用const，为什么呢</p>2019-08-01</li><br/>
 </ul>

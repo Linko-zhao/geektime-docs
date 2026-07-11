@@ -20,11 +20,11 @@ public class Student {
 //定义的 API 借口
 @RestController
 public class HelloController {
- 
+
     @GetMapping("/hi1")
     public Student hi1() {
         return new Student("xiaoming", Integer.valueOf(12));
-    }    
+    }
 }
 ```
 
@@ -188,12 +188,12 @@ if (body != null && producibleTypes.isEmpty()) {
 ```
 @RestController
 public class HelloController {
-    
+
     @PostMapping("/hi2")
     public Student hi2(@RequestBody Student student) {
         return student;
     }
-    
+
 }
 ```
 
@@ -509,14 +509,14 @@ public class PrintRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
 
 ```
 protected <T> Object readWithMessageConverters(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType){
-  //省略其他非关键代码  
+  //省略其他非关键代码
   if (message.hasBody()) {
     HttpInputMessage msgToUse = getAdvice().beforeBodyRead(message,      parameter, targetType, converterType);
     body = (genericConverter != null ? genericConverter.read(targetType, contextClass, msgToUse) :                    ((HttpMessageConverter<T>)converter).read(targetClass, msgToUse));
     body = getAdvice().afterBodyRead(body, msgToUse, parameter, targetType, converterType);
-    //省略其他非关键代码  
+    //省略其他非关键代码
    }
-   //省略其他非关键代码          
+   //省略其他非关键代码
    return body;
 }
 ```

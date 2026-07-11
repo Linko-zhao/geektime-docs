@@ -300,7 +300,7 @@ Clang 插件本身的编写和使用并不复杂，关键是如何更好地应�
 cmake -G Xcode -DLLVM_ENABLE_PROJECTS=clang ..&#47;llvm
 我使用上面这个命令来构建 xcode project，scheme 和 文件目录下一个 clang 相关的内容都没有，这是为何？我的 Xcode 版本是 11。
 网上找了其他人相关教程，与您讲的步骤不完全一样，试着他们的做法，也还是一样。求助</p>2020-05-04</li><br/><li><span>苹果直播网体育</span> 👍（0） 💬（2）<p>没有写如何将 .cpp 生成 .dylib 吧</p>2019-08-22</li><br/><li><span>Geek__f56783130103</span> 👍（0） 💬（0）<p>[ 72%] Built target clangCrossTU
-make[2]: *** No rule to make target `ClangOpenCLBuiltinsImpl&#39;, needed by `tools&#47;clang&#47;lib&#47;Sema&#47;CMakeFiles&#47;obj.clangSema.dir&#47;SemaLookup.cpp.o&#39;.  Stop.
+make[2]: *** No rule to make target `ClangOpenCLBuiltinsImpl&#39;, needed by `tools&#47;clang&#47;lib&#47;Sema&#47;CMakeFiles&#47;obj.clangSema.dir&#47;SemaLookup.cpp.o&#39;. Stop.
 make[1]: *** [tools&#47;clang&#47;lib&#47;Sema&#47;CMakeFiles&#47;obj.clangSema.dir&#47;all] Error 2
 make: *** [all] Error 2</p>2019-06-17</li><br/><li><span>云无心</span> 👍（0） 💬（0）<p>学习了</p>2019-06-04</li><br/>
 </ul>

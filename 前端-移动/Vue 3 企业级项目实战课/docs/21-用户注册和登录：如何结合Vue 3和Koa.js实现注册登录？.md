@@ -286,13 +286,11 @@ const onFinishFail = (e: unknown) => {
 
 ```typescript
 // packages/work-server/src/router.ts
-import Router from '@koa/router'; 
-import { 
-  signUp, 
-} from './controller/user';
+import Router from "@koa/router";
+import { signUp } from "./controller/user";
 // 其它省略代码 ...
 
-router.post('/api/post/account/sign-up', signUp); 
+router.post("/api/post/account/sign-up", signUp);
 // 其它省略代码 ...
 const routers = router.routes();
 
@@ -303,8 +301,8 @@ export default routers;
 
 ```typescript
 // packages/work-server/src/controller/user.ts
-import type { Context, Next } from 'koa'; 
-import { registerUser, queryAccount } from '../service/user'; 
+import type { Context, Next } from "koa";
+import { registerUser, queryAccount } from "../service/user";
 
 // 其它省略代码 ...
 export async function signUp(ctx: Context) {
@@ -322,12 +320,9 @@ export async function signUp(ctx: Context) {
 
 ```typescript
 // packages/work-server/src/service/user.ts
-import {
-  checkUserIsUsernameExist,
-  createUser
-} from '../model/user';
-import type { MyAPIResult } from './types';
-import type { UserInfo } from '../model/user';
+import { checkUserIsUsernameExist, createUser } from "../model/user";
+import type { MyAPIResult } from "./types";
+import type { UserInfo } from "../model/user";
 
 export async function registerUser(params: {
   username?: string;
@@ -337,29 +332,29 @@ export async function registerUser(params: {
   let result: MyAPIResult = {
     data: null,
     success: false,
-    message: '注册失败'
+    message: "注册失败",
   };
   if (!username || !password) {
-    result.message = '信息不全';
+    result.message = "信息不全";
     return result;
   }
 
   try {
     const isExist = await checkUserIsUsernameExist({ username });
     if (isExist === true) {
-      result.message = '用户名已存在';
+      result.message = "用户名已存在";
       return result;
     }
     const createResult = await createUser({ username, password });
     result = {
       data: createResult,
       success: true,
-      message: '注册成功'
+      message: "注册成功",
     };
   } catch (err: any) {
     // eslint-disable-next-line no-console
     console.log(err);
-    result.message = err?.toString() || '出现异常';
+    result.message = err?.toString() || "出现异常";
   }
   return result;
 }
@@ -370,9 +365,9 @@ export async function registerUser(params: {
 那接下来，我们就实现数据库操作的数据库模型层。
 
 ```typescript
-import md5 from 'md5';
-import { v4 } from 'uuid';
-import { runSQL, tranformModelData } from '../util/db';
+import md5 from "md5";
+import { v4 } from "uuid";
+import { runSQL, tranformModelData } from "../util/db";
 
 export interface UserInfo {
   id: number;
@@ -413,7 +408,7 @@ export async function createUser(params: {
     uuid,
     password: md5(password),
     username,
-    status: 1
+    status: 1,
   };
   const results = await runSQL(sql, values);
   if (results?.insertId > 0) {
@@ -447,6 +442,7 @@ export async function createUser(params: {
 欢迎在评论区留言参与讨论，我们下一节课再见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/22)
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>蒙</span> 👍（2） 💬（1）<p>加解密可以直接用node的加密函数不用jwt吗，
 用jwt加解密有什么额外好处吗</p>2023-01-11</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-22</li><br/><li><span>escray</span> 👍（0） 💬（0）<p>在本课附带的源码中，如果分别启动前后端
@@ -464,7 +460,7 @@ npm run dev:work-server
 
 另外就是用 pnpm i 来编译整个项目的时候，执行到
 
- &gt; vite-node .&#47;scripts&#47;build-dts.ts
+&gt; vite-node .&#47;scripts&#47;build-dts.ts
 
 还是会有 Error: TypeScript类型描述文件构建失败！
 
@@ -476,13 +472,13 @@ JSX element implicitly has type &#39;any&#39; because no interface &#39;JSX.Intr
 
 [less] Unrecognised input
 2:35:34 PM [vite] Internal server error: [less] Unrecognised input
-  Plugin: vite:css
-  File: &#47;Users&#47;zhaorui&#47;Study&#47;professional&#47;SourceCode&#47;VueStudy&#47;vue3-course&#47;chapter&#47;21&#47;packages&#47;work-front&#47;src&#47;pages&#47;sign-in&#47;sign-in.vue:103:9
-  2  |    &lt;DynamicForm
-  3  |      class=&quot;sign-up-form&quot;
-  4  |      :model=&quot;model&quot;
-     |           ^
-  5  |      :fieldList=&quot;fieldList&quot;
-  6  |      @finish=&quot;onFinish&quot;
+Plugin: vite:css
+File: &#47;Users&#47;zhaorui&#47;Study&#47;professional&#47;SourceCode&#47;VueStudy&#47;vue3-course&#47;chapter&#47;21&#47;packages&#47;work-front&#47;src&#47;pages&#47;sign-in&#47;sign-in.vue:103:9
+2 | &lt;DynamicForm
+3 | class=&quot;sign-up-form&quot;
+4 | :model=&quot;model&quot;
+| ^
+5 | :fieldList=&quot;fieldList&quot;
+6 | @finish=&quot;onFinish&quot;
 </p>2024-01-16</li><br/>
 </ul>

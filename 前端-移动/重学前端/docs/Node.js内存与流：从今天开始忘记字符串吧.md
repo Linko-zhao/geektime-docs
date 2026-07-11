@@ -31,10 +31,11 @@
 一些重要的字符集和编码：
 
 - **ASCII**：计算机世界最早的字符集，由美国国家标准协会（ANSI）制定，所以有时也被称作 ANSI 字符集。其中包含 127 个字符，涵盖了英文字母、数字、符号和一些排版控制字符。几乎所有的字符集前 127 个字符都与 ASCII 字符集保持一致。
-  
+
   ASCII 既是字符集，也是编码方式，它的每个字符码点对应了一个字节。因为影响太过深远，所以有时其它字符集的码点会被误称为“ASCII 码”。
+
 - **Unicode**： 最重要、最全面、最权威的字符集，包含了全球所有语言和大量符号，现在还包括大量的 emoji 表情图。
-  
+
   Unicode的码点范围很大，从 0 到 0x10FFFF，每 65536 个字符（即四位十六进制）被划分为一个平面（Plain）。其中，从 0 到 0xFFFF 最常用，被称作基本多文种平面（BMP）。
 
 Unicode 支持 3 种编码方式：
@@ -180,14 +181,14 @@ const { Worker } = require('worker_threads');
 
 // 创建一个 4 字节的共享内存
 const sharedBuffer = new SharedArrayBuffer(4);
-const buffer = Buffer.from(sharedBuffer, 0, 4); 
+const buffer = Buffer.from(sharedBuffer, 0, 4);
 
 // 启动 Worker 线程
 const worker = new Worker('./worker.js', { workerData: sharedBuffer });
 
 // 每秒打印 buffer 的内容
 setInterval(() => {
-    console.log(buffer); 
+    console.log(buffer);
 }, 1000);
 //worker.js
 const { workerData } = require('worker_threads');
@@ -246,7 +247,7 @@ class MyClass extends EventEmitter {
         console.log('Task started...');
         // 触发自定义事件
         this.emit('taskStarted');
-        
+
         setTimeout(() => {
             console.log('Task completed.');
             this.emit('taskCompleted', { result: 'success' });

@@ -302,7 +302,7 @@ EOF
 此时我们可以一边观察Kapenter的日志，一边用 `kubectl get machine` 命令，来查看新生成机器的状态。例如下面这台新建机器，就是由Kapenter在2分钟内完成的。
 
 ```yaml
-~ ❯❯❯ kubectl get machine default-cqq8l                       
+~ ❯❯❯ kubectl get machine default-cqq8l
 default-cqq8l   t3a.large     cn-north-1a   ip-10-96-224-116.cn-north-1.compute.internal   True    2m
 ```
 

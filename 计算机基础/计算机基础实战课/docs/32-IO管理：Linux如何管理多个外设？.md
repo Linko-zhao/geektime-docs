@@ -162,10 +162,10 @@ static void  __exit miscdrv_exit(void)
 {
     printk(KERN_EMERG "EXIT,misc\n");
 }
- 
+
 module_init(miscdrv_init);
 module_exit(miscdrv_exit);
-//版权信息和作者 
+//版权信息和作者
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("LMOS");
 ```
@@ -223,7 +223,7 @@ static ssize_t misc_read (struct file *pfile, char __user *buff, size_t size, lo
 	printk(KERN_EMERG "line:%d,%s is call\n", __LINE__, __FUNCTION__);
 	return 0;
 }
-//写回调函数 
+//写回调函数
 static ssize_t misc_write(struct file *pfile, const char __user *buff, size_t size, loff_t *off)
 {
 	printk(KERN_EMERG "line:%d,%s is call\n", __LINE__, __FUNCTION__);

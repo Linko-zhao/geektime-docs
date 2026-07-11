@@ -152,7 +152,7 @@ Layout组件主要用于做页面布局，可以按我们设定好的参数对�
 
 ```plain
 <style>
-.player {  
+.player {
   //这是背景图
   background: url("../../../assets/image/onlineB.png") no-repeat;
   background-size: 100% 100%; //让图片全部展开 铺满整个区域 图片不满的情况
@@ -210,7 +210,7 @@ Layout组件主要用于做页面布局，可以按我们设定好的参数对�
           <el-card class="card" shadow="hover">
             <div class="onlineT">
               //这里应用的是Element的头像组件，直接对应src放上对应的图片地址即可
-              <el-avatar src=""></el-avatar> 
+              <el-avatar src=""></el-avatar>
                //以下所有的展示信息都可自定义，只需改变图标和文字描述，当然对应展示的内容是动态获取的
               <el-tag class="online-tag" size="mini" type="warning">直播中</el-tag>
               <p>一起来体验游戏的魅力</p>

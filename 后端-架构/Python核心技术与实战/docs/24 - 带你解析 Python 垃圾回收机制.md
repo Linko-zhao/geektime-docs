@@ -31,7 +31,7 @@ import psutil
 def show_memory_info(hint):
     pid = os.getpid()
     p = psutil.Process(pid)
-    
+
     info = p.memory_full_info()
     memory = info.uss / 1024. / 1024
     print('{} memory used: {} MB'.format(hint, memory))
@@ -185,7 +185,7 @@ finish memory used: 48.33203125 MB
 ---------------------------------------------------------------------------
 NameError                                 Traceback (most recent call last)
 <ipython-input-12-153e15063d8a> in <module>
-     11 
+     11
      12 show_memory_info('finish')
 ---> 13 print(a)
 
@@ -330,27 +330,26 @@ objgraph.show_backrefs([a])
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Jingxiao</span> 👍（38） 💬（2）<p>思考题答案：
 
-事实上算法可以写的很简单，这是个很经典的 dfs （深度优先搜索）遍历，从起点开始遍历，对遍历到的节点做个记号。遍历完成后，再对所有节点扫一遍，没有被做记号的，就是需要垃圾回收的。</p>2019-07-06</li><br/><li><span>陈迪</span> 👍（24） 💬（4）<p>1. 循环引用情况下Python不立即回收内存，如果放任不管，即不显式调用gc.collect的话，Python的垃圾回收器自己会什么时候处理？
-2. 最后介绍了内存泄露排查工具，哪种算内存泄露呢？接问题1，不立即回收算内存泄露吗？还是有其他场景</p>2019-07-03</li><br/><li><span>天凉好个秋</span> 👍（10） 💬（3）<p>本文讲的垃圾回收算法在Java中也都有，当初在设计的时候是不是参考了Java？而且，Java中还有标记整理算法，可以解决回收内存不连续的问题，这个在Python中有没有考虑呢？</p>2019-07-03</li><br/><li><span>　　星豪</span> 👍（5） 💬（1）<p>1. 在读文章的时候找了一个可能是错别字的地方，在循环引用那一节中，第四段试想一下，如果这段代码出现在生产环境中...但经过长时间运行“候”...。这一侯应该是后来的后吧？
-2. 当垃圾回收器中新增对象减去删除对象达到相应的阈值时，就会对这一代对象启动垃圾回收。这一句话不是很明白，新增对象我理解的是新创建的对象或者是从上一代挪过来的对象，那么删除对象指的是哪些呢？或者说是如何进行指定哪些是应该被删除的对象呢？</p>2019-07-04</li><br/><li><span>MirkoWei</span> 👍（3） 💬（1）<p>windows下使用objgraph遇到个问题：
+事实上算法可以写的很简单，这是个很经典的 dfs （深度优先搜索）遍历，从起点开始遍历，对遍历到的节点做个记号。遍历完成后，再对所有节点扫一遍，没有被做记号的，就是需要垃圾回收的。</p>2019-07-06</li><br/><li><span>陈迪</span> 👍（24） 💬（4）<p>1. 循环引用情况下Python不立即回收内存，如果放任不管，即不显式调用gc.collect的话，Python的垃圾回收器自己会什么时候处理？2. 最后介绍了内存泄露排查工具，哪种算内存泄露呢？接问题1，不立即回收算内存泄露吗？还是有其他场景</p>2019-07-03</li><br/><li><span>天凉好个秋</span> 👍（10） 💬（3）<p>本文讲的垃圾回收算法在Java中也都有，当初在设计的时候是不是参考了Java？而且，Java中还有标记整理算法，可以解决回收内存不连续的问题，这个在Python中有没有考虑呢？</p>2019-07-03</li><br/><li><span>　　星豪</span> 👍（5） 💬（1）<p>1. 在读文章的时候找了一个可能是错别字的地方，在循环引用那一节中，第四段试想一下，如果这段代码出现在生产环境中...但经过长时间运行“候”...。这一侯应该是后来的后吧？2. 当垃圾回收器中新增对象减去删除对象达到相应的阈值时，就会对这一代对象启动垃圾回收。这一句话不是很明白，新增对象我理解的是新创建的对象或者是从上一代挪过来的对象，那么删除对象指的是哪些呢？或者说是如何进行指定哪些是应该被删除的对象呢？</p>2019-07-04</li><br/><li><span>MirkoWei</span> 👍（3） 💬（1）<p>windows下使用objgraph遇到个问题：
 `failed to execute [&#39;dot&#39;, &#39;-Tpdf&#39;], make sure the Graphviz executables are on your systems&#39; path`
 
 安装objgraph的时候，需要的前置条件graphviz、xdot都安装了，系统环境变量也添加了，仍然找不到路径
 
 之后通过stackoverflow得到解决办法，就是每次使用的时候，需要在代码前面手动添加环境变量
+
 ```
 import os
 
 os.environ[&quot;PATH&quot;] += os.pathsep + &#39;xxx&#47;Graphviz2.38&#47;bin&#47;&#39;
 ```
+
 问题是解决了，但是每次都需要手动添加环境变量也太麻烦了，不知道是否有更好的解决办法</p>2020-05-19</li><br/><li><span>wangkx</span> 👍（1） 💬（1）<p>课程越往后越有意思，发现了很多知识点盲区，这门课很值！</p>2020-07-02</li><br/><li><span>Switch</span> 👍（23） 💬（1）<p>思考题：
 from typing import Set
 
-
 class Graph:
-    def __init__(self, value, nodes=None):
-        self._value = value
-        self._nodes: list = [] if nodes is None else nodes
+def **init**(self, value, nodes=None):
+self._value = value
+self._nodes: list = [] if nodes is None else nodes
 
     @property
     def value(self):
@@ -375,26 +374,24 @@ class Graph:
     def __repr__(self):
         return self.__str__()
 
-
 def dfs(start: Graph, includes: Set[Graph] = None) -&gt; Set[Graph]:
-    if includes is None:
-        includes = set()
-    if start in includes:
-        return includes
-    includes.add(start)
-    for s in start.nodes:
-        includes.update(dfs(s, includes))
-    return includes
+if includes is None:
+includes = set()
+if start in includes:
+return includes
+includes.add(start)
+for s in start.nodes:
+includes.update(dfs(s, includes))
+return includes
 
-
-if __name__ == &#39;__main__&#39;:
-    A = Graph(&#39;A&#39;)
-    B = Graph(&#39;B&#39;)
-    C = Graph(&#39;C&#39;)
-    D = Graph(&#39;D&#39;)
-    E = Graph(&#39;E&#39;)
-    F = Graph(&#39;F&#39;)
-    has_nodes = {A, B, C, D, E, F}
+if **name** == &#39;**main**&#39;:
+A = Graph(&#39;A&#39;)
+B = Graph(&#39;B&#39;)
+C = Graph(&#39;C&#39;)
+D = Graph(&#39;D&#39;)
+E = Graph(&#39;E&#39;)
+F = Graph(&#39;F&#39;)
+has_nodes = {A, B, C, D, E, F}
 
     # A-&gt;B-&gt;E
     #  -&gt;C-&gt;E
@@ -411,6 +408,7 @@ if __name__ == &#39;__main__&#39;:
     print(graph_nodes)
     # OUT: {Graph F nodes [&#39;D&#39;], Graph D nodes [&#39;F&#39;]}
     print(has_nodes - graph_nodes)
+
 </p>2019-07-08</li><br/><li><span>youaresherlock</span> 👍（8） 💬（1）<p>四次引用，a，python 的函数调用栈，函数参数，和 getrefcount
 不理解这里的函数调用栈、函数参数为什么增加了2次，这里有什么区别？他们两个不是一样的吗，函数参数在函数调用栈里，应该是一次啊</p>2020-07-06</li><br/><li><span>你说呢</span> 👍（5） 💬（0）<p>可以这样理解么：python的垃圾回收机制，以引用计数算法为主、标记-删除算法为辅 来确定内存中哪些对象可以回收；而分代回收算法确定了垃圾是什么时候被回收。
 </p>2021-03-17</li><br/><li><span>程序员人生</span> 👍（5） 💬（10）<p>请问一下，老师
@@ -438,24 +436,26 @@ def dfs(graph: dict, start: str):
     return visited
 
 def unreachable_nodes(graph: dict, start: str):
-    reachable_nodes = dfs(graph, start)
-    all_nodes = set(node for nodes in graph.values() for node in nodes).union(graph.keys())
-    return all_nodes - reachable_nodes
+reachable_nodes = dfs(graph, start)
+all_nodes = set(node for nodes in graph.values() for node in nodes).union(graph.keys())
+return all_nodes - reachable_nodes
 
 # 示例图结构
+
 graph = {
-    &quot;A&quot;: {&quot;B&quot;, &quot;C&quot;},
-    &quot;B&quot;: {&quot;A&quot;, &quot;D&quot;, &quot;E&quot;},
-    &quot;C&quot;: {&quot;A&quot;, &quot;F&quot;},
-    &quot;D&quot;: {&quot;B&quot;},
-    &quot;E&quot;: {&quot;B&quot;, &quot;F&quot;},
-    &quot;F&quot;: {&quot;C&quot;, &quot;E&quot;},
-    &quot;G&quot;: {&quot;H&quot;},
-    &quot;H&quot;: {&quot;G&quot;}
+&quot;A&quot;: {&quot;B&quot;, &quot;C&quot;},
+&quot;B&quot;: {&quot;A&quot;, &quot;D&quot;, &quot;E&quot;},
+&quot;C&quot;: {&quot;A&quot;, &quot;F&quot;},
+&quot;D&quot;: {&quot;B&quot;},
+&quot;E&quot;: {&quot;B&quot;, &quot;F&quot;},
+&quot;F&quot;: {&quot;C&quot;, &quot;E&quot;},
+&quot;G&quot;: {&quot;H&quot;},
+&quot;H&quot;: {&quot;G&quot;}
 }
 
 print(unreachable_nodes(graph, &#39;A&#39;))
 
 # 输出
+
 {&#39;G&#39;, &#39;H&#39;}</p>2023-05-16</li><br/><li><span>瞌睡的咸鱼</span> 👍（1） 💬（0）<p>思考题——通过有向图的拓扑排序可以求出（可以参考《算法导论》去理解）</p>2019-07-03</li><br/>
 </ul>

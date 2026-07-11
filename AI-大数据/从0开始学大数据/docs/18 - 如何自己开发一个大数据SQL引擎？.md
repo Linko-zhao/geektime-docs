@@ -33,13 +33,13 @@ Panthera的设计思路是保留Hive语义分析器不动，替换Hive语法解�
 标准SQL和Hive QL的差别主要有两个方面，一个是语法表达方式，Hive QL语法和标准SQL语法略有不同；另一个是Hive QL支持的语法元素比标准SQL要少很多，比如，数据仓库领域主要的测试集[TPC-H](http://www.tpc.org/tpch/)所有的SQL语句Hive都不支持。尤其是Hive不支持复杂的嵌套子查询，而对于数据仓库分析而言，嵌套子查询几乎是无处不在的。比如下面这样的SQL，在where查询条件existes里面包含了另一条SQL语句。
 
 ```
-select o_orderpriority, count(*) as order_count 
-from orders 
-where o_orderdate >= date '[DATE]' 
-and o_orderdate < date '[DATE]' + interval '3' month 
-and exists 
-( select * from lineitem 
-where l_orderkey = o_orderkey and l_commitdate < l_receiptdate ) 
+select o_orderpriority, count(*) as order_count
+from orders
+where o_orderdate >= date '[DATE]'
+and o_orderdate < date '[DATE]' + interval '3' month
+and exists
+( select * from lineitem
+where l_orderkey = o_orderkey and l_commitdate < l_receiptdate )
 group by o_orderpriority order by o_orderpriority;
 ```
 
@@ -171,46 +171,46 @@ SQL注入是一种常见的Web攻击手段，如下图所示，攻击者在HTTP�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>纯洁的憎恶</span> 👍（36） 💬（1）<p>基于SQL的大数据仓库引擎panthera的核心任务是把SQL语义与Hive AST对应起来。难点是SQL的语义远比Hive AST丰富，而幸运的事SQL丰富的表意逻辑主要源于它的嵌套子语句，这在Hive AST中是不存在的。但是SQL的嵌套子语句可以等价于若干jion操作。
 
-为了在工程上降低实现难度，特意为每个语法点设计一个对象（类），这就将复杂问题分解为无数个小步骤，可以持续交付，不用长期等待，从而将不可能有条件的变为可能。而且每个类的代码十分简洁，遇到问题也便于各个击破。</p>2018-12-17</li><br/><li><span>李二木</span> 👍（32） 💬（1）<p>Oracle会有走向衰落吗？</p>2018-12-09</li><br/><li><span>反应慢</span> 👍（5） 💬（1）<p>之前有一段时间在学习函数式编程，和sql一样属于命令式编程，所以感觉以函数去解析sql是水到渠成的事情。不过至今没有动手去实现一下，比较遗憾</p>2018-12-14</li><br/><li><span>都市夜归人</span> 👍（1） 💬（3）<p>   private static SqlASTTransformer tf =
-      new RedundantSelectGroupItemTransformer(
-      new DistinctTransformer(
-      new GroupElementNormalizeTransformer(
-      new PrepareQueryInfoTransformer(
-      new OrderByTransformer(
-      new OrderByFunctionTransformer(
-      new MinusIntersectTransformer(
-      new PrepareQueryInfoTransformer(
-      new UnionTransformer(
-      new Leftsemi2LeftJoinTransformer(
-      new CountAsteriskPositionTransformer(
-      new FilterInwardTransformer(
-      &#47;&#47;use leftJoin method to handle not exists for correlated
-      new CrossJoinTransformer(
-      new PrepareQueryInfoTransformer(
-      new SubQUnnestTransformer(
-      new PrepareFilterBlockTransformer(
-      new PrepareQueryInfoTransformer(
-      new TopLevelUnionTransformer(
-      new FilterBlockAdjustTransformer(
-      new PrepareFilterBlockTransformer(
-      new ExpandAsteriskTransformer(
-      new PrepareQueryInfoTransformer(
-      new CrossJoinTransformer(
-      new PrepareQueryInfoTransformer(
-      new ConditionStructTransformer(
-      new MultipleTableSelectTransformer(
-      new WhereConditionOptimizationTransformer(
-      new PrepareQueryInfoTransformer(
-      new InTransformer(
-      new TopLevelUnionTransformer(
-      new MinusIntersectTransformer(
-      new NaturalJoinTransformer(
-      new OrderByNotInSelectListTransformer(
-      new RowNumTransformer(
-      new BetweenTransformer(
-      new UsingTransformer(
-      new SchemaDotTableTransformer(
-      new NothingTransformer())))))))))))))))))))))))))))))))))))));
+为了在工程上降低实现难度，特意为每个语法点设计一个对象（类），这就将复杂问题分解为无数个小步骤，可以持续交付，不用长期等待，从而将不可能有条件的变为可能。而且每个类的代码十分简洁，遇到问题也便于各个击破。</p>2018-12-17</li><br/><li><span>李二木</span> 👍（32） 💬（1）<p>Oracle会有走向衰落吗？</p>2018-12-09</li><br/><li><span>反应慢</span> 👍（5） 💬（1）<p>之前有一段时间在学习函数式编程，和sql一样属于命令式编程，所以感觉以函数去解析sql是水到渠成的事情。不过至今没有动手去实现一下，比较遗憾</p>2018-12-14</li><br/><li><span>都市夜归人</span> 👍（1） 💬（3）<p> private static SqlASTTransformer tf =
+new RedundantSelectGroupItemTransformer(
+new DistinctTransformer(
+new GroupElementNormalizeTransformer(
+new PrepareQueryInfoTransformer(
+new OrderByTransformer(
+new OrderByFunctionTransformer(
+new MinusIntersectTransformer(
+new PrepareQueryInfoTransformer(
+new UnionTransformer(
+new Leftsemi2LeftJoinTransformer(
+new CountAsteriskPositionTransformer(
+new FilterInwardTransformer(
+&#47;&#47;use leftJoin method to handle not exists for correlated
+new CrossJoinTransformer(
+new PrepareQueryInfoTransformer(
+new SubQUnnestTransformer(
+new PrepareFilterBlockTransformer(
+new PrepareQueryInfoTransformer(
+new TopLevelUnionTransformer(
+new FilterBlockAdjustTransformer(
+new PrepareFilterBlockTransformer(
+new ExpandAsteriskTransformer(
+new PrepareQueryInfoTransformer(
+new CrossJoinTransformer(
+new PrepareQueryInfoTransformer(
+new ConditionStructTransformer(
+new MultipleTableSelectTransformer(
+new WhereConditionOptimizationTransformer(
+new PrepareQueryInfoTransformer(
+new InTransformer(
+new TopLevelUnionTransformer(
+new MinusIntersectTransformer(
+new NaturalJoinTransformer(
+new OrderByNotInSelectListTransformer(
+new RowNumTransformer(
+new BetweenTransformer(
+new UsingTransformer(
+new SchemaDotTableTransformer(
+new NothingTransformer())))))))))))))))))))))))))))))))))))));
 这个类在使用的时候该有多麻烦啊？</p>2019-05-12</li><br/><li><span>galen</span> 👍（29） 💬（1）<p>因为SQL语句在程序运行前已经进行了预编译，在程序运行时第一次操作数据库之前，SQL语句已经被数据库分析，编译和优化，对应的执行计划也会缓存下来并允许数据库已参数化的形式进行查询，当运行时动态地把参数传给PreprareStatement时，即使参数里有敏感字符如 or &#39;1=1&#39;也数据库会作为一个参数一个字段的属性值来处理而不会作为一个SQL指令，如此，就起到了SQL注入的作用了</p>2018-12-08</li><br/><li><span>欧嘉权Felix</span> 👍（15） 💬（0）<p>如果用statement jdbc会简单拼接字符串然后作为sql执行
 preparedstatement就会进行预编译 对其中的换行符等字符做转义 对注入的sql会起到混淆的作用
 mybatis这些orm框架也是基于preparedstatement mybatis尽量使用#占位符</p>2018-12-08</li><br/><li><span>Well_Ksun</span> 👍（9） 💬（0）<p>老师能简单聊聊presto吗？也是faceboook开源出来的。据说AWS 的 Athena 就是基于 Presto 的产品。</p>2018-12-17</li><br/><li><span>杰之7</span> 👍（8） 💬（0）<p>从这篇文章开始，大数据技术的体系架构知识就告一段落，但并不意味着已经完全掌握，我需要不断的回顾体系架构原理，这样才会有可能沿着这个思路有自己的一点拓展。回到本篇内容，如何自己开发SQL引擎，由于Hive语法元素少于标准SQL,且不支持复杂的嵌套子查询，所以开发的难点就是如何将复杂嵌套消除转化成标准SQL。在老师讲述的过程中，主要通过装饰模式等价转化类的构造，对于每一种新的语法通过开发新的Transformer类，然后通过组合模式将抽象语法树AST进行遍历，最后转化成Hive格式的抽象语法树。通过这样的整个过程，就完成的对Hive语法解析器的替换，保留了Hive语义分析器。通过本节的学习，我相信老师说的这套思路，那些技术厉害的人不是掌握了每一种技术，而是掌握了技术背后的体系和原理，当有新的技术出现时，同样先去思考技术背后的原理是什么，这样就算没有参与其中的技术，也会新的技术有一个好的认识。</p>2018-12-09</li><br/><li><span>蒙</span> 👍（6） 💬（0）<p>sql预编译，应该是将原始sql先解析成语法树，入参不能影响语法树的变化</p>2020-01-14</li><br/><li><span>GeekGay</span> 👍（4） 💬（0）<p>https:&#47;&#47;github.com&#47;lealone

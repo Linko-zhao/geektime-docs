@@ -156,11 +156,11 @@ from LangChain.prompts import PromptTemplate
 
 llm = ChatOpenAI(model="gpt-4o", api_key=OPENAI_API_KEY,
                  base_url=OPENAI_API_BASE)
-                 
+
 retriever = vector_db.as_retriever()
 
-template = """Use the following pieces of context to answer the question at the end. 
-If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer as concise as possible. 
+template = """Use the following pieces of context to answer the question at the end.
+If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer as concise as possible.
 Always say "thanks for asking!" at the end of the answer.
 {context}
 Question: {question}

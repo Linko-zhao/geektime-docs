@@ -12,10 +12,10 @@
 
 ```javascript
 var obj1 = {
-    myprop: 'my value'
+  myprop: "my value",
 };
 var obj2 = {
-    myprop: 'my value'
+  myprop: "my value",
 };
 obj1 === obj2; // false
 ```
@@ -30,12 +30,12 @@ obj1 === obj2; // false
 var count = 0;
 
 var counter = {
-  increment() {
-    return ++count;
-  },
-  decrement() {
-    return --count;
-  }
+  increment() {
+    return ++count;
+  },
+  decrement() {
+    return --count;
+  },
 };
 
 Object.freeze(counter);
@@ -90,20 +90,20 @@ Redux 使用“**单向数据流**”应用程序结构。也就是说，第一�
 
 ```javascript
 var o = new Object(),
-    n = new Object(1),
-    s = Object('1'),
-    b = Object(true);
+  n = new Object(1),
+  s = Object("1"),
+  b = Object(true);
 // test
-o.constructor === Object;  // true
-n.constructor === Number;  // true
-s.constructor === String;  // true
+o.constructor === Object; // true
+n.constructor === Number; // true
+s.constructor === String; // true
 b.constructor === Boolean; // true
 ```
 
 还有一个非常常见的例子就是我们说箭头函数（arrow function）就是工厂模式。之所以这么说是因为如果箭头函数体由单个表达式组成的话，在函数创建时会间接返回一个对象，所以是一个小型工厂函数。
 
 ```javascript
-var createUser = (userName) => ({ userName: userName });
+var createUser = (userName) => ({ userName: userName });
 createUser("bar"); // {userName: 'bar'}
 createUser("foo"); // {userName: 'foo'}
 ```

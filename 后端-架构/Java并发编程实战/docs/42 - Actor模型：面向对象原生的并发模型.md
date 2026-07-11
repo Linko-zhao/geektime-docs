@@ -13,7 +13,7 @@ Actor模型本质上是一种计算模型，基本的计算单元称为Actor，�
 ```
 //该Actor当收到消息message后，
 //会打印Hello message
-static class HelloActor 
+static class HelloActor
     extends UntypedActor {
   @Override
   public void onReceive(Object message) {
@@ -25,7 +25,7 @@ public static void main(String[] args) {
   //创建Actor系统
   ActorSystem system = ActorSystem.create("HelloSystem");
   //创建HelloActor
-  ActorRef helloActor = 
+  ActorRef helloActor =
     system.actorOf(Props.create(HelloActor.class));
   //发送消息给HelloActor
   helloActor.tell("Actor", ActorRef.noSender());
@@ -88,10 +88,10 @@ public static void main(String[] args) throws InterruptedException {
   ActorSystem system = ActorSystem.create("HelloSystem");
   //4个线程生产消息
   ExecutorService es = Executors.newFixedThreadPool(4);
-  //创建CounterActor 
-  ActorRef counterActor = 
+  //创建CounterActor
+  ActorRef counterActor =
     system.actorOf(Props.create(CounterActor.class));
-  //生产4*100000个消息 
+  //生产4*100000个消息
   for (int i=0; i<4; i++) {
     es.execute(()->{
       for (int j=0; j<100000; j++) {
@@ -122,7 +122,6 @@ Actor可以创建新的Actor，这些Actor最终会呈现出一个树状结构�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>QQ怪</span> 👍（28） 💬（2）<p>老师，actor模式具体实现的产品有哪些?想知道这些更加理解actor</p>2019-06-04</li><br/><li><span>aoe</span> 👍（16） 💬（2）<p>感兴趣的可以看看《响应式架构  消息模式Actor实现与Scala.Akka应用集成》</p>2019-11-22</li><br/><li><span>兔斯基</span> 👍（15） 💬（4）<p>这种并发模型现实应用多么？系统往往很少有可以接受丢失消息的吧？</p>2019-06-04</li><br/><li><span>stg609</span> 👍（12） 💬（1）<p>虽然一个actor 是不会有并发问题，但要是同时发给多个actor去处理呢，每个actor 都可能访问同一数据库或者redis 这种共享资源，那还是有并发问题吧</p>2020-05-07</li><br/><li><span>DFighting</span> 👍（7） 💬（1）<p>Actor读起来好像流数据处理模型中的Operator，不过Flink解决一致性语义(exactly-once)使用的是轻量级一致性快照，即在每个节点内部缓存当前整个系统执行到何处的状态，不过代价就是需要在计算拓扑中传递状态，算是一种内存换一致性吧，不过现在存储愈发可得，这个代价应该也是可以接受的。</p>2019-10-16</li><br/><li><span>晓杰</span> 👍（5） 💬（3）<p>请问老师actor模型的效率是不是会比较低</p>2019-06-05</li><br/><li><span>浩</span> 👍（2） 💬（1）<p>老师怎么把actor用在实际开发中，在spring boot中集成
 </p>2022-07-29</li><br/><li><span>张三丰</span> 👍（2） 💬（1）<p>很长一段时间里，我都以为对象方法是面向对象理论中消息的一种实现，直到接触到 Actor 模型，才明白消息压根不是这个实现法。
-
 
 老师是认为面向对象调用方法不叫消息？那么面向对象调用方法这种数据传递方式叫什么？</p>2019-10-14</li><br/><li><span>cricket1981</span> 👍（1） 💬（1）<p>&quot;也不保证消息送达的顺序和发送的顺序是一致的&quot; …… 想问下什么情况下会发生这种情形？MailBox不是类似Queue一样FIFO结构吗？</p>2019-06-05</li><br/><li><span>潭州太守</span> 👍（1） 💬（1）<p>请问老师，Actor是不是不适合低延迟场景，或者有没有策略保证低延迟。</p>2019-06-04</li><br/><li><span>明天更美好</span> 👍（0） 💬（2）<p>遇到一个线程问题，我们有个业务要通过mq去通知第三方，但是第三方能力比较差，我们同步的时候mq堆积很多。后来改成用woker-thread模式，队列设置了2000线程用了64个机器是64核的，拒绝策论是当前线程执行该任务。结果发现队列很快就被放满了，一段时间后mq又堆积了。因为客户端没有及时签收消息，导致broker限流了直接不销费了，这种问题老师您有什么好的建议吗？</p>2019-06-04</li><br/><li><span>翡冷翠</span> 👍（21） 💬（1）<p>累加器这个例子里只是启动了四个线程去发送消息，实际累加只是在一个线程(actor)里进行的</p>2019-07-01</li><br/><li><span>湮汐</span> 👍（8） 💬（3）<p>感觉就像消息队列，但是是用单线程顺序消费的模式。</p>2020-05-19</li><br/><li><span>有铭</span> 👍（4） 💬（1）<p>Actor模型的最佳实践目前还是erlang，Java的akka有些不伦不类</p>2019-06-04</li><br/><li><span>new life</span> 👍（3） 💬（0）<p>actor 模型没有性能问题，我觉得是因为我们加锁保证线程安全，这个期间只有一个线程在对共享资源的持有，而actor只有一个线程处理消息，一样的道理，还省略了线程抢资源时候的切换开销，不知道理解的对不对；</p>2020-04-26</li><br/>
 </ul>

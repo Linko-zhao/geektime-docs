@@ -79,9 +79,9 @@ spec:
 
 ```bash
 [root@k8s-master ~]# kubectl apply -f my-probe-nginx-pod.yaml 
-pod/my-probe-nginx-pod created 
+pod/my-probe-nginx-pod created
 
-[root@k8s-master ~]# kubectl describe pod my-probe-nginx-pod 
+[root@k8s-master ~]# kubectl describe pod my-probe-nginx-pod
 ......
 Containers:
   nginx-c:
@@ -99,15 +99,16 @@ Containers:
 这里我们修改 Pod 中的启动探针，改成检测一个 Nginx 应用中不存在的文件名，再重新部署一下，查看 Pod 详情。
 
 ```yaml
+
 ...
-    startupProbe:  # 启动探针
-      exec:
-        command:
-        - cat
-        - /etc/nginx/aaa.conf    # 不存在的配置文件
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      failureThreshold: 3
+startupProbe: # 启动探针
+  exec:
+    command:
+      - cat
+      - /etc/nginx/aaa.conf # 不存在的配置文件
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  failureThreshold: 3
 ...
 ```
 
@@ -244,26 +245,27 @@ spec:
 2.然后再来修改 Pod，在运行容器时执行 “touch &#47;data&#47;config.txt” 命令来创建这个配置文件，再观察一下 Pod 的运行情况
 
 这个试了半天都没成功。不知道哪里出问题了。请老师帮看一下。
-# my-pod-probe.yaml 
+
+# my-pod-probe.yaml
+
 apiVersion: v1
 kind: Pod
 metadata:
-  name: my-pod-probe
+name: my-pod-probe
 spec:
-  containers:
-  - name: nginx-c-probe
-    image: swr.cn-north-4.myhuaweicloud.com&#47;ddn-k8s&#47;docker.io&#47;nginx:1.26.1-alpine
-    command: [&quot;&#47;bin&#47;sh&quot;, &quot;-c&quot;]
-    args: [&quot;touch &#47;root&#47;config.txt&quot;]
-    startupProbe:
-      exec:
-        command:
-        - cat
-        - &#47;root&#47;config.txt
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      successThreshold: 1
-      failureThreshold: 3
+containers:
+
+- name: nginx-c-probe
+  image: swr.cn-north-4.myhuaweicloud.com&#47;ddn-k8s&#47;docker.io&#47;nginx:1.26.1-alpine
+  command: [&quot;&#47;bin&#47;sh&quot;, &quot;-c&quot;]
+  args: [&quot;touch &#47;root&#47;config.txt&quot;]
+  startupProbe:
+  exec:
+  command: - cat - &#47;root&#47;config.txt
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
 
 </p>2024-08-21</li><br/><li><span>抱紧我的小鲤鱼</span> 👍（0） 💬（1）<p>
     readinessProbe:

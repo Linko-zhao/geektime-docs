@@ -24,7 +24,7 @@ void onMessage(Message msg){
 //处理浏览器发来的请求
 Respond handleWebReq(){
   //创建一消息
-  Message msg1 = new 
+  Message msg1 = new
     Message("1","{...}");
   //发送消息
   send(msg1);
@@ -55,18 +55,18 @@ GuardedObject的内部实现非常简单，是管程的一个经典用法，你�
 class GuardedObject<T>{
   //受保护的对象
   T obj;
-  final Lock lock = 
+  final Lock lock =
     new ReentrantLock();
   final Condition done =
     lock.newCondition();
   final int timeout=1;
-  //获取受保护对象  
+  //获取受保护对象
   T get(Predicate<T> p) {
     lock.lock();
     try {
       //MESA管程推荐写法
       while(!p.test(obj)){
-        done.await(timeout, 
+        done.await(timeout,
           TimeUnit.SECONDS);
       }
     }catch(InterruptedException e){
@@ -100,7 +100,7 @@ Guarded Suspension模式里GuardedObject有两个核心方法，一个是get()�
 //处理浏览器发来的请求
 Respond handleWebReq(){
   //创建一消息
-  Message msg1 = new 
+  Message msg1 = new
     Message("1","{...}");
   //发送消息
   send(msg1);
@@ -127,35 +127,35 @@ void onMessage(Message msg){
 class GuardedObject<T>{
   //受保护的对象
   T obj;
-  final Lock lock = 
+  final Lock lock =
     new ReentrantLock();
   final Condition done =
     lock.newCondition();
   final int timeout=2;
   //保存所有GuardedObject
-  final static Map<Object, GuardedObject> 
+  final static Map<Object, GuardedObject>
   gos=new ConcurrentHashMap<>();
   //静态方法创建GuardedObject
-  static <K> GuardedObject 
+  static <K> GuardedObject
       create(K key){
     GuardedObject go=new GuardedObject();
     gos.put(key, go);
     return go;
   }
-  static <K, T> void 
+  static <K, T> void
       fireEvent(K key, T obj){
     GuardedObject go=gos.remove(key);
     if (go != null){
       go.onChanged(obj);
     }
   }
-  //获取受保护对象  
+  //获取受保护对象
   T get(Predicate<T> p) {
     lock.lock();
     try {
       //MESA管程推荐写法
       while(!p.test(obj)){
-        done.await(timeout, 
+        done.await(timeout,
           TimeUnit.SECONDS);
       }
     }catch(InterruptedException e){
@@ -186,16 +186,16 @@ class GuardedObject<T>{
 Respond handleWebReq(){
   int id=序号生成器.get();
   //创建一消息
-  Message msg1 = new 
+  Message msg1 = new
     Message(id,"{...}");
   //创建GuardedObject实例
   GuardedObject<Message> go=
-    GuardedObject.create(id);  
+    GuardedObject.create(id);
   //发送消息
   send(msg1);
   //等待MQ消息
   Message r = go.get(
-    t->t != null);  
+    t->t != null);
 }
 void onMessage(Message msg){
   //唤醒等待的线程
@@ -215,7 +215,7 @@ Guarded Suspension模式也常被称作Guarded Wait模式、Spin Lock模式（�
 有同学觉得用done.await()还要加锁，太啰嗦，还不如直接使用sleep()方法，下面是他的实现，你觉得他的写法正确吗？
 
 ```
-//获取受保护对象  
+//获取受保护对象
 T get(Predicate<T> p) {
   try {
     while(!p.test(obj)){
@@ -244,5 +244,5 @@ void onChanged(T obj) {
 如果存在这种场景，再维护一个 ConcurrentHashMap，key 是 msg.id，value 是对应的 obj，是否就能解决结果这问题？
 
 谢谢老师！</p>2019-06-03</li><br/><li><span>Monday</span> 👍（1） 💬（1）<p>guarded suspension模式解决了我工作中的一个问题
-client同步掉我的服务a，服务a处理并需要等待一个定时任务的执行结果，</p>2020-12-17</li><br/><li><span>王盛武</span> 👍（1） 💬（2）<p>王老师，请问这里lock是实例私有对象，为什么不用 lock.signal？  感觉文案里的代码不需要signalall函数，因为这个lock是每次都new出来的，线程等待队列里永远只有一个线程，所以signalall意义不大</p>2019-06-17</li><br/>
+client同步掉我的服务a，服务a处理并需要等待一个定时任务的执行结果，</p>2020-12-17</li><br/><li><span>王盛武</span> 👍（1） 💬（2）<p>王老师，请问这里lock是实例私有对象，为什么不用 lock.signal？ 感觉文案里的代码不需要signalall函数，因为这个lock是每次都new出来的，线程等待队列里永远只有一个线程，所以signalall意义不大</p>2019-06-17</li><br/>
 </ul>

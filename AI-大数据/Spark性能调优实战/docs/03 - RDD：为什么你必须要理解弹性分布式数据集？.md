@@ -27,13 +27,13 @@ val instanceDF = factDF
     .agg("sum(value) as sum_value")
 instanceDF
 }
- 
+
 pairDF.collect.foreach{
 case (startDate: String, endDate: String) =>
     val instance = createInstance(factDF, startDate, endDate)
     val outPath = s"${rootPath}/endDate=${endDate}/startDate=${startDate}"
     instance.write.parquet(outPath)
-} 
+}
 
 ```
 
@@ -146,7 +146,9 @@ case (startDate: String, endDate: String) =>
 当下比较流行的计算框架 Spark&#47;Flink, 如果使用 Yarn 来调度计算任务, 对于 Yarn 而言, 本地的 Spark&#47;Flink 都可以看作是 Yarn 的客户端, 而对于用户而言, 编写的 job 都可以看做是本地的 Spark&#47;Flink 的客户端,  他们共同的本质都是使用本地 Spark&#47;Flink, 将用户的 job 解析并优化成物理执行计划, 然后提交到 Yarn 上部署执行</p>2021-03-26</li><br/><li><span>tony</span> 👍（2） 💬（1）<p>纯算分离 有 计算节点+oss，所有计算节点从oss访问数据，网络io代价差不多。为了加速计算节点访问速度，还会在计算节点上加个缓存。
 
 所以当计算节点访问数据不在cache，那么preferecneLocations应该就不起什么作用了。这么理解对吗？</p>2021-09-04</li><br/><li><span>林建林</span> 👍（2） 💬（1）<p>preferredLocations：可以理解为最佳位置，移动计算不移动数据，数据在哪就在哪计算，减少IO</p>2021-03-31</li><br/><li><span>Z宇锤锤</span> 👍（2） 💬（2）<p># 关于RDD的单机思维模式
+
 ## RDD中的集合排序问题
+
 RDD.collect.sort
 </p>2021-03-27</li><br/><li><span>L3nvy</span> 👍（2） 💬（8）<p>1. “单机模式”，不知道算不算。不知道Spark可以开多线程触发action算子，同时提交多个不相关的作业，Spark UI同时运行的job拉满 : )。之前代码都是按面向过程的思维一步一步写的。
 2. 处理数据源的时候，jdbc，读取本地文件不起作用

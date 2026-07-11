@@ -28,22 +28,22 @@ TypeScript是微软开发的JavaScript的超集，这里说的超集，意思就
 
 ```typescript
 interface 极客时间课程 {
-    课程名字:string,
-    价格:number[],
-    受众:string,
-    讲师头像?:string|boolean,
-    获取口令():string
+  课程名字: string;
+  价格: number[];
+  受众: string;
+  讲师头像?: string | boolean;
+  获取口令(): string;
 }
 
 let vueCourse: 极客时间课程 = {
-    课程名字:'玩转Vue 3全家桶',
-    价格:[59,129],
-    受众: '前端小老弟',
-    讲师头像:false,
-    获取口令(){
-        return 88
-    }
-}
+  课程名字: "玩转Vue 3全家桶",
+  价格: [59, 129],
+  受众: "前端小老弟",
+  讲师头像: false,
+  获取口令() {
+    return 88;
+  },
+};
 ```
 
 这就是TypeScript带来的好处，如果项目中的每个变量、每个接口都能在定义的时候定义好类型，那么很多错误在开发阶段就可以提前被TypeScript识别。在上面的代码中，我们使用interface去定义一个复杂的类型接口，也即极客时间课程。
@@ -65,8 +65,8 @@ TypeScript能够智能地去报错和提示，也是Vue 3的代码阅读起来�
 我们在函数名的后面用尖括号包裹一个类型占位符，常见的写法是，这里为了帮助你理解，我用&lt;某种类型&gt;替代这种写法。调用方式可以直接使用test(1), 也可以使用test &lt;number&gt; (1) 。泛型让我们拥有了根据输入的类型去实现函数的能力，这里你也能感受到TypeScript类型可以进行动态设置。
 
 ```typescript
-function test<某种类型>(args:某种类型):某种类型{
-    return args
+function test<某种类型>(args: 某种类型): 某种类型 {
+  return args;
 }
 ```
 
@@ -79,11 +79,14 @@ getProperty(vueCourse， '课程名字') // 返回 ['玩转Vue3全家桶']
 因为getProperty的返回值是由输入类型决定的，所以一定会用到泛型。但是返回值是vueCourse的一个value值，那如何定义返回值的类型呢？首先我们要学习的是keyof关键字，下面代码中我们使用 `type 课程属性列表 = keyof 极客时间课程` ，就可以根据获取到的极客时间课程这个对象的属性列表，使用extends来限制属性只能从极客时间的课程里获取。
 
 ```typescript
-function getProperty<某种类型, 某种属性 extends keyof 某种类型>(o: 某种类型, name: 某种属性): 某种类型[某种属性] {
-    return o[name]
+function getProperty<某种类型, 某种属性 extends keyof 某种类型>(
+  o: 某种类型,
+  name: 某种属性,
+): 某种类型[某种属性] {
+  return o[name];
 }
 function getProperty<T, K extends keyof T>(o: T, name: K): T[K] {
-    return o[name]
+  return o[name];
 }
 ```
 
@@ -113,8 +116,8 @@ export default defineComponent({
 在&lt;script setup&gt;的内部，需要调整写法的内容不多。下面的代码使用Composition API的过程中，可以针对ref或者reactive进行类型推导。如果ref包裹的是数字，那么在对count.value进行split函数操作的时候，TypeScript就可以预先判断count.value是一个数字，并且进行报错提示。
 
 ```javascript
-    const count = ref(1)
-    count.value.split('') // => Property 'split' does not exist on type 'number'
+const count = ref(1);
+count.value.split(""); // => Property 'split' does not exist on type 'number'
 ```
 
 我们也可以显式地去规定ref、reactive和computed输入的属性，下面代码中我们分别演示了ref、reactive和computed限制类型的写法，每个函数都可以使用默认的参数推导，也可以显式地通过泛型去限制。
@@ -146,23 +149,23 @@ const course2 = computed<极客时间课程>(() => {
 
 ```typescript
 const props = defineProps<{
-  title: string
-  value?: number
-}>()
-const emit = defineEmits<{ 
-  (e: 'update', value: number): void
-}>()
+  title: string;
+  value?: number;
+}>();
+const emit = defineEmits<{
+  (e: "update", value: number): void;
+}>();
 ```
 
 接下来，我们对清单应用做一个TypeScript代码的改造。首先清单本身就是一个类型，在下面的代码中，我们定义Todo这个接口，然后初始化todos的时候，Vue也暴露了Ref这个类型，todos是Ref包裹的数组。
 
 ```typescript
-import {ref, Ref} from 'vue'
-interface Todo{
-  title:string,
-  done:boolean
+import { ref, Ref } from "vue";
+interface Todo {
+  title: string;
+  done: boolean;
 }
-let todos:Ref<Todo[]> = ref([{title:'学习Vue',done:false}])
+let todos: Ref<Todo[]> = ref([{ title: "学习Vue", done: false }]);
 ```
 
 因为这里需要把todos的格式设置为Vue3的响应式类型，所以当你需要了解Composition API所有的类型设置的时候，你可以进入项目目录下面的node\_modules/@vue/reactivity/dist/reactivity.d.ts中查看。
@@ -186,18 +189,19 @@ export default router
 我们打开项目目录下的node\_modules/vue-router/dist/vue-router.d.ts文件，下面的代码中你可以看到vue-router是一个组合类型，在这个类型的限制下，你在注册路由的时候，如果参数有漏写或者格式不对的情况，那就会在调试窗口里直接看到报错信息。如果没有TypeScript的话，我们需要先启动dev，之后在浏览器的调试页面里看到错误页面，回来之后才能定位问题。
 
 ```typescript
-export declare type RouteRecordRaw = RouteRecordSingleView | RouteRecordMultipleViews | RouteRecordRedirect;
+export declare type RouteRecordRaw =
+  RouteRecordSingleView | RouteRecordMultipleViews | RouteRecordRedirect;
 
 declare interface RouteRecordSingleView extends _RouteRecordBase {
-    /**
-     * Component to display when the URL matches this route.
-     */
-    component: RawRouteComponent;
-    components?: never;
-    /**
-     * Allow passing down params as props to the component rendered by `router-view`.
-     */
-    props?: _RouteRecordProps;
+  /**
+   * Component to display when the URL matches this route.
+   */
+  component: RawRouteComponent;
+  components?: never;
+  /**
+   * Allow passing down params as props to the component rendered by `router-view`.
+   */
+  props?: _RouteRecordProps;
 }
 ```
 
@@ -236,19 +240,20 @@ TypeScript最终还是要编译成为JavaScript，并在浏览器里执行。对
   （runtime error）；静态语言比动态语言多个“门卫”，编译器，代码在运行前，它帮你检查一边，出问 
     题报错，报的是编译错误（compile error）。编译出错的代码根本不会走到运行时阶段。
 
-  2. 怎么实现的
-    静态语言怎么检查代码，通过“规则”，这个规则就是所谓的&quot;强类型系统&quot;。
-    简单的说就是&quot;先定规则，再执行”，“先得有类型，才能执行”。这也是为什么它在“灵活性”上不如动 
-    态语言。
+2. 怎么实现的
+   静态语言怎么检查代码，通过“规则”，这个规则就是所谓的&quot;强类型系统&quot;。
+   简单的说就是&quot;先定规则，再执行”，“先得有类型，才能执行”。这也是为什么它在“灵活性”上不如动
+   态语言。
 
- 3. 超集
-    刚开始看这个定义的时候也没搞太明白，后来就清楚了；各个厂家的浏览器中“实现”JavaScript 是根 
-    据 ECMAScript 标准。而浏览器只能看的懂 JavaScript。
-    所以 TypeScript 最终都会“编译”成 JavaScript 跑在宿主环境里。哪些在 ts 中看到的 “超级” 语法，关 
-    键词 最终都会变成 js。
+3. 超集
+   刚开始看这个定义的时候也没搞太明白，后来就清楚了；各个厂家的浏览器中“实现”JavaScript 是根
+   据 ECMAScript 标准。而浏览器只能看的懂 JavaScript。
+   所以 TypeScript 最终都会“编译”成 JavaScript 跑在宿主环境里。哪些在 ts 中看到的 “超级” 语法，关
+   键词 最终都会变成 js。
 
- 4. 也挑个小错
-     let todos:Ref(Todo[]) = ref([{title: &quot;学习Vue&quot;, done: false}]) 中，应该是 Ref&lt;Todo[]&gt; 吧
+4. 也挑个小错
+   let todos:Ref(Todo[]) = ref([{title: &quot;学习Vue&quot;, done: false}]) 中，应该是 Ref&lt;Todo[]&gt; 吧
+
 </p>2021-11-17</li><br/><li><span>费城的二鹏</span> 👍（3） 💬（1）<p>了解了 TypeScript 的使用后，你可以回想一下 Vue 2 里有哪些写法是对 TypeScript 不友好的，以及我们应该怎么在 Vue 3 优化呢？
 
 在公司项目使用 ts 开发 vue2，感觉这个写法掩盖了很多 vue2 本身的概念。比如说 data 方法没了，watch 方法没了，都变成了注解，不太容易理解到 vue 本身的设计思路。</p>2021-11-17</li><br/><li><span>费城的二鹏</span> 👍（1） 💬（1）<p>const emit = defineEmits&lt;{

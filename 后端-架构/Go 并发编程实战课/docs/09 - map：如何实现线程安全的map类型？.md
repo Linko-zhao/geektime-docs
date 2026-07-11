@@ -224,16 +224,16 @@ func (m *RWMap) Each(f func(k, v int) bool) { // 遍历map
 ```
 
     var SHARD_COUNT = 32
-	
+
     // 分成SHARD_COUNT个分片的map
 	type ConcurrentMap []*ConcurrentMapShared
-	
+
 	// 通过RWMutex保护的线程安全的分片，包含一个map
 	type ConcurrentMapShared struct {
 		items        map[string]interface{}
 		sync.RWMutex // Read Write mutex, guards access to internal map.
 	}
-	
+
 	// 创建并发map
 	func New() ConcurrentMap {
 		m := make(ConcurrentMap, SHARD_COUNT)
@@ -242,7 +242,7 @@ func (m *RWMap) Each(f func(k, v int) bool) { // 遍历map
 		}
 		return m
 	}
-	
+
 
 	// 根据key计算分片索引
 	func (m ConcurrentMap) GetShard(key string) *ConcurrentMapShared {
@@ -525,6 +525,7 @@ sync.map一个优秀的地方是当我们访问read的时候不需要上锁，�
 .&#47;main.go:11:12: invalid operation: resMap == resMap (map can only be compared to nil)</p>2021-05-14</li><br/><li><span>新味道</span> 👍（0） 💬（1）<p>新加的元素需要放入到 dirty 中，如果 dirty 为 nil，那么需要从 read 字段中复制出来一个 dirty 对象。
 
 ---
+
 为什么需要从 read 字段中复制出来一个 dirty 对象？
 </p>2020-11-26</li><br/><li><span>Geek_zbvt62</span> 👍（0） 💬（3）<p>应该着重说明一下为什么有expunged这种状态,这点比较迷惑。我能理解expunged的entry代表read中存在而dirty中不存在。但为什么在read向dirty复制时，需要将nil的entry变为expunged？</p>2020-11-13</li><br/><li><span>Panmax</span> 👍（0） 💬（1）<p>文章中写到「所以，这里我们就超前一把，我带你直接体验这个即将要发布的泛型方案。」
 
@@ -533,7 +534,7 @@ sync.map一个优秀的地方是当我们访问read的时候不需要上锁，�
 在高并发的情况下，存在多个goroutine在修改同一个Key，第一次CAS都失败了，在竞争锁；如果不进行第二次CAS检查就直接修改，这个Key就会被多次修改；
 
 2. 真正删除key的操作是在数据从read往dirty迁移的过程中（往dirty写数据时，发现dirty没有数据，就会触发迁移），只迁移没有被标记为删除的KV</p>2020-10-30</li><br/><li><span>我来也</span> 👍（14） 💬（1）<p>看到本文的标题,就让我想到之前看过的一篇文章:
-[踩了 Golang sync.Map 的一个坑](https:&#47;&#47;gocn.vip&#47;topics&#47;10860)
+   [踩了 Golang sync.Map 的一个坑](https://gocn.vip/topics/10860)
 
 就是老师文章代码中的一行注释的由来:
 `这一行长坤在1.15中实现的时候忘记加上了，导致在特殊的场景下有些key总是没有被回收`
@@ -541,31 +542,25 @@ sync.map一个优秀的地方是当我们访问read的时候不需要上锁，�
 当时我是好好把系统的sync.Map代码看了一下.
 虽然才短短384行代码,但还是花了不少功夫.
 
-另外,推荐一个 欧长坤 未完工的开源电子书 [Go 语言原本](https:&#47;&#47;github.com&#47;golang-design&#47;under-the-hood).
+另外,推荐一个 欧长坤 未完工的开源电子书 [Go 语言原本](https://github.com/golang-design/under-the-hood).
 </p>2020-10-30</li><br/><li><span>NULL</span> 👍（9） 💬（2）<p>感觉有两个地方写的有点模糊，导致对后面的内容有些不明所以_(:з」∠)_
 1是 “通过冗余的两个数据结构（只读的 read 字段、可以 dirty）”，可以 dirty 是笔误吗
 2是 “动态调整。miss 次数多了之后”，miss是什么？
 
 查了下其他资料，dirty指 将最新写入的数据则存在 dirty 字段上
 misses 字段用来统计 read 被穿透的次数（被穿透指需要读 dirty 的情况）
-这样理解起来好多了_(:з」∠)_</p>2020-11-02</li><br/><li><span>TT</span> 👍（5） 💬（0）<p> 1. 为什么说 read 是并发读写安全的？
- 2. read 为什么可以更新 key 对应的 value？dirty 中会同步更新吗？
- 3. map 的 misses 是什么？干嘛用的？
- 4. 什么时候 misses 会变化？
- 5. readOnly 的 amended 是什么？
- 6. 什么时候会改变 amended？
- 7. 定义 expunged 是干什么用的？标记清除到底是怎么标记的？又是怎么清除的？
+这样理解起来好多了_(:з」∠)_</p>2020-11-02</li><br/><li><span>TT</span> 👍（5） 💬（0）<p> 1. 为什么说 read 是并发读写安全的？2. read 为什么可以更新 key 对应的 value？dirty 中会同步更新吗？3. map 的 misses 是什么？干嘛用的？4. 什么时候 misses 会变化？5. readOnly 的 amended 是什么？6. 什么时候会改变 amended？7. 定义 expunged 是干什么用的？标记清除到底是怎么标记的？又是怎么清除的？
 
 自己写了一篇总结 http:&#47;&#47;zero-tt.fun&#47;go&#47;sync-map&#47; ，希望可以和大家讨论</p>2021-05-21</li><br/><li><span>阿梅</span> 👍（1） 💬（0）<p>map并发读写不只是panic，而是直接宕机， 也就是无法通过recover捕获后继续执行程序</p>2023-11-15</li><br/><li><span>张申傲</span> 👍（1） 💬（0）<p>concurrent-map，新知识点get，项目中用起来。</p>2022-04-14</li><br/><li><span>while (1)等;</span> 👍（0） 💬（0）<p>老师好！
 type RWMap struct { &#47;&#47; 一个读写锁保护的线程安全的map
-    sync.RWMutex &#47;&#47; 读写锁保护下面的map字段
-    m map[int]int
+sync.RWMutex &#47;&#47; 读写锁保护下面的map字段
+m map[int]int
 }
 &#47;&#47; 新建一个RWMap
 func NewRWMap(n int) *RWMap {
-    return &amp;RWMap{
-        m: make(map[int]int, n),
-    }
+return &amp;RWMap{
+m: make(map[int]int, n),
+}
 }
 这里初始化map的时候为什么用的是&amp;RWMap</p>2021-07-04</li><br/>
 </ul>

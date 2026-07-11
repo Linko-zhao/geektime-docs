@@ -15,14 +15,14 @@
 // this flag is matched when the element has dynamic class bindings.
 if (patchFlag & PatchFlags.CLASS) {
   if (oldProps.class !== newProps.class) {
-    hostPatchProp(el, 'class', null, newProps.class, isSVG)
+    hostPatchProp(el, "class", null, newProps.class, isSVG);
   }
 }
 
 // style
 // this flag is matched when the element has dynamic style bindings
 if (patchFlag & PatchFlags.STYLE) {
-  hostPatchProp(el, 'style', oldProps.style, newProps.style, isSVG)
+  hostPatchProp(el, "style", oldProps.style, newProps.style, isSVG);
 }
 if (shapeFlag & ShapeFlags.ELEMENT) {
   processElement(
@@ -34,8 +34,8 @@ if (shapeFlag & ShapeFlags.ELEMENT) {
     parentSuspense,
     isSVG,
     slotScopeIds,
-    optimized
-  )
+    optimized,
+  );
 } else if (shapeFlag & ShapeFlags.COMPONENT) {
   processComponent(
     n1,
@@ -46,8 +46,8 @@ if (shapeFlag & ShapeFlags.ELEMENT) {
     parentSuspense,
     isSVG,
     slotScopeIds,
-    optimized
-  )
+    optimized,
+  );
 }
 ```
 
@@ -58,19 +58,19 @@ if (shapeFlag & ShapeFlags.ELEMENT) {
 而在JavaScript中我们可以很方便地使用toString(2)的方式，把十进制数字转换成二进制。运算的概念很简单，就是在二进制上的“与”和“或”运算：
 
 ```javascript
-(13).toString(2) // 1101
+(13).toString(2); // 1101
 
-0 & 0  // 0
-0 & 1  // 0
-1 & 0  // 0
-1 & 1  // 1
+0 & 0; // 0
+0 & 1; // 0
+1 & 0; // 0
+1 & 1; // 1
 
-0 | 0  // 0
-0 | 1  // 1
-1 | 0  // 1
-1 | 1  // 1 
+0 | 0; // 0
+0 | 1; // 1
+1 | 0; // 1
+1 | 1; // 1
 
-1 << 2 // 1左移动两位，就是100  就是1*2平方 = 4
+1 << 2; // 1左移动两位，就是100  就是1*2平方 = 4
 ```
 
 二进制中，我们每个位置只能是0或者1这两个值，&amp;和 | 的概念和JavaScript中的&amp;&amp;和 || 保持一致。两个二进制的&amp;运算就是只有两个二进制位置都是1的时候，结果是1，其余情况运算结果都是0；| 是按位置进行“或”运算，只有两个二进制位置都是0的时候，结果是0，其余情况运算结果都是1；并且，还可以通过左移&lt;&lt; 和右移&gt;&gt;操作符，实现乘以2和除以2的效果。
@@ -84,14 +84,13 @@ if (shapeFlag & ShapeFlags.ELEMENT) {
 我们来做一下LeetCode231题，题目描述很简单，判断数字n是不是2的幂次方，也就是说，判断数字n是不是2的整次方，比如2、4、8。我们可以很轻松地写出JavaScript的解答，n一直除以2，如果有余数就是false，否则就是true：
 
 ```javascript
-var isPowerOfTwo = function(n) {
-    if(n === 1) return true
-    while( n > 2 ){
-        n = n / 2
-        if(n % 2 !== 0) return false
-    }
-    return n===2
-
+var isPowerOfTwo = function (n) {
+  if (n === 1) return true;
+  while (n > 2) {
+    n = n / 2;
+    if (n % 2 !== 0) return false;
+  }
+  return n === 2;
 };
 ```
 
@@ -125,18 +124,18 @@ var isPowerOfTwo = function(n) {
 
 ```javascript
 const PatchFlags = {
-  TEXT:1,      // 0001
-  CLASS: 1<<1, // 0010
-  STYLE:1<<2,  // 0100 
-  PROPS:1<<3   // 1000
-}
+  TEXT: 1, // 0001
+  CLASS: 1 << 1, // 0010
+  STYLE: 1 << 2, // 0100
+  PROPS: 1 << 3, // 1000
+};
 
-const flag1 = PatchFlags.TEXT | PatchFlags.STYLE // 0101
+const flag1 = PatchFlags.TEXT | PatchFlags.STYLE; // 0101
 
 // 权限校验
 
-flag1 & PatchFlags.TEXT  // 有权限，结果大于1
-flag1 & PatchFlags.CLASS //没有权限 是0
+flag1 & PatchFlags.TEXT; // 有权限，结果大于1
+flag1 & PatchFlags.CLASS; //没有权限 是0
 ```
 
 ## 最长递增子系列
@@ -174,21 +173,21 @@ Vue 3借鉴了inferno的算法逻辑，就像操场上需要按照个头从低�
  * @param {number[]} nums
  * @return {number}
  */
-const lengthOfLIS = function(nums) {
-    let n = nums.length;
-    if (n == 0) {
-        return 0;
+const lengthOfLIS = function (nums) {
+  let n = nums.length;
+  if (n == 0) {
+    return 0;
+  }
+  let dp = new Array(n).fill(1);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[j] < nums[i]) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+      }
     }
-    let dp = new Array(n).fill(1);
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < i; j++) {
-            if (nums[j] < nums[i]) {
-                dp[i] = Math.max(dp[i], dp[j] + 1);
-            }
-        }
-    }
-    return Math.max(...dp) 
-}
+  }
+  return Math.max(...dp);
+};
 ```
 
 由于我们需要两层循环，所以这个解法的时间复杂度是n的平方，这个解法其实已经不错了，但是还有更优秀的解法，也就是Vue 3中用到的算法：贪心+二分。
@@ -208,33 +207,33 @@ const lengthOfLIS = function(nums) {
  * @param {number[]} nums
  * @return {number}
  */
-const lengthOfLIS = function(nums) {
-    let len = nums.length
-    if (len <= 1) {
-        return len
-    }
-    let arr = [nums[0]]
-    for (let i = 0; i < len; i++) {
-        // nums[i] 大于 arr 尾元素时，直接追加到后面，递增序列长度+1
-        if (nums[i] > arr[arr.length - 1]) {
-            arr.push(nums[i])
+const lengthOfLIS = function (nums) {
+  let len = nums.length;
+  if (len <= 1) {
+    return len;
+  }
+  let arr = [nums[0]];
+  for (let i = 0; i < len; i++) {
+    // nums[i] 大于 arr 尾元素时，直接追加到后面，递增序列长度+1
+    if (nums[i] > arr[arr.length - 1]) {
+      arr.push(nums[i]);
+    } else {
+      // 否则，查找递增子序列中第一个大于numsp[i]的元素 替换它
+      // 递增序列，可以使用二分查找
+      let left = 0;
+      let right = arr.length - 1;
+      while (left < right) {
+        let mid = (left + right) >> 1;
+        if (arr[mid] < nums[i]) {
+          left = mid + 1;
         } else {
-            // 否则，查找递增子序列中第一个大于numsp[i]的元素 替换它
-            // 递增序列，可以使用二分查找
-            let left = 0
-            let right = arr.length - 1
-            while (left < right) {
-                let mid = (left + right) >> 1
-                if (arr[mid] < nums[i]) {
-                    left = mid + 1
-                } else {
-                    right = mid
-                }
-            }
-            arr[left] = nums[i]
+          right = mid;
         }
+      }
+      arr[left] = nums[i];
     }
-    return arr.length
+  }
+  return arr.length;
 };
 ```
 
@@ -244,48 +243,48 @@ const lengthOfLIS = function(nums) {
 
 ```typescript
 // https://en.wikipedia.org/wiki/Longest_increasing_subsequence
-	function getSequence(arr: number[]): number[] {
-	  const p = arr.slice() //赋值一份arr
-	  const result = [0]
-	  let i, j, u, v, c
-	  const len = arr.length
-	  for (i = 0; i < len; i++) {
-	    const arrI = arr[i]
-	    if (arrI !== 0) {
-	      j = result[result.length - 1]
-	      if (arr[j] < arrI) {
-	        p[i] = j  // 存储在result最后一个索引的值
-	        result.push(i)
-	        continue
-	      }
-	      u = 0
-	      v = result.length - 1
-          // 二分查找，查找比arrI小的节点，更新result的值
-	      while (u < v) {
-	        c = (u + v) >> 1
-	        if (arr[result[c]] < arrI) {
-	          u = c + 1
-	        } else {
-	          v = c
-	        }
-	      }
-	      if (arrI < arr[result[u]]) {
-	        if (u > 0) {
-	          p[i] = result[u - 1]
-	        }
-	        result[u] = i
-	      }
-	    }
-	  }
-	  u = result.length
-	  v = result[u - 1]
-      // 查找数组p 找到最终的索引
-	  while (u-- > 0) {
-	    result[u] = v
-	    v = p[v]
-	  }
-	  return result
-	}
+function getSequence(arr: number[]): number[] {
+  const p = arr.slice(); //赋值一份arr
+  const result = [0];
+  let i, j, u, v, c;
+  const len = arr.length;
+  for (i = 0; i < len; i++) {
+    const arrI = arr[i];
+    if (arrI !== 0) {
+      j = result[result.length - 1];
+      if (arr[j] < arrI) {
+        p[i] = j; // 存储在result最后一个索引的值
+        result.push(i);
+        continue;
+      }
+      u = 0;
+      v = result.length - 1;
+      // 二分查找，查找比arrI小的节点，更新result的值
+      while (u < v) {
+        c = (u + v) >> 1;
+        if (arr[result[c]] < arrI) {
+          u = c + 1;
+        } else {
+          v = c;
+        }
+      }
+      if (arrI < arr[result[u]]) {
+        if (u > 0) {
+          p[i] = result[u - 1];
+        }
+        result[u] = i;
+      }
+    }
+  }
+  u = result.length;
+  v = result[u - 1];
+  // 查找数组p 找到最终的索引
+  while (u-- > 0) {
+    result[u] = v;
+    v = p[v];
+  }
+  return result;
+}
 ```
 
 这段代码就是Vue 3里的实现，result存储的就是长度是i的递增子序列最小末位置的索引，最后计算出最长递增子序列。
@@ -293,35 +292,35 @@ const lengthOfLIS = function(nums) {
 我们得到increasingNewIndexSequence队列后，再去遍历数组进行patch操作就可以实现完整的diff流程了：
 
 ```typescript
-      for (i = toBePatched - 1; i >= 0; i--) {
-        const nextIndex = s2 + i
-        const nextChild = c2[nextIndex] as VNode
-        const anchor =
-          nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor
-        if (newIndexToOldIndexMap[i] === 0) {
-          // mount new
-          patch(
-            null,
-            nextChild,
-            container,
-            anchor,
-            parentComponent,
-            parentSuspense,
-            isSVG,
-            slotScopeIds,
-            optimized
-          )
-        } else if (moved) {
-          // move if:
-          // There is no stable subsequence (e.g. a reverse)
-          // OR current node is not among the stable sequence
-          if (j < 0 || i !== increasingNewIndexSequence[j]) {
-            move(nextChild, container, anchor, MoveType.REORDER)
-          } else {
-            j--
-          }
-        }
-      }
+for (i = toBePatched - 1; i >= 0; i--) {
+  const nextIndex = s2 + i;
+  const nextChild = c2[nextIndex] as VNode;
+  const anchor =
+    nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor;
+  if (newIndexToOldIndexMap[i] === 0) {
+    // mount new
+    patch(
+      null,
+      nextChild,
+      container,
+      anchor,
+      parentComponent,
+      parentSuspense,
+      isSVG,
+      slotScopeIds,
+      optimized,
+    );
+  } else if (moved) {
+    // move if:
+    // There is no stable subsequence (e.g. a reverse)
+    // OR current node is not among the stable sequence
+    if (j < 0 || i !== increasingNewIndexSequence[j]) {
+      move(nextChild, container, anchor, MoveType.REORDER);
+    } else {
+      j--;
+    }
+  }
+}
 ```
 
 上面代码的思路，我们用下图演示。做完双端对比之后，a和g已经计算出可以直接复用DOM，剩下的队列中我们需要把hbfdc更新成abdef。

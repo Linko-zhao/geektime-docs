@@ -203,6 +203,7 @@ query = "文档的主要发现是什么？"
 response = query_engine.query(query)
 print(response.response)
 ```
+
 <div><strong>精选留言（4）</strong></div><ul>
 <li><span>小虎子11🐯</span> 👍（0） 💬（0）<p>课程代码地址：https:&#47;&#47;github.com&#47;tylerelyt&#47;LLaMa-in-Action</p>2024-11-25</li><br/><li><span>旅梦开发团</span> 👍（1） 💬（0）<p>上面的代码缺少了依赖安装，补下：
 pip install llama_index 

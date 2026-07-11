@@ -366,9 +366,9 @@ int main(int argc, char const *argv[])
 mkdir kernelbuild
 
 2、下载源码，解压
-wget https:&#47;&#47;mirrors.edge.kernel.org&#47;pub&#47;linux&#47;kernel&#47;v5.x&#47;linux-5.10.59.tar.gz   
+wget https:&#47;&#47;mirrors.edge.kernel.org&#47;pub&#47;linux&#47;kernel&#47;v5.x&#47;linux-5.10.59.tar.gz
 
-tar -xzf linux-5.10.59.tar.gz   
+tar -xzf linux-5.10.59.tar.gz
 
 cd linux-5.10.59
 
@@ -378,7 +378,7 @@ make mrproper
 4、修改文件
 4.1、arch&#47;x86&#47;entry&#47;syscalls&#47;syscall_64.tbl
 #在440后面增加一行
-441  common  get_cpus    sys_get_cpus
+441 common get_cpus sys_get_cpus
 
 4.2、include&#47;linux&#47;syscalls.h
 #在最后一个asmlinkage增加一行
@@ -389,7 +389,7 @@ asmlinkage long sys_get_cpus(void);
 &#47;&#47;获取系统中有多少CPU
 SYSCALL_DEFINE0(get_cpus)
 {
-    return num_present_cpus();
+return num_present_cpus();
 }
 
 5、内核配置
@@ -412,13 +412,13 @@ sudo make install
 #include &lt;sys&#47;syscall.h&gt;
 int main(int argc, char const *argv[])
 {
-    &#47;&#47;syscall就是根据系统调用号调用相应的系统调用
-    long cpus = syscall(441);
-    printf(&quot;cpu num is:%d\n&quot;, cpus);&#47;&#47;输出结果
-    return 0;
+&#47;&#47;syscall就是根据系统调用号调用相应的系统调用
+long cpus = syscall(441);
+printf(&quot;cpu num is:%d\n&quot;, cpus);&#47;&#47;输出结果
+return 0;
 }
 
-gcc  cpus.c -o cpus
+gcc cpus.c -o cpus
 
 .&#47;cpus
 在没有修改的内核上返回是-1
@@ -430,26 +430,26 @@ gcc  cpus.c -o cpus
 &#47;&#47;文件路径arch&#47;x86&#47;entry&#47;entry_64.S
 SYM_CODE_START(entry_SYSCALL_64)
 &#47;&#47;省略代码
-call   do_syscall_64
+call do_syscall_64
 SYM_CODE_END(entry_SYSCALL_64)
 
 &#47;&#47;文件路径arch&#47;x86&#47;entry&#47;entry_64.S
 SYM_CODE_START(entry_SYSCALL_compat)
-call   do_fast_syscall_32
+call do_fast_syscall_32
 SYM_CODE_END(entry_SYSCALL_compat)
 
 2.3、调用do_syscall_64
 #ifdef CONFIG_X86_64
 __visible noinstr void do_syscall_64(unsigned long nr, struct pt_regs *regs)
 {
-    nr = syscall_enter_from_user_mode(regs, nr);
-    instrumentation_begin();
-    if (likely(nr &lt; NR_syscalls)) {
-        nr = array_index_nospec(nr, NR_syscalls);
-        regs-&gt;ax = sys_call_table[nr](regs);
-    }
-    instrumentation_end();
-    syscall_exit_to_user_mode(regs);
+nr = syscall_enter_from_user_mode(regs, nr);
+instrumentation_begin();
+if (likely(nr &lt; NR_syscalls)) {
+nr = array_index_nospec(nr, NR_syscalls);
+regs-&gt;ax = sys_call_table[nr](regs);
+}
+instrumentation_end();
+syscall_exit_to_user_mode(regs);
 }
 #endif
 
@@ -460,33 +460,34 @@ sys_call_table[nr](regs)
 
 2.5、但咱们实际写的函数sys_get_cpus，好像和实际调用函数__x64_sys_get_cpus，差了一个__x64，这需要一个wrapper
 arch\x86\include\asm\syscall_wrapper.h
-#define SYSCALL_DEFINE0(sname)                      \
-    SYSCALL_METADATA(_##sname, 0);                  \
-    static long __do_sys_##sname(const struct pt_regs *__unused);   \
-    __X64_SYS_STUB0(sname)                      \
-    __IA32_SYS_STUB0(sname)                     \
-    static long __do_sys_##sname(const struct pt_regs *__unused)
+#define SYSCALL_DEFINE0(sname) \
+SYSCALL_METADATA(_##sname, 0); \
+static long __do_sys_##sname(const struct pt_regs *__unused); \
+__X64_SYS_STUB0(sname) \
+__IA32_SYS_STUB0(sname) \
+static long __do_sys_##sname(const struct pt_regs *__unused)
 
-#define __X64_SYS_STUB0(name)                       \
-    __SYS_STUB0(x64, sys_##name)
+#define __X64_SYS_STUB0(name) \
+__SYS_STUB0(x64, sys_##name)
 
-#define __SYS_STUB0(abi, name)                      \
-    long __##abi##_##name(const struct pt_regs *regs);      \
-    ALLOW_ERROR_INJECTION(__##abi##_##name, ERRNO);         \
-    long __##abi##_##name(const struct pt_regs *regs)       \
-        __alias(__do_##name);
+#define __SYS_STUB0(abi, name) \
+long **##abi##\_##name(const struct pt_regs \*regs); \
+ALLOW_ERROR_INJECTION(**##abi##_##name, ERRNO); \
+long \__##abi##_##name(const struct pt_regs *regs) \
+__alias(__do_##name);
 
 SYSCALL_DEFINE0(get_cpus)，会展开成为
-__X64_SYS_STUB0(get_cpus) 
+__X64_SYS_STUB0(get_cpus)
 然后
- __SYS_STUB0(x64, sys_get_cpus)
+__SYS_STUB0(x64, sys_get_cpus)
 然后
 long __x64_sys_get_cpus(const struct pt_regs *regs);
 
 这样前后就对上了，glibc和linux内核就通了。</p>2021-08-17</li><br/><li><span>neohope</span> 👍（4） 💬（1）<p>一、glibc部分【上】
 1、应用程序调用open函数
 &#47;&#47;glibc&#47;intl&#47;loadmsgcat.c
-# define open(name, flags)  __open_nocancel (name, flags)
+
+# define open(name, flags) __open_nocancel (name, flags)
 
 2、展开后实际上调用了
 __open_nocancel(name, flags)
@@ -502,23 +503,23 @@ INLINE_SYSCALL_CALL (openat, AT_FDCWD, file, oflag, mode);
 
 4.2、第1次展开INLINE_SYSCALL_CALL
 #define INLINE_SYSCALL_CALL(...) \
-  __INLINE_SYSCALL_DISP (__INLINE_SYSCALL, __VA_ARGS__)
+__INLINE_SYSCALL_DISP (__INLINE_SYSCALL, **VA_ARGS**)
 
 展开得到：
-__INLINE_SYSCALL_DISP(__INLINE_SYSCALL, __VA_ARGS__【openat, AT_FDCWD, file, oflag, mode】)
+__INLINE_SYSCALL_DISP(__INLINE_SYSCALL, **VA_ARGS**【openat, AT_FDCWD, file, oflag, mode】)
 
 4.3、第2次展开__INLINE_SYSCALL_DISP
 #define __INLINE_SYSCALL_DISP(b,...) \
-  __SYSCALL_CONCAT (b,__INLINE_SYSCALL_NARGS(__VA_ARGS__))(__VA_ARGS__)
+__SYSCALL_CONCAT (b,__INLINE_SYSCALL_NARGS(**VA_ARGS**))(**VA_ARGS**)
 
 展开得到：
-__SYSCALL_CONCAT(b【__INLINE_SYSCALL】,__INLINE_SYSCALL_NARGS(__VA_ARGS__【openat, AT_FDCWD, file, oflag, mode】))(__VA_ARGS__【openat, AT_FDCWD, file, oflag, mode】)
+__SYSCALL_CONCAT(b【__INLINE_SYSCALL】,__INLINE_SYSCALL_NARGS(**VA_ARGS**【openat, AT_FDCWD, file, oflag, mode】))(**VA_ARGS**【openat, AT_FDCWD, file, oflag, mode】)
 
 4.4、第3次展开__INLINE_SYSCALL_NARGS
-__INLINE_SYSCALL_NARGS(__VA_ARGS__【openat, AT_FDCWD, file, oflag, mode】)
+__INLINE_SYSCALL_NARGS(**VA_ARGS**【openat, AT_FDCWD, file, oflag, mode】)
 
 #define __INLINE_SYSCALL_NARGS(...) \
-  __INLINE_SYSCALL_NARGS_X (__VA_ARGS__,7,6,5,4,3,2,1,0,)
+__INLINE_SYSCALL_NARGS_X (**VA_ARGS**,7,6,5,4,3,2,1,0,)
 
 展开得到：
 __INLINE_SYSCALL_NARGS_X(openat, AT_FDCWD, file, oflag, mode,7,6,5,4,3,2,1,0,)
@@ -529,13 +530,13 @@ __INLINE_SYSCALL_NARGS_X(openat, AT_FDCWD, file, oflag, mode,7,6,5,4,3,2,1,0,)
 展开得到参数个数：4
 
 从而4.4的结果为
-__SYSCALL_CONCAT(__INLINE_SYSCALL,4)(__VA_ARGS__【openat, AT_FDCWD, file, oflag, mode】)
+__SYSCALL_CONCAT(__INLINE_SYSCALL,4)(**VA_ARGS**【openat, AT_FDCWD, file, oflag, mode】)
 
 4.5、然后展开__SYSCALL_CONCAT，其实就是字符拼接
 __SYSCALL_CONCAT(__INLINE_SYSCALL,4)
 
-#define __SYSCALL_CONCAT_X(a,b)     a##b
-#define __SYSCALL_CONCAT(a,b)       __SYSCALL_CONCAT_X (a, b)
+#define __SYSCALL_CONCAT_X(a,b) a##b
+#define __SYSCALL_CONCAT(a,b) __SYSCALL_CONCAT_X (a, b)
 
 展开得到：
 __INLINE_SYSCALL4
@@ -545,7 +546,7 @@ __INLINE_SYSCALL4(openat, AT_FDCWD, file, oflag, mode)
 
 4.6、然后展开INTERNAL_SYSCALL4
 #define __INLINE_SYSCALL4(name, a1, a2, a3, a4) \
-  INLINE_SYSCALL (name, 4, a1, a2, a3, a4)
+INLINE_SYSCALL (name, 4, a1, a2, a3, a4)
 
 展开得到：
 INLINE_SYSCALL(openat, 4, AT_FDCWD, file, oflag, mode)</p>2021-08-17</li><br/><li><span>neohope</span> 👍（3） 💬（1）<p>二、linux内核部分【上】
@@ -555,8 +556,8 @@ arch&#47;x86&#47;include&#47;generated&#47;asm&#47;syscalls_64.h
 arch&#47;x86&#47;entry&#47;syscall_64.c
 
 1.1、以sys_openat为例，在syscall_64.tbl中为
-257    common    openat            sys_openat
-441    common    get_cpus          sys_get_cpus
+257 common openat sys_openat
+441 common get_cpus sys_get_cpus
 
 1.2、make后，在生成的syscalls_64.h中为
 __SYSCALL_COMMON(257, sys_openat)
@@ -578,7 +579,7 @@ extern long __x64_sys_openat(const struct pt_regs *);
 #define __SYSCALL_64(nr, sym) [nr] = __x64_##sym,
 
 asmlinkage const sys_call_ptr_t sys_call_table[__NR_syscall_max+1] = {
-    [0 ... __NR_syscall_max] = &amp;__x64_sys_ni_syscall,
+[0 ... __NR_syscall_max] = &amp;__x64_sys_ni_syscall,
 #include &lt;asm&#47;syscalls_64.h&gt;
 };
 
@@ -601,20 +602,20 @@ intel体系的系统调用限制最多六个参数，没有任何一个参数是
 不学习就变废物😂</p>2021-08-13</li><br/><li><span>苏流郁宓</span> 👍（0） 💬（1）<p>syscall应该是系统与应用软件的接口？类似win系统的消息模块？int是操作系统与硬件的接口？如新插入usb鼠标？</p>2021-08-13</li><br/><li><span>neohope</span> 👍（3） 💬（0）<p>一、glibc部分【下】
 4.7、展开INLINE_SYSCALL
 &#47;&#47;glibc&#47;sysdeps&#47;unix&#47;sysv&#47;linux&#47;sysdep.h
-#define INLINE_SYSCALL(name, nr, args...)       \
-  ({                  \
-    long int sc_ret = INTERNAL_SYSCALL (name, nr, args);    \
-    __glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (sc_ret))    \
-    ? SYSCALL_ERROR_LABEL (INTERNAL_SYSCALL_ERRNO (sc_ret))   \
-    : sc_ret;               \
-  })
+#define INLINE_SYSCALL(name, nr, args...) \
+({ \
+long int sc_ret = INTERNAL_SYSCALL (name, nr, args); \
+__glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (sc_ret)) \
+? SYSCALL_ERROR_LABEL (INTERNAL_SYSCALL_ERRNO (sc_ret)) \
+: sc_ret; \
+})
 
 展开得到
-INTERNAL_SYSCALL (openat, 4, args【AT_FDCWD, file, oflag, mode】);  
+INTERNAL_SYSCALL (openat, 4, args【AT_FDCWD, file, oflag, mode】);
 
 4.8、展开INTERNAL_SYSCALL
-#define INTERNAL_SYSCALL(name, nr, args...)       \
-  internal_syscall##nr (SYS_ify (name), args)
+#define INTERNAL_SYSCALL(name, nr, args...) \
+internal_syscall##nr (SYS_ify (name), args)
 
 展开得到
 internal_syscall4(SYS_ify(openat), args【AT_FDCWD, file, oflag, mode】)

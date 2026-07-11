@@ -54,7 +54,7 @@ auto arr2 = numcpp::array({1, 2, 3});
 auto arr3 = numcpp::array<std::initializer_list<std::initializer_list<int32_t>>>({ {1, 2}, {3, 4} });
 auto arr4 = numcpp::array<std::vector<std::vector<std::vector<int32_t>>>>({
     {{1, 2}, {3, 4}},
-    {{5, 6}, {7, 8}} 
+    {{5, 6}, {7, 8}}
 });
 auto arr5 = numcpp::ones<int32_t>({ 1, 2, 3, 4, 5 });
 ```
@@ -502,7 +502,7 @@ namespace numcpp {
      * 用于帮助调用者获取一个多维容器类型的实际元素类型
      * 该结构体定义也是一个递归定义
      */
-    
+
     // 如果第34行或第40行都不匹配，编译器会选用这一默认版本
     export template <typename>
     struct ContainerValueTypeHelper {
@@ -528,7 +528,7 @@ namespace numcpp {
      * 该成员函数有两个重载版本，
      * 负责将多维容器中的数据拷贝到多维数组对象的数据缓冲区中
      */
-     
+
     // 通过IsNumberIterable这一concept来约束调用该版本的参数必须是元素类型为Number的可迭代容器，用于处理一维容器
     export template <IsNumberIterable ContainerType>
     typename ContainerType::value_type* fillContainerBuffer(

@@ -124,8 +124,8 @@ for n := range sum(sq(odd(echo(nums)))) {
 上面的代码类似于我们执行了Unix/Linux命令： `echo $nums | sq | sum`。同样，如果你不想有那么多的函数嵌套，就可以使用一个代理函数来完成。
 
 ```
-type EchoFunc func ([]int) (<- chan int) 
-type PipeFunc func (<- chan int) (<- chan int) 
+type EchoFunc func ([]int) (<- chan int)
+type PipeFunc func (<- chan int) (<- chan int)
 
 func pipeline(nums []int, echo EchoFunc, pipeFns ... PipeFunc) <- chan int {
   ch  := echo(nums)
@@ -139,7 +139,7 @@ func pipeline(nums []int, echo EchoFunc, pipeFns ... PipeFunc) <- chan int {
 然后，就可以这样做了：
 
 ```
-var nums = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}    
+var nums = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 for n := range pipeline(nums, gen, odd, sq, sum) {
     fmt.Println(n)
   }

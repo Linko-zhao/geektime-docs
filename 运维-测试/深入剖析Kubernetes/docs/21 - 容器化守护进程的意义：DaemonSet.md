@@ -389,6 +389,7 @@ controller不再判断调度条件，给每个pode设置NodeAffinity。控制器
 然后我下一次更新的时候，就要再先加上Partition，然后再更新。全部更新时再去掉。
 
 我看了老师的回复，表达的是这个意思吗？</p>2018-10-10</li><br/><li><span>紫夜</span> 👍（33） 💬（4）<p>张老师，DaemonSet的滚动更新，是先delete旧的pod，再启动新的pod，还是和Deployment一样，先创建新的pod，再删除旧的pod?</p>2019-08-15</li><br/><li><span>DJH</span> 👍（24） 💬（1）<p>张老师，请教几个基础问题：
+
 1. 在上一讲中，有一点我还是没想通，为何MySQL的数据复制操作必须要用sidecar容器来处理，而不用Mysql主容器来一并解决，你当时提到说是因为容器是单进程模型。如果取消sidecar容器，把数据复制操作和启动MySQL服务这两个操作一并写到MySQL主容器的sh -c命令中，这样算不算一个进程呢？
 
 2. StatefulSet的容器启动有先后顺序，那么当序号较小的容器由于某种原因需要重启时，会不会先把序号较大的容器KILL掉，再按照它们本来的顺序重新启动一次？
@@ -399,7 +400,7 @@ controller不再判断调度条件，给每个pode设置NodeAffinity。控制器
 
 5. Deployment里可以控制保留历史ReplicaSet的数量，那么ControllerRevision这个API对象能不能做到保留指定数量的版本记录？
 
-问题比较多，谢谢！</p>2018-10-10</li><br/><li><span>Kanner</span> 👍（23） 💬（3）<p>那为什么Deployment不用ControllerRevison管理版本呢</p>2018-10-10</li><br/><li><span>虎虎❤️</span> 👍（13） 💬（1）<p>一直不理解notation和label的区别，他们的设计思想是什么呢？加污点是前者还是后者？</p>2018-10-10</li><br/><li><span>宋晓明</span> 👍（10） 💬（4）<p>老师：有没有公司这样用k8s的：apiserver管理很多pod 每个pod的ip地址全部暴露出来 nginx的upstream配置全是pod的ip地址，访问流程也就是client—&gt;nginx—&gt;pod:port  还有一个程序会监控pod地址变化，一旦变化，自动更新nginx配置。这是新公司使用k8s的流程，感觉好多k8s特性都没用到，比如service，ingress等 大材小用了。。。</p>2018-10-10</li><br/><li><span>Geek_dn82ci</span> 👍（9） 💬（2）<p>Stateful set 管理的replica 不是通过RS实现的么？</p>2018-11-12</li><br/><li><span>donson</span> 👍（7） 💬（1）<p>“需要注意的是，在 Kubernetes v1.11 之前，由于调度器尚不完善，DaemonSet 是由 DaemonSet Controller 自行调度的，即它会直接设置 Pod 的 spec.nodename 字段，这样就可以跳过调度器了。”，后来随着调度器的完善，调度器就把DaemonSet的调度逻辑收回，由调度器统一调度。划清边界，领域内聚</p>2018-10-10</li><br/><li><span>初学者</span> 👍（6） 💬（1）<p>还是没有明白damonset的实现与&quot;污点&quot;的关系，理论上为了实现每个node上有且只有pod, daemonset controller 和nodeaffinity就可以了，为啥需要&quot;污点&quot;机制？</p>2018-10-29</li><br/><li><span>虎虎❤️</span> 👍（4） 💬（1）<p>sts 在update的过程中如果失败，并且没有办法restore，比如pulling image fail。这种情况应该怎么恢复？
+问题比较多，谢谢！</p>2018-10-10</li><br/><li><span>Kanner</span> 👍（23） 💬（3）<p>那为什么Deployment不用ControllerRevison管理版本呢</p>2018-10-10</li><br/><li><span>虎虎❤️</span> 👍（13） 💬（1）<p>一直不理解notation和label的区别，他们的设计思想是什么呢？加污点是前者还是后者？</p>2018-10-10</li><br/><li><span>宋晓明</span> 👍（10） 💬（4）<p>老师：有没有公司这样用k8s的：apiserver管理很多pod 每个pod的ip地址全部暴露出来 nginx的upstream配置全是pod的ip地址，访问流程也就是client—&gt;nginx—&gt;pod:port 还有一个程序会监控pod地址变化，一旦变化，自动更新nginx配置。这是新公司使用k8s的流程，感觉好多k8s特性都没用到，比如service，ingress等 大材小用了。。。</p>2018-10-10</li><br/><li><span>Geek_dn82ci</span> 👍（9） 💬（2）<p>Stateful set 管理的replica 不是通过RS实现的么？</p>2018-11-12</li><br/><li><span>donson</span> 👍（7） 💬（1）<p>“需要注意的是，在 Kubernetes v1.11 之前，由于调度器尚不完善，DaemonSet 是由 DaemonSet Controller 自行调度的，即它会直接设置 Pod 的 spec.nodename 字段，这样就可以跳过调度器了。”，后来随着调度器的完善，调度器就把DaemonSet的调度逻辑收回，由调度器统一调度。划清边界，领域内聚</p>2018-10-10</li><br/><li><span>初学者</span> 👍（6） 💬（1）<p>还是没有明白damonset的实现与&quot;污点&quot;的关系，理论上为了实现每个node上有且只有pod, daemonset controller 和nodeaffinity就可以了，为啥需要&quot;污点&quot;机制？</p>2018-10-29</li><br/><li><span>虎虎❤️</span> 👍（4） 💬（1）<p>sts 在update的过程中如果失败，并且没有办法restore，比如pulling image fail。这种情况应该怎么恢复？
 
 我尝试再patch一个正确的image 路径，但是没有反应。 然后我delete掉了出错的pod。正常的做法应该是什么？roll out 到上一个&#47;下一个正确版本？</p>2018-10-10</li><br/><li><span>放开那坨便便</span> 👍（4） 💬（1）<p>“这样，mysql 这个 StatefulSet 就会严格按照 Pod 的序号，逐一更新 MySQL 容器的镜像。而如果更新有错误，它会自动回滚到原先的版本。”
 

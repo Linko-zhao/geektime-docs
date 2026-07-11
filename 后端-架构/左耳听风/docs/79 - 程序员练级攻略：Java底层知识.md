@@ -61,22 +61,26 @@ JVM也是学习Java过程中非常重要的一部分内容。我推荐阅读一�
 
 - [开篇词](https://time.geekbang.org/column/article/8136)
 - 入门篇
-  
+
   - [零基础启蒙](https://time.geekbang.org/column/article/8216)
   - [正式入门](https://time.geekbang.org/column/article/8217)
+
 - 修养篇
-  
+
   - [程序员修养](https://time.geekbang.org/column/article/8700)
+
 - 专业基础篇
-  
+
   - [编程语言](https://time.geekbang.org/column/article/8701)
   - [理论学科](https://time.geekbang.org/column/article/8887)
   - [系统知识](https://time.geekbang.org/column/article/8888)
+
 - 软件设计篇
-  
+
   - [软件设计](https://time.geekbang.org/column/article/9369)
+
 - 高手成长篇
-  
+
   - [Linux系统、内存和网络（系统底层知识）](https://time.geekbang.org/column/article/9759)
   - [异步I/O模型和Lock-Free编程（系统底层知识）](https://time.geekbang.org/column/article/9851)
   - [Java底层知识](https://time.geekbang.org/column/article/10216)
@@ -91,6 +95,7 @@ JVM也是学习Java过程中非常重要的一部分内容。我推荐阅读一�
   - [前端性能优化和框架（前端方向）](https://time.geekbang.org/column/article/12389)
   - [UI/UX设计（前端方向）](https://time.geekbang.org/column/article/12486)
   - [技术资源集散地](https://time.geekbang.org/column/article/12561)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>AI</span> 👍（117） 💬（1）<p>有同学认为这种介绍文章没用，一大堆引用。我觉得吧，这文章价值很大。如果只是要写一篇关于字节码或JVM的详细使用，那很多书籍或网站可能有了，反而不值得写。耗子叔这系列文章，在我看来很有大局观，自顶向下梳理了各种技术脉络。授人以渔其实更重要，好的老师是给你指出明路，让你少走弯路，而不是给你讲解几道题。不过这也许要工作几年后才能更深刻的体会到吧，这些总结的资源是一笔财富，至少不用走弯路，可以有选择性的去挑选适合你的认为有价值有兴趣的内容去学习。</p>2018-07-19</li><br/><li><span>吃桔子的攻城狮</span> 👍（49） 💬（2）<p>第一次评论。这个专栏看了这么久，第一次觉得有必要说几句，这种风格的专栏真的非常赞。看到有些同学说链接太多缺少耗子哥自己的东西，我想说这个系列随便一篇文章拿出来，如果纯自己写都能单独写成一个系列甚至一本书。这就像重复造轮子，明明已经有了优秀的文献资料，为什么要重新写一套？相反，能把这些优质资源做整合，串联，归纳，提供学习的路径和思路才是受益无穷的！
 
@@ -102,7 +107,7 @@ JVM也是学习Java过程中非常重要的一部分内容。我推荐阅读一�
 
 这几天耐着性子慢慢读英文的文章，自己的英语能力也有所提高。
 
-感谢皓哥🙏</p>2019-06-01</li><br/><li><span>鹤鸣</span> 👍（4） 💬（0）<p>C++程序员问个问题:怎样对一个已有的基于spring的项目优化性能?目前我这边首先要做的事情是测试出性能瓶颈，但是目前为止我还在使用那种很土的办法，纯体力活的那种，我觉得这个路子不大对头。</p>2018-07-04</li><br/><li><span>ZYCHD(子玉)</span> 👍（3） 💬（0）<p>读耗子书的文章总给人带来新鲜的感觉。视野很开阔。前后穿插纵横千里！</p>2018-07-03</li><br/><li><span>Rolin</span> 👍（2） 💬（0）<p>Android 程序猿好好学！</p>2018-07-03</li><br/><li><span>葛阳</span> 👍（2） 💬（0）<p>赞</p>2018-07-03</li><br/><li><span>货赛阔xliu</span> 👍（1） 💬（0）<p>左耳朵老师， 
-Aleksey的那个blog叫JVM Anatomy Quarks，不是park是夸克。 
+感谢皓哥🙏</p>2019-06-01</li><br/><li><span>鹤鸣</span> 👍（4） 💬（0）<p>C++程序员问个问题:怎样对一个已有的基于spring的项目优化性能?目前我这边首先要做的事情是测试出性能瓶颈，但是目前为止我还在使用那种很土的办法，纯体力活的那种，我觉得这个路子不大对头。</p>2018-07-04</li><br/><li><span>ZYCHD(子玉)</span> 👍（3） 💬（0）<p>读耗子书的文章总给人带来新鲜的感觉。视野很开阔。前后穿插纵横千里！</p>2018-07-03</li><br/><li><span>Rolin</span> 👍（2） 💬（0）<p>Android 程序猿好好学！</p>2018-07-03</li><br/><li><span>葛阳</span> 👍（2） 💬（0）<p>赞</p>2018-07-03</li><br/><li><span>货赛阔xliu</span> 👍（1） 💬（0）<p>左耳朵老师，
+Aleksey的那个blog叫JVM Anatomy Quarks，不是park是夸克。
 我觉得他就是想对jvm做量子维度的分析。 </p>2020-06-08</li><br/><li><span>土豆小小</span> 👍（1） 💬（0）<p>突然的感受，国外程序员的简历上都有很多底层语言，就很好奇他们在自己的项目中是如何涉及到这么多不同的技术</p>2020-04-28</li><br/><li><span>Allen5g</span> 👍（1） 💬（0）<p>打卡第79篇，感谢耗子叔</p>2020-03-29</li><br/>
 </ul>

@@ -289,18 +289,18 @@ endif
 <li><span>吴咏炜</span> 👍（7） 💬（6）<p>由于 minpac 本身的修改，文中给出的需要加到 .vimrc 中的代码目前应改成：
 
 if exists(&#39;g:loaded_minpac&#39;)
-  &quot; Minpac is loaded.
-  call minpac#init()
-  call minpac#add(&#39;k-takata&#47;minpac&#39;, {&#39;type&#39;: &#39;opt&#39;})
+&quot; Minpac is loaded.
+call minpac#init()
+call minpac#add(&#39;k-takata&#47;minpac&#39;, {&#39;type&#39;: &#39;opt&#39;})
 
-  &quot; Other plugins
+&quot; Other plugins
 endif
 
 if has(&#39;eval&#39;)
-  &quot; Minpac commands
-  command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
+&quot; Minpac commands
+command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
   command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
-  command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
+command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 endif
 
 请大家注意一下。
@@ -342,11 +342,11 @@ Minpac has not been initialized. Use the default values.
 
 这个问题怎么处理呀，上网没找到解决方案</p>2020-10-28</li><br/><li><span>chris</span> 👍（0） 💬（1）<p>安装完 yegappan&#47;mru 包启动gvim发生报如下错误, 不影响mru功能的使用, 但好多其他菜单不见了, 请问老师知道是什么问题吗?
 处理 &#47;usr&#47;share&#47;vim&#47;vim81&#47;menu.vim 时发生错误:
-第  129 行:
+第 129 行:
 E329: 没有菜单 &quot;&amp;Print&quot;</p>2020-09-15</li><br/><li><span>裕</span> 👍（0） 💬（2）<p>使用 :PackUpdate 命令 会报下面错误，请问是什么问题阿
 
 Error detected while processing function minpac#update:
-line    2:
+line 2:
 E117: Unknown function: minpac#impl#update
 Press ENTER or type command to continue
 </p>2020-08-31</li><br/><li><span>老王</span> 👍（0） 💬（3）<p>Vim的安装目录是什么？用户目录又是什么呢？</p>2020-08-29</li><br/>

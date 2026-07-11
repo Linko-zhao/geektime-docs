@@ -88,7 +88,7 @@ docs  img  LICENSE  Makefile  README.md  src  test
 deps:
             sudo apt update
             sudo apt install -y build-essential git make gcc clang libelf-dev gcc-multilib
- 
+
 kernel-src:
             git clone --depth 1 --single-branch --branch ${LINUX_VERSION}  https://github.com/torvalds/linux.git kernel-src
             cd kernel-src/tools/lib/bpf && make && make install prefix=../../../../
@@ -112,7 +112,7 @@ bpf_program.c  loader.c
 #include <stdlib.h>
 #include "bpf_helpers.h"
 
-//这里定义了一个eBPF Maps 
+//这里定义了一个eBPF Maps
 //Data in this map is accessible in user-space
 struct bpf_map_def SEC("maps") kill_map = {
       .type        = BPF_MAP_TYPE_HASH,
@@ -120,33 +120,33 @@ struct bpf_map_def SEC("maps") kill_map = {
       .value_size  = sizeof(char),
       .max_entries = 64,
 };
- 
+
 // This is the tracepoint arguments of the kill functions
 // /sys/kernel/debug/tracing/events/syscalls/sys_enter_kill/format
 struct syscalls_enter_kill_args {
     long long pad;
- 
+
     long syscall_nr;
     long pid;
     long sig;
 };
 
-// 这里定义了BPF_PROG_TYPE_TRACEPOINT类型的BPF Program   
+// 这里定义了BPF_PROG_TYPE_TRACEPOINT类型的BPF Program
 SEC("tracepoint/syscalls/sys_enter_kill")
 int bpf_prog(struct syscalls_enter_kill_args *ctx) {
   // Ignore normal program terminations
   if(ctx->sig != 9) return 0;
- 
+
   // We can call glibc functions in eBPF
   long key = labs(ctx->pid);
   int val = 1;
- 
+
   // Mark the PID as killed in the map
   bpf_map_update_elem(&kill_map, &key, &val, BPF_NOEXIST);
- 
+
   return 0;
 }
- 
+
 // All eBPF programs must be GPL licensed
 char _license[] SEC("license") = "GPL";
 ```
@@ -180,7 +180,7 @@ kill\_map是HASH Maps里的一个key，它是一个long数据类型，value是�
 ```shell
 # make build
 clang -O2 -target bpf -c src/bpf_program.c -Ikernel-src/tools/testing/selftests/bpf -Ikernel-src/tools/lib/bpf -o src/bpf_program.o
- 
+
 # ls -l src/bpf_program.o
 -rw-r----- 1 root root 1128 Jan 24 00:50 src/bpf_program.o
 ```
@@ -193,12 +193,12 @@ clang -O2 -target bpf -c src/bpf_program.c -Ikernel-src/tools/testing/selftests/
 查看eBPF bytecode信息的操作如下：
 
 ```shell
-### 用objdump来查看bpf_program.o里的汇编指令 
+### 用objdump来查看bpf_program.o里的汇编指令
 # llvm-objdump -D src/bpf_program.o
 …
- 
+
 Disassembly of section tracepoint/syscalls/sys_enter_kill:
- 
+
 0000000000000000 <bpf_prog>:
        0:   79 12 18 00 00 00 00 00         r2 = *(u64 *)(r1 + 24)
        1:   55 02 10 00 09 00 00 00         if r2 != 9 goto +16 <LBB0_2>
@@ -219,10 +219,10 @@ Disassembly of section tracepoint/syscalls/sys_enter_kill:
       17: 85 00 00 00 02 00 00 00         call 2
 …
 
-### 用readelf读到bpf_program.o中的ELF section信息。  
+### 用readelf读到bpf_program.o中的ELF section信息。
 # llvm-readelf -sections src/bpf_program.o
 There are 9 section headers, starting at offset 0x228:
- 
+
 Section Headers:
   [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
 …
@@ -238,27 +238,27 @@ Section Headers:
 #include "bpf_load.h"
 #include <unistd.h>
 #include <stdio.h>
- 
+
 int main(int argc, char **argv) {
   // Load our newly compiled eBPF program
   if (load_bpf_file("src/bpf_program.o") != 0) {
     printf("The kernel didn't load the BPF program\n");
     return -1;
   }
- 
+
   printf("eBPF will listen to force kills for the next 30 seconds!\n");
   sleep(30);
- 
+
   // map_fd is a global variable containing all eBPF map file descriptors
   int fd = map_fd[0], val;
   long key = -1, prev_key;
- 
+
   // Iterate over all keys in the map
   while(bpf_map_get_next_key(fd, &prev_key, &key) == 0) {
     printf("%ld was forcefully killed!\n", key);
     prev_key = key;
   }
- 
+
   return 0;
 }
 ```
@@ -279,7 +279,7 @@ int main(int argc, char **argv) {
 clang -O2 -target bpf -c src/bpf_program.c -Ikernel-src/tools/testing/selftests/bpf -Ikernel-src/tools/lib/bpf -o src/bpf_program.o
 clang -O2 -o src/ebpf-kill-example -lelf -Ikernel-src/samples/bpf -Ikernel-src/tools/lib -Ikernel-src/tools/perf -Ikernel-src/tools/include -Llib64 -lbpf \
         kernel-src/samples/bpf/bpf_load.c -DHAVE_ATTR_TEST=0 src/loader.c
- 
+
 # ls -l src/ebpf-kill-example
 -rwxr-x--- 1 root root 23400 Jan 24 01:28 src/ebpf-kill-example
 ```

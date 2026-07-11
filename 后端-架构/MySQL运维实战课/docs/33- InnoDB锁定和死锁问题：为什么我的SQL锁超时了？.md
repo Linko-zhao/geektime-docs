@@ -9,10 +9,11 @@ MySQL使用锁来控制多个并发的进程或线程对共享资源的访问。
 我总结起来，大致有下面这几种类型。
 
 - 内存中的数据结构。
-  
+
   - 内存中的链表结构，如会话列表、活跃事务列表、InnoDB Buffer Pool 中LRU链表、Flush链表、Hash链表等等。
   - 内存中的变量，如REDO日志序列号、下一个事务的事务ID。
   - 缓存的页面。
+
 - 元数据，包括表、SCHEMA、存储过程等。
 - 表和表里的记录。
 
@@ -39,7 +40,7 @@ Command: Query
 可以通过performance\_schema.metadata\_locks表来查看元数据锁的请求状态。
 
 ```plain
-mysql> select object_type, object_name, lock_type, lock_duration, lock_status 
+mysql> select object_type, object_name, lock_type, lock_duration, lock_status
     from performance_schema.metadata_locks;
 +-------------+----------------+---------------------+---------------+-------------+
 | object_type | object_name    | lock_type           | lock_duration | lock_status |
@@ -87,7 +88,7 @@ Query OK, 0 rows affected (0.00 sec)
 mysql> lock table t1 read, t2 write;
 Query OK, 0 rows affected (0.00 sec)
 
-mysql> select engine, object_schema, object_name, lock_type, lock_mode 
+mysql> select engine, object_schema, object_name, lock_type, lock_mode
   from data_locks;
 +--------+---------------+-------------+-----------+-----------+
 | engine | object_schema | object_name | lock_type | lock_mode |
@@ -96,7 +97,7 @@ mysql> select engine, object_schema, object_name, lock_type, lock_mode
 | INNODB | rep           | t1          | TABLE     | S         |
 +--------+---------------+-------------+-----------+-----------+
 
-mysql> select object_type, object_name, lock_type, lock_status  
+mysql> select object_type, object_name, lock_type, lock_status
   from metadata_locks;
 +-------------+----------------+----------------------+-------------+
 | object_type | object_name    | lock_type            | lock_status |
@@ -151,7 +152,7 @@ InnoDB为什么要使用意向锁呢？
 不过实际上，在上面这个场景中，MySQL使用了元数据锁。从Processlist中可以发现会话2的状态是“Waiting for table metadata lock”，从metadata\_locks表也可以查到会话2在等待元数据锁。
 
 ```plain
-select object_type, object_name, lock_type, lock_status     
+select object_type, object_name, lock_type, lock_status
   from metadata_locks where object_name='tab';
 +-------------+-------------+------------------+-------------+
 | object_type | object_name | lock_type        | lock_status |
@@ -167,17 +168,17 @@ MySQL执行普通的Select语句时，并不会对记录加锁，只有执行ins
 
 ```plain
 create table test_lock(
-    id varchar(10) not null, 
+    id varchar(10) not null,
     a varchar(10) ,
-    b varchar(10) not null, 
-    c varchar(10) not null, 
+    b varchar(10) not null,
+    c varchar(10) not null,
     d int,
-    primary key(id), 
-    unique key uk_ac(a,c), 
+    primary key(id),
+    unique key uk_ac(a,c),
     key idx_b(b));
 
 
-insert into test_lock(id,a,b,c,d) values 
+insert into test_lock(id,a,b,c,d) values
     ('pk10','a10','b10','c10',10),
     ('pk20','a20','b20','c20',20),
     ('pk30','a30','b30','c30',30);
@@ -203,7 +204,7 @@ mysql> select * from test_lock where b='b20' for update;
 +------+------+-----+-----+------+
 1 row in set (0.01 sec)
 
-mysql> select object_name, index_name, lock_type, lock_mode, lock_data 
+mysql> select object_name, index_name, lock_type, lock_mode, lock_data
   from data_locks order by  object_name;
 +-------------+------------+-----------+---------------+---------------+
 | object_name | index_name | lock_type | lock_mode     | lock_data     |
@@ -281,7 +282,7 @@ mysql> select * from test_lock where a='a20' for update;
 +------+------+-----+-----+------+
 1 row in set (0.00 sec)
 
-mysql> select object_name, index_name, lock_type, lock_mode, lock_data 
+mysql> select object_name, index_name, lock_type, lock_mode, lock_data
 from data_locks order by  object_name;
 +-------------+------------+-----------+---------------+----------------------+
 | object_name | index_name | lock_type | lock_mode     | lock_data            |
@@ -314,7 +315,7 @@ mysql> select * from test_lock where b='b15' for update;
 Empty set (0.00 sec)
 
 
-mysql> select object_name, index_name, lock_type, lock_mode, lock_data 
+mysql> select object_name, index_name, lock_type, lock_mode, lock_data
   from data_locks order by  object_name, index_name;
 +-------------+------------+-----------+-----------+---------------+
 | object_name | index_name | lock_type | lock_mode | lock_data     |
@@ -346,7 +347,7 @@ mysql> select * from test_lock where b = 'b20' for update;
 1 row in set (0.00 sec)
 
 
-mysql> select object_name, index_name, lock_type, lock_mode, lock_data 
+mysql> select object_name, index_name, lock_type, lock_mode, lock_data
   from data_locks order by  object_name, index_name;
 +-------------+------------+-----------+---------------+---------------+
 | object_name | index_name | lock_type | lock_mode     | lock_data     |
@@ -370,7 +371,7 @@ Query OK, 0 rows affected (0.00 sec)
 mysql>。select * from test_lock where b >= 'b11' and b <= 'b12' for update;
 Empty set (0.00 sec)
 
-mysql> select object_name, index_name, lock_type, lock_mode, lock_data 
+mysql> select object_name, index_name, lock_type, lock_mode, lock_data
   from data_locks order by  object_name, index_name;
 +-------------+------------+-----------+-----------+---------------+
 | object_name | index_name | lock_type | lock_mode | lock_data     |
@@ -491,7 +492,7 @@ MySQL是怎么给记录加锁的呢？这跟SQL语句的执行过程息息相关
 比如下面这个SQL语句。
 
 ```plain
-select * from tab 
+select * from tab
 where K > Ks and K < Kt
 ```
 
@@ -520,7 +521,7 @@ CREATE TABLE `test_lock2` (
   KEY `idx_b` (`b`)
 ) ENGINE=InnoDB;
 
-insert into test_lock2 values 
+insert into test_lock2 values
   ('pk11', 'a10', 'b10', 1, 0),
   ('pk12', 'a20', 'b10', 2, 0),
   ('pk21', 'a30', 'b20', 1, 0),
@@ -546,7 +547,7 @@ Rows matched: 0  Changed: 0  Warnings: 0
 这个例子中，索引字段b使用等值匹配，并且记录不存在，因此获取了记录(b20, pk21)的gap锁。
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
     from data_locks;
 +------------+-----------+-----------+---------------+
 | index_name | lock_type | lock_mode | lock_data     |
@@ -570,7 +571,7 @@ Rows matched: 3  Changed: 3  Warnings: 0
 除了给匹配到的3条记录加上Next-key锁，还给下一条记录(b30, pk31)加上了GAP锁。
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
     from data_locks;
 +------------+-----------+---------------+---------------+
 | index_name | lock_type | lock_mode     | lock_data     |
@@ -600,7 +601,7 @@ Rows matched: 0  Changed: 0  Warnings: 0
 范围匹配时，加锁的情况和等值匹配的情况有一点区别，这次给记录(b20, pk21)加上了Next-key锁。
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
 from data_locks;
 +------------+-----------+---------------+---------------+
 | index_name | lock_type | lock_mode     | lock_data     |
@@ -655,7 +656,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
 如果使用唯一索引，并且查找的记录存在，则只需要给记录加普通的记录锁，而不需要锁记录前的区间。
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
   from data_locks;
 +------------+-----------+---------------+------------------+
 | index_name | lock_type | lock_mode     | lock_data        |
@@ -678,7 +679,7 @@ Rows matched: 0  Changed: 0  Warnings: 0
 ```
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
   from data_locks;
 +------------+-----------+-----------+------------------+
 | index_name | lock_type | lock_mode | lock_data        |
@@ -700,7 +701,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
 ```
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
   from data_locks;
 +------------+-----------+---------------+------------------+
 | index_name | lock_type | lock_mode     | lock_data        |
@@ -781,8 +782,8 @@ mysql> select * from test_lock2
 | pk21 | a30 | b20 |    1 |    1 |
 +------+-----+-----+------+------+
 3 rows in set (0.00 sec)
-mysql> explain select * from test_lock2 
-  where b='b20'  
+mysql> explain select * from test_lock2
+  where b='b20'
   order by id desc for update\G
 *************************** 1. row ***************************
            id: 1
@@ -801,7 +802,7 @@ possible_keys: idx_b
 ```
 
 ```plain
-mysql> select index_name, lock_type, lock_mode, lock_data 
+mysql> select index_name, lock_type, lock_mode, lock_data
   from data_locks;
 +------------+-----------+---------------+---------------+
 | index_name | lock_type | lock_mode     | lock_data     |
@@ -954,7 +955,7 @@ Insert数据时，要获取插入意向锁。Update主键或二级索引字段�
 执行下面这个SQL时，索引记录(b20, pk25)会插入到记录(b30, pk31)之前。
 
 ```plain
-insert into test_lock2(id, a,b,c,d) 
+insert into test_lock2(id, a,b,c,d)
 values('pk25', 'a99', 'b20', 0,0);
 ```
 
@@ -1006,10 +1007,10 @@ mysql> select
   t3.PROCESSLIST_INFO as blocking_processlist_info,
   t3.PROCESSLIST_STATE as blocking_processlist_state,
   t3.PROCESSLIST_TIME as blocking_processlist_time,
-  t5.object_name, 
-  t5.lock_type blocking_lock_type, 
-  t5.lock_mode blocking_lock_mode, 
-  t5.lock_data blocking_lock_data, 
+  t5.object_name,
+  t5.lock_type blocking_lock_type,
+  t5.lock_mode blocking_lock_mode,
+  t5.lock_data blocking_lock_data,
   t4.lock_mode waiting_lock_mode,
   t4.lock_status wait_status,
   t2.PROCESSLIST_ID as waiting_processlist_id,
@@ -1073,7 +1074,7 @@ mysql> update test_lock2 set d=d+1 where b='b99';
 ```
 
 ```plain
-mysql> select thread_id, index_name, lock_type, lock_mode, lock_data, lock_status 
+mysql> select thread_id, index_name, lock_type, lock_mode, lock_data, lock_status
   from data_locks;
 +-----------+------------+-----------+---------------+---------------+-------------+
 | thread_id | index_name | lock_type | lock_mode     | lock_data     | lock_status |
@@ -1123,7 +1124,7 @@ CREATE TABLE `parent` (
   `a` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
   key idx_pid(pid)
-) ENGINE=InnoDB 
+) ENGINE=InnoDB
 
 CREATE TABLE `child` (
   `id` varchar(10) NOT NULL,
@@ -1148,7 +1149,7 @@ Query OK, 1 row affected (0.00 sec)
 ```
 
 ```plain
-mysql> select object_name, index_name, lock_type, lock_mode, lock_data, lock_status 
+mysql> select object_name, index_name, lock_type, lock_mode, lock_data, lock_status
   from data_locks;
 +-------------+------------+-----------+---------------+--------------------------+-------------+
 | object_name | index_name | lock_type | lock_mode     | lock_data                | lock_status |

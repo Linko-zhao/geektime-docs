@@ -101,7 +101,7 @@ ASLayoutSpec 子类实现了各种布局思路，ASLayoutSpec 会制定各种布
 
     // 在 hStack 里添加 imageNode 和 vStack 节点
     [hStack setChildren:@[imageNode, vStack]];
-    
+
     // 创建一个 ASInsetLayoutSpec 容器，设置四周边距为5，将 hStack 作为其子节点
     ASInsetLayoutSpec *insetSpec = [ASInsetLayoutSpec insetLayoutSpecWithInsets:UIEdgeInsetsMake(5,5,5,5) child:hStack];
 
@@ -169,7 +169,7 @@ public func htmlToTexture() {
     // 生成 DOM 树
     let document = StyleResolver().resolver(treeBuilder.doc, styleSheet: cssStyle)
     document.des() //打印包含样式信息的 DOM 树
-    
+
     //转 Textrue
     let layoutElement = LayoutElement().createRenderer(doc: document)
     _ = HTMLToTexture(nodeName:"Flexbox").converter(layoutElement);

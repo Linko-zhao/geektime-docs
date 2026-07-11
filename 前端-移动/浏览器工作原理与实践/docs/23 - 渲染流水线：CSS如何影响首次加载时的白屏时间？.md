@@ -8,7 +8,7 @@
 
 ```
 //theme.css
-div{ 
+div{
     color : coral;
     background-color:black
 }
@@ -49,7 +49,7 @@ div{
 
 ```
 //theme.css
-div{ 
+div{
     color : coral;
     background-color:black
 }
@@ -84,7 +84,7 @@ div{
 
 ```
 //theme.css
-div{ 
+div{
     color : coral;
     background-color:black
 }
@@ -170,17 +170,16 @@ console.log('time.geekbang.org')
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>🍐 🍾 🔆</span> 👍（16） 💬（18）<p>老师我想问下 如果script放在&lt;&#47;body&gt; 还有优化的意义么  这样就不会阻塞渲染了么 </p>2019-12-03</li><br/><li><span>vianem</span> 👍（0） 💬（9）<p>老师求解答：
 
-
 &lt;html&gt;
 &lt;head&gt;
-    &lt;link href=&quot;theme.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link href=&quot;theme.css&quot; rel=&quot;stylesheet&quot;&gt;
 &lt;&#47;head&gt;
 &lt;body&gt;
-    &lt;div&gt;geekbang com&lt;&#47;div&gt;
-    &lt;script&gt;
-        while (1) {}
-    &lt;&#47;script&gt;
-    &lt;div&gt;geekbang com&lt;&#47;div&gt;
+&lt;div&gt;geekbang com&lt;&#47;div&gt;
+&lt;script&gt;
+while (1) {}
+&lt;&#47;script&gt;
+&lt;div&gt;geekbang com&lt;&#47;div&gt;
 &lt;&#47;body&gt;
 &lt;&#47;html&gt;
 按照文章中所说，dom解析应该一直被while循环阻塞，更生成不了布局树和绘制位图。但是我们还是能看到页面能显示出script标签前的内容呀。</p>2019-12-02</li><br/><li><span>Angus</span> 👍（148） 💬（24）<p>第1条：下载JavaScript文件并执行同步代码，会阻塞页面渲染
@@ -192,15 +191,15 @@ console.log('time.geekbang.org')
 第7条：orientation:landscape表示横屏，与题设条件一致，会加载，与第4条一致，可能阻塞页面渲染
 第8天：orientation:portrait表示竖屏，这里不会加载，不会阻塞页面渲染
 
-会阻塞页面的有1、3、4、5、7。我这里的问题在于是否加载CSS文件和JavaScript文件时，CSS文件一定会阻塞JavaScript代码的执行，还是说在JavaScript脚本需要使用到CSSOM能力的时候才会有这个前置依赖。</p>2019-09-26</li><br/><li><span>老余</span> 👍（23） 💬（1）<p>script异步的属性是async，不是sync</p>2019-10-13</li><br/><li><span>SeaYang</span> 👍（17） 💬（3）<p>老师，浏览器是不是有一个尽量快速渲染页面的机制呢？比如说，有时候打开一个网页很慢，后面慢慢地显示了样式错乱的页面，这明显是css没有加载构建完成，但是还是看到有页面出来了，只是样式有点乱。老师，能解释一下浏览器在这个过程中的一些优化措施吗？</p>2019-09-27</li><br/><li><span>梦见君笑</span> 👍（16） 💬（0）<p>DOMContentLoaded: 当页面的内容解析完成后，则触发该事件 
-   •JS 会阻塞DOM的解析和渲染，所以DOMContentLoaded会在JS执行后触发
-   • 因为CSS会阻塞JS执行
-       • 如果JS在CSS之前或只有CSS资源，则DOMContentLoaded事件不必等CSS加载完毕
-       • 如果页面同时存在JS和CSS且CSS在JS之前，那DOMContentLoaded事件需等待CSS加载完毕后触发
+会阻塞页面的有1、3、4、5、7。我这里的问题在于是否加载CSS文件和JavaScript文件时，CSS文件一定会阻塞JavaScript代码的执行，还是说在JavaScript脚本需要使用到CSSOM能力的时候才会有这个前置依赖。</p>2019-09-26</li><br/><li><span>老余</span> 👍（23） 💬（1）<p>script异步的属性是async，不是sync</p>2019-10-13</li><br/><li><span>SeaYang</span> 👍（17） 💬（3）<p>老师，浏览器是不是有一个尽量快速渲染页面的机制呢？比如说，有时候打开一个网页很慢，后面慢慢地显示了样式错乱的页面，这明显是css没有加载构建完成，但是还是看到有页面出来了，只是样式有点乱。老师，能解释一下浏览器在这个过程中的一些优化措施吗？</p>2019-09-27</li><br/><li><span>梦见君笑</span> 👍（16） 💬（0）<p>DOMContentLoaded: 当页面的内容解析完成后，则触发该事件
+•JS 会阻塞DOM的解析和渲染，所以DOMContentLoaded会在JS执行后触发
+• 因为CSS会阻塞JS执行
+• 如果JS在CSS之前或只有CSS资源，则DOMContentLoaded事件不必等CSS加载完毕
+• 如果页面同时存在JS和CSS且CSS在JS之前，那DOMContentLoaded事件需等待CSS加载完毕后触发
 
-onLoad: 等待页面的所有资源都加载完成才会触发，这些资源包括css、js、图片视频等</p>2021-02-23</li><br/><li><span>梦星魂</span> 👍（8） 💬（2）<p>老师好，经过我实践后的得知，chrome遇到外部脚本就会渲染标签之前的dom,  这应该是chrome的优化处理，但如果是内联脚本，则会阻塞全部dom的渲染</p>2020-06-22</li><br/><li><span>雨晴</span> 👍（5） 💬（5）<p>我觉得有两个问题不是很明确
+onLoad: 等待页面的所有资源都加载完成才会触发，这些资源包括css、js、图片视频等</p>2021-02-23</li><br/><li><span>梦星魂</span> 👍（8） 💬（2）<p>老师好，经过我实践后的得知，chrome遇到外部脚本就会渲染标签之前的dom, 这应该是chrome的优化处理，但如果是内联脚本，则会阻塞全部dom的渲染</p>2020-06-22</li><br/><li><span>雨晴</span> 👍（5） 💬（5）<p>我觉得有两个问题不是很明确
 1.网速很慢的时候，会出现无样式的DOM，此时的css文件没有下载解析完成，但文章中说，DOM 构建结束之后、css 文件还未下载完成的这段时间内，渲染流水线无事可做，因为下一步是合成布局树，而合成布局树需要 CSSOM 和 DOM，所以这里需要等待 CSS 加载结束并解析成 CSSOM。布局树没有生成的情况下，怎么布局？怎么渲染呢？无样式dom怎么出现的呢？
-2.为什么要把JS放在&#47;body前，反正都是一样阻塞</p>2021-03-31</li><br/><li><span>诤</span> 👍（5） 💬（9）<p>网络进程不是按流式把数据给渲染进程，同时渲染进程用HTML parser构造DOM的么，似乎不存在预解释的机会阿</p>2020-02-27</li><br/><li><span>HB</span> 👍（5） 💬（1）<p>有个疑问，DOM tree 和 render tree  构建是同时进行的还是DOM tree和 cssom都构建完成后才构建render tree呢？看how browser works  有些没看清楚</p>2019-09-26</li><br/><li><span>弓</span> 👍（4） 💬（2）<p>如果没有js，解析到link 有 css这个标签的时候，css不管下没下载好，是否都会阻塞html的解析
+2.为什么要把JS放在&#47;body前，反正都是一样阻塞</p>2021-03-31</li><br/><li><span>诤</span> 👍（5） 💬（9）<p>网络进程不是按流式把数据给渲染进程，同时渲染进程用HTML parser构造DOM的么，似乎不存在预解释的机会阿</p>2020-02-27</li><br/><li><span>HB</span> 👍（5） 💬（1）<p>有个疑问，DOM tree 和 render tree 构建是同时进行的还是DOM tree和 cssom都构建完成后才构建render tree呢？看how browser works 有些没看清楚</p>2019-09-26</li><br/><li><span>弓</span> 👍（4） 💬（2）<p>如果没有js，解析到link 有 css这个标签的时候，css不管下没下载好，是否都会阻塞html的解析
 </p>2020-03-26</li><br/><li><span>在路上_W</span> 👍（2） 💬（0）<p>Hardboiled Web Design这本书中讲，这个方法初看起来似乎在区分不同媒体查询的时候非常有效，但是当心，浏览器会下载每一个外联的样式表，无论这些样式在当前设备中
 是否有效，这将会大大降低网站或者APP 的性能。
 李老师文章说是特定场景下会才会加载，这个只是会都下载，但有些不符合条件的文件不会被解析吗？</p>2020-04-28</li><br/><li><span>(ಡωಡ)hahaha</span> 👍（2） 💬（3）<p>老师，请问一下，你在说  这个问题（渲染引擎还需要将这些内容转换为 CSSOM，因为 JavaScript 有修改 CSSOM 的能力，所以在执行 JavaScript 之前，还需要依赖 CSSOM。也就是说 CSS 在部分情况下也会阻塞 DOM 的生成）css也会阻塞dom生成，是因为js阻塞了dom, 而 JavaScript 执行之前，还需要依赖 CSSOM，是怎么判断js依赖 cssom,是 执行js  发现 需要cssom,渲染引擎 停止执行js,开始去解析css吗</p>2020-03-21</li><br/><li><span>zgy</span> 👍（1） 💬（0）<p>这个的页面的 async 写错了，在文章中“JavaScript 标记上 sync 或者 defer”</p>2023-07-13</li><br/><li><span>AIGC Weekly 周报</span> 👍（1） 💬（0）<p>

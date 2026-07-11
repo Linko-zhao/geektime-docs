@@ -327,7 +327,7 @@ operator 包含两个部分，分别是自定义资源 CRD 和自定义控制器
 - 如果是非推理大模型，哪家生成k8s yaml最厉害：gpt4.5? claude 3.7? grok3? 还是gemini2-adv?
 - 如果是推理大模型，哪家生成k8s yaml最厉害：gpt-o3-mini-high? gpt-o1? 还是claude&#47;grok&#47;gemini的thinking模式?
 
-谢大佬。</p>2025-03-11</li><br/><li><span>timefly</span> 👍（1） 💬（1）<p>请教老师，   kuberay可以要 mac book pro, m系列， 或者intel芯片运行吗？  minikube是可以运行的。</p>2025-03-10</li><br/><li><span>willmyc</span> 👍（1） 💬（1）<p>1.修改为replicas=2之后，Kubernetes将启动一个新的Pod实例，以确保系统中始终运行两个完全相同的Pod 2.当有两个Pod时，Service会自动对这两个Pod进行负载均衡 3.Deployment在滚动更新时会逐个更新Pod</p>2025-03-10</li><br/><li><span>grok</span> 👍（1） 💬（1）<p>云阳大佬你好，刚买了你的课。求助+请教：
+谢大佬。</p>2025-03-11</li><br/><li><span>timefly</span> 👍（1） 💬（1）<p>请教老师， kuberay可以要 mac book pro, m系列， 或者intel芯片运行吗？ minikube是可以运行的。</p>2025-03-10</li><br/><li><span>willmyc</span> 👍（1） 💬（1）<p>1.修改为replicas=2之后，Kubernetes将启动一个新的Pod实例，以确保系统中始终运行两个完全相同的Pod 2.当有两个Pod时，Service会自动对这两个Pod进行负载均衡 3.Deployment在滚动更新时会逐个更新Pod</p>2025-03-10</li><br/><li><span>grok</span> 👍（1） 💬（1）<p>云阳大佬你好，刚买了你的课。求助+请教：
 
 我在校专业是燃气轮机设计，会些python。对于docker&#47;K8s一窍不通。前两天在普通的多节点环境下部署deepseek成功，不是K8s，就是简单的多机多卡。使用了SGLang。最新的上级指示是，换成K8s。公司IT会去把集群的环境准备好。
 

@@ -5,7 +5,7 @@
 目前，我们的任务列表是这样的：
 
 - RuntimeDelegate
-  
+
   - 为MediaType提供HeaderDelegate
   - 为CacheControl提供HeaderDelegate
   - 为Cookie提供HeaderDelegates
@@ -14,24 +14,29 @@
   - 为NewCookie提供HeaderDelegate
   - 为Date提供HeaderDelegate
   - 提供OutboundResponseBuilder
+
 - OutboundResponseBuilder
-  
+
   - 可按照不同的Status生成Resposne
+
 - OutboundResponse
 - ResourceDispatcher
-  
+
   - 将Resource Method的返回值包装为Response对象
+
 - Providers
-  
+
   - 可获取MessageBodyWriter
   - 可获取ExceptionMapper
+
 - Runtimes
-  
+
   - 可获取ResourceDispatcher
   - 可获取Providers
+
 - MessageBodyWriter
 - ExceptionMapper
-  
+
   - 需要提供默认的ExceptionMapper
 
 ## 通过Spike验证架构愿景

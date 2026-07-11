@@ -77,7 +77,7 @@ client = OpenAI()
 # 定义问题生成函数
 def generate_question(topic):
     response = client.chat.completions.create(
-        model="gpt-4o", 
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "你是一个善于提问的助手,会根据给定的话题生成问题。"},
             {"role": "user", "content": f"请问一个关于{topic}的问题,用于训练金融领域的聊天机器人。直接生成问题就好，不需要回复“好的”"}
@@ -107,7 +107,7 @@ def generate_answer(question):
 # 定义要生成问答数据的金融主题
 topics = [
     "股票投资",
-    "银行理财", 
+    "银行理财",
     "基金定投",
     "资产配置",
     "风险管理"  
@@ -121,10 +121,10 @@ with tqdm(total=total_qa_pairs, desc="生成问答数据", unit="组") as pbar:
         for i in range(3):  # 每个主题生成3组问答
             question = generate_question(topic)
             print(f"生成问题: {question}")
-            
+           
             answer = generate_answer(question)
             print(f"生成回答: {answer}\n")
-            
+           
             qa_data.append({
                 "messages": [
                     {"role": "system", "content": "你是一个金融领域的智能助理,能够专业地回答用户的金融问题。"},
@@ -132,7 +132,7 @@ with tqdm(total=total_qa_pairs, desc="生成问答数据", unit="组") as pbar:
                     {"role": "assistant", "content": answer}
                 ]
             })
-            
+           
             pbar.update(1)  # 更新进度条
 
 # 将生成的数据保存到JSONL文件
@@ -183,28 +183,28 @@ for ex in dataset:
     if not isinstance(ex, dict):
         format_errors["data_type"] += 1
         continue
-        
+       
     messages = ex.get("messages", None)
     if not messages:
         format_errors["missing_messages_list"] += 1
         continue
-        
+       
     for message in messages:
         if "role" not in message or "content" not in message:
             format_errors["message_missing_key"] += 1
-        
+       
         if any(k not in ("role", "content", "name", "function_call", "weight") for k in message):
             format_errors["message_unrecognized_key"] += 1
-        
+       
         if message.get("role", None) not in ("system", "user", "assistant", "function"):
             format_errors["unrecognized_role"] += 1
-            
+           
         content = message.get("content", None)
         function_call = message.get("function_call", None)
-        
+       
         if (not content and not function_call) or not isinstance(content, str):
             format_errors["missing_content"] += 1
-    
+   
     if not any(message.get("role", None) == "assistant" for message in messages):
         format_errors["example_missing_assistant_message"] += 1
 
@@ -261,7 +261,7 @@ client = OpenAI()
 n_epochs = 20
 
 job = client.fine_tuning.jobs.create(
-   training_file="file-ID8oHTZDz5jp4VdzOnJyvgfs", 
+   training_file="file-ID8oHTZDz5jp4VdzOnJyvgfs",
    model="gpt-3.5-turbo",
    hyperparameters={"n_epochs": n_epochs}
 )
@@ -294,7 +294,7 @@ import time
 while status not in ["succeeded", "failed", "cancelled"]:
     print(f"作业状态: {status}, 等待 10 秒...")
     time.sleep(10)
-    
+   
     job = client.fine_tuning.jobs.retrieve(job_id)
     status = job.status
 
@@ -388,7 +388,7 @@ Function Calling的微调数据样本格式和普通的Fine-Tuning样本略有�
     "messages": [
         {"role": "user", "content": "给我写一封请假信,用公司的正式格式"},
         {
-            "role": "assistant", 
+            "role": "assistant",
             "function_call": {
                 "name": "write_leave_letter",
                 "arguments": "{\"name\": \"张三\", \"dept\": \"市场部\", \"position\": \"销售经理\", \"reason\": \"发烧感冒\", \"days\": 2}"
@@ -408,7 +408,7 @@ Function Calling的微调数据样本格式和普通的Fine-Tuning样本略有�
                     "reason": {"type":  "string", "description": "请假原因"},
                     "days": {"type":  "integer", "description":  "请假天数"}
                 },
-                "required": ["name", "dept", "position", "reason", "days"]  
+                "required": ["name", "dept", "position", "reason", "days"]
             }
         }
     ]

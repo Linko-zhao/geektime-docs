@@ -69,27 +69,27 @@ XA协议是一个很流行的分布式事务协议，可以很好地支撑我们
 # 开启一个事务Id为xid的XA子事务
 # gtrid是事务主ID，bqual是子事务标识
 # formatid是数据类型标注 类似format type
-XA {START|BEGIN} xid[gtrid[,bqual[,format_id]]] [JOIN|RESUME] 
+XA {START|BEGIN} xid[gtrid[,bqual[,format_id]]] [JOIN|RESUME]
 
 # 结束xid的子事务，这个事务会标注为IDLE状态
 # 如果IDEL状态直接执行XA COMMIT提交那么就是 1PC
-XA END xid [SUSPEND [FOR MIGRATE]] 
+XA END xid [SUSPEND [FOR MIGRATE]]
 
 # 让子事务处于Prepared状态，等待其他子事务处理后，后续统一最终提交或回滚
 # 另外 在这个操作之前如果断开链接，之前执行的事务都会回滚
-XA PREPARE xid 
+XA PREPARE xid
 
 # 上面不同子事务 用不同的xid(gtrid一致，如果在一个实例bqual必须不同)
 
 # 指定xid子事务最终提交
-XA COMMIT xid [ONE PHASE] 
+XA COMMIT xid [ONE PHASE]
 XA ROLLBACK xid 子事务最终回滚
 
 # 查看处于Prepared状态的事务
 # 我们用这个来确认事务进展情况，借此决定是否整体提交
 # 即使提交链接断开了，我们用这个仍旧能看到所有的PrepareD状态的事务
-# 
-XA RECOVER [CONVERT XID] 
+#
+XA RECOVER [CONVERT XID]
 ```
 
 言归正传，我们以购物场景为例，在购物的整个事务流程中，需要协调的服务有三个：**用户钱包、商品库存和用户购物订单，**它们的数据都放在私有的数据库中。
@@ -128,7 +128,7 @@ func main() {
       panic(err.Error())
    }
    defer moneyDb.Close()
-   
+
    // 生成xid(如果在同一个数据库，子事务不能使用相同xid)
    xid := strconv.FormatInt(time.Now().UnixMilli(), 10)
    //如果后续执行过程有报错，那么回滚所有子事务
@@ -139,7 +139,7 @@ func main() {
          moneyDb.Exec("XA ROLLBACK ?", xid)
       }
    }()
- 
+
    // 第一阶段 Prepare
    // 库存 子事务启动
    if _, err = stockDb.Exec("XA START ?", xid); err != nil {
@@ -174,7 +174,7 @@ func main() {
    if _, err = orderDb.Exec("XA PREPARE ?", xid); err != nil {
       panic(err.Error())
    }
-   
+
    // 钱包 子事务启动
    if _, err = moneyDb.Exec("XA START ?", xid); err != nil {
       panic(err.Error())
@@ -193,7 +193,7 @@ func main() {
    }
    // 在这时，如果链接断开、Prepared状态的XA事务仍旧在MySQL存在
    // 任意一个链接调用XA RECOVER都能够看到这三个没有最终提交的事务
-   
+
    // --------
    // 第二阶段 运行到这里没有任何问题
    // 那么执行 commit
@@ -243,7 +243,7 @@ func main() {
       panic(err.Error())
    }
    defer moneyDb.Close()
-   
+
    // 生成xid
    xid := strconv.FormatInt(time.Now().UnixMilli(), 10)
    //如果后续执行过程有报错，那么回滚所有子事务
@@ -254,7 +254,7 @@ func main() {
          moneyDb.Exec("XA ROLLBACK ?", xid)
       }
    }()
- 
+
    //调用API扣款，api内执行xa start、sql、xa end、xa prepare
    if _, err = API.Call("UserMoneyBagPay", uid, price, xid); err != nil {
       panic(err.Error())
@@ -372,8 +372,9 @@ Q4：中厂、大厂一般用什么来做分布式事务？
 Q5：一个网站，50万用户，这种规模的网站用什么来实现分布式事务？</p>2022-11-11</li><br/><li><span>Sam Fu</span> 👍（1） 💬（1）<p>老师 xa这玩意有人用吗</p>2023-09-01</li><br/><li><span>花花大脸猫</span> 👍（1） 💬（1）<p>前提是能接受短暂的数据不一致（非强一致性），所以业务上我们一般很少会使用分布式事务来管控，而是通过补偿机制来实现业务数据的一致性，但是如果调用的链路很长的话，补偿也是一个很头疼的事情</p>2022-11-18</li><br/><li><span>txjlrk</span> 👍（1） 💬（1）<p>厉害，由浅入深，由理论到实践，面面俱到。
 分布式事务也分为柔性和刚性两种</p>2022-11-11</li><br/><li><span>阿昕</span> 👍（0） 💬（1）<p>思考题：1.利用本地消息表+mq，或者mq的事务消息实现，可以达到解耦的目的；2.利用seata类框架，对复杂场景或者长事务可以使用sega模式。</p>2023-04-06</li><br/><li><span>👽</span> 👍（0） 💬（1）<p>有一个没用的废话就是，要尽可能减少分布式事务的发生以及，尽可能使分布式事务的力度更细。
 比如现在创建订单和支付行为很多厂商似乎就是拆开的。
- 
+
 似乎基本都是：
+
 1. 创建订单的同时扣减库存。这一部分是一个事务；
 2. 用户付款，扣减用户余额，同时修改订单状态。这部分是另外的事务；
 

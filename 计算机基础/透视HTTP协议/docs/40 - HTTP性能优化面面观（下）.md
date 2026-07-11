@@ -30,16 +30,16 @@ Nginx或者OpenResty自身也有很多配置参数可以用来进一步调优，
 
 ```
 server {
-  listen 80 deferred reuseport backlog=4096 fastopen=1024; 
+  listen 80 deferred reuseport backlog=4096 fastopen=1024;
 
 
   keepalive_timeout  60;
   keepalive_requests 10000;
-  
+
   location ~* \.(png)$ {
     root /var/images/png/;
   }
-  
+
   location ~* \.(php)$ {
     proxy_pass http://php_back_end;
   }

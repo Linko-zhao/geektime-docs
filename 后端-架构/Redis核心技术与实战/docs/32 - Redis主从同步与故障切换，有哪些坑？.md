@@ -175,7 +175,7 @@ bind 192.168.10.3 192.168.10.4 192.168.10.5
 
 2、Redis 4.0 版本解决了上述问题，在 slave 写入带过期时间的 key，slave 会记下这些 key，并且在后台定时检测这些 key 是否已过期，过期后从内存中删除。
 
-但是请注意，这 2 种情况，slave 都不会主动删除由 *master 同步过来带有过期时间的 key*。也就是 master 带有过期时间的 key，什么时候删除由 master 自己维护，slave 不会介入。如果 slave 设置了 slave-read-only = no，而且是 4.0+ 版本，slave 也只维护直接向自己写入 的带有过期的 key，过期时只删除这些 key。
+但是请注意，这 2 种情况，slave 都不会主动删除由 _master 同步过来带有过期时间的 key_。也就是 master 带有过期时间的 key，什么时候删除由 master 自己维护，slave 不会介入。如果 slave 设置了 slave-read-only = no，而且是 4.0+ 版本，slave 也只维护直接向自己写入 的带有过期的 key，过期时只删除这些 key。
 
 另外，我还能想到的主从同步的 2 个问题:
 
@@ -186,7 +186,6 @@ bind 192.168.10.3 192.168.10.4 192.168.10.5
 slave-serve-stale-data
 
 解释：当一个slave与master失去联系时，或者复制正在进行的时候，slave应对请求的行为：1) 如果为 yes（默认值） ，slave 仍然会应答客户端请求，但返回的数据可能是过时，或者数据可能是空的在第一次同步的时候；2) 如果为 no ，在你执行除了 info 和 salveof 之外的其他命令时，slave 都将返回一个 &quot;SYNC with master in progress&quot; 的错误。
-
 
 29、slave-read-only
 

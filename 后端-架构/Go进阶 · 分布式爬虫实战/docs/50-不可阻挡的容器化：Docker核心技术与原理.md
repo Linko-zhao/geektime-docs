@@ -132,7 +132,7 @@ docker exec  -it  crawler:latest sh
 执行docker ps可以查看当前正在运行的容器。
 
 ```plain
-» docker ps 
+» docker ps
 CONTAINER ID   IMAGE                    COMMAND                CREATED          STATUS
 52442ef0a737   crawler:latest      "./crawler worker"       12 seconds ago   Up 12 seconds
 ```
@@ -167,7 +167,7 @@ CMD ["./crawler","worker"]
 接下来让我们再次执行dokcer build，会发现最新生成的镜像大小只有41MB了。相比最初的782MB，节省了七百多兆空间。
 
 ```plain
-» docker images 
+» docker images
 REPOSITORY   TAG        IMAGE ID       CREATED         SIZE
 crawler      local      19c35890a440   9 days ago      41MB
 ```

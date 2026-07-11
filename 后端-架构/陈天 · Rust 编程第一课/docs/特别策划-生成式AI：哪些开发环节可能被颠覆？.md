@@ -4,7 +4,7 @@
 
 可能有同学未能参与，这里我简单整理了第一场AIGC分享的要点内容，你也可以看视频：[如何以更有准备的姿态拥抱 AIGC 新时代](https://www.bilibili.com/video/BV1RP411S78r/?share_source=copy_web)。如果你对其他话题更感兴趣，可以看文末的其他资料链接。
 
-* * *
+---
 
 AIGC发展到现在，其实也就是最近三个月被 ChatGPT带火的， ChatGPT你可以理解为是所有AIGC的一个大脑，其他各种各样的model都是四肢，由 ChatGPT指挥，那目前被热议的GPT或者LLM，究竟是个什么东西？我们和它对话的时候到底发生了什么？作为程序员我们如何高效使用ChatGPT？
 
@@ -148,7 +148,7 @@ GPT对我们程序员的具体影响，首先是开发团队的变化。
 
 最后提一个值得思考的点，如果说我跟AI一直对话，我把从小到大所有经历的事情、所有掌握的知识经验，都跟AI分享，最后有没有可能 AI面对外界的时候表现的行为，完全跟我一模一样，那以后人是不是可以通过这种方式永生？欢迎留言脑洞。
 
-* * *
+---
 
 ### 拓展阅读
 
@@ -161,7 +161,7 @@ GPT对我们程序员的具体影响，首先是开发团队的变化。
 [探索 ChatGPT：让 ChatGPT 和目前已有工具深度整合，做一个Postgres AI 助手？](https://mp.weixin.qq.com/s/FWph8YdO-Nk5LKKVsHIZsQ)
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>Y024</span> 👍（6） 💬（0）<p>勘误：
-chatGPT →ChatGPT 
+chatGPT →ChatGPT
 
 instruction，给一些高质量的例子帮助 GPT 进一步理解。
 &#47;&#47;应为：example，给一些高质量的例子帮助 GPT 进一步理解。

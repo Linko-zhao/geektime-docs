@@ -22,11 +22,11 @@
 
 第一种处理方法最为简洁，就是**约定“可以通过GOTO到达的位置”**。
 
-在这种情况下，JavaScript将GOTO的“离开某个语句”这一行为理解为“中断（Break）该语句的执行”。由于这个中断行为是明确针对于该语句的，所以“GOTO到达的位置”也就可以毫无分歧地约定为该语句（作为代码块）的结束位置。这是“break”作为子句的由来。它用在某些“可中断语句（*BreakableStatement*）”的内部，用于中断并将程序流程“跳转（GOTO）到语句的结束位置”。
+在这种情况下，JavaScript将GOTO的“离开某个语句”这一行为理解为“中断（Break）该语句的执行”。由于这个中断行为是明确针对于该语句的，所以“GOTO到达的位置”也就可以毫无分歧地约定为该语句（作为代码块）的结束位置。这是“break”作为子句的由来。它用在某些“可中断语句（_BreakableStatement_）”的内部，用于中断并将程序流程“跳转（GOTO）到语句的结束位置”。
 
 在语法上，这表示为（该语法只作用于对“可中断语句”的中断）：
 
-> ***break***;
+> _**break**_;
 
 所谓“可中断语句”其实只有两种，包括全部的**循环语句**，以及**switch语句**。在这两种语句内部使用的“break;”，采用的就是这种处理机制——中断当前语句，将执行逻辑交给下一语句。
 
@@ -52,7 +52,7 @@ bbb: if (true) {
 
 因此，中断这种标签化语句的“break”的语法，也是显式地用“标签”来标示位置的。例如：
 
-> ***break*** *labelName;*
+> _**break**_ _labelName;_
 
 所以你才会看到，我在文章中写的这两种语句都是可行的：
 
@@ -66,7 +66,7 @@ else {
   ...
   break aaa;
 }
- 
+
 // 在try...catch...finally中也可以使用break;
 bbb: try {
   ...
@@ -248,15 +248,15 @@ let b=10
 这个if语句有括号而且用了let，老师为什么又说if语句没有块级作用域？
 </p>2019-11-22</li><br/><li><span>海绵薇薇</span> 👍（20） 💬（1）<p>Hello，老师好：）阅读完文章还存在如下问题，期待有解答或方向，感谢：）
 
-try { 
+try {
 
-​	1
+​ 1
 
 } finally {
 
-​	console.log(&#39;finally&#39;)
+​ console.log(&#39;finally&#39;)
 
-​	2
+​ 2
 
 }
 
@@ -270,38 +270,37 @@ try {
 
 try {
 
-​	throw 1
+​ throw 1
 
 } catch(ex) {
 
-​	2
+​ 2
 
 }
 
 这里确实输出了2。
 
-
 function foo() {
 
-​	aaa: try {
+​ aaa: try {
 
-​		return 1;
+​ return 1;
 
-​	} finally {
+​ } finally {
 
-​		break aaa;
+​ break aaa;
 
-​	}
+​ }
 
 }
 
-return 1   Result是{type: return, value: 1}
-break      Result是{type: break, value: empty, target: aaa}
+return 1 Result是{type: return, value: 1}
+break Result是{type: break, value: empty, target: aaa}
 
 2. 这里finally中语句的结果却覆盖了try中语句的结果，这是一个特例吗？</p>2019-11-28</li><br/><li><span>Elmer</span> 👍（10） 💬（3）<p>觉得函数执行应该是语句执行的一部分或者一个特例，返回值都已经统一为文中的result。
-只不过函数执行具体实现了本身的上下文创建与回收，并用额外的栈来记录当前执行状况。
-两者都是流程控制的一种形式。关系应为语句执行包含函数执行。
-不知道理解的对不对。</p>2019-12-10</li><br/><li><span>zcdll</span> 👍（9） 💬（1）<p>返回 Empty 的语句，是不是还有 单独的一个 分号，和  if 不写大括号，或者大括号中为空？</p>2019-11-22</li><br/><li><span>Geek_q04ku5</span> 👍（6） 💬（2）<p>尝试完整地对比函数执行与语句执行的过程：
+   只不过函数执行具体实现了本身的上下文创建与回收，并用额外的栈来记录当前执行状况。
+   两者都是流程控制的一种形式。关系应为语句执行包含函数执行。
+   不知道理解的对不对。</p>2019-12-10</li><br/><li><span>zcdll</span> 👍（9） 💬（1）<p>返回 Empty 的语句，是不是还有 单独的一个 分号，和 if 不写大括号，或者大括号中为空？</p>2019-11-22</li><br/><li><span>Geek_q04ku5</span> 👍（6） 💬（2）<p>尝试完整地对比函数执行与语句执行的过程：
 
 ·操作返回值：
 函数执行：在函数体的最后进行一次返回值的赋值
@@ -309,16 +308,15 @@ break      Result是{type: break, value: empty, target: aaa}
 
 如下所示：
 function foo() {
-    1 + 1;
-    return 1; &#47;&#47;函数的执行结果为1 赋值动作仅有一次
+1 + 1;
+return 1; &#47;&#47;函数的执行结果为1 赋值动作仅有一次
 }
 
 foo();
 
-
 {
-    1 + 1; &#47;&#47;整个块语句的执行结果更新为2
-    2 + 2; &#47;&#47;整个块语句的执行结果更新为4
+1 + 1; &#47;&#47;整个块语句的执行结果更新为2
+2 + 2; &#47;&#47;整个块语句的执行结果更新为4
 }
 
 ·堆栈顺序
@@ -327,13 +325,13 @@ foo();
 如下所示：
 
 function bar() {
-    return;
+return;
 }
 
 function foo() {
-    1 + 1;
-    bar()
-    return 1; &#47;&#47;函数的执行结果为1 赋值动作仅有一次
+1 + 1;
+bar()
+return 1; &#47;&#47;函数的执行结果为1 赋值动作仅有一次
 }
 
 foo();
@@ -341,10 +339,9 @@ foo();
 &#47;&#47;开始执行foo-&gt;开始执行bar-&gt;bar执行结束-&gt;foo执行结束
 
 {
-    1 + 1; &#47;&#47;整个块语句的执行结果更新为2
-    2 + 2; &#47;&#47;整个块语句的执行结果更新为4
+1 + 1; &#47;&#47;整个块语句的执行结果更新为2
+2 + 2; &#47;&#47;整个块语句的执行结果更新为4
 }
-
 
 &#47;&#47;开始执行块语句{}-&gt;执行1+1-&gt;1+1执行结束-&gt;执行2+2-&gt;2+2执行结束-&gt;块语句执行结束
 
@@ -363,7 +360,6 @@ JavaScript 是一门混合了函数式与命令式范型的语言，对函数和
 本质上所有 JavaScript 的执行都是语句执行（包括函数执行），语句执行的过程因语句类型而异，但结果都返回的是一个“完成”结果。
 
 但【函数语句执行】和【普通语句（非函数）执行】的区别在于：函数语句执行返回的“完成”结果是值或者引用（未报异常的情况下），而普通语句执行返回的是一个完成状态（Completion）。
-
 
 2、执行过程方面：
 
@@ -384,13 +380,11 @@ JavaScript的执行（运行）环境：是一个后入先出的栈，栈顶就�
 2.5 循环语句执行过程
 2.6 try...catch 执行过程
 
-
 【仍旧未解的疑问】
 
 1、函数执行和语句执行返回的都是一个完成状态？还是函数执行返回的只能是值或引用？亦或是其他说法？表达式执行（包括函数执行），本质上都是求值运算，所以它们应当只返回值。但是事实上所有的执行——包括函数、表达式和语句也都“同时”是可以返回完成状态，这样才能在表达式中向外抛异常，因为异常抛出就是一个完成状态。
 
 但是ECMAScript对所有在表达式层面上返回的“完成状态”做了处理，相当于在语言层面上“消化了”这些状态。所以绝大多数情况下，你认为表达式执行返回的Result是值或引用就好了。稍有例外的是，函数调用返回的是一个type为Return的完成状态，只不过它在内部方法Call处理之后，也已经变成了值而已。
-
 
 1、可以理解为函数中return的设计是为了传递函数的状态，break的设计则是为了传递语句的状态么？可以
 2、可以认为break;只可以中断语句，不能用在函数中，break label;可以用在函数中，它返回了上一行语句的完成状态并作为所在函数的返回值？. 不太对。break labelName只与“块”相关，与函数没直接关系。语句的“块”也是有返回值的，因为JavaScript里面存在“语句执行是有值的”这个设定。
@@ -402,7 +396,6 @@ JavaScript的执行（运行）环境：是一个后入先出的栈，栈顶就�
 但是，在内部过程Call()的调用中它会取出值，而不是直接返回“Return类型的完成类型”。所以在“函数调用作为表达式的操作数”时，运算处理的还是“Result&#47;Value值”，而不是“完成记录”。
 
 由于函数调用会“从完成记录中取出值”，所以它不能返回“引用（规范类型）”
-
 
 在js中，语句执行跟表达式执行是分开的，是两种不同概念的东西。而函数执行其实是表达式执行的一种，其中函数名（亦即是函数）是运算数，而一对括号是运算符。——这是确实的，并且这个称为“函数调用运算符”的括号也是有优先级的，你可以直接在MDN里面查到。
 
@@ -430,7 +423,6 @@ JavaScript 是一门混合了函数式与命令式范型的语言，对函数和
 
 但【函数语句执行】和【普通语句（非函数）执行】的区别在于：函数语句执行返回的“完成”结果是值或者引用（未报异常的情况下），而普通语句执行返回的是一个完成状态（Completion）。
 
-
 2、执行过程方面：
 
 总体来讲，
@@ -450,7 +442,6 @@ JavaScript的执行（运行）环境：是一个后入先出的栈，栈顶就�
 2.5 循环语句执行过程
 2.6 try...catch 执行过程
 
-
 【仍旧未解的疑问】
 
 1、函数执行和语句执行返回的都是一个完成状态？还是函数执行返回的只能是值或引用？亦或是其他说法？
@@ -461,20 +452,20 @@ JavaScript的执行（运行）环境：是一个后入先出的栈，栈顶就�
 &#47;&#47; 测试样例1：try里有return finally里没有return
 let x = 0;
 function f (){
-    try {
-        console.log(&quot;try start:&quot;,x)
-        x = 1
-        console.log(&quot;try end:&quot;,x)
-       return x;
-    } catch(e){
-    }
-    finally{
-        console.log(&quot;finally: start&quot;,x)
-        x = 3;
-        console.log(&quot;finally: end&quot;,x)
-    }
-    console.log(&quot;return:&quot;,x)
-    return x;
+try {
+console.log(&quot;try start:&quot;,x)
+x = 1
+console.log(&quot;try end:&quot;,x)
+return x;
+} catch(e){
+}
+finally{
+console.log(&quot;finally: start&quot;,x)
+x = 3;
+console.log(&quot;finally: end&quot;,x)
+}
+console.log(&quot;return:&quot;,x)
+return x;
 }
 console.log(f())
 &#47;* 输出结果：
@@ -490,21 +481,21 @@ finally: end 3
 &#47;&#47; 测试样例2：如果在finally里也加个return语句
 let x = 0;
 function f (){
-    try {
-        console.log(&quot;try start:&quot;,x)
-        x = 1
-        console.log(&quot;try end:&quot;,x)
-       return x;
-    } catch(e){
-    }
-    finally{
-        console.log(&quot;finally: start&quot;,x)
-        x = 3;
-        console.log(&quot;finally: end&quot;,x)
-        return x
-    }
-    console.log(&quot;return:&quot;,x)
-    return x;
+try {
+console.log(&quot;try start:&quot;,x)
+x = 1
+console.log(&quot;try end:&quot;,x)
+return x;
+} catch(e){
+}
+finally{
+console.log(&quot;finally: start&quot;,x)
+x = 3;
+console.log(&quot;finally: end&quot;,x)
+return x
+}
+console.log(&quot;return:&quot;,x)
+return x;
 }
 console.log(f())
 &#47;* 输出结果：
@@ -518,21 +509,21 @@ finally: end 3
 &#47;&#47; 测试样例3：如果finally和try语句块里都没有return语句
 let x = 0;
 function f (){
-    try {
-        console.log(&quot;try start:&quot;,x)
-        x = 1
-        console.log(&quot;try end:&quot;,x)
-    } catch(e){
-        x = 2;
-        return x;
-    }
-    finally{
-        console.log(&quot;finally: start&quot;,x)
-        x = 3;
-        console.log(&quot;finally: end&quot;,x)
-    }
-    console.log(&quot;return:&quot;,x)
-    return x;
+try {
+console.log(&quot;try start:&quot;,x)
+x = 1
+console.log(&quot;try end:&quot;,x)
+} catch(e){
+x = 2;
+return x;
+}
+finally{
+console.log(&quot;finally: start&quot;,x)
+x = 3;
+console.log(&quot;finally: end&quot;,x)
+}
+console.log(&quot;return:&quot;,x)
+return x;
 }
 console.log(f())
 &#47;* 输出结果：
@@ -555,8 +546,8 @@ let n = 2;
     let c1 = n != 0;
     let c2 = (n &amp; (n - 1)) === 0;
     let c3 = n &amp; (n - 1) === 0;
-    console.log(c1, c2, c3);  
+    console.log(c1, c2, c3);
 
-打印： true true 0   
-c3 结果为什么变成了0  按照表达式 左右操作数的逻辑</p>2019-11-26</li><br/>
+打印： true true 0  
+c3 结果为什么变成了0 按照表达式 左右操作数的逻辑</p>2019-11-26</li><br/>
 </ul>

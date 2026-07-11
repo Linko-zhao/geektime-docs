@@ -24,7 +24,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 memory = ConversationSummaryBufferMemory(llm=ChatOpenAI(), max_token_limit=2048)
 conversation = ConversationChain(
-    llm=OpenAI(max_tokens=2048, temperature=0.5), 
+    llm=OpenAI(max_tokens=2048, temperature=0.5),
     memory=memory,
 )
 
@@ -41,7 +41,7 @@ with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as d
 
     with gr.Row():
         txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter").style(container=False)
-        
+
     txt.submit(predict, [txt, state], [chatbot, state])
 
 demo.launch()
@@ -69,7 +69,7 @@ def transcribe(audio):
     os.rename(audio, audio + '.wav')
     audio_file = open(audio + '.wav', "rb")
     transcript = openai.Audio.transcribe("whisper-1", audio_file)
-    return transcript['text']    
+    return transcript['text']
 ```
 
 3. 接着，我们就要把麦克风录好的声音自动发送给语音识别，然后再提交给原先基于文本聊天的机器人就好了。
@@ -103,7 +103,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 memory = ConversationSummaryBufferMemory(llm=ChatOpenAI(), max_token_limit=2048)
 conversation = ConversationChain(
-    llm=OpenAI(max_tokens=2048, temperature=0.5), 
+    llm=OpenAI(max_tokens=2048, temperature=0.5),
     memory=memory,
 )
 
@@ -118,7 +118,7 @@ def transcribe(audio):
     os.rename(audio, audio + '.wav')
     audio_file = open(audio + '.wav', "rb")
     transcript = openai.Audio.transcribe("whisper-1", audio_file)
-    return transcript['text']    
+    return transcript['text']
 
 def process_audio(audio, history=[]):
     text = transcribe(audio)
@@ -130,10 +130,10 @@ with gr.Blocks(css="#chatbot{height:350px} .overflow-y-auto{height:500px}") as d
 
     with gr.Row():
         txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter").style(container=False)
-        
+
     with gr.Row():
         audio = gr.Audio(source="microphone", type="filepath")
-        
+
     txt.submit(predict, [txt, state], [chatbot, state])
     audio.change(process_audio, [audio, state], [chatbot, state])
 
@@ -193,7 +193,7 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 memory = ConversationSummaryBufferMemory(llm=ChatOpenAI(), max_token_limit=2048)
 conversation = ConversationChain(
-    llm=OpenAI(max_tokens=2048, temperature=0.5), 
+    llm=OpenAI(max_tokens=2048, temperature=0.5),
     memory=memory,
 )
 
@@ -221,7 +221,7 @@ def transcribe(audio):
     os.rename(audio, audio + '.wav')
     audio_file = open(audio + '.wav', "rb")
     transcript = openai.Audio.transcribe("whisper-1", audio_file)
-    return transcript['text']    
+    return transcript['text']
 
 def process_audio(audio, history=[]):
     text = transcribe(audio)
@@ -233,10 +233,10 @@ with gr.Blocks(css="#chatbot{height:800px} .overflow-y-auto{height:800px}") as d
 
     with gr.Row():
         txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter").style(container=False)
-        
+
     with gr.Row():
         audio = gr.Audio(source="microphone", type="filepath")
-        
+
     txt.submit(predict, [txt, state], [chatbot, state])
     audio.change(process_audio, [audio, state], [chatbot, state])
 
@@ -283,9 +283,9 @@ export DID_API_KEY=YOUR_DID_API_KEY
 import requests
 import os
 
-def generate_talk(input, avatar_url, 
-                  voice_type = "microsoft", 
-                  voice_id = "zh-CN-XiaomoNeural", 
+def generate_talk(input, avatar_url,
+                  voice_type = "microsoft",
+                  voice_id = "zh-CN-XiaomoNeural",
                   api_key = os.environ.get('DID_API_KEY')):
     url = "https://api.d-id.com/talks"
     payload = {
@@ -394,7 +394,7 @@ play_mp4_video(result_url)
 def predict(input, history=[]):
     if input is not None:
         history.append(input)
-        response = conversation.predict(input=input)    
+        response = conversation.predict(input=input)
         video_url = get_mp4_video(input=response, avatar_url=avatar_url)
         video_html = f"""<video width="320" height="240" controls autoplay><source src="{video_url}" type="video/mp4"></video>"""
         history.append(response)
@@ -403,7 +403,7 @@ def predict(input, history=[]):
     else:
         video_html = f'<img src="{avatar_url}" width="320" height="240" alt="John Carmack">'
         responses = [(u,b) for u,b in zip(history[::2], history[1::2])]
-        return responses, video_html, history        
+        return responses, video_html, history
 ```
 
 注：通过ChatGPT获取回答，然后将回答和头像一起生成一个视频文件自动播放。
@@ -418,7 +418,7 @@ def get_mp4_video(input, avatar_url=avatar_url):
     index = 0
     while index < 30:
         index += 1
-        if 'result_url' in talk:    
+        if 'result_url' in talk:
             video_url = talk['result_url']
             return video_url
         else:
@@ -577,7 +577,7 @@ conda activate py38
 
 #pip install paddlepaddle
 #安装使用GPU的PaddlePaddle
-pip install paddlepaddle-gpu  
+pip install paddlepaddle-gpu
 pip install ppgan
 pip install isort
 pip install typing-extensions

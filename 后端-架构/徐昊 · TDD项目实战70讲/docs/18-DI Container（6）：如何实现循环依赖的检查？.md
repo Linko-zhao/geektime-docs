@@ -5,10 +5,10 @@
 到目前为止，我们的代码是这样的：
 
 ```
- ContextConfig.java: 
-    
+ ContextConfig.java:
+
     package geektime.tdd.di;
-    
+
     import jakarta.inject.Inject;
     import java.lang.reflect.Constructor;
     import java.lang.reflect.InvocationTargetException;
@@ -20,23 +20,23 @@
     import java.util.stream.Collectors;
     import static java.util.Arrays.asList;
     import static java.util.Arrays.stream;
-        
+
     public class ContextConfig {
         private Map<Class<?>, ComponentProvider<?>> providers = new HashMap<>();
         private Map<Class<?>, List<Class<?>>> dependencies = new HashMap<>();
-        
+
         public <Type> void bind(Class<Type> type, Type instance) {
             providers.put(type, context -> instance);
             dependencies.put(type, asList());
         }
-        
+
         public <Type, Implementation extends Type>
         void bind(Class<Type> type, Class<Implementation> implementation) {
             Constructor<Implementation> injectConstructor = getInjectConstructor(implementation);
             providers.put(type, new ConstructorInjectionProvider<>(type, injectConstructor));
             dependencies.put(type, stream(injectConstructor.getParameters()).map(Parameter::getType).collect(Collectors.toList()));
         }
-        
+
         public Context getContext() {
             for (Class<?> component: dependencies.keySet()) {
                 for (Class<?> dependency: dependencies.get(component)) {
@@ -50,11 +50,11 @@
                 }
             };
         }
-        
+
         interface ComponentProvider<T> {
             T get(Context context);
         }
-        
+
         class ConstructorInjectionProvider<T> implements ComponentProvider<T> {
             private Class<?> componentType;
             private Constructor<T> injectConstructor;
@@ -82,7 +82,7 @@
                 }
             }
         }
-        
+
         private <Type> Constructor<Type> getInjectConstructor(Class<Type> implementation) {
             List<Constructor<?>> injectConstructors = stream(implementation.getConstructors())
                     .filter(c -> c.isAnnotationPresent(Inject.class)).collect(Collectors.toList());
@@ -96,13 +96,13 @@
             });
         }
     }
-        
+
     Context.java:
-        
+
     package geektime.tdd.di;
-        
+
     import java.util.Optional;
-     
+
     public interface Context {
         <Type> Optional<Type> get(Class<Type> type);
     }
@@ -114,7 +114,7 @@
 
 ## 视频演示
 
-让我们进入今天的部分：  
+让我们进入今天的部分：
 
 ## 思考题
 
@@ -156,7 +156,7 @@
 - 三、列一下用的重构手法，看如何改变的
   - 使用 Idea 快捷键进行重构（Extract 变量、方法参数、方法、类；inLine 方法；构造工厂方法；尽量使用接口等）
   - 通过**绞杀植物模式**替换旧的实现
-    - 姚琪琳老师的 [遗留系统现代化实战 | 06 | 以增量演进为手段：为什么历时一年的改造到头来是一场空？](http:&#47;&#47;gk.link&#47;a&#47;11lAM)中有详细介绍
+    - 姚琪琳老师的 [遗留系统现代化实战 | 06 | 以增量演进为手段：为什么历时一年的改造到头来是一场空？](http://gk.link/a/11lAM)中有详细介绍
 
 附录
 设计原则：https:&#47;&#47;wyyl1.com&#47;post&#47;18&#47;02&#47;#51-%E4%B8%BA%E4%BD%95%E8%A6%81%E5%85%B3%E5%BF%83%E8%AE%BE%E8%AE%A1
@@ -176,8 +176,7 @@
 Q2：在学习课程的过程中，你对 TDD 的认识有发生什么变化吗？
 1、必须要在多种场景下见识下，TDD能够自己演进出合理的结构，才能真正的相信这种假设。
 （这次重构后再次感受这种现实）
-2、感觉在调整整个结构时的满足感好像比前面的重构更大。</p>2022-05-18</li><br/><li><span>新的一页</span> 👍（0） 💬（0）<p>1. 我觉得后续的调整可以这样走，happy path放在config中，sadly path放在provider里面；
-2. 实践TDD的时候，我发现需要一台好的机器，以支持我频繁的跑测试。</p>2022-05-09</li><br/><li><span>keep_curiosity</span> 👍（0） 💬（0）<p>循环依赖抛出异常时，抛出具体要实例化的类型相比只抛接口的类型是不是对用户更友好？
+2、感觉在调整整个结构时的满足感好像比前面的重构更大。</p>2022-05-18</li><br/><li><span>新的一页</span> 👍（0） 💬（0）<p>1. 我觉得后续的调整可以这样走，happy path放在config中，sadly path放在provider里面；2. 实践TDD的时候，我发现需要一台好的机器，以支持我频繁的跑测试。</p>2022-05-09</li><br/><li><span>keep_curiosity</span> 👍（0） 💬（0）<p>循环依赖抛出异常时，抛出具体要实例化的类型相比只抛接口的类型是不是对用户更友好？
 本节课跟练结束后的tag：https:&#47;&#47;github.com&#47;codingthought&#47;TDD-DI&#47;releases&#47;tag&#47;18</p>2022-05-01</li><br/><li><span>胡小寒</span> 👍（0） 💬（1）<p>测试</p>2022-04-25</li><br/><li><span>临风</span> 👍（0） 💬（1）<p>重构到contextConfig部分的时候，和老师的实现有所不同。我的理解中，老师是将通过一个context接口，将get逻辑通过context接口进行了二次的封装，来间接调用provider中的ComponentProvider来获取实例，再将原有的get方法从contextConfig调用，改为context调用，有点像对get方法做了一个aop的增强，这样就能实现dependencies的前置校验校验。
 在我的实现中，我是将原本的context变为contextConfiguration，代码基本保持不变，新增initContainer方法。通过该方法将providers生成的实例，直接传递给新的Context类，在新的Context中保存在Map&lt;Class&lt;?&gt;, Object&gt; container中，然后把get方法移到Context类中。这样contextConfiguration只有bind的逻辑，而新的Context只有get的逻辑。但是我不知道我这样写会有什么问题，希望老师能指点一下。
 https:&#47;&#47;github.com&#47;lenwind&#47;TDD-Learn</p>2022-04-22</li><br/><li><span>aoe</span> 👍（0） 💬（0）<p>消除坏味道，这句语气很可爱</p>2022-04-21</li><br/><li><span>Flynn</span> 👍（0） 💬（0）<p>加餐想老师搞一节Android开发的TDD</p>2022-04-19</li><br/>

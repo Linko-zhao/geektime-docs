@@ -179,6 +179,7 @@ zhusaidong&#47;nacos-server-m1:2.0.3
 docker pull zhusaidong&#47;nacos-server-m1:2.0.3
 
 # nacos-cluster1
+
 docker run -d \
 -e PREFER_HOST_MODE=hostname \
 -e MODE=cluster \
@@ -196,6 +197,7 @@ docker run -d \
 zhusaidong&#47;nacos-server-m1:2.0.3
 
 # nacos-cluster2
+
 docker run -d \
 -e PREFER_HOST_MODE=hostname \
 -e MODE=cluster \
@@ -212,15 +214,17 @@ docker run -d \
 --name my-nacos2 \
 zhusaidong&#47;nacos-server-m1:2.0.3</p>2022-02-14</li><br/><li><span>密码123456</span> 👍（3） 💬（1）<p>遇到了一个问题，目录不能用中文，目录不能用中文，目录不能用中文。</p>2022-01-25</li><br/><li><span>kernel</span> 👍（3） 💬（2）<p>1、用腾讯云搭建nacos集群，在配置cluster.conf 后，启动，会在配置文件中多了一个
 内网IP+端口？这是为什么？
-10.0.16.14:8948  --- 这个是启动后自动加上的，对应的IP是腾讯云的内网ip
+10.0.16.14:8948 --- 这个是启动后自动加上的，对应的IP是腾讯云的内网ip
 101.42.237.141:8848
 101.42.237.141:8948
-2、在idea中起服务，会报这个错误 
+2、在idea中起服务，会报这个错误
 failed to req API:&#47;nacos&#47;v1&#47;ns&#47;instance after all servers([101.42.237.141:8848]) tried: ErrCode:400
 网上查是说cluster.conf文件中配置了其他nacos时，若其他未启动，则会出现上述报错！是不是那个内网ip+端口导致的？</p>2022-01-18</li><br/><li><span>Geek_ebdb72</span> 👍（2） 💬（3）<p>我用的docker-compose搭建的但是启动总是报no datasource set 请问有交流群么</p>2022-02-11</li><br/><li><span>wxyz2z</span> 👍（2） 💬（1）<p>m1的mac启动不了，看了日志have &#39;x86_64&#39;, need &#39;arm64e&#39;，请问老师怎么解决</p>2022-01-05</li><br/><li><span>会飞的鱼</span> 👍（1） 💬（3）<p>不知道为啥，Nacos服务端总是启动失败，控制台、日志都看不出问题来，老师可以帮忙远程看下吗
 
 添加集群机器列表时，用到的IP地址还用到application.properties中配置吗
+
 ## 注意，这里的IP不能是localhost或者127.0.0.1
+
 192.168.1.100:8848
 192.168.1.100:8948</p>2022-02-13</li><br/><li><span>Earthkiid</span> 👍（1） 💬（1）<p>mysql版本太低了也不行，搞了半天一直都无法绑定数据源，后面查看日志才发现是有表没查到，然后才发现应该是导入sql时没注意，只成功建了五六个表，有的语句貌似执行不了？然后升级到5.7再重新来一次就行了。。</p>2022-01-29</li><br/><li><span>西门吹牛</span> 👍（1） 💬（1）<p>Nacos 可以做服务注册中心，可以做配置中心
 注册中心以高可用为主(AP)，采用最终一致性协议，和Gossip 不一样，每个节点只负责把自己管理的数据同步给集群中其他节点

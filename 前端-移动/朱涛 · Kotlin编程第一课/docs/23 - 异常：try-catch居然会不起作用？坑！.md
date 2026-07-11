@@ -637,7 +637,7 @@ End
 ```plain
 // 代码段16
 
-public fun SupervisorJob(parent: Job? = null) : CompletableJob 
+public fun SupervisorJob(parent: Job? = null) : CompletableJob
                     = SupervisorJobImpl(parent)
 
 
@@ -775,7 +775,7 @@ fun main() = runBlocking {
            // 变化在这里
            launch(myExceptionHandler) {
                delay(100L)
-               1 / 0 
+               1 / 0
            }
        }
        delay(100L)
@@ -852,8 +852,8 @@ Exception in thread "main" ArithmeticException: / by zero
 全部用ExceptionHandler 替代try catch是不合理的，因为在实际编码过程中，我们有时需要在当前上下文合适地处理异常，比如兜底操作，重试等，并不是一味的把异常抛出去，如果都交给顶层就无法很好地处理这些case。类似于Java的UnCauthedExceptionHandler 。</p>2022-03-11</li><br/><li><span>êｗěｎ</span> 👍（3） 💬（1）<p>思考题: 个人理解，看场景。有些业务是可以把异常当作分支处理，这种情况，handler就不适合了。</p>2022-03-11</li><br/><li><span>dashingqi</span> 👍（0） 💬（1）<p>请问，文章中的动画是怎么做的啊？</p>2022-04-25</li><br/><li><span>syz</span> 👍（0） 💬（1）<p>准则二例子
 val job1 = Job()
 val pJob: Job = launch(myFixedThread) {
-            launch(job1) {&#47;&#47;coroutine#3}
-            launch{&#47;&#47;CoroutineId(4)}
+launch(job1) {&#47;&#47;coroutine#3}
+launch{&#47;&#47;CoroutineId(4)}
 }
 照搬的例子，测试时发现job1下的协程也停止了打印
 检查发现
@@ -866,31 +866,32 @@ launch(Dispatchers.Default)
 这里为什么必须使用Default线程池？</p>2022-04-06</li><br/><li><span>追梦小乐</span> 👍（0） 💬（1）<p>关于异常要写对应的异常，不要用父类的Except ion，在使用快捷键给一点代码加上try-catch后，出来的就是父类的题材，那老师我们在编写代码的时候，怎么判断是属于某一个具体的异常？！</p>2022-03-23</li><br/><li><span>白乾涛</span> 👍（0） 💬（2）<p>以下代码，&quot;End&quot; 都打印了，子 Job 也停止了，为啥程序不能停止？
 
 fun main() = runBlocking {
-    val dispatcher = Executors.newFixedThreadPool(2) { Thread(it, &quot;bqt&quot;) }.asCoroutineDispatcher()
-    val pJob = launch(dispatcher) {
-        launch {
-            var i = 0
-            while (true) {
-                delay(500)
-                i++
-                println(&quot;cJob - $i&quot;)
-            }
-        }
-    }
+val dispatcher = Executors.newFixedThreadPool(2) { Thread(it, &quot;bqt&quot;) }.asCoroutineDispatcher()
+val pJob = launch(dispatcher) {
+launch {
+var i = 0
+while (true) {
+delay(500)
+i++
+println(&quot;cJob - $i&quot;)
+}
+}
+}
 
     delay(2000L)
     pJob.cancel()
     pJob.join()
     println(&quot;End&quot;)
-}</p>2022-03-20</li><br/><li><span>白乾涛</span> 👍（0） 💬（2）<p>代码段3，为啥使用 Dispatchers.IO&#47;Default 就没问题，使用自定义线程池就有问题？</p>2022-03-20</li><br/><li><span>PoPlus</span> 👍（0） 💬（1）<p>有点复杂，感觉需要结合着源码看可能才会明了</p>2022-03-18</li><br/><li><span>H.ZWei</span> 👍（0） 💬（0）<p>    val exceptionHandler = CoroutineExceptionHandler { _, throwable -&gt;
-        println(&quot;exception handler: ${throwable.message}&quot;)
-    }
-    val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    val scope = CoroutineScope(Job()   + exceptionHandler )
-    scope.launch {
-        println(&quot;launch run&quot;)
-        1&#47; 0
-    }
+
+}</p>2022-03-20</li><br/><li><span>白乾涛</span> 👍（0） 💬（2）<p>代码段3，为啥使用 Dispatchers.IO&#47;Default 就没问题，使用自定义线程池就有问题？</p>2022-03-20</li><br/><li><span>PoPlus</span> 👍（0） 💬（1）<p>有点复杂，感觉需要结合着源码看可能才会明了</p>2022-03-18</li><br/><li><span>H.ZWei</span> 👍（0） 💬（0）<p> val exceptionHandler = CoroutineExceptionHandler { _, throwable -&gt;
+println(&quot;exception handler: ${throwable.message}&quot;)
+}
+val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+val scope = CoroutineScope(Job() + exceptionHandler )
+scope.launch {
+println(&quot;launch run&quot;)
+1&#47; 0
+}
 
 文档说CoroutineExceptionHandler 在顶层协程中才会生效，但我测试了在顶层协程中也不生效，上面代码创建了一个CoroutineScope中不传入dispatcher 启动协程（默认情况下会使用Dispatchers.Default），异常发生后CoroutineExceptionHandler 不会生效，需要把dispatcher 传入才会生效，对CoroutineExceptionHandler 还是不太理解，看官网例子的测试用例都是GlobalScope</p>2023-08-20</li><br/>
 </ul>

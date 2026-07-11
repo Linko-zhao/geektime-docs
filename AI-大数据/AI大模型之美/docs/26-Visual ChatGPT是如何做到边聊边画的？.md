@@ -181,7 +181,7 @@ def __init__(self, load_dict):
                 if template_required_names.issubset(loaded_names):
                     self.models[class_name] = globals()[class_name](
                         **{name: self.models[name] for name in template_required_names})
-        
+
         print(f"All the Available Functions: {self.models}")
 
 ……

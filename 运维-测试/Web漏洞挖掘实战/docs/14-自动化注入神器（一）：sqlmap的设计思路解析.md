@@ -64,20 +64,20 @@ url =
 # Examples:
 #   mysql://USER:PASSWORD@DBMS_IP:DBMS_PORT/DATABASE_NAME
 #   oracle://USER:PASSWORD@DBMS_IP:DBMS_PORT/DATABASE_SID
-direct = 
+direct =
 
 # Parse targets from Burp or WebScarab logs
 # Valid: Burp proxy (http://portswigger.net/suite/) requests log file path
 # or WebScarab proxy (http://www.owasp.org/index.php/Category:OWASP_WebScarab_Project)
 # 'conversations/' folder path
-logFile = 
+logFile =
 
 # Scan multiple targets enlisted in a given textual file
 bulkFile =
 
 # Load HTTP request from a file
 # Example (file content): POST /login.jsp HTTP/1.1\nHost: example.com\nUser-Agent: Mozilla/4.0\n\nuserid=joe&password=guessme
-requestFile = 
+requestFile =
 
 # At least one of these options has to be specified to set the source to
 # get target URLs from.
@@ -91,20 +91,20 @@ url =
 # Examples:
 #   mysql://USER:PASSWORD@DBMS_IP:DBMS_PORT/DATABASE_NAME
 #   oracle://USER:PASSWORD@DBMS_IP:DBMS_PORT/DATABASE_SID
-direct = 
+direct =
 
 # Parse targets from Burp or WebScarab logs
 # Valid: Burp proxy (http://portswigger.net/suite/) requests log file path
 # or WebScarab proxy (http://www.owasp.org/index.php/Category:OWASP_WebScarab_Project)
 # 'conversations/' folder path
-logFile = 
+logFile =
 
 # Scan multiple targets enlisted in a given textual file
 bulkFile =
 
 # Load HTTP request from a file
 # Example (file content): POST /login.jsp HTTP/1.1\nHost: example.com\nUser-Agent: Mozilla/4.0\n\nuserid=joe&password=guessme
-requestFile = 
+requestFile =
 ......
 # Force back-end DBMS operating system to provided value. If this option is
 
@@ -118,7 +118,7 @@ requestFile =
 
 # Valid: linux, windows
 
-os = 
+os =
 ......
 ```
 
@@ -573,7 +573,7 @@ def init():
     _saveConfig()  # 保存当前扫描的配置
     _setRequestFromFile() # 解析 request file 的文件内容
     _cleanupOptions() # 为 conf 中的参数赋初值
-    _cleanupEnvironment() 
+    _cleanupEnvironment()
     _purge() # 清空 sqlmap 相关信息
     _checkDependencies() # 检查是否缺失依赖
     _createHomeDirectories() # 创建 output、history 目录
@@ -590,7 +590,7 @@ def init():
     _setPostprocessFunctions() # 设置处理响应的函数
     _setTrafficOutputFP() # 创建 trafficFile 并获取文件句柄
     _setupHTTPCollector() # 创建 HAR 文件
-    _setHttpChunked() # 设置 chunked 
+    _setHttpChunked() # 设置 chunked
     _checkWebSocket() # 检查 websocket 环境是否正常
 
     parseTargetDirect() # 解析数据库链接
@@ -606,7 +606,7 @@ def init():
         _setHTTPAuthentication() # 设置请求的认证信息
         _setHTTPHandlers() # 设置对应的请求处理类
         _setDNSCache() # 设置 dns 缓存
-        _setSocketPreConnect() 
+        _setSocketPreConnect()
         _setSafeVisit()
         _doSearch() # 处理 Google Dork 解析
         _setStdinPipeTargets() # 从 pipeline 中获取 targets

@@ -67,7 +67,7 @@ dc.onclose = () => {
 };
 
 dc.onmessage = (event)=>{
-  ...	
+  ...
 }
 ...
 ```
@@ -100,7 +100,7 @@ onmessage = (event) => {
     //将buffer和 size 清空，为下一次传文件做准备
     receiveBuffer = [];
     receiveSize = 0;
-    
+
     //生成下载地址
     downloadAnchor.href = URL.createObjectURL(received);
     downloadAnchor.download = fileName;
@@ -135,7 +135,7 @@ function sendData(){
     ...
     dc.send(e.target.result); //发送数据
     offset += e.target.result.byteLength; //更改已读数据的偏移量
-    ...  
+    ...
     if (offset < file.size) { //如果文件没有被读完
       readSlice(offset); // 读取数据
     }
@@ -177,7 +177,7 @@ fileType = file.type;
 lastModifyTime = file.lastModified;
 
 //向信令服务器发送消息
-sendMessage(roomid, 
+sendMessage(roomid,
   {
     //将文件信息以 JSON 格式发磅
     type: 'fileinfo',

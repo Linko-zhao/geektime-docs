@@ -155,7 +155,7 @@ mysql> show global variables  like 'wait%';
 在以前的MySQL版本中，如果想查看别的会话的某个参数值，没有很简便的方法。8.0中，可以到performance\_schema.variables\_by\_thread表查看其他会话的变量值。
 
 ```go
-mysql>  select * from performance_schema.variables_by_thread 
+mysql>  select * from performance_schema.variables_by_thread
     where variable_name = 'wait_timeout';
 +-----------+---------------+----------------+
 | THREAD_ID | VARIABLE_NAME | VARIABLE_VALUE |

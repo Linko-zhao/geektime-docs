@@ -84,7 +84,7 @@ protected void populateBean(String beanName, RootBeanDefinition mbd, @Nullable B
           //省略非关键代码
          }
       }
-   }   
+   }
 }
 ```
 
@@ -109,7 +109,7 @@ protected void inject(Object bean, @Nullable String beanName, @Nullable Property
          //寻找“依赖”，desc为"dataService"的DependencyDescriptor
          value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
       }
-      
+
    }
    //省略非关键代码
    if (value != null) {
@@ -217,7 +217,7 @@ public Object doResolveDependency(DependencyDescriptor descriptor, @Nullable Str
       //省略其他非关键代码
       if (matchingBeans.size() > 1) {
          //省略多个bean的决策过程，即案例1重点介绍内容
-      } 
+      }
      //省略其他非关键代码
 }
 ```
@@ -457,11 +457,11 @@ DataService dataService;
 2.我的印象中 @Autowired只能按照类型注入，这里有点颠覆认知  那么问题来了，@Resource和@Autowired区别到底是啥？</p>2021-04-26</li><br/><li><span>可乐</span> 👍（1） 💬（2）<p>问题：
 
 public interface DataService {
-    void deleteStudent(int id);
+void deleteStudent(int id);
 }
 
 这个接口并没有注入bean，为什么可以用autowire去找这个bean呢？</p>2022-04-12</li><br/><li><span>Monday</span> 👍（1） 💬（0）<p>1、@Priority(value=${number})看源码：值越小优先级越低,可以为负数,若存在两个候选直接抛异常.
-2、思考题：不可以，命名方式不能通过</p>2021-06-16</li><br/><li><span>虹炎</span> 👍（1） 💬（0）<p>不能做到，因为会报编译错误。studentController.InnerClassDataService;  这一句。</p>2021-05-14</li><br/><li><span>Monday</span> 👍（1） 💬（1）<p>有2个问题
+2、思考题：不可以，命名方式不能通过</p>2021-06-16</li><br/><li><span>虹炎</span> 👍（1） 💬（0）<p>不能做到，因为会报编译错误。studentController.InnerClassDataService; 这一句。</p>2021-05-14</li><br/><li><span>Monday</span> 👍（1） 💬（1）<p>有2个问题
 1、bean的依赖关系在实例化之前就应该知晓吧？然后安装顺序初始化
 2、循环依赖怎么解决？
 谢谢老师</p>2021-05-10</li><br/><li><span>Utah</span> 👍（1） 💬（0）<p>这些问题之前经常遇到，解决方式就是百度，没有深入研究过原理，希望通过这次学习，以后遇到此类问题知其然知其所以然</p>2021-05-08</li><br/><li><span>otakuhuang</span> 👍（0） 💬（0）<p>内部类的 Bean 名称包含了 . 符号，使用 @Qualifier 会因命名问题导致编译失败</p>2024-02-18</li><br/><li><span>子夜枯灯</span> 👍（0） 💬（0）<p>思考题：不可以，命名方式不能通过</p>2022-01-25</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>思考题应该不能用方法1，变量名好像不能有点符号</p>2021-11-01</li><br/>

@@ -18,7 +18,7 @@ while(存在未对账订单){
   diff = check(pos, dos);
   // 差异写入差异库
   save(diff);
-} 
+}
 ```
 
 ## 利用并行优化对账系统
@@ -58,7 +58,7 @@ while(存在未对账订单){
   diff = check(pos, dos);
   // 差异写入差异库
   save(diff);
-} 
+}
 ```
 
 ## 用CountDownLatch实现线程等待
@@ -69,7 +69,7 @@ while(存在未对账订单){
 
 ```
 // 创建2个线程的线程池
-Executor executor = 
+Executor executor =
   Executors.newFixedThreadPool(2);
 while(存在未对账订单){
   // 查询未对账订单
@@ -80,14 +80,14 @@ while(存在未对账订单){
   executor.execute(()-> {
     dos = getDOrders();
   });
-  
+
   /* ？？如何实现等待？？*/
-  
+
   // 执行对账操作
   diff = check(pos, dos);
   // 差异写入差异库
   save(diff);
-}   
+}
 ```
 
 那如何解决这个问题呢？你可以开动脑筋想出很多办法，最直接的办法是弄一个计数器，初始值设置成2，当执行完`pos = getPOrders();`这个操作之后将计数器减1，执行完`dos = getDOrders();`之后也将计数器减1，在主线程里，等待计数器等于0；当计数器等于0时，说明这两个查询操作执行完了。等待计数器等于0其实就是一个条件变量，用管程实现起来也很简单。
@@ -96,11 +96,11 @@ while(存在未对账订单){
 
 ```
 // 创建2个线程的线程池
-Executor executor = 
+Executor executor =
   Executors.newFixedThreadPool(2);
 while(存在未对账订单){
   // 计数器初始化为2
-  CountDownLatch latch = 
+  CountDownLatch latch =
     new CountDownLatch(2);
   // 查询未对账订单
   executor.execute(()-> {
@@ -112,10 +112,10 @@ while(存在未对账订单){
     dos = getDOrders();
     latch.countDown();
   });
-  
+
   // 等待两个查询操作结束
   latch.await();
-  
+
   // 执行对账操作
   diff = check(pos, dos);
   // 差异写入差异库
@@ -166,14 +166,14 @@ while(存在未对账订单){
 Vector<P> pos;
 // 派送单队列
 Vector<D> dos;
-// 执行回调的线程池 
-Executor executor = 
+// 执行回调的线程池
+Executor executor =
   Executors.newFixedThreadPool(1);
 final CyclicBarrier barrier =
   new CyclicBarrier(2, ()->{
     executor.execute(()->check());
   });
-  
+
 void check(){
   P p = pos.remove(0);
   D d = dos.remove(0);
@@ -182,7 +182,7 @@ void check(){
   // 差异写入差异库
   save(diff);
 }
-  
+
 void checkAll(){
   // 循环查询订单库
   Thread T1 = new Thread(()->{
@@ -193,7 +193,7 @@ void checkAll(){
       barrier.await();
     }
   });
-  T1.start();  
+  T1.start();
   // 循环查询运单库
   Thread T2 = new Thread(()->{
     while(存在未对账订单){
@@ -237,15 +237,15 @@ CountDownLatch和CyclicBarrier是Java并发包提供的两个非常易用的线�
 
 老师这样理解对吗，谢谢老师
 </p>2019-04-11</li><br/><li><span>空知</span> 👍（68） 💬（7）<p>老师,关于CyclicBarrier回调函数,请教下
-自己写了个 CyclicBarrier的例子,回调函数总是在计数器归0时候执行,但是线程T1 T2要等回调函数执行结束之后才会再次执行...看了下CyclicBarrier 的源码,当内部计数器 index == 0时候, 
+自己写了个 CyclicBarrier的例子,回调函数总是在计数器归0时候执行,但是线程T1 T2要等回调函数执行结束之后才会再次执行...看了下CyclicBarrier 的源码,当内部计数器 index == 0时候,
 
 final Runnable command = barrierCommand;
-                    
-if (command != null)
-                        
-	command.run();
-没有开启子线程吧.也就是说 对账还是同步执行的,结束之后才是下一次的查询</p>2019-04-11</li><br/><li><span>曾轼麟</span> 👍（65） 💬（4）<p>老师推荐您使用ThreadPoolExecutor去实现线程池，并且实现里面的RejectedExecutionHandler和ThreadFactory，这样可以方便当调用订单查询和派送单查询的时候出现full gc的时候 dump文件 可以快速定位出现问题的线程是哪个业务线程，如果是CountDownLatch，建议设置超时时间，避免由于业务死锁没有调用countDown()导致现线程睡死的情况</p>2019-04-13</li><br/><li><span>波波</span> 👍（28） 💬（8）<p>思考题中，如果生产者比较快，消费者比较慢，生产者通知的时候，消费者还在对账，这个时候会怎么处理？会不会导致消费者错失通知，导致队列满了，但是消费者却没有收到通知。</p>2019-04-11</li><br/><li><span>nanquanmama</span> 👍（19） 💬（1）<p>最后的那个例子，业务逻辑的部分已经变得很不直观，并发控制的逻辑掩盖住了业务逻辑。请问一下老师，实际项目开发中，并发控制逻辑如何做，才能和业务逻辑分离出来？</p>2019-04-11</li><br/><li><span>... ...</span> 👍（18） 💬（3）<p>追问：如果线程池是单线程的话。那假如生产者速度快运check函数执行时间。那是不是就会出现堵塞情况了。久而久之，是不是会出现队列内存溢出</p>2019-04-12</li><br/><li><span>Adam</span> 👍（15） 💬（1）<p>如果生产者比较快，消费者check还没对账完 会不会照成 队列越来越多 最后内存溢出了 ，有没有什么好的方案解决呢？</p>2019-06-14</li><br/><li><span>忍者无敌1995</span> 👍（14） 💬（2）<p>有，如果为线程池有多个线程，则由于check()函数里面的两个remove并不是原子操作，可能导致消费错乱。假设订单队列中有P1，P2；派送队列中有D1,D2；两个线程T1,T2同时执行check，可能出现T1消费到P1,D2，T2消费到P2，D1，就是T1先执行pos.remove(0), 而后T2执行pos.remove(0);dos.remov(0);然后T1才执行dos.remove(0)的场景</p>2019-05-01</li><br/><li><span>木偶人King</span> 👍（14） 💬（1）<p>老师，最后checkAll（） 这里为什么new 了两个Thread  而不是使用线程池
 
+if (command != null)
+
+    command.run();
+
+没有开启子线程吧.也就是说 对账还是同步执行的,结束之后才是下一次的查询</p>2019-04-11</li><br/><li><span>曾轼麟</span> 👍（65） 💬（4）<p>老师推荐您使用ThreadPoolExecutor去实现线程池，并且实现里面的RejectedExecutionHandler和ThreadFactory，这样可以方便当调用订单查询和派送单查询的时候出现full gc的时候 dump文件 可以快速定位出现问题的线程是哪个业务线程，如果是CountDownLatch，建议设置超时时间，避免由于业务死锁没有调用countDown()导致现线程睡死的情况</p>2019-04-13</li><br/><li><span>波波</span> 👍（28） 💬（8）<p>思考题中，如果生产者比较快，消费者比较慢，生产者通知的时候，消费者还在对账，这个时候会怎么处理？会不会导致消费者错失通知，导致队列满了，但是消费者却没有收到通知。</p>2019-04-11</li><br/><li><span>nanquanmama</span> 👍（19） 💬（1）<p>最后的那个例子，业务逻辑的部分已经变得很不直观，并发控制的逻辑掩盖住了业务逻辑。请问一下老师，实际项目开发中，并发控制逻辑如何做，才能和业务逻辑分离出来？</p>2019-04-11</li><br/><li><span>... ...</span> 👍（18） 💬（3）<p>追问：如果线程池是单线程的话。那假如生产者速度快运check函数执行时间。那是不是就会出现堵塞情况了。久而久之，是不是会出现队列内存溢出</p>2019-04-12</li><br/><li><span>Adam</span> 👍（15） 💬（1）<p>如果生产者比较快，消费者check还没对账完 会不会照成 队列越来越多 最后内存溢出了 ，有没有什么好的方案解决呢？</p>2019-06-14</li><br/><li><span>忍者无敌1995</span> 👍（14） 💬（2）<p>有，如果为线程池有多个线程，则由于check()函数里面的两个remove并不是原子操作，可能导致消费错乱。假设订单队列中有P1，P2；派送队列中有D1,D2；两个线程T1,T2同时执行check，可能出现T1消费到P1,D2，T2消费到P2，D1，就是T1先执行pos.remove(0), 而后T2执行pos.remove(0);dos.remov(0);然后T1才执行dos.remove(0)的场景</p>2019-05-01</li><br/><li><span>木偶人King</span> 👍（14） 💬（1）<p>老师，最后checkAll（） 这里为什么new 了两个Thread 而不是使用线程池
 
 </p>2019-04-11</li><br/><li><span>iron_man</span> 👍（13） 💬（3）<p>王老师，cyclicbarrier，具体是在什么时候清零计数器呢？是在所有线程await返回后还是在回调函数调用后？await和回掉函数的调用顺序是怎样的</p>2019-04-11</li><br/><li><span>王盛武</span> 👍（12） 💬（2）<p>undefind同学的意思差不多对。                         只有一个线程的线程池，是因为，订单队列和派单队列读取数据存在竞态条件。 如果要开多个线程，则需要一个lock进行同步那两个remove方法。    个人推荐的思路是，如果生产者速度比消费者快的情况下，放入一个双向的阻塞队列尾部，每次从双向队列头部取两个对象，根据对象属性来区别订单类型，也能开多个线程进行check操作。  但本文业务里check速度很快，所以这个场景只需要开1个线程的线程池是合理的。</p>2019-04-11</li><br/><li><span>梦典</span> 👍（11） 💬（1）<p>1.回调处理交给新开辟的线程执行，让当前处理继续进行，无需等待
 2.使用线程池解决新开辟线程创建和销毁的开销问题

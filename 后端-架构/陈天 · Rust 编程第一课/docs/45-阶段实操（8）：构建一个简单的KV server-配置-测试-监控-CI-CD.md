@@ -451,7 +451,7 @@ c.bench_function("publishing", move |b| {
 
 ```bash
 preparing server and subscribers....................................................................................................Done!
-publishing              time:   [419.73 ms 426.84 ms 434.20 ms]                     
+publishing              time:   [419.73 ms 426.84 ms 434.20 ms]
                         change: [-1.6712% +1.0499% +3.6586%] (p = 0.48 > 0.05)
                         No change in performance detected.
 ```
@@ -460,7 +460,7 @@ publishing              time:   [419.73 ms 426.84 ms 434.20 ms]
 
 ```bash
 preparing server and subscribers....................................................................................................Done!
-publishing              time:   [318.61 ms 324.48 ms 329.81 ms]                     
+publishing              time:   [318.61 ms 324.48 ms 329.81 ms]
                         change: [-25.854% -23.980% -22.144%] (p = 0.00 < 0.05)
                         Performance has improved.
 ```
@@ -530,7 +530,7 @@ RUST_LOG=info cargo bench
 
 ```bash
 preparing server and subscribers....................................................................................................Done!
-publishing              time:   [1.7464 ms 1.9556 ms 2.2343 ms]                       
+publishing              time:   [1.7464 ms 1.9556 ms 2.2343 ms]
 Found 2 outliers among 10 measurements (20.00%)
   1 (10.00%) high mild
   1 (10.00%) high severe
@@ -656,7 +656,7 @@ loop {
 
 ```bash
 preparing server and subscribers....................................................................................................Done!
-publishing              time:   [1.3986 ms 1.4140 ms 1.4474 ms]                       
+publishing              time:   [1.3986 ms 1.4140 ms 1.4474 ms]
                         change: [-26.647% -19.977% -10.798%] (p = 0.00 < 0.05)
                         Performance has improved.
 Found 2 outliers among 10 measurements (20.00%)
@@ -669,7 +669,7 @@ Found 2 outliers among 10 measurements (20.00%)
 
 ```bash
 preparing server and subscribers....................................................................................................Done!
-publishing              time:   [1.4086 ms 1.4229 ms 1.4315 ms]                       
+publishing              time:   [1.4086 ms 1.4229 ms 1.4315 ms]
                         change: [-99.570% -99.563% -99.554%] (p = 0.00 < 0.05)
                         Performance has improved.
 ```
@@ -677,7 +677,7 @@ publishing              time:   [1.4086 ms 1.4229 ms 1.4315 ms]
 嗯，在我的 OS X下，现在整体性能也到了 1.4ms 的水平。这也意味着，在有 100 个 subscribers 的情况下，我们的 KV server 每秒钟可以处理 714k publish 请求；而在 1000 个 subscribers 的情况下，性能在 11.1ms 的水平，也就是每秒可以处理 90k publish 请求：
 
 ```bash
-publishing              time:   [11.007 ms 11.095 ms 11.253 ms]                      
+publishing              time:   [11.007 ms 11.095 ms 11.253 ms]
                         change: [-96.618% -96.556% -96.486%] (p = 0.00 < 0.05)
                         Performance has improved.
 ```
@@ -702,7 +702,7 @@ let values: &'static [&'static str] = Box::leak(
 测试结果差不太多：
 
 ```plain
-publishing              time:   [10.917 ms 11.098 ms 11.428 ms]                      
+publishing              time:   [10.917 ms 11.098 ms 11.428 ms]
                         change: [-0.4822% +2.3311% +4.9631%] (p = 0.12 > 0.05)
                         No change in performance detected.
 ```

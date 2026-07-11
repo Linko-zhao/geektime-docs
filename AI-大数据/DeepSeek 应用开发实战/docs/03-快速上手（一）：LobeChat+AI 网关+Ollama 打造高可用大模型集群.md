@@ -22,7 +22,7 @@ Ollama 有一个非常出色的特性，这也是众多开发者选择它的关�
 
 ```python
 client = OpenAI(
-    api_key=os.getenv("AliDeep"),  
+    api_key=os.getenv("AliDeep"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 ```
@@ -38,31 +38,31 @@ OK，讲了这么多，接下来，我们就进入到这节课的实战环节。
 首先使用 nvidia-smi 命令，确认 GPU 卡的驱动已经装好，可以被识别。
 
 ```json
-root@aitest:~# nvidia-smi                                                                                                                                                
-Sun Feb 16 13:56:24 2025                                                                                                                                                 
-+-----------------------------------------------------------------------------+                                                                                          
-| NVIDIA-SMI 515.76       Driver Version: 515.76       CUDA Version: 11.7     |                                                                                          
-|-------------------------------+----------------------+----------------------+                                                                                          
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |                                                                                          
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |                                                                                          
-|                               |                      |               MIG M. |                                                                                          
-|===============================+======================+======================|                                                                                          
-|   0  Tesla T4            Off  | 00000000:00:07.0 Off |                    0 |                                                                                          
-| N/A   42C    P0    25W /  70W |      2MiB / 15360MiB |      0%      Default |                                                                                          
-|                               |                      |                  N/A |                                                                                          
-+-------------------------------+----------------------+----------------------+                                                                                          
-|   1  Tesla T4            Off  | 00000000:00:08.0 Off |                    0 |                                                                                          
-| N/A   43C    P0    26W /  70W |      2MiB / 15360MiB |      5%      Default |                                                                                          
-|                               |                      |                  N/A |                                                                                          
-+-------------------------------+----------------------+----------------------+                                                                                          
-                                                                                                                                                                         
-+-----------------------------------------------------------------------------+                                                                                          
-| Processes:                                                                  |                                                                                          
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |                                                                                          
-|        ID   ID                                                   Usage      |                                                                                          
-|=============================================================================|                                                                                          
-|  No running processes found                                                 |                                                                                          
-+-----------------------------------------------------------------------------+ 
+root@aitest:~# nvidia-smi
+Sun Feb 16 13:56:24 2025
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.76       Driver Version: 515.76       CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            Off  | 00000000:00:07.0 Off |                    0 |
+| N/A   42C    P0    25W /  70W |      2MiB / 15360MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla T4            Off  | 00000000:00:08.0 Off |                    0 |
+| N/A   43C    P0    26W /  70W |      2MiB / 15360MiB |      5%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
 ```
 
 可以看到两张 T4 卡已经就绪了。
@@ -90,11 +90,11 @@ docker run -dp 8880:11434 --gpus device=0 --name DeepSeek-R1-1 docker.1ms.run/ol
 如果一切正常，启动后，就会返回容器的 ID。接着我们通过 docker ps 命令，就可以查询到容器的信息。
 
 ```shell
-root@aitest:~# docker run -dp 8880:11434 --gpus device=0 --name DeepSeek-R1-1 docker.1ms.run/ollama/ollama:latest                                                        
+root@aitest:~# docker run -dp 8880:11434 --gpus device=0 --name DeepSeek-R1-1 docker.1ms.run/ollama/ollama:latest
 7049f65fd9d34392c26355174f4701c1b2c5aa718cdc168d19a982f0519d7635
 
-root@aitest:~# docker ps                                                                                                                                                 
-CONTAINER ID   IMAGE                                 COMMAND               CREATED          STATUS         PORTS                                           NAMES         
+root@aitest:~# docker ps
+CONTAINER ID   IMAGE                                 COMMAND               CREATED          STATUS         PORTS                                           NAMES
 7049f65fd9d3   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   10 seconds ago   Up 9 seconds   0.0.0.0:8880->11434/tcp, [::]:8880->11434/tcp   DeepSeek-R1-1
 ```
 
@@ -102,8 +102,8 @@ CONTAINER ID   IMAGE                                 COMMAND               CREAT
 
 ```shell
 root@aitest:~# docker run -dp 8880:11434 --gpus device=0 --name DeepSeek-R1-1 docker.1ms.run/ollama/ollama:0.5.11
-bd74646a26c6a539aa7660eb664caa585dba188720f0975701b73d87263b6cdf                                                                                                         
-docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]]. 
+bd74646a26c6a539aa7660eb664caa585dba188720f0975701b73d87263b6cdf
+docker: Error response from daemon: could not select device driver "" with capabilities: [[gpu]].
 ```
 
 这是因为服务器的 NVIDIA Container Toolkit 没有装，需要执行如下命令安装一下：
@@ -120,7 +120,7 @@ systemctl restart docker
 安装完成后，执行 docker info 命令，确保 docker 守护进程已经正确配置 GPU 支持。命令和输出如下：
 
 ```shell
-root@aitest:~# docker info | grep -i nvidia                                                                                                                              
+root@aitest:~# docker info | grep -i nvidia
  Runtimes: io.containerd.runc.v2 nvidia runc
 ```
 
@@ -194,12 +194,12 @@ docker run -dp 8880:11434 --runtime=nvidia --gpus device=0 --name DeepSeek-R1-1 
 最后查看容器中的模型是否已经运行：
 
 ```shell
-root@aitest:~# docker ps                                                                                                                                                 
-CONTAINER ID   IMAGE                                 COMMAND               CREATED         STATUS         PORTS                                           NAMES          
-9a44f04e78f7   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   6 minutes ago   Up 6 minutes   0.0.0.0:8880->11434/tcp, [::]:8880->11434/tcp   DeepSeek-R1-1  
+root@aitest:~# docker ps
+CONTAINER ID   IMAGE                                 COMMAND               CREATED         STATUS         PORTS                                           NAMES
+9a44f04e78f7   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   6 minutes ago   Up 6 minutes   0.0.0.0:8880->11434/tcp, [::]:8880->11434/tcp   DeepSeek-R1-1
 
-root@aitest:~# docker exec -it 9a44f04e78f7 ollama list                                                                                                                  
-NAME               ID              SIZE     MODIFIED                                                                                                                     
+root@aitest:~# docker exec -it 9a44f04e78f7 ollama list
+NAME               ID              SIZE     MODIFIED
 deepseek-r1:32b    38056bbcbb2d    19 GB    About an hour ago
 ```
 
@@ -317,6 +317,7 @@ sudo ldconfig
 curl -V
 
 4. 然后又遇到安装下载ollama timeout（众所周知的原因），只能多试几次，然后其中一次成功下载了。run起来了。
+
 </p>2025-03-10</li><br/><li><span>楚翔style</span> 👍（2） 💬（1）<p>老师,有个问题请教下. 模型部署到本地有什么意义吗? 能想到的就是个人知识库   现在各大厂都开放满血版dk,或者直接买满血版api不是更好吗. </p>2025-03-27</li><br/><li><span>6CYS</span> 👍（2） 💬（2）<p>老师好，请问企业级部署的话，用ollama的多还是Xinference的多？</p>2025-03-26</li><br/><li><span>完美坚持</span> 👍（2） 💬（1）<p>在AutoDL上使用Ollama部署DeepSeek：实现局域网私有化AI助手 - KeViNOne的文章 - 知乎
 https:&#47;&#47;zhuanlan.zhihu.com&#47;p&#47;23213698282
 
@@ -327,13 +328,12 @@ https:&#47;&#47;zhuanlan.zhihu.com&#47;p&#47;23213698282
 (base) PS C:\Users\admin&gt; ollama run deepseek-r1-think:7b
 &gt;&gt;&gt; hello
 
-
 &lt;&#47;think&gt;
 
-Hello! How can I assist you today? 😊</p>2025-03-04</li><br/><li><span>kevin</span> 👍（2） 💬（1）<p>16GB 显存的 T4 卡部署32B的ds模型，大模型反应很慢吧？我部署了，体验是这样的</p>2025-03-04</li><br/><li><span>Kathy</span> 👍（1） 💬（1）<p>老师，这个可以直接在Mac 上部署吗</p>2025-04-23</li><br/><li><span>Geek_66f829</span> 👍（1） 💬（1）<p>老师你好，Ollama 通过对模型的量化，可以显著降低对于显存的占用，但是同时也会降低模型输出的质量，我这样理解对吗？</p>2025-04-13</li><br/><li><span>ifelse</span> 👍（1） 💬（1）<p>学习打卡</p>2025-04-02</li><br/><li><span>Cathon</span> 👍（1） 💬（1）<p>老师，请问生产上会用ollama部署模型吗，是不是通常都用vllm呀</p>2025-03-14</li><br/><li><span>完美坚持</span> 👍（1） 💬（1）<p>老师我在aotodl上面用ollama安装了deepseek，但是无论是7b还是32b的都特别慢，看nvidia-smi，好像没有怎么用显卡gpu（4MiB &#47;  32760MiB，36G显存只用了4m）
+Hello! How can I assist you today? 😊</p>2025-03-04</li><br/><li><span>kevin</span> 👍（2） 💬（1）<p>16GB 显存的 T4 卡部署32B的ds模型，大模型反应很慢吧？我部署了，体验是这样的</p>2025-03-04</li><br/><li><span>Kathy</span> 👍（1） 💬（1）<p>老师，这个可以直接在Mac 上部署吗</p>2025-04-23</li><br/><li><span>Geek_66f829</span> 👍（1） 💬（1）<p>老师你好，Ollama 通过对模型的量化，可以显著降低对于显存的占用，但是同时也会降低模型输出的质量，我这样理解对吗？</p>2025-04-13</li><br/><li><span>ifelse</span> 👍（1） 💬（1）<p>学习打卡</p>2025-04-02</li><br/><li><span>Cathon</span> 👍（1） 💬（1）<p>老师，请问生产上会用ollama部署模型吗，是不是通常都用vllm呀</p>2025-03-14</li><br/><li><span>完美坚持</span> 👍（1） 💬（1）<p>老师我在aotodl上面用ollama安装了deepseek，但是无论是7b还是32b的都特别慢，看nvidia-smi，好像没有怎么用显卡gpu（4MiB &#47; 32760MiB，36G显存只用了4m）
 但是用ollama ps
-NAME              ID              SIZE      PROCESSOR    UNTIL   
-deepseek-r1:7b    0a8c26691023    6.0 GB    100% GPU     Forever    
+NAME ID SIZE PROCESSOR UNTIL  
+deepseek-r1:7b 0a8c26691023 6.0 GB 100% GPU Forever  
 这里好像又显示用了gpu
 
 我查了半天也没弄好，这是怎么回事呀？怎么就可以让他调用gpu了呢?

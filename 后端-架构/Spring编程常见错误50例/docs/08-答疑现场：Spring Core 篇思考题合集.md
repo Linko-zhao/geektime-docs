@@ -388,7 +388,7 @@ private int doCompare(@Nullable Object o1, @Nullable Object o2, @Nullable OrderS
 
 ```
  //省略其他非关键代码
- //获取 executor 
+ //获取 executor
  Executor executor = getTaskExecutor();
    for (ApplicationListener<?> listener : getApplicationListeners(event, type)) {
       //如果存在 executor，则提交到 executor 中去执行

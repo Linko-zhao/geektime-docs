@@ -56,7 +56,7 @@ var p = (*[0]int)(b) // ok，*p = []
 var p = (*[1]int)(b) // ok，*p = [11]
 var p = (*[2]int)(b) // ok，*p = [11, 12]
 var p = (*[3]int)(b) // ok，*p = [11, 12, 13]
-var p = (*[3]int)(b[:1]) // cannot convert slice with length 1 to pointer to array with length 3 
+var p = (*[3]int)(b[:1]) // cannot convert slice with length 1 to pointer to array with length 3
 ```
 
 另外，nil切片或cap为0的empty切片都可以被转换为一个长度为0的数组指针，比如：
@@ -408,11 +408,11 @@ Go 1.17版本的一些重要新特性就介绍到这里了，除了上面这些�
 
 2. 另外文中这这句话：“并指定一些寄存器为调用保存寄存器，允许函数在不同的调用中保持状态。” 能展开说一下不，没太明白这句话？
 
-2. “或者依赖一些像比较函数代码指针的未公开的行为。” 能详细说一下什么是未公开的行为呢？
+3. “或者依赖一些像比较函数代码指针的未公开的行为。” 能详细说一下什么是未公开的行为呢？
 
-3. 我是直接修改go.mod中的go 版本为：go 1.15，然后执行本课程之前讲的在本地安装多个go版本的go 1.15.13 版本的测试命令： go1.15.13 test -bench .  发现比1.17版本耗时增加很多。  请问老师，我的这个测试方式是正确的么？
+4. 我是直接修改go.mod中的go 版本为：go 1.15，然后执行本课程之前讲的在本地安装多个go版本的go 1.15.13 版本的测试命令： go1.15.13 test -bench . 发现比1.17版本耗时增加很多。 请问老师，我的这个测试方式是正确的么？
 
-ps: go module 的变更那里，需要先 执行go install golang.org&#47;x&#47;exp&#47;cmd&#47;txtar@latest  安装txtar工具。
+ps: go module 的变更那里，需要先 执行go install golang.org&#47;x&#47;exp&#47;cmd&#47;txtar@latest 安装txtar工具。
 </p>2021-12-19</li><br/><li><span>陈东</span> 👍（2） 💬（1）<p>与时俱进的一个语言。</p>2021-12-19</li><br/><li><span>Darren</span> 👍（2） 💬（1）<p>老师，java是基于堆栈的还是基于寄存器的？我的理解好像是基于堆栈的😂，但不知道是否正确</p>2021-12-18</li><br/><li><span>在下宝龙、</span> 👍（2） 💬（1）<p>老师您好，我最近使用go mod tidy 发现并不能很好的生效，使用之后 go mod文件并没有增加出自己想要的包信息，给我的提示是这个，我尝试去理解并没有找到答案- =，我的go版本是1.17
 To upgrade to the versions selected by go 1.16:
         go mod tidy -go=1.16 &amp;&amp; go mod tidy -go=1.17

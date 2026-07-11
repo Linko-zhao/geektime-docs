@@ -92,11 +92,11 @@ int open(const char *pathname, int flags, mode_t mode, int* fd) {
   if (/*文件不存在*/) {
     return EEXIST;
   }
-  
+
   if (/*没有访问权限*/) {
     return EACCESS;
   }
-  
+
   if (/*打开文件成功*/) {
     return SUCCESS; // C语言中的宏定义：#define SUCCESS 0
   }
@@ -120,12 +120,12 @@ int open(const char *pathname, int flags, mode_t mode）{
     errno = EEXIST;
     return -1;
   }
-  
+
   if (/*没有访问权限*/) {
     errno = EACCESS;
     return -1;
   }
-  
+
   // ...
 }
 // 使用举例
@@ -133,9 +133,9 @@ int hFile = open(“c:\test.txt”, O_RDWR, S_IRWXU|S_IRWXG|S_IRWXO);
 if (-1 == hFile) {
   printf("Failed to open file, error no: %d.\n", errno);
   if (errno == EEXIST ) {
-    // ...        
+    // ...
   } else if(errno == EACCESS) {
-    // ...    
+    // ...
   }
   // ...
 }
@@ -155,7 +155,7 @@ if (-1 == hFile) {
 ```
 public class UserService {
   private UserRepo userRepo; // 依赖注入
-  
+
   public User getUser(String telephone) {
     // 如果用户不存在，则返回null
     return null;
@@ -190,7 +190,7 @@ if (user != null) { // 做NULL值判断，否则有可能会报NPE
 // 使用空集合替代NULL
 public class UserService {
   private UserRepo userRepo; // 依赖注入
-  
+
   public List<User> getUsers(String telephonePrefix) {
    // 没有查找到数据
     return Collections.emptyList();
@@ -209,7 +209,7 @@ public String retrieveUppercaseLetters(String text) {
 }
 // retrieveUppercaseLetters()使用举例
 String uppercaseLetters = retrieveUppercaseLetters("wangzheng");
-int length = uppercaseLetters.length();// 不需要做NULL值判断 
+int length = uppercaseLetters.length();// 不需要做NULL值判断
 System.out.println("Contains " + length + " upper case letters.");
 ```
 
@@ -232,7 +232,7 @@ System.out.println("Contains " + length + " upper case letters.");
 public void parseRedisAddress(String address) {
   this.host = RedisConfig.DEFAULT_HOST;
   this.port = RedisConfig.DEFAULT_PORT;
-  
+
   if (StringUtils.isBlank(address)) {
     return;
   }
@@ -241,7 +241,7 @@ public void parseRedisAddress(String address) {
   if (ipAndPort.length != 2) {
     throw new RuntimeException("...");
   }
-  
+
   this.host = ipAndPort[0];
   // parseInt()解析失败会抛出NumberFormatException运行时异常
   this.port = Integer.parseInt(ipAndPort[1]);
@@ -354,7 +354,6 @@ C语言没有异常这样的语法机制，返回错误码便是最常用的出�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Promise°</span> 👍（9） 💬（2）<p>大家好,第一次发言。有个疑问:各位在Service层返回的是对象还是Result接口</p>2020-08-10</li><br/><li><span>sunnywhy</span> 👍（6） 💬（4）<p>第二种返回Null的情况，可以使用Optional吗</p>2020-01-24</li><br/><li><span>张三丰</span> 👍（4） 💬（1）<p>这句话不太理解，即便是可恢复的异常依然是向上抛更合理，比如提现金额大于余额就应该告知用户啊。实在想不明白受检查异常的用武之地在哪？
 
-
 对于代码 bug（比如数组越界）以及不可恢复异常（比如数据库连接失败），即便我们捕获了，也做不了太多事情，所以，我们倾向于使用非受检异常。对于可恢复异常、业务异常，比如提现金额大于余额的异常，我们更倾向于使用受检异常，明确告知调用者需要捕获处理。</p>2020-06-09</li><br/><li><span>微思</span> 👍（3） 💬（1）<p>Happy new year！
 鼠年大吉🎊🎈🎉🍾️🎆🧧</p>2020-01-25</li><br/><li><span>皮卡皮卡</span> 👍（0） 💬（1）<p>返回空对象章节中，return Collectiosn.emptyList();出现拼写错误，应该是Collections.emptyList();</p>2020-01-24</li><br/><li><span>Jxin</span> 👍（111） 💬（0）<p>回答问题
 1.抛出异常，因为服务器获取不到host是一种异常情况，并且打印的异常日志不能是warm,而是err，因为该异常不会自动回复。
@@ -364,7 +363,6 @@ C语言没有异常这样的语法机制，返回错误码便是最常用的出�
 3.抛出异常，null值裁剪名称是一种异常情况。或则说，对于裁剪名称这个函数，入参不能为null。
 
 4.返回空字符串。小于等于0说明不需要带随机后缀，这也是一个正常的业务场景。返回空字符串是为了方便调用方不用做null判断。
-
 
 分歧：
 1.get,find,select等dao层操作，返回null是正常业务情况，表示数据不存在。但在其应用层，数据不存在可能意味着有脏数据，数据缺失等情况，属于异常情况，需要抛出异常。所以同样是get方法，持久层返回null，业务层返回可能是异常。
@@ -381,21 +379,21 @@ C语言没有异常这样的语法机制，返回错误码便是最常用的出�
 答：抛出异常，这是一个无法恢复的情况，打断正常的处理流程并进入异常逻辑处理模块
 
 2. 对于 getLastFiledOfHostName() 函数，是否应该将 UnknownHostException 异常在函数内部吞掉（try-catch 并打印日志）？还是应该将异常继续往上抛出？如果往上抛出的话，是直接把 UnknownHostException 异常原封不动地抛出，还是封装成新的异常抛出？
-答：不应该内部吞掉，应该抛出到上层做统一的异常处理，这里是个单一的模块，不需要再封装
+   答：不应该内部吞掉，应该抛出到上层做统一的异常处理，这里是个单一的模块，不需要再封装
 
 3. 对于 getLastSubstrSplittedByDot(String hostName) 函数，如果 hostName 为 NULL 或者是空字符串，这个函数应该返回什么？
-答：抛出异常，异常消息是—hostName为NULL或空字符串
+   答：抛出异常，异常消息是—hostName为NULL或空字符串
 
 4. 对于 generateRandomAlphameric(int length) 函数，如果 length 小于 0 或者等于 0，这个函数应该返回什么？
-答：抛出异常，异常消息是—参数不合法</p>2020-01-27</li><br/><li><span>大雁小鱼</span> 👍（5） 💬（4）<p>我的领导告诉我，代码稳定是第一位的，如果线上代码没有出错，即便代码写得很烂，都是不允许去修改的，一个标点一个符号都不能修改，更别说小步重构了。所以可以理解为什么有的公司代码永远都是4、5年前的样子，不去动它了。</p>2020-09-10</li><br/><li><span>exception</span> 👍（4） 💬（0）<p>关于函数返回值的问题，之前写代码也纠结过，思考过，目前我在项目中使用如下：
-定义返回值Result(success, value, errCode, errMessage)和异常同时使用。
-正常的业务逻辑，都使用Result进行返回，业务逻辑中出现失败的情况，通过错误码进行定义。像文中提到的查询成功但是没有数据的情况，那就是Result的success为true，但是value为空。
-异常适用于处理非业务逻辑情况，如远程RPC调用失败，网络超时，空指针，等情况才使用异常往外抛。
-对于受检异常和非受检异常，各自各有优劣吧，不能说谁完全就能代替谁，只要用的得当，都有他的价值，没必要太极端。</p>2020-10-16</li><br/><li><span>平风造雨</span> 👍（4） 💬（0）<p>不能恢复的异常应该抛出，能处理能恢复的可以吞掉，但是吞掉的异常要有办法在日志或者其它办法看到异常的原因，便于后续排查问题。异常是否要重新定义异常并抛出，不能一概而论，某些情况下，异常的值和类型本身就是接口约定中的一部分，特别是unchecked异常。</p>2020-01-24</li><br/><li><span>郑大钱</span> 👍（3） 💬（1）<p>异常，这对我来说是一个多么陌生的概念。
-OC中的try catch不能捕获UncaughtException，而内存溢出、野指针等大部分异常都是UncaughtException，而可以捕获的异常基本都是我们可以预防的，所以OC中的异常处理很鸡肋，也因此异常处理对我来说是真空的。异常信息依赖于**Error指针参数。
-转写dart代码后，发现异常处理居然是一种流程控制语句，抛出异常会影响后续代码的执行。异常流程是一个很优雅的错误处理方案，用上了就停不下来。</p>2020-11-04</li><br/><li><span>Ken张云忠</span> 👍（2） 💬（0）<p>对于 generate() 函数，如果本机名获取失败，函数返回什么？这样的返回值是否合理？
-返回null-时间戳-8位随机数字字母符号的字符串.
-这样返回合理.因为业务允许一定概率的id重复,并且时间戳-8位随机的数字字母重叠的概率本身就很低,所以代码可以满足业务继续执行,至于最终要不要继续执行可以由上层业务程序控制.
+   答：抛出异常，异常消息是—参数不合法</p>2020-01-27</li><br/><li><span>大雁小鱼</span> 👍（5） 💬（4）<p>我的领导告诉我，代码稳定是第一位的，如果线上代码没有出错，即便代码写得很烂，都是不允许去修改的，一个标点一个符号都不能修改，更别说小步重构了。所以可以理解为什么有的公司代码永远都是4、5年前的样子，不去动它了。</p>2020-09-10</li><br/><li><span>exception</span> 👍（4） 💬（0）<p>关于函数返回值的问题，之前写代码也纠结过，思考过，目前我在项目中使用如下：
+   定义返回值Result(success, value, errCode, errMessage)和异常同时使用。
+   正常的业务逻辑，都使用Result进行返回，业务逻辑中出现失败的情况，通过错误码进行定义。像文中提到的查询成功但是没有数据的情况，那就是Result的success为true，但是value为空。
+   异常适用于处理非业务逻辑情况，如远程RPC调用失败，网络超时，空指针，等情况才使用异常往外抛。
+   对于受检异常和非受检异常，各自各有优劣吧，不能说谁完全就能代替谁，只要用的得当，都有他的价值，没必要太极端。</p>2020-10-16</li><br/><li><span>平风造雨</span> 👍（4） 💬（0）<p>不能恢复的异常应该抛出，能处理能恢复的可以吞掉，但是吞掉的异常要有办法在日志或者其它办法看到异常的原因，便于后续排查问题。异常是否要重新定义异常并抛出，不能一概而论，某些情况下，异常的值和类型本身就是接口约定中的一部分，特别是unchecked异常。</p>2020-01-24</li><br/><li><span>郑大钱</span> 👍（3） 💬（1）<p>异常，这对我来说是一个多么陌生的概念。
+   OC中的try catch不能捕获UncaughtException，而内存溢出、野指针等大部分异常都是UncaughtException，而可以捕获的异常基本都是我们可以预防的，所以OC中的异常处理很鸡肋，也因此异常处理对我来说是真空的。异常信息依赖于**Error指针参数。
+   转写dart代码后，发现异常处理居然是一种流程控制语句，抛出异常会影响后续代码的执行。异常流程是一个很优雅的错误处理方案，用上了就停不下来。</p>2020-11-04</li><br/><li><span>Ken张云忠</span> 👍（2） 💬（0）<p>对于 generate() 函数，如果本机名获取失败，函数返回什么？这样的返回值是否合理？
+   返回null-时间戳-8位随机数字字母符号的字符串.
+   这样返回合理.因为业务允许一定概率的id重复,并且时间戳-8位随机的数字字母重叠的概率本身就很低,所以代码可以满足业务继续执行,至于最终要不要继续执行可以由上层业务程序控制.
 
 对于 getLastFiledOfHostName() 函数，是否应该将 UnknownHostException 异常在函数内部吞掉（try-catch 并打印日志）？还是应该将异常继续往上抛出？如果往上抛出的话，是直接把 UnknownHostException 异常原封不动地抛出，还是封装成新的异常抛出？
 不应该内部吞掉异常,应该直接把异常原封不动地抛出.因为当前是非业务工具类,异常处理该要交由业务程序来处理.

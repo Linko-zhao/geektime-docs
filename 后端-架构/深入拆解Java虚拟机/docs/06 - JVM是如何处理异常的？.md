@@ -258,6 +258,7 @@ public class Foo {
   }
 }
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>阿坤</span> 👍（62） 💬（2）<p>如果finally有return语句，catch内throw的异常会被忽略，这个从jvm层面怎么解释呢？</p>2018-09-02</li><br/><li><span>曲东方</span> 👍（42） 💬（2）<p>throw exception性能差fillstacktrace除了遍历堆栈以外，如果有inline 代码消除等编译优化发生，是不是要先“去优化”完了再fill？要不然可能出现错误堆栈和代码对不上的情况
 
@@ -265,25 +266,25 @@ throw exception估计也会影响jit的优化，进而影响整体性能
 
 </p>2018-08-11</li><br/><li><span>李二木</span> 👍（14） 💬（2）<p> 	看完今天的文章有几个疑问
 
-   1方法的异常表是包含RuntimeException这种非check类型的异常吧？如果是那么每个方法都有异常表，那么是不是每个异常表中都有像ArrayIndexOutOfBoundsException这类型异常了。这类公共异常是私有还是共享呢
+1方法的异常表是包含RuntimeException这种非check类型的异常吧？如果是那么每个方法都有异常表，那么是不是每个异常表中都有像ArrayIndexOutOfBoundsException这类型异常了。这类公共异常是私有还是共享呢
 
-   2像catch自定义异常，也会添加的当前方法的异常表里吗？
+2像catch自定义异常，也会添加的当前方法的异常表里吗？
 
-   3 我们常常看到的异常调用栈，这里方法调用信息其实就是弹出方法栈帧吗？</p>2018-08-01</li><br/><li><span>吴伟</span> 👍（11） 💬（1）<p>检查异常和非检查异常也就是其他书籍中说的编译期异常和运行时异常？</p>2018-08-01</li><br/><li><span>李双迎</span> 👍（10） 💬（1）<p>老师，如果异常构造比较耗时，那么能否通过缓存同一位置相同异常的实例，来解决呢？</p>2018-09-07</li><br/><li><span>子清</span> 👍（5） 💬（1）<p>如果在业务层的代码中使用Assert来判断参数是否有问题，然后在调用方捕捉异常，这样会不会耗性能</p>2018-08-01</li><br/><li><span>Ennis LM</span> 👍（4） 💬（1）<p>Java 虚拟机会忽略掉异常构造器以及填充栈帧的 Java 方法（Throwable.fillInStackTrace），直接从新建异常位置开始算起。
+3 我们常常看到的异常调用栈，这里方法调用信息其实就是弹出方法栈帧吗？</p>2018-08-01</li><br/><li><span>吴伟</span> 👍（11） 💬（1）<p>检查异常和非检查异常也就是其他书籍中说的编译期异常和运行时异常？</p>2018-08-01</li><br/><li><span>李双迎</span> 👍（10） 💬（1）<p>老师，如果异常构造比较耗时，那么能否通过缓存同一位置相同异常的实例，来解决呢？</p>2018-09-07</li><br/><li><span>子清</span> 👍（5） 💬（1）<p>如果在业务层的代码中使用Assert来判断参数是否有问题，然后在调用方捕捉异常，这样会不会耗性能</p>2018-08-01</li><br/><li><span>Ennis LM</span> 👍（4） 💬（1）<p>Java 虚拟机会忽略掉异常构造器以及填充栈帧的 Java 方法（Throwable.fillInStackTrace），直接从新建异常位置开始算起。
 Java 虚拟机还会忽略标记为不可见的 Java 方法栈帧。
 
-请问老师，填充栈帧的 Java 方法和不可见的 Java 方法栈帧，是什么</p>2018-08-01</li><br/><li><span>兔子</span> 👍（3） 💬（1）<p>老师，您好！java.lang.Error这种错误产生的原因是什么样的？jvm对这种Error的处理方式跟Exception一样的吗？如果程序碰到这种情况为了确保程序还能正常运行加上try catch是否就可以了？谢谢！</p>2019-11-27</li><br/><li><span>贾智文</span> 👍（3） 💬（1）<p>当触发异常的字节码的索引值在某个异常表条目的监控范围内，Java 虚拟机会判断所抛出的异常和该条目想要捕获的异常是否匹配。                        
+请问老师，填充栈帧的 Java 方法和不可见的 Java 方法栈帧，是什么</p>2018-08-01</li><br/><li><span>兔子</span> 👍（3） 💬（1）<p>老师，您好！java.lang.Error这种错误产生的原因是什么样的？jvm对这种Error的处理方式跟Exception一样的吗？如果程序碰到这种情况为了确保程序还能正常运行加上try catch是否就可以了？谢谢！</p>2019-11-27</li><br/><li><span>贾智文</span> 👍（3） 💬（1）<p>当触发异常的字节码的索引值在某个异常表条目的监控范围内，Java 虚拟机会判断所抛出的异常和该条目想要捕获的异常是否匹配。  
 这里有点没懂，每层方法的监控范围有可能会重叠吧，只用索引判断不会出现多个情况都满足的情况吗？</p>2018-08-10</li><br/><li><span>无言的约定</span> 👍（0） 💬（1）<p>郑老师，问个问题，在执行某个方法时，我不知道在哪会发生异常，这个时候我怎么才能捕获可能产生的异常并存储在日志文件里？</p>2019-12-23</li><br/><li><span>Randy</span> 👍（0） 💬（1）<p>郑老师，请教一下 ，文章中说下面这段代码编译出了3份finally 代码块，请问是怎么看出来的，请帮忙解读一下
 public void test() {
-    try {
-      tryBlock = 0;
-    } catch (Exception e) {
-      catchBlock = 1;
-    } finally {
-      finallyBlock = 2;
-    }
-    methodExit = 3;
-  }</p>2019-11-21</li><br/><li><span>旭东(Frank)</span> 👍（0） 💬（1）<p>请问检查式异常的初衷是什么？经常因为检查式异常导致方法重构时，相应方法的封装性被破坏？
+try {
+tryBlock = 0;
+} catch (Exception e) {
+catchBlock = 1;
+} finally {
+finallyBlock = 2;
+}
+methodExit = 3;
+}</p>2019-11-21</li><br/><li><span>旭东(Frank)</span> 👍（0） 💬（1）<p>请问检查式异常的初衷是什么？经常因为检查式异常导致方法重构时，相应方法的封装性被破坏？
 
 如何正确使用这两种异常，有何指导意见？谢谢</p>2018-08-29</li><br/><li><span>YIFENG</span> 👍（0） 💬（2）<p>老师，在讲复制finally部分的图中，复制到catch部分的finally右边的黄色虚线指向重新抛出异常，哪种情况会走到这条黄线路径呢？</p>2018-08-01</li><br/><li><span>钱</span> 👍（181） 💬（6）<p>感谢雨迪！
 这节让我终于搞清楚了两个疑惑！
@@ -294,7 +295,6 @@ public void test() {
 
 2:finally是怎么实现无论异常与否都能被执行的？
 这个事情是由编译器来实现的，现在的做法是这样的，编译器在编译Java代码时，会复制finally代码块的内容，然后分别放在try-catch代码块所有的正常执行路径及异常执行路径的出口中。
-
 
 </p>2018-08-02</li><br/><li><span>wuyong</span> 👍（9） 💬（0）<p>```java
 public class Foo {
@@ -313,8 +313,10 @@ public class Foo {
         }
         methodExit = 3;
     }
+
 }
-```
+
+````
 
 相当于如下的代码：
 
@@ -341,3 +343,4 @@ public class Foo {
 }
 ```</p>2020-08-12</li><br/>
 </ul>
+````

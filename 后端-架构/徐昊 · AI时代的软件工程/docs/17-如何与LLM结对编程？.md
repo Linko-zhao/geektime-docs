@@ -26,12 +26,14 @@
 
 通过如下的模板，我们可以使用LLM帮助我们分解任务：
 
-> 功能需求  
-> ====  
+> 功能需求
+> ====
+>
 > {requirement}  
 >    
-> 任务  
-> ====  
+> 任务
+> ====
+>
 > 请根据上面的功能需求，列出需要测试的场景。描述场景，并给出相关的测试数据。
 
 ![](https://static001.geekbang.org/resource/image/2d/ec/2d739a4c3ae67615fd44f1be6be8deec.jpg?wh=2020x3333)  
@@ -58,7 +60,7 @@ GPT给出的结果如下图所示。
 
 > 请不要考虑custom type的情况，测试的场景生成junit junpiter测试。  
 > 要求：
-> 
+>
 > - 每个场景对应一个测试方法。
 > - 被测试的类叫ArgumentParser。它的构造函数接受Map&lt;String, ArgumentType&gt;作为参数配置；
 > - ArgumentParser的parse方法返回Map&lt;String, Object&gt;作为解析结果；
@@ -487,6 +489,7 @@ public class ArgumentParser {
 庞杂的认知行为模式，从gpt给与的需求拆分的任务列表，我们和llm进行认知对齐，帮其弥补llm认知需求的差异，在该模式下我们根据对齐的任务列表生成测试代码和生产代码
 清晰的认知行为模式，根据测试代码执行进行测试来发现生产代码上的遗漏，发现错误,与llm进行交互调整生产代码，最终完成测试的通过。
 这里有两个疑问
+
 1. 假设根据测试代码执行发现未知的错误(此时无法与gpt进行交互)，我们也不理解改错误的信息，我们此时就需要debug一步步调试，此时我们本身又处于复杂模式下(探索-感知-响应)，而可以和llm交互后我们又处于清晰模式下(感知-分类-响应)。我们因为一个llm帮助我们的认知行为发生了两个重大的变更吗？
 2. TDD测试驱动,红-绿-重构，这节课里没看到重构循环,感觉缺少了点啥</p>2024-04-15</li><br/><li><span>FARO_Z</span> 👍（2） 💬（0）<p>感觉 LLM 只能比较好的生成单点功能的代码，一般也就是工具类
 
@@ -508,16 +511,20 @@ public class ArgumentParser {
 
 列出测试场景
 ----------------
+
 功能需求
 ====
+
 {requirement}
 
 任务
 ====
+
 请根据上面的功能需求，列出需要测试的场景。描述场景，并给出相关的测试数据。
 
 编写测试代码
 ----------------
+
 请生成 junit junpiter 测试
 要求：
 每个场景对应一个测试方法
@@ -529,55 +536,55 @@ public class ArgumentParser {
 然后对业务逻辑层写清楚诉求，然后跟 LLM 结队编程吗？运用本篇内容</p>2024-05-04</li><br/><li><span>术子米德</span> 👍（0） 💬（0）<p>&#47;&#47; Question by EnigmaWU: generate could missing ut code for me
 &#47;&#47; Answer from ChatCopilot:
 TEST(CC_parseCmdLineArgs, LogSavingDir) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;path&#47;to&#47;log&quot;};
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
-  EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
-  EXPECT_EQ(0, CmdLineArgs.RecvPort);
-  EXPECT_STREQ(&quot;&#47;path&#47;to&#47;log&quot;, CmdLineArgs.pLogSavingDir);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;path&#47;to&#47;log&quot;};
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
+EXPECT_FALSE(CmdLineArgs.IsLoggingEnabled);
+EXPECT_EQ(0, CmdLineArgs.RecvPort);
+EXPECT_STREQ(&quot;&#47;path&#47;to&#47;log&quot;, CmdLineArgs.pLogSavingDir);
 }
 
 TEST(CC_parseCmdLineArgs, InvalidArgs) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;invalid&quot;};
-  EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(2, argv, &amp;CmdLineArgs));
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;invalid&quot;};
+EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(2, argv, &amp;CmdLineArgs));
 }
 
 TEST(CC_parseCmdLineArgs, MissingValueForPort) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-p&quot;};
-  EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(2, argv, &amp;CmdLineArgs));
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-p&quot;};
+EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(2, argv, &amp;CmdLineArgs));
 }
 
 TEST(CC_parseCmdLineArgs, MissingValueForDir) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-d&quot;};
-  EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(2, argv, &amp;CmdLineArgs));
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-d&quot;};
+EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(2, argv, &amp;CmdLineArgs));
 }
 
 TEST(CC_parseCmdLineArgs, NonNumericPort) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-p&quot;, (char *)&quot;nonnumeric&quot;};
-  EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-p&quot;, (char *)&quot;nonnumeric&quot;};
+EXPECT_EQ(CC_FAIL, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
 }
 
 TEST(CC_parseCmdLineArgs, MultipleSameArgs) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-l&quot;, (char *)&quot;-l&quot;};
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
-  EXPECT_TRUE(CmdLineArgs.IsLoggingEnabled);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-l&quot;, (char *)&quot;-l&quot;};
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(3, argv, &amp;CmdLineArgs));
+EXPECT_TRUE(CmdLineArgs.IsLoggingEnabled);
 }
 
 TEST(CC_parseCmdLineArgs, ArgsInDifferentOrder) {
-  CC_CmdLineArgs_T CmdLineArgs;
-  char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-p&quot;, (char *)&quot;1234&quot;, (char *)&quot;-l&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;path&#47;to&#47;log&quot;};
-  EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(6, argv, &amp;CmdLineArgs));
-  EXPECT_TRUE(CmdLineArgs.IsLoggingEnabled);
-  EXPECT_EQ(1234, CmdLineArgs.RecvPort);
-  EXPECT_STREQ(&quot;&#47;path&#47;to&#47;log&quot;, CmdLineArgs.pLogSavingDir);
+CC_CmdLineArgs_T CmdLineArgs;
+char *argv[] = {(char *)&quot;test&quot;, (char *)&quot;-p&quot;, (char *)&quot;1234&quot;, (char *)&quot;-l&quot;, (char *)&quot;-d&quot;, (char *)&quot;&#47;path&#47;to&#47;log&quot;};
+EXPECT_EQ(CC_SUCCESS, CC_parseCmdLineArgs(6, argv, &amp;CmdLineArgs));
+EXPECT_TRUE(CmdLineArgs.IsLoggingEnabled);
+EXPECT_EQ(1234, CmdLineArgs.RecvPort);
+EXPECT_STREQ(&quot;&#47;path&#47;to&#47;log&quot;, CmdLineArgs.pLogSavingDir);
 }</p>2024-04-15</li><br/><li><span>术子米德</span> 👍（0） 💬（0）<p>&#47;&#47; Chat with Copilot, Question by EnigmaWU:
 &#47;&#47; #file:CC_parseCmdLineArgs.c #file:CC_parseCmdLineArgsTest_byCopilot.cxx
-&#47;&#47;      what UT already written and what UT is missed?
+&#47;&#47; what UT already written and what UT is missed?
 
 &#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;&#47;
 &#47;&#47; Answer from ChatCopilot:
@@ -600,5 +607,5 @@ MissingValueForDir: Tests the function with the -d argument but without a value 
 NonNumericPort: Tests the function with a non-numeric value for the -p argument.
 MultipleSameArgs: Tests the function with multiple instances of the same argument.
 ArgsInDifferentOrder: Tests the function with all possible arguments in a different order.
- **&#47;</p>2024-04-15</li><br/>
+**&#47;</p>2024-04-15</li><br/>
 </ul>

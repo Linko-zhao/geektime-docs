@@ -46,7 +46,7 @@ export const createApp = ((...args) => {
     return proxy
   }
   return app
-}) 
+})
 function normalizeContainer(container){
   if (isString(container)) {
     const res = document.querySelector(container)
@@ -76,7 +76,7 @@ function ensureRenderer() {
     renderer ||
     (renderer = createRenderer<Node, Element | ShadowRoot>(rendererOptions))
   )
-}  
+}
 ```
 
 可以看到，createRenderer函数传递的参数是nodeOps和patchProp的合并对象。
@@ -119,7 +119,7 @@ export const nodeOps: Omit<RendererOptions<Node, Element>, 'patchProp'> = {
   parentNode: node => node.parentNode as Element | null,
   nextSibling: node => node.nextSibling,
   querySelector: selector => doc.querySelector(selector),
-... 
+...
 }
 ```
 
@@ -241,7 +241,7 @@ export function createAppAPI<HostElement>(
             render(vnode, rootContainer, isSVG)
           }
           return getExposeProxy(vnode.component!) || vnode.component!.proxy
-        } 
+        }
       },
 
       provide(key, value) {

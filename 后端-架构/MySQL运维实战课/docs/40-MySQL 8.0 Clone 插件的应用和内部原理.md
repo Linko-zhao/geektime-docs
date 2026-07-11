@@ -26,7 +26,7 @@ mysql> install plugin clone soname 'mysql_clone.so';
 使用show plugins命令或到plugins表查看插件状态。
 
 ```plain
-mysql> SELECT PLUGIN_NAME, PLUGIN_STATUS 
+mysql> SELECT PLUGIN_NAME, PLUGIN_STATUS
     FROM INFORMATION_SCHEMA.PLUGINS
     WHERE PLUGIN_NAME = 'clone';
 

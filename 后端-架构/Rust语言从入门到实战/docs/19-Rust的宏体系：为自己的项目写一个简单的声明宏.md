@@ -441,14 +441,14 @@ fn foo() {
 
 为什么第二个分支匹配不需要分号呢？ 我看第一个示例只有单个匹配也是分号结尾的</p>2023-12-01</li><br/><li><span>奕</span> 👍（0） 💬（3）<p>cargo expand 宏展开这个网站地址是什么啊</p>2024-02-05</li><br/><li><span>Taozi</span> 👍（0） 💬（1）<p>过程宏本质上是编译器的扩展插件</p>2023-12-02</li><br/><li><span>伯阳</span> 👍（0） 💬（1）<p>感觉和注解有点像</p>2023-12-01</li><br/><li><span>Calvin</span> 👍（0） 💬（0）<p>macro_export 的示例代码中的 inner 模块的宏调用代码有点问题，需要在函数或方法中：
 mod inner {
-    super::m!();
-    crate::m!();
+super::m!();
+crate::m!();
 }
 应该类似于：
 mod inner {
-    pub fn foo() {
-        super::m!();
-        crate::m!();
-    }
+pub fn foo() {
+super::m!();
+crate::m!();
+}
 }</p>2024-04-25</li><br/>
 </ul>

@@ -203,10 +203,10 @@ pom.xml 文件：
 ```plain
 class com.action.fly.FlyService
 sun.misc.Launcher$AppClassLoader@18b4aac2
- I'm Flying 
+ I'm Flying
 class com.action.run.RunService
 sun.misc.Launcher$AppClassLoader@18b4aac2
- I'm Running 
+ I'm Running
 ```
 
 通过输出结果可以知道，接口的实现类都是由 AppClassLoader 加载的，而接口 Runnable 肯定由根类加载器加载，那么接口和实现类由不同的类加载器加载是怎么做到的呢？答案在 ServiceLoader.load() 方法中，你可以看一下这个方法的源码。

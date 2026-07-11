@@ -68,7 +68,7 @@ return func(c *Context) {
 				}
 				...
 
-                
+
 				if brokenPipe {
 					// 如果有标记位，我们不能写任何的状态码
 					c.Error(err.(error)) // nolint: errcheck
@@ -153,7 +153,7 @@ func call(skip int) bool {   //24 行
 func stack(skip int) []byte {
 	...
     // 循环从第 skip 层堆栈到最后一层
-	for i := skip; ; i++ { 
+	for i := skip; ; i++ {
 		pc, file, line, ok := runtime.Caller(i)
 		// 获取堆栈函数所在源文件
 		if file != lastFile {

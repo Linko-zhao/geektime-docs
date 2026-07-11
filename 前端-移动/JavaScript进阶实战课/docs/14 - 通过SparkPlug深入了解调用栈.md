@@ -31,7 +31,7 @@
 ```javascript
 //  Sparkplug 编译器的部分代码
 for (; !iterator.done(); iterator.Advance()) {
-  VisitSingleBytecode();
+  VisitSingleBytecode();
 }
 ```
 
@@ -87,6 +87,7 @@ Sparkplug实际的代码很少，基本工作就是内置模块调用和控制�
 
 - V8 博客：[https://v8.dev/blog/sparkplug](https://v8.dev/blog/sparkplug)
 - 隔壁班宫文学老师的课程：[《编译原理之美》](https://time.geekbang.org/column/intro/100034101?tab=catalog)
+
 <div><strong>精选留言（8）</strong></div><ul>
 <li><span>WGH丶</span> 👍（0） 💬（1）<p>这节课对我来说太硬了  先放下   后面学学编译相关的知识</p>2022-12-26</li><br/><li><span>魏志鹏</span> 👍（0） 💬（1）<p>看不懂汗 流汗</p>2022-11-13</li><br/><li><span>真嗣</span> 👍（1） 💬（0）<p>这节课过于硬核了...</p>2023-01-12</li><br/><li><span>浩然</span> 👍（0） 💬（0）<p>汗流浃背了属于是</p>2024-04-25</li><br/><li><span>晴空万里</span> 👍（0） 💬（0）<p>这个差的东西有点多呀</p>2023-11-01</li><br/><li><span>荷兰小猪8813</span> 👍（0） 💬（0）<p>那个图的指针方向是不是错的？？？</p>2023-03-17</li><br/><li><span>度衡</span> 👍（0） 💬（0）<p>图里面的虚线&#39;反优化&#39;干啥呢？不应该只优化吗，怎么还反优化？</p>2023-01-01</li><br/><li><span>魏志鹏</span> 👍（0） 💬（0）<p>不懂啊</p>2022-11-13</li><br/>
 </ul>

@@ -35,7 +35,7 @@ npm install --save-dev @babel/core @babel/cli
 之后，我们可以加入预设（preset）。预设的加入有两种方式，一种是将所用的编译插件都一次性安装；另外一种则是只针对特定的插件，比如箭头函数做安装。
 
 ```javascript
-npm install --save-dev @babel/preset-env 
+npm install --save-dev @babel/preset-env
 ./node_modules/.bin/babel src --out-dir lib --presets=@babel/env
 
 npm install --save-dev @babel/plugin-transform-arrow-functions
@@ -46,10 +46,10 @@ npm install --save-dev @babel/plugin-transform-arrow-functions
 
 ```javascript
 // Babel输入: ES6箭头函数
-[1, 2, 3].map(n => n + 1);
+[1, 2, 3].map((n) => n + 1);
 
 // Babel输出: ES5匿名函数
-[1, 2, 3].map(function(n) {
+[1, 2, 3].map(function (n) {
   return n + 1;
 });
 ```
@@ -88,7 +88,7 @@ npm install --save-dev @babel/preset-typescript
 打包工具通常有一个支持插件的架构，并且支持导入和打包非JavaScript代码的模块。假设你的程序包含一个很大的JSON兼容的数据结构，我们可以用代码打包工具来将它配置成一个单独的JSON文件，然后通过声明的方式将它导入到程序中。
 
 ```javascript
-import widgets from "./app-widget-list.json"
+import widgets from "./app-widget-list.json";
 ```
 
 类似的，我们也可以使用打包工具的插件功能，在 JavaScript 中，通过 import 来导入 CSS 文件。不过，这里需要注意的是，导入任何 JS 以外的文件所使用的都是非标准的扩展，并且会让我们的代码对打包工具产生一定程度上的依赖。

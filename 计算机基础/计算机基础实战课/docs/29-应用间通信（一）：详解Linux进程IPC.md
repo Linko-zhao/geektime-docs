@@ -35,11 +35,11 @@ int main()
 	{
 		// 写入管道
 		write(fd[1], w_buf, strlen(w_buf));
-		// 等待子进程退出 
+		// 等待子进程退出
 		wait(&rets);
 	}
 	else if(pid == 0)
-	{	
+	{
 		// 新进程
 		printf("这是子进程 id = %d\n", getpid());
 		// 读取管道
@@ -92,9 +92,9 @@ void handle_timer(int signum, siginfo_t *info, void *ucontext)
 {
 	printf("handle_timer 信号码:%d\n", signum);
 	printf("进程:%d 退出!\n", getpid());
-	// 正常退出进程 
+	// 正常退出进程
 	exit(0);
-	return; 
+	return;
 }
 int main()
 {
@@ -184,7 +184,7 @@ void handle_timer(int signum, siginfo_t *info, void *ucontext)
 	value.sival_int = subid; // 子进程的id
 	// 调用sigqueue，向子进程发出SIGUSR1信号
 	sigqueue(value.sival_int, SIGUSR1, value);
-	return; 
+	return;
 }
 
 int main()
@@ -285,7 +285,7 @@ Q3：管道内部的缓冲可以设置吗？
 Q4：应用进程可以给Linux内核发送信号吗？
 
 Q5：信号例子的死循环会导致系统卡死吗？
-信号例子的代码中，循环代码“while(1)  {    ;&#47;&#47; 死循环防止进程退出  }” ，循环体中什么都没有，没有阻塞，没有等待，会导致系统卡死吗？
+信号例子的代码中，循环代码“while(1) { ;&#47;&#47; 死循环防止进程退出 }” ，循环体中什么都没有，没有阻塞，没有等待，会导致系统卡死吗？
 
 Q6：Hello OS可以安装在虚拟机上吗？
 我正在看老师的另外一门课《操作系统实战45讲》，其中第02课是讲Hello OS的。这个Hello OS是安装在Linux下。我没有专门的Linux电脑，我的笔记本是 win10，用VMWare安装了Ubuntu22虚拟机。请问，Hello OS可以安装在此Ubuntu22虚拟机下吗？</p>2022-09-30</li><br/><li><span>贾献华</span> 👍（1） 💬（2）<p>SIGQUIT 应该是 Ctrl+\ 控制吧！</p>2022-09-30</li><br/><li><span>苏流郁宓</span> 👍（1） 💬（1）<p>管道需要信号调节的（从一个进程数据传输到另一个进程）

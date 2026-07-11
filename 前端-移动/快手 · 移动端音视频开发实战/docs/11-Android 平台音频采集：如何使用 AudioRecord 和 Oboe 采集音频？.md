@@ -234,7 +234,7 @@ Q7：read函数的数组类型，需要根据audioFormat来确定吧。如果aud
         如果audioFormat是16位，则应该用short[]，是这样吗？
 
 Q8：播放PCM的命令中，哪一项是表示PCM？
-ffplay -f s16le  -sample_rate 44100  -channels 1 -i vocal.pcm，s16le表示什么意思？表示PCM吗？
+ffplay -f s16le -sample_rate 44100 -channels 1 -i vocal.pcm，s16le表示什么意思？表示PCM吗？
 Q9：PCM转WAV的命令中，哪一项是表示WAV？
 ffmpeg -f s16le -sample_rate 44100 -channels 1 -i vocal.pcm -acodec pcm_s16le vocal.wav，哪一项是表示wav？pcm_s16se吗？
 Q10：用两种采集方法，是播放器项目会同时采用这两种吗？

@@ -21,7 +21,7 @@
 ```shell
 # docker exec -it root_example bash -c "ps -ef | grep sleep"
 root         1     0  0 01:14 ?        00:00:00 /usr/bin/coreutils --coreutils-prog-shebang=sleep /usr/bin/sleep 3600
- 
+
 # ps -ef | grep sleep
 root      5473  5443  0 18:14 ?        00:00:00 /usr/bin/coreutils --coreutils-prog-shebang=sleep /usr/bin/sleep 3600
 ```
@@ -79,16 +79,16 @@ UID        PID  PPID  C STIME TTY          TIME CMD
 ```shell
 # cat Dockerfile
 FROM centos
- 
+
 RUN adduser -u 6667 nonroot
 USER nonroot
- 
+
 # docker build -t registry/nonroot:v1 .
 …
- 
+
 # docker run -d --name root_example -v /etc:/mnt registry/nonroot:v1 sleep 3600
 050809a716ab0a9481a6dfe711b332f74800eff5fea8b4c483fa370b62b4b9b3
- 
+
 # docker exec -it root_example bash
 [nonroot@050809a716ab /]$ id
 uid=6667(nonroot) gid=6667(nonroot) groups=6667(nonroot)
@@ -249,7 +249,8 @@ redhat   29433 29410  0 05:14 pts/0    00:00:00 sleep 3600
 实际也这么尝试过,效果也不错.
 但问题是,我的项目会很多,每个人构建命令的写法都完全不一样,如果每个地方都去指定参数,就会比较繁琐,且容易遗漏.
 
-------------------
+---
+
 后来,我看到一篇文章: 容器资源可视化隔离的实现方法
 (https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;SCxD4OiDYsmoIyN5XMk4YA)
 
@@ -288,8 +289,8 @@ root用户运行capsh --print
 非root用户运行capsh --print
 发现Current字段仍然包含14个capabilities，对宿主机的&#47;etc&#47;shadow没有读写权限
 
-这就让我感觉有点困惑了，原本预期容器内非root用户运行capsh  --print的capabilities应该为空呀，或者知道少于root用户的capabilities吧？</p>2021-01-09</li><br/><li><span>JianXu</span> 👍（0） 💬（0）<p>install slirp4netns and Podman on your machine by entering the following command:
+这就让我感觉有点困惑了，原本预期容器内非root用户运行capsh --print的capabilities应该为空呀，或者知道少于root用户的capabilities吧？</p>2021-01-09</li><br/><li><span>JianXu</span> 👍（0） 💬（0）<p>install slirp4netns and Podman on your machine by entering the following command:
 
 $ yum install slirp4netns podman -y
-We will use slirp4netns to connect a network namespace to the internet in a completely rootless (or unprivileged) way.</p>2022-09-08</li><br/><li><span>自然</span> 👍（0） 💬（0）<p>有个场景：用jenkins  在 openjdk镜像里 maven 编译java项目, 一个 maven目录（在主机上，而且还有其他很多工具），一个项目源码目录  需要映射到  openjdk镜像里（普通用户启动docker），jenkins 里的pipline 是大家都可以写的。 如何防止 加载主机上目录 在docker镜像里 root用户 随意修改呢（ 比如 我不想他删除 主机上的maven）？</p>2022-07-22</li><br/><li><span>sunnoy</span> 👍（0） 💬（0）<p>如果容器内的用户uid在宿主机上不存在呢，这个时候描述符的分配是怎么样的呢</p>2022-04-24</li><br/>
+We will use slirp4netns to connect a network namespace to the internet in a completely rootless (or unprivileged) way.</p>2022-09-08</li><br/><li><span>自然</span> 👍（0） 💬（0）<p>有个场景：用jenkins 在 openjdk镜像里 maven 编译java项目, 一个 maven目录（在主机上，而且还有其他很多工具），一个项目源码目录 需要映射到 openjdk镜像里（普通用户启动docker），jenkins 里的pipline 是大家都可以写的。 如何防止 加载主机上目录 在docker镜像里 root用户 随意修改呢（ 比如 我不想他删除 主机上的maven）？</p>2022-07-22</li><br/><li><span>sunnoy</span> 👍（0） 💬（0）<p>如果容器内的用户uid在宿主机上不存在呢，这个时候描述符的分配是怎么样的呢</p>2022-04-24</li><br/>
 </ul>

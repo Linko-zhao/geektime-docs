@@ -169,13 +169,13 @@ support检查环境的特性，它与media比较类似。
 qualified rule主要是由选择器和声明区块构成。声明区块又由属性和值构成。我在下面的列表中，介绍了这部分语法的组成要点。
 
 - 普通规则
-  
+
   - 选择器
   - 声明列表
-    
+
     - 属性
     - 值
-      
+
       - 值的类型
       - 函数
 
@@ -293,70 +293,75 @@ attr()函数允许CSS接受属性值的控制。
 
 # 1. 图片
 
-* filter
-    * blur()
-    * brightness()
-    * contrast()
-    * drop-shadow()
-    * grayscale()
-    * hue_rotate()
-    * invert()
-    * opacity()
-    * saturate()
-    * sepia()
-* cross-fade()
-* element()
-* image-set()
-* imagefunction()
+- filter
+  - blur()
+  - brightness()
+  - contrast()
+  - drop-shadow()
+  - grayscale()
+  - hue_rotate()
+  - invert()
+  - opacity()
+  - saturate()
+  - sepia()
+- cross-fade()
+- element()
+- image-set()
+- imagefunction()
 
 # 2. 图形绘制
-* conic-gradient()
-* linear-gradient()
-* radial-gradient()
-* repeating-linear-gradient()
-* repeating-radial-gradient()
-* shape()
+
+- conic-gradient()
+- linear-gradient()
+- radial-gradient()
+- repeating-linear-gradient()
+- repeating-radial-gradient()
+- shape()
 
 # 3. 布局
-* calc()
-* clamp()
-* fit-content()
-* max()
-* min()
-* minmax()
-* repeat()
+
+- calc()
+- clamp()
+- fit-content()
+- max()
+- min()
+- minmax()
+- repeat()
 
 # 4. 变形&#47;动画
-* transform
-    * matrix()
-    * matrix3d()
-    * perspective()
-    * rotate()
-    * rotate3d()
-    * rotateX()
-    * rotateY()
-    * rotateZ()
-    * scale()
-    * scale3d()
-    * scaleX()
-    * scaleY()
-    * scaleZ()
-    * skew()
-    * skewX()
-    * skewY()
-    * translate()
-    * translate3d()
-    * translateX()
-    * translateY()
-    * translateZ()
+
+- transform
+  - matrix()
+  - matrix3d()
+  - perspective()
+  - rotate()
+  - rotate3d()
+  - rotateX()
+  - rotateY()
+  - rotateZ()
+  - scale()
+  - scale3d()
+  - scaleX()
+  - scaleY()
+  - scaleZ()
+  - skew()
+  - skewX()
+  - skewY()
+  - translate()
+  - translate3d()
+  - translateX()
+  - translateY()
+  - translateZ()
 
 # 5. 环境与元素
-* var()
-* env()
-* attr()
+
+- var()
+- env()
+- attr()
+
 </p>2019-02-07</li><br/><li><span>Sevens 些粉</span> 👍（80） 💬（1）<p>推荐一下《css世界》这本书，有理论基础也有实战应用和常遇坑，看了两章感觉不错。</p>2019-02-08</li><br/><li><span>米斯特菠萝</span> 👍（34） 💬（1）<p>我看到winter老师讲解这些冷门的知识，忽然意识到什么叫做精通？要精通就要抠这种细节，这样才能做到精通
 
-做就要做精通，前端是一种手艺人</p>2019-02-09</li><br/><li><span>文全</span> 👍（15） 💬（0）<p>@import 用于引入一个 CSS 文件，除了 @charset 规则不会被引入，@import 可以引入另一个 JavaScript 文件的全部内容。这段写错了 应该是css 文件全部内容</p>2019-02-07</li><br/><li><span>Aaaaaaaaaaayou</span> 👍（12） 💬（0）<p>“只有伪类可以出现在伪元素之后”是不是写反了</p>2019-02-07</li><br/><li><span>mimof9</span> 👍（8） 💬（4）<p>试了一下 toggle这个函数 并没有效果。clac实测下来是有效果的。</p>2019-02-08</li><br/><li><span>前端男孩</span> 👍（7） 💬（0）<p>本来想发张思维导图的，但是貌似不支持发图，想想算了，也就整理了67个css函数，也不知道够不够。</p>2019-06-04</li><br/><li><span>无痕</span> 👍（7） 💬（1）<p>“||”这个选择器我怎么没搜到，是什么意思</p>2019-03-04</li><br/><li><span>xuanyuan</span> 👍（4） 💬（1）<p>每篇文章希望增加一些预备知识，后端程序员表示看不懂</p>2019-02-08</li><br/><li><span>瓶盖</span> 👍（3） 💬（0）<p>css函数：https:&#47;&#47;www.w3cplus.com&#47;css&#47;css-functions.html</p>2019-02-28</li><br/><li><span>Rushan-Chen</span> 👍（3） 💬（0）<p>@mimof9 
+做就要做精通，前端是一种手艺人</p>2019-02-09</li><br/><li><span>文全</span> 👍（15） 💬（0）<p>@import 用于引入一个 CSS 文件，除了 @charset 规则不会被引入，@import 可以引入另一个 JavaScript 文件的全部内容。这段写错了 应该是css 文件全部内容</p>2019-02-07</li><br/><li><span>Aaaaaaaaaaayou</span> 👍（12） 💬（0）<p>“只有伪类可以出现在伪元素之后”是不是写反了</p>2019-02-07</li><br/><li><span>mimof9</span> 👍（8） 💬（4）<p>试了一下 toggle这个函数 并没有效果。clac实测下来是有效果的。</p>2019-02-08</li><br/><li><span>前端男孩</span> 👍（7） 💬（0）<p>本来想发张思维导图的，但是貌似不支持发图，想想算了，也就整理了67个css函数，也不知道够不够。</p>2019-06-04</li><br/><li><span>无痕</span> 👍（7） 💬（1）<p>“||”这个选择器我怎么没搜到，是什么意思</p>2019-03-04</li><br/><li><span>xuanyuan</span> 👍（4） 💬（1）<p>每篇文章希望增加一些预备知识，后端程序员表示看不懂</p>2019-02-08</li><br/><li><span>瓶盖</span> 👍（3） 💬（0）<p>css函数：https:&#47;&#47;www.w3cplus.com&#47;css&#47;css-functions.html</p>2019-02-28</li><br/><li><span>Rushan-Chen</span> 👍（3） 💬（0）<p>@mimof9
 文章的链接是CSS4 working draft状态的文档，是很新的文档。
 
 看了下CSS3 Candidate Recommendation状态的文档，没有toggle()、min()、max()、clamp()，这几个函数应该是css4新加的，基本上浏览器都还不支持。

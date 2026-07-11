@@ -66,7 +66,7 @@ while (true) {
 
 ```
 while (true) {
-            ConsumerRecords<String, String> records = 
+            ConsumerRecords<String, String> records =
 	consumer.poll(Duration.ofSeconds(1));
             process(records); // 处理消息
             consumer.commitAsync((offsets, exception) -> {
@@ -88,7 +88,7 @@ commitAsync是否能够替代commitSync呢？答案是不能。commitAsync的问
 ```
    try {
            while(true) {
-                        ConsumerRecords<String, String> records = 
+                        ConsumerRecords<String, String> records =
                                     consumer.poll(Duration.ofSeconds(1));
                         process(records); // 处理消息
                         commitAysnc(); // 使用异步提交规避阻塞
@@ -123,7 +123,7 @@ private Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
 int count = 0;
 ……
 while (true) {
-            ConsumerRecords<String, String> records = 
+            ConsumerRecords<String, String> records =
 	consumer.poll(Duration.ofSeconds(1));
             for (ConsumerRecord<String, String> record: records) {
                         process(record);  // 处理消息
@@ -157,20 +157,20 @@ while (true) {
 
 1 固定频率提及，例如5s提及一次
 2 poll新数据之前提交前面消费的数据</p>2019-07-15</li><br/><li><span>bbbi</span> 👍（5） 💬（1）<p>老师您好！有一个问题时。Kafka的offset是一个数字，那么这个数值最大时多少？有没有可能存在用完的情况？</p>2020-02-14</li><br/><li><span>Luke</span> 👍（4） 💬（1）<p>我的理解，不管怎样做，单靠Kafka无法保证消息不被重复消费，无论时候自动提交还是手动提交，同步提交还是异步提交，消息的下游消费都要做去重和幂等处理。除非能够保证消息的消费和位点的提交是一个原子操作。而这个原子性太难保证了，基本上又要引入分布式一致性的那一套东西了。</p>2020-10-28</li><br/><li><span>不忘初心丶方得始终</span> 👍（4） 💬（1）<p>老师你好，问个问题，目前公司要用kafka同步老数据库数据，同步过程是按照老数据库的bin.log日志顺序进行同步，但是在同步过程中，有些表是有关联的，加入将数据放到多个分区，不同分区数据消费顺序不一样，就会导致数据同步出现关联问题，如果设置一个分区……这样又太慢，有什么好的建议吗？</p>2019-10-25</li><br/><li><span>Standly</span> 👍（4） 💬（4）<p>try {
-        while (true) {
-            ConsumerRecords&lt;String, String&gt; records = 
-                        consumer.poll(Duration.ofSeconds(1));
-            process(records); &#47;&#47; 处理消息
-            commitAysnc(); &#47;&#47; 使用异步提交规避阻塞
-        }
-     } catch (Exception e) {
-        handle(e); &#47;&#47; 处理异常
-    } finally {
-        try {
-            consumer.commitSync(); &#47;&#47; 最后一次提交使用同步阻塞式提交
-        } finally {
-            consumer.close();
-        }
-    }
+while (true) {
+ConsumerRecords&lt;String, String&gt; records =
+consumer.poll(Duration.ofSeconds(1));
+process(records); &#47;&#47; 处理消息
+commitAysnc(); &#47;&#47; 使用异步提交规避阻塞
+}
+} catch (Exception e) {
+handle(e); &#47;&#47; 处理异常
+} finally {
+try {
+consumer.commitSync(); &#47;&#47; 最后一次提交使用同步阻塞式提交
+} finally {
+consumer.close();
+}
+}
 这段代码如果异常了，不就退出while循环了么？也就相当于消费者线程异常退出？</p>2019-07-16</li><br/><li><span>kursk.ye</span> 👍（4） 💬（3）<p>我现在有点糊涂了，kafka的offset是以broker发消息给consumer时，broker的offset为准；还是以consumer 的commit offset为准？比如，一个partition现在的offset是99，执行poll(10)方法时，broker给consumer发送了10条记录，在broker中offset变为109；假如 enable.auto.commit 为false，为手动提交consumer offset,但是cosumer在执行consumer.commitSync()或consumer.commitAsync()时进程失败，整个consumer进程都崩溃了；于是一个新的consumer接替原consumer继续消费，那么他是从99开始消费，还是从109开始消费？</p>2019-07-14</li><br/><li><span>J.Smile</span> 👍（3） 💬（1）<p>老师，我真的遇到了无论是自动提交或者是手动提交，没有报错，但是消费位移就是没有增长，心塞塞！！！求助🆘</p>2020-07-21</li><br/>
 </ul>

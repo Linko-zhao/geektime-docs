@@ -47,7 +47,7 @@
 
 ```javascript
 // easy-server.cjs
-const http = require('node:http');
+const http = require("node:http");
 
 const server = http.createServer((req, res) => {
   const url = req.url;
@@ -65,7 +65,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(6001, () => {
-  console.log('服务已经启动，浏览器打开 http://127.0.0.1:6001/');
+  console.log("服务已经启动，浏览器打开 http://127.0.0.1:6001/");
 });
 ```
 
@@ -79,12 +79,12 @@ server.listen(6001, () => {
 
 ```typescript
 // easy-server.ts
-import http from 'node:http';
+import http from "node:http";
 
 const server = http.createServer(
   (
     req: http.IncomingMessage,
-    res: http.ServerResponse<http.IncomingMessage>
+    res: http.ServerResponse<http.IncomingMessage>,
   ) => {
     const url = req.url;
     const html = `
@@ -98,11 +98,11 @@ const server = http.createServer(
   </html>
   `;
     res.end(html);
-  }
+  },
 );
 
 server.listen(6001, () => {
-  console.log('服务已经启动，浏览器打开 http://127.0.0.1:6001/');
+  console.log("服务已经启动，浏览器打开 http://127.0.0.1:6001/");
 });
 ```
 
@@ -116,8 +116,8 @@ server.listen(6001, () => {
 
 ```typescript
 /* eslint-disable no-console */
-import Koa from 'koa';
-import type { Context, Next } from 'koa';
+import Koa from "koa";
+import type { Context, Next } from "koa";
 
 const app = new Koa();
 
@@ -148,7 +148,7 @@ app.use(async (ctx: Context, next: Next) => {
 });
 
 app.listen(6001, () => {
-  console.log('Koa.js 服务已经启动，浏览器打开 http://127.0.0.1:6001/');
+  console.log("Koa.js 服务已经启动，浏览器打开 http://127.0.0.1:6001/");
 });
 ```
 
@@ -163,21 +163,21 @@ app.listen(6001, () => {
 const context = {};
 
 async function middleware1(ctx: any, next: any) {
-  console.log('打印 001');
+  console.log("打印 001");
   await next();
-  console.log('打印 004');
+  console.log("打印 004");
 }
 
 async function middleware2(ctx: any, next: any) {
-  console.log('处理HTTP响应之前');
+  console.log("处理HTTP响应之前");
   await next();
-  console.log('处理HTTP响应之后');
+  console.log("处理HTTP响应之后");
 }
 
 async function middleware3(ctx: any, next: any) {
-  console.log('打印 002');
+  console.log("打印 002");
   await next();
-  console.log('打印 003');
+  console.log("打印 003");
 }
 
 Promise.resolve(
@@ -187,15 +187,14 @@ Promise.resolve(
         return Promise.resolve(
           middleware3(context, async () => {
             return Promise.resolve();
-          })
+          }),
         );
-      })
+      }),
     );
-  })
+  }),
 ).then(() => {
-  console.log('执行结束');
+  console.log("执行结束");
 });
-
 ```
 
 执行后的打印效果如下：
@@ -257,18 +256,17 @@ Koa.js本身框架极其简单，虽然只提供了HTTP请求和相应的处理�
 ```typescript
 // packages/work-server/src/router.ts
 
-import Router from '@koa/router';
-import { renderPage } from './controller/page';
-import { getData } from './controller/api';
+import Router from "@koa/router";
+import { renderPage } from "./controller/page";
+import { getData } from "./controller/api";
 
 const router = new Router();
-router.get('/page/:pageName', renderPage);
-router.get('/page/:pageName/:subPageName', renderPage);
-router.get('/api/getData', getData);
+router.get("/page/:pageName", renderPage);
+router.get("/page/:pageName/:subPageName", renderPage);
+router.get("/api/getData", getData);
 const routers = router.routes();
 
 export default routers;
-
 ```
 
 控制层，我们实现了两个控制内容。
@@ -277,59 +275,56 @@ export default routers;
 
 ```typescript
 // packages/work-server/src/controller/page.ts
-import type { Context, Next } from 'koa';
-import { getPageHTML } from '../util/file';
+import type { Context, Next } from "koa";
+import { getPageHTML } from "../util/file";
 
 export const renderPage = async (ctx: Context, next: Next) => {
   ctx.body = getPageHTML(ctx.params.pageName);
   await next();
 };
-
 ```
 
 另一个控制层内容是API请求控制，就是Ajax或者HTTPXMLRequest的请求操作：
 
 ```typescript
 // packages/work-server/src/controller/api.ts
-import type { Context, Next } from 'koa';
+import type { Context, Next } from "koa";
 
 export const getData = async (ctx: Context, next: Next) => {
   const data = [
-    { id: 'A001', name: '001' },
-    { id: 'A002', name: '002' },
-    { id: 'A003', name: '003' },
-    { id: 'A004', name: '004' },
-    { id: 'A005', name: '005' }
+    { id: "A001", name: "001" },
+    { id: "A002", name: "002" },
+    { id: "A003", name: "003" },
+    { id: "A004", name: "004" },
+    { id: "A005", name: "005" },
   ];
   ctx.body = data;
   await next();
 };
-
 ```
 
 最后启动代码为如下所示：
 
 ```typescript
 // packages/work-server/src/index.ts
-import path from 'node:path';
-import Koa from 'koa';
-import koaStatic from 'koa-static';
-import koaMount from 'koa-mount';
-import routers from './router';
-import { getServerDir } from './util/file';
+import path from "node:path";
+import Koa from "koa";
+import koaStatic from "koa-static";
+import koaMount from "koa-mount";
+import routers from "./router";
+import { getServerDir } from "./util/file";
 
 const app = new Koa();
 
-const publicDirPath = path.join(getServerDir(), 'public');
-app.use(koaMount('/public', koaStatic(publicDirPath)));
+const publicDirPath = path.join(getServerDir(), "public");
+app.use(koaMount("/public", koaStatic(publicDirPath)));
 app.use(routers);
 
 const port = 8001;
 
 app.listen(port, () => {
-  console.log('服务启动: http://127.0.0.1:' + port);
+  console.log("服务启动: http://127.0.0.1:" + port);
 });
-
 ```
 
 最后你就可以用vite-node启动TypeScript的服务代码，访问服务页面。
@@ -425,6 +420,7 @@ Koa.js和Express.js的中间件模型有什么区别吗？
 欢迎在留言区参与讨论，我们下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/17)
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>WGH丶</span> 👍（0） 💬（1）<p>没能get到洋葱模型的好处，老师能解释下，或者推荐下好的资料吗？</p>2023-01-05</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-18</li><br/><li><span>escray</span> 👍（0） 💬（0）<p>小白来问，如何用 vite-node 启动 TypeScript 的服务代码，惭愧
 

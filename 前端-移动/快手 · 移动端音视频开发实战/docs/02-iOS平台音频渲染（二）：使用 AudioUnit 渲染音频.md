@@ -266,14 +266,14 @@ static OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags 
 <li><span>大土豆</span> 👍（3） 💬（2）<p>iOS Api就是花样多，这个Graph类似FFmpeg的滤镜graph，抽象了一部分的音频处理。Android Api就原始多了，解码出来的PCM，自己去处理吧，不提供任何Api，连重采样都没有。</p>2022-07-27</li><br/><li><span>keepgoing</span> 👍（1） 💬（2）<p>老师这一讲的内容非常详细，对iOS audio unit的使用有了很详细的了解，其中还是有几个问题想确认希望老师有空时帮忙解答，十分感谢：
 
 1. 示例代码中给audio unit扬声器播放的场景设置ASBD代码是：
-AudioUnitSetProperty( remoteIOUnit,kAudioUnitProperty_StreamFormat, 
-kAudioUnitScope_Output, 1, &amp;asbd, sizeof(asbd));
-这里的element 是1，请问是不是应该改成element为0；另外asbd需要给element的0的output和input scope都设置一下吗？
+   AudioUnitSetProperty( remoteIOUnit,kAudioUnitProperty_StreamFormat,
+   kAudioUnitScope_Output, 1, &amp;asbd, sizeof(asbd));
+   这里的element 是1，请问是不是应该改成element为0；另外asbd需要给element的0的output和input scope都设置一下吗？
 
 2. 老师在文中给出的将remote i&#47;o audio unit element 0 与扬声器进行连接使用的key是 kAudioOutputUnitProperty_EnableIO，这个key的本质是一个开关，是不是可以理解remote i&#47;o audio unit 的 element 0 output 和 element 1 input 本身已经与扬声器&#47;麦克风连接了，我们使用时只需要将kAudioOutputUnitProperty_EnableIO的值设置为1，即启动了这个连接？
 
 3. 在问题2的基础上，请问该如何将 element 0 的 input 和 element 1 的 output 连接起来。
-如果想实现老师文中提到的从麦克风中采集音频后使用扬声器播放的场景，element 0 需要数据时可以通过预先设置的call back 方法感知到，需要调用什么接口才能从 element 1 中获取采集到的数据呢，这块没有特别想明白，想请老师提示下细节，感谢！
+   如果想实现老师文中提到的从麦克风中采集音频后使用扬声器播放的场景，element 0 需要数据时可以通过预先设置的call back 方法感知到，需要调用什么接口才能从 element 1 中获取采集到的数据呢，这块没有特别想明白，想请老师提示下细节，感谢！
 
 学了老师的课确实对 audio unit 有了更多好奇的地方，上面是一些困惑，希望老师有空时能帮忙解答，非常感谢！如果有一些理解错误或者鱼唇的地方，请老师多多包涵</p>2022-12-04</li><br/><li><span>jcy</span> 👍（1） 💬（1）<p>问一下，如何需要提供很复杂、很强大的音频功能，使用 AUGraph 是否比使用 AVAudioEngine 有更大地灵活性</p>2022-08-08</li><br/><li><span>Ins</span> 👍（0） 💬（1）<p>老师能否补一下音频技术的历史发展，比如一些标准、频谱、编码之类的，讲一下音频的一些底层逻辑。</p>2022-09-26</li><br/><li><span>jcy</span> 👍（0） 💬（1）<p>
 AURenderCallbackStruct renderProc;

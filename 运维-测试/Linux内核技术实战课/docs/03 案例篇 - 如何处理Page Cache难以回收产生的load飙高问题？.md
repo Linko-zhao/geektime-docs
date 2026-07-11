@@ -61,7 +61,7 @@ extra\_free\_kbytes的目的是为了解决min\_free\_kbyte造成的内存浪费
 总的来说，通过调整内存水位，在一定程度上保障了应用的内存申请，但是同时也带来了一定的内存浪费，因为系统始终要保障有这么多的free内存，这就压缩了Page Cache的空间。调整的效果你可以通过/proc/zoneinfo来观察：
 
 ```
-$ egrep "min|low|high" /proc/zoneinfo 
+$ egrep "min|low|high" /proc/zoneinfo
 ...
         min      7019
         low      8773
@@ -138,9 +138,9 @@ node 1 cpus: 12 13 14 15 16 17 18 19 20 21 22 23 36 37 38 39 40 41 42 43 44 45 4
 node 1 size: 131072 MB
 node 1 free: 122995 MB
 node distances:
-node   0   1 
-  0:  10  21 
-  1:  21  10 
+node   0   1
+  0:  10  21
+  1:  21  10
 ```
 
 其中CPU0～11，24～35的local node为node 0；而CPU12～23，36～47的local node为node 1。如下图所示：

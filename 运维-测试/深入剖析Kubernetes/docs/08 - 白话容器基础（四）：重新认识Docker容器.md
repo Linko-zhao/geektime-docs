@@ -20,9 +20,9 @@ app = Flask(__name__)
 @app.route('/')
 def hello():
     html = "<h3>Hello {name}!</h3>" \
-           "<b>Hostname:</b> {hostname}<br/>"           
+           "<b>Hostname:</b> {hostname}<br/>"
     return html.format(name=os.getenv("NAME", "world"), hostname=socket.gethostname())
-    
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
 ```
@@ -226,12 +226,12 @@ lrwxrwxrwx 1 root root 0 Aug 13 14:05 uts -> uts:[4026532277]
 
 int main(int argc, char *argv[]) {
     int fd;
-    
+
     fd = open(argv[1], O_RDONLY);
     if (setns(fd, 0) == -1) {
         errExit("setns");
     }
-    execvp(argv[2], &argv[2]); 
+    execvp(argv[2], &argv[2]);
     errExit("execvp");
 }
 ```
@@ -243,25 +243,25 @@ int main(int argc, char *argv[]) {
 现在，你可以编译执行一下这个程序，加入到容器进程（PID=25686）的Network Namespace中：
 
 ```
-$ gcc -o set_ns set_ns.c 
-$ ./set_ns /proc/25686/ns/net /bin/bash 
+$ gcc -o set_ns set_ns.c
+$ ./set_ns /proc/25686/ns/net /bin/bash
 $ ifconfig
-eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:02  
+eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:02
           inet addr:172.17.0.2  Bcast:0.0.0.0  Mask:255.255.0.0
           inet6 addr: fe80::42:acff:fe11:2/64 Scope:Link
           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
           RX packets:12 errors:0 dropped:0 overruns:0 frame:0
           TX packets:10 errors:0 dropped:0 overruns:0 carrier:0
-	   collisions:0 txqueuelen:0 
+	   collisions:0 txqueuelen:0
           RX bytes:976 (976.0 B)  TX bytes:796 (796.0 B)
 
-lo        Link encap:Local Loopback  
+lo        Link encap:Local Loopback
           inet addr:127.0.0.1  Mask:255.0.0.0
           inet6 addr: ::1/128 Scope:Host
           UP LOOPBACK RUNNING  MTU:65536  Metric:1
           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-	  collisions:0 txqueuelen:1000 
+	  collisions:0 txqueuelen:1000
           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
 ```
 

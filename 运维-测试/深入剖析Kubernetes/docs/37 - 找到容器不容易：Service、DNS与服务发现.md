@@ -159,9 +159,9 @@ IPVS模式的工作原理，其实跟iptables模式类似。当我们创建了�
 # ipvsadm -ln
  IP Virtual Server version 1.2.1 (size=4096)
   Prot LocalAddress:Port Scheduler Flags
-    ->  RemoteAddress:Port           Forward  Weight ActiveConn InActConn     
+    ->  RemoteAddress:Port           Forward  Weight ActiveConn InActConn
   TCP  10.102.128.4:80 rr
-    ->  10.244.3.6:9376    Masq    1       0          0         
+    ->  10.244.3.6:9376    Masq    1       0          0
     ->  10.244.1.7:9376    Masq    1       0          0
     ->  10.244.2.3:9376    Masq    1       0          0
 ```
@@ -254,7 +254,7 @@ spec:
 Server:    10.96.0.10
 Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
 
-Name:      *.default.svc.cluster.local
+Name: *.default.svc.cluster.local
 Address 1: 10.244.1.7 busybox-3.default-subdomain.default.svc.cluster.local
 Address 2: 10.96.0.1 kubernetes.default.svc.cluster.local
 Address 3: 10.97.103.223 hostnames.default.svc.cluster.local
@@ -277,8 +277,8 @@ Address 3: 10.97.103.223 hostnames.default.svc.cluster.local
 
 问下为啥源地址是这个啊？现在数据包源地址不应该是客户端的地址吗？</p>2020-02-23</li><br/><li><span>mcc</span> 👍（8） 💬（9）<p>描述一个实际使用中遇到kube-proxy的一个问题。我使用service的nodeport模式对外发布服务，前端使用openresty做代理的，upstream就配置node ip+nodeport。在使用过程中发现openresty经常不定期报104:connection reset by peer when read response head这个错误，从错误看出openstry从nodeport读取数据的时候tcp连接被重置了，使用同一openresty的后端是普通虚拟机的节点的服务却没有这个问题，问题还有个特点就是某个服务长时间没有被访问，第一次点击的时候就会出现，然后后面就好了。nodeport是被kube-proxy监听的，问题就出在openresty与kube-proxy的tcp连接上，能否帮忙分析kube-proxy为何会重置连接？</p>2018-11-16</li><br/><li><span>grep</span> 👍（4） 💬（2）<p>示例里这里打出来的 endpoints ip：
 kubectl get endpoints hostnames
-NAME        ENDPOINTS
-hostnames   10.244.0.5:9376,10.244.0.6:9376,10.244.0.7:9376
+NAME ENDPOINTS
+hostnames 10.244.0.5:9376,10.244.0.6:9376,10.244.0.7:9376
 
 与下面的 iptables 规则里的 endpoint ip 对不上
 -A KUBE-SEP-57KPRZ3JQVENLNBR -s 10.244.3.6&#47;32 -m comment --comment &quot;default&#47;hostnames:&quot; -j MARK --set-xmark 0x00004000&#47;0x00004000
@@ -290,23 +290,23 @@ hostnames   10.244.0.5:9376,10.244.0.6:9376,10.244.0.7:9376
 -A KUBE-SEP-X3P2623AGDH6CDF3 -s 10.244.2.3&#47;32 -m comment --comment &quot;default&#47;hostnames:&quot; -j MARK --set-xmark 0x00004000&#47;0x00004000
 -A KUBE-SEP-X3P2623AGDH6CDF3 -p tcp -m comment --comment &quot;default&#47;hostnames:&quot; -m tcp -j DNAT --to-destination 10.244.2.3:9376
 
-是不是中间重新部署过？</p>2019-09-27</li><br/><li><span>艾斯Z艾穆</span> 👍（4） 💬（1）<p>您好，我使用coreDNS插件版本是1.2.6 
+是不是中间重新部署过？</p>2019-09-27</li><br/><li><span>艾斯Z艾穆</span> 👍（4） 💬（1）<p>您好，我使用coreDNS插件版本是1.2.6
 配置文件的内容：
 Corefile: |
-    .:53 {
-        errors
-        health
-        kubernetes cluster.local. in-addr.arpa ip6.arpa {
-            pods insecure
-            upstream
-            fallthrough in-addr.arpa ip6.arpa
-        }
-        prometheus :9153
-        proxy . 100.64.255.100 223.5.5.5 11.125.1.12
-        cache 30
-        loop
-        reload
-        loadbalance
-    }
+.:53 {
+errors
+health
+kubernetes cluster.local. in-addr.arpa ip6.arpa {
+pods insecure
+upstream
+fallthrough in-addr.arpa ip6.arpa
+}
+prometheus :9153
+proxy . 100.64.255.100 223.5.5.5 11.125.1.12
+cache 30
+loop
+reload
+loadbalance
+}
 在解析公网的域名的时候会有小概率随机出现unknown host，请问会是什么问题</p>2018-12-03</li><br/><li><span>独孤九剑</span> 👍（3） 💬（0）<p>“服务”本质是一种“反向代理”机制</p>2021-07-01</li><br/>
 </ul>

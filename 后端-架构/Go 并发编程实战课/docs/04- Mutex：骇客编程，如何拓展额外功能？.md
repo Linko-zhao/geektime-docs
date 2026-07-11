@@ -329,24 +329,24 @@ func (e *RWMutex) readerWaitPtr() *int32 {
 如果加上timeout机制，就不要用defer 去unlock，因为需要自行判断超时时间，然后直接unlock，如果defer再unlock就会触发panic</p>2023-11-27</li><br/><li><span>斯蒂芬.赵</span> 👍（1） 💬（3）<p>fast path执行失败，直接返回false不就行了，为啥还要往下执行？正常不是多个携程并发只有一个执行成功，其他都是失败么？</p>2021-05-07</li><br/><li><span>Calvin</span> 👍（0） 💬（1）<p>老师，TryLock 那里的以下这段代码，我对比了一下官方 1.18 以后的实现，貌似 mutexWoken 可以排除掉？
 old := atomic.LoadInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)))
 if old&amp;(mutexLocked|mutexStarving|mutexWoken) != 0 {
-	return false
+return false
 }
 
 官方的实现：
 old := m.state
-if old&amp;(mutexLocked|mutexStarving) != 0 {	&#47;&#47; 这里和本课程文章中的差别是少了 |mutexWoken
-    return false
+if old&amp;(mutexLocked|mutexStarving) != 0 { &#47;&#47; 这里和本课程文章中的差别是少了 |mutexWoken
+return false
 }
 
 &#47;&#47; There may be a goroutine waiting for the mutex, but we are
 &#47;&#47; running now and can try to grab the mutex before that
 &#47;&#47; goroutine wakes up.
 if !atomic.CompareAndSwapInt32(&amp;m.state, old, old|mutexLocked) {
-	return false
+return false
 }
 
 if race.Enabled {
-	race.Acquire(unsafe.Pointer(m))
+race.Acquire(unsafe.Pointer(m))
 }
 return true</p>2024-05-20</li><br/><li><span>路过</span> 👍（0） 💬（1）<p>想问一下，为什么最后实现线程安全的队列里面的 Dequeue() 方法释放锁不用defer，这样不用写两次unlock</p>2023-04-17</li><br/><li><span>鲁迅原名周树人</span> 👍（0） 💬（2）<p>老师您好，
 
@@ -359,66 +359,69 @@ return true</p>2024-05-20</li><br/><li><span>路过</span> 👍（0） 💬（1�
 		return true
 	}
 
-	&#47;&#47; 如果处于唤醒、加锁或者饥饿状态，这次请求就不参与竞争了，返回false
-	old := atomic.LoadInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)))
-	fmt.Println(&quot;===old===:&quot;, old)
-	if old&amp;(mutexLocked|mutexStarving|mutexWoken) != 0 {
-		return false
-	}
+    &#47;&#47; 如果处于唤醒、加锁或者饥饿状态，这次请求就不参与竞争了，返回false
+    old := atomic.LoadInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)))
+    fmt.Println(&quot;===old===:&quot;, old)
+    if old&amp;(mutexLocked|mutexStarving|mutexWoken) != 0 {
+    	return false
+    }
 
-	&#47;&#47; 尝试在竞争的状态下请求锁
-	new := old | mutexLocked
-	fmt.Println(&quot;===new===:&quot;, new) &#47;&#47;请问在什么情况下会执行到这里
-	return atomic.CompareAndSwapInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)), old, new)
+    &#47;&#47; 尝试在竞争的状态下请求锁
+    new := old | mutexLocked
+    fmt.Println(&quot;===new===:&quot;, new) &#47;&#47;请问在什么情况下会执行到这里
+    return atomic.CompareAndSwapInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)), old, new)
+
 }
 
 func main() {
-	var mu Mutex
-	go func() { &#47;&#47; 启动一个goroutine持有一段时间的锁
-		mu.Lock()
-		time.Sleep(time.Duration(rand.Intn(2)) * time.Second)
-		mu.Unlock()
-	}()
+var mu Mutex
+go func() { &#47;&#47; 启动一个goroutine持有一段时间的锁
+mu.Lock()
+time.Sleep(time.Duration(rand.Intn(2)) * time.Second)
+mu.Unlock()
+}()
 
-	time.Sleep(time.Second)
+    time.Sleep(time.Second)
 
-	n := int(10)
-	var wg sync.WaitGroup
-	wg.Add(n)
+    n := int(10)
+    var wg sync.WaitGroup
+    wg.Add(n)
 
-	for i := 0; i &lt; n; i++ {
-		go func() {
-			ok := mu.TryLock() &#47;&#47; 尝试获取到锁
-			defer wg.Done()
-			if ok { &#47;&#47; 获取成功
-				fmt.Println(&quot;got the lock&quot;)
-				&#47;&#47; do something
-				mu.Unlock()
-				return
-			}
-		}()
-	}
-	&#47;&#47; 没有获取到
-	wg.Wait()
+    for i := 0; i &lt; n; i++ {
+    	go func() {
+    		ok := mu.TryLock() &#47;&#47; 尝试获取到锁
+    		defer wg.Done()
+    		if ok { &#47;&#47; 获取成功
+    			fmt.Println(&quot;got the lock&quot;)
+    			&#47;&#47; do something
+    			mu.Unlock()
+    			return
+    		}
+    	}()
+    }
+    &#47;&#47; 没有获取到
+    wg.Wait()
+
 }
 
 老师，你好。在main中尝试编写一段逻辑测试TryLock方法，请问在什么情况下会执行fmt.Println(&quot;===new===:&quot;, new) 请老师答疑解惑，谢谢。</p>2020-11-16</li><br/><li><span>樊少</span> 👍（0） 💬（1）<p>在安全Queue的实现中，锁的释放为什么不用defer?</p>2020-11-05</li><br/><li><span>Chen</span> 👍（0） 💬（1）<p>第 15 行我们右移三位（这里的常量 mutexWaiterShift 的值为 3），就得到了当前等待者的数量
 =&gt;&gt; 这里看不懂，为什么右移三位=》得到等待者数量</p>2020-10-22</li><br/><li><span>linxs</span> 👍（0） 💬（3）<p>TryLock方法内，对于这段代码有点不理解，为什么要把&amp;m.Mutex转换成*int32，这里的话我直接用&amp;m.Mutex.state是否是一样的
 
-if atomic.CompareAndSwapInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)), 0, mutexLocked) { 
-     return true 
+if atomic.CompareAndSwapInt32((*int32)(unsafe.Pointer(&amp;m.Mutex)), 0, mutexLocked) {
+return true
 }</p>2020-10-20</li><br/><li><span>Junes</span> 👍（34） 💬（2）<p>我来提供个思路~
 
 最简单直接的是采用channel实现，用select监听锁和timeout两个channel，不在今天的讨论范围内。
 
 1. 用for循环+TryLock实现：
-先记录开始的时间，用for循环判断是否超时：没有超时则反复尝试tryLock，直到获取成功；如果超时直接返回失败。
+   先记录开始的时间，用for循环判断是否超时：没有超时则反复尝试tryLock，直到获取成功；如果超时直接返回失败。
 
 问题：高频的CAS自旋操作，如果失败的太多，会消耗大量的CPU。
 
 2. 优化1：TryLock的fast的拆分
-TryLock的抢占实现分为两部分，一个是fast path，另一个是竞争状态下的，后者的cas操作很多。我会考虑减少slow方法的频率，比如调用n次fast path失败后，再调用一次整个Trylock。
+   TryLock的抢占实现分为两部分，一个是fast path，另一个是竞争状态下的，后者的cas操作很多。我会考虑减少slow方法的频率，比如调用n次fast path失败后，再调用一次整个Trylock。
 
 3. 优化2：借鉴TCP重试机制
-for循环中的重试增加休眠时间，每次失败将休眠时间乘以一个系数（如1.5），直到达到上限（如10ms），减少自旋带来的性能损耗</p>2020-10-19</li><br/>
+   for循环中的重试增加休眠时间，每次失败将休眠时间乘以一个系数（如1.5），直到达到上限（如10ms），减少自旋带来的性能损耗</p>2020-10-19</li><br/>
+
 </ul>

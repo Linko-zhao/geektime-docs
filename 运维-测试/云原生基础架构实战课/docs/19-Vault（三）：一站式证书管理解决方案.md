@@ -143,7 +143,6 @@ spec:
         secretRef:
           name: vault-token
           key: token
-
 ```
 
 这段代码里有两处需要你根据自己的情况做替换。

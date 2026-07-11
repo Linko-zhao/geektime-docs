@@ -207,12 +207,12 @@ function DataList() {
       dispatch({ type: 'FETCH_DATA_FAILURE', error: err });
     })
   }, []);
-  
+
   // 绑定到 state 的变化
   const data = useSelector(state => state.data);
   const pending = useSelector(state => state.pending);
   const error = useSelector(state => state.error);
-  
+
   // 根据 state 显示不同的状态
   if (error) return 'Error.';
   if (pending) return 'Loading...';
@@ -310,15 +310,15 @@ store.dispatch(decrementAction); &#47;&#47; 计数器减 10</p>2021-06-08</li><b
 也就是说，redux-thunk 要做的就是【把这段代码实现一遍】。
 
 就是下面这段代码：
-    &#47;&#47; 请求发送时
-    dispatch({ type: &#39;FETCH_DATA_BEGIN&#39; });
-    fetch(&#39;&#47;some-url&#39;).then(res =&gt; {
-      &#47;&#47; 请求成功时
-      dispatch({ type: &#39;FETCH_DATA_SUCCESS&#39;, data: res });
-    }).catch(err =&gt; {
-      &#47;&#47; 请求失败时
-      dispatch({ type: &#39;FETCH_DATA_FAILURE&#39;, error: err });
-    });
+&#47;&#47; 请求发送时
+dispatch({ type: &#39;FETCH_DATA_BEGIN&#39; });
+fetch(&#39;&#47;some-url&#39;).then(res =&gt; {
+&#47;&#47; 请求成功时
+dispatch({ type: &#39;FETCH_DATA_SUCCESS&#39;, data: res });
+}).catch(err =&gt; {
+&#47;&#47; 请求失败时
+dispatch({ type: &#39;FETCH_DATA_FAILURE&#39;, error: err });
+});
 
 为了redux-thunk能重复使用这段代码，我们还需要定义一个 actionCreator 函数，用来返回这段代码。
 
@@ -326,16 +326,16 @@ store.dispatch(decrementAction); &#47;&#47; 计数器减 10</p>2021-06-08</li><b
 
 例如：
 useUserList(dispatch =&gt; {
-    return useCallback(() =&gt; {
-        &#47;&#47; 请求发送时
-    dispatch({ type: &#39;FETCH_DATA_BEGIN&#39; });
-    fetch(&#39;&#47;some-url&#39;).then(res =&gt; {
-      &#47;&#47; 请求成功时
-      dispatch({ type: &#39;FETCH_DATA_SUCCESS&#39;, data: res });
-    }).catch(err =&gt; {
-      &#47;&#47; 请求失败时
-      dispatch({ type: &#39;FETCH_DATA_FAILURE&#39;, error: err });
-    }), [dispatch]);
-    });
+return useCallback(() =&gt; {
+&#47;&#47; 请求发送时
+dispatch({ type: &#39;FETCH_DATA_BEGIN&#39; });
+fetch(&#39;&#47;some-url&#39;).then(res =&gt; {
+&#47;&#47; 请求成功时
+dispatch({ type: &#39;FETCH_DATA_SUCCESS&#39;, data: res });
+}).catch(err =&gt; {
+&#47;&#47; 请求失败时
+dispatch({ type: &#39;FETCH_DATA_FAILURE&#39;, error: err });
+}), [dispatch]);
+});
 }) </p>2022-03-07</li><br/><li><span>山丘smith18651579836</span> 👍（1） 💬（0）<p>为什么不用usecontext</p>2022-01-23</li><br/><li><span>Juntíng</span> 👍（1） 💬（0）<p>Hooks 的出现，结合 context API，用管理全局状态更加简洁易懂，只是在数据流变更机制上不容易捕获，但是却比 Redux 带来的代码复杂度的增加、样板代码过多，不易于阅读上来说我更加偏爱 hooks + ContextAPI 。</p>2021-06-22</li><br/>
 </ul>

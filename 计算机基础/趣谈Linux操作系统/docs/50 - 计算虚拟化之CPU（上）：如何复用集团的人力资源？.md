@@ -312,7 +312,7 @@ static void pc_i440fx_machine_options(MachineClass *m)
 
 接下来，DEFINE\_I440FX\_MACHINE里面又定义了DEFINE\_PC\_MACHINE。它有四个参数，除了DEFINE\_I440FX\_MACHINE传进来的三个参数以外，多了一个initfn，也即初始化函数，指向刚才定义的pc\_init\_##suffix。
 
-在DEFINE\_PC\_MACHINE中，我们定义了一个函数pc\_machine\_##suffix##*class\_init。从函数的名字class\_init可以看出，这是machine\_class从纸面上的class初始化为Class对象的方法。在这个函数里面，我们可以看到，它创建了一个MachineClass对象，这个就是Class对象。MachineClass对象的init函数指向上面定义的pc\_init*##suffix，说明这个函数是machine这种类型初始化的一个函数，后面会被调用。
+在DEFINE\_PC\_MACHINE中，我们定义了一个函数pc\_machine\_##suffix##_class\_init。从函数的名字class\_init可以看出，这是machine\_class从纸面上的class初始化为Class对象的方法。在这个函数里面，我们可以看到，它创建了一个MachineClass对象，这个就是Class对象。MachineClass对象的init函数指向上面定义的pc\_init_##suffix，说明这个函数是machine这种类型初始化的一个函数，后面会被调用。
 
 接着，我们看DEFINE\_PC\_MACHINE。它定义了一个pc\_machine\_type\_##suffix的TypeInfo。这是用于生成纸面上的class的原材料，果真后面调用了type\_init。
 
@@ -440,7 +440,7 @@ static void type_initialize(TypeImpl *ti)
 
 因为在machine的命令行里面，我们指定了名字为"pc-i440fx-4.0"，就肯定能够找到我们注册过了的TypeImpl，并调用它的class\_init函数。
 
-因而pc\_machine\_##suffix##*class\_init会被调用，在这里面，pc\_i440fx\_machine\_options才真正被调用初始化MachineClass，并且将MachineClass的init函数设置为pc\_init*##suffix。也即，当select\_machine执行完毕后，就有一个MachineClass了。
+因而pc\_machine\_##suffix##_class\_init会被调用，在这里面，pc\_i440fx\_machine\_options才真正被调用初始化MachineClass，并且将MachineClass的init函数设置为pc\_init_##suffix。也即，当select\_machine执行完毕后，就有一个MachineClass了。
 
 接着，我们回到object\_new。这就很好理解了，MachineClass是一个Class类，接下来应该通过它生成一个Instance，也即对象，这就是object\_new的作用。
 
@@ -495,13 +495,13 @@ object\_new中，TypeImpl的instance\_init会被调用，创建一个对象。cu
 
 1. 初始化所有模块
 
-模块的信息(包括名称, 模块类型初始化函数等), 存在 TypeInfo 中, 通过调用 type_init, 将这些信息统一以 ModelEntry 的格式存储到 ModelTypeList 中. 
+模块的信息(包括名称, 模块类型初始化函数等), 存在 TypeInfo 中, 通过调用 type_init, 将这些信息统一以 ModelEntry 的格式存储到 ModelTypeList 中.
 
-module_call_init() 会调用 ModelTypeList 中所有模块的初始化函数,  从 ModelEntry 里存储的 TypeInfo 信息生成 TypeImpl(类似于 class 文件), 这个 TypeImpl 会存储到 qemu 的一个全局 hash 表中.  
+module_call_init() 会调用 ModelTypeList 中所有模块的初始化函数, 从 ModelEntry 里存储的 TypeInfo 信息生成 TypeImpl(类似于 class 文件), 这个 TypeImpl 会存储到 qemu 的一个全局 hash 表中.
 
 2. 解析命令行参数
 
-命令行参数比较多. 
+命令行参数比较多.
 
 其中 -machine 参数用于指定计算机体系结构. 另外 网卡&#47;硬盘的配置要分表从 Host&#47;Guest 较多进行设置.
 

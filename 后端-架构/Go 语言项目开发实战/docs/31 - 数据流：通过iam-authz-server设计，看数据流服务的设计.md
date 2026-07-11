@@ -20,22 +20,19 @@ Ladon解决了这个问题：在特定的条件下，谁能够/不能够对哪�
 
 ```json
 {
-  "description": "One policy to rule them all.",
-  "subjects": ["users:<peter|ken>", "users:maria", "groups:admins"],
-  "actions" : ["delete", "<create|update>"],
-  "effect": "allow",
-  "resources": [
-    "resources:articles:<.*>",
-    "resources:printer"
-  ],
-  "conditions": {
-    "remoteIP": {
-        "type": "CIDRCondition",
-        "options": {
-            "cidr": "192.168.0.1/16"
-        }
-    }
-  }
+  "description": "One policy to rule them all.",
+  "subjects": ["users:<peter|ken>", "users:maria", "groups:admins"],
+  "actions": ["delete", "<create|update>"],
+  "effect": "allow",
+  "resources": ["resources:articles:<.*>", "resources:printer"],
+  "conditions": {
+    "remoteIP": {
+      "type": "CIDRCondition",
+      "options": {
+        "cidr": "192.168.0.1/16"
+      }
+    }
+  }
 }
 ```
 
@@ -52,12 +49,12 @@ Ladon解决了这个问题：在特定的条件下，谁能够/不能够对哪�
 
 ```json
 {
-  "subject": "users:peter",
-  "action" : "delete",
-  "resource": "resources:articles:ladon-introduction",
-  "context": {
-    "remoteIP": "192.168.0.5"
-  }
+  "subject": "users:peter",
+  "action": "delete",
+  "resource": "resources:articles:ladon-introduction",
+  "context": {
+    "remoteIP": "192.168.0.5"
+  }
 }
 ```
 
@@ -65,7 +62,7 @@ Ladon解决了这个问题：在特定的条件下，谁能够/不能够对哪�
 
 ```json
 {
-    "allowed": true
+  "allowed": true
 }
 ```
 
@@ -372,21 +369,21 @@ r.Context["username"] = c.GetHeader("username")
 ```go
 func (m *PolicyManager) FindRequestCandidates(r *ladon.Request) (ladon.Policies, error) {
 		username := ""
-	
+
 		if user, ok := r.Context["username"].(string); ok {
 			username = user
 		}
-	
+
 		policies, err := m.client.List(username)
 		if err != nil {
 			return nil, errors.Wrap(err, "list policies failed")
 		}
-	
+
 		ret := make([]ladon.Policy, 0, len(policies))
 		for _, policy := range policies {
 			ret = append(ret, policy)
 		}
-	
+
 		return ret, nil
 	}
 ```
@@ -548,9 +545,9 @@ func NewAnalytics(options *AnalyticsOptions, store storage.AnalyticsHandler) *An
 		recordsBufferSize := options.RecordsBufferSize
 		workerBufferSize := recordsBufferSize / uint64(ps)
 		log.Debug("Analytics pool worker buffer size", log.Uint64("workerBufferSize", workerBufferSize))
-	
+
 		recordsChan := make(chan *AnalyticsRecord, recordsBufferSize)
-	
+
 		return &Analytics{
 			store:                      store,
 			poolSize:                   ps,
@@ -613,14 +610,14 @@ func (auth *Authorization) LogGrantedAccessRequest(r *ladon.Request, p ladon.Pol
 func (r *Analytics) Start() {
 		analytics = r
 		r.store.Connect()
-	
+
 		// start worker pool
 		atomic.SwapUint32(&r.shouldStop, 0)
 		for i := 0; i < r.poolSize; i++ {
 			r.poolWg.Add(1)
 			go r.recordWorker()
 		}
-	
+
 		// stop analytics workers
 		go r.Stop()
 	}
@@ -689,13 +686,13 @@ authz也需要对请求进行认证工作，authz 的认证采用 cache 方式�
 authz的认证工作主要交给了 landon 来完成。iam-apiserver 存储的授权策略符合landon的语法规范，iam-authz-server 接收的授权请求，也符合landon的语法规范。landon 通过接口的方式，暴露了manager、auditLogger、metric 等相关的接口。比如，我们需要为landon提供用户的 policy 列表，是否允许授权，由 landon 来做决策。
 缓存设计</p>2021-12-04</li><br/><li><span>dll</span> 👍（1） 💬（1）<p>每次从apiserver触发reload() 都是全量的拉去 s.cli.GetPolicies()，这样应该可能会产生性能问题吧 假如当Policies数量特别大的时候</p>2022-10-17</li><br/><li><span>陈先生</span> 👍（1） 💬（1）<p>如果iam-authz-server挂了，是不是有audit log丢失的可能性？</p>2021-10-07</li><br/><li><span>helloworld</span> 👍（1） 💬（1）<p>在实际应用中，请求&#47;v1&#47;authz接口的参数体是网关根据用户实际请求的某个具体业务的api的参数、请求方法、path等，并根据提前定制的规则自动构造出来的吧，这样理解对吗</p>2021-08-16</li><br/><li><span>岑惠韬</span> 👍（0） 💬（1）<p>老师请问Load的Start函数第二个协程的作用是什么呢？是主要起解耦作用吗？假如让PubSubLoop直接操作requeue切片，让reloadLoop每秒清空切片，仅考虑当前用法的话是不是也是能跑的？还是会有什么逻辑上的问题？</p>2022-11-06</li><br/><li><span>꧁子华宝宝萌萌哒꧂</span> 👍（0） 💬（1）<p>preparedAuthzServer.Run 为啥需要一个 stopChan 来阻塞不让退出？
 
-按我的理解这个 stopChan 没有写，这个进程永远就退不了， 
+按我的理解这个 stopChan 没有写，这个进程永远就退不了，
 
 直接 return s.genericAPIServer.Run() 不可以吗？</p>2022-06-27</li><br/><li><span>xinHAOr</span> 👍（0） 💬（1）<p>func (r *Analytics) Start() 里面为什么同步执行了Stop？刚启动完就停止了吗</p>2022-04-16</li><br/><li><span>Geek_226b1b</span> 👍（0） 💬（3）<p>老师，请问为什么用Ristretto缓存数据，不直接用Redis缓存数据呢？在用Redis缓存的基础上，讲一下MySQL与Redis的数据一致性相关的缓存读写策略会不会更好一点？把所有数据都简单缓存到一个缓存包&#47;Redis里，没有淘汰机制是不是不太好？</p>2022-03-16</li><br/><li><span>RunDouble</span> 👍（0） 💬（1）<p>太强调授权相关的东西，并不是很好的 demo。</p>2022-02-27</li><br/><li><span>Sch0ng</span> 👍（2） 💬（0）<p>详细介绍了iam-authz-server的设计与实现。
 需要结合代码和跑起来的程序反复揣摩。</p>2021-08-16</li><br/><li><span>Will</span> 👍（1） 💬（0）<p>孔老师。Reload这里
 c.secrets.Clear()
 for key, val := range secrets {
-	c.secrets.Set(key, val, 1)
+c.secrets.Set(key, val, 1)
 }
 这里clear.另一个请求如果授权的话。还没有跑到set的方法。可能会有问题。虽然可能是毫秒级别的。
 可能是为了教学演示，如果是生产使用的话，是不是要设计成增量合理些。</p>2023-08-31</li><br/>

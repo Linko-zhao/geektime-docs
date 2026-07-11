@@ -177,11 +177,11 @@ m.Store(1, &quot;a&quot;)
 m.Store(2, &quot;b&quot;)
 就算要检查，应该是检查键的实际类型不能是函数类型、字典类型和切片类型
 还望老师解惑下~谢谢</p>2022-10-28</li><br/><li><span>Jason</span> 👍（0） 💬（1）<p>郝大，map的键值对的删除为什么要先置为nil再置为unpunged呢，直接置为unpunged不行吗？而且真正删除一个键值对要经过delete-&gt;dirtyLocked-&gt;missLocked三个步骤才能删除</p>2022-10-11</li><br/><li><span>Geek_f0ae52</span> 👍（0） 💬（1）<p>func (e *entry) load() (value interface{}, ok bool) {
-	p := atomic.LoadPointer(&amp;e.p)
-	if p == nil || p == expunged {
-		return nil, false
-	}
-	return *(*interface{})(p), true
+p := atomic.LoadPointer(&amp;e.p)
+if p == nil || p == expunged {
+return nil, false
 }
-(*interface{})(p)   这句话的意思是把p转换成interface类型的指针吗？</p>2022-04-01</li><br/>
+return *(*interface{})(p), true
+}
+(*interface{})(p) 这句话的意思是把p转换成interface类型的指针吗？</p>2022-04-01</li><br/>
 </ul>

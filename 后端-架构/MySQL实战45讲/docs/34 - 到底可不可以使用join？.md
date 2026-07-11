@@ -81,7 +81,7 @@ select * from t1 straight_join t2 on (t1.a=t2.a);
 
 1. 执行`select * from t1`，查出表t1的所有数据，这里有100行；
 2. 循环遍历这100行数据：
-   
+
    - 从每一行R取出字段a的值$R.a；
    - 执行`select * from t2 where a=$R.a`；
    - 把返回的结果和R构成结果集的一行。
@@ -224,7 +224,7 @@ select * from t1 straight_join t2 on (t1.a=t2.b);
 
 1. 如果是Index Nested-Loop Join算法，应该选择小表做驱动表；
 2. 如果是Block Nested-Loop Join算法：
-   
+
    - 在join\_buffer\_size足够大的时候，是一样的；
    - 在join\_buffer\_size不够大的时候（这种情况更常见），应该选择小表做驱动表。
 
@@ -292,6 +292,7 @@ select t1.b,t2.* from  t2  straight_join t1 on (t1.b=t2.b) where t2.id<=100;
 
 > @老杨同志 提到了更新之间会互相等锁的问题。同一个事务，更新之后要尽快提交，不要做没必要的查询，尤其是不要执行需要返回大量数据的查询；  
 > @长杰 同学提到了undo表空间变大，db服务堵塞，服务端磁盘空间不足的例子。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>没时间了ngu</span> 👍（117） 💬（9）<p>join这种用的多的，看完还是有很大收获的。像之前讲的锁之类，感觉好抽象，老是记不住，唉。</p>2019-01-30</li><br/><li><span>信信</span> 👍（376） 💬（19）<p>老师好，回答本期问题：如果驱动表分段，那么被驱动表就被多次读，而被驱动表又是大表，循环读取的间隔肯定得超1秒，这就会导致上篇文章提到的：“数据页在LRU_old的存在时间超过1秒，就会移到young区”。最终结果就是把大部分热点数据都淘汰了，导致“Buffer pool hit rate”命中率极低，其他请求需要读磁盘，因此系统响应变慢，大部分请求阻塞。</p>2019-01-30</li><br/><li><span>斜面镜子 Bill</span> 👍（238） 💬（6）<p>因为 join_buffer 不够大，需要对被驱动表做多次全表扫描，也就造成了“长事务”。除了老师上节课提到的导致undo log 不能被回收，导致回滚段空间膨胀问题，还会出现：1. 长期占用DML锁，引发DDL拿不到锁堵慢连接池； 2. SQL执行socket_timeout超时后业务接口重复发起，导致实例IO负载上升出现雪崩；3. 实例异常后，DBA kill SQL因繁杂的回滚执行时间过长，不能快速恢复可用；4. 如果业务采用select *作为结果集返回，极大可能出现网络拥堵，整体拖慢服务端的处理；5. 冷数据污染buffer pool，block nested-loop多次扫描，其中间隔很有可能超过1s，从而污染到lru 头部，影响整体的查询体验。</p>2019-01-31</li><br/><li><span>老杨同志</span> 👍（67） 💬（1）<p>对被驱动表进行全表扫描，会把冷数据的page加入到buffer pool.,并且block nested-loop要扫描多次，两次扫描的时间可能会超过1秒，使lru的那个优化失效，把热点数据从buffer pool中淘汰掉，影响正常业务的查询效率</p>2019-01-30</li><br/><li><span>Zzz</span> 👍（46） 💬（7）<p>林老师，我没想清楚为什么会进入young区域。假设大表t大小是M页&gt;old区域N页，由于Block Nested-Loop Join需要对t进行k次全表扫描。第一次扫描时，1~N页依次被放入old区域，访问N+1页时淘汰1页，放入N+1页，以此类推，第一次扫描结束后old区域存放的是M-N+1~M页。第二次扫描开始，访问1页，淘汰M-N+1页，放入1页。可以把M页想象成一个环，N页想象成在这个环上滑动的窗口，由于M&gt;N，不管是哪次扫描，需要访问的页都不会在滑动窗口上，所以不会存在“被访问的时候数据页在 LRU 链表中存在的时间超过了 1 秒“而被放入young的情况。我能想到的会被放入young区域的情况是，在当次扫描中，由于一页上有多行数据，需要对该页访问多次，超过了1s，不管这种情况就和t大小没关系了，而是由于page size太大，而一行数据太少。</p>2019-01-30</li><br/><li><span>清风浊酒</span> 👍（45） 💬（2）<p>老师您好，left join 和 right join 会固定驱动表吗？</p>2019-01-30</li><br/><li><span>泡泡爱dota</span> 👍（38） 💬（4）<p>explain select * from t1 straight_join t2 on (t1.a=t2.a) where t1.a &lt; 50; 
 老师, 这条sql为什么t1.a的索引没有用上, t1还是走全表

@@ -108,7 +108,7 @@ Every day, engineers need to find new ways to deal with new problems. Engineers 
 
 如果在学习中有什么问题，你可以在留言区提问，同时欢迎你把学习心得分享出来，我们一起每天进步一点。
 <div><strong>精选留言（3）</strong></div><ul>
-<li><span>Vincent Chan</span> 👍（0） 💬（1）<p>https:&#47;&#47;quillbot.com&#47;</p>2024-03-06</li><br/><li><span>柯里</span> 👍（0） 💬（1）<p>现在可以用chatgpt了</p>2023-11-07</li><br/><li><span>escray</span> 👍（7） 💬（0）<p>对于调整句子结构似乎感受不是特别的深刻，复杂句改简单句、被动改主动…… 
+<li><span>Vincent Chan</span> 👍（0） 💬（1）<p>https:&#47;&#47;quillbot.com&#47;</p>2024-03-06</li><br/><li><span>柯里</span> 👍（0） 💬（1）<p>现在可以用chatgpt了</p>2023-11-07</li><br/><li><span>escray</span> 👍（7） 💬（0）<p>对于调整句子结构似乎感受不是特别的深刻，复杂句改简单句、被动改主动……
 
 Paraphrase 之后的段落似乎缺少了“文气”，我觉的如果是中文的话，被改写之后可能也会这样。原因就是文中提到的，改写是以句子为单位的，所以打“断”了文章的脉络，也就是文气。
 

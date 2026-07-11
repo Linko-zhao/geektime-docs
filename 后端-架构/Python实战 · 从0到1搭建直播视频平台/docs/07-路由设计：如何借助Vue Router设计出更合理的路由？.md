@@ -27,7 +27,7 @@ Vue 的官方路由是Vue Router ，在[第4节课](https://time.geekbang.org/co
 当我们在页面上要显示路由对应的组件时，就要用到router-view标签。
 
 ```javascript
-<router-view/>
+<router-view />
 ```
 
 下面我们进入实操练习，体会一下在Vue项目中如何使用Vue Router配置路由配置。
@@ -45,19 +45,19 @@ npm install vue-router@4
 第二步，我们要定义一个路由配置的文件。比如在项目src文件夹下建一个router文件夹，然后进入router文件夹，在里面创建一个index.js文件。
 
 ```javascript
-import Vue from 'vue'
+import Vue from "vue";
 //引入Vue Router组件
-import Router from 'vue-router'
+import Router from "vue-router";
 //让Vue使用Router
-Vue.use(Router)
+Vue.use(Router);
 const routes = [
-  { path: '/', component: Home },    //路由地址和组件一一对应，注意需要换成自己的页面
-  { path: '/about', component: About }
-]
+  { path: "/", component: Home }, //路由地址和组件一一对应，注意需要换成自己的页面
+  { path: "/about", component: About },
+];
 
 const router = new Router({
-  routes: routes
-})
+  routes: routes,
+});
 
 export default router;
 ```
@@ -65,19 +65,19 @@ export default router;
 第三步，打开main.js，将刚刚在文件中定义好的路由绑定到Vue实例上。
 
 ```javascript
-import Vue from 'vue'
+import Vue from "vue";
 //引入刚刚定义好的Vue Router 配置文件
-import router from './router/index.js'
-import App from './App'
+import router from "./router/index.js";
+import App from "./App";
 
 new Vue({
-  el: '#app',
-  router,    //将路由绑定在Vue实例上
+  el: "#app",
+  router, //将路由绑定在Vue实例上
   components: {
-    App
+    App,
   },
-  template: '<App/>'
-})
+  template: "<App/>",
+});
 ```
 
 第四步，在App.vue中加上router-view标签。
@@ -119,8 +119,8 @@ npm run dev
 ```javascript
 const routes = [
   // 动态字段以冒号开始
-  { path: '/product/detail/:id', component: ProductDetail },
-]
+  { path: "/product/detail/:id", component: ProductDetail },
+];
 ```
 
 这样，带路径参数的路由就配好了。
@@ -130,7 +130,7 @@ const routes = [
 在商品详情页面中可以通过route的params方式来获取当前的ID，params是路由传值的方式，后面是代码实现。
 
 ```javascript
-this.$route.params.id
+this.$route.params.id;
 ```
 
 ### 重定向
@@ -138,13 +138,13 @@ this.$route.params.id
 当我们在开发过程中，如果遇到路由重定向的需求，需要跳转到路由配置的地址时，想转到其他地址，就可以使用重定向，**redirect是重定向到的地址**。
 
 ```javascript
-const routes = [{ path: '/home', redirect: '/' }]
+const routes = [{ path: "/home", redirect: "/" }];
 ```
 
 或者你可以采用下面的实现方式。
 
 ```javascript
-const routes = [{ path: '/home', redirect: { name: 'homepage' } }]
+const routes = [{ path: "/home", redirect: { name: "homepage" } }];
 ```
 
 ### 别名
@@ -152,16 +152,19 @@ const routes = [{ path: '/home', redirect: { name: 'homepage' } }]
 有时想通过更多的地址访问同一个组件，就可以给路由添加别名，alias的值就是对应其他地址的名称，后面具体的代码实现。
 
 ```javascript
-const routes = [{ path: '/', component: Homepage, alias: '/home' }]
+const routes = [{ path: "/", component: Homepage, alias: "/home" }];
 ```
 
 当我们需要更多地址时，alias可以是数组。
 
 ```javascript
-const routes = [{ 
-path: '/', component: Homepage, 
-alias: ['/addr1','/addr2','/addr3'] 
-}]
+const routes = [
+  {
+    path: "/",
+    component: Homepage,
+    alias: ["/addr1", "/addr2", "/addr3"],
+  },
+];
 ```
 
 ### 嵌套路由
@@ -189,25 +192,25 @@ alias: ['/addr1','/addr2','/addr3']
 
 ```javascript
 const routes = [
-  {
-    path: '/user/:id',
-    component: User,
-    children: [
-      {
-        // 当 /user/:id/profile 匹配成功
-        // UserProfile 将被渲染到 User 的 <router-view> 内部
-        path: '/profile',
-        component: UserProfile
-      },
-      {
-        // 当 /user/:id/posts 匹配成功
-        // UserPosts 将被渲染到 User 的 <router-view> 内部
-        path: '/posts',
-        component: UserPosts
-      },
-    ],
-  },
-]
+  {
+    path: "/user/:id",
+    component: User,
+    children: [
+      {
+        // 当 /user/:id/profile 匹配成功
+        // UserProfile 将被渲染到 User 的 <router-view> 内部
+        path: "/profile",
+        component: UserProfile,
+      },
+      {
+        // 当 /user/:id/posts 匹配成功
+        // UserPosts 将被渲染到 User 的 <router-view> 内部
+        path: "/posts",
+        component: UserPosts,
+      },
+    ],
+  },
+];
 ```
 
 这样当 /user/:id/profile 匹配成功时，UserProfile 组件将被渲染到 User 的 内部，当 /user/:id/posts 匹配成功时，UserPosts 组件将被渲染到 User 的 内部。
@@ -239,7 +242,7 @@ const UserDetails = () => import('./views/UserDetails.vue')
 const router = new Router({
   // ...
   routes: [{
-   path: '/users/:id', 
+   path: '/users/:id',
   component: UserDetails
 })
 ```
@@ -255,7 +258,7 @@ const router = new Router({
 在代码中我们使用this.$router.push来控制路由页面的跳转，比如跳转到About组件页面。
 
 ```javascript
-this.$router.push('/about')
+this.$router.push("/about");
 ```
 
 这个跳转等同于点击页面上的router-link链接。
@@ -267,7 +270,7 @@ this.$router.push('/about')
 有时跳转到下一个页面需要带上一些信息，比如搜索关键词等，就需要跳转时链接带上参数，就像后面这样。
 
 ```javascript
-this.$router.push({ path: '/about', query: { keyword: '二次元美少女' } })
+this.$router.push({ path: "/about", query: { keyword: "二次元美少女" } });
 ```
 
 在HTML代码中我们想要实现参数的传值，就直接通过标签来实现，后面是具体的实现代码。
@@ -281,14 +284,14 @@ this.$router.push({ path: '/about', query: { keyword: '二次元美少女' } })
 这样，跳转到About组件时链接上就会带上参数 “keyword=二次元美少女”。也就是说，地址本来是 “localhost:8080/about”，带上参数后是 “localhost:8080/about?keyword=二次元美少女”。那么在About组件页，我们可以通过route.query来获得当前页面链接上的参数。
 
 ```javascript
-this.$route.query.keyword  //-->'二次元美少女'
+this.$route.query.keyword; //-->'二次元美少女'
 ```
 
 有一些隐秘的信息不想在链接上展示，那么可以跳转时给组件传参数。
 
 ```javascript
 // 命名的路由，并加上参数，让路由建立 url
-this.$router.push({ name: 'user', params: { username: 'eduardo' } })
+this.$router.push({ name: "user", params: { username: "eduardo" } });
 ```
 
 那我们就可以在HTML代码块中直接用后面这种方式来实现。
@@ -304,7 +307,7 @@ name是组件的名字，params是要给组件传的参数对。这两种方式�
 在user组件页，我们可以使用router.params来取到路由带来的参数，这样当我们需要通过一些字段做数据处理或接口请求时，就可以直接使用传递的值。
 
 ```javascript
-this.$router.params.username  //-->eduardo
+this.$router.params.username; //-->eduardo
 ```
 
 2.回到上一页
@@ -314,13 +317,13 @@ this.$router.params.username  //-->eduardo
 那么这个功能在代码中应该如何控制呢？你可以通过下面的代码来实现，这样就实现回到上一页的功能。
 
 ```javascript
-this.$router.go(-1)
+this.$router.go(-1);
 ```
 
 以此类推，如果想要回到上一页的上一页的代码就是后面这样。
 
 ```javascript
-this.$router.go(-2)
+this.$router.go(-2);
 ```
 
 3.组件的路由钩子函数
@@ -332,7 +335,7 @@ this.$router.go(-2)
 ```javascript
 <template>
 <div id="MyComponent"></div>
-</template>    
+</template>
 <script>
 export default {
     name: 'MyComponent',
@@ -374,16 +377,16 @@ beforeRouteLeave(to, from) {
 
 ```javascript
 router.beforeEach(async (to, from) => {
-   if (
-     // 检查用户是否已登陆
-     !isAuthenticated &&
-     // 避免无限重定向
-     to.name !== 'Login'
-   ) {
-     // 将用户重定向到登陆页面
-     return { name: 'Login' }
-   }
- })
+  if (
+    // 检查用户是否已登陆
+    !isAuthenticated &&
+    // 避免无限重定向
+    to.name !== "Login"
+  ) {
+    // 将用户重定向到登陆页面
+    return { name: "Login" };
+  }
+});
 ```
 
 而当我们想要统计页面访问数量时，就可以使用router.afterEach钩子函数。显然，这个函数要在路由跳转之后调用。
@@ -391,7 +394,7 @@ router.beforeEach(async (to, from) => {
 ```javascript
 router.afterEach((to, from) => {
   //do something
-})
+});
 ```
 
 到这里，Vue Router的核心知识我们就梳理好了。但纸上得来终觉浅，绝知此事要躬行。接下来我们在真正的项目中，体会一下它们都是如何应用的。
@@ -580,7 +583,7 @@ export default router;
 我们再来说说平台的登陆功能设计，在用户登陆成功之后，需要再次回到平台的首页，也就是我们刚访问过的路由，我们直接通过router.go(-1)的方法回到上一页。
 
 ```javascript
-this.$router.go(-1)
+this.$router.go(-1);
 ```
 
 ![](https://static001.geekbang.org/resource/image/9a/a3/9a68b186f2a682419246485548cafda3.jpg?wh=3043x1820)
@@ -612,7 +615,7 @@ this.$router.push("/home/" + user.userId);
 以此类推，都可以通过上面的代码实现路由的跳转和参数的传递，当然，如果我们想要获取用户的资料，我们就必须要先知道用户id是什么，通过id我们才能进行数据的查询，这时候对于传递值的获取，我们可以通过router.params获取当前页面组件的参数id（用户的id）。
 
 ```javascript
-this.$router.params.id
+this.$router.params.id;
 ```
 
 掌握了以上的方法，你想要实现路由的跳转，还有值的传递就非常简单了，在项目中你都可以通过这样的方式来实现，可以看到我们通过路由管理，实现了项目中一系列页面的地址和展示组件的配置和页面之间的相互跳转，这样我们在后面的项目开发就能更加快捷。
@@ -647,32 +650,33 @@ import About from &#39;..&#47;pages&#47;Home.vue&#39;
 </p>2023-10-23</li><br/><li><span>ZENG</span> 👍（1） 💬（1）<p>跟着教程实操一边确实学习到很多
 
 有几点总结一下，
+
 1. vue-router3.x版本和4.x版本的路由配置会有一些差别，如果之前用vue-cli配置是3.x版本的可以按照 https:&#47;&#47;v3.router.vuejs.org&#47;zh&#47;guide&#47;#javascript 这个来，如果是冲重新安装的
-npm install vue-router@4，按照 https:&#47;&#47;router.vuejs.org&#47;zh&#47;guide&#47; 来配置
+   npm install vue-router@4，按照 https:&#47;&#47;router.vuejs.org&#47;zh&#47;guide&#47; 来配置
 
 2. 升级 babel7.x
-先把 package.json babel 开头的依赖删掉，再删掉 node_modules
+   先把 package.json babel 开头的依赖删掉，再删掉 node_modules
 
 然后 package.json 加上：
-    &quot;@babel&#47;cli&quot;: &quot;^7.21.5&quot;,
-    &quot;@babel&#47;core&quot;: &quot;^7.22.1&quot;,
-    &quot;@babel&#47;plugin-proposal-class-properties&quot;: &quot;^7.18.6&quot;,
-    &quot;@babel&#47;plugin-transform-classes&quot;: &quot;^7.21.0&quot;,
-    &quot;@babel&#47;plugin-transform-runtime&quot;: &quot;^7.22.4&quot;,
-    &quot;@babel&#47;preset-env&quot;: &quot;^7.22.4&quot;,
-    &quot;babel-loader&quot;: &quot;^8.0.4&quot;,
+&quot;@babel&#47;cli&quot;: &quot;^7.21.5&quot;,
+&quot;@babel&#47;core&quot;: &quot;^7.22.1&quot;,
+&quot;@babel&#47;plugin-proposal-class-properties&quot;: &quot;^7.18.6&quot;,
+&quot;@babel&#47;plugin-transform-classes&quot;: &quot;^7.21.0&quot;,
+&quot;@babel&#47;plugin-transform-runtime&quot;: &quot;^7.22.4&quot;,
+&quot;@babel&#47;preset-env&quot;: &quot;^7.22.4&quot;,
+&quot;babel-loader&quot;: &quot;^8.0.4&quot;,
 再 npm install 重新安装一下
 
 然后修改.babelrc为：
 {  
-  &quot;presets&quot;: [  
-    &quot;@babel&#47;preset-env&quot;  
-  ],
-  &quot;plugins&quot;: [
-    &quot;@babel&#47;plugin-transform-runtime&quot;,
-    &quot;@babel&#47;plugin-proposal-class-properties&quot;,
-    &quot;@babel&#47;plugin-transform-classes&quot;
-  ]
+&quot;presets&quot;: [  
+&quot;@babel&#47;preset-env&quot;  
+],
+&quot;plugins&quot;: [
+&quot;@babel&#47;plugin-transform-runtime&quot;,
+&quot;@babel&#47;plugin-proposal-class-properties&quot;,
+&quot;@babel&#47;plugin-transform-classes&quot;
+]
 }
 </p>2023-06-11</li><br/><li><span>友</span> 👍（1） 💬（1）<p>我是访问 localhost:8080&#47;#&#47;about 才出现的页面 其实我现在也搞不清楚前端这些东西了</p>2023-05-25</li><br/><li><span>暴走的海鸽</span> 👍（1） 💬（2）<p>Home.vue组件和About.vue组件呢？</p>2023-05-10</li><br/><li><span>冯丽娟</span> 👍（0） 💬（1）<p>about页面出不来，我是复制文中的代码的，也出不来，home页面能正常路由。</p>2024-05-14</li><br/><li><span>niniク</span> 👍（0） 💬（1）<p>SyntaxError: lmporting binding name &#39;default&quot; cannot be resolved by star export entries.
 老师，这是什么原因呢</p>2024-04-17</li><br/><li><span>魁</span> 👍（0） 💬（1）<p>想开发一个带有页面分享统计功能的表单页面，能记录打开的表单是由谁分享的，这功能能用带参数的动态路由实现吗？</p>2024-04-10</li><br/><li><span>功夫熊猫</span> 👍（0） 💬（1）<p>老师你好，安装vue-router@4的时候会报错，看起来是不是router 4的版本yao 依赖vue 3.2.0以上版本，但是前边一路教程下来，安装下来的应该是vue2.9.6版本
@@ -692,42 +696,42 @@ npm ERR!
 npm ERR! Fix the upstream dependency conflict, or retry
 </p>2023-10-27</li><br/><li><span>明仔的阳光午后</span> 👍（0） 💬（1）<p>懒加载的写法二 `ComponentA：resolve=&gt;([&#39;需要加载的路由的地址&#39;，resolve])`没起作用，改成`ComponentA：resolve=&gt;require([&#39;需要加载的路由的地址&#39;，resolve])`之后才起作用</p>2023-08-29</li><br/><li><span>Geek_88cc02</span> 👍（0） 💬（1）<p>老师，有代码地址吗？叙述过于抽象了 about组件那些都么有，看不懂 我们真没基础</p>2023-06-10</li><br/><li><span>Geek_88cc02</span> 👍（0） 💬（1）<p>Home 组件  About 组件代码没有讲吧？</p>2023-06-10</li><br/><li><span>阿望(tom)</span> 👍（0） 💬（1）<p>老师，你的代码Layout 里边 下边 css 用了 less, 但是在文中还有你的git代码里边 没有提到需要安装这个扩展，于是我这边搜了一下 ，按照文中给出的搭建方法，less-loader 还只能安装@5.0.0版本，,另外在 编译过程中 项目并不能100%编译 ，提示 app.vue {parse:&quot;babylon&quot;} 被废弃了 需要换成 {parser::&quot;balbel&quot;} 请问这2个问题，能讲解下吗</p>2023-05-31</li><br/><li><span>Geek_840593</span> 👍（0） 💬（8）<p>ERROR  Failed to compile with 1 errors                                                                                                  18:14:14
 
- error  in .&#47;src&#47;components&#47;PC&#47;MyHeader.vue
+error in .&#47;src&#47;components&#47;PC&#47;MyHeader.vue
 
-Module build failed: 
+Module build failed:
 
 .book-header {
-  border-bottom: 1px solid @border-color;
-                         ^
+border-bottom: 1px solid @border-color;
+^
 Variable @border-color is undefined
-      in &#47;Users&#47;guoyan&#47;my-project&#47;src&#47;components&#47;PC&#47;MyHeader.vue (line 191, column 27)
+in &#47;Users&#47;guoyan&#47;my-project&#47;src&#47;components&#47;PC&#47;MyHeader.vue (line 191, column 27)
 
- @ .&#47;node_modules&#47;.store&#47;vue-style-loader@4.1.3&#47;node_modules&#47;vue-style-loader!.&#47;node_modules&#47;.store&#47;css-loader@3.2.0&#47;node_modules&#47;css-loader&#47;dist&#47;cjs.js?{&quot;sourceMap&quot;:true}!.&#47;node_modules&#47;vue-loader&#47;lib&#47;style-compiler?{&quot;vue&quot;:true,&quot;id&quot;:&quot;data-v-72e0c896&quot;,&quot;scoped&quot;:true,&quot;hasInlineConfig&quot;:false}!.&#47;node_modules&#47;.store&#47;less-loader@5.0.0&#47;node_modules&#47;less-loader&#47;dist&#47;cjs.js?{&quot;sourceMap&quot;:true}!.&#47;node_modules&#47;vue-loader&#47;lib&#47;selector.js?type=styles&amp;index=0!.&#47;src&#47;components&#47;PC&#47;MyHeader.vue 4:14-463 15:3-20:5 16:22-471
- @ .&#47;src&#47;components&#47;PC&#47;MyHeader.vue
- @ .&#47;node_modules&#47;babel-loader&#47;lib!.&#47;node_modules&#47;vue-loader&#47;lib&#47;selector.js?type=script&amp;index=0!.&#47;src&#47;Layout&#47;Layout.vue
- @ .&#47;src&#47;Layout&#47;Layout.vue
- @ .&#47;node_modules&#47;babel-loader&#47;lib!.&#47;node_modules&#47;vue-loader&#47;lib&#47;selector.js?type=script&amp;index=0!.&#47;src&#47;App.vue
- @ .&#47;src&#47;App.vue
- @ .&#47;src&#47;main.js
- @ multi (webpack)-dev-server&#47;client?http:&#47;&#47;localhost:8080 webpack&#47;hot&#47;dev-server .&#47;src&#47;main.js</p>2023-05-25</li><br/><li><span>Geek_840593</span> 👍（0） 💬（1）<p>npm install vue-router@4
+@ .&#47;node_modules&#47;.store&#47;vue-style-loader@4.1.3&#47;node_modules&#47;vue-style-loader!.&#47;node_modules&#47;.store&#47;css-loader@3.2.0&#47;node_modules&#47;css-loader&#47;dist&#47;cjs.js?{&quot;sourceMap&quot;:true}!.&#47;node_modules&#47;vue-loader&#47;lib&#47;style-compiler?{&quot;vue&quot;:true,&quot;id&quot;:&quot;data-v-72e0c896&quot;,&quot;scoped&quot;:true,&quot;hasInlineConfig&quot;:false}!.&#47;node_modules&#47;.store&#47;less-loader@5.0.0&#47;node_modules&#47;less-loader&#47;dist&#47;cjs.js?{&quot;sourceMap&quot;:true}!.&#47;node_modules&#47;vue-loader&#47;lib&#47;selector.js?type=styles&amp;index=0!.&#47;src&#47;components&#47;PC&#47;MyHeader.vue 4:14-463 15:3-20:5 16:22-471
+@ .&#47;src&#47;components&#47;PC&#47;MyHeader.vue
+@ .&#47;node_modules&#47;babel-loader&#47;lib!.&#47;node_modules&#47;vue-loader&#47;lib&#47;selector.js?type=script&amp;index=0!.&#47;src&#47;Layout&#47;Layout.vue
+@ .&#47;src&#47;Layout&#47;Layout.vue
+@ .&#47;node_modules&#47;babel-loader&#47;lib!.&#47;node_modules&#47;vue-loader&#47;lib&#47;selector.js?type=script&amp;index=0!.&#47;src&#47;App.vue
+@ .&#47;src&#47;App.vue
+@ .&#47;src&#47;main.js
+@ multi (webpack)-dev-server&#47;client?http:&#47;&#47;localhost:8080 webpack&#47;hot&#47;dev-server .&#47;src&#47;main.js</p>2023-05-25</li><br/><li><span>Geek_840593</span> 👍（0） 💬（1）<p>npm install vue-router@4
 
 npm ERR! code ERESOLVE
 npm ERR! ERESOLVE unable to resolve dependency tree
-npm ERR! 
+npm ERR!
 npm ERR! While resolving: my-project@1.0.0
 npm ERR! Found: vue@2.7.14
 npm ERR! node_modules&#47;vue
-npm ERR!   vue@&quot;^2.5.2&quot; from the root project
-npm ERR! 
+npm ERR! vue@&quot;^2.5.2&quot; from the root project
+npm ERR!
 npm ERR! Could not resolve dependency:
 npm ERR! peer vue@&quot;^3.2.0&quot; from vue-router@4.2.0
 npm ERR! node_modules&#47;vue-router
-npm ERR!   vue-router@&quot;4&quot; from the root project
-npm ERR! 
+npm ERR! vue-router@&quot;4&quot; from the root project
+npm ERR!
 npm ERR! Fix the upstream dependency conflict, or retry
 npm ERR! this command with --force or --legacy-peer-deps
 npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
-npm ERR! 
-npm ERR! 
+npm ERR!
+npm ERR!
 npm ERR! For a full report see:</p>2023-05-16</li><br/>
 </ul>

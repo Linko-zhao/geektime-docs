@@ -54,10 +54,10 @@ NDCG和其他一系列搜索评价指标都是更加注重头部的相关度。�
 
 **参考文献**
 
-1. Burges, C.; Shaked, T.; Renshaw, E.; Lazier, A.; Deeds, M.; Hamilton, N. &amp; Hullender, G. Learning to Rank Using Gradient Descent. *Proceedings of the 22nd International Conference on Machine Learning*, ACM, 89-96, 2005.
-2. Burges, C. J.; Ragno, R. &amp; Le, Q. V. Schölkopf, B.; Platt, J. C. &amp; Hoffman, T. (Eds.). Learning to Rank with Nonsmooth Cost Functions. *Advances in Neural Information Processing Systems 19*, MIT Press, 193-200, 2007.
-3. Wu, Q.; Burges, C. J.; Svore, K. M. &amp; Gao, J. Adapting Boosting for Information Retrieval Measures. *Information Retrieval*, Kluwer Academic Publishers, 13, 254-270, 2010.
-4. Chapelle, O. &amp; Chang, Y.Chapelle, O.; Chang, Y. &amp; Liu, T.-Y. (Eds.). Yahoo! Learning to Rank Challenge Overview. *Proceedings of the Learning to Rank Challenge*, PMLR, 14, 1-24, 2011.
+1. Burges, C.; Shaked, T.; Renshaw, E.; Lazier, A.; Deeds, M.; Hamilton, N. &amp; Hullender, G. Learning to Rank Using Gradient Descent. _Proceedings of the 22nd International Conference on Machine Learning_, ACM, 89-96, 2005.
+2. Burges, C. J.; Ragno, R. &amp; Le, Q. V. Schölkopf, B.; Platt, J. C. &amp; Hoffman, T. (Eds.). Learning to Rank with Nonsmooth Cost Functions. _Advances in Neural Information Processing Systems 19_, MIT Press, 193-200, 2007.
+3. Wu, Q.; Burges, C. J.; Svore, K. M. &amp; Gao, J. Adapting Boosting for Information Retrieval Measures. _Information Retrieval_, Kluwer Academic Publishers, 13, 254-270, 2010.
+4. Chapelle, O. &amp; Chang, Y.Chapelle, O.; Chang, Y. &amp; Liu, T.-Y. (Eds.). Yahoo! Learning to Rank Challenge Overview. _Proceedings of the Learning to Rank Challenge_, PMLR, 14, 1-24, 2011.
 
 **论文链接**
 
@@ -65,6 +65,7 @@ NDCG和其他一系列搜索评价指标都是更加注重头部的相关度。�
 - [Learning to Rank with Nonsmooth Cost Functions](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.62.1530&rep=rep1&type=pdf)
 - [Adapting Boosting for Information Retrieval Measures](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.157.5117&rep=rep1&type=pdf)
 - [Yahoo! Learning to Rank Challenge Overview](http://proceedings.mlr.press/v14/chapelle11a/chapelle11a.pdf)
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>yaolixu</span> 👍（1） 💬（0）<p>会不会出现梯度消失的情况？如果出现了，怎么破？</p>2018-11-08</li><br/><li><span>吴文敏</span> 👍（0） 💬（0）<p>这样会影响模型的收敛速度吧</p>2018-01-31</li><br/>
 </ul>

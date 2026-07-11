@@ -389,63 +389,61 @@ spec:
    PV。来满足业务的新需求，这个情况如果解决不了，我相信运维这个职业马上就会消失。
    最后，动态存储卷的好处还在于分层和解耦，对于简单的localPath或者NFS这种存储卷或许相对来说还比较简单一些，但是像类似于远程存储磁盘这种就相对来说比较
    复杂了，动态存储可以让我们只关注于需求点，至于怎么把这些东西创建出来，就交由各个类型的provisioner去处理就行了。
-   
-  缺点：缺点的话就是在于资源的管控方面，比如原本我可能只需要2Gi的空间，但是业务人员对容量把握不够申请了10Gi，就会有8Gi空间的浪费。
+
+缺点：缺点的话就是在于资源的管控方面，比如原本我可能只需要2Gi的空间，但是业务人员对容量把握不够申请了10Gi，就会有8Gi空间的浪费。
 2:StorageClass 作用是帮助指定特定类型的provisioner，这决定了你要使用的具体某种类型的存储插件；另外它还限定了PV和PVC的绑定关系，只有从属于同一StorageClass的PV和PVC才能做绑定动作，比如指定GlusterFS类型的PVC对象不能绑定到另外一个PVC定义的NFS类型的StorageClass 模版创建出的Volume的PV对象上面去。</p>2022-08-20</li><br/><li><span>新时代农民工</span> 👍（10） 💬（2）<p>不妨试一试docker版的nfs-server，简单又方便 https:&#47;&#47;hub.docker.com&#47;r&#47;fuzzle&#47;docker-nfs-server</p>2022-08-20</li><br/><li><span>大毛</span> 👍（9） 💬（1）<p>用面向对象的思想来理解 kubernetes 在存储上的设计：
 SC 是类，PV 是实例，PVC 是创建实例的代码，provisioner 是工厂。
 有一种豁然开朗的感觉</p>2023-06-22</li><br/><li><span>小江爱学术</span> 👍（8） 💬（1）<p>老师，不知道这么理解对不对，因为存储它涉及到了对物理机文件系统绑定的操作，因此K8S做了一系列抽象。PV在这个抽象里，其实就指代了主机文件系统的路径，当然至于再往实现层面走，是网络文件系统还是主机文件系统，这就全由PV的绑定类型决定。而往抽象层走，作为K8S的核心系统，K8S想尽可能屏蔽掉底层，也就是主机文件系统的概念，所以它抽象了StorageClass，用来统一指代&#47;管理PV。至此，K8S持久化存储就可以分两个部分，第一部分是由 主机文件系统+PV+StorageClass组成的，用来将抽象对象绑定到真实文件系统的生产者部分；第二部分就是 Volume+PVC+StorageClass，完全被抽象为K8S核心业务的消费者部分，而StorageClass，可以看作是两部分连接的桥梁。</p>2022-10-28</li><br/><li><span>马以</span> 👍（6） 💬（5）<p>云服务器环境搭建：主要在nfs权限那边比较麻烦
 
 -- 服务端
 1: 查看是否安装了必要的软件
-	$ dpkg -l | grep rpcbind
-	...
+$ dpkg -l | grep rpcbind
+...
 
-	$ sudo apt -y install rpcbind
-	$ sudo apt -y install nfs-kernel-server
-	$ sudo apt -y install nfs-common
+    $ sudo apt -y install rpcbind
+    $ sudo apt -y install nfs-kernel-server
+    $ sudo apt -y install nfs-common
+
 2.修改 &#47;etc&#47;services 追加
 
-	# Local services
-	mountd 4011&#47;udp
-	mountd 4011&#47;tcp
+    # Local services
+    mountd 4011&#47;udp
+    mountd 4011&#47;tcp
 
-	内容，固定mountd 的端口号
+    内容，固定mountd 的端口号
 
 
 
-	打开端口号访问限制：
-	 TCP: 2049、111、4011
-	 UDP: 111、4046、4011
-
+    打开端口号访问限制：
+     TCP: 2049、111、4011
+     UDP: 111、4046、4011
 
 3. 创建目录 追加配置（和文档中的一样）
-  $ mkdir -p &#47;tmp&#47;nfs
+$ mkdir -p &#47;tmp&#47;nfs
 
-  &#47;etc&#47;exports 内容增加以下内容（我的云服务器外网ip是175.179网段，这里要根据自身的情况修改）：
-    &#47;tmp&#47;nfs 175.178.0.0&#47;16(rw,sync,no_subtree_check,no_root_squash,insecure)
+&#47;etc&#47;exports 内容增加以下内容（我的云服务器外网ip是175.179网段，这里要根据自身的情况修改）：
+&#47;tmp&#47;nfs 175.178.0.0&#47;16(rw,sync,no_subtree_check,no_root_squash,insecure)
 
-
-   $ sudo exportfs -v
+$ sudo exportfs -v
    $ sudo exportfs -v
 
 4.开启服务
 
-	$ sudo systemctl start  nfs-server
-	$ sudo systemctl enable nfs-server
-	$ sudo systemctl status nfs-server
+    $ sudo systemctl start  nfs-server
+    $ sudo systemctl enable nfs-server
+    $ sudo systemctl status nfs-server
 
-	$ sudo systemctl start  rpcbind
-	$ sudo systemctl enable rpcbind
-	$ sudo systemctl status rpcbind
-
+    $ sudo systemctl start  rpcbind
+    $ sudo systemctl enable rpcbind
+    $ sudo systemctl status rpcbind
 
 -- 客户端
 1.安装客户端软件
 
-   $ sudo apt -y install nfs-common
+$ sudo apt -y install nfs-common
    $ sudo apt -y install rpcbind
 
-   其它步骤和老师基本一样
+其它步骤和老师基本一样
 
 </p>2022-08-19</li><br/><li><span>zzz</span> 👍（4） 💬（2）<p>nfs provisoner 在生产建议使用HELM包方式进行，而且已经在生产实践过，
 nfs-subdir-external-provisioner
@@ -463,13 +461,13 @@ metadata:
 
 provisioner: k8s-sigs.io&#47;nfs-subdir-external-provisioner
 parameters:
-  onDelete: &quot;retain&quot;
+onDelete: &quot;retain&quot;
 
 正确的yaml文件内容如下：
 apiVersion: storage.k8s.io&#47;v1
 kind: StorageClass
 metadata:
-  name: nfs-client
+name: nfs-client
 provisioner: k8s-sigs.io&#47;nfs-subdir-external-provisioner # or choose another name, must match deployment&#39;s env PROVISIONER_NAME&#39;
 reclaimPolicy: Retain
 </p>2023-12-12</li><br/><li><span>Layne</span> 👍（1） 💬（2）<p>已实操
@@ -486,9 +484,11 @@ sudo mount -t nfs 192.168.56.103:&#47;home&#47;layne&#47;data&#47;nfs &#47;data&
 #!&#47;bin&#47;bash
 
 # Pull the desired image using crictl
+
 crictl pull registry.cn-hangzhou.aliyuncs.com&#47;google_containers&#47;pause:3.8
 
 # Tag the pulled image using ctr
+
 ctr -n k8s.io i tag registry.cn-hangzhou.aliyuncs.com&#47;google_containers&#47;pause:3.8 k8s.gcr.io&#47;pause:3.8
 
 echo &quot;Image pull and tag complete&quot;

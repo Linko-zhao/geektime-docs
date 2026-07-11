@@ -29,26 +29,26 @@ public class ManagedSelector extends ContainerLifeCycle implements Dumpable
 {
     //原子变量，表明当前的ManagedSelector是否已经启动
     private final AtomicBoolean _started = new AtomicBoolean(false);
-    
+
     //表明是否阻塞在select调用上
     private boolean _selecting = false;
-    
+
     //管理器的引用，SelectorManager管理若干ManagedSelector的生命周期
     private final SelectorManager _selectorManager;
-    
+
     //ManagedSelector不止一个，为它们每人分配一个id
     private final int _id;
-    
+
     //关键的执行策略，生产者和消费者是否在同一个线程处理由它决定
     private final ExecutionStrategy _strategy;
-    
+
     //Java原生的Selector
     private Selector _selector;
-    
+
     //"Selector更新任务"队列
     private Deque<SelectorUpdate> _updates = new ArrayDeque<>();
     private Deque<SelectorUpdate> _updateable = new ArrayDeque<>();
-    
+
     ...
 }
 ```
@@ -126,12 +126,12 @@ public Runnable onSelected()
     boolean flushable = (readyOps & SelectionKey.OP_WRITE) != 0;
 
     // return task to complete the job
-    Runnable task= fillable 
-            ? (flushable 
-                    ? _runCompleteWriteFillable 
+    Runnable task= fillable
+            ? (flushable
+                    ? _runCompleteWriteFillable
                     : _runFillable)
-            : (flushable 
-                    ? _runCompleteWrite 
+            : (flushable
+                    ? _runCompleteWrite
                     : null);
 
     return task;
@@ -152,7 +152,7 @@ public interface ExecutionStrategy
 
     //实现具体执行策略，任务生产出来后可能由当前线程执行，也可能由新线程来执行
     public void produce();
-    
+
     //任务的生产委托给Producer内部接口，
     public interface Producer
     {
@@ -201,7 +201,7 @@ private class SelectorProducer implements ExecutionStrategy.Producer
             Runnable task = processSelected();
             if (task != null)
                 return task;
-            
+
            //如果没有I/O事件就绪，就干点杂活，看看有没有客户提交了更新Selector的任务，就是上面提到的SelectorUpdate任务类。
             processUpdates();
             updateKeys();
@@ -250,33 +250,33 @@ SelectorProducer是ManagedSelector的内部类，SelectorProducer实现了Execut
    如何注册感兴趣事件和处理逻辑呢？提供了两个接口：SelectorUpdate和Selectable，
    其中SelectorUpdate接口让调用者可以网ManagerSelector中的Selector注册感兴趣事件，
    其中Selectable接口让调用者提供一个处理逻辑。
-   
+
 2，Producer是一个发动机，它的作用就是：注册 --&gt; 获取就绪的IO --&gt; 产生对应的处理任务
-   上述对应了其内部的三个方法：processUpdates,select,processSelected
-   其对应的实现类为：ManagerSelector.SelectoeProducer
+上述对应了其内部的三个方法：processUpdates,select,processSelected
+其对应的实现类为：ManagerSelector.SelectoeProducer
 
 3，ExecutionStrategy则是上面Producer接口产生处理任务的执行策略了，jetty中默认的策略有：
-   a，ProduceConsume 单线程创建和执行所有任务
-   b，ProduceExecuteConsume 专门线程创建任务，然后任务放进线程池中执行
-   c，ExecuteProduceConsume 一个线程中创建任务并执行，同时启动另一个线程进行任务的创建
-      和执行，其中顺序是：创建任务 --&gt; 开启新线程（使用线程池） --&gt; 执行任务
-   d，EatWhatYouKill  判断当前当前是否系统忙碌，在ProduceExecuteConsume和ExecuteProduceConsume
-      运行模式中切换
-            
+a，ProduceConsume 单线程创建和执行所有任务
+b，ProduceExecuteConsume 专门线程创建任务，然后任务放进线程池中执行
+c，ExecuteProduceConsume 一个线程中创建任务并执行，同时启动另一个线程进行任务的创建
+和执行，其中顺序是：创建任务 --&gt; 开启新线程（使用线程池） --&gt; 执行任务
+d，EatWhatYouKill 判断当前当前是否系统忙碌，在ProduceExecuteConsume和ExecuteProduceConsume
+运行模式中切换
+
 较于理解（不准确）的执行顺序：调用者 --&gt; ManagerSelector --&gt; SelectoeProducer --&gt; ExecutionStrategy
 
-这样总结对么？老师。</p>2019-10-13</li><br/><li><span>sionsion</span> 👍（2） 💬（0）<p>https:&#47;&#47;webtide.com&#47;eat-what-you-kill&#47; , 这里有一篇文章也做了解释，有兴趣的可以看看。</p>2019-07-14</li><br/><li><span>Gary</span> 👍（1） 💬（2）<p>老师好，在 ManagedSelector # SelectorProductor # processUpdates() 源码中看到有这么一段 
-            synchronized(ManagedSelector.this)
-            {
-                Deque&lt;SelectorUpdate&gt; updates = _updates;
-                _updates = _updateable;
-                _updateable = updates;
-            }
-            ···
-           for (SelectorUpdate update : _updateable){
-            ···
-            }
-           这里不直接循环 _updates 的原因是防止不断有请求填充了 _updates，导致前面的请求无法返回吗，感觉这里的_updateable 用一个局部变量就可以了，为啥他要作为类的字段</p>2019-10-09</li><br/><li><span>magicnum</span> 👍（1） 💬（0）<p>不直接注册I&#47;O事件是为了解耦吧，而且队列平衡了生产者消费者的处理能力</p>2019-06-22</li><br/><li><span>Markss</span> 👍（0） 💬（0）<p>老师,有个地方不太理解, 利用同一个线程执行业务可以理解, 但是即使是同一个线程,用完cpu时间也会有上下文切换, 下一次执行依旧有可能被分配至其他cpu的呀, 依旧存在无法使用cpu缓存的问题呀?</p>2022-07-20</li><br/><li><span>xzy</span> 👍（0） 💬（0）<p>“根据 Jetty 的官方测试，这种名为“EatWhatYouKill”的线程策略将吞吐量提高了 8 倍”，jetty官方说明的链接有吗？</p>2021-12-02</li><br/><li><span>Edward Lee</span> 👍（0） 💬（0）<p>对于课后习题，我说下自己的理解
+这样总结对么？老师。</p>2019-10-13</li><br/><li><span>sionsion</span> 👍（2） 💬（0）<p>https:&#47;&#47;webtide.com&#47;eat-what-you-kill&#47; , 这里有一篇文章也做了解释，有兴趣的可以看看。</p>2019-07-14</li><br/><li><span>Gary</span> 👍（1） 💬（2）<p>老师好，在 ManagedSelector # SelectorProductor # processUpdates() 源码中看到有这么一段
+synchronized(ManagedSelector.this)
+{
+Deque&lt;SelectorUpdate&gt; updates = _updates;
+_updates = _updateable;
+_updateable = updates;
+}
+···
+for (SelectorUpdate update : _updateable){
+···
+}
+这里不直接循环 _updates 的原因是防止不断有请求填充了 _updates，导致前面的请求无法返回吗，感觉这里的_updateable 用一个局部变量就可以了，为啥他要作为类的字段</p>2019-10-09</li><br/><li><span>magicnum</span> 👍（1） 💬（0）<p>不直接注册I&#47;O事件是为了解耦吧，而且队列平衡了生产者消费者的处理能力</p>2019-06-22</li><br/><li><span>Markss</span> 👍（0） 💬（0）<p>老师,有个地方不太理解, 利用同一个线程执行业务可以理解, 但是即使是同一个线程,用完cpu时间也会有上下文切换, 下一次执行依旧有可能被分配至其他cpu的呀, 依旧存在无法使用cpu缓存的问题呀?</p>2022-07-20</li><br/><li><span>xzy</span> 👍（0） 💬（0）<p>“根据 Jetty 的官方测试，这种名为“EatWhatYouKill”的线程策略将吞吐量提高了 8 倍”，jetty官方说明的链接有吗？</p>2021-12-02</li><br/><li><span>Edward Lee</span> 👍（0） 💬（0）<p>对于课后习题，我说下自己的理解
 
 ManagerSelector 管理 Queue 的好处
 1、单线程管理 IO 事件无需加锁操作
@@ -301,7 +301,9 @@ ManagerSelector 管理 Queue 的好处
             case EXECUTE_PRODUCE_CONSUME:
                 _epcMode.increment();
                 runTask(task);
+
 ```
 
 老师，看了EatWhatYouKill的代码，在doProduce()方法中有以上内容，来执行生产的任务，第一种是当前线程串行执行，第二种是由生产的线程非阻塞的执行？？第三种是开新线程执行，第四种好像也是当前线程执行，不过每个执行前都有个_xxxMode.increment()，好像是通过这个变量来控制的？不太明白代码里第二种的非阻塞怎么体现，以及第一种和和第四种的区别，好像和_xxxMode这个变量相关，望老师指点下，谢谢！！</p>2020-02-28</li><br/>
 </ul>
+```

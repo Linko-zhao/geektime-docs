@@ -62,7 +62,7 @@ public class Person {
 ```plain
 class Person(val name: String, var age: Int) {
     fun isAdult(): Boolean {
-        return age >= 18 
+        return age >= 18
     }
 }
 ```
@@ -71,7 +71,7 @@ class Person(val name: String, var age: Int) {
 
 ```plain
 class Person(val name: String, var age: Int) {
-    fun isAdult() = age >= 18 
+    fun isAdult() = age >= 18
 }
 ```
 
@@ -497,22 +497,23 @@ fun display(data: Result) = when(data) {
 2.val可以重写get,var的get和set都不能重写
 </p>2022-01-01</li><br/><li><span>白乾涛</span> 👍（9） 💬（2）<p>Kotlin 的继承是默认封闭的，这样岂不是要经常修改基础类吗？特别是对于那些开源库来说</p>2022-01-14</li><br/><li><span>Geek_70c6da</span> 👍（8） 💬（1）<p>请教老师，kotlin对象的深拷贝有什么优雅的写法吗</p>2021-12-30</li><br/><li><span>初升的太阳</span> 👍（8） 💬（5）<p>由于我们的密封类只有这三种情况，所以我们的 when 表达式不需要 else 分支。可以看到，这样的代码风格，既实现了类似枚举类的逻辑完备性，还完美实现了数据结构的封装。
 
-没看出来和枚举的区别</p>2021-12-29</li><br/><li><span>JakePrim</span> 👍（5） 💬（3）<p>密封类不是很理解，为什么密封类的内部 要使用data class 呢？如何正确的定义密封类？</p>2021-12-29</li><br/><li><span>百炼钢</span> 👍（4） 💬（7）<p>密封类的设计目的没太明白，可能我对java的枚举理解不深，导致老师用枚举来解释密封类，让我更糊涂了…    自问：密封类设计目的是为了辅助 when 表达式的使用吗？按文中的例子也可以用继承来实现，那么密封类的作用就是简化代码吗？</p>2022-02-24</li><br/><li><span>白乾涛</span> 👍（4） 💬（1）<p>val (name, age) = tom
+没看出来和枚举的区别</p>2021-12-29</li><br/><li><span>JakePrim</span> 👍（5） 💬（3）<p>密封类不是很理解，为什么密封类的内部 要使用data class 呢？如何正确的定义密封类？</p>2021-12-29</li><br/><li><span>百炼钢</span> 👍（4） 💬（7）<p>密封类的设计目的没太明白，可能我对java的枚举理解不深，导致老师用枚举来解释密封类，让我更糊涂了… 自问：密封类设计目的是为了辅助 when 表达式的使用吗？按文中的例子也可以用继承来实现，那么密封类的作用就是简化代码吗？</p>2022-02-24</li><br/><li><span>白乾涛</span> 👍（4） 💬（1）<p>val (name, age) = tom
 
 这里的顺序是和构造方法里面的一致呢
 还是不需要一致，只需要变量名一样呢</p>2022-01-14</li><br/><li><span>A Lonely Cat</span> 👍（3） 💬（1）<p>相应地，如果想在 Kotlin 当中定义一个普通的内部类，我们需要在嵌套类的前面加上 inner 关键字。
 
 这下面的代码有误，IDE 会报错，我猜朱老师是想写下面这段代码吧
- init {
-        println(name)
-        foo()
-  }</p>2022-01-10</li><br/><li><span>郑峰</span> 👍（2） 💬（1）<p>You can declare properties in interfaces. A property declared in an interface can either be abstract or provide implementations for accessors. Properties declared in interfaces can&#39;t have backing fields, and therefore accessors declared in interfaces can&#39;t reference them.</p>2022-01-10</li><br/><li><span>魏全运</span> 👍（2） 💬（1）<p>接口成员属性实际编译时都会转成方法，所以如果是Java继承该接口必须实现getter(val 属性)和setter(var 属性)，而如果实现类是kotlin 的则必须定义接口属性为成员变量且添加override 关键字，kotlin的语法糖自动实现了接口属性的getter 和setter 方法。总体使用起来还是很麻烦的，没理解什么场景会需要这样用。</p>2022-01-06</li><br/><li><span>l-zesong</span> 👍（2） 💬（1）<p>copy函数是深克隆吗？</p>2022-01-04</li><br/><li><span>7Promise</span> 👍（2） 💬（2）<p>接口的属性不可以重写setter方法</p>2021-12-29</li><br/><li><span>Barry</span> 👍（1） 💬（2）<p>class Person(val name: String, var age: Int) {
-     val isAdult 
-        get() = age &gt;= 18
+init {
+println(name)
+foo()
+}</p>2022-01-10</li><br/><li><span>郑峰</span> 👍（2） 💬（1）<p>You can declare properties in interfaces. A property declared in an interface can either be abstract or provide implementations for accessors. Properties declared in interfaces can&#39;t have backing fields, and therefore accessors declared in interfaces can&#39;t reference them.</p>2022-01-10</li><br/><li><span>魏全运</span> 👍（2） 💬（1）<p>接口成员属性实际编译时都会转成方法，所以如果是Java继承该接口必须实现getter(val 属性)和setter(var 属性)，而如果实现类是kotlin 的则必须定义接口属性为成员变量且添加override 关键字，kotlin的语法糖自动实现了接口属性的getter 和setter 方法。总体使用起来还是很麻烦的，没理解什么场景会需要这样用。</p>2022-01-06</li><br/><li><span>l-zesong</span> 👍（2） 💬（1）<p>copy函数是深克隆吗？</p>2022-01-04</li><br/><li><span>7Promise</span> 👍（2） 💬（2）<p>接口的属性不可以重写setter方法</p>2021-12-29</li><br/><li><span>Barry</span> 👍（1） 💬（2）<p>class Person(val name: String, var age: Int) {
+val isAdult
+get() = age &gt;= 18
 }
 -----------
-age是可变的，在age从17变到18过程中，isAdult就从false变成true了。而isAdult这里用val修饰，是不是用错了，而应该用var修饰？</p>2022-02-09</li><br/><li><span>阿白</span> 👍（1） 💬（1）<p>open class Person() { 
-    abstract fun walk()
+
+age是可变的，在age从17变到18过程中，isAdult就从false变成true了。而isAdult这里用val修饰，是不是用错了，而应该用var修饰？</p>2022-02-09</li><br/><li><span>阿白</span> 👍（1） 💬（1）<p>open class Person() {
+abstract fun walk()
 }
 文档中这一处示例错了，抽象方法只能定义在抽象类里</p>2022-01-04</li><br/>
 </ul>

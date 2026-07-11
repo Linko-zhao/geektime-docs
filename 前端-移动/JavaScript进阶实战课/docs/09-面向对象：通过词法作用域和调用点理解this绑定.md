@@ -12,7 +12,7 @@
 
 ```javascript
 function aLogger() {
-    console.log( this.a );
+  console.log(this.a);
 }
 var a = 2;
 aLogger(); // 2
@@ -26,12 +26,12 @@ aLogger(); // 2
 
 ```javascript
 function aLogger() {
-    console.log( this.a );
+  console.log(this.a);
 }
 
 var obj = {
-    a: 3,
-    logger: aLogger
+  a: 3,
+  logger: aLogger,
 };
 
 var a = 2;
@@ -43,17 +43,17 @@ obj.logger(); // 3
 
 ```javascript
 function logger() {
-    console.log( this.a );
+  console.log(this.a);
 }
 
 var obj = {
-    a: 3,
-    logger: logger
+  a: 3,
+  logger: logger,
 };
 
 var a = 2;
 
-var objLogger = obj.logger; 
+var objLogger = obj.logger;
 
 objLogger(); // 2
 ```
@@ -64,14 +64,14 @@ objLogger(); // 2
 
 ```javascript
 function logger() {
-    console.log( this.a );
+  console.log(this.a);
 }
 
 var obj = {
-    a: 3
+  a: 3,
 };
 
-logger.call( obj ); // 3
+logger.call(obj); // 3
 ```
 
 这种显式绑定也不能完全解决问题，它也会产生一些副作用，比如在通过 wrapper 包装的 new String，new Boolean 或 new Number 的时候，这种绑定就会消失。
@@ -82,18 +82,18 @@ logger.call( obj ); // 3
 
 ```javascript
 function logger() {
-    console.log( this.a );
+  console.log(this.a);
 }
 
 var obj = {
-    a: 3
+  a: 3,
 };
 
-var hardBinding = logger.bind( obj );
+var hardBinding = logger.bind(obj);
 
-setTimeout( hardBinding, 1000 ); // 3
+setTimeout(hardBinding, 1000); // 3
 
-hardBinding.call( window ); // 3
+hardBinding.call(window); // 3
 ```
 
 ## new绑定
@@ -102,39 +102,38 @@ hardBinding.call( window ); // 3
 
 ```javascript
 function logger(a) {
-    this.a = a;
-    console.log( this.a );
+  this.a = a;
+  console.log(this.a);
 }
 
-var loggerA = new logger( 2 ); // 2
+var loggerA = new logger(2); // 2
 ```
 
 下面我们来看一个“硬碰硬”的较量，我们来试试用hard binding 来对决 new binding，看看谁拥有绝对的实力。下面，我们先将 logger 里的 this 硬性绑定到obj 1上，这时我们输出的结果是2。然后，我们用 new 来创建一个新的 logger 实例，在这个实例中，我们可以看到 obj 2 作为新的 logger 实例，它的 this 是可以不受 obj 1 影响的。**所以new是强于hard binding的。**
 
 ```javascript
 function logger(a) {
-    this.a = a;
+  this.a = a;
 }
 
 var obj1 = {};
 
-var hardBinding = logger.bind( obj1 );
+var hardBinding = logger.bind(obj1);
 
-hardBinding( 2 );
+hardBinding(2);
 
-console.log( obj1.a ); // 2
+console.log(obj1.a); // 2
 
-var obj2 = new logger( 3 );
+var obj2 = new logger(3);
 
-console.log( obj1.a ); // 2
-console.log( obj2.a ); // 3
+console.log(obj1.a); // 2
+console.log(obj2.a); // 3
 ```
 
 之前在评论区也有朋友提到过谋智，也就是开发了火狐浏览器的公司，运营的一个MDN网站是一个不错的辅助了解JavaScript的平台。通过在MDN上的 bind polyfill 的代码，我们大概可以看到在 bind 中是有一个逻辑判断的，它会看新的实例是不是通过 new 来创建的，如果是，那么 this 就绑定到新的实例上。
 
 ```javascript
-this instanceof fNOP &&
-oThis ? this : oThis
+this instanceof fNOP && oThis ? this : oThis;
 
 // ... and:
 
@@ -145,7 +144,7 @@ fBound.prototype = new fNOP();
 那么我们对比 new 和 bind 各有什么好处呢？用 new 的好处是可以帮助我们忽略 hard binding，同时可以预设函数的实参。用 bind 的好处是任何 this 之后的实参，都可以当做是默认的实参。这样就可以用来创建我们之前[第3讲](https://time.geekbang.org/column/article/574132)说过的柯理式中的部分应用。比如在下面的例子中，1 和 2 就作为默认实参，在 partialFunc 中我们只要输入 9，就可以得到3个数字相加的结果。
 
 ```javascript
-function fullFunc (x, y, z) {
+function fullFunc(x, y, z) {
   return x + y + z;
 }
 
@@ -157,23 +156,22 @@ partialFunc(9); // 12
 
 ```javascript
 if (!Function.prototype.softBind) {
-    Function.prototype.softBind = function(obj) {
-        var fn = this,
-            curried = [].slice.call( arguments, 1 ),
-            bound = function bound() {
-                return fn.apply(
-                    (!this ||
-                        (typeof window !== "undefined" &&
-                            this === window) ||
-                        (typeof global !== "undefined" &&
-                            this === global)
-                    ) ? obj : this,
-                    curried.concat.apply( curried, arguments )
-                );
-            };
-        bound.prototype = Object.create( fn.prototype );
-        return bound;
-    };
+  Function.prototype.softBind = function (obj) {
+    var fn = this,
+      curried = [].slice.call(arguments, 1),
+      bound = function bound() {
+        return fn.apply(
+          !this ||
+            (typeof window !== "undefined" && this === window) ||
+            (typeof global !== "undefined" && this === global)
+            ? obj
+            : this,
+          curried.concat.apply(curried, arguments),
+        );
+      };
+    bound.prototype = Object.create(fn.prototype);
+    return bound;
+  };
 }
 ```
 
@@ -191,9 +189,9 @@ var logger1 = logger.softBind( obj1 );
 logger1(); // name: obj1
 
 obj2.logger = logger.softBind( obj1 );
-obj2.logger(); // name: obj2   
+obj2.logger(); // name: obj2
 
-logger1.call( obj3 ); // name: obj3   
+logger1.call( obj3 ); // name: obj3
 
 setTimeout( obj2.logger, 1000 ); // name: obj1
 ```
@@ -201,7 +199,7 @@ setTimeout( obj2.logger, 1000 ); // name: obj1
 同样地，这样的软性绑定也支持我们前面说的柯理式中的部分应用。
 
 ```javascript
-function fullFunc (x, y, z) {
+function fullFunc(x, y, z) {
   return x + y + z;
 }
 
@@ -215,50 +213,50 @@ partialFunc(9); // 12
 
 ```javascript
 function logger() {
-    return (a) => {
-        console.log( this.a );
-    };
+  return (a) => {
+    console.log(this.a);
+  };
 }
 var obj1 = {
-    a: 2
+  a: 2,
 };
 
 var obj2 = {
-    a: 3
+  a: 3,
 };
 
-var logger1 = logger.call( obj1 );
+var logger1 = logger.call(obj1);
 
-logger1.call( obj2 ); // 2
+logger1.call(obj2); // 2
 ```
 
 通过箭头函数来做 this 绑定的一个比较常用的场景就是setTimeout。在这个函数中的 this 就会绑定在 logger 的函数词法域里。
 
 ```javascript
 function logger() {
-    setTimeout(() => {
-        console.log( this.a );
-    },1000);
+  setTimeout(() => {
+    console.log(this.a);
+  }, 1000);
 }
 var obj = {
-    a: 2
+  a: 2,
 };
-logger.call( obj ); // 2
+logger.call(obj); // 2
 ```
 
 如果我们不用箭头函数的话，也可以通过 self = this 这样的方式将 this 绑定在词法域里。
 
 ```javascript
 function logger() {
-    var self = this; 
-    setTimeout( function(){
-        console.log( self.a );
-    }, 1000 );
+  var self = this;
+  setTimeout(function () {
+    console.log(self.a);
+  }, 1000);
 }
 var obj = {
-    a: 2
+  a: 2,
 };
-logger.call( obj ); // 2
+logger.call(obj); // 2
 ```
 
 但是通常为了代码的可读性和可维护性，在同一个函数中，应该一以贯之，要么尽量使用词法域，干脆不要有 this；或者要用 this，就通过 bind 等来绑定，而不是通过箭头函数或者 self = this 这样的“奇技淫巧”来做绑定。

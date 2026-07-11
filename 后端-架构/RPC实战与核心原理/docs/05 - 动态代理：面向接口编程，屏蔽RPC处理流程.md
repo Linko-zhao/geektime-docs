@@ -102,17 +102,17 @@ import java.lang.reflect.UndeclaredThrowableException;
 
 public final class $Proxy0 extends Proxy implements Hello {
   private static Method m3;
-  
+
   private static Method m1;
-  
+
   private static Method m0;
-  
+
   private static Method m2;
-  
+
   public $Proxy0(InvocationHandler paramInvocationHandler) {
     super(paramInvocationHandler);
   }
-  
+
   public final String say() {
     try {
       return (String)this.h.invoke(this, m3, null);
@@ -120,9 +120,9 @@ public final class $Proxy0 extends Proxy implements Hello {
       throw null;
     } catch (Throwable throwable) {
       throw new UndeclaredThrowableException(throwable);
-    } 
+    }
   }
-  
+
   public final boolean equals(Object paramObject) {
     try {
       return ((Boolean)this.h.invoke(this, m1, new Object[] { paramObject })).booleanValue();
@@ -130,9 +130,9 @@ public final class $Proxy0 extends Proxy implements Hello {
       throw null;
     } catch (Throwable throwable) {
       throw new UndeclaredThrowableException(throwable);
-    } 
+    }
   }
-  
+
   public final int hashCode() {
     try {
       return ((Integer)this.h.invoke(this, m0, null)).intValue();
@@ -140,9 +140,9 @@ public final class $Proxy0 extends Proxy implements Hello {
       throw null;
     } catch (Throwable throwable) {
       throw new UndeclaredThrowableException(throwable);
-    } 
+    }
   }
-  
+
   public final String toString() {
     try {
       return (String)this.h.invoke(this, m2, null);
@@ -150,9 +150,9 @@ public final class $Proxy0 extends Proxy implements Hello {
       throw null;
     } catch (Throwable throwable) {
       throw new UndeclaredThrowableException(throwable);
-    } 
+    }
   }
-  
+
   static {
     try {
       m3 = Class.forName("com.proxy.Hello").getMethod("say", new Class[0]);
@@ -164,7 +164,7 @@ public final class $Proxy0 extends Proxy implements Hello {
       throw new NoSuchMethodError(noSuchMethodException.getMessage());
     } catch (ClassNotFoundException classNotFoundException) {
       throw new NoClassDefFoundError(classNotFoundException.getMessage());
-    } 
+    }
   }
 }
 

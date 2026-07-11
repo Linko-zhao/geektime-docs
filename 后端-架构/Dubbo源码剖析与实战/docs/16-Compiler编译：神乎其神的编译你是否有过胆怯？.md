@@ -128,13 +128,13 @@ public class JavassistProxyUtils {
     public static Object newProxyInstance(Object sourceTarget) throws Exception{
         // ClassPool：Class对象的容器
         ClassPool pool = ClassPool.getDefault();
-        
+
         // 通过ClassPool生成一个public类
         Class<?> targetClazz = sourceTarget.getClass().getInterfaces()[0];
         String proxyClassName = "$" + targetClazz.getSimpleName() + "CustomInvoker_" + INC.incrementAndGet();
         CtClass ctClass = pool.makeClass(proxyClassName);
         ctClass.setSuperclass(pool.get("com.hmilyylimh.cloud.compiler.custom.CustomInvoker"));
-        
+
         // 添加方法  public Object invokeMethod(Object instance, String mtdName, Class<?>[] types, Object[] args) throws NoSuchMethodException { {...}
         CtClass returnType = pool.get("java.lang.Object");
         CtMethod newMethod=new CtMethod(
@@ -145,15 +145,15 @@ public class JavassistProxyUtils {
         newMethod.setModifiers(Modifier.PUBLIC);
         newMethod.setBody(buildBody(targetClazz).toString());
         ctClass.addMethod(newMethod);
-        
+
         // 生成 class 类
         Class<?> clazz = ctClass.toClass();
-        
+
         // 将 class 文件写到 target 目录下，方便调试查看
         String filePath = JavassistProxyUtils.class.getResource("/").getPath()
                 + JavassistProxyUtils.class.getPackage().toString().substring("package ".length()).replaceAll("\\.", "/");
         ctClass.writeFile(filePath);
-        
+
         // 反射实例化创建对象
         return clazz.newInstance();
     }
@@ -363,7 +363,7 @@ public class AsmProxyUtils implements Opcodes {
     public static Object newProxyInstance(Class originClass) throws Exception{
         String newClzNameSuffix = "Handler";
         byte[] classBytes = generateByteCode(originClass, newClzNameSuffix);
-        
+
         // 可以想办法将 classBytes 存储为一个文件
         String filePath = AsmProxyUtils.class.getResource("/").getPath()
                 + AsmProxyUtils.class.getPackage().toString().substring("package ".length()).replaceAll("\\.", "/");
@@ -371,7 +371,7 @@ public class AsmProxyUtils implements Opcodes {
                 originClass.getSimpleName() + newClzNameSuffix + ".class"));
         fileOutputStream.write(classBytes);
         fileOutputStream.close();
-        
+
         // 还得把 classBytes 加载到 JVM 内存中去
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Class<?> loaderClass = Class.forName("java.lang.ClassLoader");
@@ -387,7 +387,7 @@ public class AsmProxyUtils implements Opcodes {
                 0,
                 classBytes.length
         });
-        
+
         // 实例化对象
         return ((Class)respObject).newInstance();
     }
@@ -631,9 +631,9 @@ public static void main(String[] args) throws Exception {
     handler.addBefore(userBean);
     // 这里为了观察效果，先打印一下 userBean 的内容看看
     System.out.println(userBean);
-    
+
     // 接下来，假设有执行 db 的操作，那就直接将密文入库了
-    
+
     // db 操作完成之后，还得将 userBean 的密文变成明文，这里应该还有 addAfter 解密操作
 }
 ```
@@ -756,7 +756,7 @@ private ReflectionData<T> reflectionData() {
                   ↓
 // 存方法列表的反射对象类
 // 从该类中发现含有大量的字段集合、方法集合、构造方法集合等等
-// 存储太多太多的重要数据，缓存占据的容量大小也是一个问题因素                  
+// 存储太多太多的重要数据，缓存占据的容量大小也是一个问题因素
 private static class ReflectionData<T> {
     volatile Field[] declaredFields;
     volatile Field[] publicFields;
@@ -775,7 +775,7 @@ private static class ReflectionData<T> {
     }
 }
                   ↓
-// 从声明的方法列表集合中，检索出一个匹配方法名称和方法参数的 method 对象                  
+// 从声明的方法列表集合中，检索出一个匹配方法名称和方法参数的 method 对象
 private static Method searchMethods(Method[] methods,
                                     String name,
                                     Class<?>[] parameterTypes)

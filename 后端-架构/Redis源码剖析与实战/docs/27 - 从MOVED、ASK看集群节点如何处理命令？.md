@@ -300,6 +300,7 @@ if (n == NULL || n != server.cluster->myself) {
 	…
 	}
 ```
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>Kaito</span> 👍（10） 💬（0）<p>1、cluster 模式的 Redis，在执行命令阶段，需要判断 key 是否属于本实例，不属于会给客户端返回请求重定向的信息
 
@@ -324,5 +325,5 @@ if (n == NULL || n != server.cluster->myself) {
 两个方法刚好对应了client在事务中，执行EXEC命令和普通命令的两种情况。Redis是发现当getNodeByQuery返回的clusterNode节点不是自己的时候才会执行这两个方法，并且当Redis以集群模式运行的时候，跨节点是不支持事务，如果发现当前client有事务开启的情况，可能是之前开启的，那么当getNodeByQuery发现不是自己的时候需要把之前的事务废弃。如果命令直接就是EXEC了那么直接调用discardTransaction丢弃事务，如果是事务中的某个命令出现这种情况(例如：开启事务后发生迁移)，则调用flagTransaction，等到EXEC的时候一样丢弃。
 
 补充：
-    集群中涉及MULTI&#47;EXEC的操作需要让key都在同一节点上面，如果不在会返回 MOVED 信息或者直接返回error信息。</p>2021-10-12</li><br/><li><span>可怜大灰狼</span> 👍（0） 💬（0）<p>只要能够进入n == NULL || n != server.cluster-&gt;myself，都表示需要重定向客户端了。如果当前是execCommand，discardTransaction就释放整个multi阶段缓存下来的命令。否则就打一个脏标识CLIENT_DIRTY_EXEC</p>2021-10-12</li><br/>
+集群中涉及MULTI&#47;EXEC的操作需要让key都在同一节点上面，如果不在会返回 MOVED 信息或者直接返回error信息。</p>2021-10-12</li><br/><li><span>可怜大灰狼</span> 👍（0） 💬（0）<p>只要能够进入n == NULL || n != server.cluster-&gt;myself，都表示需要重定向客户端了。如果当前是execCommand，discardTransaction就释放整个multi阶段缓存下来的命令。否则就打一个脏标识CLIENT_DIRTY_EXEC</p>2021-10-12</li><br/>
 </ul>

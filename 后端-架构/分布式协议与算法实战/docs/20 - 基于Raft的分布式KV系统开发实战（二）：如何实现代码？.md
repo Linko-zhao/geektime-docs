@@ -195,7 +195,7 @@ curl -XGET raft-cluster-host02:8091/key/foo?level=consistent  -L
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>wjh_all_in</span> 👍（10） 💬（1）<p>这里实现一致性，没有采用Quorum NWR，而是把所有读请求都转移到主节点，这在实际的生产系统会成为瓶颈吧？</p>2020-03-30</li><br/><li><span>方块睡衣</span> 👍（7） 💬（1）<p>老师请留意下项目地址</p>2020-04-01</li><br/><li><span>小晏子</span> 👍（5） 💬（2）<p>如果移除节点，那要考虑是移除主节点还是非主节点吧，如果是主节点那么需要重新发起选主流程，并将主节点数据同步到其他节点，如果是非主节点，那么要通知主节点该节点移除不需要在发送日志给它了。</p>2020-03-30</li><br/><li><span>还有这种操作</span> 👍（3） 💬（2）<p>老师有没有代码示例，或者项目示例</p>2020-03-30</li><br/><li><span>羽翼1982</span> 👍（1） 💬（1）<p>一路过来追老师的课，收获还是蛮多的；不过比起实现的细节，我还是想更多了解设计和架构上的知识，特别是这些理论在成熟的开源分布式系统上应用（Kafka，TiDB，ETCD，Cassandra等等），希望老师能够同通过加餐的形式补充这些内容</p>2020-03-31</li><br/><li><span>🤔 2⃣ 0⃣ 1⃣ 9⃣🙄 🤥</span> 👍（0） 💬（1）<p>$GOPATH&#47;bin&#47;raftdb -id node02 -haddr raft-cluster-host02:8091 -raddr raft-cluster-host02:8089 -join raft-cluster-host01:8091 ~&#47;.raftdb
 
-$GOPATH&#47;bin&#47;raftdb -id node02 -haddr raft-cluster-host02:8091 -raddr raft-cluster-host02:8089  ~&#47;.raftdb
+$GOPATH&#47;bin&#47;raftdb -id node02 -haddr raft-cluster-host02:8091 -raddr raft-cluster-host02:8089 ~&#47;.raftdb
 老师，添加第二个节点，这两条命令都要执行一遍吗？我执行第一条就被阻塞了</p>2020-11-12</li><br/><li><span>Heaven</span> 👍（0） 💬（1）<p>那么整体流程还是按照写操作的流程
 获取到store中进行执行
 如果不报错,就说进行了RemoveServer()

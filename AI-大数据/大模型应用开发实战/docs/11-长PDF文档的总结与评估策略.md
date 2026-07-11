@@ -54,16 +54,16 @@ def load_model(model_name='t5-small'):
 def summarize_text(text, tokenizer, model):
     # 使用T5的前缀来指定任务类型
     text = "summarize: " + text
-    
+   
     # 对文本进行编码
     inputs = tokenizer.encode(text, return_tensors="pt", max_length=512, truncation=True)
-    
+   
     # 使用模型生成总结
     summary_ids = model.generate(inputs, max_length=150, min_length=40, length_penalty=2.0, num_beams=4, early_stopping=True)
-    
+   
     # 解码生成的总结
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
-    
+   
     return summary
 
 # 加载预训练的T5模型
@@ -108,7 +108,7 @@ ChatGPT等新一代大语言模型的出现，为文档总结带来了新的突�
 from dotenv import load_dotenv
 load_dotenv()
 
-import os 
+import os
 import anthropic
 os.environ["ANTHROPIC_API_KEY"] = "<your_api_key>"
 ```
@@ -118,34 +118,34 @@ os.environ["ANTHROPIC_API_KEY"] = "<your_api_key>"
 ```plain
 def generate_summary(text):
     client = anthropic.Anthropic()
-    
+   
     system_prompt = "你是一个用于总结研究论文的AI助手。"
-    
+   
     messages = [
         {
-            "role": "user", 
+            "role": "user",
             "content": [
                 {
                     "type": "text",
                     "text": f"""
                     请总结以下研究论文,重点关注其关键发现、方法和结论:
-                    
+                   
                     {text}
-                    
+                   
                     请用大约150字提供一个简明扼要的英文摘要。
                     """
                 }
             ]
         }
     ]
-    
+   
     message = client.messages.create(
         model="claude-3-opus-20240229",
         max_tokens=1000,
         messages=messages,
         system=system_prompt
     )
-    
+   
     return message.content[0].text.strip()
 
 ```

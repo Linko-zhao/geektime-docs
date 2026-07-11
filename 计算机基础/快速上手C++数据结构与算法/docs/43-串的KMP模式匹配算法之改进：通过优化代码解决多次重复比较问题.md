@@ -189,44 +189,44 @@ void getNextValArray(int i, int next[], int nextval[])
 	}
 	return;
 }
-	
+
 //求本串的next和nextval数组
 void getNextAndNextValArray_Classic(int next[],int nextval[])
 {
 	if (length < 1)
 		return;
-	
+
 	//next数组的前两个元素肯定是0和1
 	if (length == 1) //只有一个字符
 	{
 		next[0] = 0;
 		return;
 	}
-	
+
 	next[0] = 0;
 	next[1] = 1;
-	
+
 	getNextValArray(0, next, nextval);
 	getNextValArray(1, next, nextval);
-	
+
 	if (length == 2) //只有二个字符
 	{
 		return;
 	}
-	
+
 	//至少三个字符
 	int next_idx = 2;    //需要求的next数组中下标为2的元素值
 	int qz_tail_idx = 0; //前缀末尾位置
-		
+
 	while (next_idx < length)
 	{
 		if (ch[qz_tail_idx] == ch[next_idx - 1]) //next_idx-1代表后缀末尾位置
 		{
 			next[next_idx] = (qz_tail_idx + 1) + 1;   //qz_tail_idx+1就是前缀的宽度
-			
+
 			//这里求nextval元素值：求next元素值后就可以求nextval元素值
 			getNextValArray(next_idx, next, nextval);
-			
+
 			next_idx++;
 			qz_tail_idx++; //前缀末尾位置：其实这样写也OK：qz_tail_idx = next[next_idx - 1] - 1; 
 		}
@@ -234,17 +234,17 @@ void getNextAndNextValArray_Classic(int next[],int nextval[])
 		{
 			//qz_tail_idx = next[qz_tail_idx] - 1; //这句是最难理解的代码
 			qz_tail_idx = nextval[qz_tail_idx] - 1; //注意可以用这句替换上一句，其实不替换也可以
-			
+
 			//qz_tail_idx允许等于0，等于0有机会下次while时再比较一次，所以下面只判断qz_tail_idx < 0 的情形
 			if (qz_tail_idx < 0)
 			{
 				//没找到前缀
 				qz_tail_idx = 0;
 				next[next_idx] = 1;
-				
+
 				//这里求nextval元素值：求next元素值后就可以求nextval元素值
 				getNextValArray(next_idx, next, nextval);
-				
+
 				++next_idx;
 			}
 		}
@@ -266,11 +266,11 @@ void getNextAndNextValArray_Classic(int next[],int nextval[])
 int StrKMPIndex(const MySString& substr, int nextornextval[], int pos = 0)
 {
 	if (length < substr.length) //主串还没子串长，那不可能找到
-		return -1;		
-	
+		return -1;
+
 	int point1 = pos; //指向主串
 	int point2 = 0;  //指向子串
-	
+
 	while (ch[point1] != '\0' && substr.ch[point2] != '\0')
 	{
 		if (ch[point1] == substr.ch[point2])
@@ -302,7 +302,7 @@ int StrKMPIndex(const MySString& substr, int nextornextval[], int pos = 0)
 			}
 		}
 	}//end while
-		
+
 	if (substr.ch[point2] == '\0')
 	{
 		//找到了子串
@@ -323,7 +323,7 @@ int* mynextvalarray15 = new int[mys15sub.length]; //nextval数组
 cout <<"本次采用典型的KMP算法求解next和nextval数组然后利用nextval数组进行模式串匹配查找：----"<< endl;
 mys15sub.getNextAndNextValArray_Classic(mynextarray15, mynextvalarray15); //求next数组和nextval数组
 MySString mys15master; //主串
-mys15master.StrAssign("abbabbababaaababaaa"); 	
+mys15master.StrAssign("abbabbababaaababaaa");
 cout <<"StrKMPIndex()结果为"<< mys15master.StrKMPIndex(mys15sub, mynextvalarray15) << endl;
 delete[]mynextarray15;
 delete[]mynextvalarray15;

@@ -60,7 +60,7 @@ Copy算法是最简单实用的一种模型，也是我们学习GC算法的基�
 void copy_gc() {
     for (obj in roots) {
         *obj = copy(obj);
-    }          
+    }
 }
 obj * copy(obj) {
     new_obj = to_space.allocate(obj.size);
@@ -102,7 +102,7 @@ A和C都拷到新的空间里了，原来的引用关系还是正确的。但我
 void copy_gc() {
     for (obj in roots) {
         *obj = copy(obj);
-    }          
+    }
 }
 obj * copy(obj) {
     if (!obj.visited) {

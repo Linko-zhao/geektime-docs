@@ -261,17 +261,17 @@ https:&#47;&#47;github.com&#47;aimergenge&#47;inline-block-layout</p>2019-03-16<
 还是没有理解这句话</p>2019-03-17</li><br/><li><span>彧豪</span> 👍（7） 💬（0）<p>grid写大的整体的布局框架，flex写一维的可线性化的布局，这两种布局的兼容性已经更好了，再加上一些模块和脚手架打包的时候能自动为你添加浏览器前缀，布局变得越来越容易了</p>2019-03-15</li><br/><li><span>沉默的话唠</span> 👍（4） 💬（2）<p>为什么我写后面的完整版的，不会自动排布，宽度总是不够。被撑下去了。</p>2019-03-20</li><br/><li><span>有铭</span> 👍（3） 💬（1）<p>为什么三栏平分的那个样式里，给 outer 添加一个特定宽度和给最后一个 div 加上一个负的右 margin，我用chrome试验的结果，是变成了3个宽度很窄的盒子，而且第三个盒子在第二排？</p>2019-03-14</li><br/><li><span>梧桐</span> 👍（2） 💬（1）<p>给 outer 添加一个特定宽度， 没有看到什么实际效果啊，下面这段代码还是会换行。
 
 .outer {
-    width:101px
+width:101px
 }
 
 .inner {
-    width:33.33%;
-    height:300px;
-    display:inline-block;
-    outline:solid 1px blue;
+width:33.33%;
+height:300px;
+display:inline-block;
+outline:solid 1px blue;
 }
 
 .inner:last-child {
-    margin-right:-5px;
+margin-right:-5px;
 }</p>2020-01-16</li><br/><li><span>Sticker</span> 👍（2） 💬（0）<p>感觉自适应宽还是浮动更爽一点！</p>2019-04-30</li><br/><li><span>翰弟</span> 👍（2） 💬（0）<p>日拱一卒</p>2019-03-15</li><br/>
 </ul>

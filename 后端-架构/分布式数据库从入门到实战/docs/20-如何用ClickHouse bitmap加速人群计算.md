@@ -167,7 +167,7 @@ CREATE TABLE cdp_user_tag_bitmap_local on cluster default
     ) ENGINE = AggregatingMergeTree()
     PARTITION BY tag_id
     ORDER BY (tag_id,tag_value,tag_name,tag_category);
-    
+
 CREATE TABLE cdp_user_tag_bitmap_all on cluster default as cdp_user_tag_bitmap_local
     ENGINE = Distributed(default, 'cdp', 'cdp_user_tag_bitmap_local', tag_id);
 ```

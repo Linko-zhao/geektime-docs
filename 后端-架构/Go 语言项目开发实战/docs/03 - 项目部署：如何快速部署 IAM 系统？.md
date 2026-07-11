@@ -115,7 +115,7 @@ gpgcheck=1
 enabled=1
 gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
 EOF
- 
+
 $ sudo yum install -y mongodb-org
 ```
 
@@ -890,7 +890,7 @@ serverVersion:
 
 期待在留言区看到你的尝试，我们下一讲见！
 
-* * *
+---
 
 ## 彩蛋：一键安装
 
@@ -898,7 +898,7 @@ serverVersion:
 
 ```
 $ export LINUX_PASSWORD='iam59!z$' # 重要：这里要 export going 用户的密码
-$ version=latest && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C / tmp/       
+$ version=latest && curl https://marmotedu-1254073058.cos.ap-beijing.myqcloud.com/iam-release/${version}/iam.tar.gz | tar -xz -C / tmp/
 $ cd /tmp/iam/ && ./scripts/install/install.sh iam::install::install
 
 ```
@@ -938,27 +938,30 @@ serverVersion:
 
 iamctl version -o yaml
 clientVersion:
-  buildDate: &quot;2021-06-02T03:23:02Z&quot;
-  compiler: gc
-  gitCommit: c01dd7bc7ee8aa2c06b9b70e565dff9f5e13e5ce
-  gitTreeState: dirty
-  gitVersion: c01dd7b
-  goVersion: go1.16.2
-  platform: linux&#47;amd64
+buildDate: &quot;2021-06-02T03:23:02Z&quot;
+compiler: gc
+gitCommit: c01dd7bc7ee8aa2c06b9b70e565dff9f5e13e5ce
+gitTreeState: dirty
+gitVersion: c01dd7b
+goVersion: go1.16.2
+platform: linux&#47;amd64
 serverVersion:
-  buildDate: &quot;2021-06-02T03:13:04Z&quot;
-  compiler: gc
-  gitCommit: c01dd7bc7ee8aa2c06b9b70e565dff9f5e13e5ce
-  gitTreeState: dirty
-  gitVersion: c01dd7b
-  goVersion: go1.16.2
-  platform: linux&#47;amd64</p>2021-06-02</li><br/><li><span>单推dd</span> 👍（6） 💬（5）<p>在启动iam-authz-server服务的时候一直启动不起来，然后我通过日志发现他用的端口是9090，正好和我阿里云服务器的web界面管理工具cockpit用的一样，所以用了sudo systemctl stop cockpit.socket命令，让9090端口空出来，成功启动iam-authz-server服务。</p>2021-06-12</li><br/><li><span>Ransang</span> 👍（6） 💬（1）<p>好家伙，就这个项目安装就够我喝几壶里</p>2021-06-07</li><br/><li><span>chinandy</span> 👍（5） 💬（5）<p>安装 iamctl。第二步生成并安装 iamctl 的配置文件（config）：$ .&#47;scripts&#47;genconfig.sh scripts&#47;install&#47;environment.sh configs&#47;config &gt; config
+buildDate: &quot;2021-06-02T03:13:04Z&quot;
+compiler: gc
+gitCommit: c01dd7bc7ee8aa2c06b9b70e565dff9f5e13e5ce
+gitTreeState: dirty
+gitVersion: c01dd7b
+goVersion: go1.16.2
+platform: linux&#47;amd64</p>2021-06-02</li><br/><li><span>单推dd</span> 👍（6） 💬（5）<p>在启动iam-authz-server服务的时候一直启动不起来，然后我通过日志发现他用的端口是9090，正好和我阿里云服务器的web界面管理工具cockpit用的一样，所以用了sudo systemctl stop cockpit.socket命令，让9090端口空出来，成功启动iam-authz-server服务。</p>2021-06-12</li><br/><li><span>Ransang</span> 👍（6） 💬（1）<p>好家伙，就这个项目安装就够我喝几壶里</p>2021-06-07</li><br/><li><span>chinandy</span> 👍（5） 💬（5）<p>安装 iamctl。第二步生成并安装 iamctl 的配置文件（config）：$ .&#47;scripts&#47;genconfig.sh scripts&#47;install&#47;environment.sh configs&#47;config &gt; config
 在configs下面没有config文件，这个文件是怎么来的，我自己touch了一个显然不对的，我打开看.iam目录下看他是空的。</p>2021-08-18</li><br/><li><span>小可爱(`へ´*)ノ</span> 👍（5） 💬（1）<p>老师，你mariadb安装脚本中的出现类似iam::mariadb::uninstall的命名，使用::有什么目的吗</p>2021-06-17</li><br/><li><span>呵呵哒</span> 👍（4） 💬（19）<p>最后的鉴权验证一直这样{&quot;code&quot;:100202,&quot;message&quot;:&quot;Signature is invalid&quot;}
-换了token 新加的用户  策略 和秘钥 都不行</p>2021-06-05</li><br/><li><span>pedro</span> 👍（4） 💬（7）<p>老师的脚本玩的真的非常溜，我几乎无阻碍的到了 iam-apiserver 安装这个地方了，但是遇到了两个问题，第一个文中关于 git clone --depth 的命令有错误，depth 没有指定参数，导致 clone 失败；第二个问题很棘手，google 尝试了几个办法都没有解决，在运行：
+换了token 新加的用户 策略 和秘钥 都不行</p>2021-06-05</li><br/><li><span>pedro</span> 👍（4） 💬（7）<p>老师的脚本玩的真的非常溜，我几乎无阻碍的到了 iam-apiserver 安装这个地方了，但是遇到了两个问题，第一个文中关于 git clone --depth 的命令有错误，depth 没有指定参数，导致 clone 失败；第二个问题很棘手，google 尝试了几个办法都没有解决，在运行：
+
 ```sh
 make build BINS=iam-apiserver
 ```
+
 脚本的时候，会报错：
+
 ```sh
 ===========&gt; Building binary iam-apiserver f96a5c8 for linux amd64
 verifying github.com&#47;marmotedu&#47;marmotedu-sdk-go@v1.0.0&#47;go.mod: checksum mismatch
@@ -970,11 +973,12 @@ This download does NOT match an earlier download recorded in go.sum.
 The bits may have been replaced on the origin server, or an attacker may
 have intercepted the download attempt.
 ```
+
 我尝试用 go clean --modcache 和 go mod tidy 都没有解决，还是报校验错误，可能 sdk-go 这个包本身就有问题，这个包又是老师维护的，麻烦老师答疑解惑，多谢了～</p>2021-05-27</li><br/><li><span>Geek_9b9ea5</span> 👍（3） 💬（6）<p>第 3 步，测试 iam-authz-server 是否成功安装中，测试资源授权是否通过，执行
 $ curl -s -XPOST -H&#39;Content-Type: application&#47;json&#39; -H&#39;Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Ilp1eHZYTmZHMDhCZEVNcWtUYVA0MUwyRExBcmxFNkpwcW9veCIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYxNzg0NTE5NSwiaWF0IjoxNjE3ODM3OTk1LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MTc4Mzc5OTV9.za9yLM7lHVabPAlVQLCqXEaf8sTU6sodAsMXnmpXjMQ&#39; -d&#39;{&quot;subject&quot;:&quot;users:maria&quot;,&quot;action&quot;:&quot;delete&quot;,&quot;resource&quot;:&quot;resources:articles:ladon-introduction&quot;,&quot;context&quot;:{&quot;remoteIP&quot;:&quot;192.168.0.5&quot;}}&#39; http:&#47;&#47;127.0.0.1:9090&#47;v1&#47;authz
 {&quot;allowed&quot;:true}报错，在问题区发现有人提出问题并且未有正确的解决方案，望老师解惑。
 {&quot;code&quot;:100202,&quot;message&quot;:&quot;Signature is invalid&quot;}</p>2021-08-30</li><br/><li><span>forever_ele</span> 👍（3） 💬（2）<p>创建授权策略时如果报 {&quot;code&quot;:100101,&quot;message&quot;:&quot;Database error&quot;} ，说明策略已经存在了，可执行
-curl -s -XDELETE -H&#39;Authorization: Bearer {Token}&#39; http:&#47;&#47;127.0.0.1:8080&#47;v1&#47;policies&#47;{策略名} 删除后重试</p>2021-08-04</li><br/><li><span>morris</span> 👍（3） 💬（2）<p>执行：   iamctl user list 
+curl -s -XDELETE -H&#39;Authorization: Bearer {Token}&#39; http:&#47;&#47;127.0.0.1:8080&#47;v1&#47;policies&#47;{策略名} 删除后重试</p>2021-08-04</li><br/><li><span>morris</span> 👍（3） 💬（2）<p>执行： iamctl user list
 error: {&quot;code&quot;:100207,&quot;message&quot;:&quot;Permission denied&quot;}
 
 这是为啥呢</p>2021-07-20</li><br/>

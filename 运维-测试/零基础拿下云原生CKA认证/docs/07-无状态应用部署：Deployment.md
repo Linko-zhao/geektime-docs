@@ -37,23 +37,23 @@ kubectl create deployment <deployment名称> --image=nginx --replicas=3
 
 ```yaml
 # my-nginx-dep.yaml
-apiVersion: apps/v1 
-kind: Deployment 
-metadata: 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: my-nginx-dep
-spec: 
-  replicas: 3 # Pod 副本预期数量 
-  selector:   # 通过选择器来管理 Pod
-    matchLabels: 
-      pod: my-nginx  # 要管理的 Pod 的标签
-  template:   # 定义 Pod 的模板
-    metadata: 
-      labels: 
-        pod: my-nginx # Pod 的标签 
-    spec: 
-      containers: 
-      - name: nginx 
-        image: nginx
+spec:
+  replicas: 3 # Pod 副本预期数量
+  selector: # 通过选择器来管理 Pod
+    matchLabels:
+      pod: my-nginx # 要管理的 Pod 的标签
+  template: # 定义 Pod 的模板
+    metadata:
+      labels:
+        pod: my-nginx # Pod 的标签
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
 ```
 
 - **apiVersion**：Deployment 的 apiVersion 值是 “apps/v1”。
@@ -164,13 +164,13 @@ Deployment 具有版本概念，它与 YAML 文件中的 Pod 模板（template�
 
 ```bash
 # 通过修改 Deployment 的 YAML 文件，修改 Pod 使用的容器镜像，然后重新部署
-kubectl apply -f my-nginx-dep.yaml 
+kubectl apply -f my-nginx-dep.yaml
 
 # 通过 "kubectl set" 命令修改 deployment 中 Pod 的容器镜像
-kubectl set image deployment/my-nginx-dep nginx=nginx:1.26.0 
+kubectl set image deployment/my-nginx-dep nginx=nginx:1.26.0
 
 # 通过 "kubectl edit" 命令，直接打开编辑器对 deployment 进行修改，保存立即生效
-kubectl edit deployment/my-nginx-dep 
+kubectl edit deployment/my-nginx-dep
 ```
 
 这里介绍一下滚动更新的原理。滚动更新主要通过一个隐藏的 ReplicaSet 资源对象实现。实际上，Deployment 并不直接管理 Pod，而是通过 ReplicaSet 来管理 Pod。ReplicaSet 实际上负责管理多个副本的 Pod，每个 ReplicaSet 对应一个 Deployment 的版本。当 Deployment 升级时，会同时创建一个新版本的 ReplicaSet，新版本的 ReplicaSet 开始创建新的 Pod，而旧版本的 ReplicaSet 则开始删除旧的 Pod。
@@ -246,6 +246,7 @@ REVISION  CHANGE-CAUSE
 这里发现版本 REVISION 只是数字，而且 CHANGE-CAUSE 原因也没有说明，这样的展示结果不太友好。如果我们想在每次版本升级时增加一些说明，可以通过在 Deployment 的YAML 文件的 metadata 属性中添加 annotations 属性，用来增加注解信息。YAML 文件示例如下：
 
 ```yaml
+
 ...
 metadata:
   name: my-nginx-dep
@@ -269,11 +270,11 @@ REVISION  CHANGE-CAUSE
 如果在部署过程中遇到严重问题，可以使用版本回退功能。由于 Deployment 采用 ReplicaSet进行应用部署的版本管理，因此可以方便地回退到任意历史版本。回退过程与滚动更新相似，也能持续保持服务不间断，但是版本回退事实上并不是真的回到上一版本，而是会生成一个新的 Deployment 版本。
 
 ```bash
-# 回滚上一个版本 
+# 回滚上一个版本
 kubectl rollout undo deployment <deployment名称>
 
 # 回滚历史指定版本
-kubectl rollout undo deployment <deployment名称> --to-revision=2 
+kubectl rollout undo deployment <deployment名称> --to-revision=2
 ```
 
 讲完了 Deployment 的高级功能，你是不是已经感受到它的强大。的确，在我们实际项目部署架构中，Deployment 是用得最多的应用部署方式，大量无状态应用（很多微服务应用也是无状态应用）都是使用 Deployment 部署到集群中。通过 Deployment 的多 Pod 副本、水平扩缩容、滚动更新等功能，保障了应用的高可用、可扩展和持续稳定。

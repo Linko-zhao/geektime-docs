@@ -121,25 +121,25 @@ Ranges提供了一些工具函数，用于访问传统STL容器和Ranges视图�
 #include <algorithm>
 #include <ranges>
 #include <iostream>
- 
+
 int main() {
     namespace ranges = std::ranges;
- 
+
     // 首先，调用ranges::begin和ranges::end函数获取容器的迭代器
     // 接着，通过迭代器访问数据中的元素
     std::vector<int> v = { 3, 1, 4, 1, 5, 9, 2, 6 };
     auto start = ranges::begin(v);
     std::cout << "[0]: " << *start << std::endl;
- 
+
     auto curr = start;
     curr++;
     std::cout << "[1]: " << *curr << std::endl;
- 
+
     std::cout << "[4]: " << *(curr + 3) << std::endl;
- 
+
     auto stop = ranges::end(v);
     std::sort(start, stop);
- 
+
     // 最后，调用ranges::cbegin和ranges::cend循环输出排序后的数据
     for (auto it = ranges::cbegin(v);
         it != ranges::cend(v);
@@ -148,7 +148,7 @@ int main() {
         std::cout << *it << " ";
     }
     std::cout << std::endl;
- 
+
     return 0;
 }
 ```
@@ -318,50 +318,52 @@ Q4：“start = std::find(getArray().begin(), getArray().end(), 1);”调用后�
 #include &lt;algorithm&gt;
 #include &lt;ranges&gt;
 #include &lt;iostream&gt;
- 
+
 int main() {
-    namespace ranges = std::ranges;
- 
+namespace ranges = std::ranges;
+
     auto getArray = [] { return std::vector{ 0, 1, 0, 1 }; };
- 
+
     &#47;&#47; 编译成功
     auto start = std::find(getArray().begin(), getArray().end(), 1);
     std::cout &lt;&lt; *start &lt;&lt; std::endl;
- 
+
     &#47;&#47; 编译失败
     auto rangeStart = ranges::find(getArray(), 1);
     std::cout &lt;&lt; *rangeStart &lt;&lt; std::endl;
- 
+
     return 0;
+
 }
-这个代码块中auto getArray = [] { return std::vector{ 0, 1, 0, 1 }; };编译器会报错，需要改成 auto getArray = [] { 
-        
+这个代码块中auto getArray = [] { return std::vector{ 0, 1, 0, 1 }; };编译器会报错，需要改成 auto getArray = [] {
+
         return std::vector&lt;int&gt;{ 0, 1, 0, 1 };
-        
+
     };才可以</p>2023-12-13</li><br/><li><span>努力学习不准懈怠</span> 👍（0） 💬（1）<p>
+
 #include &lt;vector&gt;
 #include &lt;algorithm&gt;
 #include &lt;ranges&gt;
 #include &lt;iostream&gt;
- 
+
 int main() {
-    namespace ranges = std::ranges;
- 
+namespace ranges = std::ranges;
+
     &#47;&#47; 首先，调用ranges::begin和ranges::end函数获取容器的迭代器
     &#47;&#47; 接着，通过迭代器访问数据中的元素
     std::vector&lt;int&gt; v = { 3, 1, 4, 1, 5, 9, 2, 6 };
     auto start = ranges::begin(v);
     std::cout &lt;&lt; &quot;[0]: &quot; &lt;&lt; *start &lt;&lt; std::endl;
- 
+
     auto curr = start;
     curr++;
     std::cout &lt;&lt; &quot;[1]: &quot; &lt;&lt; *curr &lt;&lt; std::endl;
- 
+
     std::cout &lt;&lt; &quot;[5]: &quot; &lt;&lt; *(curr + 3) &lt;&lt; std::endl;
- 
+
     auto stop = ranges::end(v);
     std::sort(start, stop);
- 
+
     &#47;&#47; 最后，调用ranges::cbegin和ranges::cend循环输出排序后的数据
     for (auto it = ranges::cbegin(v);
         it != ranges::cend(v);
@@ -370,8 +372,9 @@ int main() {
         std::cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
     }
     std::cout &lt;&lt; std::endl;
- 
+
     return 0;
+
 }
 这段代码第19行应该是std::cout &lt;&lt; &quot;[4]: &quot; &lt;&lt; *(curr + 3) &lt;&lt; std::endl;</p>2023-02-22</li><br/>
 </ul>

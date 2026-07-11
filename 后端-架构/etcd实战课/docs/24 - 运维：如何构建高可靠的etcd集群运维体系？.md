@@ -203,7 +203,7 @@ spec:
 主要有以下方法，首先是通过etcdctl snapshot命令行人工备份。在发起重要变更的时候，你可以通过如下命令进行备份，并查看快照状态。
 
 ```
-ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT 
+ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT
 snapshot save snapshotdb
 ETCDCTL_API=3 etcdctl --write-out=table snapshot status snapshotdb
 ```
@@ -264,28 +264,28 @@ spec:
 ```
 apiVersion: etcd.cloud.tencent.com/v1beta1
 kind: EtcdMonitor
-metadata:  
-creationTimestamp: "2020-06-15T12:19:30Z"  
-generation: 1  
-labels:    
-clusterName: gz-qcloud-etcd-03    
-region: gz    
-source: etcd-life-cycle-operator  
-name: gz-qcloud-etcd-03-etcd-node-key-diff  
-namespace: gz
-spec:  
-clusterId: gz-qcloud-etcd-03  
-metricName: etcd-node-key-diff  
-metricProviderName: cruiser  
-name: gz-qcloud-etcd-03  
-productName: tke  
+metadata:
+creationTimestamp: "2020-06-15T12:19:30Z"
+generation: 1
+labels:
+clusterName: gz-qcloud-etcd-03
 region: gz
-status:  
-records:  
-- endTime: "2021-02-25T11:22:26Z"    
-message: collectEtcdNodeKeyDiff,etcd cluster gz-qcloud-etcd-03,total key num is      
-122143,nodeKeyDiff is 0     
-startTime: "2021-02-25T12:39:28Z"  
+source: etcd-life-cycle-operator
+name: gz-qcloud-etcd-03-etcd-node-key-diff
+namespace: gz
+spec:
+clusterId: gz-qcloud-etcd-03
+metricName: etcd-node-key-diff
+metricProviderName: cruiser
+name: gz-qcloud-etcd-03
+productName: tke
+region: gz
+status:
+records:
+- endTime: "2021-02-25T11:22:26Z"
+message: collectEtcdNodeKeyDiff,etcd cluster gz-qcloud-etcd-03,total key num is
+122143,nodeKeyDiff is 0
+startTime: "2021-02-25T12:39:28Z"
 updatedAt: "2021-02-25T12:39:28Z"
 ```
 
@@ -384,7 +384,7 @@ https:&#47;&#47;github.com&#47;tkestack&#47;kstone, 欢迎大家star、fork，�
 
 我针对 learner 操作一直提示 rpc not supported for learner 错误：
 
-ETCDCTL_API=3 .&#47;etcdctl --endpoints=172.168.111.129:62379 member promote ebcec9c01f280618       
+ETCDCTL_API=3 .&#47;etcdctl --endpoints=172.168.111.129:62379 member promote ebcec9c01f280618  
 {&quot;level&quot;:&quot;warn&quot;,&quot;ts&quot;:&quot;2022-08-25T14:31:06.673+0800&quot;,&quot;caller&quot;:&quot;clientv3&#47;retry_interceptor.go:62&quot;,&quot;msg&quot;:&quot;retrying of unary invoker failed&quot;,&quot;target&quot;:&quot;endpoint:&#47;&#47;client-3c29945a-de04-4bec-9ad3-48c50f3fd135&#47;172.168.111.129:62379&quot;,&quot;attempt&quot;:0,&quot;error&quot;:&quot;rpc error: code = Unavailable desc = etcdserver: rpc not supported for learner&quot;}
-Error: etcdserver: rpc not supported for learner</p>2022-08-25</li><br/><li><span>hifine</span> 👍（0） 💬（0）<p>老师好，请问A和B跨区，B区部署learner, A区故障时，learner该如何操作，网上资料太少了，搜边了都没找到，我操作learner一直提示 rpc not supported for learner</p>2022-08-25</li><br/><li><span>Magic Star Trace</span> 👍（0） 💬（0）<p>我们线上 etcd  是用虚拟机部署的，没有在k8s集群内 能否将error级别的日志 重定向到其他目录呢？</p>2021-03-29</li><br/>
+Error: etcdserver: rpc not supported for learner</p>2022-08-25</li><br/><li><span>hifine</span> 👍（0） 💬（0）<p>老师好，请问A和B跨区，B区部署learner, A区故障时，learner该如何操作，网上资料太少了，搜边了都没找到，我操作learner一直提示 rpc not supported for learner</p>2022-08-25</li><br/><li><span>Magic Star Trace</span> 👍（0） 💬（0）<p>我们线上 etcd 是用虚拟机部署的，没有在k8s集群内 能否将error级别的日志 重定向到其他目录呢？</p>2021-03-29</li><br/>
 </ul>

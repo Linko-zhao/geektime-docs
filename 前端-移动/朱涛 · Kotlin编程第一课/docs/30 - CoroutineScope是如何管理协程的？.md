@@ -269,14 +269,14 @@ public open class JobSupport constructor(active: Boolean) : Job, ChildJob, Paren
 
         if (isCompleted) {
             handle.dispose()
-            parentHandle = NonDisposableHandle 
+            parentHandle = NonDisposableHandle
         }
     }
 }
 
 // Job源码
 public interface Job : CoroutineContext.Element {
-    public val children: Sequence<Job>   
+    public val children: Sequence<Job>
     public fun attachChild(child: ChildJob): ChildHandle
 }
 ```
@@ -501,13 +501,14 @@ public open fun childCancelled(cause: Throwable): Boolean {
 在第23讲当中，我们学习过SupervisorJob，它可以起到隔离异常传播的作用，下面是它的源代码，请问你能借助这节课学的知识点来分析下它的原理吗？
 
 ```plain
-public fun SupervisorJob(parent: Job? = null) : CompletableJob = 
+public fun SupervisorJob(parent: Job? = null) : CompletableJob =
     SupervisorJobImpl(parent)
 
 private class SupervisorJobImpl(parent: Job?) : JobImpl(parent) {
     override fun childCancelled(cause: Throwable): Boolean = false
 }
 ```
+
 <div><strong>精选留言（6）</strong></div><ul>
 <li><span>Paul Shan</span> 👍（11） 💬（1）<p>思考题：SupervisorJob 重写了childCancelled方法，当异常发生，错误在整个树中传递，调用到​​cancelParent会调用parent.childCancelled，这个时候就会直接返回false而不是调用cancelImpl，错误传递就会终止，父协程不会被cancle掉。执行的路径其实和CancellationException异常类似，区别是cancelParent的返回值。</p>2022-04-01</li><br/><li><span>飓风</span> 👍（7） 💬（1）<p>CancellationException 引起的异常，会传递给兄弟节点吗？</p>2022-04-13</li><br/><li><span>辉哥</span> 👍（1） 💬（1）<p>原文: 另外，由于 CoroutineScope 当中的 Job 是我们手动创建的，并不需要执行任何协程代码，所以，它会是 true。也就是说，这里会执行注释 2 对应的代码
 

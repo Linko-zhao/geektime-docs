@@ -204,7 +204,7 @@ class Conversation2:
         message = response["choices"][0]["message"]["content"]
         num_of_tokens = response['usage']['total_tokens']
         self.messages.append({"role": "assistant", "content": message})
-        
+
         if len(self.messages) > self.num_of_round*2 + 1:
             del self.messages[1:3]
         return message, num_of_tokens
@@ -391,11 +391,11 @@ from openai import OpenAI
 client = OpenAI()
 
 class Conversation:
-    def __init__(self, prompt, num_of_round):
-        self.prompt = prompt
-        self.num_of_round = num_of_round
-        self.messages = []
-        self.messages.append({&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: self.prompt})
+def **init**(self, prompt, num_of_round):
+self.prompt = prompt
+self.num_of_round = num_of_round
+self.messages = []
+self.messages.append({&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: self.prompt})
 
     def ask(self, question):
         try:
@@ -418,7 +418,6 @@ class Conversation:
             del self.messages[1:3] # Remove the first round conversation left.
         return message
 
-
 不然跑不过去。。openai改了。。。
 </p>2024-01-23</li><br/><li><span>我自己带盐</span> 👍（30） 💬（2）<p>可以认模型总结一下，全部的对话，再发过去</p>2023-03-29</li><br/><li><span>黄琨</span> 👍（16） 💬（1）<p>问题1: 为了防止超标，可能需要在对话开始前设置一个允许最大的token阈值，比如 MAX_TOKEN_LIMIT = 2000，再设置一个小于某个数量就需要提醒的警告值，比如 MIN_TOKEN_LIMIT = 200，对话前初始化一个最大值，对话过程中减去每轮所消耗的token数量，当结果少于最小值的时候，再调用删减对话数组的代码。
 
@@ -430,29 +429,29 @@ context.load_verify_locations(&quot;D:\Anaconda\Library\ssl\cert.pem&quot;)
 
 具体报错如下：
 Error communicating with OpenAI: HTTPSConnectionPool(host=&#39;api.openai.com&#39;, port=443): Max retries exceeded with url: &#47;v1&#47;chat&#47;completions (Caused by SSLError(SSLError(1, &#39;[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1129)&#39;)))
-Assistant : Error communicating with OpenAI: HTTPSConnectionPool(host=&#39;api.openai.com&#39;, port=443): Max retries exceeded with url: &#47;v1&#47;chat&#47;completions (Caused by SSLError(SSLError(1, &#39;[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1129)&#39;)))</p>2023-04-03</li><br/><li><span>川月</span> 👍（1） 💬（6）<p>    del self.messages[1:3] &#47;&#47;Remove the first round conversation left.
-        ^
+Assistant : Error communicating with OpenAI: HTTPSConnectionPool(host=&#39;api.openai.com&#39;, port=443): Max retries exceeded with url: &#47;v1&#47;chat&#47;completions (Caused by SSLError(SSLError(1, &#39;[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1129)&#39;)))</p>2023-04-03</li><br/><li><span>川月</span> 👍（1） 💬（6）<p> del self.messages[1:3] &#47;&#47;Remove the first round conversation left.
+^
 SyntaxError: cannot delete operator 为什么这个报错啊</p>2023-03-31</li><br/><li><span>Bonnenult丶凉煜</span> 👍（1） 💬（1）<p>安装gradio需要使用这个命令conda install -c conda-forge gradio</p>2023-03-30</li><br/><li><span>陈鹏</span> 👍（0） 💬（1）<p>成功运行，开心。
 请教老师一个问题：用hugging face 自己搭建的app，会一直运行吗？平台是否有策略到一定时间后停止我的app？</p>2023-05-15</li><br/><li><span>王石磊</span> 👍（0） 💬（3）<p>我的示例报错现象是这样的，程序代码中设置了 API_KEY 和 网路代理，运行其他前面的代码正常，本节课的代码出现了。下面的问题。不存在API_KEY 费用不足或谷歌不能访问的情况。
 openai.api_key = os.environ[&quot;OPENAI_API_KEY&quot;]
 os.environ[&quot;http_proxy&quot;] = &quot;socks5:&#47;&#47;127.0.0.1:xxx&quot;
 os.environ[&quot;https_proxy&quot;] = &quot;socks5:&#47;&#47;127.0.0.1:xxx&quot;
 Traceback (most recent call last):
-  File &quot;D:\Python3810\lib\site-packages\urllib3\connectionpool.py&quot;, line 703, in urlopen
-    httplib_response = self._make_request(
-  File &quot;D:\Python3810\lib\site-packages\urllib3\connectionpool.py&quot;, line 449, in _make_request
-    six.raise_from(e, None)
-  File &quot;&lt;string&gt;&quot;, line 3, in raise_from
-  File &quot;D:\Python3810\lib\site-packages\urllib3\connectionpool.py&quot;, line 444, in _make_request
-    httplib_response = conn.getresponse()
-  File &quot;D:\Python3810\lib\http\client.py&quot;, line 1344, in getresponse
-    response.begin()
-  File &quot;D:\Python3810\lib\http\client.py&quot;, line 307, in begin
-    version, status, reason = self._read_status()
-  File &quot;D:\Python3810\lib\http\client.py&quot;, line 276, in _read_status
-    raise RemoteDisconnected(&quot;Remote end closed connection without&quot;
+File &quot;D:\Python3810\lib\site-packages\urllib3\connectionpool.py&quot;, line 703, in urlopen
+httplib_response = self._make_request(
+File &quot;D:\Python3810\lib\site-packages\urllib3\connectionpool.py&quot;, line 449, in _make_request
+six.raise_from(e, None)
+File &quot;&lt;string&gt;&quot;, line 3, in raise_from
+File &quot;D:\Python3810\lib\site-packages\urllib3\connectionpool.py&quot;, line 444, in _make_request
+httplib_response = conn.getresponse()
+File &quot;D:\Python3810\lib\http\client.py&quot;, line 1344, in getresponse
+response.begin()
+File &quot;D:\Python3810\lib\http\client.py&quot;, line 307, in begin
+version, status, reason = self._read_status()
+File &quot;D:\Python3810\lib\http\client.py&quot;, line 276, in _read_status
+raise RemoteDisconnected(&quot;Remote end closed connection without&quot;
 http.client.RemoteDisconnected: Remote end closed connection without response
 
-During handling of the above exception, another exception occurred:</p>2023-05-14</li><br/><li><span>陈鹏</span> 👍（0） 💬（2）<p>老师，第一段代码示例中的num_of_round=2，是不是要改为3？  感觉 前后内容对应不上，前面num_of_round设为2，虽然第三轮对话能练习上下文，但是问了问题3后，第一个问题和回答已经删除了</p>2023-05-07</li><br/><li><span>勇.Max</span> 👍（0） 💬（1）<p>gradio应用代码，我在jupyter-lab上运行，左下角一直显示Busy，卡着不动。
+During handling of the above exception, another exception occurred:</p>2023-05-14</li><br/><li><span>陈鹏</span> 👍（0） 💬（2）<p>老师，第一段代码示例中的num_of_round=2，是不是要改为3？ 感觉 前后内容对应不上，前面num_of_round设为2，虽然第三轮对话能练习上下文，但是问了问题3后，第一个问题和回答已经删除了</p>2023-05-07</li><br/><li><span>勇.Max</span> 👍（0） 💬（1）<p>gradio应用代码，我在jupyter-lab上运行，左下角一直显示Busy，卡着不动。
 我电脑配置并不低（macbook pro m1），网络也没问题。请问老师这种问题如何解决呢？</p>2023-04-23</li><br/><li><span>绘世浮夸 つ</span> 👍（0） 💬（1）<p>对于现在api做了限制每分钟只能提问三次怎么解决老师</p>2023-04-21</li><br/>
 </ul>

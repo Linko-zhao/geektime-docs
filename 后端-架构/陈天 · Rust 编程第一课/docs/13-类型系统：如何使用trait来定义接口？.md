@@ -425,7 +425,7 @@ pub trait Service<Request> {
     // Future 类型受 Future trait 约束
     type Future: Future;
     fn poll_ready(
-        &mut self, 
+        &mut self,
         cx: &mut Context<'_>
     ) -> Poll<Result<(), Self::Error>>;
     fn call(&mut self, req: Request) -> Self::Future;
@@ -873,7 +873,7 @@ struct Complex {
 }
 ```
 
-4. 
+4.
 
 ```rust
 impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
@@ -891,11 +891,12 @@ impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
 
 有个小小的疑问想请教下老师，在 **Trait Object 的实现机理** 这一小节开始给的配图中，
 formatter 这个 trait object 的 ptr 为啥会指向参数 text 呢？不是指向 HtmlFormatter 这个实例数据吗？</p>2021-09-22</li><br/><li><span>Marvichov</span> 👍（3） 💬（3）<p>```
-    &#47;&#47; 指向同一种类型的同一个 trait 的 vtable 地址相同
-    &#47;&#47; 这里都是 String + Display
-    assert_eq!(vtable1, vtable3);
-    &#47;&#47; 这里都是 String + Debug
-    assert_eq!(vtable2, vtable4);
+&#47;&#47; 指向同一种类型的同一个 trait 的 vtable 地址相同
+&#47;&#47; 这里都是 String + Display
+assert_eq!(vtable1, vtable3);
+&#47;&#47; 这里都是 String + Debug
+assert_eq!(vtable2, vtable4);
+
 ```
 
 我原本以为String有个method call table, Display也有一个单独的; 那么说, 我自己写了个trait给String type, 岂不是编译的时候, 我自己提供的method需要append到String之前已经有的vtable?
@@ -930,21 +931,23 @@ fn dynamic_dispatch(t: &amp;Bar){
 
 这里不能理解的是动态分发，参数t也是要求为&amp;Bar的呀，那么这里到底和静态分发的核心区分是什么？凭什么就无法确定类型大小而需要用虚表呢？这个实在不太理解，多谢了。</p>2021-10-28</li><br/><li><span>Marvichov</span> 👍（1） 💬（1）<p>&gt; C++ &#47; Java 指向 vtable 的指针，在编译时放在类结构里，
 
-现在C++的vtable也是分开放的 (可能看编译器, clang是分开的); 
+现在C++的vtable也是分开放的 (可能看编译器, clang是分开的);
 
-不过对 cpp, 对interface的实现大家都和original class definition放在一起. 没有试过在分开的文件中impl一个cpp的class的interface (parent inheritance). 可能也行, 但是不符合cpp的convention. 
+不过对 cpp, 对interface的实现大家都和original class definition放在一起. 没有试过在分开的文件中impl一个cpp的class的interface (parent inheritance). 可能也行, 但是不符合cpp的convention.
 
 rust相对而言, 对某个类型的impl可以到处放.
 
 ```
+
 vtable for Foo:
-        .quad   0
-        .quad   typeinfo for Foo    &#47;&#47; RTTI for foo
-        .quad   Foo::method1()      &#47;&#47; where vtable starts
-        .quad   Bar::method2()      &#47;&#47; for method2 in vtable
-        .quad   Foo::~Foo() [complete object destructor]
-        .quad   Foo::~Foo() [deleting destructor]
-```
+.quad 0
+.quad typeinfo for Foo &#47;&#47; RTTI for foo
+.quad Foo::method1() &#47;&#47; where vtable starts
+.quad Bar::method2() &#47;&#47; for method2 in vtable
+.quad Foo::~Foo() [complete object destructor]
+.quad Foo::~Foo() [deleting destructor]
+
+````
 
 https:&#47;&#47;guihao-liang.github.io&#47;2020&#47;05&#47;30&#47;what-is-vtable-in-cpp</p>2021-10-07</li><br/><li><span>hughieyu</span> 👍（1） 💬（1）<p>1. 不可以。 Complex不能实现Add多次，只能实现对一种类型的计算。
 2. 不能。 对于trait object来说， Self信息已经被擦除了。
@@ -983,7 +986,7 @@ impl&lt;&#39;a&gt; SentenceIter&lt;&#39;a&gt; {
 }
 
 impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
-    type Item = &amp;&#39;a str; 
+    type Item = &amp;&#39;a str;
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
         if self.s.is_empty() {
@@ -1010,29 +1013,31 @@ impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
 }
 
 ```</p>2021-11-16</li><br/><li><span>TheLudlows</span> 👍（0） 💬（3）<p>老师，为什么加了关联类型之后，需要用Sized对Self进行限定呢？</p>2021-11-09</li><br/><li><span>野山门</span> 👍（0） 💬（1）<p>看大家的答案后，小小的改进了一下第四题：
-```
-impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
-  type Item = &amp;&#39;a str; &#47;&#47; 想想 Item 应该是什么类型？
+````
 
-  fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
-    if self.s.trim().is_empty() {
-      return None;
-    }
-    match self.s.find(self.delimiter) {
-      None =&gt; {
-        let s = self.s.trim();
-        *self.s = &quot;&quot;;
-        Some(s)
-      }
-      Some(i) =&gt; {
-        let next_index = i + self.delimiter.len_utf8();
-        let s = &amp;self.s[..next_index].trim();
-        *self.s = &amp;self.s[next_index..];
-        Some(s)
-      }
-    }
-  }
+impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
+type Item = &amp;&#39;a str; &#47;&#47; 想想 Item 应该是什么类型？
+
+fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+if self.s.trim().is_empty() {
+return None;
 }
+match self.s.find(self.delimiter) {
+None =&gt; {
+let s = self.s.trim();
+*self.s = &quot;&quot;;
+Some(s)
+}
+Some(i) =&gt; {
+let next_index = i + self.delimiter.len_utf8();
+let s = &amp;self.s[..next_index].trim();
+*self.s = &amp;self.s[next_index..];
+Some(s)
+}
+}
+}
+}
+
 ```</p>2021-10-21</li><br/><li><span>wzx</span> 👍（0） 💬（2）<p>第四题：
 
 struct SentenceIter&lt;&#39;a&gt; {
@@ -1067,3 +1072,4 @@ impl&lt;&#39;a&gt; Iterator for SentenceIter&lt;&#39;a&gt; {
     }
 }</p>2021-09-24</li><br/><li><span>记事本</span> 👍（0） 💬（1）<p>rust泛型真的太抽象了</p>2021-09-23</li><br/>
 </ul>
+```

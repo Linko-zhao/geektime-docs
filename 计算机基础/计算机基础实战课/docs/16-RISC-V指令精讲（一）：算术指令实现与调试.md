@@ -322,7 +322,7 @@ slt_ins:
 .globl sltu_ins
 sltu_ins:
     sltu a0, a0, a1         #if(a0<a1) a0=1 else a0=0，a0，a1是参数，a0是返回值，这样计算结果就返回了
-    jr ra                   #函数返回    
+    jr ra                   #函数返回
 ```
 
 这里已经写好了slt\_ins与sltu\_ins函数，分别是执行slt和sltu指令，都是拿a0寄存器和a1寄存器比较，如果a0小于a1寄存器，就把1写入到a0寄存器，否则写入0到a0寄存器。

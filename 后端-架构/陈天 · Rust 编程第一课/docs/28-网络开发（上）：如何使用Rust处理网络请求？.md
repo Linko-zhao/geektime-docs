@@ -343,24 +343,23 @@ use futures::{SinkExt, StreamExt};
 use tokio_util::codec::{Framed, LengthDelimitedCodec};
 use prost::Message;
 
-
 #[tokio::main]
 async fn main() -&gt; Result&lt;()&gt; {
-    tracing_subscriber::fmt::init();
-    let service: Service&lt;SledDb&gt; = ServiceInner::new(SledDb::new(&quot;&#47;tmp&#47;kvserver&quot;))
-        .fn_before_send(|res| match res.message.as_ref() {
-            &quot;&quot; =&gt; res.message = &quot;altered. Original message is empty.&quot;.into(),
-            s =&gt; res.message = format!(&quot;altered: {}&quot;, s),
-        })
-        .into();
-    let addr = &quot;127.0.0.1:9527&quot;;
-    let listener = TcpListener::bind(addr).await?;
-    loop {
-        let (stream, addr) = listener.accept().await?;
-        println!(&quot;accepted: {:?}&quot;, addr);
-        &#47;&#47; LengthDelimitedCodec 默认 4 字节长度
-        let mut stream = Framed::new(stream, LengthDelimitedCodec::new());
-        let svc = service.clone();
+tracing_subscriber::fmt::init();
+let service: Service&lt;SledDb&gt; = ServiceInner::new(SledDb::new(&quot;&#47;tmp&#47;kvserver&quot;))
+.fn_before_send(|res| match res.message.as_ref() {
+&quot;&quot; =&gt; res.message = &quot;altered. Original message is empty.&quot;.into(),
+s =&gt; res.message = format!(&quot;altered: {}&quot;, s),
+})
+.into();
+let addr = &quot;127.0.0.1:9527&quot;;
+let listener = TcpListener::bind(addr).await?;
+loop {
+let (stream, addr) = listener.accept().await?;
+println!(&quot;accepted: {:?}&quot;, addr);
+&#47;&#47; LengthDelimitedCodec 默认 4 字节长度
+let mut stream = Framed::new(stream, LengthDelimitedCodec::new());
+let svc = service.clone();
 
         tokio::spawn(async move {
             &#47;&#47; 接收到的消息会只包含消息主体（不包含长度）
@@ -374,10 +373,11 @@ async fn main() -&gt; Result&lt;()&gt; {
             }
         });
     }
+
 }
 </p>2021-11-29</li><br/><li><span>进击的Lancelot</span> 👍（3） 💬（0）<p>思考题可以参考 dva 同学的实现，我这里也提供一个关于 client 的修改:
 
-```rust
+````rust
 use anyhow::Result;
 use bytes::Bytes;
 use futures::prelude::*;
@@ -403,3 +403,4 @@ async fn main() -&gt; Result&lt;()&gt; {
 }
 ```</p>2022-09-16</li><br/><li><span>贱猴🐔哥的室友</span> 👍（0） 💬（0）<p>之前以为protobuf必须和grpc等一起用比较好，发现自定义的格式其实跟 TLV（Type-Length-Value）是一样的原理，而且更简单，这种方式应该比较好</p>2022-10-10</li><br/>
 </ul>
+````

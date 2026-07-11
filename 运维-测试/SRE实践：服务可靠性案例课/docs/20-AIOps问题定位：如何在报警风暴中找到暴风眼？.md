@@ -102,7 +102,7 @@ def call_service(caller, callee):
 def check_fault(caller, callee, downstream_services=None):
     """
     检查调用者调用被调用者的故障，并递归检查下游服务。
-    
+
     :param caller: 调用者服务
     :param callee: 被调用者服务
     :param downstream_services: 下游服务字典，键为服务名称，值为其下游服务列表
@@ -125,7 +125,7 @@ def check_fault(caller, callee, downstream_services=None):
 def check_downstream(service, downstream_services):
     """
     递归检查服务的下游服务。
-    
+
     :param service: 当前服务
     :param downstream_services: 下游服务字典
     :return: 故障所在的服务或确认当前服务正常

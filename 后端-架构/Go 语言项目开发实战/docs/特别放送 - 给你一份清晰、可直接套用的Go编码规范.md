@@ -16,7 +16,7 @@
 - 文件长度不能超过800行。
 - 函数长度不能超过80行。
 - import规范
-  
+
   - 代码都必须用 goimports进行格式化（建议将代码Go代码编辑器设置为：保存时运行 goimports）。  
     \- 不要使用相对路径引入包，例如 import …/util/net 。  
     \- 包名称与导入路径的最后一个目录名不匹配时，或者多个相同包名冲突时，则必须使用导入别名。
@@ -256,7 +256,7 @@ if err != nil {
 ```
 
 - 错误描述建议
-  
+
   - 告诉用户他们可以做什么，而不是告诉他们不能做什么。
   - 当声明一个需求时，用must 而不是should。例如，must be greater than 0、must match regex ‘\[a-z]+’。
   - 当声明一个格式不对时，用must not。例如，must not contain。
@@ -355,7 +355,7 @@ u := User{
 ### 2.5 接口命名
 
 - 接口命名的规则，基本和结构体命名规则保持一致：
-  
+
   - 单个函数的接口名以 “er"”作为后缀（例如Reader，Writer），有时候可能导致蹩脚的英文，但是没关系。
   - 两个函数的接口名以两个函数名命名，例如ReadWriter。
   - 三个以上函数的接口名，类似于结构体名。
@@ -381,11 +381,12 @@ u := User{
 
 - 变量名必须遵循**驼峰式**，首字母根据访问控制决定使用大写或小写。
 - 在相对简单（对象数量少、针对性强）的环境中，可以将一些名称由完整单词简写为单个字母，例如：
-  
+
   - user 可以简写为 u；
   - userID 可以简写 uid。
+
 - 特有名词时，需要遵循以下规则：
-  
+
   - 如果变量为私有，且特有名词为首个单词，则使用小写，如 apiClient。
   - 其他情况都应当使用该名词原有的写法，如 APIClient、repoID、UserID。
 
@@ -531,19 +532,19 @@ var ErrSigningMethod = errors.New("Invalid signing method")
 - 出现大块常量或变量定义时，可在前面注释一个总的说明，然后在每一行常量的前一行或末尾详细注释该常量的定义，例如：
 
 ```
-// Code must start with 1xxxxx.    
-const (                         
-    // ErrSuccess - 200: OK.          
-    ErrSuccess int = iota + 100001    
-                                                   
-    // ErrUnknown - 500: Internal server error.    
-    ErrUnknown    
+// Code must start with 1xxxxx.
+const (
+    // ErrSuccess - 200: OK.
+    ErrSuccess int = iota + 100001
 
-    // ErrBind - 400: Error occurred while binding the request body to the struct.    
-    ErrBind    
-                                                  
-    // ErrValidation - 400: Validation failed.    
-    ErrValidation 
+    // ErrUnknown - 500: Internal server error.
+    ErrUnknown
+
+    // ErrBind - 400: Error occurred while binding the request body to the struct.
+    ErrBind
+
+    // ErrValidation - 400: Validation failed.
+    ErrValidation
 )
 ```
 
@@ -815,9 +816,10 @@ switch os := runtime.GOOS; os {
 - 传入变量和返回变量以小写字母开头。
 - 函数参数个数不能超过5个。
 - 函数分组与顺序
-  
+
   - 函数应按粗略的调用顺序排序。
   - 同一文件中的函数应按接收者分组。
+
 - 尽量采用值传递，而非指针传递。
 - 传入参数是 map、slice、chan、interface ，不要传递指针。
 
@@ -952,7 +954,8 @@ var _ http.Handler = LogHandler{}
 详见: https:&#47;&#47;github.com&#47;golang&#47;go&#47;blob&#47;master&#47;src&#47;runtime&#47;slice.go#L22
 
 9. 最佳实践, 在编译时验证接口的符合性，例如：
-描述不够准确
-详见: https:&#47;&#47;github.com&#47;xxjwxc&#47;uber_go_guide_cn#toc8</p>2022-07-30</li><br/><li><span>滴滴答答</span> 👍（11） 💬（2）<p>为什么函数参数尽量不用指针传递？如果是一个比较大的结构体，传指针不是更好吗？</p>2021-06-17</li><br/><li><span>苳冬</span> 👍（3） 💬（1）<p>驼峰命名 APIClient、UserID，如果遇到API+ID就是APIID这样连续两个全大写可读性很低啊</p>2021-06-24</li><br/><li><span>Vackine</span> 👍（3） 💬（1）<p>在1.2初始化结构体引用时，给的案例里面bad 和good的sval的方式是一模一样的啊？还有在切片初始化时不都建议提前制定容量，然后后面为什么在声明slice是时候，又不建议make的方式而用var 的方式？</p>2021-06-17</li><br/><li><span>josephzxy</span> 👍（2） 💬（4）<p>想问1.2节里为什么“对于未导出的顶层常量和变量，使用 _ 作为前缀。”，有什么作用吗？首字母小写不是已经表明是未导出(unexported)了吗？谢谢！</p>2021-08-05</li><br/><li><span>dll</span> 👍（2） 💬（1）<p>注释写中文才能说清楚的情况，该怎么规范注释呢</p>2021-06-30</li><br/><li><span>Seven</span> 👍（2） 💬（1）<p>为方便团队都使用这份规范，需要写到开发文档里。请问这篇规范可以给个GitHub链接吗？这样方便更多人用，当然注明来自本课程也可以让更多人慕名学习。</p>2021-06-26</li><br/><li><span>Geek_a4cca6</span> 👍（2） 💬（2）<p>老师，请问有学习班的群吗？</p>2021-06-24</li><br/><li><span>Q</span> 👍（2） 💬（4）<p>空slice那里为啥要 先判断slice != nil 再判断 len(slice) &gt; 0 呢？不判断不可以吗？</p>2021-06-19</li><br/><li><span>Fan</span> 👍（1） 💬（1）<p>请问go web 的项目结构目录有标准吗？ 查资料查到一个社区标准（https:&#47;&#47;github.com&#47;golang-standards&#47;project-layout），但是褒贬不一。所以想问问您那的结构目录是怎么标准化的？</p>2021-07-27</li><br/><li><span>jssfy</span> 👍（1） 💬（1）<p>不要使用相对路径引入包，例如 import ..&#47;util&#47;net 。
-请问这里是不是指不要用.或者..这种符号？引用内部子目录下的其他package应该还是允许的吧？</p>2021-06-21</li><br/><li><span>dch666</span> 👍（1） 💬（4）<p>判断空字符串用 len(s) == 0 比 s == &quot;&quot; 好在哪呢</p>2021-06-17</li><br/><li><span>夏夜星语</span> 👍（1） 💬（2）<p>请问我们现在的iam 项目代码已经完全写完了嘛，以后就都是这种理论课嘛？</p>2021-06-17</li><br/><li><span>oneWalker</span> 👍（0） 💬（1）<p>这个规范可以给一份word版本的吗？或者推荐一下来源，我好做成flashcard培养编码规范习惯。</p>2022-05-18</li><br/><li><span>Geek_f23c82</span> 👍（0） 💬（1）<p>1.2和6.5的第一条似乎是冲突的</p>2022-04-03</li><br/>
+   描述不够准确
+   详见: https:&#47;&#47;github.com&#47;xxjwxc&#47;uber_go_guide_cn#toc8</p>2022-07-30</li><br/><li><span>滴滴答答</span> 👍（11） 💬（2）<p>为什么函数参数尽量不用指针传递？如果是一个比较大的结构体，传指针不是更好吗？</p>2021-06-17</li><br/><li><span>苳冬</span> 👍（3） 💬（1）<p>驼峰命名 APIClient、UserID，如果遇到API+ID就是APIID这样连续两个全大写可读性很低啊</p>2021-06-24</li><br/><li><span>Vackine</span> 👍（3） 💬（1）<p>在1.2初始化结构体引用时，给的案例里面bad 和good的sval的方式是一模一样的啊？还有在切片初始化时不都建议提前制定容量，然后后面为什么在声明slice是时候，又不建议make的方式而用var 的方式？</p>2021-06-17</li><br/><li><span>josephzxy</span> 👍（2） 💬（4）<p>想问1.2节里为什么“对于未导出的顶层常量和变量，使用 _ 作为前缀。”，有什么作用吗？首字母小写不是已经表明是未导出(unexported)了吗？谢谢！</p>2021-08-05</li><br/><li><span>dll</span> 👍（2） 💬（1）<p>注释写中文才能说清楚的情况，该怎么规范注释呢</p>2021-06-30</li><br/><li><span>Seven</span> 👍（2） 💬（1）<p>为方便团队都使用这份规范，需要写到开发文档里。请问这篇规范可以给个GitHub链接吗？这样方便更多人用，当然注明来自本课程也可以让更多人慕名学习。</p>2021-06-26</li><br/><li><span>Geek_a4cca6</span> 👍（2） 💬（2）<p>老师，请问有学习班的群吗？</p>2021-06-24</li><br/><li><span>Q</span> 👍（2） 💬（4）<p>空slice那里为啥要 先判断slice != nil 再判断 len(slice) &gt; 0 呢？不判断不可以吗？</p>2021-06-19</li><br/><li><span>Fan</span> 👍（1） 💬（1）<p>请问go web 的项目结构目录有标准吗？ 查资料查到一个社区标准（https:&#47;&#47;github.com&#47;golang-standards&#47;project-layout），但是褒贬不一。所以想问问您那的结构目录是怎么标准化的？</p>2021-07-27</li><br/><li><span>jssfy</span> 👍（1） 💬（1）<p>不要使用相对路径引入包，例如 import ..&#47;util&#47;net 。
+   请问这里是不是指不要用.或者..这种符号？引用内部子目录下的其他package应该还是允许的吧？</p>2021-06-21</li><br/><li><span>dch666</span> 👍（1） 💬（4）<p>判断空字符串用 len(s) == 0 比 s == &quot;&quot; 好在哪呢</p>2021-06-17</li><br/><li><span>夏夜星语</span> 👍（1） 💬（2）<p>请问我们现在的iam 项目代码已经完全写完了嘛，以后就都是这种理论课嘛？</p>2021-06-17</li><br/><li><span>oneWalker</span> 👍（0） 💬（1）<p>这个规范可以给一份word版本的吗？或者推荐一下来源，我好做成flashcard培养编码规范习惯。</p>2022-05-18</li><br/><li><span>Geek_f23c82</span> 👍（0） 💬（1）<p>1.2和6.5的第一条似乎是冲突的</p>2022-04-03</li><br/>
+
 </ul>

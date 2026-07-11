@@ -16,7 +16,7 @@ userId, Int
 itemId, Int
 price, Float
 quantity, Int
- 
+
 // 用户表users关键字段
 id, Int
 name, String
@@ -129,7 +129,7 @@ java.io.IOException: Failed to connect to node-2&#47;192.168.10.1:41977
 
 有个疑问请教下老师：
 1DPP 的机制就是将经过过滤后的维度表广播到事实表进行裁剪，减少扫描数据，但 Spark 怎么才知道哪个是维度表哪个是事实表？因为 Spark 一上来是不清楚表信息的，如果一开始就把事实表先扫描了，那感觉 DPP 就失去意义了，是否需要开发者共一些额外的信息？</p>2021-05-11</li><br/><li><span>kingcall</span> 👍（4） 💬（1）<p>回答：
-问题1 Broadcast Hash Join 本身也是依赖Broadcast 来完成的，所以Broadcast 肯定是可以完成这个需求的，但是有一个问题  Broadcast Hash Join 有spark.sql.autoBroadcastJoinThreshold 这个限制条件，但是这个条件也仅仅是限制了是否自动发生Broadcast Join，所以手动Broadcast话就没这个限制了或者使用hints，所以想怎么玩就怎么玩了，不知道对不对? 但是这里依然有一个问题那就是Broadcast出去的变量过大，这也就是 Broadcast Join 为啥有一个阈值了，要是这里能有一个这样的机制就好了，首先判断能否发生PDD 优化，然后让每个executor 去主动拉去自己所需的数据就好了(满足条件的 Join Key 的key 和 value)，而不是整个Broadcast 变量。
+问题1 Broadcast Hash Join 本身也是依赖Broadcast 来完成的，所以Broadcast 肯定是可以完成这个需求的，但是有一个问题 Broadcast Hash Join 有spark.sql.autoBroadcastJoinThreshold 这个限制条件，但是这个条件也仅仅是限制了是否自动发生Broadcast Join，所以手动Broadcast话就没这个限制了或者使用hints，所以想怎么玩就怎么玩了，不知道对不对? 但是这里依然有一个问题那就是Broadcast出去的变量过大，这也就是 Broadcast Join 为啥有一个阈值了，要是这里能有一个这样的机制就好了，首先判断能否发生PDD 优化，然后让每个executor 去主动拉去自己所需的数据就好了(满足条件的 Join Key 的key 和 value)，而不是整个Broadcast 变量。
 问题2 缓存、外部存储主要是saprk 没有类似flink 的 Async IO ，但是也可以自己在map 函数中实现
 </p>2021-05-11</li><br/><li><span>To_Drill</span> 👍（1） 💬（3）<p>老师，按照DPP的机制来看，DPP只支持内连接(inner join)不支持外连接(left&#47;right join)吧？如果是的，那就有多了个限制条件，适用场景更少了。</p>2021-12-02</li><br/><li><span>张守一</span> 👍（1） 💬（1）<p>老师 如果以userid作为分区字段 相比于日期等分区字段 分区过多 但id等字段又常常作为join key 这个怎么解决呢</p>2021-05-18</li><br/><li><span>西南偏北</span> 👍（1） 💬（1）<p>可以在逻辑计划优化的时候，就直接将维表的过滤条件通过join条件传导到事实表，减少数据的扫描</p>2021-05-16</li><br/><li><span>Unknown element</span> 👍（0） 💬（1）<p>老师您好，问下如果关联是left join那DPP还能生效吗？此时左表并不需要过滤，因为结果集应该保留左表所有数据
 谢谢老师~</p>2022-01-17</li><br/><li><span>tony</span> 👍（0） 💬（1）<p>其实，spark有定义rule的机制，在逻辑计划阶段自己实现query rewrite，通过一些前置的检验条件，把维表的非分区字段条件转为filter推到事实表的logical plan上。不过只能满足小数据量的场景。</p>2021-09-08</li><br/><li><span>sparkjoy</span> 👍（0） 💬（1）<p>老师，DPP对于bucket有效果吗？</p>2021-08-27</li><br/><li><span>Fendora范东_</span> 👍（0） 💬（1）<p>问题回答

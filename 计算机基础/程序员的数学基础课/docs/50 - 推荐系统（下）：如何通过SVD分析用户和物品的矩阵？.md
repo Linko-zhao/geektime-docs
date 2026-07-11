@@ -210,11 +210,12 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import scale
 
-
 # 加载用户对电影对评分数据
+
 df_ratings = pd.read_csv(&quot;ml-latest-small&#47;ratings.csv&quot;)
 
 # 获取用户对数量和电影对数量 这里只取前 1&#47;10 , 减少数据规模
+
 user_num = int(df_ratings[&quot;userId&quot;].max() &#47; 10)
 movie_num = int(df_ratings[&quot;movieId&quot;].max() &#47; 10)
 print(user_num, movie_num)
@@ -222,38 +223,48 @@ df_ratings = df_ratings[df_ratings[&quot;userId&quot;] &lt;= user_num]
 df_ratings = df_ratings[df_ratings[&quot;movieId&quot;] &lt;= movie_num]
 
 # 构造用户对电影对二元关系矩阵
+
 user_rating = np.zeros((user_num, movie_num))
 
 # 由于用户和电影对 ID 都是从 1 开始，为了和 Python 的索引一致，减去 1
+
 df_ratings[&quot;userId&quot;] = df_ratings[&quot;userId&quot;] - 1
 df_ratings[&quot;movieId&quot;] = df_ratings[&quot;movieId&quot;] - 1
+
 # 设置用户对电影对评分
+
 for userId in range(user_num):
-    user_rating[userId][df_ratings[df_ratings[&quot;userId&quot;] == userId][&quot;movieId&quot;]] = \
-        df_ratings[df_ratings[&quot;userId&quot;] == userId][&quot;rating&quot;]
+user_rating[userId][df_ratings[df_ratings[&quot;userId&quot;] == userId][&quot;movieId&quot;]] = \
+df_ratings[df_ratings[&quot;userId&quot;] == userId][&quot;rating&quot;]
 
 # 二维数组转化为矩阵
+
 x = np.mat(user_rating)
 
 # 标准化每位用户的评分数据 每一行
+
 x_s = scale(x, with_mean=True, with_std=True, axis=1)
 
 # 进行 SVD 奇异值分解
+
 u, sigma, vt = np.linalg.svd(x_s, full_matrices=False, compute_uv=True)
 print(&quot;U 矩阵：&quot;, u)
 print(&quot;Sigma 奇异值：&quot;, sigma)
 print(&quot;V 矩阵：&quot;, vt)
 
 # 加载电影元信息
+
 df_movies = pd.read_csv(&quot;ml-latest-small&#47;movies.csv&quot;)
 dict_movies = dict(zip(df_movies[&quot;movieId&quot;], df_movies[&quot;title&quot;] + &quot;, &quot; + df_movies[&quot;genres&quot;]))
 print(dict_movies)
 
 # 输出和某个奇异值高度相关的电影 这些电影代表了一个主题
+
 # (注意：向量中电影的 ID 和原始的电影的 ID 相差 1，所以在读取 dict_movies 需要使用 i+1)
+
 print(np.max(vt[1, :]))
 print(list(zip(np.where(vt[1] &gt; 0.1)[0] + 1, vt[1][np.where(vt[1] &gt; 0.1)],
-               [dict_movies[i] for i in (np.where(vt[1] &gt; 0.1)[0] + 1)])))
+[dict_movies[i] for i in (np.where(vt[1] &gt; 0.1)[0] + 1)])))
 </p>2019-04-22</li><br/><li><span>Paul Shan</span> 👍（4） 💬（0）<p>方阵进行特征值分析以后，特征值表示坐标变换的伸缩部分，特征向量表示对应每个伸缩量对应的方向。非方阵右奇异分量对应的特征值的平方根反映的是该矩阵右乘一个列向量对应变换的伸缩量信息。非方阵左奇异分量对应的特征值的平方根反映的是该矩阵左乘一个行向量对应变换的伸缩信息。
 
 用户-电影矩阵反映的是用户和电影的关系，经过特征向量分解以后，变成用户-主题-电影。因为左右奇异矩阵都是行列式值为1的方阵，主题对角阵也就完全反应了原来矩阵的分量大小，对角阵每个元素大小反映了主题的相对重要程度。主题分量对应的矢量又是原来用户和电影维度线性组合而成。线性组合的系数分别是左奇异阵和右奇异阵，这些系数也反应了用户和主题，以及电影和主题的权重系数（类似线性回归中的权重）。</p>2019-10-22</li><br/><li><span>013923</span> 👍（1） 💬（0）<p>推荐系统（2）学习！</p>2022-09-23</li><br/>

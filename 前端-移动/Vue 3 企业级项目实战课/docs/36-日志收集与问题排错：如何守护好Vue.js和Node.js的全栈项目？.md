@@ -146,12 +146,12 @@ ps -o pid,%cpu,%mem -p ${pid}
 另外，我们也可以用子进程的方式执行“ps”命令，获取进程的内存和CPU数据，并记录在日志里。子进程的命令操作参考代码。
 
 ```typescript
-import childProcess from 'node:child_process';
+import childProcess from "node:child_process";
 
 const pid = 6904;
 const cmd = `ps -o pid,%cpu,%mem -p ${pid}`;
 const output = childProcess.execSync(cmd, {
-  encoding: 'utf-8'
+  encoding: "utf-8",
 });
 console.log(output);
 //  "PID  %CPU %MEM\n6904   0.0  0.3"
@@ -205,13 +205,13 @@ CPU或者内存的占用红线，我们可以定为50%，如果超过这条红�
 
 ```typescript
 // packages/work-server/start-daemon.cjs
-const path = require('path');
-const cluster = require('cluster');
-const os = require('os');
+const path = require("path");
+const cluster = require("cluster");
+const os = require("os");
 
 const maxProcessCount = os.cpus().length;
 // 待启动多进程的 后台服务入口文件
-const entryFile = path.join(__dirname, 'dist', 'index.cjs');
+const entryFile = path.join(__dirname, "dist", "index.cjs");
 
 let reforkCount = 0;
 const maxTryCount = 1000;
@@ -242,20 +242,20 @@ function startDaemon() {
   }
 
   function reforkWorker() {
-    console.log('尝试重新开启新线程 ...');
+    console.log("尝试重新开启新线程 ...");
     reforkCount++;
     if (reforkCount >= maxTryCount) {
-      throw Error('已经超出最多尝试次数');
+      throw Error("已经超出最多尝试次数");
     }
     return forkWorker();
   }
 
-  cluster.on('exit', (worker) => {
+  cluster.on("exit", (worker) => {
     console.log(`进程 pid=${worker.process.pid} 已经退出`);
     reforkWorker();
   });
 
-  cluster.on('disconnect', (worker) => {
+  cluster.on("disconnect", (worker) => {
     console.log(`进程 pid=${worker.process.pid} 已经断开连接`);
     if (worker.isDead && worker.isDead()) {
       console.log(`进程 pid=${worker.process.pid} 已经挂掉了`);
@@ -310,6 +310,7 @@ startDaemon();
 期待在留言区看到你的思考。我们结束语见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/36)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-10-09</li><br/>
 </ul>

@@ -56,20 +56,20 @@ server.register(selector, SelectionKey.OP_ACCEPT);
 ```
  while (true) {
         selector.select();//查询I/O事件
-        for (Iterator<SelectionKey> i = selector.selectedKeys().iterator(); i.hasNext();) { 
-            SelectionKey key = i.next(); 
-            i.remove(); 
+        for (Iterator<SelectionKey> i = selector.selectedKeys().iterator(); i.hasNext();) {
+            SelectionKey key = i.next();
+            i.remove();
 
-            if (key.isAcceptable()) { 
-                // 建立一个新连接 
-                SocketChannel client = server.accept(); 
-                client.configureBlocking(false); 
-                
+            if (key.isAcceptable()) {
+                // 建立一个新连接
+                SocketChannel client = server.accept();
+                client.configureBlocking(false);
+
                 //连接建立后，告诉Selector，我现在对I/O可读事件感兴趣
                 client.register(selector, SelectionKey.OP_READ);
-            } 
+            }
         }
-    } 
+    }
 ```
 
 简单回顾完服务端NIO编程之后，你会发现服务端在I/O通信上主要完成了三件事情：**监听连接、I/O事件查询以及数据读写**。因此Jetty设计了**Acceptor、SelectorManager和Connection来分别做这三件事情**，下面我分别来说说这三个组件。
@@ -146,14 +146,14 @@ private void createEndPoint(SelectableChannel channel, SelectionKey selectionKey
 {
     //1. 创建EndPoint
     EndPoint endPoint = _selectorManager.newEndPoint(channel, this, selectionKey);
-    
+
     //2. 创建Connection
     Connection connection = _selectorManager.newConnection(channel, endPoint, selectionKey.attachment());
-    
+
     //3. 把EndPoint、Connection和SelectionKey绑在一起
     endPoint.setConnection(connection);
     selectionKey.attach(endPoint);
-    
+
 }
 ```
 

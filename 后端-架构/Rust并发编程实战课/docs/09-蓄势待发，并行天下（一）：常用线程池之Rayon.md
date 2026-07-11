@@ -58,13 +58,14 @@ main函数中，首先创建了八个线程的线程池，然后在该线程池�
 使用 Rayon 有两种方式：
 
 - **高级并行构造（High-level parallel constructs）** 是使用 Rayon 最简单的方式，通常也是效率最高的。
-  
+
   1. 并行迭代器（Parallel iterators）使将顺序迭代器转换为并行执行变得容易。`ParallelIterator` trait 为所有并行迭代器定义了通用方法。
   2. `IndexedParallelIterator` trait 为支持随机访问的迭代器添加了方法。
   3. `par_sort` 方法并行地对 `&mut [T]` 切片（或向量）进行排序。
   4. `par_extend` 可用于有效地扩展集合，其中的元素由并行迭代器生成。
+
 - **自定义任务（Custom tasks）** 允许你自行将工作划分为并行任务。
-  
+
   1. `join` 用于将一个任务细分为两部分。
   2. `scope` 创建一个作用域，你可以在其中创建任意数量的并行任务。
   3. `ThreadPoolBuilder` 可用于创建你自己的线程池或自定义全局线程池。
@@ -137,11 +138,11 @@ fn main() -> Result<(), rayon::ThreadPoolBuildError> {
         .build()?;
 
     pool.install(|| println!("Hello from my custom thread!"));
-    
+
     std::thread::sleep(time::Duration::from_secs(1));
     drop(pool);
     std::thread::sleep(time::Duration::from_secs(1));
-    
+
     Ok(())
 }
 ```
@@ -349,7 +350,7 @@ fn main() {
 ```rust
 fn main() {
     let result = rayon::join(
-        || println!("task 1"), 
+        || println!("task 1"),
         || {println!("task 2"); 2}
     );
 
@@ -406,11 +407,12 @@ rayon::scope(|s| {
 **关键区别**
 
 - **调度范围**：
-  
+
   - `yield_local` 只会影响当前线程池内部的任务调度。
   - `yield_now` 可能会跨线程池，允许操作系统或全局调度器介入调度，调度的范围更广。
+
 - **粒度**：
-  
+
   - `yield_local` 只是让出当前线程的时间片，其他任务可能会继续在当前线程池的其他线程中执行。
   - `yield_now` 允许更广泛的线程调度，可能会将当前线程移交给其他线程池或调度器。
 
@@ -491,7 +493,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .num_threads(8)
         .thread_name(|i| format!("rayon-global-thread-{}", i))
         .build_global()?;
-    
+
     rayon::scope(|s| {
         s.spawn(|_| {
             println!("Hello from rayon global thread:{}!", current().name().unwrap());

@@ -255,15 +255,15 @@ Wall time: 2.01 s
 
 不过，第二个代码，到底发生了什么呢？为了让你更详细了解到协程和线程的具体区别，这里我详细地分析了整个过程。步骤有点多，别着急，我们慢慢来看。
 
-01. `asyncio.run(main())`，程序进入 main() 函数，事件循环开启；
-02. task1 和 task2 任务被创建，并进入事件循环等待运行；运行到 print，输出 `'before await'`；
-03. await task1 执行，用户选择从当前的主任务中切出，事件调度器开始调度 worker\_1；
-04. worker\_1 开始运行，运行 print 输出`'worker_1 start'`，然后运行到 `await asyncio.sleep(1)`， 从当前任务切出，事件调度器开始调度 worker\_2；
-05. worker\_2 开始运行，运行 print 输出 `'worker_2 start'`，然后运行 `await asyncio.sleep(2)` 从当前任务切出；
-06. 以上所有事件的运行时间，都应该在 1ms 到 10ms 之间，甚至可能更短，事件调度器从这个时候开始暂停调度；
-07. 一秒钟后，worker\_1 的 sleep 完成，事件调度器将控制权重新传给 task\_1，输出 `'worker_1 done'`，task\_1 完成任务，从事件循环中退出；
-08. await task1 完成，事件调度器将控制器传给主任务，输出 `'awaited worker_1'`，·然后在 await task2 处继续等待；
-09. 两秒钟后，worker\_2 的 sleep 完成，事件调度器将控制权重新传给 task\_2，输出 `'worker_2 done'`，task\_2 完成任务，从事件循环中退出；
+1.  `asyncio.run(main())`，程序进入 main() 函数，事件循环开启；
+2.  task1 和 task2 任务被创建，并进入事件循环等待运行；运行到 print，输出 `'before await'`；
+3.  await task1 执行，用户选择从当前的主任务中切出，事件调度器开始调度 worker\_1；
+4.  worker\_1 开始运行，运行 print 输出`'worker_1 start'`，然后运行到 `await asyncio.sleep(1)`， 从当前任务切出，事件调度器开始调度 worker\_2；
+5.  worker\_2 开始运行，运行 print 输出 `'worker_2 start'`，然后运行 `await asyncio.sleep(2)` 从当前任务切出；
+6.  以上所有事件的运行时间，都应该在 1ms 到 10ms 之间，甚至可能更短，事件调度器从这个时候开始暂停调度；
+7.  一秒钟后，worker\_1 的 sleep 完成，事件调度器将控制权重新传给 task\_1，输出 `'worker_1 done'`，task\_1 完成任务，从事件循环中退出；
+8.  await task1 完成，事件调度器将控制器传给主任务，输出 `'awaited worker_1'`，·然后在 await task2 处继续等待；
+9.  两秒钟后，worker\_2 的 sleep 完成，事件调度器将控制权重新传给 task\_2，输出 `'worker_2 done'`，task\_2 完成任务，从事件循环中退出；
 10. 主任务输出 `'awaited worker_2'`，协程全任务结束，事件循环结束。
 
 接下来，我们进阶一下。如果我们想给某些协程任务限定运行时间，一旦超时就取消，又该怎么做呢？再进一步，如果某些协程运行时出现错误，又该怎么处理呢？同样的，来看代码。
@@ -337,7 +337,7 @@ async def main():
     await asyncio.sleep(10)
     consumer_1.cancel()
     consumer_2.cancel()
-    
+
     await asyncio.gather(consumer_1, consumer_2, producer_1, producer_2, return_exceptions=True)
 
 %time asyncio.run(main())
@@ -486,16 +486,16 @@ Wall time: 4.98 s
 import asyncio
 
 async def crawl_page(url):
-    print(&#39;crawling {}&#39;.format(url))
-    sleep_time = int(url.split(&#39;_&#39;)[-1])
-    await asyncio.sleep(sleep_time)
-    return &#39;OK {}&#39;.format(url)
+print(&#39;crawling {}&#39;.format(url))
+sleep_time = int(url.split(&#39;_&#39;)[-1])
+await asyncio.sleep(sleep_time)
+return &#39;OK {}&#39;.format(url)
 
 async def main(urls):
-    tasks = [asyncio.create_task(crawl_page(url)) for url in urls]
-    for task in tasks:
-        task.add_done_callback(lambda future: print(&#39;result: &#39;, future.result()))
-    await asyncio.gather(*tasks)
+tasks = [asyncio.create_task(crawl_page(url)) for url in urls]
+for task in tasks:
+task.add_done_callback(lambda future: print(&#39;result: &#39;, future.result()))
+await asyncio.gather(*tasks)
 
 %time asyncio.run(main([&#39;url_1&#39;, &#39;url_2&#39;, &#39;url_3&#39;, &#39;url_4&#39;]))
 
@@ -505,20 +505,22 @@ crawling url_1
 crawling url_2
 crawling url_3
 crawling url_4
-result:  OK url_1
-result:  OK url_2
-result:  OK url_3
-result:  OK url_4
+result: OK url_1
+result: OK url_2
+result: OK url_3
+result: OK url_4
 Wall time: 4 s</p>2019-07-01</li><br/><li><span>Jingxiao</span> 👍（77） 💬（10）<p>发现评论区好多朋友说无法运行，在这里统一解释下：
+
 1. %time 是 jupyter notebook 自带的语法糖，用来统计一行命令的运行时间；如果你的运行时是纯粹的命令行 python，或者 pycharm，那么请把 %time 删掉，自己用传统的时间戳方法来记录时间也可以；或者使用 jupyter notebook
 2. 我的本地解释器是 Anaconda Python 3.7.3，亲测 windows &#47; ubuntu 均可正常运行，如无法执行可以试试 pip install nest-asyncio，依然无法解决请尝试安装 Anaconda Python
 3. 这次代码因为使用了较新的 API，所以需要较新的版本号，但是朋友们依然出现了一些运行时问题，这里先表示下歉意；同时也想说明的是，在提问之前自己经过充分搜索，尝试后解决问题，带来的快感，和能力的提升，相应也是很大的，一门工程最需要的是 hands on dirty work（动手做脏活），才能让自己的能力得到本质的提升，加油！</p>2019-06-25</li><br/><li><span>Airnm.毁</span> 👍（8） 💬（3）<p>豆瓣那个发现requests.get(url).content&#47;text返回都为空，然后打了下status_code发现是418，网上找418的解释，一般是网站反爬虫基础机制，需要加请求头模仿浏览器就可跳过，改为下面的样子就可通过：url = &quot;https:&#47;&#47;movie.douban.com&#47;cinema&#47;later&#47;beijing&#47;&quot;
-head={
-    &#39;User-Agent&#39;:&#39;Mozilla&#47;5.0 (Windows NT 6.1; Win64; x64) AppleWebKit&#47;537.36 (KHTML, like Gecko) Chrome&#47;81.0.4044.113 Safari&#47;537.36&#39;,
-    &#39;Referer&#39;:&#39;https:&#47;&#47;time.geekbang.org&#47;column&#47;article&#47;101855&#39;,
-    &#39;Connection&#39;:&#39;keep-alive&#39;}
-res = requests.get(url,headers=head)</p>2020-04-18</li><br/><li><span>jackstraw</span> 👍（4） 💬（2）<p>有点没明白，前面说任务创建后立马就开始执行了么？怎么后面在解密底层运行过程的时候，说任务创建后等待执行？到底是哪一个呀？</p>2020-01-14</li><br/><li><span>长期规划</span> 👍（2） 💬（1）<p>老师，在最后那个协程例子中为何没用requests库呢？是因为它不支持协程吗</p>2019-12-20</li><br/><li><span>一凡</span> 👍（1） 💬（1）<p>协程是单线程怎么理解？所有的协程都是吗</p>2020-06-18</li><br/><li><span>苹果</span> 👍（1） 💬（1）<p>asyncio.run() cannot be called from a running event loop
-这个问题是如何解决，
+   head={
+   &#39;User-Agent&#39;:&#39;Mozilla&#47;5.0 (Windows NT 6.1; Win64; x64) AppleWebKit&#47;537.36 (KHTML, like Gecko) Chrome&#47;81.0.4044.113 Safari&#47;537.36&#39;,
+   &#39;Referer&#39;:&#39;https:&#47;&#47;time.geekbang.org&#47;column&#47;article&#47;101855&#39;,
+   &#39;Connection&#39;:&#39;keep-alive&#39;}
+   res = requests.get(url,headers=head)</p>2020-04-18</li><br/><li><span>jackstraw</span> 👍（4） 💬（2）<p>有点没明白，前面说任务创建后立马就开始执行了么？怎么后面在解密底层运行过程的时候，说任务创建后等待执行？到底是哪一个呀？</p>2020-01-14</li><br/><li><span>长期规划</span> 👍（2） 💬（1）<p>老师，在最后那个协程例子中为何没用requests库呢？是因为它不支持协程吗</p>2019-12-20</li><br/><li><span>一凡</span> 👍（1） 💬（1）<p>协程是单线程怎么理解？所有的协程都是吗</p>2020-06-18</li><br/><li><span>苹果</span> 👍（1） 💬（1）<p>asyncio.run() cannot be called from a running event loop
+   这个问题是如何解决，
+
 </p>2020-02-02</li><br/><li><span>隰有荷</span> 👍（1） 💬（1）<p>老师，在如下代码中：
 async def worker_2():
     print(&#39;worker_2 start&#39;)
@@ -543,7 +545,7 @@ Python、Anaconda、Jupyter都安装了。
 2、可能会出现 RuntimeError: This event loop is already running，解决方案一：pip install nest_asyncio; import nest_asyncio; nest_asyncio.apply()；解决方案二：有些友人说是 tornado 5.x 起的版本才有此问题，可考虑将其版本降至 4.x（不推荐）；
 3、%time 与 %%time 的主要区别：%time func()（必须是同一行）；%%time 必须放在单元格的开头，强烈建议单独一行 + 不要与 import、def 相关的语句放在同个单元格；
 4、爬虫中的 aiohttp.ClientSession(headers=header, connector=aiohttp.TCPConnector(ssl=False)) 提及未声明的 header，要么将 headers=header 部分去掉使用默认参数，要么用诸如 header={&quot;User-Agent&quot;: &quot;Mozilla&#47;5.0 (Windows NT 6.1; Win64; x64) AppleWebKit&#47;537.36 (KHTML, like Gecko) Chrome&#47;74.0.3729.157 Safari&#47;537.36&quot;} 来显式声明；
-5、tasks = [asyncio.create_task(crawl_page(url)) for url in urls]; await asyncio.gather(*tasks); 
+5、tasks = [asyncio.create_task(crawl_page(url)) for url in urls]; await asyncio.gather(*tasks);
 约等于
 tasks = [crawl_page(url) for url in urls]; asyncio.get_even_loop().run_until_complete(asyncio.wait(tasks));
 或

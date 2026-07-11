@@ -118,7 +118,7 @@ cpuacct.usage          cpu.rt_runtime_us
 在这里，我们能看到cpu.shares，还有一个重要的文件tasks。这里面是这个容器里所有进程的进程号，也即所有这些进程都被这些CPU策略控制。
 
 ```
-[3dc0601189dd218898f31f9526a6cfae83913763a4da59f95ec789c6e030ecfd]# cat tasks 
+[3dc0601189dd218898f31f9526a6cfae83913763a4da59f95ec789c6e030ecfd]# cat tasks
 39487
 39520
 39526
@@ -256,7 +256,7 @@ memory.max_usage_in_bytes
 我们还可以看一下tasks文件的内容，tasks里面是容器里面所有进程的进程号。
 
 ```
-[3dc0601189dd218898f31f9526a6cfae83913763a4da59f95ec789c6e030ecfd]# cat tasks 
+[3dc0601189dd218898f31f9526a6cfae83913763a4da59f95ec789c6e030ecfd]# cat tasks
 39487
 39520
 39526
@@ -512,7 +512,7 @@ struct mem_cgroup {
 ```
 struct cftype cgroup1_base_files[] = {
 ......
-    {   
+    {
         .name = "tasks",
         .seq_start = cgroup_pidlist_start,
         .seq_next = cgroup_pidlist_next,
@@ -520,7 +520,7 @@ struct cftype cgroup1_base_files[] = {
         .seq_show = cgroup_pidlist_show,
         .private = CGROUP_FILE_TASKS,
         .write = cgroup_tasks_write,
-    },  
+    },
 }
 
 static struct kernfs_ops cgroup_kf_ops = {
@@ -667,50 +667,50 @@ const struct file_operations kernfs_file_fops = {
 ```
 static struct cftype cpu_files[] = {
 #ifdef CONFIG_FAIR_GROUP_SCHED
-    {   
+    {
         .name = "shares",
         .read_u64 = cpu_shares_read_u64,
         .write_u64 = cpu_shares_write_u64,
-    },  
+    },
 #endif
 #ifdef CONFIG_CFS_BANDWIDTH
-    {   
+    {
         .name = "cfs_quota_us",
         .read_s64 = cpu_cfs_quota_read_s64,
         .write_s64 = cpu_cfs_quota_write_s64,
-    },  
-    {   
+    },
+    {
         .name = "cfs_period_us",
         .read_u64 = cpu_cfs_period_read_u64,
         .write_u64 = cpu_cfs_period_write_u64,
-    },  
+    },
 }
 
 
 static struct cftype mem_cgroup_legacy_files[] = {
-    {   
+    {
         .name = "usage_in_bytes",
         .private = MEMFILE_PRIVATE(_MEM, RES_USAGE),
         .read_u64 = mem_cgroup_read_u64,
-    },  
-    {   
+    },
+    {
         .name = "max_usage_in_bytes",
         .private = MEMFILE_PRIVATE(_MEM, RES_MAX_USAGE),
         .write = mem_cgroup_reset,
         .read_u64 = mem_cgroup_read_u64,
-    },  
-    {   
+    },
+    {
         .name = "limit_in_bytes",
         .private = MEMFILE_PRIVATE(_MEM, RES_LIMIT),
         .write = mem_cgroup_write,
         .read_u64 = mem_cgroup_read_u64,
-    },  
-    {   
+    },
+    {
         .name = "soft_limit_in_bytes",
         .private = MEMFILE_PRIVATE(_MEM, RES_SOFT_LIMIT),
         .write = mem_cgroup_write,
         .read_u64 = mem_cgroup_read_u64,
-    },  
+    },
 }
 ```
 
@@ -843,17 +843,17 @@ Linux VServer 是一种基于 Security Contexts 的软分区技术，可以做�
 
 随着容器技术的发展，Docker的开发者在了解并掌握了 Cgroup 技术之后，应用这项技术去实现Docker 的资源管理和隔离功能。因此，Cgroup 不仅解决了 Linux 系统的资源管理问题，也为容器技术的发展提供了基础。
 
-
 </p>2024-02-23</li><br/><li><span>fhchina</span> 👍（3） 💬（0）<p>cpu.cfs_period_us的单位是us, 微秒不是毫秒</p>2019-11-23</li><br/><li><span>羊仔爸比</span> 👍（1） 💬（1）<p>老师：
       请教一下docker 里面我设置了 内存的limit是2g，cgroup 文件中memory.usage_in_bytes这个文件是是包含memory.stat中的total_rss 和total_cache 相加的大小，oom kill的时候会根据memory.usage_in_bytes的值kill吗，如果不是根据这个文件的值kill是根据哪个值进行kill的？</p>2020-05-29</li><br/><li><span>Bravery168</span> 👍（0） 💬（0）<p>容器从概念上就是通过各种数据结构的定义建构了一个模型，从执行层面，本质上是对进程资源和行为的定义和控制。牛</p>2022-12-15</li><br/><li><span>幼儿编程教学</span> 👍（0） 💬（0）<p>&gt;第五步，对于 CPU 来讲，会修改 scheduled entity，放入相应的队列里面去，从而下次调度的时候就起作用了。对于内存的 cgroup 设定，只有在申请内存的时候才起作用。
 
 请教老师，2个我比较非常的问题。
-* 设置 cgroup cpu后，极端情况下，是否会突发cpu超过限制？
-文章中说”对于 CPU 来讲，会修改 scheduled entity，放入相应的队列里面去，从而下次调度的时候就起作用了“。如果1个进程，占用时间太长，或者短时间内，耗费了很多cpu，是否会引发cpu超量使用，导致系统卡死？k8s中，如果cpu设置的不好（配置大于宿主机实际量），是会引发宿主机卡死的情况。这时候，只能重启宿主机
-* 设置 cgroup memory后，极端情况下，是否会突发memory超过限制？
-内存好像会？因为上面说，”只有在申请内存的时候才起作用“。那之前申请的内存呢？申请内存的时候，申请的都是虚拟内存。假设宿主机只有1g内存。2个进程a,b，都申请内存1g。内存应该是在实际使用时，才会去分配。所以，进程a,b运行起来，可以超过宿主机实际1g内存。这时，操作系统会oom。应该是这样吧？</p>2022-11-02</li><br/><li><span>Sudouble</span> 👍（0） 💬（0）<p>这么多篇深度文章，很好的诠释了十几年前的一个疑问，为什么不让电脑突然断电！内存、缓存里存的大量数据，操作系统还没有触发写，这时突然断电，这部分数据全都丢了。</p>2022-06-19</li><br/><li><span>EST4What</span> 👍（0） 💬（0）<p>为什么我mount -t cgroup会显示，而切换到&#47;sys&#47;fs&#47;cgroup时，文件却不见了呢
 
-[root@jenkins cgroup]# mount -t cgroup 
+- 设置 cgroup cpu后，极端情况下，是否会突发cpu超过限制？
+  文章中说”对于 CPU 来讲，会修改 scheduled entity，放入相应的队列里面去，从而下次调度的时候就起作用了“。如果1个进程，占用时间太长，或者短时间内，耗费了很多cpu，是否会引发cpu超量使用，导致系统卡死？k8s中，如果cpu设置的不好（配置大于宿主机实际量），是会引发宿主机卡死的情况。这时候，只能重启宿主机
+- 设置 cgroup memory后，极端情况下，是否会突发memory超过限制？
+  内存好像会？因为上面说，”只有在申请内存的时候才起作用“。那之前申请的内存呢？申请内存的时候，申请的都是虚拟内存。假设宿主机只有1g内存。2个进程a,b，都申请内存1g。内存应该是在实际使用时，才会去分配。所以，进程a,b运行起来，可以超过宿主机实际1g内存。这时，操作系统会oom。应该是这样吧？</p>2022-11-02</li><br/><li><span>Sudouble</span> 👍（0） 💬（0）<p>这么多篇深度文章，很好的诠释了十几年前的一个疑问，为什么不让电脑突然断电！内存、缓存里存的大量数据，操作系统还没有触发写，这时突然断电，这部分数据全都丢了。</p>2022-06-19</li><br/><li><span>EST4What</span> 👍（0） 💬（0）<p>为什么我mount -t cgroup会显示，而切换到&#47;sys&#47;fs&#47;cgroup时，文件却不见了呢
+
+[root@jenkins cgroup]# mount -t cgroup
 cgroup on &#47;sys&#47;fs&#47;cgroup&#47;systemd type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,xattr,release_agent=&#47;usr&#47;lib&#47;systemd&#47;systemd-cgroups-agent,name=systemd)
 cgroup on &#47;sys&#47;fs&#47;cgroup&#47;memory type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,memory)
 cgroup on &#47;sys&#47;fs&#47;cgroup&#47;devices type cgroup (rw,nosuid,nodev,noexec,relatime,seclabel,devices)
@@ -871,7 +871,7 @@ total 0
 
 </p>2022-03-02</li><br/><li><span>songyy</span> 👍（0） 💬（0）<p>testnginx 不在docker的repo里面吧。示例里面
 
- docker run -d --cpu-shares 513 --cpus 2 --cpuset-cpus 1,3 --memory 1024M --memory-swap 1234M --memory-swappiness 7 -p 8081:80 testnginx:1
+docker run -d --cpu-shares 513 --cpus 2 --cpuset-cpus 1,3 --memory 1024M --memory-swap 1234M --memory-swappiness 7 -p 8081:80 testnginx:1
 
 这个代码就跑不起来了</p>2021-07-04</li><br/><li><span>吴钩</span> 👍（0） 💬（0）<p>对namespace和cgroup了解增加了很多，赞！</p>2021-04-26</li><br/><li><span>许童童</span> 👍（0） 💬（0）<p>跟着老师一起精进。</p>2019-08-09</li><br/>
 </ul>

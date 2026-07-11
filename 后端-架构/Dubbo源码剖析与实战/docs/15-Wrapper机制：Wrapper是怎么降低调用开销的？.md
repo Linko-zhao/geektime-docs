@@ -43,7 +43,7 @@ public class CommonController {
         // 统一的接收请求的入口
         return commonInvoke(className, parameterTypeName, mtdName, reqBody);
     }
-    
+
     /**
      * <h2>统一入口的核心逻辑。</h2>
      *
@@ -60,10 +60,10 @@ public class CommonController {
                                       String reqParamsStr) throws Exception {
         // 通过反射机制可以获取接口类名对应的类对象
         Class<?> clz = Class.forName(className);
-        
+
         // 接着通过类对象的简称获取到对应的接口服务
         Object cacheObj = SpringCtxUtils.getBean(clz);
-        
+
         // 然后通过接口方法名和接口方法参数
         if (cacheObj.getClass().getName().equals(className)) {
             // 来精准定位需要提供方接口服务中的哪个方法进行处理
@@ -74,11 +74,11 @@ public class CommonController {
                 // 真正的发起对源对象（被代理对象）的方法调用
                 return ((DemoFacade) cacheObj).say();
             }
-            
+
             // 如果找不到的话，就抛出异常，提示方法不存在
             throw new RuntimeException(String.join(".", className, mtdName) + " 的方法不存在");
         }
-        
+
         // 如果找不到的话，就抛出异常，提示类不存在
         throw new RuntimeException(className + " 类不存在");
     }
@@ -125,7 +125,7 @@ public class CommonController {
         // 统一的接收请求的入口
         return commonInvoke(className, parameterTypeName, mtdName, reqBody);
     }
-    
+
     /**
      * <h2>统一入口的核心逻辑。</h2>
      *
@@ -142,15 +142,15 @@ public class CommonController {
                                       String reqParamsStr) throws Exception {
         // 通过反射机制可以获取接口类名对应的类对象
         Class<?> clz = Class.forName(className);
-        
+
         // 接着通过类对象的简称获取到对应的接口服务的【代理对象】
         // 相当于不同的 clz 就会获取不同的代理对象，各个代理对象代理的源对象都不一样的
         ProxyInvoker proxyInvoker = SpringCtxUtils.getBean(clz);
-        
+
         // 【代理对象】调用自身的统一方法，然后内部会去识别方法名、方法参数调用不同的方法
         return proxyInvoker.invoke(clz, mtdName, parameterTypeName, reqParamsStr);
     }
-    
+
     ///////////////////////////////////////////////////
     // 提供方服务：模拟的是其中一个代理类结构样子
     ///////////////////////////////////////////////////
@@ -194,7 +194,7 @@ public class ReflectBenchmarkTest {
         }
         long end = System.currentTimeMillis();
         System.out.println("正常调用耗时为：" + (end - start) + " 毫秒");
-        
+
         // 循环反射创建类调用某个方法，并打印耗时的时间
         start = System.currentTimeMillis();
         for (int i = 0; i < size; i++) {
@@ -203,7 +203,7 @@ public class ReflectBenchmarkTest {
         end = System.currentTimeMillis();
         System.out.println("反射调用耗时为：" + (end - start) + " 毫秒");
     }
-    
+
     // 正常创建对象，并调用对象的方法
     public static void normalInvoke(){
         // 普通的创建对象
@@ -211,7 +211,7 @@ public class ReflectBenchmarkTest {
         // 普通的调用对象的方法
         customSpi.getDefaultPort();
     }
-    
+
     // 反射创建对象，并反射调用对象的方法
     public static void reflectInvoke(){
         try {
@@ -293,7 +293,7 @@ public class $DemoFacadeCustomInvoker extends CustomInvoker {
 ///////////////////////////////////////////////////
 public class CustomInvokerProxyUtils {
     private static final AtomicInteger INC = new AtomicInteger();
-       
+
     // 创建源对象（被代理对象）的代理对象
     public static Object newProxyInstance(Object sourceTarget) throws Exception{
         String packageName = "com.hmilyylimh.cloud.wrapper.custom";
@@ -404,7 +404,7 @@ public static void main(String[] args) throws Exception {
     // 创建源对象（即被代理对象）
     DemoFacadeImpl demoFacade = new DemoFacadeImpl();
     // 生成自定义的代理类
-    CustomInvoker invoker = 
+    CustomInvoker invoker =
          (CustomInvoker)CustomInvokerProxyUtils.newProxyInstance(demoFacade);
     // 调用代理类的方法
     invoker.invokeMethod(demoFacade, "sayHello", new Class[]{String.class}, new Object[]{"Geek"});
@@ -479,7 +479,7 @@ public class InvokeDemoFacade {
 
 ```java
 ///////////////////////////////////////////////////
-// Wrapper.getWrapper(demoFacade.getClass()) 
+// Wrapper.getWrapper(demoFacade.getClass())
 // 这句代码生成出来的 wrapper 代理对象，对应类的代码结构
 ///////////////////////////////////////////////////
 package com.hmilyylimh.cloud.wrapper.demo;
@@ -650,7 +650,7 @@ private T createExtension(String name, boolean wrap) {
         throw findException(name);
     }
     // 此处省略若干行代码...
-}    
+}
 ```
 
 由此可见，到底有没有扩展点集合或者到底怎么加载的，完全在于“getExtensionClasses()”该方法是怎么处理的，于是进入该方法看看。
@@ -760,8 +760,9 @@ spring.factories 除了可以 EnableAutoConfiguration 类型的类之外，还�
 5. EnableAutoConfiguration
 6. FailureAnalyzer
 7. TemplateAvailabilityProvider
+
 <div><strong>精选留言（4）</strong></div><ul>
 <li><span>斯瓦辛武Roy</span> 👍（3） 💬（1）<p>给老师点个赞，这样的底层代码真的有助于P6的进步，希望春节期间不停更哈</p>2023-01-22</li><br/><li><span>王建新</span> 👍（0） 💬（2）<p>他到底是怎么代理生成那块if else的没看到原理呀</p>2023-07-28</li><br/><li><span>张三丰</span> 👍（0） 💬（2）<p>&quot;但是这么一来，如何生成动态代理类的逻辑就至关重要了，而且万一我们以后有自主定制的诉求，想修改这段生成代理类的这段逻辑，反而受 Cglib 库的牵制。&quot;
 
-老师，这个能举个例子么？  是怎么牵制的？</p>2023-02-09</li><br/><li><span>_Axios丶靜ﻩ</span> 👍（0） 💬（0）<p>这里的wrapper机制和ExtentionLoader里面的iswrapclass有关系吗，我觉得是没有啥关系</p>2025-01-11</li><br/>
+老师，这个能举个例子么？ 是怎么牵制的？</p>2023-02-09</li><br/><li><span>_Axios丶靜ﻩ</span> 👍（0） 💬（0）<p>这里的wrapper机制和ExtentionLoader里面的iswrapclass有关系吗，我觉得是没有啥关系</p>2025-01-11</li><br/>
 </ul>

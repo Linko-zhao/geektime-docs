@@ -215,10 +215,10 @@ public Object deepCopy(Object object) {
   ByteArrayOutputStream bo = new ByteArrayOutputStream();
   ObjectOutputStream oo = new ObjectOutputStream(bo);
   oo.writeObject(object);
-  
+
   ByteArrayInputStream bi = new ByteArrayInputStream(bo.toByteArray());
   ObjectInputStream oi = new ObjectInputStream(bi);
-  
+
   return oi.readObject();
 }
 ```
@@ -291,7 +291,7 @@ public class ShoppingCart {
 ShoppingCart cart = new ShoppingCart();
 List<ShoppingCartItem> items = cart.getItems();
 items.clear();//try to modify the list
-// Exception in thread "main" java.lang.UnsupportedOperationExceptio 
+// Exception in thread "main" java.lang.UnsupportedOperationExceptio
 
 ShoppingCart cart = new ShoppingCart();
 cart.add(new ShoppingCartItem(...));
@@ -316,20 +316,20 @@ public class Person {
 本质上BeanUtils.copyProperties是浅拷贝，在使用过程中需要对嵌套对象或者集合进行额外处理</p>2020-11-17</li><br/><li><span>南北少卿</span> 👍（1） 💬（1）<p>如果对象的创建成本比较大，而同一个类的不同对象之间差别不大（大部分字段都相同） ...
 这句话没有想明白</p>2020-07-05</li><br/><li><span>唯她命</span> 👍（0） 💬（2）<p>
 public class Demo {
-  private ConcurrentHashMap&lt;String, SearchWord&gt; currentKeywords = new ConcurrentHashMap&lt;&gt;();
-  private long lastUpdateTime = -1;
+private ConcurrentHashMap&lt;String, SearchWord&gt; currentKeywords = new ConcurrentHashMap&lt;&gt;();
+private long lastUpdateTime = -1;
 
-  public void refresh() {
-    &#47;&#47; 从数据库中取出更新时间&gt;lastUpdateTime的数据，放入到currentKeywords中
-    List&lt;SearchWord&gt; toBeUpdatedSearchWords = getSearchWords(lastUpdateTime);
-    long maxNewUpdatedTime = lastUpdateTime;
-    for (SearchWord searchWord : toBeUpdatedSearchWords) {
-      if (searchWord.getLastUpdateTime() &gt; maxNewUpdatedTime) {
-        maxNewUpdatedTime = searchWord.getLastUpdateTime();
-      }
+public void refresh() {
+&#47;&#47; 从数据库中取出更新时间&gt;lastUpdateTime的数据，放入到currentKeywords中
+List&lt;SearchWord&gt; toBeUpdatedSearchWords = getSearchWords(lastUpdateTime);
+long maxNewUpdatedTime = lastUpdateTime;
+for (SearchWord searchWord : toBeUpdatedSearchWords) {
+if (searchWord.getLastUpdateTime() &gt; maxNewUpdatedTime) {
+maxNewUpdatedTime = searchWord.getLastUpdateTime();
+}
 }
 
-代码有问题啊，   List&lt;SearchWord&gt; toBeUpdatedSearchWords = getSearchWords(lastUpdateTime);
+代码有问题啊， List&lt;SearchWord&gt; toBeUpdatedSearchWords = getSearchWords(lastUpdateTime);
 toBeUpdatedSearchWords里的数据是改过的数据，时间都大于lastUpdateTime
 那为啥下面还要searchWord.getLastUpdateTime() &gt; maxNewUpdatedTime？？？？
 </p>2020-07-05</li><br/><li><span>L🚲🐱</span> 👍（94） 💬（2）<p>问题 1: 逻辑删除即可
@@ -340,13 +340,13 @@ toBeUpdatedSearchWords里的数据是改过的数据，时间都大于lastUpdate
 争哥说：这里我们利用了 Java 中的 clone() 语法来复制一个对象。如果你熟悉的语言没有这个语法，那把数据从 currentKeywords 中一个个取出来，然后再重新计算哈希值，放入到 newKeywords 中也是可以接受的。
 
 Java HashMap的clone方法就把数据取出来，计算hash值，在放回去的。clone方法中，调用了putMapEntries方法，其中有一关键的一行，克隆重新计算了hash值：
-putVal(hash(key), key, value, false, evict); 
+putVal(hash(key), key, value, false, evict);
 
 文章中的深复制：为什么SearchWord不重写clone方法呢？
 @Override
 protected Object clone() throws CloneNotSupportedException {
-  SearchWord newWord = new SearchWord(this.keyWord, this.times, this.tmstamp);
-  return newWord;
+SearchWord newWord = new SearchWord(this.keyWord, this.times, this.tmstamp);
+return newWord;
 }
 </p>2020-02-19</li><br/><li><span>岁月</span> 👍（17） 💬（3）<p>课堂讨论题
 关键字如果支持删除, 最简单高效的方法就是在数据表里加一个delete bool类型的字段, 占用空间不多, 但是很方便程序识别最近更新的数据里面, 有哪条是需要删除的. 不过这样会带来一个问题, 就是插入新关键字的时候, 要先检查一下是否存在同名的关键字, 有的话要把delete字段修改为false, 所以还需要对关键字建立索引, 这样可以高效查找出是否存在同名关键字</p>2020-02-21</li><br/><li><span>新的起点，新的开始^_^</span> 👍（15） 💬（8）<p>我有个问题，最后一种方式使用copy()的浅拷贝+对象替换可以提高效率。但是copy()之后，数据库中更没有发生变化的数据其实newKeywords中指向的还是之前的对象引用啊，不是一个新的对象，那这个结果不久和需求冲突了吗？需求是：任何时刻，系统 A 中的所有数据都必须是同一个版本的。举个例子，比如说我修改了一个newKeywords中value对应的SearchWord对象的某个属性，那么响应的，currentKeywords中肯定也会发生变化，因为SearchWord地址值时一样的，这个就不是刚开始讲的深拷贝得到的是一份完完全全独立的对象，它不是独立的，只有数据库中被更新过的数据是独立的，因为执行了map.remove()和map.put()</p>2020-04-26</li><br/><li><span>安静</span> 👍（14） 💬（1）<p>老师，就是java分层架构中各层的对象，比如VO，BO，PO之间的互相转换，使用的就是原型模式，而做业务开发每天都要与这些打交道。</p>2020-04-08</li><br/><li><span>不似旧日</span> 👍（13） 💬（2）<p>既然说在Java中不常用那我就不看了，以后有时间再学。</p>2020-02-24</li><br/><li><span>忆水寒</span> 👍（10） 💬（13）<p>让我想到了linux下面fork，其实内核也是拷贝了一份数据。Java里面的copyonwrite是不是也是这种深拷贝原理呢？</p>2020-02-19</li><br/><li><span>小晏子</span> 👍（6） 💬（4）<p>1. 考虑到删除关键词，那么最好数据库使用软删除，这样可以知道哪些关键词是被删除的，那么拿到这些被删除的关键词就可以在clone出来的newKeywords基础上，直接remove掉已经删除的哪些关键词就可以了。反之如果不是使用的软删除，那么就不好使用原型模式，需要获取新版本全量数据，然后和旧版本数据一一比对，看哪些数据是被删除的了。

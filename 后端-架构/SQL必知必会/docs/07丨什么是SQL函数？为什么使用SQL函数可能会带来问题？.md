@@ -241,38 +241,39 @@ from heros
 where birthdate &lt; date(&#39;2017-01-01&#39;);</p>2019-06-26</li><br/><li><span>海洋</span> 👍（2） 💬（1）<p>作业：
 SELECT AVG(hp_max) FROM heros;
 +-------------------+
-| AVG(hp_max)       |
+| AVG(hp_max) |
 +-------------------+
 | 6580.478260869565 |
 +-------------------+
 1 row in set (0.07 sec)
 
--------------------------------------------
- SELECT name FROM heros WHERE Year(birthdate) &lt; 2017 AND birthdate is NOT NULL;
+---
+
+SELECT name FROM heros WHERE Year(birthdate) &lt; 2017 AND birthdate is NOT NULL;
 +----------+
-| name     |
+| name |
 +----------+
-| 夏侯惇   |
-| 牛魔     |
-| 吕布     |
-| 芈月     |
+| 夏侯惇 |
+| 牛魔 |
+| 吕布 |
+| 芈月 |
 | 太乙真人 |
-| 刘邦     |
-| 关羽     |
+| 刘邦 |
+| 关羽 |
 | 马可波罗 |
-| 李元芳   |
-| 虞姬     |
+| 李元芳 |
+| 虞姬 |
 | 成吉思汗 |
 | 不知火舞 |
-| 貂蝉     |
-| 周瑜     |
-| 张良     |
-| 钟馗     |
-| 蔡文姬   |
-| 花木兰   |
-| 李白     |
-| 杨戬     |
-| 刘备     |
+| 貂蝉 |
+| 周瑜 |
+| 张良 |
+| 钟馗 |
+| 蔡文姬 |
+| 花木兰 |
+| 李白 |
+| 杨戬 |
+| 刘备 |
 | 宫本武藏 |
 | 娜可露露 |
 +----------+
@@ -283,30 +284,29 @@ SELECT name FROM heros WHERE DATE(birthdate) &lt;&#39;2017-01-01&#39; AND birthd
 +-----------------------+
 | ROUND(AVG(hp_max), 2) |
 +-----------------------+
-|               6580.48 |
+| 6580.48 |
 +-----------------------+
-&gt; SELECT name FROM heros WHERE birthdate IS NOT NULL AND DATE(birthdate)&lt;&#39;2017-01-01&#39;;</p>2019-06-27</li><br/><li><span>圆子蛋</span> 👍（1） 💬（1）<p>1. SELECT AVG(max_hp) FROM heros;
-2. SELECT name,YEAR(birthdate) AS birthdate FROM heros WHERE birthdate is NOT NULL AND YEAR(birthdate)&lt;2017</p>2019-06-26</li><br/><li><span>Amo,</span> 👍（0） 💬（1）<p>今日打卡sql函数</p>2020-03-22</li><br/><li><span>爬行的蜗牛</span> 👍（0） 💬（1）<p>SELECT name,  hp_max
+&gt; SELECT name FROM heros WHERE birthdate IS NOT NULL AND DATE(birthdate)&lt;&#39;2017-01-01&#39;;</p>2019-06-27</li><br/><li><span>圆子蛋</span> 👍（1） 💬（1）<p>1. SELECT AVG(max_hp) FROM heros; 2. SELECT name,YEAR(birthdate) AS birthdate FROM heros WHERE birthdate is NOT NULL AND YEAR(birthdate)&lt;2017</p>2019-06-26</li><br/><li><span>Amo,</span> 👍（0） 💬（1）<p>今日打卡sql函数</p>2020-03-22</li><br/><li><span>爬行的蜗牛</span> 👍（0） 💬（1）<p>SELECT name, hp_max
 FROM heros
-WHERE DATE (birthdate) &lt; &#39;2017-1-1&#39;  AND birthdate IS NOT NULL;</p>2019-12-22</li><br/><li><span>爬行的蜗牛</span> 👍（0） 💬（1）<p>SELECT name,  hp_max
+WHERE DATE (birthdate) &lt; &#39;2017-1-1&#39; AND birthdate IS NOT NULL;</p>2019-12-22</li><br/><li><span>爬行的蜗牛</span> 👍（0） 💬（1）<p>SELECT name, hp_max
 FROM heros
-WHERE DATE (birthdate) &lt; &#39;2017-1-1&#39;  AND birthdate IS NOT NULL;</p>2019-12-22</li><br/><li><span>高泽林</span> 👍（0） 💬（1）<p>计算英雄的最大生命平均值：
+WHERE DATE (birthdate) &lt; &#39;2017-1-1&#39; AND birthdate IS NOT NULL;</p>2019-12-22</li><br/><li><span>高泽林</span> 👍（0） 💬（1）<p>计算英雄的最大生命平均值：
 SELECT AVG(hp_max) FROM heros;
 
 显示所有在2017年之前上线的英雄：
 SELECT name FROM heros WHERE birthdate IS NOT NULL AND YEAR(birthdate) &lt; 2017;</p>2019-12-14</li><br/><li><span>taoist</span> 👍（0） 💬（1）<p>#MariaDB:
 
 #英雄的最大生命平均值:
-SELECT  ROUND(AVG(hp_max)) as avg_hp FROM heros;
+SELECT ROUND(AVG(hp_max)) as avg_hp FROM heros;
 
 #显示出所有在 2017 年之前上线的英雄:
-SELECT name,birthdate FROM heros WHERE   EXTRACT(YEAR FROM birthdate) &lt; &#39;2017&#39;;</p>2019-12-12</li><br/><li><span>程序员花卷</span> 👍（0） 💬（1）<p>第一题：计算最大生命值的平均值
+SELECT name,birthdate FROM heros WHERE EXTRACT(YEAR FROM birthdate) &lt; &#39;2017&#39;;</p>2019-12-12</li><br/><li><span>程序员花卷</span> 👍（0） 💬（1）<p>第一题：计算最大生命值的平均值
 mysql&gt; SELECT AVG(hp_max)
-    -&gt; FROM heros；
+-&gt; FROM heros；
 第二题：计算在2017年之前上线的英雄，如果不存在，那么就不显示
 mysql&gt; SELECT *
-    -&gt; FROM heros
-    -&gt; WHERE YEAR(birthdate) &lt; &#39;2017&#39; AND birthdate IS NOT NULL;
+-&gt; FROM heros
+-&gt; WHERE YEAR(birthdate) &lt; &#39;2017&#39; AND birthdate IS NOT NULL;
 根据老师所讲的，所有的关键字和函数都尽量大写，其他的都小写，这是规范。
 今天学习了几种比较常用的函数的类型：
 日期函数

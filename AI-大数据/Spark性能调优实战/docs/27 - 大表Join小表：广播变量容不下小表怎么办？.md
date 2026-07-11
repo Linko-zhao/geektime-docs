@@ -90,7 +90,7 @@ userId, Int
 itemId, Int
 price, Float
 quantity, Int
- 
+
 // 用户表users关键字段
 id, Int
 name, String

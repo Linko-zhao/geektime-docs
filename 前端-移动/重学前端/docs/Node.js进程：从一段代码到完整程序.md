@@ -27,7 +27,7 @@ setTimeout(()=>console.log("Finished!"), 60000);
 利用定时器创建一个一分钟后执行的任务，这将会创建一个存在一分钟的进程。在这个进程结束之前，我们可以使用操作系统命令ps来查看这个进程：
 
 ```
-ps 
+ps
 ```
 
 执行此命令后，我们将会看到当前正在执行的进程列表，我们可以看到创建此进程的命令和进程 ID（ps：命令还可以使用不同参数看到更多信息，与本文无关不再赘述，请参考操作系统文档）。
@@ -54,7 +54,7 @@ process.stdout.write('请输入你的名字: ');
 process.stdin.on('data', (data) => {
     // 输出用户输入的信息
     process.stdout.write(`你好, ${data.toString().trim()}!\n`);
-    
+
     // 结束进程
     process.exit();
 });

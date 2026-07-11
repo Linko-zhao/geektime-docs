@@ -187,7 +187,7 @@ React.createElement(type, props, ...children)
 
 ```
 function Component() {
-  return 
+  return
     <div>{/*假设这行JSX语句很长，为了提升一些代码可读性才特地换行*/}</div>;
 }
 ```
@@ -373,7 +373,7 @@ const KanbanCard = (props) => {
   var title = props.title;
   return (<div>KanbanCard {title}</div>);
 };
-  
+
 // 更简单的箭头函数+参数解构
 const KanbanCard = ({title}) => (
   <div>KanbanCard {title}</div>
@@ -422,16 +422,19 @@ const KanbanColumn = enhance(({ showAdd, setShowAdd }) => (
 这时我相信你已经不会再有这节课开头的误解了：
 
 - JSX就是React？
-  
+
   - 不是。JSX只是React其中一个API，`createElement` 函数的语法糖。
+
 - JSX就是React组件？
-  
+
   - 不是。JSX是React组件渲染方法返回值的一部分，React组件还有其他的功能。
+
 - JSX就是另一种HTML？
-  
+
   - 不是。JSX本质还是JS，只是在最终渲染时才创建修改DOM。
+
 - JSX既能声明视图，又能混入JS表达式，那是不是可以把所有逻辑都写在JSX里？
-  
+
   - 可以是可以，但毕竟不能在JSX里使用命令式语句，能做的事情很有限。
 
 运用好JSX，可以很大程度提高你的React开发效率和效果。
@@ -453,7 +456,7 @@ const KanbanColumn = enhance(({ showAdd, setShowAdd }) => (
 答：不一定。JSX 并不是一个新的模板语言，可以认为是一个语法糖。比如Vue也有JSX。
 
 2. JSX 一定得生成 HTML 吗？可以用 JSX 生成其他模版吗？
-答：课程中讲到，本质上来说，JSX可以认为是一个语法糖，最终还是调用React.createElement. 所以理解重写一个createElement也可能生成别的，不一定是HTML。</p>2022-08-31</li><br/><li><span>心叶</span> 👍（3） 💬（1）<p>讲到jsx，为什么不直接拿出官方文档呢？
+   答：课程中讲到，本质上来说，JSX可以认为是一个语法糖，最终还是调用React.createElement. 所以理解重写一个createElement也可能生成别的，不一定是HTML。</p>2022-08-31</li><br/><li><span>心叶</span> 👍（3） 💬（1）<p>讲到jsx，为什么不直接拿出官方文档呢？
 
 https:&#47;&#47;facebook.github.io&#47;jsx&#47;
 
@@ -466,12 +469,11 @@ JSX 一定得生成 HTML 吗？可以用 JSX 生成其他模版吗？
 如上。</p>2022-09-01</li><br/><li><span>阿阳</span> 👍（1） 💬（1）<p>最近在vue项目中引入了jsx，在自定义组件的时候，恰好踩到了这节课说的几个坑。帮助很大。
 jsx应该不是react独有的，它只是个语法糖，它可以被编译为任意的其他渲染函数。</p>2022-09-01</li><br/><li><span>杨永安</span> 👍（1） 💬（4）<p>jsx本质是一个返回格式为json的node节点描述信息。可以用在跨端跨平台的用途，比如拿到json作为render蓝本的时候，最后的render会根据宿主环境对应调用相应API。
 
-
 话说这课没有了吗？</p>2022-08-31</li><br/><li><span>Hello,Tomrrow</span> 👍（1） 💬（1）<p>JSX 不是在 React 中发明的，二者的关系更像是相互成就。
 
 </p>2022-08-30</li><br/><li><span>即将暴富的木杉</span> 👍（1） 💬（1）<p>vue  的  template 的实现就是基于jsx的吧</p>2022-08-30</li><br/><li><span>癡癡的等你歸</span> 👍（0） 💬（2）<p>老师，这段话是否有问题？
 
 其中 type 参数是必须的，props 可选，当参数数量大于等于 3 时，可以有一个或多个 children。
 
-参数数量和children有什么必然联系吗？🤔️</p>2022-11-12</li><br/><li><span>灵感_idea</span> 👍（0） 💬（1）<p>讲解确实系统又全面，也可以看出作者的经历和经验都比较丰富，只是暂时还未进入比较深入的部分，希望加油做成一个精品课！</p>2022-11-06</li><br/><li><span>狗蛋。</span> 👍（0） 💬（1）<p>如果todoList中有一个空对象，还会遍历出KanbanCard吗？如果遍历出来只是title和status没有值 是一个空的dom？</p>2022-10-19</li><br/><li><span>永不放弃</span> 👍（0） 💬（1）<p>老师 这篇适合0基础开发吗？ 了解html css  flutter，js部分</p>2022-10-14</li><br/>
+参数数量和children有什么必然联系吗？🤔️</p>2022-11-12</li><br/><li><span>灵感_idea</span> 👍（0） 💬（1）<p>讲解确实系统又全面，也可以看出作者的经历和经验都比较丰富，只是暂时还未进入比较深入的部分，希望加油做成一个精品课！</p>2022-11-06</li><br/><li><span>狗蛋。</span> 👍（0） 💬（1）<p>如果todoList中有一个空对象，还会遍历出KanbanCard吗？如果遍历出来只是title和status没有值 是一个空的dom？</p>2022-10-19</li><br/><li><span>永不放弃</span> 👍（0） 💬（1）<p>老师 这篇适合0基础开发吗？ 了解html css flutter，js部分</p>2022-10-14</li><br/>
 </ul>

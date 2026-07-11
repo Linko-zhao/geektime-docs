@@ -127,16 +127,12 @@ App
 
 ```javascript
 const KanbanBoard = ({ children }) => (
-  <main className="kanban-board">{children}</main>
+  <main className="kanban-board">{children}</main>
 );
 
 const KanbanColumn = ({ children, className }) => {
-  const combinedClassName = `kanban-column ${className}`;
-  return (
-    <section className={combinedClassName}>
-      {children}
-    </section>
-  );
+  const combinedClassName = `kanban-column ${className}`;
+  return <section className={combinedClassName}>{children}</section>;
 };
 ```
 
@@ -244,10 +240,13 @@ SyntaxError: /Users/evisong/dev/projects/oh-my-kanban/src/App.js: Adjacent JSX e
 
 ```javascript
 const todoTitle = (
-  <>
-    <span>待处理</span><button onClick={handleAdd}
-      disabled={showAdd}>&#8853; 添加新卡片</button>
-  </>
+  <>
+        <span>待处理</span>
+    <button onClick={handleAdd} disabled={showAdd}>
+      &#8853; 添加新卡片
+    </button>
+     {" "}
+  </>
 );
 ```
 
@@ -283,8 +282,10 @@ const todoTitle = (
 ```javascript
 <KanbanColumn className="column-todo">
   <KanbanColumn.Title>
-    待处理<button onClick={handleAdd}
-      disabled={showAdd}>&#8853; 添加新卡片</button>
+    待处理
+    <button onClick={handleAdd} disabled={showAdd}>
+      &#8853; 添加新卡片
+    </button>
   </KanbanColumn.Title>
   {/* ...省略 */}
 </KanbanColumn>
@@ -297,7 +298,7 @@ const todoTitle = (
 通过刚才的实验，我们相当于用 `oh-my-kanban` 项目做了一道填空题：
 
 > 现需用React技术开发一个看板应用项目，按照组件层次结构，可以将整个应用拆分成根组件 `App`、（1)组件、(2)组件和 `KanbanCard` 组件。
-> 
+>
 > 答案：（1）`KanbanBoard` ；（2）`KanbanColumn`
 
 这个答案肯定是可以得分的，但这却不是唯一的答案。只要你认为合理，尽管可以拆分出 `KanbanTodoColumn` 、 `KanbanOngoingColumn` 、 `KanbanDoneColumn` 等，也可以把两个组件合并成 `KanbanBoardWithColumns` 。
@@ -443,10 +444,10 @@ App
 对应的Pull Request是： https:&#47;&#47;gitee.com&#47;evisong&#47;geektime-column-oh-my-kanban&#47;pulls&#47;3
 打了一个v0.5.0版本标签： https:&#47;&#47;gitee.com&#47;evisong&#47;geektime-column-oh-my-kanban&#47;releases&#47;tag&#47;v0.5.0</p>2022-09-01</li><br/><li><span>杨永安</span> 👍（3） 💬（1）<p>哇，周四的凌晨更新</p>2022-09-01</li><br/><li><span>杨永安</span> 👍（1） 💬（2）<p>好奇真子组件模式</p>2022-09-01</li><br/><li><span>流乔</span> 👍（0） 💬（1）<p>唉，现在写开源项目就特别容易决策疲劳</p>2022-09-22</li><br/><li><span>tron</span> 👍（0） 💬（1）<p>对 React 子组件概念的澄清这一小节
 对于组件树和元素树的不同之处，有点不是太理解
-不知道是不是可以理解为，组件树是代码运行前的结构，代码运行后，组件return出元素，就成了元素树呢</p>2022-09-13</li><br/><li><span>都市夜归人</span> 👍（0） 💬（1）<p>const KanbanBoard = ({ children }) =&gt; (  &lt;main className=&quot;kanban-board&quot;&gt;{children}&lt;&#47;main&gt;);
+不知道是不是可以理解为，组件树是代码运行前的结构，代码运行后，组件return出元素，就成了元素树呢</p>2022-09-13</li><br/><li><span>都市夜归人</span> 👍（0） 💬（1）<p>const KanbanBoard = ({ children }) =&gt; ( &lt;main className=&quot;kanban-board&quot;&gt;{children}&lt;&#47;main&gt;);
 缺少 return</p>2022-09-01</li><br/><li><span>莫比斯</span> 👍（0） 💬（0）<p>pc存储空间
 |——本地磁盘
-|        |——文件夹
-|        |——文件
+| |——文件夹
+| |——文件
 |——其他存储设备</p>2023-07-03</li><br/><li><span>Lucas Lin</span> 👍（0） 💬（0）<p>不理解为什么老师会说「就拆分方向而言，一般面对中小型应用，更倾向于从上到下拆分，先定义最大粒度的组件，然后逐渐缩小粒度；面对大型应用，则更倾向于从下往上拆分，先从较小粒度的组件开始。」，有例子或是不同拆分方向带来的优缺点吗？</p>2022-12-09</li><br/><li><span>InfoQ_3906e8b6c95f</span> 👍（0） 💬（0）<p>React 的Component和Element是不是类似于Flutter的Widget和Element? Component&#47;Widget 只是轻量级的UI逻辑封装，也就是文章中说的POJO，真正参与渲染的其实是Element或更加底层的RenderObject(Flutter)</p>2022-10-19</li><br/><li><span>阿阳</span> 👍（0） 💬（0）<p>周四，继续追</p>2022-09-01</li><br/>
 </ul>

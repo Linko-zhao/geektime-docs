@@ -379,7 +379,7 @@ protected final void incompleteWrite(boolean setOpWrite) {
                     }
                 };
             }
-            eventLoop().execute(flushTask); 
+            eventLoop().execute(flushTask);
         }
     }
 ```

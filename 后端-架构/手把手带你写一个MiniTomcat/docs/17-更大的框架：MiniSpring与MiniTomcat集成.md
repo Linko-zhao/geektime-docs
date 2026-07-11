@@ -31,7 +31,7 @@ public class HelloWorldBean {
     BaseService baseservice;
     @Autowired
     UserService userService;
-    
+
     @RequestMapping("/test2")
     public void doTest2(HttpServletRequest request, HttpServletResponse response) {
        String str = "test 2, hello world!";
@@ -47,13 +47,13 @@ public class HelloWorldBean {
        ModelAndView mav = new ModelAndView("test","msg",user.getName());
        return mav;
     }
-    
+
     @Autowired
     IAction action;
     @RequestMapping("/testaop2")
     public void doTestAop2(HttpServletRequest request, HttpServletResponse response) {
        action.doSomething();
-       
+
        String str = "test aop 2, hello world!";
        try {
           response.getWriter().write(str);
@@ -61,7 +61,7 @@ public class HelloWorldBean {
           // TODO Auto-generated catch block
           e.printStackTrace();
        }
-    }  
+    }
 }
 ```
 
@@ -224,11 +224,11 @@ MiniTomcat
     public void start(){
         Logger logger = new FileLogger();
         setLogger(logger);
-        
+
         //scan web.xml
-        String file = System.getProperty("minit.base") + File.separator + 
+        String file = System.getProperty("minit.base") + File.separator +
                this.docbase + File.separator + "WEB-INF" + File.separator + "web.xml";
-        
+
         SAXReader reader = new SAXReader();
         Document document;
        try {
@@ -244,7 +244,7 @@ MiniTomcat
              initParametersMap.put(paramName, paramValue);
           }
           servletContext = new StandardServletContext(this.docbase, initParametersMap);
-            
+
           //解析servlet
           List<Element> servlets = root.elements("servlet");
             for (Element servlet : servlets) {
@@ -266,13 +266,13 @@ MiniTomcat
                 if (loadonstartup != null) {
                    loadonstartupstr = loadonstartup.getText();
                 }
-                
+
                 System.out.println("servlet " + servletnamestr + servletclassstr);
                 this.servletClsMap.put(servletnamestr, servletclassstr);
                 if (loadonstartupstr != null) {
                    getWrapper(servletnamestr);
                 }
-                
+
             }
           // 解析servlet-mapping
           List<Element> servletMappings = root.elements("servlet-mapping");
@@ -287,7 +287,7 @@ MiniTomcat
           e.printStackTrace();
        }
         System.out.println("Context started.........");
- }  
+ }
 ```
 
 上面的代码列出了对 `<context-param>`、`<servlet>` 标签下的 `<init-param>` 与 `<servlet-mapping>` 标签的解析，我们分别定义initParametersMap、servletInitParamMap、servletMappingMap三个Map数据结构，来存储解析的数据。后续的程序就可以从这里获取到这些配置信息了。
@@ -420,8 +420,8 @@ final class StandardContextValve extends ValveBase {
         //通过pattern找到合适的servlet名
         String servletName = this.urlMatch(servletPattern);
         StandardContext context = (StandardContext)getContainer();
-        
-        servletWrapper = (StandardWrapper)context.getWrapper(servletName); 
+
+        servletWrapper = (StandardWrapper)context.getWrapper(servletName);
         try {
            System.out.println("Call service()");
            servletWrapper.invoke(request, response);

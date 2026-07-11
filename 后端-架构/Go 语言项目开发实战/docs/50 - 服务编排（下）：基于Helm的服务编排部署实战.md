@@ -240,7 +240,7 @@ iam-cert   14     12s
 
 **第六步，**创建镜像仓库访问密钥。
 
-在准备阶段，我们开通了[腾讯云镜像仓库服务](http://ccr.ccs.tencentyun.com)，并创建了用户```10000099``xxxx```，密码为`iam59!z$`。
+在准备阶段，我们开通了[腾讯云镜像仓库服务](http://ccr.ccs.tencentyun.com)，并创建了用户`10000099``xxxx`，密码为`iam59!z$`。
 
 接下来，我们就可以创建docker-registry secret了。Kubernetes在下载Docker镜像时，需要docker-registry secret来进行认证。创建命令如下：
 
@@ -316,7 +316,7 @@ $ kubectl delete namespace iam
 
 在实际的项目开发中，我们需要将IAM应用部署到不同的环境中，不同环境的配置文件是不同的，那么IAM项目是如何进行多环境部署的呢？
 
-IAM项目在[configs]()目录下创建了多个Helm values文件（格式为`values-{envName}-env.yaml`）：
+IAM项目在[configs](<>)目录下创建了多个Helm values文件（格式为`values-{envName}-env.yaml`）：
 
 - values-test-env.yaml，测试环境Helm values文件。
 - values-pre-env.yaml，预发环境Helm values文件。
@@ -348,9 +348,11 @@ $ helm -n iam install -f configs/values-test-env.yaml iam deployments/iam # 安�
 
 我一般调试时使用helm upgrade --install —debug —dry-run。如果可以看到渲染后的yaml，调试起来还是蛮方便的。</p>2021-09-25</li><br/><li><span>yandongxiao</span> 👍（1） 💬（1）<p>总结：
 制作chart的流程：
+
 1. 使用 helm create 命令创建一个 chart；
 2. chart 的目录结构：Chart.yaml, values.yaml, templates, charts 等。
 3. templates 目录中包含资源的定义文件，使用了 go template 语法，有点凌乱。
 4. 建议 values.yaml 文件中个，给所有字符串类型的值加上引号；使用字符串来表示整型，通过 {{ int $values }} 方式来引用。
 5. 使用 helm lint 或者 helm install --dry-run 方式，验证helm package的格式，但内容上不一定符合你预期。</p>2021-12-05</li><br/><li><span>GeekCoder</span> 👍（0） 💬（1）<p>一个应用有多个服务，其中一个服务改动之后，得重新打一个chart包？全部重新部署？</p>2022-05-25</li><br/><li><span>骨汤鸡蛋面</span> 👍（0） 💬（1）<p>对于一些yaml配置，如果pro 使用，test 不需要，该如何配置呢。比如node 亲和性配置，可能线上要配，测试环境就无所谓了。</p>2022-04-08</li><br/><li><span>Wongkakui</span> 👍（0） 💬（0）<p>有个疑问，一般集群内的资源都是运维管理的，但我们项目使用到的资源可以通过helm values维护在自己代码仓库，运维缺改不了，这种情况有最佳实践吗</p>2023-03-05</li><br/>
+
 </ul>

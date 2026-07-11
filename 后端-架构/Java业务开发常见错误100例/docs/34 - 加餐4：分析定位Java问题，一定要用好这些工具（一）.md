@@ -295,7 +295,7 @@ Total: reserved=6635310KB, committed=5337110KB
 
 
 -               Arena Chunk (reserved=196KB, committed=196KB)
-                            (malloc=196KB)            
+                            (malloc=196KB)
 ```
 
 重新以VM.native\_memory detail参数运行jcmd：
@@ -502,15 +502,15 @@ spring.datasource.url=jdbc:mysql://localhost:6657/common_mistakes?characterEncod
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Darren</span> 👍（24） 💬（1）<p>1、jmap -dump是会dump所有的对象，不关心是否可达；jmap -dump:live只会dump存活的对象，即可以从GcRoot可达的对象。测试是在循环中，一直创建对象，然后休眠1s，dump2次，发现创建对象的个数不同。</p>2020-04-22</li><br/><li><span>程序员小跃</span> 👍（6） 💬（2）<p>老师，你让我这个Java重新整理了方向，这才是 Java 更高层次需要掌握的东西，不然平时只知道写代码，遇到问题只会重启的话，对自己能力的提升实在是太慢了。
 
-Java 的世界，还是离不开 JVM的判断。Wireshark 原来还可以分析 MySQL 相关，以前一直觉得只能网络抓包呢，哈哈</p>2020-10-31</li><br/><li><span>小杰</span> 👍（6） 💬（1）<p>老师现在特别火的阿里定位问题的工具Arthas  是不是都是拿jvm工具实现的呢，感觉很强大</p>2020-04-21</li><br/><li><span>👽</span> 👍（5） 💬（1）<p>墙裂建议收藏，总有一天用得着。</p>2020-04-21</li><br/><li><span>梦倚栏杆</span> 👍（4） 💬（2）<p>-XX:ThreadStackSize=256k 实际效果是256M
+Java 的世界，还是离不开 JVM的判断。Wireshark 原来还可以分析 MySQL 相关，以前一直觉得只能网络抓包呢，哈哈</p>2020-10-31</li><br/><li><span>小杰</span> 👍（6） 💬（1）<p>老师现在特别火的阿里定位问题的工具Arthas 是不是都是拿jvm工具实现的呢，感觉很强大</p>2020-04-21</li><br/><li><span>👽</span> 👍（5） 💬（1）<p>墙裂建议收藏，总有一天用得着。</p>2020-04-21</li><br/><li><span>梦倚栏杆</span> 👍（4） 💬（2）<p>-XX:ThreadStackSize=256k 实际效果是256M
 -Xss:256k 实际效果是256k
 官方文档提示这两个参数效果等同，都是byte为单位
 https:&#47;&#47;docs.oracle.com&#47;javase&#47;8&#47;docs&#47;technotes&#47;tools&#47;unix&#47;java.html#BABHDABI</p>2020-04-22</li><br/><li><span>梦倚栏杆</span> 👍（3） 💬（4）<p>老师，你的第一个演示我这儿直接就被杀掉了
- java -jar target&#47;java-common-mistakes-0.0.1-SNAPSHOT.jar -Xms1g -Xmx1g
- jps 正常
+java -jar target&#47;java-common-mistakes-0.0.1-SNAPSHOT.jar -Xms1g -Xmx1g
+jps 正常
 jinfo $pid
 提示：Error attaching to process ： Can&#39;t attach symbolicator to the process
-发现进程已经被kill掉</p>2020-04-22</li><br/><li><span>若镜</span> 👍（2） 💬（1）<p>作为同样的一个15years+的programmer 不得不说 老师分享的足够干货 多谢。</p>2020-10-23</li><br/><li><span>Geek_3b1096</span> 👍（2） 💬（1）<p>重新认识用Wireshark分析问题，谢谢老师</p>2020-05-01</li><br/><li><span>vivi</span> 👍（2） 💬（2）<p>jmap -dump是输出堆中所有对象  jmap -dump:live是输出堆中所有活着的对象  而且jmap -dump:live会触发gc  线上使用要注意这个</p>2020-04-21</li><br/><li><span>刘大明</span> 👍（2） 💬（1）<p>这篇定位java问题的文章,真的是打开了新天地.以前重来没有关注过jvm相关的信息,这次是开了眼界.</p>2020-04-21</li><br/><li><span>FelixFly</span> 👍（1） 💬（1）<p>老师，咨询一下Full GC 基本 10 秒一次这个结论是怎么总结出来的？Full GC一般控制在多少秒一次比较好？</p>2020-05-13</li><br/><li><span>子不语</span> 👍（1） 💬（2）<p>老师好，第一个例子，启动 10 个死循环的线程，每个线程分配一个 10MB 左右的字符串，然后休眠 10 秒，完整的代码能给下吗。或者能否把案例的代码都上传到github。</p>2020-05-02</li><br/><li><span>润欢➿</span> 👍（0） 💬（1）<p>老师课程真的很好，带我进入了新java领域。
+发现进程已经被kill掉</p>2020-04-22</li><br/><li><span>若镜</span> 👍（2） 💬（1）<p>作为同样的一个15years+的programmer 不得不说 老师分享的足够干货 多谢。</p>2020-10-23</li><br/><li><span>Geek_3b1096</span> 👍（2） 💬（1）<p>重新认识用Wireshark分析问题，谢谢老师</p>2020-05-01</li><br/><li><span>vivi</span> 👍（2） 💬（2）<p>jmap -dump是输出堆中所有对象 jmap -dump:live是输出堆中所有活着的对象 而且jmap -dump:live会触发gc 线上使用要注意这个</p>2020-04-21</li><br/><li><span>刘大明</span> 👍（2） 💬（1）<p>这篇定位java问题的文章,真的是打开了新天地.以前重来没有关注过jvm相关的信息,这次是开了眼界.</p>2020-04-21</li><br/><li><span>FelixFly</span> 👍（1） 💬（1）<p>老师，咨询一下Full GC 基本 10 秒一次这个结论是怎么总结出来的？Full GC一般控制在多少秒一次比较好？</p>2020-05-13</li><br/><li><span>子不语</span> 👍（1） 💬（2）<p>老师好，第一个例子，启动 10 个死循环的线程，每个线程分配一个 10MB 左右的字符串，然后休眠 10 秒，完整的代码能给下吗。或者能否把案例的代码都上传到github。</p>2020-05-02</li><br/><li><span>润欢➿</span> 👍（0） 💬（1）<p>老师课程真的很好，带我进入了新java领域。
 
 感谢，每节课都有认真看。写md笔记。</p>2020-05-12</li><br/><li><span>hellojd</span> 👍（4） 💬（1）<p>连接mysql,可以指定固定端口？怎么设置？有啥意义？不太明白</p>2020-04-22</li><br/><li><span>不能忍的地精</span> 👍（3） 💬（0）<p>刚好最近在看JVM.昨天利用jvm的工具发现了生产OOM的原因,今天又补课了</p>2020-04-21</li><br/>
 </ul>

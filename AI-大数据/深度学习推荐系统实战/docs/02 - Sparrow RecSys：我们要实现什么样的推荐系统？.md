@@ -140,13 +140,13 @@ win7下 搭建 推荐系统 的步骤：
 https:&#47;&#47;www.jetbrains.com&#47;idea&#47;download&#47;#section=windows
 
 2. 第2步骤：如何下载和配置JDK1.8（一定要JDK1.8）
-https:&#47;&#47;www.cnblogs.com&#47;hejh&#47;p&#47;11276434.html
+   https:&#47;&#47;www.cnblogs.com&#47;hejh&#47;p&#47;11276434.html
 
 3.第3步骤：IDEA配置JDK1.8（一定要JDK1.8）
 https:&#47;&#47;blog.csdn.net&#47;liluo_2951121599&#47;article&#47;details&#47;78484776
 
 4. 第4步骤：window下安装scala步骤
-https:&#47;&#47;www.cnblogs.com&#47;onlyxx&#47;p&#47;5168882.html
+   https:&#47;&#47;www.cnblogs.com&#47;onlyxx&#47;p&#47;5168882.html
 
 4.1 第4.1步骤：Scala安装问题找不到主类的（不要安装在有空格的路径）
 https:&#47;&#47;blog.csdn.net&#47;weekdawn&#47;article&#47;details&#47;94625067
@@ -155,13 +155,13 @@ https:&#47;&#47;blog.csdn.net&#47;weekdawn&#47;article&#47;details&#47;94625067
 https:&#47;&#47;blog.csdn.net&#47;yulutian&#47;article&#47;details&#47;80566728
 
 5. 第5步骤：IDEA配置Scala
-https:&#47;&#47;www.cnblogs.com&#47;starzy&#47;p&#47;10461038.html
+   https:&#47;&#47;www.cnblogs.com&#47;starzy&#47;p&#47;10461038.html
 
 6. 第6步骤：win7安装hadoop spark
-https:&#47;&#47;www.jianshu.com&#47;p&#47;9f40fe1b6587
+   https:&#47;&#47;www.jianshu.com&#47;p&#47;9f40fe1b6587
 
 7. 第7步骤：安装Redis
-https:&#47;&#47;www.cnblogs.com&#47;liuqingzheng&#47;p&#47;9831331.html
+   https:&#47;&#47;www.cnblogs.com&#47;liuqingzheng&#47;p&#47;9831331.html
 
 大功告成，如果安装过程有问题的同学，请留言，我们一起解决！~^^</p>2021-06-18</li><br/><li><span>夜雨声烦</span> 👍（15） 💬（6）<p>JAVA小白 mac os系统 安装Sparrow Recsys时的历程：
 1，安装java8和scala2.11

@@ -316,8 +316,7 @@ Undefined constant or missing &#39;(&#39; in &#39;vis_mb_type&#39;
 [aac @ 00000237ca4cff80] Unable to parse option value &quot;vis_mb_type&quot;
 [aac @ 00000237ca4cff80] Error setting option debug to value vis_mb_type.
 
-首先这个问题怎么解决？ 其次，我用的最新的5.1版本，书上用的似乎是3.X版本，感觉应该是版本不同导致的。我尝试了查帮助来解决，但没有成功。 请问：怎么从帮助中查vis_mb_type的用法？ 
-
+首先这个问题怎么解决？ 其次，我用的最新的5.1版本，书上用的似乎是3.X版本，感觉应该是版本不同导致的。我尝试了查帮助来解决，但没有成功。 请问：怎么从帮助中查vis_mb_type的用法？
 
 Q3：FFmpeg，老师用的时候版本是多少？
 我用的是最新的5.1版本，执行ffmpeg -h muxer=mp4后，显示：Default video codec: mpeg4，

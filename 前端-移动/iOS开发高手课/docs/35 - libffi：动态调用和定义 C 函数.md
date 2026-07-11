@@ -126,7 +126,7 @@ extern void ffi_call_SYSV (void *stack, void *frame,
 
     // 记录函数指针 fn
     mov x9, x2          /* save fn */
-    
+
     // 记录返回值 rvalue
     mov x8, x3          /* install structure return */
 #ifdef FFI_GO_CLOSURES
@@ -134,7 +134,7 @@ extern void ffi_call_SYSV (void *stack, void *frame,
     mov x18, x5         /* install static chain */
 #endif
     // 保存 rvalue 和 flags
-    stp x3, x4, [x29, #16]  /* save rvalue and flags */ 
+    stp x3, x4, [x29, #16]  /* save rvalue and flags */
 
     //先将向量参数传到寄存器
     tbz w4, #AARCH64_FLAG_ARG_V_BIT, 1f
@@ -151,7 +151,7 @@ extern void ffi_call_SYSV (void *stack, void *frame,
 
     //释放上下文，留下栈里参数
     add sp, sp, #CALL_CONTEXT_SIZE
-    
+
     // 调用函数指针 fn
     blr     x9
 
@@ -214,15 +214,15 @@ void testFFICall() {
     ffi_type *argumentTypes[] = {&ffi_type_pointer, &ffi_type_pointer, &ffi_type_sint32, &ffi_type_sint32};
     // 通过 ffi_prep_cif 内 ffi_prep_cif_core 来设置 ffi_cif 结构体所需要的数据，包括 ABI、参数个数、参数类型等。
     ffi_prep_cif(&cif, FFI_DEFAULT_ABI, 4, &ffi_type_pointer, argumentTypes);
-    
+
     Sark *sark = [Sark new];
     SEL selector = @selector(fooWithBar:baz:);
-    
+
     // 函数参数的设置
     int bar = 123;
     int baz = 456;
     void *arguments[] = {&sark, &selector, &bar, &baz};
-    
+
     // 函数指针 fn
     IMP imp = [sark methodForSelector:selector];
     // 返回值声明
@@ -280,17 +280,17 @@ void testFFIClosure() {
 
     // 声明一个新的函数指针
     IMP newIMP;
-    
+
     // 分配一个 closure 关联新声明的函数指针
     ffi_closure *closure = ffi_closure_alloc(sizeof(ffi_closure), (void *)&newIMP);
 
     // ffi_closure 关联 cif、closure、函数实体 closureCalled
     ffi_prep_closure_loc(closure, &cif, closureCalled, NULL, NULL);
-    
+
     // 使用 Runtime 接口动态地将 fooWithBar:baz 方法绑定到 closureCalled 函数指针上
     Method method = class_getInstanceMethod([Sark class], @selector(fooWithBar:baz:));
     method_setImplementation(method, newIMP);
-    
+
     // after hook
     Sark *sark = [Sark new];
     int ret = [sark fooWithBar:123 baz:456];
@@ -328,26 +328,23 @@ Block 是一个 Objective-C 对象，表面看类似 C 函数，实际上却有�
 
 @implementation CoderPerson
 
-
 &#47;&#47; 发现, 即使是不加 static, 在 release 的时候这个函数符号也没有
-&#47;&#47;  static int coder_func() {
+&#47;&#47; static int coder_func() {
 int coder_func() {
-    int a = 10;
-    int b = 20;
-    int c = a+b;
-    return c;
+int a = 10;
+int b = 20;
+int c = a+b;
+return c;
 }
 
 - (void)coder_method {
-    int d = coder_func();
-    NSLog(@&quot;%d&quot;, d);
-}
+  int d = coder_func();
+  NSLog(@&quot;%d&quot;, d);
+  }
 
 @end
 
-
 一摸一样的代码、如果放到终端项目中的话，确实是要加上static才会在release的时候被裁减。 感觉是项目的参数配置导致的、但是一直没有找到。
-
 
 </p>2019-06-10</li><br/><li><span>forping</span> 👍（1） 💬（0）<p>struct BlockDescriptor
 {
@@ -358,39 +355,39 @@ int coder_func() {
 
 struct Block
 {
-    void *isa;
-    int flags;
-    int reserved;
-    void *invoke;
-    struct BlockDescriptor *descriptor;
+void *isa;
+int flags;
+int reserved;
+void *invoke;
+struct BlockDescriptor *descriptor;
 };
 
 static void *BlockImpl(id block)
 {
-    return ((__bridge struct Block *)block)-&gt;invoke;
+return ((__bridge struct Block *)block)-&gt;invoke;
 }
 
 void testFFIBlockCall(){
-    
+
     int(^block)(void) = ^{
         NSLog(@&quot;1&quot;);
         return 2;
     };
-    
-    
+
+
     ffi_cif cif;
     ffi_type *argumentTypes[] = {};
-    
+
     ffi_prep_cif(&amp;cif, FFI_DEFAULT_ABI, 0, &amp;ffi_type_sint32, argumentTypes);
-    
+
     void *arguments[] = {};
-    
+
     IMP imp = BlockImpl(block);
-    
+
     int retValue;
-    
+
     ffi_call(&amp;cif, imp, &amp;retValue, arguments);
     NSLog(@&quot;ffi_call: %d&quot;, retValue);
-    
+
 }</p>2021-01-26</li><br/><li><span>林峰峰</span> 👍（1） 💬（0）<p>想问下实际应用中，这种动态调用用到了那些方面？</p>2019-06-17</li><br/><li><span>Space</span> 👍（0） 💬（0）<p>如何hook C函数？没头绪~</p>2021-07-07</li><br/><li><span>Master</span> 👍（0） 💬（0）<p>没太看明白，好像被调用的函数都是被编译过的啊？</p>2020-03-11</li><br/><li><span>三刀流剑客</span> 👍（0） 💬（0）<p>可以用libffi动态替换系统+load方法吗</p>2019-08-29</li><br/><li><span>帅气潇洒的豆子</span> 👍（0） 💬（1）<p>没有汇编基础，看起来好痛苦。</p>2019-05-30</li><br/>
 </ul>

@@ -61,20 +61,20 @@ User userBean = (User) bf.getBean("userFactoryBean");
 
 ```
 public class DefaultSingletonBeanRegistry {
-    
+
     //使用了线程安全容器ConcurrentHashMap，保存各种单实例对象
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>;
 
     protected Object getSingleton(String beanName) {
     //先到HashMap中拿Object
     Object singletonObject = singletonObjects.get(beanName);
-    
+
     //如果没拿到通过反射创建一个对象实例，并添加到HashMap中
     if (singletonObject == null) {
       singletonObjects.put(beanName,
                            Class.forName(beanName).newInstance());
    }
-   
+
    //返回对象实例
    return singletonObjects.get(beanName);
   }
@@ -130,7 +130,7 @@ public static void main(String[] args) {
 
     //创建代理对象,把目标对象传给代理对象,建立代理关系
     StudentDaoProxy proxy = new StudentDaoProxy(target);
-   
+
     //执行的是代理的方法
     proxy.save();
 }
@@ -158,7 +158,7 @@ public class MyInvocationHandler implements InvocationHandler {
         System.out.println("开始事务");
         Object result = method.invoke(obj, args);
         System.out.println("开始事务");
-        
+
         return result;
     }
 }
@@ -170,14 +170,14 @@ public class MyInvocationHandler implements InvocationHandler {
 public static void main(String[] args) {
   //创建目标对象StudentDao
   IStudentDao stuDAO = new StudentDao();
-  
+
   //创建MyInvocationHandler对象
   InvocationHandler handler = new MyInvocationHandler(stuDAO);
-  
+
   //使用Proxy.newProxyInstance动态的创建代理对象stuProxy
-  IStudentDao stuProxy = (IStudentDao) 
+  IStudentDao stuProxy = (IStudentDao)
  Proxy.newProxyInstance(stuDAO.getClass().getClassLoader(), stuDAO.getClass().getInterfaces(), handler);
-  
+
   //动用代理对象的方法
   stuProxy.save();
 }
@@ -205,15 +205,14 @@ private static final Class&lt;?&gt;[] constructorParams = { InvocationHandler.cl
 
 &#47;&#47;newProxyInstance无限精简之后就是：
 public static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] interfaces, InvocationHandler h)
-        throws IllegalArgumentException {
-    &#47;&#47;通过ProxyClassFactory调用ProxyGenerator生成了代理类
-    Class&lt;?&gt; cl = getProxyClass0(loader, interfaces);
-    &#47;&#47;找到参数为InvocationHandler.class的构造函数
-    final Constructor&lt;?&gt; cons = cl.getConstructor(constructorParams);
-    &#47;&#47;创建代理类实例
-    return cons.newInstance(new Object[]{h});
+throws IllegalArgumentException {
+&#47;&#47;通过ProxyClassFactory调用ProxyGenerator生成了代理类
+Class&lt;?&gt; cl = getProxyClass0(loader, interfaces);
+&#47;&#47;找到参数为InvocationHandler.class的构造函数
+final Constructor&lt;?&gt; cons = cl.getConstructor(constructorParams);
+&#47;&#47;创建代理类实例
+return cons.newInstance(new Object[]{h});
 }
-
 
 &#47;&#47;在ProxyGenerator类中：
 public static byte[] generateProxyClass(final String name,Class&lt;?&gt;[] interfaces, int accessFlags)){}
@@ -224,8 +223,8 @@ private byte[] generateClassFile() {}
 &#47;&#47;生成对应的字节码
 &#47;&#47;其实这也就说明了，为何JDK的动态代理，必须需要至少一个接口</p>2019-07-24</li><br/><li><span>nightmare</span> 👍（11） 💬（1）<p>老师能讲一下spring这么解决循环依耐的吗</p>2019-07-19</li><br/><li><span>Standly</span> 👍（10） 💬（1）<p>老师 ，工厂方法模式没看懂。另外DefaultSingletonBeanRegistry的getBean方法的实现存在线程安全问题吧？虽然用了ConcurrentHashMap,但是if (singletonObject == null) 存在竞态条件， 可能有2个线程同时判断为true，最后产生了2个对象实例。应该用putIfAbsent方法。</p>2019-07-18</li><br/><li><span>802.11</span> 👍（0） 💬（1）<p>文中的工厂模式，有一个疑惑，它确实解决了对象的创建问题，但是对象每一个字段的赋值，工厂模式可以解决吗？或者怎么解决呢，谢谢</p>2019-07-29</li><br/><li><span>-W.LI-</span> 👍（12） 💬（0）<p>之前硬着头皮看过这个源码，中间有一步weakcache印象深刻。弱引用缓存，先从缓存中取，没取到获取字节码，校验魔术版本号之类的，最后反射实现。反射效率不高也是这个原因导致的，要获取源文件校验准备初始化(轻量级累加载一次)。</p>2019-07-18</li><br/><li><span>QQ怪</span> 👍（6） 💬（0）<p>动态代理的思路便是动态生成一个新类，先通过传入的classLoader生成对应Class对象，后通过反射获取构造函数对象并生成代理类实例，jdk动态代理是通过接口实现的，但很多类是没有针对接口设计的，但是我们知道可以通过拼接字节码生成新的类的自由度是十分大的，所以cglib框架就是通过拼接字节码来实现非接口类的代理。</p>2019-07-18</li><br/><li><span>QQ怪</span> 👍（4） 💬（0）<p>老师这次加餐面试必问题</p>2019-07-18</li><br/><li><span>草戊</span> 👍（3） 💬（1）<p>BeanFactory和FactoryBean的代码示例是一样的？</p>2019-07-29</li><br/><li><span>靠人品去赢</span> 👍（1） 💬（0）<p>这个工厂模式，这各其实实例化的出来我觉得还是工厂bean，但是可以通过getObject来获取bean。这里可以看一下Spring的ObjectFactoryCreatingFactoryBean（通过继承AbstractFactoryBean ，然后由AbstractFactoryBean实现BeanFactory的）
 public Object getObject() throws BeansException {
-			return this.beanFactory.getBean(this.targetBeanName);
-		}
+return this.beanFactory.getBean(this.targetBeanName);
+}
 对应类名字传过来即可，若果是动态那工厂模式就大显神威了。
 </p>2019-11-07</li><br/><li><span>桔子</span> 👍（1） 💬（0）<p>谢谢，我学会了动态代理~</p>2019-09-29</li><br/><li><span>芋头</span> 👍（0） 💬（0）<p>老师，其实我蛮好奇怎么样才能看到动态代理后的类代码</p>2023-03-22</li><br/><li><span>惘 闻</span> 👍（0） 💬（0）<p>老师你说的代理模式是为了增强被代理类的方法。可是这不是装饰器模式的定义吗？代理模式主要是提供一种间接访问被代理类的方式和控制。</p>2021-01-26</li><br/><li><span>liyanzhaog</span> 👍（0） 💬（0）<p>动态反射的理解：
        &#47;&#47;创建目标对象StudentDao
@@ -254,15 +253,15 @@ public final class $Proxy0 extends Proxy implements IStudentDao {
 private static Method m3=
  Class.forName(&quot;com.sustcoder.design.proxy.IStudentDao&quot;).getMethod(&quot;save&quot;);
     public $Proxy0(InvocationHandler var1) throws {
-        super(var1);
-    }
-    public final void save() throws {
-        try {
-            super.h.invoke(this, m3, (Object[])null);
-        } catch (RuntimeException | Error var2) {
-            throw var2;
-        } catch (Throwable var3) {
-            throw new UndeclaredThrowableException(var3);
-        }
-    }</p>2020-07-29</li><br/><li><span>nightmare</span> 👍（0） 💬（0）<p>如果是基于反射实现的，那增强的业务这么植入的</p>2019-07-19</li><br/><li><span>许童童</span> 👍（0） 💬（2）<p>工厂方法模式说的就是抽象工厂模式吧</p>2019-07-18</li><br/>
+super(var1);
+}
+public final void save() throws {
+try {
+super.h.invoke(this, m3, (Object[])null);
+} catch (RuntimeException | Error var2) {
+throw var2;
+} catch (Throwable var3) {
+throw new UndeclaredThrowableException(var3);
+}
+}</p>2020-07-29</li><br/><li><span>nightmare</span> 👍（0） 💬（0）<p>如果是基于反射实现的，那增强的业务这么植入的</p>2019-07-19</li><br/><li><span>许童童</span> 👍（0） 💬（2）<p>工厂方法模式说的就是抽象工厂模式吧</p>2019-07-18</li><br/>
 </ul>

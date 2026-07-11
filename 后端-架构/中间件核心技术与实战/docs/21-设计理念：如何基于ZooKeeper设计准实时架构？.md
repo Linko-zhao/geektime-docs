@@ -185,7 +185,7 @@ class MqConsumerGroupDataNodeListener extends TreeCacheListener {
 我们公司对消息中间件的消息发送与消息消费做了统一的封装，对用户弱化了集群的概念，用户发送、消费消息时，不需要知道主题所在的集群地址，相关的API如下所示：
 
 ```plain
-public static SendResult send(String topic, SimpleMessage simpleMessage) 
+public static SendResult send(String topic, SimpleMessage simpleMessage)
 public static void subscribe(String consumerGroup, MessageListener listener)
 ```
 

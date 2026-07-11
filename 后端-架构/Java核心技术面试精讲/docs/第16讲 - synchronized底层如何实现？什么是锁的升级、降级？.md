@@ -92,7 +92,7 @@ void ObjectSynchronizer::fast_enter(Handle obj, BasicLock* lock,
 	}
     assert(!obj->mark()->has_bias_pattern(), "biases should be revoked by now");
   }
- 
+
   slow_enter(obj, lock, THREAD);
 }
 
@@ -132,7 +132,7 @@ void ObjectSynchronizer::slow_enter(Handle obj, BasicLock* lock, TRAPS) {
     lock->set_displaced_header(NULL);
     return;
   }
- 
+
   // 重置Displaced Header
   lock->set_displaced_header(markOopDesc::unused_mark());
   ObjectSynchronizer::inflate(THREAD,
@@ -274,7 +274,6 @@ public class StampedSample {
 混合型自旋锁，起初表现的和正常自旋锁一样，如果无法获取互斥锁，它也许会放弃该线程的执行，并允许其他线程执行。
 
 切记，自旋锁只有在多核CPU上有效果，单核毫无效果，只是浪费时间。
-
 
 以上基本参考来源于：
 http:&#47;&#47;ifeve.com&#47;java_lock_see1&#47;

@@ -86,9 +86,9 @@ class Common(object):
   # common的构造函数
   def __init__(self,url_root,api_type):
     '''
-    :param api_type:接口类似当前支持http、ws，http就是HTTP协议，ws是WebSocket协议  
-    :param url_root: 被测系统的根路由   
-    '''    
+    :param api_type:接口类似当前支持http、ws，http就是HTTP协议，ws是WebSocket协议
+    :param url_root: 被测系统的根路由
+    '''
     if api_type=='ws':
       self.ws = create_connection(url_root)
     elif api_type=='http':
@@ -97,20 +97,20 @@ class Common(object):
 
 
   # ws协议的消息发送
-  
+
   def send(self,params):
     '''
     :param params: websocket接口的参数
-    
+
     :return: 访问接口的返回值
-    ''' 
+    '''
     self.ws.send(params)
     res = self.ws.recv()
     return res
 
 
   # common类的析构函数，清理没有用的资源
-  
+
   def __del__(self):
     '''
     :return:
@@ -119,15 +119,15 @@ class Common(object):
        self.ws.close()
   def get(self, uri, params=None):
     '''
-    封装你自己的get请求，uri是访问路由，params是get请求的参数，如果没有默认为空 
-    :param uri: 访问路由 
-    :param params: 传递参数，string类型，默认为None 
+    封装你自己的get请求，uri是访问路由，params是get请求的参数，如果没有默认为空
+    :param uri: 访问路由
+    :param params: 传递参数，string类型，默认为None
     :return: 此次访问的response
     '''
     # 拼凑访问地址
     if params is not None:
       url = self.url_root + uri + params
-    else:    
+    else:
       url = self.url_root + uri
     # 通过get请求访问对应地址
     res = requests.get(url)
@@ -149,7 +149,7 @@ class Common(object):
     else:
       # 如果无参数，访问方式如下
       # 返回request的Response结果，类型为requests的Response类型
-      res = requests.post(url)    
+      res = requests.post(url)
     return res
 
 
@@ -233,18 +233,18 @@ del con
     elif api_type==&#39;http&#39;:
       self.url_root = url_root
 
-------------------------------------------
+---
 
-  # common类的析构函数，清理没有用的资源
-  
-  def __del__(self):
-    &#39;&#39;&#39;
-    :return:
-    &#39;&#39;&#39;
-    if self.ws!=&#39;null&#39;:------加个判断好点
-      self.ws.close()
+# common类的析构函数，清理没有用的资源
 
-不然测http的时候websocket会报错。</p>2020-02-19</li><br/><li><span>VeryYoung</span> 👍（6） 💬（3）<p>好巧，websocket协议也是我遇到的第一个陌生协议，那个时候测试工期短，用的是java技术栈，就用了netty框架来封装，后面有时间了就进行回顾，发现还有有个websocket.jar开源包，后面又相继遇到了amqp、mqtt等非http协议！</p>2020-02-15</li><br/><li><span>孟见大侠</span> 👍（3） 💬（1）<p>其实根本就不要加api_type这个参数，根据url_root 就可以知道协议类型了。ws:&#47;&#47;echo.websocket.org 是ws协议，https:&#47;&#47;echo.websocket.org是https协议。根据协议头，截取出来就可以了。这样可以少传一个参数。</p>2020-03-07</li><br/><li><span>夜歌</span> 👍（1） 💬（6）<p>from websocket import create_connection，请问websocket是您自己封装的类吗？试着运行代码，发现没有websocket这个模块，然后pip install websocket 后也没有 create_connection 这个方法。所以是自己封装的吗？</p>2020-04-27</li><br/><li><span>shadow</span> 👍（1） 💬（1）<p>这里Common里增加了一个入参api_type『def __init__(self,url_root,api_type)』，用于标记请求协议类型，这实际相当于框架底层方法重构，一个方法是给这个入参加默认传参，就是之前的http，不知道还有没有别的方法？
+def **del**(self):
+&#39;&#39;&#39;
+:return:
+&#39;&#39;&#39;
+if self.ws!=&#39;null&#39;:------加个判断好点
+self.ws.close()
+
+不然测http的时候websocket会报错。</p>2020-02-19</li><br/><li><span>VeryYoung</span> 👍（6） 💬（3）<p>好巧，websocket协议也是我遇到的第一个陌生协议，那个时候测试工期短，用的是java技术栈，就用了netty框架来封装，后面有时间了就进行回顾，发现还有有个websocket.jar开源包，后面又相继遇到了amqp、mqtt等非http协议！</p>2020-02-15</li><br/><li><span>孟见大侠</span> 👍（3） 💬（1）<p>其实根本就不要加api_type这个参数，根据url_root 就可以知道协议类型了。ws:&#47;&#47;echo.websocket.org 是ws协议，https:&#47;&#47;echo.websocket.org是https协议。根据协议头，截取出来就可以了。这样可以少传一个参数。</p>2020-03-07</li><br/><li><span>夜歌</span> 👍（1） 💬（6）<p>from websocket import create_connection，请问websocket是您自己封装的类吗？试着运行代码，发现没有websocket这个模块，然后pip install websocket 后也没有 create_connection 这个方法。所以是自己封装的吗？</p>2020-04-27</li><br/><li><span>shadow</span> 👍（1） 💬（1）<p>这里Common里增加了一个入参api_type『def **init**(self,url_root,api_type)』，用于标记请求协议类型，这实际相当于框架底层方法重构，一个方法是给这个入参加默认传参，就是之前的http，不知道还有没有别的方法？
 还有一个就是，框架开发，会多多少少的涉及到底层重构，然后可能影响的就是所有的用例都需要修改，这种情况，不知道有没有什么好的规避方法？</p>2020-02-15</li><br/><li><span>April Gao</span> 👍（0） 💬（1）<p>不懂就问，self.ws=&#39;null&#39;，python中没有null，请问这个写法是正确的吗？</p>2021-09-01</li><br/><li><span>-_-</span> 👍（0） 💬（1）<p>elif api_type==&#39;http&#39;: self.ws=&#39;null&#39;这边为啥要加self.ws=&#39;null&#39;这边不加有什么影响吗既然是http为什么要写这一行是为了迎合析构函数吗</p>2020-07-30</li><br/><li><span>雪糕</span> 👍（0） 💬（1）<p>from common import Common 运行时报错：ModuleNotFoundError: No module named &#39;common&#39;
 代码里确实没有小写的common模块，请问老师这是怎么回事呢？</p>2020-06-17</li><br/><li><span>博彦-孙文</span> 👍（0） 💬（1）<p>你好老师，我现在面临一个问题，RPC接口怎么用脚本实现接口测试？目前这类接口是蚂蚁的，属于人家的东西，Python中没有这样的工具包</p>2020-04-25</li><br/><li><span>aoe</span> 👍（0） 💬（1）<p>老师的故事很有趣</p>2020-02-18</li><br/><li><span>Ruby | 成长精进</span> 👍（0） 💬（1）<p>ws消息通过jmeter请求发送成功了，但是聊天窗口没有收到消息，请问会是什么原因，现在遇到这个问题，求解中</p>2020-02-17</li><br/><li><span>Fredo</span> 👍（0） 💬（3）<p>你好，我想问一下这里做陌生的协议接口测试，测试人员参考的依据是什么文档，我们怎么得知我们测试的接口准确性呢？</p>2020-02-14</li><br/>
 </ul>

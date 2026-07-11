@@ -39,7 +39,7 @@ fn main() {
             println!("Hello from my custom thread: {}!", thread::current().name().unwrap());
         });
     }
-   
+
     pool.join();
 }
 ```
@@ -94,12 +94,12 @@ fn main() {
     pool.execute(|| println!("bar"));
 
     pool.join();
-    
+
     println!("active_count: {}", pool.active_count());
     println!("queued_count: {}", pool.queued_count());
     println!("max_count: {}", pool.max_count());
-    println!("panic_count: {}", pool.panic_count()); 
-     
+    println!("panic_count: {}", pool.panic_count());
+
 }
 ```
 

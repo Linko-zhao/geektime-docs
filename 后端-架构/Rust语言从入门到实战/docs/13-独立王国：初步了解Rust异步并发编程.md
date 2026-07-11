@@ -18,7 +18,7 @@ Rust其实也差不多，它用类似的方式引入了 `async/.await` 关键字
 
 ```plain
 async fn foo() {
-  
+
 }
 ```
 
@@ -32,7 +32,7 @@ fn foo() {
 }
 
 fn foo() {
-    async move { 
+    async move {
       // 加move，类似闭包，明确标识把用到的环境变量移动进来
     };
 }
@@ -181,7 +181,7 @@ tokio = { version = "1", features = ["full"] }
 
 ```plain
 #[tokio::main]      // 这个是tokio库里面提供的一个属性宏标注
-async fn main() {   // 注意 main 函数前面有 async 
+async fn main() {   // 注意 main 函数前面有 async
     println!("Hello world");
 }
 ```
@@ -267,7 +267,7 @@ async fn doit() -> std::io::Result<()> {
     let mut file = File::open("foo.txt").await.unwrap();  // 打开文件
     let mut contents = vec![];
     // 将文件内容读到contents动态数组里面，注意传入的是可变引用
-    file.read_to_end(&mut contents).await.unwrap();  
+    file.read_to_end(&mut contents).await.unwrap();
     println!("len = {}", contents.len());
     Ok(())
 }
@@ -382,7 +382,7 @@ use tokio::task;
 #[tokio::main]
 async fn main() {
     // 在这里执行异步任务
-    let task_a = task::spawn(async {    
+    let task_a = task::spawn(async {
         "hello world!"
     });
     // ...
@@ -493,5 +493,6 @@ async runtime &#47; 异步运行时
 - main 不能是 async 的 =&gt; main 里头不能有 await =&gt; 那 main 里写啥来驱动 async fn &#47; async block?
 - 这时就需要一个 async runtime &#47; 异步运行时
 - 简单来说就是一个可以写在 main 里的 await
+
 </p>2023-12-19</li><br/><li><span>哄哄</span> 👍（0） 💬（1）<p>请问，tokio::task::spawn和tokio::spawn的区别</p>2023-12-02</li><br/><li><span>Geek_72807e</span> 👍（0） 💬（2）<p>请问老师，如果crateA为crateB1.1版本实现了一个trait，而我的项目中依赖了crateB1.0版本，那么这个trait会失效吗？还有，我奇怪的是如果一个struct的trait分散在各个crate中，怎么能让这些trait都生效呢……</p>2023-11-17</li><br/><li><span>Apa琦</span> 👍（0） 💬（1）<p>tokio是完全使用操作系统的api实现的异步，那rust底层就没有提供异步的方法么。</p>2023-11-17</li><br/><li><span>刘丹</span> 👍（0） 💬（1）<p>请问老师，如果异步函数返回的是 Result，那么就必须在 .await 后面继续调用 .unwrap() ？在实际项目里，有没有不使用 unwrap() 的写法吗？</p>2023-11-17</li><br/><li><span>Calvin</span> 👍（1） 💬（0）<p>老师，是 JoinHandle 而不是 JoinHandler!</p>2024-04-12</li><br/><li><span>chai</span> 👍（0） 💬（0）<p>&quot;独立王国“是相对于rust同步机制来说的，在异步机制中，对其对应的同步机制，都重新实现了一遍，例如文件io、网络io等</p>2024-12-02</li><br/><li><span>独钓寒江</span> 👍（0） 💬（0）<p>比如示例里，我们就把这个新的任务命名为 task_a，它的类型是 JoinHandler。在用 spawn() 创建 task_a 后，这个新任务就立即执行。--&gt; 不是应该碰到await才执行吗？</p>2024-06-22</li><br/>
 </ul>

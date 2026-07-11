@@ -63,7 +63,7 @@ public class Test {
 
 ```java
 public interface BeanPostProcessor {
-    Object postProcessBeforeInitialization(Object bean, String beanName) throws 
+    Object postProcessBeforeInitialization(Object bean, String beanName) throws
 BeansException;
 }
 ```
@@ -117,7 +117,7 @@ this.getBeanFactory().getBean(fieldName);
                         field.set(bean, autowiredObj);
                         System.out.println("autowire " + fieldName + " for bean 
 " + beanName);
-                    } 
+                    }
                 }
             }
         }
@@ -172,8 +172,8 @@ ConcurrentHashMap<>(256);
         for (String beanName : beanDefinitionNames) {
             try {
                 getBean(beanName);
-            } 
-        } 
+            }
+        }
     }
     @Override
     public Object getBean(String beanName) throws BeansException {
@@ -208,10 +208,10 @@ ConcurrentHashMap<>(256);
         Method method = null;
         try {
             method = clz.getMethod(beanDefinition.getInitMethodName());
-        } 
+        }
         try {
             method.invoke(obj);
-        } 
+        }
     }
     @Override
     public Boolean containsBean(String name) {
@@ -228,7 +228,7 @@ beanDefinition) {
         if (!beanDefinition.isLazyInit()) {
             try {
                 getBean(name);
-            } 
+            }
         }
     }
     @Override
@@ -265,7 +265,7 @@ beanDefinition) {
         this.earlySingletonObjects.put(beanDefinition.getId(), obj);
         try {
             clz = Class.forName(beanDefinition.getClassName());
-        } 
+        }
         //完善bean，主要是处理属性
         populateBean(beanDefinition, clz, obj);
         return obj;
@@ -312,9 +312,9 @@ constructorArgumentValue.getValue());
                 try {
                     con = clz.getConstructor(paramTypes);
                     obj = con.newInstance(paramValues);
-                } 
+                }
             }
-        } 
+        }
         System.out.println(beanDefinition.getId() + " bean created. " + 
 beanDefinition.getClassName() + " : " + obj.toString());
         return obj;
@@ -357,7 +357,7 @@ propertyValues.getPropertyValueList().get(i);
                 } else {//is ref, create the dependent beans
                     try {
                         paramTypes[0] = Class.forName(pType);
-                    } 
+                    }
                     try {//再次调用getBean创建ref的bean实例
                         paramValues[0] = getBean((String) pValue);
                     }
@@ -368,10 +368,10 @@ propertyValues.getPropertyValueList().get(i);
                 Method method = null;
                 try {
                     method = clz.getMethod(methodName, paramTypes);
-                } 
+                }
                 try {
                     method.invoke(obj, paramValues);
-                } 
+                }
             }
         }
     }
@@ -489,7 +489,7 @@ XmlBeanDefinitionReader(beanFactory);
         if (isRefresh) {
             try {
                 refresh();
-            } 
+            }
         }
     }
 
@@ -642,3 +642,4 @@ else {
 关于课后题：
 可以实现，这部分在 Processor 部分进行了解耦合，只要实现相关注解的 Processor，并在 Context 中进行加载，即可。</p>2023-03-29</li><br/>
 </ul>
+```

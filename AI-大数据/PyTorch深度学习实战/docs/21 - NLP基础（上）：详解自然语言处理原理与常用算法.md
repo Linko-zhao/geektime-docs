@@ -62,8 +62,8 @@ jieba的使用也很方便，我来演示一下：
 import jieba
 text = "极客时间棒呆啦"
 # jieba.cut得到的是generator形式的结果
-seg = jieba.cut(text)  
-print(' '.join(seg)) 
+seg = jieba.cut(text)
+print(' '.join(seg))
 
 # Get： 极客 时间 棒呆 啦
 ```
@@ -74,8 +74,8 @@ print(' '.join(seg))
 import jieba.posseg as posseg
 text = "一天不看极客时间我就浑身难受"
 # 形如pair('word, 'pos')的结果
-seg = posseg.cut(text)  
-print([se for se in seg]) 
+seg = posseg.cut(text)
+print([se for se in seg])
 # Get [pair('一天', 'm'), pair('不', 'd'), pair('看', 'v'), pair('极客', 'n'), pair('时间', 'n'), pair('我', 'r'), pair('就', 'd'), pair('浑身', 'n'), pair('难受', 'v')]
 ```
 
@@ -247,13 +247,17 @@ tf-idf算法是建立在这样一个假设之上的：对区别文档最有意�
 from nltk import TextCollection
 
 sents=[&#39;i like jike&#39;,&#39;i want to eat apple&#39;,&#39;i like lady gaga&#39;]
+
 # 首先进行分词
+
 sents=[word_tokenize(sent) for sent in sents]
 
 # 构建语料库
+
 corpus=TextCollection(sents)
 
 # 计算IDF
+
 idf=corpus.idf(&#39;like&#39;)  
 print(idf)#0.4054651081081644
 请问这个idf值应该怎么算呢？如果按照公式，文档总数为3, 包含词条‘like’的文档数为2，分母再加上1，那么idf=ln(3&#47;(2+1)=0?? 为什么会跟结果不符合呢？</p>2021-12-16</li><br/><li><span>John(易筋)</span> 👍（0） 💬（1）<p>方老师，最后一段代码有误，for少了in， input_content 应该是texts。修正后如下
@@ -263,20 +267,26 @@ import jieba.posseg as jp
 import jieba
 
 texts = [line.strip() for line in open(&#39;input.txt&#39;, &#39;r&#39;)]
+
 # 老规矩，先分词
+
 words_list = []
 for text in texts:
-  words = [w.word for w in jp.cut(text)]
-  words_list.append(words)
+words = [w.word for w in jp.cut(text)]
+words_list.append(words)
 
 # 构建文本统计信息, 遍历所有的文本，为每个不重复的单词分配序列id，同时收集该单词出现的次数
+
 dictionary = corpora.Dictionary(words_list)
 
 # 构建语料，将dictionary转化为一个词袋。
+
 # corpus是一个向量的列表，向量的个数就是文档数。你可以输出看一下它内部的结构是怎样的。
+
 corpus = [dictionary.doc2bow(words) for words in words_list]
 
 # 开始训练LDA模型
+
 lda_model = models.ldamodel.LdaModel(corpus=corpus, num_topics=8, id2word=dictionary, passes=10)</p>2022-09-09</li><br/><li><span>思勇</span> 👍（0） 💬（1）<p>LDA模型示例无法跑通，从网上找了一个，可以跑： https:&#47;&#47;zhuanlan.zhihu.com&#47;p&#47;134161509</p>2022-06-22</li><br/><li><span>亚林</span> 👍（0） 💬（1）<p>nltk 计算TF-IDF的时候，如果是无限个文档或是很大量的文档，这改怎么玩类</p>2022-05-31</li><br/><li><span>官</span> 👍（5） 💬（0）<p>只用TF-IDF的话，在不设置停用词的情况，有很多常见的冠词还有谓语动词出现的次数会非常高，比如 is the ，或者汉语“是”，“我”等。而在研究段落主题或者文章含义的时候，这些词实际含义并不大，所以在使用TF-IDF之前需要对文本进行一些预处理。</p>2021-11-30</li><br/><li><span>Sam Wang</span> 👍（2） 💬（0）<p>TFIDF缺少了semantic meaning </p>2021-12-10</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-12-10</li><br/><li><span>Matthew</span> 👍（0） 💬（0）<p>离线下载安装NLTK的nltk_data数据包：
 https:&#47;&#47;blog.csdn.net&#47;qq_43140627&#47;article&#47;details&#47;103895811
 

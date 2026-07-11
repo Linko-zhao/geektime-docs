@@ -138,7 +138,7 @@ aeProcessEvents函数实现的主要功能，包括捕获事件、判断事件�
 int aeProcessEvents(aeEventLoop *eventLoop, int flags)
 {
     int processed = 0, numevents;
- 
+
     /* 若没有事件处理，则立刻返回*/
     if (!(flags & AE_TIME_EVENTS) && !(flags & AE_FILE_EVENTS)) return 0;
     /*如果有IO事件发生，或者紧急的时间事件发生，则开始处理*/
@@ -149,7 +149,7 @@ int aeProcessEvents(aeEventLoop *eventLoop, int flags)
     if (flags & AE_TIME_EVENTS)
         processed += processTimeEvents(eventLoop);
     /* 返回已经处理的文件或时间*/
-    return processed; 
+    return processed;
 }
 ```
 
@@ -332,11 +332,11 @@ Nginx 采用多 Reactor 多进程模型，不过与标准的多 Reactor 多进�
 
 以 epoll 举例，aeApi 是抽象层，不同平台选用不通的 IO 复用 API。
 
-aeCreateEventLoop &lt;---&gt; aeApiCreate   &lt;---&gt; epoll_create
-aeCreateFileEvent &lt;---&gt; aeApiAddEvent &lt;---&gt; epoll_ctl    
-aeProcessEvents   &lt;---&gt; aeApiPoll     &lt;---&gt; epoll_wait   </p>2022-02-22</li><br/><li><span>码小呆</span> 👍（2） 💬（0）<p>只知道netty用过Reactor模型，看了评论学到了</p>2021-08-18</li><br/><li><span>阿豪</span> 👍（1） 💬（5）<p>主循环这样不断执行，怎么保证不耗尽cpu ？理论上这个cpu 会一直处于忙碌状态。</p>2021-12-18</li><br/><li><span>曾轼麟</span> 👍（1） 💬（0）<p>上篇文章回答的时候自己提到的-Redis基于多种IO复用实现了同一方法但是多套代码文件的思路，没想到这期老师就提到了。回答老师的问题：还有什么软件系统使用了Reactor模型？
+aeCreateEventLoop &lt;---&gt; aeApiCreate &lt;---&gt; epoll_create
+aeCreateFileEvent &lt;---&gt; aeApiAddEvent &lt;---&gt; epoll_ctl  
+aeProcessEvents &lt;---&gt; aeApiPoll &lt;---&gt; epoll_wait </p>2022-02-22</li><br/><li><span>码小呆</span> 👍（2） 💬（0）<p>只知道netty用过Reactor模型，看了评论学到了</p>2021-08-18</li><br/><li><span>阿豪</span> 👍（1） 💬（5）<p>主循环这样不断执行，怎么保证不耗尽cpu ？理论上这个cpu 会一直处于忙碌状态。</p>2021-12-18</li><br/><li><span>曾轼麟</span> 👍（1） 💬（0）<p>上篇文章回答的时候自己提到的-Redis基于多种IO复用实现了同一方法但是多套代码文件的思路，没想到这期老师就提到了。回答老师的问题：还有什么软件系统使用了Reactor模型？
 答：
-    最典型的就是netty，java靠netty得以实现了高性能的服务
+最典型的就是netty，java靠netty得以实现了高性能的服务
 
 总结：
 本篇文章老师主要介绍了Redis是如何实现Reactor模型，其本质上就是围绕三个事件的实现【连接请求，读事件，写事件】，而Redis为了方便实现，封装了事件驱动框架aeEventLoop，其本质上是一个不断处理事件的循环。能同时分发处理来自成百上千个客户端的读，写，连接等请求。

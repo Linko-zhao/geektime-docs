@@ -60,7 +60,7 @@ stock_data = stock_data[(stock_data['日期'] >= start_date) & (stock_data['日�
 ```python
 # 计算日收益率
 stock_data['日收益率'] = stock_data['收盘'].pct_change()
-            
+           
 # 计算年化波动率 (假设一年252个交易日)
 volatility = stock_data['日收益率'].std() * np.sqrt(252) * 100
 ```
@@ -113,7 +113,7 @@ plt.figure(figsize=(15, 8))
 plt.plot(stock_data['日期'], stock_data['收盘'], label=f'{stock_code}')
 
 # 添加关键价格标注
-plt.annotate(f'{stock_code} 起始价: {start_price:.2f}', 
+plt.annotate(f'{stock_code} 起始价: {start_price:.2f}',
             xy=(stock_data['日期'].iloc[0], start_price),
             xytext=(10, 10), textcoords='offset points')
 plt.annotate(f'{stock_code} 结束价: {end_price:.2f}',
@@ -223,12 +223,12 @@ return None
 可调用工具列表：
 get_financial_report:
     根据股票代码列表获取财报数据
-    
+   
     Parameters:
     -----------
     stock_codes : list
         股票代码列表
-    
+   
     Returns:
     --------
     dict
@@ -236,7 +236,7 @@ get_financial_report:
 
 analyze_stocks:
    根据股票代码列表获取股票的起始价格，结束价格，区间涨跌幅，最大回撤，年化波动率
-    
+   
     Parameters:
     -----------
     stock_codes : list
@@ -279,7 +279,7 @@ def llm_call(state):
         SystemMessage(
             content=f"""
 你是一个思路清晰，有条理的金融分析师，必须严格按照以下金融分析计划执行：
-    
+   
 当前金融分析计划：
 {state["plan"]}
 

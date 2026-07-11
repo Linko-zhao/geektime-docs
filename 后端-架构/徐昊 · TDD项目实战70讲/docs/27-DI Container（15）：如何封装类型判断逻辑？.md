@@ -25,7 +25,7 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
     private Constructor<T> injectConstructor;
     private List<Field> injectFields;
     private List<Method> injectMethods;
-    
+
     public InjectionProvider(Class<T> component) {
         if (Modifier.isAbstract(component.getModifiers())) throw new IllegalComponentException();
         this.injectConstructor = getInjectConstructor(component);
@@ -36,7 +36,7 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
         if (injectMethods.stream().anyMatch(m -> m.getTypeParameters().length != 0))
             throw new IllegalComponentException();
     }
-    
+
     @Override
     public T get(Context context) {
         try {
@@ -48,14 +48,14 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
             throw new RuntimeException(e);
         }
     }
-    
+
     @Override
     public List<Type> getDependencies() {
         return concat(concat(stream(injectConstructor.getParameters()).map(Parameter::getParameterizedType),
                         injectFields.stream().map(Field::getGenericType)),
                 injectMethods.stream().flatMap(m -> stream(m.getParameters()).map(Parameter::getParameterizedType))).toList();
     }
-    
+
     private static <T> List<Method> getInjectMethods(Class<T> component) {
         List<Method> injectMethods = traverse(component, (methods, current) -> injectable(current.getDeclaredMethods())
                 .filter(m -> isOverrideByInjectMethod(methods, m))
@@ -63,17 +63,17 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
         Collections.reverse(injectMethods);
         return injectMethods;
     }
-    
+
     private static <T> List<Field> getInjectFields(Class<T> component) {
         return traverse(component, (fields, current) -> injectable(current.getDeclaredFields()).toList());
     }
-    
+
     private static <Type> Constructor<Type> getInjectConstructor(Class<Type> implementation) {
         List<Constructor<?>> injectConstructors = injectable(implementation.getConstructors()).toList();
         if (injectConstructors.size() > 1) throw new IllegalComponentException();
         return (Constructor<Type>) injectConstructors.stream().findFirst().orElseGet(() -> defaultConstructor(implementation));
     }
-    
+
     private static <Type> Constructor<Type> defaultConstructor(Class<Type> implementation) {
         try {
             return implementation.getDeclaredConstructor();
@@ -81,7 +81,7 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
             throw new IllegalComponentException();
         }
     }
-    
+
     private static <T> List<T> traverse(Class<?> component, BiFunction<List<T>, Class<?>, List<T>> finder) {
         List<T> members = new ArrayList<>();
         Class<?> current = component;
@@ -91,37 +91,37 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
         }
         return members;
     }
-    
+
     private static <T extends AnnotatedElement> Stream<T> injectable(T[] declaredFields) {
         return stream(declaredFields).filter(f -> f.isAnnotationPresent(Inject.class));
     }
-    
+
     private static boolean isOverride(Method m, Method o) {
         return o.getName().equals(m.getName()) && Arrays.equals(o.getParameterTypes(), m.getParameterTypes());
     }
-    
+
     private static <T> boolean isOverrideByNoInjectMethod(Class<T> component, Method m) {
         return stream(component.getDeclaredMethods()).filter(m1 -> !m1.isAnnotationPresent(Inject.class)).noneMatch(o -> isOverride(m, o));
     }
-    
+
     private static boolean isOverrideByInjectMethod(List<Method> injectMethods, Method m) {
         return injectMethods.stream().noneMatch(o -> isOverride(m, o));
     }
-    
+
     private static Object[] toDependencies(Context context, Executable executable) {
         return stream(executable.getParameters()).map(p -> toDependency(context, p.getParameterizedType())).toArray(Object[]::new);
     }
-    
+
     private static Object toDependency(Context context, Field field) {
         return toDependency(context, field.getGenericType());
     }
-    
+
     private static Object toDependency(Context context, Type type) {
         return context.get(type).get();
     }
 }
 
-Context.java: 
+Context.java:
 
 package geektime.tdd.di;
 
@@ -145,16 +145,16 @@ import static java.util.List.of;
 
 public class ContextConfig {
     private Map<Class<?>, ComponentProvider<?>> providers = new HashMap<>();
-    
+
     public <Type> void bind(Class<Type> type, Type instance) {
         providers.put(type, (ComponentProvider<Type>) context -> instance);
     }
-    
+
     public <Type, Implementation extends Type>
     void bind(Class<Type> type, Class<Implementation> implementation) {
         providers.put(type, new InjectionProvider<>(implementation));
     }
-    
+
     public Context getContext() {
         providers.keySet().forEach(component -> checkDependencies(component, new Stack<>()));
         return new Context() {
@@ -173,27 +173,27 @@ public class ContextConfig {
             }
         };
     }
-    
+
     private Class<?> getComponentType(Type type) {
         return (Class<?>) ((ParameterizedType) type).getActualTypeArguments()[0];
     }
-    
+
     private boolean isContainerType(Type type) {
         return type instanceof ParameterizedType;
     }
-    
+
     private void checkDependencies(Class<?> component, Stack<Class<?>> visiting) {
         for (Type dependency : providers.get(component).getDependencies()) {
             if (isContainerType(dependency)) checkContainerTypeDependency(component, dependency);
             else checkComponentDependency(component, visiting, (Class<?>) dependency);
         }
     }
-    
+
     private void checkContainerTypeDependency(Class<?> component, Type dependency) {
         if (!providers.containsKey(getComponentType(dependency)))
             throw new DependencyNotFoundException(component, getComponentType(dependency));
     }
-    
+
     private void checkComponentDependency(Class<?> component, Stack<Class<?>> visiting, Class<?> dependency) {
         if (!providers.containsKey(dependency)) throw new DependencyNotFoundException(component, dependency);
         if (visiting.contains(dependency)) throw new CyclicDependenciesFoundException(visiting);
@@ -201,7 +201,7 @@ public class ContextConfig {
         checkDependencies(dependency, visiting);
         visiting.pop();
     }
-    
+
     interface ComponentProvider<T> {
         T get(Context context);
         default List<Type> getDependencies() {
@@ -215,11 +215,12 @@ public class ContextConfig {
 
 - 无需构造的组件——组件实例
 - 如果注册的组件不可实例化，则抛出异常
-  
+
   - 抽象类
   - 接口
+
 - 构造函数注入
-  
+
   - 无依赖的组件应该通过默认构造函数生成组件实例
   - 有依赖的组件，通过Inject标注的构造函数生成组件实例
   - 如果所依赖的组件也存在依赖，那么需要对所依赖的组件也完成依赖注入
@@ -227,20 +228,23 @@ public class ContextConfig {
   - 如果组件没有Inject标注的构造函数，也没有默认构造函数（新增任务）
   - 如果组件需要的依赖不存在，则抛出异常
   - 如果组件间存在循环依赖，则抛出异常
+
 - 字段注入
-  
+
   - 通过Inject标注将字段声明为依赖组件
   - 如果字段为final则抛出异常
   - 依赖中应包含Inject Field声明的依赖
+
 - 方法注入
-  
+
   - 通过Inject标注的方法，其参数为依赖组件
   - 通过Inject标注的无参数方法，会被调用
   - 按照子类中的规则，覆盖父类中的Inject方法
   - 如果方法定义类型参数，则抛出异常
   - 依赖中应包含Inject Method声明的依赖
+
 - 对Provider类型的依赖
-  
+
   - 从容器中取得组件的Provider（新增任务）
   - 注入构造函数中可以声明对于Provider的依赖
   - 注入字段中可以声明对于Provider的依赖
@@ -248,20 +252,23 @@ public class ContextConfig {
   - 将构造函数中的Provider加入依赖（新增任务）
   - 将字段中的Provider加入依赖（新增任务）
   - 将方法中的Provider加入依赖（新增任务）
+
 - 自定义Qualifier的依赖
-  
+
   - 注册组件时，可额外指定Qualifier
   - 注册组件时，可从类对象上提取Qualifier
   - 寻找依赖时，需同时满足类型与自定义Qualifier标注
   - 支持默认Qualifier——Named
+
 - Singleton生命周期
-  
+
   - 注册组件时，可额外指定是否为Singleton
   - 注册组件时，可从类对象上提取Singleton标注
   - 对于包含Singleton标注的组件，在容器范围内提供唯一实例
   - 容器组件默认不是Single生命周期
+
 - 自定义Scope标注
-  
+
   - 可向容器注册自定义Scope标注的回调
 
 ## 视频演示

@@ -239,10 +239,10 @@ root@c340ba5cb9de:&#47;#
 
 shell2 # # .&#47;execve.bt
 Attaching 3 probes...
-NETNS          CONTAINER              PPID     PID     COMM         ARGS
-4026531993   VM-56-211-centos   799603 181059 bash            docker exec -ti vibrant_jepsen bash
+NETNS CONTAINER PPID PID COMM ARGS
+4026531993 VM-56-211-centos 799603 181059 bash docker exec -ti vibrant_jepsen bash
 ...
-4026532351   c340ba5cb9de         181078   181083 runc:[2:INIT]   bash
+4026532351 c340ba5cb9de 181078 181083 runc:[2:INIT] bash
 
 具体源码：
 ======================================
@@ -255,20 +255,20 @@ NETNS          CONTAINER              PPID     PID     COMM         ARGS
 &#47;&#47;#include &lt;linux&#47;pid_namespace.h&gt;
 #include &lt;net&#47;net_namespace.h&gt;
 
-BEGIN 
+BEGIN
 {
-  printf(&quot;%-12s %-18s %-6s %-6s %-16s %s\n&quot;, &quot;NETNS&quot;, &quot;CONTAINER&quot;, &quot;PPID&quot;, &quot;PID&quot;, &quot;COMM&quot;, &quot;ARGS&quot;);
+printf(&quot;%-12s %-18s %-6s %-6s %-16s %s\n&quot;, &quot;NETNS&quot;, &quot;CONTAINER&quot;, &quot;PPID&quot;, &quot;PID&quot;, &quot;COMM&quot;, &quot;ARGS&quot;);
 }
 
 tracepoint:syscalls:sys_enter_execve,
 tracepoint:syscalls:sys_enter_execveat
 {
-  $task = (struct task_struct *)curtask;
+$task = (struct task_struct *)curtask;
   $netns = $task-&gt;nsproxy-&gt;net_ns-&gt;ns.inum;
   &#47;&#47;$pidns = $task-&gt;nsproxy-&gt;pid_ns_for_children-&gt;ns.inum;
   $cname = $task-&gt;nsproxy-&gt;uts_ns-&gt;name.nodename;
   printf(&quot;%-12ld %-18s %-6d %-6d %-16s&quot;, (uint64)$netns, $cname, curtask-&gt;parent-&gt;pid, pid, comm);
-  join(args-&gt;argv);
+join(args-&gt;argv);
 }</p>2022-02-10</li><br/><li><span>写点啥呢</span> 👍（5） 💬（1）<p>本节课是关于eBPF在安全方面的使用，微博上看到有人发的这个rookit：https:&#47;&#47;weibo.com&#47;tv&#47;show&#47;1034:4718242451882158?from=old_pc_videoshow，因此我对eBPF如何保证自身安全性很好奇，想请教下老师对于系统来说eBPF是一个两面利器，它自身设计与实现，还有在使用中该如何注意避免引入安全问题呢？
 
 另外像bpf_send_signal辅助函数能够通过信号杀死进程，这是不是一种类似变成语言的unsafe方法，应该在实际中谨慎使用呢？
@@ -276,7 +276,7 @@ tracepoint:syscalls:sys_enter_execveat
 谢谢老师。</p>2022-02-09</li><br/><li><span>莫名</span> 👍（3） 💬（1）<p>1、曾使用过 sysdig，老版本通过插入内核模块的方式进行安全审计。后来 sysdig 支持了 eBPF driver，主要通过追踪系统调用分析可能的安全隐患。sysdig eBPF driver 实现比较简单，一共十几个 program，统一放在 probe.c 源文件，里面的思路借鉴下还是不错的。
 2、觉得需要在 bash 自身上做手脚，比如把 bash 软链接到一个脚本文件，记录下 bash 执行记录，然后 直接 exit。或者修改 bash 配置文件 .bashrc，文件末尾直接 exit。两种方法都有局限性，如果被识破可以很容易绕过去。</p>2022-02-10</li><br/><li><span>Geek_89541f</span> 👍（0） 💬（2）<p>请问我在阿里云的虚拟机（centos系统，内核版本4.18)中使用ip link加载xdp程序，若指定xdpdrv模式会报错，xdpgeneric可以。这是为啥？虚拟网卡只能使用generic模式吗？这样性能不能满足生产需求。</p>2022-02-09</li><br/><li><span>Bachue Zhou</span> 👍（0） 💬（0）<p>如果运行 bpftrace 找不到 BEGIN symbol，例如出现：
 ERROR: Could not resolve symbol: &#47;proc&#47;self&#47;exe:BEGIN_trigger
-就运行 
+就运行
 sudo apt install bpftrace-dbgsym
 就行了哈</p>2023-04-09</li><br/><li><span>郑海成</span> 👍（0） 💬（0）<p>https:&#47;&#47;elixir.bootlin.com&#47;linux&#47;v5.13&#47;source&#47;include&#47;linux&#47;sched.h#L657 老师，bootlin这个网站是有什么要求吗？为什么我所有的代码link都显示 &quot;This file does not exist.&quot;呢？</p>2022-04-13</li><br/>
 </ul>

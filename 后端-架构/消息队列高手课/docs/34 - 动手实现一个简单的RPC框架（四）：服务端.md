@@ -123,7 +123,7 @@ public Command handle(Command requestCommand) {
 3. 找到服务提供者之后，利用Java反射机制调用服务的对应方法；
 4. 把结果封装成响应命令并返回，在RequestInvocation中，它会把这个响应命令发送给客户端。
 
-再来看成员变量serviceProviders，它的定义是：Map&lt;String/*service name*/, Object/*service provider*/&gt; serviceProviders。它实际上就是一个Map，Key就是服务名，Value就是服务提供方，也就是服务实现类的实例。这个Map的数据从哪儿来的呢？我们来看一下RpcRequestHandler这个类的定义：
+再来看成员变量serviceProviders，它的定义是：Map&lt;String/_service name_/, Object/_service provider_/&gt; serviceProviders。它实际上就是一个Map，Key就是服务名，Value就是服务提供方，也就是服务实现类的实例。这个Map的数据从哪儿来的呢？我们来看一下RpcRequestHandler这个类的定义：
 
 ```
 @Singleton
@@ -189,5 +189,6 @@ workers.execute(() -&gt; {
 首先：helloServiceapi 项目中 建了一个接口   这个接口在服务端去实现   客户端也用到了~ 问下这个接口 在正常的使用中 都是服务端定义好  去给客户端 去使用的么  
 第二点：就是在服务端  服务端启动的时候  这个demo 中 是自己去实例化了HelloServiceImpl对象  如果在生产环境中 是不是启动的时候 通过反射 去实例化 那些特定的对外提供的服务  HelloService这样的接口 是不是也要做下标识  是这个思路么
 最后 给自己立下个flag  这个月 自己会去 用netcore+netty+zookeeper 去实现一个RPC  多谢老师 </p>2019-11-08</li><br/><li><span>kim118000</span> 👍（0） 💬（3）<p>Method method = serviceProvider.getClass().getMethod(rpcRequest.getMethodName(), String.class);
-每次请求都用反射获取method，有没有性能损耗，是不是存起来，请问老师这部分生产级别怎么处理的？</p>2019-10-15</li><br/><li><span>东方奇骥</span> 👍（5） 💬（1）<p>这里注册中心信息是保存在本地文件中，如果保存在数据库，就要用数据库锁，或者zookeeper、redis的分布式锁。感谢老师，工作三年了，没写过框架，这个专栏收获不小！实战篇就超值了。</p>2020-01-21</li><br/><li><span>亚洲舞王.尼古拉斯赵四</span> 👍（3） 💬（0）<p>看过了这四节rpc的课程之后，再去看了看中KafkaClient及实现的源码，和本篇讲述思想都是相似的，玥哥厉害！还是思想重要，同时觉得期末测试中的状态转换图也是中间件的基本中的基本，重要中的重要的点，KafkaClient这个接口中很多方法都是基于状态字段来给予的返回。（为什么提起状态转换图我就想到了线程的状态转换~~☺️</p>2019-11-11</li><br/><li><span>任鹏斌</span> 👍（3） 💬（0）<p>代码拿下来刚消化了一部分，慢慢消化，希望能做一些扩展，一转眼课程要结束了，老师辛苦！</p>2019-10-13</li><br/><li><span>leslie</span> 👍（1） 💬（1）<p>动手要欠账了：大致明白了RPC整个过程需要什么了，啃几遍梳理一下-看看各个是怎么实现的啃明白再去思考Go怎么实现。。。</p>2019-10-12</li><br/><li><span>颜如玉</span> 👍（0） 💬（0）<p>Method method = serviceProvider.getClass().getMethod(rpcRequest.getMethodName(), String.class);注册中心不是只返回物理地址嘛，怎么还能调用服务端呢</p>2024-02-16</li><br/><li><span>Asha</span> 👍（0） 💬（1）<p>老师，有个问题，不知道还能不能到达你那，我们在进阶篇中讲到了应用层协议，其实就是半包处理，为什么在rpc这里没有这部分的处理</p>2021-07-23</li><br/><li><span>grey927</span> 👍（0） 💬（0）<p>老师，单例模式的实现，如果用Effective Java中推荐的枚举单例是否会更好一些。</p>2020-05-12</li><br/>
+每次请求都用反射获取method，有没有性能损耗，是不是存起来，请问老师这部分生产级别怎么处理的？</p>2019-10-15</li><br/><li><span>东方奇骥</span> 👍（5） 💬（1）<p>这里注册中心信息是保存在本地文件中，如果保存在数据库，就要用数据库锁，或者zookeeper、redis的分布式锁。感谢老师，工作三年了，没写过框架，这个专栏收获不小！实战篇就超值了。</p>2020-01-21</li><br/><li><span>亚洲舞王.尼古拉斯赵四</span> 👍（3） 💬（0）<p>看过了这四节rpc的课程之后，再去看了看中KafkaClient及实现的源码，和本篇讲述思想都是相似的，玥哥厉害！还是思想重要，同时觉得期末测试中的状态转换图也是中间件的基本中的基本，重要中的重要的点，KafkaClient这个接口中很多方法都是基于状态字段来给予的返回。（为什么提起状态转换图我就想到了线程的状态转换~~☺️</p>2019-11-11</li><br/><li><span>任鹏斌</span> 👍（3） 💬（0）<p>代码拿下来刚消化了一部分，慢慢消化，希望能做一些扩展，一转眼课程要结束了，老师辛苦！</p>2019-10-13</li><br/><li><span>leslie</span> 👍（1） 💬（1）<p>动手要欠账了：大致明白了RPC整个过程需要什么了，啃几遍梳理一下-看看各个是怎么实现的啃明白再去思考Go怎么实现。。。</p>2019-10-12</li><br/><li><span>颜如玉</span> 👍（0） 💬（0）<p>Method method = serviceProvider.getClass().getMethod(rpcRequest.getMethodName(), String.class);
+注册中心不是只返回物理地址嘛，怎么还能调用服务端呢</p>2024-02-16</li><br/><li><span>Asha</span> 👍（0） 💬（1）<p>老师，有个问题，不知道还能不能到达你那，我们在进阶篇中讲到了应用层协议，其实就是半包处理，为什么在rpc这里没有这部分的处理</p>2021-07-23</li><br/><li><span>grey927</span> 👍（0） 💬（0）<p>老师，单例模式的实现，如果用Effective Java中推荐的枚举单例是否会更好一些。</p>2020-05-12</li><br/>
 </ul>

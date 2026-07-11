@@ -44,7 +44,7 @@ if(!value.empty()&&value.contains("tom")){
   }
   int count=0;
   for(int i=0;i<strlen(name);i++){
-    ... // do something  
+    ... // do something
   }
 }
 ```
@@ -72,7 +72,7 @@ if (!value.empty() && value.contains("tom")) {   // &&两边有空格
   int count = 0;                                  // 等号两边有空格
                                                   // 新增空行分隔段落
   for(int i = 0; i < strlen(name); i++){          // =;<处有空格
-    ... // do something  
+    ... // do something
   }
 }
 ```
@@ -125,8 +125,8 @@ class FilePath final                 // 类名，首字母大写
 {
 public:
   void set_path(const string& str);    // 函数，全小写
-private:  
-  string m_path;                      // 成员变量，m_前缀 
+private:
+  string m_path;                      // 成员变量，m_前缀
   int    m_level;                     // 成员变量，m_前缀
 };
 
@@ -236,21 +236,23 @@ int get_value(const T& v);
 2、一段代码的功能，不仅仅是完成一个任务，也是一种思想的传播，因此注释担当着传递信息的功能，要养成良好的注释习惯和明了易懂注释风格。
 
 3、留白的艺术深受启发，既给代码空间留下了闲余，给视觉留下了美感，也给代码的阅读增添了节奏，更是给大脑腾出足够的思考空间。
-</p>2020-05-09</li><br/><li><span>Carlos</span> 👍（15） 💬（4）<p>哈哈, 容我先说一句题外话, 我作为一个 c++ 入门新手, 昨天和前天还真的读了一份 &quot;公司色彩很重&quot; 的 code style guide 😂(虽然没完全读懂). 
+</p>2020-05-09</li><br/><li><span>Carlos</span> 👍（15） 💬（4）<p>哈哈, 容我先说一句题外话, 我作为一个 c++ 入门新手, 昨天和前天还真的读了一份 &quot;公司色彩很重&quot; 的 code style guide 😂(虽然没完全读懂).
 
-1. 今天文章中的 &quot;留白&quot;, 和 &quot;命名&quot; 我倒是注意到了, 但是可能因为我目前写的 c++ 代码基本上都是不超过 50 行的练习文件, 所以注释这一点我没有注意到, 从现在开始注意. 
-2. 我觉得另一个重要的用法是把一些代码备注掉. 可能是为了 debug 方便(如果新代码错了, 换回旧代码, 程序还能运行), 也可能是为了以后功能拓展方便(直接把相关模块取消备注就能用了). 
+1. 今天文章中的 &quot;留白&quot;, 和 &quot;命名&quot; 我倒是注意到了, 但是可能因为我目前写的 c++ 代码基本上都是不超过 50 行的练习文件, 所以注释这一点我没有注意到, 从现在开始注意.
+2. 我觉得另一个重要的用法是把一些代码备注掉. 可能是为了 debug 方便(如果新代码错了, 换回旧代码, 程序还能运行), 也可能是为了以后功能拓展方便(直接把相关模块取消备注就能用了).
 
-补充一条我前天刚学会的 code style: 
+补充一条我前天刚学会的 code style:
 
-All header files should have #define guards to prevent multiple inclusion. The format of the symbol name should be &lt;PROJECT&gt;_&lt;PATH&gt;_&lt;FILE&gt;_H_</p>2020-05-09</li><br/><li><span>winsummer</span> 👍（12） 💬（1）<p>老师，函数的注释是写在声明处还是写在定义处好呢</p>2020-05-09</li><br/><li><span>Yaxe</span> 👍（7） 💬（1）<p>昨天上github看cpp_study这个仓库的时候 发现头像莫名熟悉，才知道之前star的注释版nginx也是罗大写的  十分有缘 学习学习！</p>2020-05-09</li><br/><li><span>幻境之桥</span> 👍（7） 💬（1）<p>在此基础上使用 clang-format 统一并减少大部分手工格式化的工作</p>2020-05-09</li><br/><li><span>湫兮如风</span> 👍（5） 💬（2）<p>看完一节的内容一定一定要阅读大家的评论！罗老师这个专栏的氛围真好、质量真高!师生共进!</p>2020-07-01</li><br/><li><span>Geek_0315ca</span> 👍（5） 💬（1）<p>我比较喜欢变量名使用m和g前缀，说明变量的作用域范围；todo注释标注自己未实现的功能和想法💡 ；函数体内部使用空行分离不同的代码片段</p>2020-05-09</li><br/><li><span>yelin</span> 👍（4） 💬（1）<p>特别喜欢匈牙利命名法里的类型前缀，不过现在使用的也基本就是m和g前缀了。我个人特别喜欢空格！很多CPP check，没有空格是会报错的，所以不能说习惯啦，这是规则。
+All header files should have #define guards to prevent multiple inclusion. The format of the symbol name should be &lt;PROJECT&gt;_&lt;PATH&gt;_&lt;FILE&gt;_H_</p>2020-05-09</li><br/><li><span>winsummer</span> 👍（12） 💬（1）<p>老师，函数的注释是写在声明处还是写在定义处好呢</p>2020-05-09</li><br/><li><span>Yaxe</span> 👍（7） 💬（1）<p>昨天上github看cpp_study这个仓库的时候 发现头像莫名熟悉，才知道之前star的注释版nginx也是罗大写的 十分有缘 学习学习！</p>2020-05-09</li><br/><li><span>幻境之桥</span> 👍（7） 💬（1）<p>在此基础上使用 clang-format 统一并减少大部分手工格式化的工作</p>2020-05-09</li><br/><li><span>湫兮如风</span> 👍（5） 💬（2）<p>看完一节的内容一定一定要阅读大家的评论！罗老师这个专栏的氛围真好、质量真高!师生共进!</p>2020-07-01</li><br/><li><span>Geek_0315ca</span> 👍（5） 💬（1）<p>我比较喜欢变量名使用m和g前缀，说明变量的作用域范围；todo注释标注自己未实现的功能和想法💡 ；函数体内部使用空行分离不同的代码片段</p>2020-05-09</li><br/><li><span>yelin</span> 👍（4） 💬（1）<p>特别喜欢匈牙利命名法里的类型前缀，不过现在使用的也基本就是m和g前缀了。我个人特别喜欢空格！很多CPP check，没有空格是会报错的，所以不能说习惯啦，这是规则。
 </p>2020-05-13</li><br/><li><span>hb</span> 👍（4） 💬（1）<p>其实各个语言都有自己的code style， 例如OC就是习惯驼峰命名，基本不用加 &quot;_&quot;</p>2020-05-11</li><br/><li><span>c1rew</span> 👍（3） 💬（1）<p>代码统一规范，推荐一个工具，astyle，命令行或者vscode也有插件，大家提交代码前一键格式化，风格还可以根据配置自定义。</p>2020-05-10</li><br/><li><span>虎皮青椒</span> 👍（3） 💬（1）<p>我觉得如果代码自己把自己写清楚了，比如清晰的布局，贴切的函数和变量名，适当的空行分割等等，注释就不必了。这是上策。
 
 如果不行，那尽量写上规整周全的注释，帮助其他人维护。这是中策。
 
 如果代码写得不行，注释也没有就太糟糕了。</p>2020-05-10</li><br/><li><span>EncodedStar</span> 👍（2） 💬（1）<p>code style 从开始学写代码就注意起来了，之前看初学者的代码都是没有换行或者空格，真的读起来难受。优秀的代码都是可以阅读的，这种代码从结构到逻辑都是让人感觉眼前一亮，而不是一脸懵逼。
 代码除了注释之外，我觉得会写log也比较重要，很多程序不仅仅是再运行前审查代码，还有就是出错时候返回来看代码，这时候你的code style和log里面的内容就为精确排查错误剩下一大笔时间！！！</p>2020-05-18</li><br/><li><span>怪兽</span> 👍（2） 💬（1）<p>我在实践中有几个疑惑，想请教一下老师：
+
 1. 函数参数也是变量，该怎么命名能够直观地知道这个变量是入参，而不是局部变量？
 2. 匈牙利命名法：string str_value;不是更能表示该变量是个字符串吗？
-3. member fucntion要注释的话，建议采用单行&#47;&#47;……， 还是多行 &#47;* @param ……   @return…… *&#47;？</p>2020-05-17</li><br/><li><span>yelin</span> 👍（2） 💬（2）<p>非常认同本文提到的很多观念啊，取百家之长，不过有些公司单位强制使用谷歌规范或者公司规范，对于这一类和自己理念冲突的问题，老师怎么解决</p>2020-05-13</li><br/>
+3. member fucntion要注释的话，建议采用单行&#47;&#47;……， 还是多行 &#47;* @param …… @return…… *&#47;？</p>2020-05-17</li><br/><li><span>yelin</span> 👍（2） 💬（2）<p>非常认同本文提到的很多观念啊，取百家之长，不过有些公司单位强制使用谷歌规范或者公司规范，对于这一类和自己理念冲突的问题，老师怎么解决</p>2020-05-13</li><br/>
+
 </ul>

@@ -57,12 +57,12 @@ function get_filecache_size()
                         read -ra ADDR <<<"$line"
                         inactive=${ADDR[1]}
                         let "items=$items+1"
-                fi  
+                fi
 
 
                 if [ $items -eq 2 ]; then
                         break;
-                fi  
+                fi
         done < $MEM_FILE
 }
 
@@ -190,17 +190,16 @@ $ sar -B 1
 第一次读取文件后，文件内容都是inactive的，只有再次读取这些内容后，才会把它放在active链表上，处于inactive链表上的pagecache在内存紧张是会首先被回收掉，有很多情况下文件内容往往只被读一次，比如日志文件，对于这类典型的one-off文件，它们占用的pagecache需要首先被回收掉；对于业务数据，往往都会读取多次，那么他们就会被放在active链表上，以此来达到保护的目的。
 
 - 如何让它变成 Active 的呢？
-第二次读取后，这些内容就会从inactive链表里给promote到active链表里，这也是评论区里有人提到的二次机会法。
+  第二次读取后，这些内容就会从inactive链表里给promote到active链表里，这也是评论区里有人提到的二次机会法。
 
 - 在什么情况下 Active 的又会变成 Inactive 的呢？
-在内存紧张时，会进行内存回收，回收会把inactive list的部分page给回收掉，为了维持inactive&#47;active的平衡，就需要把active list的部分page给demote到inactive list上，demote的原则也是lru。
+  在内存紧张时，会进行内存回收，回收会把inactive list的部分page给回收掉，为了维持inactive&#47;active的平衡，就需要把active list的部分page给demote到inactive list上，demote的原则也是lru。
 
 - 系统中有哪些控制项可以影响 Inactive 与 Active Page Cache 的大小或者二者的比例？
-min_free_kbytes会影响整体的pagecache大小;vfs_cache_pressure会影响在回收时回收pagecache和slab的比例; 在开启了swap的情况下，swappiness也会影响pagecache的大小；zone_reclaim_mode会影响node的pagecache大小；extfrag_threshold会影响pagecache的碎片情况。
+  min_free_kbytes会影响整体的pagecache大小;vfs_cache_pressure会影响在回收时回收pagecache和slab的比例; 在开启了swap的情况下，swappiness也会影响pagecache的大小；zone_reclaim_mode会影响node的pagecache大小；extfrag_threshold会影响pagecache的碎片情况。
 
 - 对于匿名页而言，当产生一个匿名页后它会首先放在 Active 链表上，请问为什么会这样子？这是合理的吗？
-这是不合理的，内核社区目前在做这一块的改进。具体可以参考https:&#47;&#47;lwn.net&#47;Articles&#47;816771&#47;。
-
+  这是不合理的，内核社区目前在做这一块的改进。具体可以参考https:&#47;&#47;lwn.net&#47;Articles&#47;816771&#47;。
 
 </p>2020-10-11</li><br/><li><span>zwb</span> 👍（21） 💬（3）<p>第二次机会法，避免大量只读一次的文件涌入 active，在需要回收时又从 active 移动到 inactive lru 链表。场景比如编译内核。</p>2020-08-21</li><br/><li><span>x-ray</span> 👍（11） 💬（3）<p>读这个确实需要对一些linux基础概念有一个了解。前几天刚读的时候，我连VFS都没有一个概念，读起来非常吃力，到第二章就看得云里雾里。这两天找了点视频把一些基础概念熟悉了下，今天再来看的时候，就感觉比较容易理解了。不过我有一个疑问，既然mmap映射的效率更高，为什么不都用这个呢？是因为标准IO无法像文件那样提前加载一块内存到PageCache吗？</p>2020-09-15</li><br/><li><span>Geek_162e2a</span> 👍（10） 💬（2）<p>应用开发者的视角
 第一次读写文件，PageCache是inactive的，为什么要这样设计？可能内核底层是采用类似LRU链表的设计来管理PageCache, 如果单纯照搬LRU链表的设计的话，当读大文件的时候会将原本属于热点缓存的PageCache冲刷出去，导致性能波动，因此需要对PageCache进行分类，来避免这个问题，即新读入的文件先进入inactive区域</p>2020-08-27</li><br/><li><span>Geek_circle</span> 👍（9） 💬（1）<p>Memory-Mapped I&#47;O（存储映射 I&#47;O）
@@ -218,6 +217,6 @@ min_free_kbytes会影响整体的pagecache大小;vfs_cache_pressure会影响在�
 10:39:40 AM      0.00      0.00   7963.00      0.00   5471.00      0.00      0.00      0.00      0.00
 ^C
 
-10:39:41 AM      0.00      4.76   1592.86      0.00   4565.48      0.00      0.00      0.00      0.00
-Average:         0.00     10.57   3941.67      0.00   4487.30      0.00      0.00      0.00      0.00</p>2020-12-11</li><br/>
+10:39:41 AM 0.00 4.76 1592.86 0.00 4565.48 0.00 0.00 0.00 0.00
+Average: 0.00 10.57 3941.67 0.00 4487.30 0.00 0.00 0.00 0.00</p>2020-12-11</li><br/>
 </ul>

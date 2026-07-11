@@ -73,21 +73,21 @@ public fun <E> Channel(
     when (capacity) {
         RENDEZVOUS -> {
             if (onBufferOverflow == BufferOverflow.SUSPEND)
-                RendezvousChannel(onUndeliveredElement) 
+                RendezvousChannel(onUndeliveredElement)
             else
-                ArrayChannel(1, onBufferOverflow, onUndeliveredElement) 
+                ArrayChannel(1, onBufferOverflow, onUndeliveredElement)
         }
         CONFLATED -> {
             ConflatedChannel(onUndeliveredElement)
         }
-        UNLIMITED -> LinkedListChannel(onUndeliveredElement) 
-        BUFFERED -> ArrayChannel( 
+        UNLIMITED -> LinkedListChannel(onUndeliveredElement)
+        BUFFERED -> ArrayChannel(
             if (onBufferOverflow == BufferOverflow.SUSPEND) CHANNEL_DEFAULT_CAPACITY else 1,
             onBufferOverflow, onUndeliveredElement
         )
         else -> {
             if (capacity == 1 && onBufferOverflow == BufferOverflow.DROP_OLDEST)
-                ConflatedChannel(onUndeliveredElement) 
+                ConflatedChannel(onUndeliveredElement)
             else
                 ArrayChannel(capacity, onBufferOverflow, onUndeliveredElement)
         }
@@ -192,8 +192,8 @@ private suspend fun sendSuspend(element: E): Unit = suspendCancellableCoroutineR
                 }
                 enqueueResult is Closed<*> -> {
                 }
-                enqueueResult === ENQUEUE_FAILED -> {} 
-                enqueueResult is Receive<*> -> {} 
+                enqueueResult === ENQUEUE_FAILED -> {}
+                enqueueResult is Receive<*> -> {}
                 else -> error("enqueueSend returned $enqueueResult")
             }
         }
@@ -242,7 +242,7 @@ protected open fun pollInternal(): Any? {
 
 // CancellableContinuationImpl
 private fun dispatchResume(mode: Int) {
-    if (tryResume()) return 
+    if (tryResume()) return
     // 5
     dispatch(mode)
 }
@@ -361,6 +361,7 @@ internal open class LinkedListChannel<E>(onUndeliveredElement: OnUndeliveredElem
     }
 }
 ```
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>Paul Shan</span> 👍（9） 💬（1）<p>思考题：LinkedListChannel.offerInternal调用AbstractSendChannel.offerInternal 失败的时候，会把发送的内容持续放到队列中，这样即使接受方没准备好或者不存在，发送方也不会等待，而持续进入可以接收数据并发送的状态。LinkedListChannel.offerSelectInternal调用AbstractSendChannel.offerSelectInternal失败的时候，还是会继续尝试调用这个方法，因为LinkedListChannel只要内存允许，会时刻处于接受数据的状态。
 </p>2022-04-04</li><br/><li><span>EdisonLi</span> 👍（5） 💬（1）<p>要是能开辟一篇实际工作业务场景的使用就更好了。</p>2022-05-08</li><br/><li><span>ACE_Killer09</span> 👍（2） 💬（1）<p>java 阻塞队列 的感觉</p>2022-04-18</li><br/>

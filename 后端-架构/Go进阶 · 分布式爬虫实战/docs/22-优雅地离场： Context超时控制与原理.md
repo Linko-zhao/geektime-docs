@@ -315,7 +315,7 @@ func (sd *sysDialer) dialSingle(ctx context.Context, ra Addr) (c Conn, err error
 		la, _ := la.(*TCPAddr)
     // tcp连接
 		c, err = sd.dialTCP(ctx, la, ra)
-		...		
+		...
 }
 ```
 
@@ -368,15 +368,15 @@ Context 在很大程度上利用了通道的一个特性：通道在 close 时�
 type cancelCtx struct {
 	Context
 
-	mu       sync.Mutex   
-	done     atomic.Value  
-	children map[canceler]struct{} 
+	mu       sync.Mutex
+	done     atomic.Value
+	children map[canceler]struct{}
 	err      error
 }
 
 type timerCtx struct {
 	cancelCtx
-	timer *time.Timer 
+	timer *time.Timer
 
 	deadline time.Time
 }
@@ -390,7 +390,7 @@ cancelCtx第一个字段保留了父Context的信息。children字段则保存�
 
 ```plain
 func (c *cancelCtx) cancel(removeFromParent bool, err error) {
-	
+
 	...
    // 关闭当前通道
 	close(d)

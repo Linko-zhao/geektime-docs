@@ -102,7 +102,7 @@ public abstract class ContainerBase implements Container {
     protected String name = null;
     //父容器
     protected Container parent = null;
-    
+
     //下面是基本的get和set方法
     public abstract String getInfo();
     public ClassLoader getLoader() {
@@ -145,7 +145,7 @@ public abstract class ContainerBase implements Container {
                 throw new IllegalArgumentException("addChild:  Child name '" +
                         child.getName() +
                         "' is not unique");
-            child.setParent((Container) this);  
+            child.setParent((Container) this);
             children.put(child.getName(), child);
         }
     }
@@ -334,7 +334,7 @@ public class ServletWrapper extends ContainerBase{
     //wrapper内含了一个servlet实例和类
     private Servlet instance = null;
     private String servletClass;
-    
+
     public ServletWrapper(String servletClass,ServletContext parent) {
         //以ServletContext为parent
         this.parent = parent;

@@ -453,6 +453,7 @@ static inline CallRecord * popCallRecord(ThreadCallStack *cs) {
 有个让我疑惑的地方是关于“热启动”的概念，我再去看了下 WWDC 上的说法，里面提到热启动应该也包括“启动后退出 App 再启动”这种情况，不知道我下面这段话的理解是否正确：
 
 “And a warm launch is an app where the application is already in memory, either because it&#39;s been launched and quit previously, and it&#39;s still sitting in the discache in the kernel, or because you just copied it over.”
+
 - https:&#47;&#47;developer.apple.com&#47;videos&#47;play&#47;wwdc2016-406&#47;?time=1484
 
 </p>2019-03-14</li><br/><li><span>唯她命</span> 👍（10） 💬（1）<p>hook 了 objc_msgSend 方法，就可以 hook  oc全部方法，这句话我不赞成，看objc源码，你会发现有的oc方法直接通过函数指针调用的,这时候hook 了 objc_msgSend 方法，是没有用的</p>2019-03-14</li><br/><li><span>登品</span> 👍（8） 💬（3）<p>公司项目启动70+的pod库 ，光pre-main时间都要3.x s了

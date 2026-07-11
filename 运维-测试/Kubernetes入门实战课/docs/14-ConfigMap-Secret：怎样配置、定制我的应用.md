@@ -137,9 +137,9 @@ metadata:
   name: user
 
 data:
-  name: cm9vdA==  # root
-  pwd: MTIzNDU2   # 123456
-  db: bXlzcWw=    # mysql
+  name: cm9vdA== # root
+  pwd: MTIzNDU2 # 123456
+  db: bXlzcWw= # mysql
 ```
 
 接下来的创建和查看对象操作和ConfigMap是一样的，使用 `kubectl apply`、`kubectl get`、`kubectl describe`：
@@ -361,23 +361,21 @@ kubectl exec -it vol-pod -- sh
 
 1. 像配置这块儿，有多少个不同类型的配置，就需要定义多少个不同的Volume进行挂载吗？例如ConfigMap 和 Secret 这里挂载了两个Volume。
 
-2. vol-pod   0&#47;1     CrashLoopBackOf   当pod变成这个状态的时候，只能删除了再重新创建吗？ 使用命令 ：kubectl delete -f vol-pod.yml。
+2. vol-pod 0&#47;1 CrashLoopBackOf 当pod变成这个状态的时候，只能删除了再重新创建吗？ 使用命令 ：kubectl delete -f vol-pod.yml。
 
 3. 课外小贴士的最后一条，没太明白，老师能再说说看吗？</p>2022-08-01</li><br/><li><span>郑小鹿</span> 👍（4） 💬（3）<p>课后问题回答：
-1、说一说你对 ConfigMap 和 Secret 这两个对象的理解，它们有什么异同点？
-相同点：
-都可以用来把配置数据和服务程序分离
-都是一种用于存储的API对象
-都以键值对k-v的方式存储数据
-都可以作为数据卷挂载在其他API对象上使用
-都不适合存储大数据，每个 ConfigMap &#47;Secret 最多支持存储1MB的数据，毕竟对内存有消耗
-
+   1、说一说你对 ConfigMap 和 Secret 这两个对象的理解，它们有什么异同点？
+   相同点：
+   都可以用来把配置数据和服务程序分离
+   都是一种用于存储的API对象
+   都以键值对k-v的方式存储数据
+   都可以作为数据卷挂载在其他API对象上使用
+   都不适合存储大数据，每个 ConfigMap &#47;Secret 最多支持存储1MB的数据，毕竟对内存有消耗
 
 不同点：
 ConfigMap一般存储非机密信息
 Secret用于存储机密信息，默认是Base64编码方式对value字符进行处理。
 Secret保存在etcd中内容是未经过加密的，对于Secret资源的权限要做好控制，可以通过RBAC规则来限制或者是使用其他加密方式
-
 
 2、如果我们修改了 ConfigMap&#47;Secret 的 YAML，然后使用 kubectl apply 命令更新对象，那么 Pod 里关联的信息是否会同步更新呢？你可以自己验证看看。
 如果 ConfigMap 是作为环境变量方式使用的，那数据不会被自动更新。 想要更新这些数据需要重新启动 Pod。
@@ -385,8 +383,7 @@ Secret保存在etcd中内容是未经过加密的，对于Secret资源的权限�
 
 1、`echo -n &quot;123456&quot; | base64` 加 -n 仅仅是为了去掉换行符吗，`&quot;123456&quot;` 中并没有换行符，为什么加 -n 与不加 -n 的结果有区别？
 
-2、构建 Pod 的时候，Secret 中的变量会被自动解码，K8S 是如何知道该用何种方式进行解码？需要通过 Secret 对象中的参数进行指定吗？</p>2022-07-23</li><br/><li><span>罗耀龙@坐忘</span> 👍（3） 💬（1）<p>yaml文件还真不好写，我对着课文写minikube运行不了，用老师的一下就过了</p>2022-07-22</li><br/><li><span>aLong</span> 👍（2） 💬（1）<p>1. ConfigMap与Secret很类似，两人使用方式上基本相同。主要不同凸显在数据的编码方式，Secret是base64，ConfigMap是明文。 
-2. 当Secret更新后，通过Volume形式ConfigMap、Secret是会更新的，与其相反就是ENV形式。 ENV形式使用方面比Volume显得方便，无需读取文件。</p>2023-01-10</li><br/><li><span>朱雯</span> 👍（2） 💬（1）<p>尝试修改pod里面的配置，显示为只读，不能和docker一样，直接修改，不然可以测试以下，容器里面修改，会不会改变外面的数据，理论上来说可以修改的话，应该外面的也会被修改，但k8s修改一个值，必须是要通过api-server来修改，所以如果直接修改就会很奇怪，这也应该是为啥这个内容禁止我修改的原因吧。</p>2022-07-27</li><br/><li><span>hiDaLao</span> 👍（2） 💬（1）<p>思考1:
+2、构建 Pod 的时候，Secret 中的变量会被自动解码，K8S 是如何知道该用何种方式进行解码？需要通过 Secret 对象中的参数进行指定吗？</p>2022-07-23</li><br/><li><span>罗耀龙@坐忘</span> 👍（3） 💬（1）<p>yaml文件还真不好写，我对着课文写minikube运行不了，用老师的一下就过了</p>2022-07-22</li><br/><li><span>aLong</span> 👍（2） 💬（1）<p>1. ConfigMap与Secret很类似，两人使用方式上基本相同。主要不同凸显在数据的编码方式，Secret是base64，ConfigMap是明文。2. 当Secret更新后，通过Volume形式ConfigMap、Secret是会更新的，与其相反就是ENV形式。 ENV形式使用方面比Volume显得方便，无需读取文件。</p>2023-01-10</li><br/><li><span>朱雯</span> 👍（2） 💬（1）<p>尝试修改pod里面的配置，显示为只读，不能和docker一样，直接修改，不然可以测试以下，容器里面修改，会不会改变外面的数据，理论上来说可以修改的话，应该外面的也会被修改，但k8s修改一个值，必须是要通过api-server来修改，所以如果直接修改就会很奇怪，这也应该是为啥这个内容禁止我修改的原因吧。</p>2022-07-27</li><br/><li><span>hiDaLao</span> 👍（2） 💬（1）<p>思考1:
 configMap和secret都可以用阿里管理配置信息，都支持env和volume两种形式在pod中使用。不过configMap使用明文保存配置信息，secret采用加密方式保存；
 思考2:
 我的验证结果跟前面几位同学有点不一样，使用env的方式，修改ConfigMap和Secret的YAML然后kubectl apply后pod中关联的信息确实不会同步更新；但如果使用volume的话，这些关联信息是会更新的，只是更新的不及时，猜测后台有一个定时任务负责处理。</p>2022-07-26</li><br/><li><span>Geek_44c03e</span> 👍（1） 💬（1）<p>有个疑问。用cm管理配置文件内容在容器里变成了kv而不是像docker run -v同步文件。这样软件使用上会有问题吧？可以用nginx.conf举例</p>2022-08-18</li><br/>

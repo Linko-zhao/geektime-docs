@@ -23,7 +23,7 @@ HTTP协议，即超文本传输协议Hyper Text Transfer Protocol。它是一个
 ```plain
 GET / HTTP/1.1
 Host: www.baidu.com
-Cookie: BIDUPSID=D6FC148CB0142694E6019498ECE6FA8F; PSTM=1644916942; 
+Cookie: BIDUPSID=D6FC148CB0142694E6019498ECE6FA8F; PSTM=1644916942;
 ...
 Accept-Encoding: gzip, deflate
 Accept-Language: zh-CN,zh;q=0.9

@@ -71,7 +71,7 @@ typedef struct _object {          //定长对象
 } PyObject;
 
 typedef struct {         //变长对象
-    PyObject ob_base;             
+    PyObject ob_base;
     Py_ssize_t ob_size;  //变长部分的项目数量，在申请内存时有确定的值，不再变
 } PyVarObject;
 ```
@@ -150,9 +150,9 @@ typedef struct _typeobject {
     PyObject_VAR_HEAD
     const char *tp_name;  /* 用于打印的名称格式是"<模块>.<名称>" */
     Py_ssize_t tp_basicsize, tp_itemsize; /* 用于申请内存 */
-    
+
     /* 后面还有很多字段，比如用于支持数值计算、序列、映射等操作的函数，用于描述属性、子类型、文档等内容的字段，等等。 */
-    ...  
+    ...
 } PyTypeObject
 ```
 
@@ -246,7 +246,7 @@ class SimpleComplex(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    def __str__(self):  
+    def __str__(self):
         return "x: %d, y: %d" % (self.x, self.y)
     def __add__(self, other):
         return SimpleComplex(self.x + other.x, self.y + other.y)
@@ -280,7 +280,7 @@ Python还有其他几个协议，比如枚举协议和映射协议等，用来�
 ```
 class myclass:
     def __init__(self, x):
-        self.x = x    
+        self.x = x
     def foo(self, b):
         c = self.x + b
         return c
@@ -300,7 +300,7 @@ class Bar:
     def __call__(self):
             print("in __call__: ", self)
 b = Bar()
-b()                              #这里会打印对象信息，并显示对象地址 
+b()                              #这里会打印对象信息，并显示对象地址
 ```
 
 现在，我在b对象后面加一对括号，就可以调用b了！实际执行的就是Bar的“`__call__`”函数（缺省的tp\_call函数会查找“`__call__`”属性，并调用）。

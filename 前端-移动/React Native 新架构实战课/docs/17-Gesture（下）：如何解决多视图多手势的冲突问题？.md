@@ -107,7 +107,7 @@ return (
 ```plain
 const scrollGesture = Gesture.Native()
 const panGesture = Gesture.Pan()
-  .onChange(e => { 
+  .onChange(e => {
     // 拖拽动画
     if (scrollY.value === 0 || refreshY.value !== -LOADING_HEIGHT) {
       refreshY.value =  Math.max(-LOADING_HEIGHT,refreshY.value + e.changeY) ;
@@ -123,7 +123,7 @@ const animatedStyle = useAnimatedStyle(() => {
 
 return (
   <GestureDetector gesture={Gesture.Simultaneous(scrollGesture, panGesture)}>
-    <Animated.ScrollView />            
+    <Animated.ScrollView />
   </GestureDetector>
 ）
 ```
@@ -224,7 +224,7 @@ function PanAndScrollView() {
         <Animated.View style={[{height: wrapperHeight}, animatedStyle]}>
           <Text style={{height: LOADING_HEIGHT }}>loading...</Text>
           <GestureDetector gesture={Gesture.Simultaneous(scrollGesture, panGesture)}>
-            <Animated.ScrollView 
+            <Animated.ScrollView
               bounces={false}
               onScroll={scrollHandler}
               scrollEventThrottle={1}>
@@ -443,6 +443,6 @@ function PanAndScrollView() {
 只是处理单视图多手势冲突的 API 是在组件的角度，处理多视图多手势冲突的 API 是在手势的角度吗 ？
 特别是 Simultaneous 与 simultaneousWithExternalGesture 感觉很像
 
-另外上面代码中的 panGesture 调用 simultaneousWithExternalGesture 时为什么还要传入 scrollGesture tapGesture 
+另外上面代码中的 panGesture 调用 simultaneousWithExternalGesture 时为什么还要传入 scrollGesture tapGesture
 外部组件为什么还要响应这两个事件，虽然我测试不传确实不行</p>2023-09-03</li><br/><li><span>songyq</span> 👍（0） 💬（0）<p>Gesture 手势库解决手势冲突的方案 确定不是抄的apple的手势代理么？</p>2022-08-17</li><br/>
 </ul>

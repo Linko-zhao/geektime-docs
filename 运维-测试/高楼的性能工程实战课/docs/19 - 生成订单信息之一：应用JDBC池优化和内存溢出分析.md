@@ -144,12 +144,12 @@ Tasks: 316 total,   1 running, 315 sleeping,   0 stopped,   0 zombie
 %Cpu4  :  3.6 us,  2.1 sy,  0.0 ni, 93.6 id,  0.0 wa,  0.0 hi,  0.3 si,  0.3 st
 %Cpu5  :  2.8 us,  1.8 sy,  0.0 ni, 95.4 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
 KiB Mem : 16265992 total,  2229060 free,  9794944 used,  4241988 buff/cache
-KiB Swap:        0 total,        0 free,        0 used.  6052732 avail Mem 
+KiB Swap:        0 total,        0 free,        0 used.  6052732 avail Mem
 
 
-  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                                                  
-29349 root      20   0 8836040   4.3g  16828 S  99.7 27.4  20:51.90 java                                                                                                                     
- 1089 root      20   0 2574864  98144  23788 S   6.6  0.6   2066:38 kubelet  
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+29349 root      20   0 8836040   4.3g  16828 S  99.7 27.4  20:51.90 java
+ 1089 root      20   0 2574864  98144  23788 S   6.6  0.6   2066:38 kubelet
 ```
 
 悲催的数据还是来了，你看，有一个us cpu达到了100%！这是啥情况？
@@ -158,7 +158,7 @@ KiB Swap:        0 total,        0 free,        0 used.  6052732 avail Mem
 
 ```
 [root@svc-mall-order-7fbdd7b85f-ks828 /]# jstat -gcutil 1 1s
-  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   
+  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
   0.00 100.00 100.00 100.00  94.86  93.15    168   28.822    93  652.664  681.486
   0.00 100.00 100.00 100.00  94.86  93.15    168   28.822    93  652.664  681.486
   0.00 100.00 100.00 100.00  94.86  93.15    168   28.822    93  652.664  681.486
@@ -258,7 +258,7 @@ KiB Swap:        0 total,        0 free,        0 used.  6052732 avail Mem
   45:          2426         135856  java.lang.invoke.MemberName
   46:          3262         130480  java.util.WeakHashMap$Entry
   47:          1630         130400  org.apache.skywalking.apm.agent.core.context.trace.EntrySpan
-[root@svc-mall-order-7fbdd7b85f-ks828 /]# 
+[root@svc-mall-order-7fbdd7b85f-ks828 /]#
 ```
 
 在分析内存时，我们可以过滤掉java自己的对象，只看和业务相关的对象。从上面的第3、4条可以看出，com.mysql.cj.protocol和SQL相关，那我们就到innodb\_trx表中去查一下，看看有没有执行时间比较长的SQL。
@@ -409,7 +409,6 @@ orderMapper.updateByPrimaryKeySelective(cancelOrder);
 <li><span>张东炫</span> 👍（5） 💬（1）<p>1.VM Thread 线程消耗 CPU 高的异常，查看JAVA gc 是否合理
 2.innodb_trx表提供了当前innodb引擎内每个事务的信息（只读事务除外），包括当一个事务启动，事务是否在等待一个锁，以及交易正在执行的语句</p>2021-05-06</li><br/><li><span>jy</span> 👍（3） 💬（1）<p>老师你好，查了下资料，bulk_insert_buffer_size是用于myisam存储引擎，我看你的建表sql，是innodb，请确认下呢？</p>2021-07-28</li><br/><li><span>阿嬷</span> 👍（0） 💬（1）<p>老师，架构图是用什么画的？</p>2022-02-14</li><br/><li><span>steve</span> 👍（0） 💬（1）<p>aix服务器的java路径下没找到jstack</p>2021-09-06</li><br/><li><span>jy</span> 👍（0） 💬（1）<p>1、第二阶段里面
 在查看 Order 服务的 top 时，占用cpu最多的是pid 29349 ，为什么后面是jstack -l 1，而不是jstack -l  29349？
-
 
 2、“当批量业务和实时业务同时出现在同一个数据库中，并且是对同样的表进行操作，这时，你就得考虑一下架构设计是否合理了。”
 请问下应该如何设计架构呢？

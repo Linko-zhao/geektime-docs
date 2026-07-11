@@ -75,12 +75,12 @@ type Container struct {
 func NewContainer(t reflect.Type, size int) *Container {
     if size <=0  { size=64 }
     return &Container{
-        s: reflect.MakeSlice(reflect.SliceOf(t), 0, size), 
+        s: reflect.MakeSlice(reflect.SliceOf(t), 0, size),
     }
 }
 func (c *Container) Put(val interface{})  error {
     if reflect.ValueOf(val).Type() != c.s.Type().Elem() {
-        return fmt.Errorf(“Put: cannot put a %T into a slice of %s", 
+        return fmt.Errorf(“Put: cannot put a %T into a slice of %s",
             val, c.s.Type().Elem()))
     }
     c.s = reflect.Append(c.s, reflect.ValueOf(val))
@@ -136,22 +136,22 @@ fmt.Println(c.s.Index(0)) //1.4142135623
 
 ```
 //用<class T>来描述泛型
-template <class T> 
-T GetMax (T a, T b)  { 
-    T result; 
-    result = (a>b)? a : b; 
-    return (result); 
-} 
+template <class T>
+T GetMax (T a, T b)  {
+    T result;
+    result = (a>b)? a : b;
+    return (result);
+}
 ```
 
 ```
-int i=5, j=6, k; 
+int i=5, j=6, k;
 //生成int类型的函数
 k=GetMax<int>(i,j);
- 
-long l=10, m=5, n; 
+
+long l=10, m=5, n;
 //生成long类型的函数
-n=GetMax<long>(l,m); 
+n=GetMax<long>(l,m);
 ```
 
 C++的编译器会在编译时分析代码，根据不同的变量类型来自动化生成相关类型的函数或类，在C++里，叫模板的具体化。

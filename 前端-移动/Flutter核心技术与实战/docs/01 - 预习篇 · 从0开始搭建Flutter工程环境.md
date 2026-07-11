@@ -33,7 +33,7 @@ Flutter源站在国内可能不太稳定，因此谷歌中国开发者社区（G
 接下来，我们需要配置镜像站点的环境变量。对于macOS和Linux系统来说，我们通过文本编辑器，打开~/.bash\_profile文件，在文件最后添加以下代码，来配置镜像站点的环境变量：
 
 ```
-export PUB_HOSTED_URL=https://pub.flutter-io.cn  
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
 export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 ```
 

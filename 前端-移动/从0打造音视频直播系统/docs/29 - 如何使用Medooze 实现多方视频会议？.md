@@ -215,38 +215,38 @@ npm ERR! Failed at the medooze-media-server@0.27.2 install script.
      err = v8::Exception::Error(SWIGV8_STRING_NEW(msg));
 老师，我 npm install 的时候报错了。 这是nodejs 版本问题吗？
 
-我的版本 
- node -v v12.13.0
- node-gyp -v v5.0.5
-系统是 Ubuntu 16.04  </p>2019-10-29</li><br/><li><span>阿良</span> 👍（0） 💬（2）<p>老师你好，我搭建medooze之后，服务顺利跑起来了，但是只能看到自己的图像，而没法看到其他人的。我调试发现他们的video的id编码不一致，想往这方面调试，但是在评论区没看到小伙伴有这样的问题，所以想跟老师请教下，我遇到的这个问题有可能是什么引起的？如有可能，能否提供测试可以正常使用的demo，感谢~</p>2021-04-26</li><br/><li><span>会飞的猪</span> 👍（0） 💬（1）<p>老师，用medooze录制的mp4视频不能播放，您有遇到过吗？
+我的版本
+node -v v12.13.0
+node-gyp -v v5.0.5
+系统是 Ubuntu 16.04 </p>2019-10-29</li><br/><li><span>阿良</span> 👍（0） 💬（2）<p>老师你好，我搭建medooze之后，服务顺利跑起来了，但是只能看到自己的图像，而没法看到其他人的。我调试发现他们的video的id编码不一致，想往这方面调试，但是在评论区没看到小伙伴有这样的问题，所以想跟老师请教下，我遇到的这个问题有可能是什么引起的？如有可能，能否提供测试可以正常使用的demo，感谢~</p>2021-04-26</li><br/><li><span>会飞的猪</span> 👍（0） 💬（1）<p>老师，用medooze录制的mp4视频不能播放，您有遇到过吗？
 const recorder = MediaServer.createRecorder (ts +&quot;.mp4&quot;,{
-			refresh : 1000,
-			timeShift : 6000,
-			disableHints : true,
-			waitForIntra: true
-		});
-		recorder.record(incomingStream);</p>2020-12-09</li><br/><li><span>张一画</span> 👍（0） 💬（1）<p>老师 我有一些不太理解 这一课里面的HTTPS证书为什么是自己生成 我记得您之前说必须是权威机构发布的证书</p>2020-10-06</li><br/><li><span>Geek_sky</span> 👍（0） 💬（3）<p>老师，我这边连接的时候遇到这个问题：
+refresh : 1000,
+timeShift : 6000,
+disableHints : true,
+waitForIntra: true
+});
+recorder.record(incomingStream);</p>2020-12-09</li><br/><li><span>张一画</span> 👍（0） 💬（1）<p>老师 我有一些不太理解 这一课里面的HTTPS证书为什么是自己生成 我记得您之前说必须是权威机构发布的证书</p>2020-10-06</li><br/><li><span>Geek_sky</span> 👍（0） 💬（3）<p>老师，我这边连接的时候遇到这个问题：
 VM479:1 Uncaught DOMException: Failed to execute &#39;createEncodedVideoStreams&#39; on &#39;RTCRtpSender&#39;: Encoded video streams not requested at PC initialization
-    at eval (eval at ws.onopen (https:&#47;&#47;192.168.50.150:8084&#47;js&#47;sfu.js:264:36), &lt;anonymous&gt;:1:8)
-    at WebSocket.ws.onopen (https:&#47;&#47;192.168.50.150:8084&#47;js&#47;sfu.js:264:36)
+at eval (eval at ws.onopen (https:&#47;&#47;192.168.50.150:8084&#47;js&#47;sfu.js:264:36), &lt;anonymous&gt;:1:8)
+at WebSocket.ws.onopen (https:&#47;&#47;192.168.50.150:8084&#47;js&#47;sfu.js:264:36)
 我换了createEncodedStreams，也不行。这是什么问题？chrome是不是需要设置什么？</p>2020-09-06</li><br/><li><span>sam</span> 👍（0） 💬（2）<p>跑起来后到页面加入房间，点ready后页面刷新一下还是弹窗让加入房间是什么情况，貌似也找不到log</p>2020-07-10</li><br/><li><span>行所当行</span> 👍（0） 💬（8）<p>老师你好，在客户端的chrome打开index.html，提示: Your browser does not support insertable streams，chrome版本83.0.4103.61(正式版本)(64位)，这个是浏览器版本问题吗？</p>2020-06-04</li><br/><li><span>dayu</span> 👍（0） 💬（1）<p>老师，可以基于medooze开发安卓版的视频会议么？</p>2020-05-08</li><br/><li><span>pyg</span> 👍（0） 💬（2）<p>老师我在本地运行了sfu服务，打开了两个Chrome窗口，但是互相看不见对方。哪些原因会导致这样呢？</p>2020-03-25</li><br/><li><span>檸檬稻</span> 👍（0） 💬（3）<p>最后卡在，
 我的版本
- node 12.15.0&#47;10.13.0
- npm 6.4.1
+node 12.15.0&#47;10.13.0
+npm 6.4.1
 系统是 Ubuntu 18.04 &#47;Ubuntu 14.04
 这些都试了，openSSL 两个版本也试了1.1.1与1.0.2d最后卡在 node运行不起来
-internal&#47;modules&#47;cjs&#47;loader.js:717                                                                                      
-  return process.dlopen(module, path.toNamespacedPath(filename));                                                       
-                 ^                                                                                                      
-                                                                                                                        
+internal&#47;modules&#47;cjs&#47;loader.js:717  
+return process.dlopen(module, path.toNamespacedPath(filename));  
+^
+
 Error: &#47;root&#47;sfu&#47;node_modules&#47;medooze-media-server&#47;build&#47;Release&#47;medooze-media-server.node: undefined symbol: HMAC_CTX_i
-nit                                                                                                                     
-    at Object.Module._extensions..node (internal&#47;modules&#47;cjs&#47;loader.js:717:18)                                          
-    at Module.load (internal&#47;modules&#47;cjs&#47;loader.js:598:32)                                                              
-    at tryModuleLoad (internal&#47;modules&#47;cjs&#47;loader.js:537:12)                                                            
-    at Function.Module._load (internal&#47;modules&#47;cjs&#47;loader.js:529:3)                                                     
-    at Module.require (internal&#47;modules&#47;cjs&#47;loader.js:636:17)                                                           
-    at require (internal&#47;modules&#47;cjs&#47;helpers.js:20:18)                                                                  
-    at Object.&lt;anonymous&gt; (&#47;root&#47;sfu&#47;node_modules&#47;medooze-media-server&#47;lib&#47;Native.js:10:19)                             
-    at Module._compile (internal&#47;modules&#47;cjs&#47;loader.js:688:30)                                             </p>2020-02-07</li><br/><li><span>ralph</span> 👍（0） 💬（1）<p>老师，能不能提高一个视频通信的例子，音频的看完，还是没想明白视频怎么弄.....</p>2020-01-02</li><br/>
+nit  
+at Object.Module._extensions..node (internal&#47;modules&#47;cjs&#47;loader.js:717:18)  
+at Module.load (internal&#47;modules&#47;cjs&#47;loader.js:598:32)  
+at tryModuleLoad (internal&#47;modules&#47;cjs&#47;loader.js:537:12)  
+at Function.Module._load (internal&#47;modules&#47;cjs&#47;loader.js:529:3)  
+at Module.require (internal&#47;modules&#47;cjs&#47;loader.js:636:17)  
+at require (internal&#47;modules&#47;cjs&#47;helpers.js:20:18)  
+at Object.&lt;anonymous&gt; (&#47;root&#47;sfu&#47;node_modules&#47;medooze-media-server&#47;lib&#47;Native.js:10:19)  
+at Module._compile (internal&#47;modules&#47;cjs&#47;loader.js:688:30) </p>2020-02-07</li><br/><li><span>ralph</span> 👍（0） 💬（1）<p>老师，能不能提高一个视频通信的例子，音频的看完，还是没想明白视频怎么弄.....</p>2020-01-02</li><br/>
 </ul>

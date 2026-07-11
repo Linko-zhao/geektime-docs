@@ -129,9 +129,9 @@ rtmp {
         listen 1935;
         #应用程序块
         application mylive {
-            live on; 
-            hls on;  
-            hls_path /usr/local/m3u8File; 
+            live on;
+            hls on;
+            hls_path /usr/local/m3u8File;
         }
     }
 }

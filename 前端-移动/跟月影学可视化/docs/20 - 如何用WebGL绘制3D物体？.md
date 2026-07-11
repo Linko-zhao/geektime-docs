@@ -25,7 +25,7 @@ void main() {
 ```
 
 ```
-// fragment shader   片元着色器 
+// fragment shader   片元着色器
 #ifdef GL_ES
 precision highp float;
 #endif
@@ -507,7 +507,7 @@ void main() {
 
 欢迎在留言区和我讨论，分享你的答案和思考，也欢迎你把这节课分享给你的朋友，我们下节课见！
 
-* * *
+---
 
 ## 源码
 
@@ -516,17 +516,17 @@ void main() {
 <li><span>阿鑫</span> 👍（3） 💬（2）<p>正四面体光照效果，https:&#47;&#47;stupidehorizon.github.io&#47;graphics&#47;demo&#47;07_3d_box&#47; 一开始没注意每个面的法向量方向，结果有的面发向量朝里了，还 debugger 了半天。</p>2020-08-28</li><br/><li><span>有一种踏实</span> 👍（1） 💬（0）<p>正四面体，就是取正立方体的四个非共棱顶点组成
 
 function tetrahedron(size, colors = [[1, 0, 0, 1]]) {
-      const h = 0.5 * size;
-      const vertices = [
-        [-h, -h, -h], &#47;&#47; 0
-        [-h, h, -h], &#47;&#47; 1
-        [h, h, -h], &#47;&#47; 2
-        [h, -h, -h], &#47;&#47; 3
-        [-h, -h, h], &#47;&#47; 4
-        [-h, h, h], &#47;&#47; 5
-        [h, h, h], &#47;&#47; 6
-        [h, -h, h], &#47;&#47; 7
-      ];
+const h = 0.5 * size;
+const vertices = [
+[-h, -h, -h], &#47;&#47; 0
+[-h, h, -h], &#47;&#47; 1
+[h, h, -h], &#47;&#47; 2
+[h, -h, -h], &#47;&#47; 3
+[-h, -h, h], &#47;&#47; 4
+[-h, h, h], &#47;&#47; 5
+[h, h, h], &#47;&#47; 6
+[h, -h, h], &#47;&#47; 7
+];
 
       const positions = [];
       const color = [];
@@ -562,4 +562,5 @@ function tetrahedron(size, colors = [[1, 0, 0, 1]]) {
 
       return { positions, color, cells, normal };
     }</p>2024-02-02</li><br/><li><span>H</span> 👍（1） 💬（0）<p>老师写的文章还不错！！！</p>2022-01-07</li><br/><li><span>蹦哒</span> 👍（0） 💬（0）<p>老师、同学们，立方体每个面的颜色为啥不会插值，而是同一个颜色呢？</p>2023-03-06</li><br/><li><span>JackWang</span> 👍（0） 💬（0）<p>老师，为什么我按照您的方法渲染后，发现圆柱体两个圆经常会被截断啊</p>2022-03-29</li><br/><li><span>卖烧烤夫斯基</span> 👍（0） 💬（0）<p>老师是不是隐藏了一些webgl原始的细节。例如缓冲处理，着色器的初始化编译等。</p>2021-03-17</li><br/>
+
 </ul>

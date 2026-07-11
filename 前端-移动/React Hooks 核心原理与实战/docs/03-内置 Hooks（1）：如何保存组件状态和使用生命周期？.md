@@ -142,7 +142,7 @@ useEffect(() => {
   };
   // 监听 resize 事件
   window.addEventListener('resize', handler);
-  
+
   // 返回一个 callback 在组件销毁时调用
   return () => {
     // 移除 resize 事件
@@ -220,7 +220,7 @@ function MyComp() {
       // ...
     }, [count])
   }
-  
+
   // 这里可能提前返回组件渲染结果，后面就不能再用 Hooks 了
   if (count === 0) {
     return 'No content';
@@ -228,7 +228,7 @@ function MyComp() {
 
   // 错误：不能将 Hook 放在可能的 return 之后
   const [loading, setLoading] = useState(false);
-  
+
   //...
   return <div>{count}</div>
 }
@@ -305,7 +305,7 @@ npm install eslint-plugin-react-hooks --save-dev
   "rules": {
     // ...
     // 检查 Hooks 的使用规则
-    "react-hooks/rules-of-hooks": "error", 
+    "react-hooks/rules-of-hooks": "error",
     // 检查依赖项的声明
     "react-hooks/exhaustive-deps": "warn"
   }
@@ -361,16 +361,16 @@ export function useActions(actions, deps) {
 2. setBlogContent可以作为依赖项，但是没必要。因为他只是用来 setState。
 3. blogContent不可以作为依赖项，会引起死循环。因为在useEffect中修改了blogContent，会引起新一轮“副作用”回调。
 
-https:&#47;&#47;github.com&#47;Si3ver&#47;react-hooks-demos&#47;blob&#47;main&#47;src&#47;03&#47;BlogView.js</p>2021-05-30</li><br/><li><span>逍遥一生</span> 👍（7） 💬（2）<p>1. 分两种情况，1）如果依赖为空，则每次都会执行，性能有损耗  2）依赖为数组，且漏掉了部分的依赖，会导致该依赖发生变化的时候useEffect内部的逻辑不执行
+https:&#47;&#47;github.com&#47;Si3ver&#47;react-hooks-demos&#47;blob&#47;main&#47;src&#47;03&#47;BlogView.js</p>2021-05-30</li><br/><li><span>逍遥一生</span> 👍（7） 💬（2）<p>1. 分两种情况，1）如果依赖为空，则每次都会执行，性能有损耗 2）依赖为数组，且漏掉了部分的依赖，会导致该依赖发生变化的时候useEffect内部的逻辑不执行
 
 2. 不需要，因为我们希望的仅仅是在id变化的时候触发更新</p>2021-05-29</li><br/><li><span>闲闲</span> 👍（4） 💬（2）<p>老师我有个疑问，
-我们项目里面用到hook，但是有个问题，一般情况下，state会很多，不可能一两个，所以会把sate组合成对象，但是有时候对象发生了改变，例如{aa:1}--&gt;{aa:2},useEffect 监听函数没有进，需要手动的将两次对象Obeject.assgin一下才能触发监听，不知道老师有没有遇到过？</p>2021-05-31</li><br/><li><span>Hottou</span> 👍（2） 💬（1）<p>王老师，对于第二个问题，因为无论调用多少次setBlogContent函数，它的指向地址是不变的，所以即使把它作为依赖项，那么它永远也不会发生改变，是这样子吗？</p>2021-08-03</li><br/><li><span>Dark I</span> 👍（2） 💬（1）<p>函数体也是每次render都会执行 那么需要每次都会render执行的语句是放在 无依赖的useEffect中还是直接放在函数体中比较好呢</p>2021-06-02</li><br/><li><span>陈威严</span> 👍（2） 💬（1）<p>将函数定义在 useEffect 的 callback 中，每次执行 useEffect 时都会重新创建函数，这样对性能会有影响吗？</p>2021-06-01</li><br/><li><span>Geek_6b7a3b</span> 👍（1） 💬（1）<p>老师，第二个问题为什么说setBlogContent是一个局部变量，这个难道不是全局的吗？</p>2021-08-23</li><br/><li><span>雅丽丽</span> 👍（1） 💬（1）<p>state 中永远不要保存可以通过计算得到的值。这是为什么呢？</p>2021-06-02</li><br/><li><span>cyh41</span> 👍（1） 💬（1）<p>建议分开用多个值多个useState，还是多个值合成一个useState呢？</p>2021-06-01</li><br/><li><span>Geek_d9bc76</span> 👍（0） 💬（1）<p>“state中永远不要保存可以通过计算得到的值”，不太明白，我视图需要根据clineWidth计算出的值决定渲染item的个数，如果不通过useState，我要怎么触发界面更新呢？？</p>2021-08-09</li><br/><li><span>寇云</span> 👍（0） 💬（1）<p>思考题1:大部分同学回答的挺好了 
-问题2： 可以把 content  和 loading  封装成一个hooks,  const [loading, content] =  useBolgContent(id)</p>2021-06-04</li><br/><li><span>Afan</span> 👍（0） 💬（2）<p>import React, { useState, useEffect } from &quot;react&quot;;
+   我们项目里面用到hook，但是有个问题，一般情况下，state会很多，不可能一两个，所以会把sate组合成对象，但是有时候对象发生了改变，例如{aa:1}--&gt;{aa:2},useEffect 监听函数没有进，需要手动的将两次对象Obeject.assgin一下才能触发监听，不知道老师有没有遇到过？</p>2021-05-31</li><br/><li><span>Hottou</span> 👍（2） 💬（1）<p>王老师，对于第二个问题，因为无论调用多少次setBlogContent函数，它的指向地址是不变的，所以即使把它作为依赖项，那么它永远也不会发生改变，是这样子吗？</p>2021-08-03</li><br/><li><span>Dark I</span> 👍（2） 💬（1）<p>函数体也是每次render都会执行 那么需要每次都会render执行的语句是放在 无依赖的useEffect中还是直接放在函数体中比较好呢</p>2021-06-02</li><br/><li><span>陈威严</span> 👍（2） 💬（1）<p>将函数定义在 useEffect 的 callback 中，每次执行 useEffect 时都会重新创建函数，这样对性能会有影响吗？</p>2021-06-01</li><br/><li><span>Geek_6b7a3b</span> 👍（1） 💬（1）<p>老师，第二个问题为什么说setBlogContent是一个局部变量，这个难道不是全局的吗？</p>2021-08-23</li><br/><li><span>雅丽丽</span> 👍（1） 💬（1）<p>state 中永远不要保存可以通过计算得到的值。这是为什么呢？</p>2021-06-02</li><br/><li><span>cyh41</span> 👍（1） 💬（1）<p>建议分开用多个值多个useState，还是多个值合成一个useState呢？</p>2021-06-01</li><br/><li><span>Geek_d9bc76</span> 👍（0） 💬（1）<p>“state中永远不要保存可以通过计算得到的值”，不太明白，我视图需要根据clineWidth计算出的值决定渲染item的个数，如果不通过useState，我要怎么触发界面更新呢？？</p>2021-08-09</li><br/><li><span>寇云</span> 👍（0） 💬（1）<p>思考题1:大部分同学回答的挺好了
+   问题2： 可以把 content 和 loading 封装成一个hooks, const [loading, content] = useBolgContent(id)</p>2021-06-04</li><br/><li><span>Afan</span> 👍（0） 💬（2）<p>import React, { useState, useEffect } from &quot;react&quot;;
 
-export default  function BlogView() {
-    &#47;&#47; 设置一个本地 state 用于保存 blog 内容
-    const [blogContent, setBlogContent] = useState(&#39;&#39;);
-    const id = 100;
+export default function BlogView() {
+&#47;&#47; 设置一个本地 state 用于保存 blog 内容
+const [blogContent, setBlogContent] = useState(&#39;&#39;);
+const id = 100;
 
     &#47;&#47; useEffect 的 callback 要避免直接的 async 函数，需要封装一下
     const doAsync =  () =&gt; {
@@ -385,16 +385,16 @@ export default  function BlogView() {
     &#47;&#47; 如果没有 blogContent 则认为是在 loading 状态
     const isLoading = !blogContent;
     return &lt;div&gt;{isLoading ? &quot;Loading...&quot; : blogContent}&lt;&#47;div&gt;;
+
 }
 打印一次1
 
-
 import React, { useState, useEffect } from &quot;react&quot;;
 
-export default  function BlogView() {
-    &#47;&#47; 设置一个本地 state 用于保存 blog 内容
-    const [blogContent, setBlogContent] = useState(&#39;&#39;);
-    const id = 100;
+export default function BlogView() {
+&#47;&#47; 设置一个本地 state 用于保存 blog 内容
+const [blogContent, setBlogContent] = useState(&#39;&#39;);
+const id = 100;
 
     &#47;&#47; useEffect 的 callback 要避免直接的 async 函数，需要封装一下
     const doAsync =  () =&gt; {
@@ -409,8 +409,10 @@ export default  function BlogView() {
     &#47;&#47; 如果没有 blogContent 则认为是在 loading 状态
     const isLoading = !blogContent;
     return &lt;div&gt;{isLoading ? &quot;Loading...&quot; : blogContent}&lt;&#47;div&gt;;
+
 }
 打印2次1</p>2021-06-02</li><br/><li><span>William</span> 👍（0） 💬（1）<p>思考题：
+
 1. 不放在依赖数组中，则无法触发 useEffect 回调；
 2. 不需要，setBlogContent 仅仅是用来更新博客内容的函数；
 

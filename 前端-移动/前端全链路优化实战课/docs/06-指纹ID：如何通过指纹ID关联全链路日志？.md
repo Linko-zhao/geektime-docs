@@ -45,30 +45,31 @@
 既然我们要使用Canvas特性，那么有一个前提条件就是浏览器必须支持Canvas标签。首先，我们需要创建一个Canvas元素，并生成上下文Context。
 
 ```javascript
-const canvas = document.createElement('canvas'); const ctx = canvas.getContext("2d");
+const canvas = document.createElement("canvas");
+const ctx = canvas.getContext("2d");
 ```
 
 第二步，我们在Canvas画布上填充矩形和文字，并设置字体、颜色、位置等属性。
 
 ```javascript
-const txt = 'geekbang'
-ctx.textBaseline ="top"
-ctx.font = "14px 'Arial'"
+const txt = "geekbang";
+ctx.textBaseline = "top";
+ctx.font = "14px 'Arial'";
 
-ctx.fillStyle = "#f60"
+ctx.fillStyle = "#f60";
 // 先画一个60x20矩形内容
-ctx.fillRect(125, 1, 60, 20)
+ctx.fillRect(125, 1, 60, 20);
 // 把字填充到矩形内
-ctx.fillStyle = "#069"
+ctx.fillStyle = "#069";
 ctx.fillText(txt, 2, 15);
 ```
 
 然后，我们采用社区提供的转换方案，将填充的矩形和文字的画布转换成Base64字符串。接下来，我们使用atob函数对Base64字符串进行编码，最后截取一部分字符，将其转换成十六进制字符串。
 
 ```javascript
-const b64 = canvas.toDataURL().replace("data:image/png;base64,","");
+const b64 = canvas.toDataURL().replace("data:image/png;base64,", "");
 const bin = atob(b64);
-const crc = bin2hex(bin.slice(-16,-12));
+const crc = bin2hex(bin.slice(-16, -12));
 ```
 
 通过刚才的方案生成指纹ID后，就能产生同一设备下、同一个浏览器的唯一标识。
@@ -91,33 +92,35 @@ type FingerprintOptions = {
 接下来，我把生成指纹的逻辑封装在了一个函数中，并把它命名为getFingerprintId函数。
 
 ```typescript
-export const getFingerprintId = (content: string, options?: FingerprintOptions) => {
-  if (!content) {
-    console.error("content is empty");
-    return null;
-  }
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext("2d");
-  // 如果不存在，则返回空值，说明不支持Canvas指纹
-  if (!ctx) return null;
+export const getFingerprintId = (
+  content: string,
+  options?: FingerprintOptions,
+) => {
+  if (!content) {
+    console.error("content is empty");
+    return null;
+  }
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d"); // 如果不存在，则返回空值，说明不支持Canvas指纹
+  if (!ctx) return null;
 
-  const txt = content || 'geekbang';
-  ctx.textBaseline = options && options.textBaseline ? options.textBaseline : "top";
-  ctx.font = options && options.font ? options.font : "14px 'Arial'";
+  const txt = content || "geekbang";
+  ctx.textBaseline =
+    options && options.textBaseline ? options.textBaseline : "top";
+  ctx.font = options && options.font ? options.font : "14px 'Arial'";
 
-  ctx.fillStyle = options && options.reactStyle ? options.reactStyle : "#f60";
-  // 先画一个60x20矩形内容
-  ctx.fillRect(125, 1, 60, 20);
+  ctx.fillStyle = options && options.reactStyle ? options.reactStyle : "#f60"; // 先画一个60x20矩形内容
+  ctx.fillRect(125, 1, 60, 20);
 
-  ctx.fillStyle = options && options.contentStyle ? options.contentStyle : "#069";
-  // 把字填充到矩形内
-  ctx.fillText(txt, 2, 15);
+  ctx.fillStyle =
+    options && options.contentStyle ? options.contentStyle : "#069"; // 把字填充到矩形内
+  ctx.fillText(txt, 2, 15);
 
-  const b64 = canvas.toDataURL().replace("data:image/png;base64,","");
-  const bin = atob(b64);
-  const crc = bin2hex(bin.slice(-16,-12));
-  return crc;
-}
+  const b64 = canvas.toDataURL().replace("data:image/png;base64,", "");
+  const bin = atob(b64);
+  const crc = bin2hex(bin.slice(-16, -12));
+  return crc;
+};
 ```
 
 getFingerprintId函数接收了两个参数。第一个是必选项，传入业务名称参数，也就是我们在画布上填充的内容。第二个参数是可选项，传入样式参数，用于业务自定义参数，以实现与不同项目的差异化。

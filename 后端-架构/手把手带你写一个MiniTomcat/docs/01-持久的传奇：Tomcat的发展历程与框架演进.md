@@ -32,15 +32,15 @@ Tomcat的发明人是James Duncan Davidson。他在1997年加入Sun公司，然�
 
 我们再仔细点，看看Tomcat是如何响应请求的。
 
-01. 用户在浏览器输入地址，请求被发送到服务器端，按照Socket模型，这个访问被一个端口驻守的程序收到，如8080。在Tomcat中，负责这一块的是在那里监听的Coyote Connector。
-02. Connector解析Socket来的请求流，再将该请求交给它所在的Service的Engine来处理，并等待Engine的回应。
-03. Engine获得请求URI，匹配到合适的虚拟主机Host。
-04. 这个Host获得请求串，匹配到合适的Context。
-05. 在Context中寻找出对应的Servlet（其实是一个Wrapper） 处理数据。
-06. 将构造HttpServletRequest对象和HttpServletResponse对象，作为参数调用Servlet的 `service()` 执行业务逻辑、数据存储等程序。
-07. Context把执行完之后的HttpServletResponse对象返回给Host。
-08. Host把HttpServletResponse对象返回给Engine。
-09. Engine把HttpServletResponse对象返回Connector。
+1.  用户在浏览器输入地址，请求被发送到服务器端，按照Socket模型，这个访问被一个端口驻守的程序收到，如8080。在Tomcat中，负责这一块的是在那里监听的Coyote Connector。
+2.  Connector解析Socket来的请求流，再将该请求交给它所在的Service的Engine来处理，并等待Engine的回应。
+3.  Engine获得请求URI，匹配到合适的虚拟主机Host。
+4.  这个Host获得请求串，匹配到合适的Context。
+5.  在Context中寻找出对应的Servlet（其实是一个Wrapper） 处理数据。
+6.  将构造HttpServletRequest对象和HttpServletResponse对象，作为参数调用Servlet的 `service()` 执行业务逻辑、数据存储等程序。
+7.  Context把执行完之后的HttpServletResponse对象返回给Host。
+8.  Host把HttpServletResponse对象返回给Engine。
+9.  Engine把HttpServletResponse对象返回Connector。
 10. Connector把HttpServletResponse对象序列化返回给浏览器。
 
 ![图片](https://static001.geekbang.org/resource/image/3e/df/3e9479e9ff9c440a5710c140b5c4a4df.png?wh=1920x950)

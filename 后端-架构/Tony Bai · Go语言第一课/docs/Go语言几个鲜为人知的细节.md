@@ -504,7 +504,7 @@ buildconstraints/demo1
 └── go.mod
 
 
-// go-details/buildconstraints/demo1/foo/f1_android.go 
+// go-details/buildconstraints/demo1/foo/f1_android.go
 
 
 //go:build linux
@@ -517,7 +517,7 @@ func F1() {
 }
 
 
-// go-details/buildconstraints/demo1/foo/f2_linux.go 
+// go-details/buildconstraints/demo1/foo/f2_linux.go
 //go:build android
 
 
@@ -528,7 +528,7 @@ func F2() {
 }
 
 
-// go-details/buildconstraints/demo1/foo/f3_darwin.go 
+// go-details/buildconstraints/demo1/foo/f3_darwin.go
 //go:build android
 
 
@@ -894,16 +894,16 @@ helloworld: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically link
 以一个使用了go-sqlite3包的代码为例，go-sqlite3是SQLite库的go binding，它依赖SQLite库，同时所有第三方C库都依赖libc。为了静态编译这个示例代码，我们要准备SQLite和libc的 .a文件：
 
 ```plain
-$yum install -y gcc glibc-static sqlite-devel 
+$yum install -y gcc glibc-static sqlite-devel
 ... ...
 
 
 已安装:
-  sqlite-devel.x86_64 0:3.7.17-8.el7_7.1                                                                                          
+  sqlite-devel.x86_64 0:3.7.17-8.el7_7.1
 
 
 更新完毕:
-  glibc-static.x86_64 0:2.17-326.el7_9.3                                                                                          
+  glibc-static.x86_64 0:2.17-326.el7_9.3
 ```
 
 接下来，我们就能以静态链接的方式编译该代码了，下面是一个go build命令的参考：

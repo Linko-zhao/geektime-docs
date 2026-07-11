@@ -525,14 +525,14 @@ ANSI提出就是为了兼容非英文字符吗？
 
 int main()
 {
-    &#47;*_setmode(_fileno(stdout),
-        _O_WTEXT);*&#47;
-    std::cout
-        &lt;&lt; &quot;中文Español Français\n&quot;;
-    std::cout
-        &lt;&lt; &quot;Narrow characters are &quot;
-        &quot;also OK on wcout\n&quot;;
-    &#47;&#47; but not on cout...
+&#47;_\_setmode(\_fileno(stdout),
+\_O_WTEXT);_&#47;
+std::cout
+&lt;&lt; &quot;中文Español Français\n&quot;;
+std::cout
+&lt;&lt; &quot;Narrow characters are &quot;
+&quot;also OK on wcout\n&quot;;
+&#47;&#47; but not on cout...
 }
 输出法语部分直接是？，这个？的产生原因是由于窄字符输出无法识别造成的吗？</p>2020-04-18</li><br/><li><span>zKerry</span> 👍（0） 💬（1）<p>干货满满</p>2020-02-25</li><br/><li><span>清风静婷</span> 👍（0） 💬（1）<p>问题2-不知是不是因为. UTF-32 如果有字节全部为0，转换成其他会认为是结束符</p>2020-02-24</li><br/>
 </ul>

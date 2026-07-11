@@ -413,23 +413,23 @@ mysql> show variables like 'log_error%';
 国庆节假期，DBA小明突然接到大量数据库告警，登录数据库执行SHOW PROCESSLIST后，发现大量会话被阻塞了。下面提供了部分会话的信息。请你根据这些信息，帮小明一起分析下，为什么会出现这样的问题？应该怎么解决这个问题呢？有哪些地方可以改进？
 
 ```go
-Id: 1842782 
-User: user_xx 
-Host: xx.xx.xx.xx:59068 
-db: db_xx 
-Command: Query 
-Time: 2326 
+Id: 1842782
+User: user_xx
+Host: xx.xx.xx.xx:59068
+db: db_xx
+Command: Query
+Time: 2326
 State: Waiting for table
 Info: update stat_item_detail set sold=sold+1, money=money+19800, Gmt_create=now() where item_id=1234567801 and day='2011-10-07 00:00:00
 
 
-Id: 1657130 
-User: user_xx 
-Host: yy.yy.yy.yy:40093 
-db: db_xx 
-Command: Query 
-Time: 184551 
-State: Sending data 
+Id: 1657130
+User: user_xx
+Host: yy.yy.yy.yy:40093
+db: db_xx
+Command: Query
+Time: 184551
+State: Sending data
 Info: select item_id, sum(sold) as sold from stat_item_detail where item_id in (select item_id from stat_item_detail where Gmt_create >= '2011-10-05 08:59:00') group by item_id
 
 
@@ -437,10 +437,10 @@ Id: 1044
 User: system user
 Host:
 db:
-Command: Connect 
+Command: Connect
 Time: 27406
 State: Flushing tables FLUSH TABLES
-Info: 
+Info:
 ```
 
 期待你的思考，欢迎在留言区中与我交流。如果今天的课程让你有所收获，也欢迎转发给有需要的朋友。我们下节课再见！
@@ -451,7 +451,6 @@ Info:
 首先，会话 1657130 中的语句被执行，Time 达到 184551 秒，查询语句是聚合语句，说明这是一个大查询，在查询执行期间，语句中涉及到的表会被打开，且持有 MDL 读锁。
 其次，可能执行了一个类似 flush tables 的命令，导致有刷新表的操作，该操作要关闭并重新打开表，因为会话 1842782 在执行大查询，表处于打开状态，因此发生冲突，从而进入等待状态
 最后，会话 1842782 对该表中记录进行变更，从 state 来看，该会话处于等待状态，看来是被执行 flush tables 的会话 1044 所阻塞
-
 
 会话 1044 中的 flush table 操作与大查询冲突，导致后续涉及到该表的读写操作的会话都陷入阻塞。</p>2024-09-17</li><br/><li><span>binzhang</span> 👍（1） 💬（1）<p>思考题里面1044这个thread值得怀疑 系统用户 没有显示具体是哪个db 在connect阶段 做flush tables操作。先杀这个试试。不知道为啥一个connect命令会触发flush table</p>2024-09-17</li><br/><li><span>王欢</span> 👍（0） 💬（1）<p>mysql 大事务，多条update 和 多条delete 语句， 事务执行时间长有什么好的优化办法吗</p>2024-09-24</li><br/>
 </ul>

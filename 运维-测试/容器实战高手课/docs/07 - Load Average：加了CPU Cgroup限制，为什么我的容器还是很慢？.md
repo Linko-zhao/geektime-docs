@@ -199,18 +199,20 @@ unsigned long nr = 0;
 
 平均负载计算公式（nr_active 表示单位时间内平均活跃进程个数，每个 CPU 对应一个 运行队列 rq，rq-&gt;nr_running、rq-&gt;nr_uninterruptible 分别表示该运行队列上可运行进程、不可中断进程的个数。累积的 nr_active 再进行指数衰减平均得到最终的平均负载）
 
-&#47;* 
-* The global load average is an exponentially decaying average of nr_running +
- * nr_uninterruptible.
- *&#47;
-nr_active = 0;
-for_each_possible_cpu(cpu)
-    nr_active += cpu_of(cpu)-&gt;nr_running + cpu_of(cpu)-&gt;nr_uninterruptible;</p>2020-11-30</li><br/><li><span>争光 Alan</span> 👍（9） 💬（4）<p>感谢分享
+&#47;*
+
+- The global load average is an exponentially decaying average of nr_running +
+- nr_uninterruptible.
+  *&#47;
+  nr_active = 0;
+  for_each_possible_cpu(cpu)
+  nr_active += cpu_of(cpu)-&gt;nr_running + cpu_of(cpu)-&gt;nr_uninterruptible;</p>2020-11-30</li><br/><li><span>争光 Alan</span> 👍（9） 💬（4）<p>感谢分享
 
 我想问下
 1.如果出现就D进程，我为什么好的故障方法排查在等待什么吗？
 2.一直有个疑问，是不是linux的进程数不能太多？太多会有很多的调度时间造成很卡？
 3.容器目前每个节点官方推荐是110个pod，openshift是250个，能问下你们这边的最佳实践不引起性能下降的前提下节点最大pod是多少个吗？</p>2020-12-02</li><br/><li><span>游离的鱼</span> 👍（6） 💬（2）<p>首先很感谢老师，然后我还是有一些些不太明白，第一个: 处于task_interruptible的进程，虽然它在等信号量和等待io上，但是我理解这个时候其实cpu是空闲的，为什么不把cpu资源让出来，等io完成或者有信号量时再把它放入可运行的队列中去等待调用呢，类似于回调函数那样的思想。第二个: 如果是我的机器长期平均负载过高，是不是一定是D状态的进程或线程引起的。 第三个: 我有四个cpu的机器，现有五个进程，有四个在cpu中运行，其中三个是处于运行状态，另一个是处于task_interruptable状态，也就是D状态，还有一个在排队，那这个时候的负载是不是就是5？如果除了刚刚的D状态的进程其他的进程都运行完了，负载是不是又变成1了。 第四个: 根据老师的定义和公式，平均负载是...的平均进程数，我感觉平均进程数是一个整数，为什么我们看到的平均负载都是带小数的。希望老师帮忙解答一下，帮我解除疑惑。万分感谢</p>2020-12-01</li><br/><li><span>Jackson Wu</span> 👍（3） 💬（1）<p>老师好，一个CPU只能同时处理一个进程，为什么还能把CPU分为0.5C的单位呢，这个cpu的单位是怎么理解的呢</p>2020-12-06</li><br/><li><span>笃定</span> 👍（2） 💬（1）<p>文中的第二个实验，四个cpu的系统，运行六个进程。理论上六个进程同一时刻不可能都处于R状态吧？一个cpu同一时刻不是只能处理一个进程吗？我的理解top输出应该是四个R状态两个S状态</p>2021-03-28</li><br/><li><span>Harold</span> 👍（2） 💬（1）<p>对于 load average 的值还是有些模糊，不考虑 D 进程的情况下，1台8核的机器有 16个 running 的进程，cpu并没有占满100%的情况下，load average取的值是 16*(1 - cpu idle) 还是 16？换句话说，是不是只要 cpu idle 不是0，取的都是 cpu usage 的值。望解答。</p>2021-01-12</li><br/><li><span>po</span> 👍（2） 💬（9）<p>有事，好几天没来留言了，我有个确认点：
+
 1. 如果一台2个cpu的机器，跑了8个进程，每个进程使用一个cpu的10%，那么load average应该是0.8吧？
 2. 平常说的物理机CPU，比如2核4线程，这个在Linux里面看是几个cpu呢？</p>2020-12-09</li><br/><li><span>Geek4329</span> 👍（2） 💬（2）<p>感谢老师，受益匪浅！
 
@@ -218,19 +220,19 @@ for_each_possible_cpu(cpu)
 “这里我们做一个kernel module，通过一个 &#47;proc 文件系统给用户程序提供一个读取的接口，只要用户进程读取了这个接口就会进入 UNINTERRUPTIBLE。”
 
 老师上面给的kernel module中，我的理解是只调用sleep，然后用户调用这个接口就进入D state，算是模拟DISK IO状态时获取不到资源时的状态吗？老师能不能给个参考，用户进程读是如何取了这个接口呢？</p>2020-11-30</li><br/><li><span>钱米</span> 👍（1） 💬（1）<p>请问老师，我的宿主机的memory cgroup很多，处于上升趋势，未下降
- ~# cat &#47;proc&#47;cgroups
-#subsys_name	hierarchy	num_cgroups	enabled
-cpuset	3	30	1
-cpu	2	101	1
-cpuacct	2	101	1
-blkio	6	99	1
-memory	7	1013	1
-devices	4	99	1
-freezer	9	30	1
-net_cls	10	30	1
-perf_event	8	30	1
-net_prio	10	30	1
-pids	5	100	1
+~# cat &#47;proc&#47;cgroups
+#subsys_name hierarchy num_cgroups enabled
+cpuset 3 30 1
+cpu 2 101 1
+cpuacct 2 101 1
+blkio 6 99 1
+memory 7 1013 1
+devices 4 99 1
+freezer 9 30 1
+net_cls 10 30 1
+perf_event 8 30 1
+net_prio 10 30 1
+pids 5 100 1
 这个影响了api对容器的创建和启动，改如何处理呢？</p>2021-01-22</li><br/><li><span>瑞</span> 👍（1） 💬（1）<p>文首提到的Cgroup无法限制LoadAverage，从而可能导致整个系统性能下降。指的是处于D状态进程的性能下降，而D状态进程对同一资源的竞争越来越多，整体表现出来就是系统性能下降。这样理解对吗？</p>2020-12-08</li><br/><li><span>Geek2014</span> 👍（1） 💬（2）<p>“在 Linux 的系统维护中，我们需要经常查看 CPU 使用情况，再根据这个情况分析系统整体的运行状态。有时候你可能会发现，明明容器里所有进程的 CPU 使用率都很低，甚至整个宿主机的 CPU 使用率都很低，而机器的 Load Average 里的值却很高，容器里进程运行得也很慢。”
 
 老师，这个问题，我是不是可以这么理解
@@ -249,5 +251,6 @@ cpu：比做一条高速公路
 把D进程考虑进去是因为，服务站里的汽车随时可能进入高速公路，造成拥堵程度增加</p>2021-01-12</li><br/><li><span>InfoQ_09e721f0120c</span> 👍（0） 💬（0）<p>mac上man top对load average的解释：
 
      LoadAvg     Load average over 1, 5, and 15 minutes.  The load average is the average number of jobs in the run queue.
+
 </p>2024-07-07</li><br/>
 </ul>

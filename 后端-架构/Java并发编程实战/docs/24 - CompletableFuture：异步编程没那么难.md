@@ -12,7 +12,7 @@ doBizB();
 new Thread(()->doBizA())
   .start();
 new Thread(()->doBizB())
-  .start();  
+  .start();
 ```
 
 **异步化**，是并行方案得以实施的基础，更深入地讲其实就是：**利用多线程优化性能这个核心方案得以实施的基础**。看到这里，相信你应该就能理解异步编程最近几年为什么会大火了，因为优化性能是互联网大厂的一个核心需求啊。Java在1.8版本提供了CompletableFuture来支持异步编程，CompletableFuture有可能是你见过的最复杂的工具类了，不过功能也着实让人感到震撼。
@@ -33,7 +33,7 @@ new Thread(()->doBizB())
 
 ```
 //任务1：洗水壶->烧开水
-CompletableFuture<Void> f1 = 
+CompletableFuture<Void> f1 =
   CompletableFuture.runAsync(()->{
   System.out.println("T1:洗水壶...");
   sleep(1, TimeUnit.SECONDS);
@@ -42,7 +42,7 @@ CompletableFuture<Void> f1 =
   sleep(15, TimeUnit.SECONDS);
 });
 //任务2：洗茶壶->洗茶杯->拿茶叶
-CompletableFuture<String> f2 = 
+CompletableFuture<String> f2 =
   CompletableFuture.supplyAsync(()->{
   System.out.println("T2:洗茶壶...");
   sleep(1, TimeUnit.SECONDS);
@@ -55,7 +55,7 @@ CompletableFuture<String> f2 =
   return "龙井";
 });
 //任务3：任务1和任务2完成后执行：泡茶
-CompletableFuture<String> f3 = 
+CompletableFuture<String> f3 =
   f1.thenCombine(f2, (__, tf)->{
     System.out.println("T1:拿到茶叶:" + tf);
     System.out.println("T1:泡茶...");
@@ -92,15 +92,15 @@ T1:泡茶...
 
 ```
 //使用默认线程池
-static CompletableFuture<Void> 
+static CompletableFuture<Void>
   runAsync(Runnable runnable)
-static <U> CompletableFuture<U> 
+static <U> CompletableFuture<U>
   supplyAsync(Supplier<U> supplier)
-//可以指定线程池  
-static CompletableFuture<Void> 
+//可以指定线程池
+static CompletableFuture<Void>
   runAsync(Runnable runnable, Executor executor)
-static <U> CompletableFuture<U> 
-  supplyAsync(Supplier<U> supplier, Executor executor)  
+static <U> CompletableFuture<U>
+  supplyAsync(Supplier<U> supplier, Executor executor)
 ```
 
 创建完CompletableFuture对象之后，会自动地异步执行runnable.run()方法或者supplier.get()方法，对于一个异步操作，你需要关注两个问题：一个是异步操作什么时候结束，另一个是如何获取异步操作的执行结果。因为CompletableFuture类实现了Future接口，所以这两个问题你都可以通过Future接口来解决。另外，CompletableFuture类还实现了CompletionStage接口，这个接口内容实在是太丰富了，在1.8版本里有40个方法，这些方法我们该如何理解呢？
@@ -153,7 +153,7 @@ CompletionStage<R> thenComposeAsync(fn);
 通过下面的示例代码，你可以看一下thenApply()方法是如何使用的。首先通过supplyAsync()启动一个异步流程，之后是两个串行操作，整体看起来还是挺简单的。不过，虽然这是一个异步流程，但任务①②③却是串行执行的，②依赖①的执行结果，③依赖②的执行结果。
 
 ```
-CompletableFuture<String> f0 = 
+CompletableFuture<String> f0 =
   CompletableFuture.supplyAsync(
     () -> "Hello World")      //①
   .thenApply(s -> s + " QQ")  //②
@@ -193,21 +193,21 @@ CompletionStage runAfterEitherAsync(other, action);
 下面的示例代码展示了如何使用applyToEither()方法来描述一个OR汇聚关系。
 
 ```
-CompletableFuture<String> f1 = 
+CompletableFuture<String> f1 =
   CompletableFuture.supplyAsync(()->{
     int t = getRandom(5, 10);
     sleep(t, TimeUnit.SECONDS);
     return String.valueOf(t);
 });
 
-CompletableFuture<String> f2 = 
+CompletableFuture<String> f2 =
   CompletableFuture.supplyAsync(()->{
     int t = getRandom(5, 10);
     sleep(t, TimeUnit.SECONDS);
     return String.valueOf(t);
 });
 
-CompletableFuture<String> f3 = 
+CompletableFuture<String> f3 =
   f1.applyToEither(f2,s -> s);
 
 System.out.println(f3.join());
@@ -218,7 +218,7 @@ System.out.println(f3.join());
 虽然上面我们提到的fn、consumer、action它们的核心方法都**不允许抛出可检查异常，但是却无法限制它们抛出运行时异常**，例如下面的代码，执行 `7/0` 就会出现除零错误这个运行时异常。非异步编程里面，我们可以使用try{}catch{}来捕获并处理异常，那在异步编程里面，异常该如何处理呢？
 
 ```
-CompletableFuture<Integer> 
+CompletableFuture<Integer>
   f0 = CompletableFuture.
     .supplyAsync(()->(7/0))
     .thenApply(r->r*10);
@@ -238,7 +238,7 @@ CompletionStage<R> handleAsync(fn);
 下面的示例代码展示了如何使用exceptionally()方法来处理异常，exceptionally()的使用非常类似于try{}catch{}中的catch{}，但是由于支持链式编程方式，所以相对更简单。既然有try{}catch{}，那就一定还有try{}finally{}，whenComplete()和handle()系列方法就类似于try{}finally{}中的finally{}，无论是否发生异常都会执行whenComplete()中的回调函数consumer和handle()中的回调函数fn。whenComplete()和handle()的区别在于whenComplete()不支持返回结果，而handle()是支持返回结果的。
 
 ```
-CompletableFuture<Integer> 
+CompletableFuture<Integer>
   f0 = CompletableFuture
     .supplyAsync(()->(7/0))
     .thenApply(r->r*10)
@@ -261,7 +261,7 @@ CompletableFuture已经能够满足简单的异步编程需求，如果你对异
 ```
 //采购订单
 PurchersOrder po;
-CompletableFuture<Boolean> cf = 
+CompletableFuture<Boolean> cf =
   CompletableFuture.supplyAsync(()->{
     //在数据库中查询规则
     return findRuleByJdbc();
@@ -283,38 +283,38 @@ Boolean isOk = cf.join();
 1，读数据库属于io操作，应该放在单独线程池，避免线程饥饿
 2，异常未处理</p>2019-04-23</li><br/><li><span>密码123456</span> 👍（50） 💬（5）<p>我在想一个问题，明明是串行过程，直接写就可以了。为什么还要用异步去实现串行？</p>2019-04-23</li><br/><li><span>发条橙子 。</span> 👍（45） 💬（2）<p>老师 ，我有个疑问。 completableFuture 中各种关系（并行、串行、聚合），实际上就覆盖了各种需求场景。 例如 ： 线程A 等待 线程B 或者 线程C 等待 线程A和B 。
 
-我们之前讲的并发包里面 countdownLatch , 或者 threadPoolExecutor 和future  就是来解决这些关系场景的 ， 那有了 completableFuture 这个类 ，是不是以后有需求都优先考虑用 completableFuture ？感觉这个类就可以解决前面所讲的类的问题了</p>2019-04-24</li><br/><li><span>青莲</span> 👍（22） 💬（1）<p>1.查数据库属于io操作，用定制线程池
+我们之前讲的并发包里面 countdownLatch , 或者 threadPoolExecutor 和future 就是来解决这些关系场景的 ， 那有了 completableFuture 这个类 ，是不是以后有需求都优先考虑用 completableFuture ？感觉这个类就可以解决前面所讲的类的问题了</p>2019-04-24</li><br/><li><span>青莲</span> 👍（22） 💬（1）<p>1.查数据库属于io操作，用定制线程池
 2.查出来的结果做为下一步处理的条件，若结果为空呢，没有对应处理
 3.缺少异常处理机制</p>2019-04-23</li><br/><li><span>笃行之</span> 👍（17） 💬（2）<p>”如果所有 CompletableFuture 共享一个线程池，那么一旦有任务执行一些很慢的 I&#47;O 操作，就会导致线程池中所有线程都阻塞在 I&#47;O 操作上，从而造成线程饥饿，进而影响整个系统的性能。”老师，阻塞在io上和是不是在一个线程池没关系吧？</p>2019-04-29</li><br/><li><span>J.M.Liu</span> 👍（12） 💬（1）<p>我觉得既然都讲到CompletableFuture了，老师是不是有必要不一章ForkJoinPool呀？毕竟，ForkJoinPool和ThreadPoolExecutor还是有很多不一样的。谢谢老师</p>2019-04-23</li><br/><li><span>henry</span> 👍（11） 💬（4）<p>老师我现在有个任务，和您的例子有相似的地方，是从一个库里查询多张表的数据同步到另外一个库，就有双重for循环，最外层用与多张表的遍历，内层的for循环用于批量读取某一张表的数据，因为数据量可能在几万条，我想分批次读出来再同步到另一个数据库，昨天写的时候用的是futuretask,今天正好看到老师的文章就改成了CompletableFuture，还没有用异常处理的，后面我还要看看怎么加上异常处理的。其它的不知道我用的对不对，请老师看看：
-   &#47;&#47; 初始化异步工具类，分别异步执行2个任务
-        CompletableFuture&lt;List&lt;PBSEnergyData&gt;&gt; asyncAquirePBSEnergyData = new CompletableFuture();
-        CompletableFuture&lt;List&lt;AXEEnergyData&gt;&gt; asyncSaveAxeEnergyData = new CompletableFuture();
-        &#47;&#47; 初始化两个线程池， 分别用于2个任务 ，1个任务一个线程池，互不干扰
-        Executor aquirePBSEnergyDataExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        Executor saveAxeEnergyDataExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        queryUtils.getTableNames().forEach(tableName -&gt; {
-            int pageSize = queryUtils.getPageSize();
-            &#47;&#47;查询该表有多少条数据，每${pageSize}条一次
-            int count = pbsEnergyService.getCount(tableName);
-            &#47;&#47;总页数
-            int pages = count &#47; pageSize;
-            int pageNum = 0;
-            final int pageNo = pageNum;
-            for(pageNum = 0; pageNum &lt;= pages; pageNum++){
-                &#47;&#47; 异步获取PBS数据库的数据并返回结果
-                asyncAquirePBSEnergyData
-                        .supplyAsync(() -&gt; {
-                    查询数据库
-                    return pbsEnergyDatas;
-                },aquirePBSEnergyDataExecutor)
-                        &#47;&#47; 任务2任务1，任务1返回的结果
-                        .thenApply(pbsEnergyDatas -&gt; asyncSaveAxeEnergyData.runAsync(()-&gt;{
-                    List&lt;AXEEnergyData&gt; axeEnergyDatas = pbsEnergyDatas.stream().map(pbsEnergyData -&gt; {
-                   	 &#47;&#47;进行类型转换
-                    }).collect(Collectors.toList());
-                    &#47;&#47;批量保存
-                },saveAxeEnergyDataExecutor));
-            }
-        });
-全部贴上去，超过字符数了，只能请老师凑合看了 :(</p>2019-04-24</li><br/><li><span>Chocolate</span> 👍（10） 💬（4）<p>回答「密码123456」：CompletableFuture 在执行的过程中可以不阻塞主线程，支持 runAsync、anyOf、allOf 等操作，等某个时间点需要异步执行的结果时再阻塞获取。</p>2019-04-23</li><br/><li><span>Geek_0quh3e</span> 👍（8） 💬（2）<p>带有asyn的方法是异步执行，这里的异步是不在当前线程中执行？  比较困惑</p>2019-05-10</li><br/><li><span>Monday</span> 👍（7） 💬（1）<p>CompletableFuture从来没玩过，老师在工作&#47;实践中有使用过这个类吗？</p>2019-12-23</li><br/><li><span>LW</span> 👍（6） 💬（1）<p>老师，为什么CompletableFuture中默认使用ForkJoinPool这个线程池呢？它为什么不用其他线程池？</p>2019-04-24</li><br/><li><span>Geek_0359eb</span> 👍（5） 💬（1）<p>老师您好，想问下主线程怎么捕获到多线程中抛出的异常，捕获后再抛出自定义异常呢？</p>2020-04-21</li><br/><li><span>易儿易</span> 👍（5） 💬（1）<p>老师我有一个问题：在描述串行关系时，为什么参数没有other？这让我觉得并不是在描述两个子任务的串行关系，而是给第一个子任务追加了一个类似“回调方法”fn等……而并行关系和汇聚关系则很明确的出现了other……</p>2019-04-23</li><br/><li><span>_立斌</span> 👍（2） 💬（2）<p>老师好，想请问一下，如果一个事务里开了多个异步任务，如果其中一个任务抛出异常了，其他任务应该全部回滚，这样的异常如何捕获并处理呢？业界有最佳实践吗？谢谢老师</p>2021-05-09</li><br/>
+&#47;&#47; 初始化异步工具类，分别异步执行2个任务
+CompletableFuture&lt;List&lt;PBSEnergyData&gt;&gt; asyncAquirePBSEnergyData = new CompletableFuture();
+CompletableFuture&lt;List&lt;AXEEnergyData&gt;&gt; asyncSaveAxeEnergyData = new CompletableFuture();
+&#47;&#47; 初始化两个线程池， 分别用于2个任务 ，1个任务一个线程池，互不干扰
+Executor aquirePBSEnergyDataExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+Executor saveAxeEnergyDataExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+queryUtils.getTableNames().forEach(tableName -&gt; {
+int pageSize = queryUtils.getPageSize();
+&#47;&#47;查询该表有多少条数据，每${pageSize}条一次
+int count = pbsEnergyService.getCount(tableName);
+&#47;&#47;总页数
+int pages = count &#47; pageSize;
+int pageNum = 0;
+final int pageNo = pageNum;
+for(pageNum = 0; pageNum &lt;= pages; pageNum++){
+&#47;&#47; 异步获取PBS数据库的数据并返回结果
+asyncAquirePBSEnergyData
+.supplyAsync(() -&gt; {
+查询数据库
+return pbsEnergyDatas;
+},aquirePBSEnergyDataExecutor)
+&#47;&#47; 任务2任务1，任务1返回的结果
+.thenApply(pbsEnergyDatas -&gt; asyncSaveAxeEnergyData.runAsync(()-&gt;{
+List&lt;AXEEnergyData&gt; axeEnergyDatas = pbsEnergyDatas.stream().map(pbsEnergyData -&gt; {
+&#47;&#47;进行类型转换
+}).collect(Collectors.toList());
+&#47;&#47;批量保存
+},saveAxeEnergyDataExecutor));
+}
+});
+全部贴上去，超过字符数了，只能请老师凑合看了 :(</p>2019-04-24</li><br/><li><span>Chocolate</span> 👍（10） 💬（4）<p>回答「密码123456」：CompletableFuture 在执行的过程中可以不阻塞主线程，支持 runAsync、anyOf、allOf 等操作，等某个时间点需要异步执行的结果时再阻塞获取。</p>2019-04-23</li><br/><li><span>Geek_0quh3e</span> 👍（8） 💬（2）<p>带有asyn的方法是异步执行，这里的异步是不在当前线程中执行？ 比较困惑</p>2019-05-10</li><br/><li><span>Monday</span> 👍（7） 💬（1）<p>CompletableFuture从来没玩过，老师在工作&#47;实践中有使用过这个类吗？</p>2019-12-23</li><br/><li><span>LW</span> 👍（6） 💬（1）<p>老师，为什么CompletableFuture中默认使用ForkJoinPool这个线程池呢？它为什么不用其他线程池？</p>2019-04-24</li><br/><li><span>Geek_0359eb</span> 👍（5） 💬（1）<p>老师您好，想问下主线程怎么捕获到多线程中抛出的异常，捕获后再抛出自定义异常呢？</p>2020-04-21</li><br/><li><span>易儿易</span> 👍（5） 💬（1）<p>老师我有一个问题：在描述串行关系时，为什么参数没有other？这让我觉得并不是在描述两个子任务的串行关系，而是给第一个子任务追加了一个类似“回调方法”fn等……而并行关系和汇聚关系则很明确的出现了other……</p>2019-04-23</li><br/><li><span>_立斌</span> 👍（2） 💬（2）<p>老师好，想请问一下，如果一个事务里开了多个异步任务，如果其中一个任务抛出异常了，其他任务应该全部回滚，这样的异常如何捕获并处理呢？业界有最佳实践吗？谢谢老师</p>2021-05-09</li><br/>
 </ul>

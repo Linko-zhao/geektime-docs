@@ -70,7 +70,7 @@ npm install @emotion/react
 ```javascript
 ((...args) => console.log(JSON.stringify(args)))`我说${false}你说${true}`;
 // 回车后控制台会打印
-[["我说","你说",""],false,true]
+[["我说", "你说", ""], false, true];
 ```
 
 接下来运行 `npm start` 启动项目，可以看到应用的样式与之前并无差异。打开React Developer Tools会看到组件树中，原有`KanbanBoard`和`KanbanColumn`之间插入了一层名为 `EmotionCssPropInternal` 的组件，与 `KanbanColumn` 平级还插入了一个 `Insertion` 组件，如下图：
@@ -242,11 +242,9 @@ JSX文件将CSS文件作为一个对象导入进来，然后在JSX代码中把�
 
 ```javascript
 // Component.jsx
-import Styles from './Component.module.css';
+import Styles from "./Component.module.css";
 
-const Component = () => (
-  <div className={Styles.container}>Test</div>
-);
+const Component = () => <div className={Styles.container}>Test</div>;
 ```
 
 经过编译后，最终的代码中会保证类名的唯一性：

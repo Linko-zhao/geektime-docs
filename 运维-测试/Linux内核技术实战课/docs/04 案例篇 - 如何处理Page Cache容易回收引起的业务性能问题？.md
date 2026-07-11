@@ -58,7 +58,7 @@ drop_slab 2
 那这个行为是否有办法观察？这同样也是可以通过/proc/vmstat来观察的，/proc/vmstat简直无所不能（这也是为什么我会在之前说内核开发者更习惯去观察/proc/vmstat）。
 
 ```
- $ grep inodesteal /proc/vmstat 
+ $ grep inodesteal /proc/vmstat
  pginodesteal 114341
  kswapd_inodesteal 1291853
 ```
@@ -93,20 +93,20 @@ drop_slab 2
 
 int main()
 {
-        int fd; 
-        char *p; 
+        int fd;
+        char *p;
         int ret;
 
 
         fd = open(FILE_NAME, O_CREAT|O_RDWR, S_IRUSR|S_IWUSR);
         if (fd < 0)
-                return -1; 
+                return -1;
 
 
         /* Set size of this file */
         ret = ftruncate(fd, SIZE);
         if (ret < 0)
-                return -1; 
+                return -1;
 
 
         /* The current offset is 0, so we don't need to reset the offset. */
@@ -114,9 +114,9 @@ int main()
 
 
         /* Mmap virtual memory */
-        p = mmap(0, SIZE, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, fd, 0); 
+        p = mmap(0, SIZE, PROT_READ|PROT_WRITE, MAP_FILE|MAP_SHARED, fd, 0);
         if (!p)
-                return -1; 
+                return -1;
 
 
         /* Alloc physical memory */
@@ -147,7 +147,7 @@ int main()
 在这个例子中，我们通过mlock(2)来锁住了读FILE\_NAME这个文件内容对应的Page Cache。在运行上述程序之后，我们来看下该如何来观察这种行为：确认这些Page Cache是否被保护住了，被保护了多大。这同样可以通过/proc/meminfo来观察:
 
 ```
-$ egrep "Unevictable|Mlocked" /proc/meminfo 
+$ egrep "Unevictable|Mlocked" /proc/meminfo
 Unevictable:     1000000 kB
 Mlocked:         1000000 kB
 ```
@@ -209,7 +209,9 @@ https:&#47;&#47;man7.org&#47;linux&#47;man-pages&#47;man2&#47;mlock.2.html</p>20
 如果使用echo 2 &gt; &#47;proc&#47;sys&#47;vm&#47;drop_caches释放slab objects (includes dentries and inodes)也会释放掉page cache，那这条指令和单纯释放page cache的echo 1 &gt; &#47;proc&#47;sys&#47;vm&#47;drop_caches指令的区别又在哪里呢？
 
 谢谢老师的解答^^</p>2020-08-28</li><br/><li><span>从远方过来</span> 👍（4） 💬（1）<p>老师，我有几个疑问：
+
 1. 扫描比例是怎么设置的？和zoneinfo里面的min，low，high有什么的联系么？
-2. “回收到足够的内存” 是指回收到high水位还是满足这一次内存分配就停止了？</p>2020-08-27</li><br/><li><span>Linuxer</span> 👍（1） 💬（2）<p>请问一下邵老师，我看memory cgroup中相关的参数是这些  memory.kmem.limit_in_bytes,memory.kmem.max_usage_in_bytes,memory.usage_in_bytes,memory.soft_limit_in_bytes,memory.memsw.usage_in_bytes.memory.memsw.max_usage_in_bytes请问跟文章中memory.max, memory.high这些是怎么对应的呢？</p>2020-11-03</li><br/><li><span>青鸟飞鱼</span> 👍（1） 💬（1）<p>老师，你好，有个疑问，memory cgroup 来对它们进行保护，如何保证我要保护的数据是放在里面的呢？</p>2020-09-20</li><br/><li><span>坚</span> 👍（1） 💬（1）<p>老师好，我查看了一下 zoneinfo 其中   pages free=4497，但是min   low hight 分别为5 6 7 ，三者设置得这么接近，有这么小，是否会有什么问题呢？</p>2020-09-02</li><br/><li><span>Geek1560</span> 👍（1） 💬（1）<p>老师好，请教一个问题，当内核分配内存时，如果没有空闲页，其中slab&#47;slub部分的匿名页会调用shrink_inactive_list 函数会扫描inactive list，将不活跃的page置换到swap分区。但是swap有时几M、几百M甚至几个G，这个内核置换的机制或算法逻辑是啥？(PS本身应用程序或内核不会一次性申请几个G的内存)</p>2020-08-30</li><br/><li><span>J.Smile</span> 👍（1） 💬（1）<p>①”pginodesteal 是指 kswapd 之外其他线程在回收过程中，因为回收 inode 而释放的 pagecache page 个数。“------这里的”kswapd 之外其他线程“有可能就是用户业务线程吧？？
-②对于java工程师，完全不懂memory cgroup 为何物。</p>2020-08-28</li><br/><li><span>好说</span> 👍（1） 💬（1）<p>老师，对于io密集型的业务，基本上大部分都是读磁盘，当带宽达到一定量级之后服务器的load会很高，但是当我执行echo &quot;1&quot;&gt;&#47;proc&#47;sys&#47;vm&#47;drop_caches后，服务器load会非常明显的下降，然后过一会就又会升上去，请问老师造成这种现象的原因是什么呢，或者老师可以提示一些排查思路吗</p>2020-08-27</li><br/><li><span>唐江</span> 👍（0） 💬（1）<p>inode被回收是什么意思？</p>2021-05-20</li><br/><li><span>洛戈</span> 👍（0） 💬（1）<p>请问老师，使用memory cgroup怎么保护指定的关键数据呢？只能设置min来保留最小的page cache呀，那并不一定能确保关键数据在min之内吧</p>2021-04-22</li><br/><li><span>Geek_b85295</span> 👍（0） 💬（1）<p>老师，关于swap请教一个问题，调整swappiness参数可以控制系统使用swap的情况。我把这个参数改成了0，也就是尽量让机器不使用swap，在echo 1 &gt; &#47;proc&#47;sys&#47;vm&#47;drop_caches 得到大量free内存的情况下，用vmstat -w 1 指标中的swap信息，还是可以看到很多的换进换出，这是为什么，谢谢老师答疑</p>2020-09-29</li><br/><li><span>王一怂</span> 👍（0） 💬（1）<p>inode本身也是文件系统的概念，这里的inode应该是内存中的inode，感觉还是区分一下比较好</p>2020-09-02</li><br/>
+2. “回收到足够的内存” 是指回收到high水位还是满足这一次内存分配就停止了？</p>2020-08-27</li><br/><li><span>Linuxer</span> 👍（1） 💬（2）<p>请问一下邵老师，我看memory cgroup中相关的参数是这些 memory.kmem.limit_in_bytes,memory.kmem.max_usage_in_bytes,memory.usage_in_bytes,memory.soft_limit_in_bytes,memory.memsw.usage_in_bytes.memory.memsw.max_usage_in_bytes请问跟文章中memory.max, memory.high这些是怎么对应的呢？</p>2020-11-03</li><br/><li><span>青鸟飞鱼</span> 👍（1） 💬（1）<p>老师，你好，有个疑问，memory cgroup 来对它们进行保护，如何保证我要保护的数据是放在里面的呢？</p>2020-09-20</li><br/><li><span>坚</span> 👍（1） 💬（1）<p>老师好，我查看了一下 zoneinfo 其中 pages free=4497，但是min low hight 分别为5 6 7 ，三者设置得这么接近，有这么小，是否会有什么问题呢？</p>2020-09-02</li><br/><li><span>Geek1560</span> 👍（1） 💬（1）<p>老师好，请教一个问题，当内核分配内存时，如果没有空闲页，其中slab&#47;slub部分的匿名页会调用shrink_inactive_list 函数会扫描inactive list，将不活跃的page置换到swap分区。但是swap有时几M、几百M甚至几个G，这个内核置换的机制或算法逻辑是啥？(PS本身应用程序或内核不会一次性申请几个G的内存)</p>2020-08-30</li><br/><li><span>J.Smile</span> 👍（1） 💬（1）<p>①”pginodesteal 是指 kswapd 之外其他线程在回收过程中，因为回收 inode 而释放的 pagecache page 个数。“------这里的”kswapd 之外其他线程“有可能就是用户业务线程吧？？
+   ②对于java工程师，完全不懂memory cgroup 为何物。</p>2020-08-28</li><br/><li><span>好说</span> 👍（1） 💬（1）<p>老师，对于io密集型的业务，基本上大部分都是读磁盘，当带宽达到一定量级之后服务器的load会很高，但是当我执行echo &quot;1&quot;&gt;&#47;proc&#47;sys&#47;vm&#47;drop_caches后，服务器load会非常明显的下降，然后过一会就又会升上去，请问老师造成这种现象的原因是什么呢，或者老师可以提示一些排查思路吗</p>2020-08-27</li><br/><li><span>唐江</span> 👍（0） 💬（1）<p>inode被回收是什么意思？</p>2021-05-20</li><br/><li><span>洛戈</span> 👍（0） 💬（1）<p>请问老师，使用memory cgroup怎么保护指定的关键数据呢？只能设置min来保留最小的page cache呀，那并不一定能确保关键数据在min之内吧</p>2021-04-22</li><br/><li><span>Geek_b85295</span> 👍（0） 💬（1）<p>老师，关于swap请教一个问题，调整swappiness参数可以控制系统使用swap的情况。我把这个参数改成了0，也就是尽量让机器不使用swap，在echo 1 &gt; &#47;proc&#47;sys&#47;vm&#47;drop_caches 得到大量free内存的情况下，用vmstat -w 1 指标中的swap信息，还是可以看到很多的换进换出，这是为什么，谢谢老师答疑</p>2020-09-29</li><br/><li><span>王一怂</span> 👍（0） 💬（1）<p>inode本身也是文件系统的概念，这里的inode应该是内存中的inode，感觉还是区分一下比较好</p>2020-09-02</li><br/>
+
 </ul>

@@ -51,7 +51,7 @@ http://www.xxx.com/#/login
 之后，在进行页面跳转的操作时，hash 值的变化并不会导致浏览器页面的刷新，只是会触发hashchange事件。在下面的代码中，通过对hashchange事件的监听，我们就可以在fn函数内部进行动态地页面切换。
 
 ```javascript
-window.addEventListener('hashchange',fn)
+window.addEventListener("hashchange", fn);
 ```
 
 ### history 模式
@@ -73,54 +73,51 @@ window.addEventListener('popstate', fn)
 在代码中，我们首先实现了用Router类去管理路由，并且，我们使用createWebHashHistory来返回hash模式相关的监听代码，以及返回当前URL和监听hashchange事件的方法；然后，我们通过Router类的install方法注册了Router的实例，并对外暴露createRouter方法去创建Router实例；最后，我们还暴露了useRouter方法，去获取路由实例。
 
 ```javascript
-import {ref,inject} from 'vue'
-const ROUTER_KEY = '__router__'
+import { ref, inject } from "vue";
+const ROUTER_KEY = "__router__";
 
-function createRouter(options){
-    return new Router(options)
+function createRouter(options) {
+  return new Router(options);
 }
 
-function useRouter(){
-    return inject(ROUTER_KEY)
+function useRouter() {
+  return inject(ROUTER_KEY);
 }
-function createWebHashHistory(){
-    function bindEvents(fn){
-        window.addEventListener('hashchange',fn)
-    }
-    return {
-        bindEvents,
-        url:window.location.hash.slice(1) || '/'
-    }
+function createWebHashHistory() {
+  function bindEvents(fn) {
+    window.addEventListener("hashchange", fn);
+  }
+  return {
+    bindEvents,
+    url: window.location.hash.slice(1) || "/",
+  };
 }
-class Router{
-    constructor(options){
-        this.history = options.history
-        this.routes = options.routes
-        this.current = ref(this.history.url)
+class Router {
+  constructor(options) {
+    this.history = options.history;
+    this.routes = options.routes;
+    this.current = ref(this.history.url);
 
-        this.history.bindEvents(()=>{
-            this.current.value = window.location.hash.slice(1)
-        })
-    }
-    install(app){
-        app.provide(ROUTER_KEY,this)
-    }
+    this.history.bindEvents(() => {
+      this.current.value = window.location.hash.slice(1);
+    });
+  }
+  install(app) {
+    app.provide(ROUTER_KEY, this);
+  }
 }
 
-export {createRouter,createWebHashHistory,useRouter}
+export { createRouter, createWebHashHistory, useRouter };
 ```
 
 有了上面这段代码，我们回到src/router/index.js中，可以看到下面代码的使用方式，我们使用createWebHashHistory作为history参数，使用routes作为页面的参数传递给createRouter函数。
 
 ```javascript
-import {
-    createRouter,
-    createWebHashHistory,
-} from './grouter/index'
+import { createRouter, createWebHashHistory } from "./grouter/index";
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
-})
+  routes,
+});
 ```
 
 下一步，我们需要注册两个内置组件router-view和router-link。在createRouter创建的Router实例上，current返回当前的路由地址，并且使用ref包裹成响应式的数据。router-view组件的功能，就是current发生变化的时候，去匹配current地址对应的组件，然后动态渲染到router-view就可以了。
@@ -194,9 +191,7 @@ class Router{
 在下面的代码中，冒号开头的id就是路由的动态部分，会同时匹配/user/dasheng和/user/geektime， 这一部分的详细内容你可以参考[官方文档的路由匹配语法部分](https://next.router.vuejs.org/zh/guide/essentials/route-matching-syntax.html)。
 
 ```javascript
-const routes = [
-  { path: '/users/:id', component: User },
-]
+const routes = [{ path: "/users/:id", component: User }];
 ```
 
 然后是在实战中，对于有些页面来说，只有管理员才可以访问，普通用户访问时，会提示没有权限。这时就需要用到vue-router的**导航守卫功能**了，也就是在访问路由页面之前进行权限认证，这样可以做到对页面的控制，也就是只允许某些用户可以访问。
@@ -222,7 +217,7 @@ const routes = [
 <li><span>ll</span> 👍（50） 💬（5）<p>本节又是收获满满，巩固加回顾了关于前端路由的整体知识结构，有一下几点：
 
 1. 什么是路由
-   所谓 router 是干什么的？是指 route 的，这里中文翻译的是 “路”。何为“路由”，可能是“路由哪里 
+   所谓 router 是干什么的？是指 route 的，这里中文翻译的是 “路”。何为“路由”，可能是“路由哪里
    来&quot;；这里的“路”，广义上来说是“资源”，可以是“页面”，也可以是 json 音视频等等。
 
    如果把路由具象化，它是这么个东西；你告诉它一串神秘的代码（地址，url等），它给你“宝贵的资
@@ -230,37 +225,37 @@ const routes = [
 
    路由是“天然”存在的，因为我们所有在网上的行为本质都是向“某个地方”要“某些资源”
 
- 2. 前后端路由的区别的补充
-    传统方式与SPA“页面跳转”的问题涉及一个核心的问题，是“导航流程”，具体可以参考，李兵老师 
-    《浏览器工作原理与实践》中导航流程一节。
+2. 前后端路由的区别的补充
+   传统方式与SPA“页面跳转”的问题涉及一个核心的问题，是“导航流程”，具体可以参考，李兵老师
+   《浏览器工作原理与实践》中导航流程一节。
 
-    导航流程简单说，就是浏览器地址栏输入地址后，到浏览器准备渲染页面前这个阶段。开始流程的 
-    一个标志，就是浏览器标签页标题左边开始转圈圈。
+   导航流程简单说，就是浏览器地址栏输入地址后，到浏览器准备渲染页面前这个阶段。开始流程的
+   一个标志，就是浏览器标签页标题左边开始转圈圈。
 
-    传统的开发模式写出的页面，在每一次请求网络资源的过程，理论上都有这个流程。这可能就是两者 
-    之间性能差异所在
+   传统的开发模式写出的页面，在每一次请求网络资源的过程，理论上都有这个流程。这可能就是两者
+   之间性能差异所在
 
-    而 SPA 开发模式，网络资源用 XMLHttpRequest 调用，页面部分用JS“模拟”页面刷新。这里JS模拟部
-    分就是现在所学 vue-router 的工作。
+   而 SPA 开发模式，网络资源用 XMLHttpRequest 调用，页面部分用JS“模拟”页面刷新。这里JS模拟部
+   分就是现在所学 vue-router 的工作。
 
- 3. 关于路由实现
-    总结下，时间以2014年，HTML5标准作为分野，分两个部分
-    – API：location.hash；Event：hashchange
-    – API：history.pushState，history.replaceState；Event：popstate
+3. 关于路由实现
+   总结下，时间以2014年，HTML5标准作为分野，分两个部分
+   – API：location.hash；Event：hashchange
+   – API：history.pushState，history.replaceState；Event：popstate
 
-    这个就是前端路由的实现核心，如果对具体API感兴趣，可以参考《Javascript 高级程序设计》第4
-    版，12章，关于 BOM 的描述。
+   这个就是前端路由的实现核心，如果对具体API感兴趣，可以参考《Javascript 高级程序设计》第4
+   版，12章，关于 BOM 的描述。
 
-    大致意思是 hash 的改变不触发页面 reloads；pushState，replaceState 改变 history 也不触发
-    reloads。浏览器的这种行为，是根据 HTML5 这个标准实现的
+   大致意思是 hash 的改变不触发页面 reloads；pushState，replaceState 改变 history 也不触发
+   reloads。浏览器的这种行为，是根据 HTML5 这个标准实现的
 
-    然后，第一个API支持了路由的 hash 模式，在这之前 hash 的应用 &lt;a id=&quot;xxx&quot;&gt; 在页面中的定位，
-    第二个API支持了路由的 history 模式，但这个需要后端配合调整下后端路由；为什么，试着将要跳 
-    转的地址复制到浏览器地址栏，然后按回车，分析下页面渲染的过程，大概就清楚了。</p>2021-11-10</li><br/><li><span>Kevin</span> 👍（7） 💬（4）<p>关于webHashHistory,和webHistory 我这里有一个实践要注意的点，不知是否正确。
-就是是否需要服务器这个角色参与。
-whh，完全是在浏览器中完成的路由行为。
-wh 可能是要有服务器参与的 
-这一点，在最近的项目中，将vue项目打包直接放到Android assert目录下时，使用两种路由一个404, 一个正常，后续改成了whh了
+   然后，第一个API支持了路由的 hash 模式，在这之前 hash 的应用 &lt;a id=&quot;xxx&quot;&gt; 在页面中的定位，
+   第二个API支持了路由的 history 模式，但这个需要后端配合调整下后端路由；为什么，试着将要跳
+   转的地址复制到浏览器地址栏，然后按回车，分析下页面渲染的过程，大概就清楚了。</p>2021-11-10</li><br/><li><span>Kevin</span> 👍（7） 💬（4）<p>关于webHashHistory,和webHistory 我这里有一个实践要注意的点，不知是否正确。
+   就是是否需要服务器这个角色参与。
+   whh，完全是在浏览器中完成的路由行为。
+   wh 可能是要有服务器参与的
+   这一点，在最近的项目中，将vue项目打包直接放到Android assert目录下时，使用两种路由一个404, 一个正常，后续改成了whh了
 
 请大佬，解惑。</p>2021-11-10</li><br/><li><span>Geek_4578dc</span> 👍（3） 💬（1）<p>大圣 实战代码仓库地址 能发一下吗</p>2021-11-11</li><br/><li><span>balabla</span> 👍（2） 💬（1）<p>大圣老师，看完之后，仍有几个问题，求翻牌+1
 1.能说下vue-router3.x到vue-router4.x有什么需要重点关注的地方嘛
@@ -270,35 +265,36 @@ https:&#47;&#47;developer.mozilla.org&#47;en-US&#47;docs&#47;Web&#47;API&#47;Pop
 
 老师，这一段中的 “新建文件RouterILnk.vue ” 与下文的注册 “import RouterLink from &#39;.&#47;RouterLink.vue&#39; ”的文件名字对不上，应该是打错了，会找不到资源</p>2021-11-17</li><br/><li><span>@</span> 👍（1） 💬（1）<p>
 &lt;template&gt;
-    &lt;a :href=&quot;&#39;#&#39;+props.to&quot;&gt;
-        &lt;slot &#47;&gt;
-    &lt;&#47;a&gt;
+&lt;a :href=&quot;&#39;#&#39;+props.to&quot;&gt;
+&lt;slot &#47;&gt;
+&lt;&#47;a&gt;
 &lt;&#47;template&gt;
 
 &lt;script setup&gt;
 let props = defineProps({
-    to:{type:String,required:true}
+to:{type:String,required:true}
 })
 
 &lt;&#47;script&gt;
 
 这里是否需要引入下defineProps，大段代码部分能否内部写点注释
 建议老师跟着文章里的代码打一遍，看看能不能跑通
-代码上 有些马虎  是否是从课件里粘出来的时候整漏了</p>2021-11-11</li><br/><li><span>关关君</span> 👍（1） 💬（4）<p>很早啊就知道History这个API了但是没用过也用不上，但今天用History写路由的时候，看了API才发现使用history.pushState()方法的时候不会触发 popstate 这个事件，只有当浏览器操作行为的时候才会触发，就比如back forward。
+代码上 有些马虎 是否是从课件里粘出来的时候整漏了</p>2021-11-11</li><br/><li><span>关关君</span> 👍（1） 💬（4）<p>很早啊就知道History这个API了但是没用过也用不上，但今天用History写路由的时候，看了API才发现使用history.pushState()方法的时候不会触发 popstate 这个事件，只有当浏览器操作行为的时候才会触发，就比如back forward。
 所以在实现的时候调用完pushState之后我手动修改的current.value 的值才成功了。</p>2021-11-11</li><br/><li><span>海阔天空</span> 👍（1） 💬（2）<p>现在一般都用history路由了吧，history路由与html5的配合更好，能充分利用html5的特性，比如html5中监听滚动条的状态等，history都可以监听</p>2021-11-11</li><br/><li><span>拼搏、进取</span> 👍（1） 💬（1）<p>const comp = computed(()=&gt;{
-    const route = router.routes[0].children.find(
-        (route) =&gt; route.path === router.current.value    )
+const route = router.routes[0].children.find(
+(route) =&gt; route.path === router.current.value )
 
     return route?route.component : null
+
 })
 大圣老师， router.routes[0].children，这里报错了。我改成outer.routes.find()......</p>2021-11-10</li><br/><li><span>一线蓝光</span> 👍（1） 💬（2）<p>在计算匹配的组件时，我们直接取得 children 匹配即可。这里我使用children匹配不上，直接使用router.routes进行的匹配， 麻烦问下是什么原因呢</p>2021-11-10</li><br/><li><span>Devo Zou</span> 👍（0） 💬（1）<p>function createWebHistory() {
-  function bindEvents(fn) {
-    window.addEventListener(&quot;popstate&quot;, fn);
-  }
-  return {
-    bindEvents,
-    url: window.location.pathname || &quot;&#47;&quot;,
-  };
+function bindEvents(fn) {
+window.addEventListener(&quot;popstate&quot;, fn);
+}
+return {
+bindEvents,
+url: window.location.pathname || &quot;&#47;&quot;,
+};
 }
 
 另外再把RouterLink里面的a标签href的 &#39;#&#39; 去掉就可以实现history 模式了。不知道这样实现对不对[捂脸]

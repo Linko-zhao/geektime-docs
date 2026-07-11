@@ -125,7 +125,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 # 数据准备
 a = np.random.randn(100)
-s = pd.Series(a) 
+s = pd.Series(a)
 # 用Matplotlib画直方图
 plt.hist(s)
 plt.show()
@@ -150,7 +150,7 @@ plt.show()
 
 在Matplotlib中，我们使用plt.bar(x, height)函数，其中参数x代表x轴的位置序列，height是y轴的数值序列，也就是柱子的高度。
 
-在Seaborn中，我们使用sns.barplot(*x=None, y=None, data=None*)函数。其中参数data为DataFrame类型，x、y是data中的变量。
+在Seaborn中，我们使用sns.barplot(_x=None, y=None, data=None_)函数。其中参数data为DataFrame类型，x、y是data中的变量。
 
 ```
 import matplotlib.pyplot as plt
@@ -178,12 +178,12 @@ plt.show()
 
 在Matplotlib中，我们使用plt.boxplot(x, labels=None)函数，其中参数x代表要绘制箱线图的数据，labels是缺省值，可以为箱线图添加标签。
 
-在Seaborn中，我们使用sns.boxplot(*x=None, y=None, data=None*)函数。其中参数data为DataFrame类型，x、y是data中的变量。
+在Seaborn中，我们使用sns.boxplot(_x=None, y=None, data=None_)函数。其中参数data为DataFrame类型，x、y是data中的变量。
 
 ```
 # 数据准备
 # 生成10*4维度数据
-data=np.random.normal(size=(10,4)) 
+data=np.random.normal(size=(10,4))
 labels = ['A','B','C','D']
 # 用Matplotlib画箱线图
 plt.boxplot(data,labels=labels)
@@ -267,7 +267,7 @@ plt.show()
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib.font_manager import FontProperties  
+from matplotlib.font_manager import FontProperties
 # 数据准备
 labels=np.array([u"推进","KDA",u"生存",u"团战",u"发育",u"输出"])
 stats=[83, 61, 95, 67, 76, 88]
@@ -277,11 +277,11 @@ stats=np.concatenate((stats,[stats[0]]))
 angles=np.concatenate((angles,[angles[0]]))
 # 用Matplotlib画蜘蛛图
 fig = plt.figure()
-ax = fig.add_subplot(111, polar=True)   
+ax = fig.add_subplot(111, polar=True)
 ax.plot(angles, stats, 'o-', linewidth=2)
 ax.fill(angles, stats, alpha=0.25)
 # 设置中文字体
-font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf", size=14)  
+font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf", size=14)
 ax.set_thetagrids(angles * 180/np.pi, labels, FontProperties=font)
 plt.show()
 ```
@@ -375,11 +375,14 @@ plt.show()
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+
 # 数据准备
+
 crashes = sns.load_dataset(&#39;car_crashes&#39;)
 crashes_data = pd.DataFrame(crashes)
 
 # 用 Seaborn 画成对关系
+
 sns.pairplot(crashes)
 plt.show()
 
@@ -392,9 +395,9 @@ import numpy as np
 
 #定义生成隐患数量函数
 def GenerateHDNum(hdtimes):
-    #hdtimes表示要生成多少隐患数量
-    HD_NumList = list(pd.Series(np.random.rand(hdtimes)))
-    return [int(x * 100) for x in HD_NumList]
+#hdtimes表示要生成多少隐患数量
+HD_NumList = list(pd.Series(np.random.rand(hdtimes)))
+return [int(x * 100) for x in HD_NumList]
 
 #数据准备函数
 def MakeData():
@@ -402,7 +405,7 @@ def MakeData():
     #创建以月份为单位的时间索引
     dti = pd.date_range(start=&#39;2017-01-01&#39;, end=&#39;2018-12-31&#39;, freq=&#39;M&#39;)
     monthlist = [str(x * 100 + y) for x,y in zip(dti.year,dti.month)]
-    
+
     hdtimes = len(monthlist)
     #生成各种隐患数量
     NormalHD = GenerateHDNum(hdtimes)
@@ -434,19 +437,19 @@ def AnalyData(HDSet,AnalyType=&#39;0&#39;):
     #Hexbin图
     if AnalyType == &#39;4&#39;:
         sns.jointplot(x=&#39;Normal&#39;, y=&#39;Import&#39;, data=HDSet, kind=&#39;hex&#39;)
-    
+
     plt.show()
 
 def ShowMenu():
-    print(&#39;=&#39;*20)
-    print(&#39;1.显示成对关系图&#39;)
-    print(&#39;2.显示散点图&#39;)
-    print(&#39;3.显示核密度图&#39;)
-    print(&#39;4.显示Hexbin图&#39;)
-    print(&#39;R.换一批数据&#39;)
-    print(&#39;0.退出&#39;)
-    print(&#39;=&#39;*20)
-    return input(&#39;请输入命令:&#39;)
+print(&#39;=&#39;*20)
+print(&#39;1.显示成对关系图&#39;)
+print(&#39;2.显示散点图&#39;)
+print(&#39;3.显示核密度图&#39;)
+print(&#39;4.显示Hexbin图&#39;)
+print(&#39;R.换一批数据&#39;)
+print(&#39;0.退出&#39;)
+print(&#39;=&#39;*20)
+return input(&#39;请输入命令:&#39;)
 
 def main():
 
@@ -462,7 +465,9 @@ def main():
             AnalyData(HDSet, command)
 
 main()</p>2019-08-18</li><br/><li><span>sxpujs</span> 👍（9） 💬（1）<p>在 Mac 下设置中文字体，可以使用以下路径：
+
 # 设置中文字体
+
 font = FontProperties(fname=&quot;&#47;System&#47;Library&#47;Fonts&#47;STHeiti Medium.ttc&quot;, size=14)</p>2019-04-21</li><br/><li><span>跳跳</span> 👍（4） 💬（1）<p>第一题：seaborn car_crashes成对关系探索
 iris=sns.load_dataset(&quot;car_crashes&quot;)
 sns.pairplot(iris)
@@ -477,40 +482,50 @@ sns.jointplot(x=&#39;alcohol&#39;,y=&#39;speeding&#39;,data=iris,kind=&#39;hex&#
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import datasets
+
 # 数据准备
+
 iris_datas = datasets.load_iris()
 iris = pd.DataFrame(iris_datas.data, columns=[&#39;SpealLength&#39;, &#39;Spealwidth&#39;, &#39;PetalLength&#39;, &#39;PetalLength&#39;])
 print(iris.shape,&quot;\n&quot;,iris)
+
 # 用Seaborn画成对关系
+
 sns.pairplot(iris)
 出现如下错误：ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().</p>2021-03-06</li><br/><li><span>求知鸟</span> 👍（3） 💬（3）<p>python在慢慢追赶R，我的R语言分析水平停止了，python水平在往上涨，现在的状态是，有老师的课就学课，没有就看《精益数据分析》。
 </p>2019-01-16</li><br/><li><span>小强</span> 👍（2） 💬（2）<p>各种场景的视图，试用什么场景，怎么分析，例子太少了，理解不够深。</p>2020-07-10</li><br/><li><span>夕子</span> 👍（1） 💬（1）<p>car_crashes = sns.load_dataset(&#39;car_crashes&#39;)
 car_crashes.head(10)
 
 # 成对关系探索
+
 sns.pairplot(car_crashes)
 plt.show()
 
 # 画散点图
+
 sns.jointplot(x = &#39;speeding&#39;, y = &#39;total&#39;, data = car_crashes, kind = &#39;scatter&#39;)
 plt.show()
 
 # 画核密度图
+
 sns.jointplot(x = &#39;speeding&#39;, y = &#39;total&#39;, data = car_crashes, kind = &#39;kde&#39;)
 plt.show()
 
 # 画hexbin图
+
 sns.jointplot(x = &#39;speeding&#39;, y = &#39;total&#39;, data = car_crashes, kind = &#39;hex&#39;)
 plt.show()</p>2021-03-18</li><br/><li><span>丁思森</span> 👍（1） 💬（2）<p>请问一下，有人在运行sns.load_dataset(&#39;tips&#39;),遇到报错urllib.error.URLError: &lt;urlopen error [Errno 11004] getaddrinfo failed&gt;么？这里直接加载数据集会报错，你们是怎么解决的？</p>2020-06-11</li><br/><li><span>毛毛🐛虫🌻</span> 👍（1） 💬（2）<p>热力图那个是颜色越浅，值越大么？</p>2019-01-18</li><br/><li><span>拉我吃</span> 👍（1） 💬（1）<p># coding:utf-8
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Data Prep
+
 car_crashes = sns.load_dataset(&#39;car_crashes&#39;)
 sns.pairplot(car_crashes)
 plt.show()
 
 # plot with seaborn (scatter, kde, hex)
+
 sns.jointplot(x=&#39;alcohol&#39;, y=&#39;speeding&#39;, data=car_crashes, kind=&#39;scatter&#39;)
 sns.jointplot(x=&#39;alcohol&#39;, y=&#39;speeding&#39;, data=car_crashes, kind=&#39;kde&#39;)
 sns.jointplot(x=&#39;alcohol&#39;, y=&#39;speeding&#39;, data=car_crashes, kind=&#39;hex&#39;)
@@ -519,7 +534,9 @@ plt.show()
 二元关系选了喝酒和超速的对比，基本上在大部分区间下是线性关系，就是喝得多速度快:)</p>2019-01-17</li><br/><li><span>陶铖</span> 👍（0） 💬（1）<p>持续学习中，受益匪浅！</p>2020-05-29</li><br/><li><span>Dorothy</span> 👍（0） 💬（1）<p>运行sns.load_dataset()的时候遇到这个问题：
 URLError: &lt;urlopen error [Errno 61] Connection refused&gt; 请问大家有解决办法吗？</p>2020-05-21</li><br/><li><span>如果</span> 👍（0） 💬（1）<p>麻烦问下，seaborn数据集导入报错，在网上查了资料以后加入ssl认证，还是报错，怎么解决的</p>2020-04-18</li><br/><li><span>十六。</span> 👍（0） 💬（1）<p>import matplotlib.pyplot as plt
 import seaborn as sns
+
 # 数据准备
+
 crashes = sns.load_dataset(&quot;car_crashes&quot;)
 sns.pairplot(crashes)
 plt.show()</p>2020-03-28</li><br/><li><span>王辉</span> 👍（0） 💬（2）<p>老师我一点基础都没有 感觉听这个像天书</p>2020-03-01</li><br/>

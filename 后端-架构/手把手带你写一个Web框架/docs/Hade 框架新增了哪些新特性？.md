@@ -172,8 +172,8 @@ Flags:
 最后是./hade model api命令。
 
 ```plain
-> ./hade model api 
-  --database=database.default 
+> ./hade model api
+  --database=database.default
   --output=/Users/jianfengye/Documents/workspace/gohade/hade/app/http/module/student/
 ```
 

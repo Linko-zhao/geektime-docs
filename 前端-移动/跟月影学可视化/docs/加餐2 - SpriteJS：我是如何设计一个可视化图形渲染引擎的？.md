@@ -158,6 +158,7 @@ SpriteJS 3.0继承了SpriteJS 2.0的跨平台性，但是不再需要使用分�
 1. [D3.js](https://d3js.org)
 2. [SpriteJS](https://spritejs.org)
 3. [Mesh.js](https://github.com/mesh-js/mesh.js)
+
 <div><strong>精选留言（7）</strong></div><ul>
 <li><span>点滴</span> 👍（3） 💬（1）<p>使用 JavaScript Core 和 JS Bindings技术，除了跨平台，脱离浏览器，在其他方面有什么提升？目前很多跨平台的框架到后期都会面临性能与native开发性能差距。这块如何考量</p>2020-09-22</li><br/><li><span>赤道</span> 👍（2） 💬（1）<p>与threejs对比一下，4.0与之优劣势？</p>2021-01-15</li><br/><li><span>LJT</span> 👍（0） 💬（0）<p>这个4版本不就是flutter么？</p>2022-07-03</li><br/><li><span>ryannz</span> 👍（0） 💬（0）<p>另外能讲讲GPGPu就更好了</p>2022-02-17</li><br/><li><span>ryannz</span> 👍（0） 💬（0）<p>v4的代码在有放出来嘛？很感兴趣。要从native做起，兼容web感觉也挺难的。
 - native用c++实现？还是rust？？

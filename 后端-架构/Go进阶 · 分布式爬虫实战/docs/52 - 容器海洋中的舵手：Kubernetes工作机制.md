@@ -40,15 +40,15 @@ Kubernetes中抽象出了Pod作为资源调度的基本单位。Pod在容器的�
 
 ![图片](https://static001.geekbang.org/resource/image/c4/0e/c4e3fcebc9ce32554284a3071ac5d40e.jpg?wh=1920x1442)
 
-01. 书写描述Deployment资源的yaml文件，通过kubectl客户端创建Deployment资源。
-02. Deployment Controller监听到Deployment资源。
-03. Deployment Controller创建ReplicaSet资源。
-04. ReplicaSet Controller 监听到ReplicaSet资源。
-05. ReplicaSet Controller 创建Pod资源。
-06. 调度器监听到新的Pod资源。
-07. 调度器将Pod调度到指定工作节点。
-08. 工作节点的kubelet监听到Pod资源的变化。
-09. kubelet通知容器运行时启动容器。
+1.  书写描述Deployment资源的yaml文件，通过kubectl客户端创建Deployment资源。
+2.  Deployment Controller监听到Deployment资源。
+3.  Deployment Controller创建ReplicaSet资源。
+4.  ReplicaSet Controller 监听到ReplicaSet资源。
+5.  ReplicaSet Controller 创建Pod资源。
+6.  调度器监听到新的Pod资源。
+7.  调度器将Pod调度到指定工作节点。
+8.  工作节点的kubelet监听到Pod资源的变化。
+9.  kubelet通知容器运行时启动容器。
 10. 容器运行时将容器启动起来。
 
 ![图片](https://static001.geekbang.org/resource/image/c4/0e/c4e3fcebc9ce32554284a3071ac5d40e.jpg?wh=1920x1442)

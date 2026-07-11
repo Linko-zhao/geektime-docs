@@ -85,7 +85,7 @@ function MyForm() {
   const [value1, setValue1] = useState();
   const [value2, setValue2] = useState();
   // 更多表单元素状态...
-  
+
   return (
     <form>
       <Field1 value={value1} onChange={setValue1} />
@@ -116,7 +116,7 @@ import { useState, useCallback } from "react";
 const useForm = (initialValues = {}) => {
   // 设置整个 form 的状态：values
   const [values, setValues] = useState(initialValues);
-  
+
   // 提供一个方法用于设置 form 上的某个字段的值
   const setFieldValue = useCallback((name, value) => {
     setValues((values) => ({
@@ -277,7 +277,7 @@ Formik 应该是最早将 React 中的 form 数据逻辑单独提取出来的表
 典型的 Formik 代码如下：
 
 ```
-import { Formik, Form } from 'formik'; 
+import { Formik, Form } from 'formik';
 
 // ...
 
@@ -353,35 +353,37 @@ React Hook Form ，顾名思义，就是在 Hooks 出现之后，完全基于 Ho
       }
     },
     [validators],
-  )
 
-  const reset = useCallback(() =&gt; {
-    setValues(initialValues)
-  }, [initialValues])</p>2021-06-27</li><br/><li><span>Geek_ad92ae</span> 👍（1） 💬（1）<p>老师，你好。在用户二次修改表单时，一般需要通过网络请求历史的表单数据进行初始化，这种情况是不是可以把网络请求和数据初始化的逻辑封装在useform里面？</p>2021-06-24</li><br/><li><span>siegfried</span> 👍（0） 💬（1）<p>sandbox是不是被删除了？</p>2022-04-17</li><br/><li><span>Wizard</span> 👍（0） 💬（0）<p>可以用lodash的debounce讓用戶輸入完成後500ms才檢查是否有錯誤
+)
+
+const reset = useCallback(() =&gt; {
+setValues(initialValues)
+}, [initialValues])</p>2021-06-27</li><br/><li><span>Geek_ad92ae</span> 👍（1） 💬（1）<p>老师，你好。在用户二次修改表单时，一般需要通过网络请求历史的表单数据进行初始化，这种情况是不是可以把网络请求和数据初始化的逻辑封装在useform里面？</p>2021-06-24</li><br/><li><span>siegfried</span> 👍（0） 💬（1）<p>sandbox是不是被删除了？</p>2022-04-17</li><br/><li><span>Wizard</span> 👍（0） 💬（0）<p>可以用lodash的debounce讓用戶輸入完成後500ms才檢查是否有錯誤
 將範例修改成下面這樣就行了
 import _ from &quot;lodash&quot;
 const validateDebounceFunction = useCallback(
-    _.debounce((name, value) =&gt; {
-      if (validators[name]) {
-        const errMsg = validators[name](value);
-        setErrors((errors) =&gt; ({
-          ...errors,
-          [name]: errMsg || null
-        }));
-      }
-    }, 500),
-    [validators]
-  );
+_.debounce((name, value) =&gt; {
+if (validators[name]) {
+const errMsg = validators[name](value);
+setErrors((errors) =&gt; ({
+...errors,
+[name]: errMsg || null
+}));
+}
+}, 500),
+[validators]
+);
 
-  const setFieldValue = useCallback(
-    (name, value) =&gt; {
-      setValues((values) =&gt; ({
-        ...values,
-        [name]: value
-      }));
+const setFieldValue = useCallback(
+(name, value) =&gt; {
+setValues((values) =&gt; ({
+...values,
+[name]: value
+}));
 
       validateDebounceFunction(name, value);
     },
     [validateDebounceFunction]
-  );</p>2021-09-03</li><br/><li><span>傻子来了快跑丶</span> 👍（0） 💬（0）<p>虽然这个 API 只支持通过函数执行进行验证，但是，我们很容易扩展支持更多的类型，比如正则匹配、值范围等等,这个能演示一下吗</p>2021-07-01</li><br/>
+
+);</p>2021-09-03</li><br/><li><span>傻子来了快跑丶</span> 👍（0） 💬（0）<p>虽然这个 API 只支持通过函数执行进行验证，但是，我们很容易扩展支持更多的类型，比如正则匹配、值范围等等,这个能演示一下吗</p>2021-07-01</li><br/>
 </ul>

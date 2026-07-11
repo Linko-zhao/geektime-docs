@@ -45,7 +45,7 @@ $ jstat -options
 ```
 # Usage: jstat -outputOptions [-t] [-hlines] VMID [interval [count]]
 $ jstat -gc 22126 1s 4
-S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT    CGC    CGCT     GCT   
+S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT    CGC    CGCT     GCT
 17472,0 17472,0  0,0    0,0   139904,0 47146,4   349568,0   21321,0   30020,0 28001,8 4864,0 4673,4     22    0,080   3      0,270   0      0,000    0,350
 17472,0 17472,0 420,6   0,0   139904,0 11178,4   349568,0   21321,0   30020,0 28090,1 4864,0 4674,2     28    0,084   3      0,270   0      0,000    0,354
 17472,0 17472,0  0,0   403,9  139904,0 139538,4  349568,0   21323,4   30020,0 28137,2 4864,0 4674,2     34    0,088   4      0,359   0      0,000    0,446
@@ -62,7 +62,7 @@ S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU  
 
 ```
 $ jstat -gc 22208 1s
-S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT    CGC    CGCT     GCT   
+S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT    CGC    CGCT     GCT
 0,0   16384,0  0,0   16384,0 210944,0 192512,0  133120,0    5332,5   28848,0 26886,4 4864,0 4620,5     19    0,067   1      0,016   2      0,002    0,084
 0,0   16384,0  0,0   16384,0 210944,0 83968,0   133120,0    5749,9   29104,0 27132,8 4864,0 4621,0     21    0,078   1      0,016   2      0,002    0,095
 0,0    0,0    0,0    0,0   71680,0  18432,0   45056,0    20285,1   29872,0 27952,4 4864,0 4671,6     23    0,089   2      0,063   2      0,002    0,153
@@ -90,7 +90,7 @@ S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU  
 
 ```
 $ jstat -gc -t 22407
-Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT    CGC    CGCT     GCT   
+Timestamp        S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT    CGC    CGCT     GCT
            10,7  0,0    0,0    0,0    0,0   55296,0  45056,0   34816,0    20267,8   30128,0 27975,3 4864,0 4671,6     33    0,086   3      0,111   2      0,001    0,198
 ```
 
@@ -199,7 +199,7 @@ Launcher Type: SUN_STANDARD
 你可以通过下述命令查看其他"manageable"虚拟机参数：
 
 ```
-$ java -XX:+PrintFlagsFinal -version | grep manageable   
+$ java -XX:+PrintFlagsFinal -version | grep manageable
      intx CMSAbortablePrecleanWaitMillis           = 100                                    {manageable} {default}
      intx CMSTriggerInterval                       = -1                                     {manageable} {default}
      intx CMSWaitDuration                          = 2000                                   {manageable} {default}
@@ -295,7 +295,7 @@ Found 1 deadlock.
 5. `jstack`将打印目标Java进程中各个线程的栈轨迹、线程状态、锁状况等信息。它还将自动检测死锁。
 6. `jcmd`则是一把瑞士军刀，可以用来实现前面除了`jstat`之外所有命令的功能。
 
-* * *
+---
 
 今天的实践环节，你可以探索`jcmd`中的下述功能，看看有没有适合你项目的监控项：
 
@@ -335,6 +335,7 @@ VM.unlock_commercial_features
 VM.uptime
 VM.version
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>杨晓峰</span> 👍（20） 💬（1）<p>jmc早openjdk网站单独下载，目前需要7 ea版处理jdk11
 http:&#47;&#47;jdk.java.net&#47;jmc&#47;</p>2018-09-30</li><br/><li><span>Geek_987169</span> 👍（11） 💬（2）<p>老师为什么官方文档介绍工具开头都有&quot;This command is experimental and unsupported&quot;这句话？</p>2018-11-04</li><br/><li><span>钱</span> 👍（5） 💬（1）<p>嘿嘿，就喜欢这样的简单拿来主义，随学随用。老师能否深入讲一下这些命令的底层实现，对应的信息都是怎么获取到的？都是从哪里获取到的？如果说都是从JVM中感觉范围有点大，往细了讲是从JVM的什么地方获取的呢？</p>2018-09-28</li><br/><li><span>Axis</span> 👍（2） 💬（1）<p>Jdk11下开源了jfr但是没有jmc这个工具查看性能文件  是为什么？</p>2018-09-28</li><br/><li><span>杨春鹏</span> 👍（1） 💬（1）<p>为什么我双击这些.exe，直接就闪退。</p>2018-10-11</li><br/><li><span>Douglas</span> 👍（0） 💬（2）<p>老师讲的好像和jdk11 没啥关系吧</p>2018-09-28</li><br/><li><span>wkq2786130</span> 👍（6） 💬（0）<p>自己做的笔记，请大家斧正  http:&#47;&#47;weikeqin.com&#47;2020&#47;03&#47;28&#47;jvm-performance-tuning-monitoring-tool&#47; </p>2020-03-30</li><br/><li><span>美滋滋</span> 👍（6） 💬（0）<p>null那位朋友 oom killer了解一下</p>2018-10-10</li><br/><li><span>田斌</span> 👍（5） 💬（1）<p>Jstack -F会导致Java进程一直挂起吗，说是jdk的bug，什么情况下会一直挂起呢</p>2018-11-08</li><br/><li><span>null</span> 👍（5） 💬（1）<p>老师， 你好

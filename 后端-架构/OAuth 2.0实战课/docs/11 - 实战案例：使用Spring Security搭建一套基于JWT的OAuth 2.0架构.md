@@ -632,7 +632,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/user/**").authenticated()
                 .anyRequest().permitAll();
     }
-}    
+}
 ```
 
 到这里，我们来想一下，如果授权服务器产生Token的话，受保护资源服务器必须要有一种办法来验证Token，那如果这里的Token不是JWT的方式，我们可以怎么办呢？
@@ -1133,17 +1133,17 @@ ler中的路由url，在这些url之上使用切面逻辑来验证token中的资
 
 5、受保护资源应用自己的数据库中假设存有用户表，是否还要与统一认证中的用户表进行实时关联，比如a应用的用户aa删除了，还需要实时删除统一认证中的aa用户在a应用中的数据
 
-问题较多，乱，请老师抽空回复下，谢谢了</p>2020-07-24</li><br/><li><span>苗</span> 👍（10） 💬（1）<p>导出公钥证书的命令：keytool -list -rfc --keystore mytest.jks | openssl x509 -inform pem -pubkey</p>2021-05-11</li><br/><li><span>而立斋</span> 👍（6） 💬（0）<p>爱了，我要去手撸一遍，验证一下真伪。哈哈</p>2020-07-23</li><br/><li><span>Younger Ku</span> 👍（5） 💬（0）<p>能把源码带着看一遍，再把经常需要定制化的地方讲一下就好了。无论如何只停留在demo使用层面总感觉心里不踏实。</p>2020-08-19</li><br/><li><span>行一善</span> 👍（2） 💬（0）<p> 生成jks密钥库	生成.jks文件
- keytool -genkey -alias tutorialspedia -keyalg RSA -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;tutorialspedia.jks&quot;
-  keytool -genkey -alias jwt -keyalg RSA -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;jwt.jks&quot;
+问题较多，乱，请老师抽空回复下，谢谢了</p>2020-07-24</li><br/><li><span>苗</span> 👍（10） 💬（1）<p>导出公钥证书的命令：keytool -list -rfc --keystore mytest.jks | openssl x509 -inform pem -pubkey</p>2021-05-11</li><br/><li><span>而立斋</span> 👍（6） 💬（0）<p>爱了，我要去手撸一遍，验证一下真伪。哈哈</p>2020-07-23</li><br/><li><span>Younger Ku</span> 👍（5） 💬（0）<p>能把源码带着看一遍，再把经常需要定制化的地方讲一下就好了。无论如何只停留在demo使用层面总感觉心里不踏实。</p>2020-08-19</li><br/><li><span>行一善</span> 👍（2） 💬（0）<p> 生成jks密钥库 生成.jks文件
+keytool -genkey -alias tutorialspedia -keyalg RSA -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;tutorialspedia.jks&quot;
+keytool -genkey -alias jwt -keyalg RSA -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;jwt.jks&quot;
 
- 导出公共证书 .cer文件
- keytool -export -alias tutorialspedia -file &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;tutorialspedia_public_cert.cer&quot; -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;tutorialspedia.jks&quot;
-  keytool -export -alias jwt -file &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;public.cert&quot; -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;jwt.jks&quot;
- 
- 查看公钥
- keytool -list -rfc --keystore tutorialspedia.jks | openssl x509 -inform pem -pubkey
-  keytool -list -rfc --keystore jwt.jks | openssl x509 -inform pem -pubkey</p>2022-08-05</li><br/><li><span>Geek_0d99c9</span> 👍（2） 💬（3）<p>代码有点问题.直接访问8082&#47; 还是被重定向到login页面.OAuth2ClientApplication这个里面的EnableOAuth2Sso注解会覆盖WebSecurityConfig里面的免登录配置.所以应该把两个合并下
+导出公共证书 .cer文件
+keytool -export -alias tutorialspedia -file &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;tutorialspedia_public_cert.cer&quot; -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;tutorialspedia.jks&quot;
+keytool -export -alias jwt -file &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;public.cert&quot; -keystore &quot;&#47;home&#47;yaoshenglu&#47;keytool&#47;jwt.jks&quot;
+
+查看公钥
+keytool -list -rfc --keystore tutorialspedia.jks | openssl x509 -inform pem -pubkey
+keytool -list -rfc --keystore jwt.jks | openssl x509 -inform pem -pubkey</p>2022-08-05</li><br/><li><span>Geek_0d99c9</span> 👍（2） 💬（3）<p>代码有点问题.直接访问8082&#47; 还是被重定向到login页面.OAuth2ClientApplication这个里面的EnableOAuth2Sso注解会覆盖WebSecurityConfig里面的免登录配置.所以应该把两个合并下
 
 package me.josephzhu.springsecurity101.cloud.auth.client;
 
@@ -1161,28 +1161,25 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 @Configuration
 @Order(200)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    &#47;**
-     * &#47;路径和&#47;login路径允许访问，其它路径需要身份认证后才能访问
-     *
-     * @param http
-     * @throws Exception
-     *&#47;
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers(&quot;&#47;test&quot;,&quot;&#47;&quot;, &quot;&#47;login**&quot;,&quot;&#47;**&#47;test&quot;,&quot;&#47;ui&#47;test&quot;, &quot;&#47;logout&quot;)
-                .permitAll()
-                .anyRequest()
-                .authenticated().and()
-                .logout().logoutSuccessUrl(&quot;&#47;&quot;);;
-    }
+&#47;** * &#47;路径和&#47;login路径允许访问，其它路径需要身份认证后才能访问 * * @param http * @throws Exception
+_&#47;
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+http
+.authorizeRequests()
+.antMatchers(&quot;&#47;test&quot;,&quot;&#47;&quot;, &quot;&#47;login_*&quot;,&quot;&#47;**&#47;test&quot;,&quot;&#47;ui&#47;test&quot;, &quot;&#47;logout&quot;)
+.permitAll()
+.anyRequest()
+.authenticated().and()
+.logout().logoutSuccessUrl(&quot;&#47;&quot;);;
+}
 
       @Bean
-  public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oAuth2ClientContext,
-                                               OAuth2ProtectedResourceDetails details) {
-  return new OAuth2RestTemplate(details, oAuth2ClientContext);
-  }
+
+public OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oAuth2ClientContext,
+OAuth2ProtectedResourceDetails details) {
+return new OAuth2RestTemplate(details, oAuth2ClientContext);
+}
 
 }
 
@@ -1192,10 +1189,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     keytool -exportcert -alias jwt -file public.cert -keystore jwt.jks -rfc
 
 Caused by: java.lang.IllegalStateException: For MAC signing you do not need to specify the verifier key separately, and if you do it must match the signing key
-	at org.springframework.util.Assert.state(Assert.java:73) ~[spring-core-5.2.1.RELEASE.jar:5.2.1.RELEASE]
-	at org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter.afterPropertiesSet(JwtAccessTokenConverter.java:318) ~[spring-security-oauth2-2.3.4.RELEASE.jar:na]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1862) ~[spring-beans-5.2.1.RELEASE.jar:5.2.1.RELEASE]
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1799) ~[spring-beans-5.2.1.RELEASE.jar:5.2.1.RELEASE]
-	... 53 common frames omitted
+at org.springframework.util.Assert.state(Assert.java:73) ~[spring-core-5.2.1.RELEASE.jar:5.2.1.RELEASE]
+at org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter.afterPropertiesSet(JwtAccessTokenConverter.java:318) ~[spring-security-oauth2-2.3.4.RELEASE.jar:na]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1862) ~[spring-beans-5.2.1.RELEASE.jar:5.2.1.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1799) ~[spring-beans-5.2.1.RELEASE.jar:5.2.1.RELEASE]
+... 53 common frames omitted
 </p>2024-08-15</li><br/><li><span>ξ！</span> 👍（0） 💬（0）<p>可不可以出一期加餐security6.0的版本啊</p>2024-06-19</li><br/><li><span>Geek_4b4d7b</span> 👍（0） 💬（0）<p>老师好，请教下单点登录为啥会有http:&#47;&#47;localhost:8083&#47;ui&#47;login的访问地址，登录页面不是在认证服务8080上吗？</p>2022-03-26</li><br/>
 </ul>

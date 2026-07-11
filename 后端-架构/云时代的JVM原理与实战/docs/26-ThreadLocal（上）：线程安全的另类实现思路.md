@@ -21,21 +21,21 @@ ThreadLocal 也叫**线程局部变量，**最早出现在 JDK 1.2 版本中，
 ThreadLocal是如何做到的呢? 让我们先**从一个最简单的变量读取和设置开始。**
 
 ```plain
-public class Wine { 
-     private static ThreadLocal obj_thread = new ThreadLocal(); 
-     private Integer  obj_common = new Integer(10); 
-     public static void main(String[] args) { 
-      Wine a = new Wine(); 
+public class Wine {
+     private static ThreadLocal obj_thread = new ThreadLocal();
+     private Integer  obj_common = new Integer(10);
+     public static void main(String[] args) {
+      Wine a = new Wine();
 
-      //情况1：普通变量的设置和获取 
-      a.obj_common = new Integer(5); 
+      //情况1：普通变量的设置和获取
+      a.obj_common = new Integer(5);
       System.out.println(a.obj_common);
 
-      //情况2：ThreadLocal变量的设置和获取 
-      obj_thread.set(new Integer(6)); 
+      //情况2：ThreadLocal变量的设置和获取
+      obj_thread.set(new Integer(6));
       System.out.println(obj_thread.get());
      }
-} 
+}
 ```
 
 我们发现ThreadLocal在设置和读取变量上，还是和普通变量存在很大差别的。当我们需要读取ThreadLocal管理的变量时，不能直接读取，而是需要调用ThreadLocal对象的 get()方法，同理，当我们需要设置ThreadLocal的变量时，也需要借助ThreadLocal的set方法。这里面到底蕴藏了怎样的玄机呢？让我们赶紧潜入JVM内部，一探究竟。

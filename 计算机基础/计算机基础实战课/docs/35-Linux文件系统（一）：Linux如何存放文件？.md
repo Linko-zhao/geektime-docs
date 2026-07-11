@@ -34,7 +34,7 @@ sudo losetup /dev/loop0 hd.img
 第二步，由于回环设备就是 Linux 下的块设备，用户可以将其看作是硬盘、光驱或软驱等设备，并且可以用mount命令把该回环设备挂载到特定目录下。这样我们就可以用 Linux 下的 mkfs.ext3 命令，把这个 /dev/loop0 回环块设备格式化，进而格式化hd.img文件，在里面建立 Ext3 文件系统。
 
 ```plain
-sudo mkfs.ext3 -q /dev/loop0  
+sudo mkfs.ext3 -q /dev/loop0
 ```
 
 需要注意的是，loop0可能已经被占用了，我们可以使用loop1、loop2等，你需要根据自己电脑的情况处理。
@@ -77,7 +77,7 @@ Ext3文件系统的超级块存放在该文件系统所在分区的2号扇区，
 
 ```plain
 struct ext3_super_block {
-	__le32	s_inodes_count;		//inode节点总数 
+	__le32	s_inodes_count;		//inode节点总数
 	__le32	s_blocks_count;		// 储存块总数
 	__le32	s_r_blocks_count;	// 保留的储存块数
 	__le32	s_free_blocks_count;// 空闲的储存块数
@@ -112,7 +112,7 @@ struct ext3_super_block {
 	char	s_volume_name[16];	// 卷名
 	char	s_last_mounted[64];	// 文件系统最后挂载路径
 	__le32	s_algorithm_usage_bitmap; // 位图算法
-      //省略了日志相关的字段  
+      //省略了日志相关的字段
 };
 ```
 
@@ -146,7 +146,7 @@ struct ext3_group_desc
 
 接下来要说的是Ext3文件系统的位图块，它非常简单，每个块组中有两种位图块：一种用来描述**块组内每个储存块的分配状态**，另一种用于描述**inode节点的分配状态**。
 
-位图块中没有什么结构，就是位图数据，即块中的每个字节都有八个位。每个位表示一个相应对象的分配状态，该位为0时，表示相应对象为空闲可用状态，为1时则表示相应对象是占用状态。例如位图块中第一个字节，表示块组0~7号储存块的分配状态；第二个字节，表示块组8~15号储存块的分配状态 ……依次类推。位图块的块号可以从块组描述符中得到。
+位图块中没有什么结构，就是位图数据，即块中的每个字节都有八个位。每个位表示一个相应对象的分配状态，该位为0时，表示相应对象为空闲可用状态，为1时则表示相应对象是占用状态。例如位图块中第一个字节，表示块组0~~7号储存块的分配状态；第二个字节，表示块组8~~15号储存块的分配状态 ……依次类推。位图块的块号可以从块组描述符中得到。
 
 ### Ext3文件系统的inode节点
 
@@ -209,7 +209,7 @@ struct ext3_inode {
 			__u32	m_i_reserved2[2];
 		} masix2;
 	} osd2;				//操作系统依赖2
-	__le16	i_extra_isize; 
+	__le16	i_extra_isize;
 	__le16	i_pad1;
 };
 ```

@@ -130,7 +130,7 @@ function fetchData() {
       }
     }
   }
-  
+
 }
 ```
 
@@ -219,7 +219,7 @@ export default function Article({ articleId}) {
   const article = db.query(
     `select * from articles where id=${articleId}`
   ).rows[0];
-  
+
   return (
     <div>
       <h1>{article.title}</h1>

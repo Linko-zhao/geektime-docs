@@ -154,41 +154,42 @@ void *malloc_zone_malloc(malloc_zone_t *zone, size_t size)
 
 利用didReceivedMemoryWarning 这个代理时间，看得我一愣。。应该是代理事件，我这算不算鸡蛋里面挑骨头？
 
-task_infk的使用需要导入&lt;mach&#47;mach.h&gt; 
+task_infk的使用需要导入&lt;mach&#47;mach.h&gt;
 
-最后一段意思是，系统通过malloc_logger来统计并管理内存的分配情况？</p>2019-04-12</li><br/><li><span>无名</span> 👍（0） 💬（1）<p>当系统还剩多少内存时，会发出内存不足的通知。</p>2019-06-25</li><br/><li><span>drunkenMouse</span> 👍（0） 💬（1）<p>系统在强杀App前，会先做优先级判断。意思是：如果优先级高的话，本来会强杀的也不强杀了，而去强杀那些没有达到limit的进程？</p>2019-04-13</li><br/><li><span>drunkenMouse</span> 👍（0） 💬（1）<p>didReceivedMemory 动态获取内存值的方法，没有找到啊 大佬能说一下吗？</p>2019-04-13</li><br/><li><span>mαnajay</span> 👍（0） 💬（1）<p>hook malloc_logger aop收集日志，然后在OOM那6秒内收集所有内存分配信息，然后在再次启动应用时 上报这两部分日志吗？ 
+最后一段意思是，系统通过malloc_logger来统计并管理内存的分配情况？</p>2019-04-12</li><br/><li><span>无名</span> 👍（0） 💬（1）<p>当系统还剩多少内存时，会发出内存不足的通知。</p>2019-06-25</li><br/><li><span>drunkenMouse</span> 👍（0） 💬（1）<p>系统在强杀App前，会先做优先级判断。意思是：如果优先级高的话，本来会强杀的也不强杀了，而去强杀那些没有达到limit的进程？</p>2019-04-13</li><br/><li><span>drunkenMouse</span> 👍（0） 💬（1）<p>didReceivedMemory 动态获取内存值的方法，没有找到啊 大佬能说一下吗？</p>2019-04-13</li><br/><li><span>mαnajay</span> 👍（0） 💬（1）<p>hook malloc_logger aop收集日志，然后在OOM那6秒内收集所有内存分配信息，然后在再次启动应用时 上报这两部分日志吗？
 oom那一刻是指的哪个时机，接受内存警告？ didReceiveMemoryWarning 中判断 是否靠近 limit吗 </p>2019-04-11</li><br/><li><span>欢乐的小马驹</span> 👍（17） 💬（0）<p>我建议，以后写这样的专栏，最后把所有参考的原始资料都下。你觉得呢？</p>2020-05-21</li><br/><li><span>白开了杯水</span> 👍（16） 💬（1）<p>一直不知道内存分配最大值获取和怎么获取当前内存分配，看了文章豁然开朗，想问的是，老师这些知识都是通过分析源码得来的吗？</p>2019-04-11</li><br/><li><span>drunkenMouse</span> 👍（10） 💬（0）<p>iOS通过堆栈管理所有的app进程，通过一个优先级最高的线程去监控系统内存的压力，还有一个快速对照表记录所有app的内存使用情况。如果内存有压力了，就按照优先级去释放优先级低还使用内存多的。
 
 所以app得内存阈值是没有固定大小的。我一直以为每个app可以使用的内存大小是固定的。。</p>2019-04-14</li><br/><li><span>D</span> 👍（6） 💬（0）<p>腾讯的OOMDetector就是干这个事的https:&#47;&#47;github.com&#47;Tencent&#47;OOMDetector</p>2021-08-16</li><br/><li><span>我唔知点死啊</span> 👍（4） 💬（2）<p>fishhook初学者提问：
 关于fishhook malloc_logger，在libmalloc中找到malloc_logger是一个结构体：
 typedef void(malloc_logger_t)(uint32_t type,
-		uintptr_t arg1,
-		uintptr_t arg2,
-		uintptr_t arg3,
-		uintptr_t result,
-		uint32_t num_hot_frames_to_skip);
+uintptr_t arg1,
+uintptr_t arg2,
+uintptr_t arg3,
+uintptr_t result,
+uint32_t num_hot_frames_to_skip);
 
 fishhook malloc_logger没有任何作用，然后在_malloc_initialize方法里面，找到这句malloc_logger = __disk_stack_logging_log_stack;
 fishhhok __disk_stack_logging_log_stack同样不起作用，现在无从下手，请指教。
 
 我的fishhook方法如下：
 static void (*original_disk_stack_logging_log_stack)(uint32_t type_flags,
-                               uintptr_t zone_ptr,
-                               uintptr_t arg2,
-                               uintptr_t arg3,
-                               uintptr_t return_val,
-                                  uint32_t num_hot_to_skip);
+uintptr_t zone_ptr,
+uintptr_t arg2,
+uintptr_t arg3,
+uintptr_t return_val,
+uint32_t num_hot_to_skip);
 void new_disk_stack_logging_log_stack(uint32_t type_flags,
-                               uintptr_t zone_ptr,
-                               uintptr_t arg2,
-                               uintptr_t arg3,
-                               uintptr_t return_val,
-                               uint32_t num_hot_to_skip) {
-    NSLog(@&quot;========== __disk_stack_logging_log_stack ==========&quot;);
+uintptr_t zone_ptr,
+uintptr_t arg2,
+uintptr_t arg3,
+uintptr_t return_val,
+uint32_t num_hot_to_skip) {
+NSLog(@&quot;========== __disk_stack_logging_log_stack ==========&quot;);
 }
 
         struct rebinding malloc_logger_rebinding = { &quot;__disk_stack_logging_log_stack&quot;, original_disk_stack_logging_log_stack, (void *)&amp;original_disk_stack_logging_log_stack};
         rebind_symbols((struct rebinding[1]){malloc_logger_rebinding}, 1);</p>2019-04-18</li><br/><li><span>无名</span> 👍（3） 💬（2）<p>我问这个问题的原因是看到SDWebImage 2.6版本的源码中释放内存缓存有两种方式：
+
 第一种：监听到内存不足时，释放所有内存缓存；
 第二种：当系统剩余内存小于12M时，释放内存缓存。
 

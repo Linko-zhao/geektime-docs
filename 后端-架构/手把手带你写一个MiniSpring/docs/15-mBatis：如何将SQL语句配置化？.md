@@ -267,14 +267,14 @@ import com.minis.jdbc.core.JdbcTemplate;
 public class DefaultSqlSessionFactory implements SqlSessionFactory{
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-	
+
 	String mapperLocations;
 	public String getMapperLocations() {
 		return mapperLocations;
 	}
 	public void setMapperLocations(String mapperLocations) {
 		this.mapperLocations = mapperLocations;
-	}	
+	}
 	Map<String,MapperNode> mapperNodeMap = new HashMap<>();
 	public Map<String, MapperNode> getMapperNodeMap() {
 		return mapperNodeMap;
@@ -336,11 +336,11 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory{
 	}
 
 	@Override
-	public SqlSession openSession() {	
+	public SqlSession openSession() {
 		SqlSession newSqlSession = new DefaultSqlSession();
 		newSqlSession.setJdbcTemplate(jdbcTemplate);
 		newSqlSession.setSqlSessionFactory(this);
-		
+
 		return newSqlSession;
 	}
 }
@@ -374,7 +374,7 @@ public class UserService {
 			String sqlid = "com.test.entity.User.getUserInfo";
 			SqlSession sqlSession = sqlSessionFactory.openSession();
 			return (User)sqlSession.selectOne(sqlid, new Object[]{new Integer(userid)},
-					(pstmt)->{			
+					(pstmt)->{
 						ResultSet rs = pstmt.executeQuery();
 						User rtnUser = null;
 						if (rs.next()) {
@@ -396,11 +396,11 @@ public class UserService {
 这个SqlSession是由工厂生成的：`SqlSession sqlSession = sqlSessionFactory.openSession();`。你可以看一下它在DefaultSqlSessionFactory类中的定义。
 
 ```plain
-	public SqlSession openSession() {	
+	public SqlSession openSession() {
 		SqlSession newSqlSession = new DefaultSqlSession();
 		newSqlSession.setJdbcTemplate(jdbcTemplate);
 		newSqlSession.setSqlSessionFactory(this);
-		
+
 		return newSqlSession;
 	}
 ```
@@ -453,10 +453,10 @@ public class DefaultSqlSession implements SqlSession{
 		String sql = this.sqlSessionFactory.getMapperNode(sqlid).getSql();
 		return jdbcTemplate.query(sql, args, pstmtcallback);
 	}
-	
+
 	private void buildParameter(){
 	}
-	
+
 	private Object resultSet2Obj() {
 		return null;
 	}

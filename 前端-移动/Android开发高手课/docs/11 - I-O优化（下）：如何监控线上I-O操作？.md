@@ -15,7 +15,7 @@
 出于稳定性的考虑，我们退而求其次还可以尝试使用Java Hook方案。以Android 6.0的源码为例，FileInputStream的整个调用流程如下。
 
 ```
-java : FileInputStream -> IoBridge.open -> Libcore.os.open 
+java : FileInputStream -> IoBridge.open -> Libcore.os.open
 -> BlockGuardOs.open -> Posix.open
 ```
 
@@ -196,7 +196,7 @@ echo 3 > /proc/sys/vm/drop_caches
 ```
 public String readConfig() {
   if (Cache != null) {
-     return cache; 
+     return cache;
   }
   cache = read("configFile");
   return cache;
@@ -261,12 +261,12 @@ int ProxyOpen(const char *pathname, int flags, mode_t mode) {
 <li><span>gmm</span> 👍（5） 💬（1）<p>想问下 libjavacore.so、libopenjdkjvm.so、libopenjdkjvm.so 是系统的共享库，为什么 hook 修改了这些库，不会影响到其他的 APP 呢</p>2019-11-26</li><br/><li><span>欢乐小熊</span> 👍（5） 💬（2）<p>看了 Matrix IO 监控的源码, 被其骚操作震惊了, 通过 .so 库名找到了 mmap 区的库地址, 然后 hook 函数的实现, 有趣极了</p>2019-06-21</li><br/><li><span>iniesta2014</span> 👍（3） 💬（1）<p>对大文件使用 mmap 或者 NIO 方式? 这样的话，大文件 mmap不是需要很大虚拟内存吗？</p>2019-04-18</li><br/><li><span>荷兰小猪8813</span> 👍（2） 💬（1）<p>2013 年我在做 Multidex 优化的时候，发现代码中...
 
 老师，可以讲一下这个是如何优化的吗？</p>2019-08-31</li><br/><li><span>小洁</span> 👍（1） 💬（1）<p>请问下，上面说到&quot;采用 Native Hook 的监控方法性能损耗基本可以忽略&quot;，请问下在监控前和加入Native Hook 之后是通过什么方式去对比性能损耗的而且保证这个统计的准确性，这个统计本身也会是一个损耗吗</p>2019-03-15</li><br/><li><span>HI</span> 👍（1） 💬（1）<p>你好，Canary_Io源码中，检测 重复读，有这样代码
-    bool RepeatReadInfo::operator==(const RepeatReadInfo &amp;target) const {
-        return target.path_ == path_
-            &amp;&amp; target.java_thread_id_ == java_thread_id_
-            &amp;&amp; target.java_stack_ == java_stack_
-            &amp;&amp; target.file_size_ == file_size_
-            &amp;&amp; target.op_size_ == op_size_;
-    }
+bool RepeatReadInfo::operator==(const RepeatReadInfo &amp;target) const {
+return target.path_ == path_
+&amp;&amp; target.java_thread_id_ == java_thread_id_
+&amp;&amp; target.java_stack_ == java_stack_
+&amp;&amp; target.file_size_ == file_size_
+&amp;&amp; target.op_size_ == op_size_;
+}
 为什么这里要检测 op_size，这个貌似代表的是当前总的buff的大小，这个值就可以代表内容是一样的吗</p>2019-03-06</li><br/><li><span>林</span> 👍（1） 💬（1）<p>绍文大佬，文章中这句话没理解：“对启动过程需要的文件，我们可以指定在安装包中不压缩”。默认打的apk包中resource、resource.arsc文件不是就是没压缩过的吗？如何指定不压缩类</p>2019-02-19</li><br/><li><span>木木哈</span> 👍（4） 💬（0）<p>给大佬献上膝盖</p>2019-03-28</li><br/><li><span>聪明的傻孩子</span> 👍（3） 💬（0）<p>过去五年，再看依然能学到东西</p>2024-02-21</li><br/>
 </ul>

@@ -54,17 +54,17 @@
 
 ```javascript
 // main.js
-var worker = new Worker('worker.js');
-worker.postMessage('Hello world');
+var worker = new Worker("worker.js");
+worker.postMessage("Hello world");
 worker.onmessage = (msg) => {
-  console.log('message from worker', msg.data);
-}
+  console.log("message from worker", msg.data);
+};
 
 // worker.js
 self.onmessage = (msg) => {
-  postMessage('message sent from worker');
-  console.log('message from main', msg.data);
-}
+  postMessage("message sent from worker");
+  console.log("message from main", msg.data);
+};
 ```
 
 在JavaScript中，有几种不同的工作线程，分别为dedicated worker、shared worker和service worker。我们可以分别来看看它们的作用。这里我们先来看看dedicated worker。
@@ -131,14 +131,18 @@ worker.onmessage = (result) => {
 
 ```javascript
 var commands = {
-  isOdd(num) { /*...*/ },
-  isEven(num) { /*...*/ } 
-}; 
+  isOdd(num) {
+    /*...*/
+  },
+  isEven(num) {
+    /*...*/
+  },
+};
 
-function dispatch(method, args) { 
-  if (commands.hasOwnProperty(method)) { 
-    return commands[method](...args); 
-  } 
+function dispatch(method, args) {
+  if (commands.hasOwnProperty(method)) {
+    return commands[method](...args);
+  }
   //...
 }
 ```

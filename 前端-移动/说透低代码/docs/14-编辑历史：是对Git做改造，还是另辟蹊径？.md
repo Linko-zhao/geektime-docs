@@ -40,7 +40,7 @@ Git有非常强大的历史分支管理能力，用于多人协作时，可以�
 
 ```typescript
 const a = 123;
-const b = '123';
+const b = "123";
 console.log(a, b);
 ```
 
@@ -58,11 +58,7 @@ console.log(a, b);
 
 ```json
 {
-  "value": [
-    "const a = 123;",
-    "const b = '123';",
-    "console.log(a, b);"
-  ]
+  "value": ["const a = 123;", "const b = '123';", "console.log(a, b);"]
 }
 ```
 

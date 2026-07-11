@@ -134,7 +134,7 @@ LLaMA 3 将这些优化整合到索引生成中，显著提升了 RAG 模型在�
 
 欢迎你把你的经验分享到留言区，也欢迎你把这节课的内容分享给其他朋友，我们下节课再见！
 
-* * *
+---
 
 ### 1. 创建环境
 
@@ -192,12 +192,12 @@ GRAPHRAG_API_KEY=EMPTY
 在 `settings.yaml` 文件中进行以下修改，配置 Ollama 进行嵌入计算：
 
 ```yaml
-llm: 
-  api_base: http://localhost:11434/v1 
-  model: meta-llama/Meta-Llama-3-8B-Instruct 
+llm:
+  api_base: http://localhost:11434/v1
+  model: meta-llama/Meta-Llama-3-8B-Instruct
 embedding:
   llm:
-    model: nomic-embed-text 
+    model: nomic-embed-text
     api_base: http://localhost:11434/api
 ```
 

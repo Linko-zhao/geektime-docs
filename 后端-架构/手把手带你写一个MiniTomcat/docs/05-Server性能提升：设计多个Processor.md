@@ -58,7 +58,7 @@ pom.xml参考如下：
             <version>3.4</version>
         </dependency>
     </dependencies>
-</project>  
+</project>
 ```
 
 ## 池化技术引入
@@ -490,10 +490,10 @@ Q1：用notifyAll唤醒所有线程，不对吧。
 Q2：recycle方法有多线程问题吗？
 假设有5个线程在处理5个请求，这5个线程都会调用recycle方法，此时会存在并发问题吗？
 Q3：线程池的大小一般为多大？
-有经验公式吗？</p>2023-12-18</li><br/><li><span>无心</span> 👍（0） 💬（2）<p>avaliable的 ture 和 false 语意是不是反了</p>2024-03-09</li><br/><li><span>Geek_b7bd01</span> 👍（0） 💬（2）<p>为什么connector调用processor.assign()方法，这样不会导致connector线程进行等待吗？为何不直接将任务丢给processor。</p>2024-01-31</li><br/><li><span>Geek_b7bd01</span> 👍（0） 💬（1）<p>这样connector不是必须得等待processor执行完成之后才能继续往下走吗，不影响效率吗？</p>2024-01-31</li><br/><li><span>ctt</span> 👍（0） 💬（1）<p> HttpProcessor initprocessor = new HttpProcessor();       
- processors.push(initprocessor);        
-curProcessors++;        
-return ((HttpProcessor) processors.pop());    请问这段代码为什么push完就立即pop了呢</p>2023-12-24</li><br/><li><span>C.</span> 👍（0） 💬（2）<p>Tomcat 为什么用一个简单的 queue 来实现多线程而不是用 JDK 自带的线程池？
+有经验公式吗？</p>2023-12-18</li><br/><li><span>无心</span> 👍（0） 💬（2）<p>avaliable的 ture 和 false 语意是不是反了</p>2024-03-09</li><br/><li><span>Geek_b7bd01</span> 👍（0） 💬（2）<p>为什么connector调用processor.assign()方法，这样不会导致connector线程进行等待吗？为何不直接将任务丢给processor。</p>2024-01-31</li><br/><li><span>Geek_b7bd01</span> 👍（0） 💬（1）<p>这样connector不是必须得等待processor执行完成之后才能继续往下走吗，不影响效率吗？</p>2024-01-31</li><br/><li><span>ctt</span> 👍（0） 💬（1）<p> HttpProcessor initprocessor = new HttpProcessor();  
+processors.push(initprocessor);  
+curProcessors++;  
+return ((HttpProcessor) processors.pop()); 请问这段代码为什么push完就立即pop了呢</p>2023-12-24</li><br/><li><span>C.</span> 👍（0） 💬（2）<p>Tomcat 为什么用一个简单的 queue 来实现多线程而不是用 JDK 自带的线程池？
 1.自定义可以更好地控制，还有后期的优化
 2.历史原因，可能当时内置线程池功能没那么完善
 现在，应该也支持使用JDK自带的线程池
@@ -503,11 +503,11 @@ return ((HttpProcessor) processors.pop());    请问这段代码为什么push完
 所以我觉得，好像永远是各个processor等待connector来执行assign，而connector实际并没有机会进入到assign里的wait()的部分？</p>2024-06-20</li><br/><li><span>夙夜SEngineer</span> 👍（0） 💬（0）<p>发现个不太合理的地方，newProcessor方法正确逻辑应该如下才对：
 
 private HttpProcessor newProcessor() {
-        HttpProcessor initprocessor = new HttpProcessor(this);
-        initprocessor.start();
-        processors.push(initprocessor);
-        curProcessors++;
-&#47;&#47;        return ((HttpProcessor) processors.pop());
-        return (HttpProcessor) initprocessor;
-    }</p>2025-02-11</li><br/><li><span>夙夜SEngineer</span> 👍（0） 💬（0）<p>虽然Connctor和Proccessor是两个线程了，但本质还是同步模型，感觉性能没有提升。不知道我哪里理解的不对，请指教</p>2025-02-11</li><br/><li><span>wild wings.Luv</span> 👍（0） 💬（0）<p>老师您好，看了您的文章收获满满。其中关于并发处理请求的架构我有一些问题。由于connector和processor是一对多的关系，所以每个processor要单独维护自己的信号，connector在分配socket时，调用processor的同步块assign。但是这个同步这里的代码我好像不是很理解。connector和processor之间实际上没有”同步的生产消费关系“：首先，createProcessor处有空余的processor时才会分配给connector，所以connector并不需要等待某个processor消费完了再给他socket，当没有空余的processor时直接放弃处理（这里也是我觉得设计的不足之处）。其次，processor中的同步块也并不是等待processor处理完请求释放socket之后，才把状态设置为false，而是拿到socket之后就马上更改状态。这样做的目的我不是很清楚，也就是这样的同步机制，我没有理解到它的用处。</p>2024-09-12</li><br/>
+HttpProcessor initprocessor = new HttpProcessor(this);
+initprocessor.start();
+processors.push(initprocessor);
+curProcessors++;
+&#47;&#47; return ((HttpProcessor) processors.pop());
+return (HttpProcessor) initprocessor;
+}</p>2025-02-11</li><br/><li><span>夙夜SEngineer</span> 👍（0） 💬（0）<p>虽然Connctor和Proccessor是两个线程了，但本质还是同步模型，感觉性能没有提升。不知道我哪里理解的不对，请指教</p>2025-02-11</li><br/><li><span>wild wings.Luv</span> 👍（0） 💬（0）<p>老师您好，看了您的文章收获满满。其中关于并发处理请求的架构我有一些问题。由于connector和processor是一对多的关系，所以每个processor要单独维护自己的信号，connector在分配socket时，调用processor的同步块assign。但是这个同步这里的代码我好像不是很理解。connector和processor之间实际上没有”同步的生产消费关系“：首先，createProcessor处有空余的processor时才会分配给connector，所以connector并不需要等待某个processor消费完了再给他socket，当没有空余的processor时直接放弃处理（这里也是我觉得设计的不足之处）。其次，processor中的同步块也并不是等待processor处理完请求释放socket之后，才把状态设置为false，而是拿到socket之后就马上更改状态。这样做的目的我不是很清楚，也就是这样的同步机制，我没有理解到它的用处。</p>2024-09-12</li><br/>
 </ul>

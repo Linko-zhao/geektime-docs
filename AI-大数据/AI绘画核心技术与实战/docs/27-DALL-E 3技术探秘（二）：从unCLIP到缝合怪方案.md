@@ -125,12 +125,12 @@ def custom_layernorm2d(x, gamma, beta, epsilon=1e-5):
 
     # 归一化
     x_normalized = (x - mean) / torch.sqrt(var + epsilon)
-  
+
     # 伸缩偏移变换
     out = gamma * x_normalized + beta
 
     return out
-    
+
 def custom_instancenorm2d(x, gamma, beta, epsilon=1e-5):
     # 计算批量均值和方差
     mean = torch.mean(x, dim=(2, 3), keepdim=True)
@@ -138,7 +138,7 @@ def custom_instancenorm2d(x, gamma, beta, epsilon=1e-5):
 
     # 归一化
     x_normalized = (x - mean) / torch.sqrt(var + epsilon)
-  
+
     # 伸缩偏移变换
     out = gamma * x_normalized + beta
 
@@ -176,13 +176,13 @@ class AdaGroupNorm(nn.Module):
             emb = self.act(emb)
 
         # DALL-E 3中提到的
-        # "a learned scale and bias term that 
-        # is dependent on the timestep signal 
+        # "a learned scale and bias term that
+        # is dependent on the timestep signal
         # is applied to the outputs of the
         # GroupNorm layers"
         # 对应就是下面这几行代码
-        
-        emb = self.linear(emb) 
+
+        emb = self.linear(emb)
         emb = emb[:, :, None, None]
         scale, shift = emb.chunk(2, dim=1)
 

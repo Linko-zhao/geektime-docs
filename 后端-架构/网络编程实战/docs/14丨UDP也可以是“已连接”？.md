@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
             error(1, errno, "sendto failed");
         }
         printf("send bytes: %zu \n", rt);
-        
+
         len = 0;
         recv_line[0] = 0;
         n = recvfrom(socket_fd, recv_line, MAXLINE, 0, reply_addr, &len);
@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
         if (rc < 0) {
             error(1, errno, "recv failed");
         }
-        
+
         count++;
     }
 

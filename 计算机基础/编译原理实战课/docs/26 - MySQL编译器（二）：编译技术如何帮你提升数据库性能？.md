@@ -99,10 +99,10 @@ MySQL编译器中，每个AST节点，都会有一个**contextualize()方法**�
 有的。举个例子，假设一个SQL语句带了子查询，那么子查询中既可以引用本查询块中的表和字段，也可以引用父查询中的表和字段。这个时候就存在了两个作用域，比如下面这个查询语句：
 
 ```
-select dept_name from departments where dept_no in 
-    (select dept_no from dept_emp 
+select dept_name from departments where dept_no in
+    (select dept_no from dept_emp
         where dept_name != 'Sales'  #引用了上一级作用域中的字段
-        group by dept_no 
+        group by dept_no
         having count(*)> 20000)
 ```
 
@@ -143,10 +143,10 @@ MySQL编译器的优化功能主要都在sql\_optimizer.cc中。就像高级语�
 你可以用explain语句，让MySQL输出执行计划，下面我们来看看MySQL具体是怎么做的：
 
 ```
-explain select employees.emp_no, first_name, 
+explain select employees.emp_no, first_name,
                departments.dept_no dept_name
         from employees, dept_emp, departments
-        where employees.emp_no = dept_emp.emp_no 
+        where employees.emp_no = dept_emp.emp_no
               and dept_emp.dept_no = departments.dept_no;
 ```
 

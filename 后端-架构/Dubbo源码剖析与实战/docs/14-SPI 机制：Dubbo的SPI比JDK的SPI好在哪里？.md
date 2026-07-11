@@ -53,17 +53,17 @@ public class WebFwBootApplication {
         // 环境已准备好，此处省略若干行代码...
         // 上下文已实例化，此处省略若干行代码...
         // 上下文已准备好，此处省略若干行代码...
-        
+
         // 应用成功启动
         onCompleted();
-        
+
         // 应用已准备好，此处省略若干行代码...
     }
-    
+
     // 应用成功启动时刻，提供一个扩展口子
     private static void onCompleted() {
         // 加载 ApplicationStartedListener 接口的所有实现类
-        ServiceLoader<ApplicationStartedListener> loader = 
+        ServiceLoader<ApplicationStartedListener> loader =
                 ServiceLoader.load(ApplicationStartedListener.class);
         // 遍历 ApplicationStartedListener 接口的所有实现类，并调用里面的 onCompleted 方法
         Iterator<ApplicationStartedListener> it = loader.iterator();
@@ -127,7 +127,7 @@ public static void main(String[] args) {
     // 模拟进行 3 次调用 load 方法并传入同一个接口
     for (int i = 0; i < 3; i++) {
         // 加载 ApplicationStartedListener 接口的所有实现类
-        ServiceLoader<ApplicationStartedListener> loader 
+        ServiceLoader<ApplicationStartedListener> loader
                = ServiceLoader.load(ApplicationStartedListener.class);
         // 遍历 ApplicationStartedListener 接口的所有实现类，并调用里面的 onCompleted 方法
         Iterator<ApplicationStartedListener> it = loader.iterator();
@@ -203,11 +203,11 @@ public class Dubbo14DubboSpiApplication {
         ApplicationModel applicationModel = ApplicationModel.defaultModel();
         // 通过 Protocol 获取指定像 ServiceLoader 一样的加载器
         ExtensionLoader<IDemoSpi> extensionLoader = applicationModel.getExtensionLoader(IDemoSpi.class);
-        
+
         // 通过指定的名称从加载器中获取指定的实现类
         IDemoSpi customSpi = extensionLoader.getExtension("customSpi");
         System.out.println(customSpi + ", " + customSpi.getDefaultPort());
-        
+
         // 再次通过指定的名称从加载器中获取指定的实现类，看看打印的引用是否创建了新对象
         IDemoSpi customSpi2 = extensionLoader.getExtension("customSpi");
         System.out.println(customSpi2 + ", " + customSpi2.getDefaultPort());

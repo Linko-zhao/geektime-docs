@@ -18,13 +18,13 @@
 
 ```typescript
 interface Form {
-  addControl(dir: NgControl): void
-  removeControl(dir: NgControl): void
-  getControl(dir: NgControl): FormControl
-  addFormGroup(dir: AbstractFormGroupDirective): void
-  removeFormGroup(dir: AbstractFormGroupDirective): void
-  getFormGroup(dir: AbstractFormGroupDirective): FormGroup
-  updateModel(dir: NgControl, value: any): void
+  addControl(dir: NgControl): void;
+  removeControl(dir: NgControl): void;
+  getControl(dir: NgControl): FormControl;
+  addFormGroup(dir: AbstractFormGroupDirective): void;
+  removeFormGroup(dir: AbstractFormGroupDirective): void;
+  getFormGroup(dir: AbstractFormGroupDirective): FormGroup;
+  updateModel(dir: NgControl, value: any): void;
 }
 ```
 
@@ -139,8 +139,12 @@ return (
       bgColor={COLUMN_BG_COLORS.ongoing}
       title="进行中"
       setDraggedItem={setDraggedItem}
-      setIsDragSource={(isSrc) => setDragSource(isSrc ? COLUMN_KEY_ONGOING : null)}
-      setIsDragTarget={(isTgt) => setDragTarget(isTgt ? COLUMN_KEY_ONGOING : null)}
+      setIsDragSource={(isSrc) =>
+        setDragSource(isSrc ? COLUMN_KEY_ONGOING : null)
+      }
+      setIsDragTarget={(isTgt) =>
+        setDragTarget(isTgt ? COLUMN_KEY_ONGOING : null)
+      }
       onDrop={handleDrop}
       cardList={ongoingList}
     />
@@ -153,7 +157,8 @@ return (
       onDrop={handleDrop}
       cardList={doneList}
     />
-  </KanbanBoard>
+     {" "}
+  </KanbanBoard>
 );
 ```
 
@@ -253,7 +258,7 @@ export default function KanbanBoard({
           bgColor={COLUMN_BG_COLORS.done}
           title="已完成"
           {/**/}
-          onDrop={onDrop}          
+          onDrop={onDrop}         
           cardList={doneList}
         />
       </>)}
@@ -280,51 +285,49 @@ export default function KanbanBoard({
 
 ```javascript
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // ...
 import KanbanBoard, {
-  COLUMN_KEY_DONE,
-  COLUMN_KEY_ONGOING,
-  COLUMN_KEY_TODO,
-} from './KanbanBoard';
+  COLUMN_KEY_DONE,
+  COLUMN_KEY_ONGOING,
+  COLUMN_KEY_TODO,
+} from "./KanbanBoard";
 
-const DATA_STORE_KEY = 'kanban-data-store';
+const DATA_STORE_KEY = "kanban-data-store";
 
 function App() {
-  const [todoList, setTodoList] = useState([/**/]);
-  const [ongoingList, setOngoingList ] = useState([/**/]);
-  const [doneList, setDoneList ] = useState([/**/]);
-  const [isLoading, setIsLoading] = useState(true);
-  // ...
-  const updaters = {
-    [COLUMN_KEY_TODO]: setTodoList,
-    [COLUMN_KEY_ONGOING]: setOngoingList,
-    [COLUMN_KEY_DONE]: setDoneList
-  };
-  const handleAdd = (column, newCard) => {
-    updaters[column]((currentStat) => [newCard, ...currentStat]);
-  };
-  const handleRemove = (column, cardToRemove) => {
-    updaters[column]((currentStat) =>
-      currentStat.filter((item) => !Object.is(item, cardToRemove))
-    );
-  };
+  const [todoList, setTodoList] = useState([/**/]);
+  const [ongoingList, setOngoingList] = useState([/**/]);
+  const [doneList, setDoneList] = useState([/**/]);
+  const [isLoading, setIsLoading] = useState(true); // ...
+  const updaters = {
+    [COLUMN_KEY_TODO]: setTodoList,
+    [COLUMN_KEY_ONGOING]: setOngoingList,
+    [COLUMN_KEY_DONE]: setDoneList,
+  };
+  const handleAdd = (column, newCard) => {
+    updaters[column]((currentStat) => [newCard, ...currentStat]);
+  };
+  const handleRemove = (column, cardToRemove) => {
+    updaters[column]((currentStat) =>
+      currentStat.filter((item) => !Object.is(item, cardToRemove)),
+    );
+  };
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        {/**/}
-      </header>
-      <KanbanBoard
-        isLoading={isLoading}
-        todoList={todoList}
-        ongoingList={ongoingList}
-        doneList={doneList}
-        onAdd={handleAdd}
-        onRemove={handleRemove}
-      />
-    </div>
-  );
+  return (
+    <div className="App">
+            <header className="App-header">        {/**/}      </header>     {" "}
+      <KanbanBoard
+        isLoading={isLoading}
+        todoList={todoList}
+        ongoingList={ongoingList}
+        doneList={doneList}
+        onAdd={handleAdd}
+        onRemove={handleRemove}
+      />
+         {" "}
+    </div>
+  );
 }
 
 export default App;
@@ -342,24 +345,29 @@ export default App;
 
 ```markdown
 App
- - todoList
- - ongoingList
- - doneList
- - isLoading
+
+- todoList
+- ongoingList
+- doneList
+- isLoading
 
 KanbanBoard
- - draggedItem
- - dragSource
- - dragTarget
+
+- draggedItem
+- dragSource
+- dragTarget
 
 KanbanColumn
- - showAdd
+
+- showAdd
 
 KanbanCard
- - displayTime
+
+- displayTime
 
 KanbanNewCard
- - title
+
+- title
 ```
 
 前面提到过，state是组件的内部实现。这么一看，KanbanColumn、KanbanCard、KanbanNewCard还挺符合的。KanbanBoard的draggedItem稍有特殊，它的state更新函数setDraggedItem是通过props传递给KanbanColumn调用的。
@@ -398,7 +406,7 @@ React为这个场景设计了context上下文，我们在[上节课](https://tim
 新建一个文件，src/context/AdminContext.js，代码如下：
 
 ```javascript
-import React from 'react';
+import React from "react";
 
 const AdminContext = React.createContext(false);
 
@@ -408,27 +416,31 @@ export default AdminContext;
 在src/App.js中使用这个context，顺便微调一下handleRemove的实现，让它只判断卡片标题相等：
 
 ```javascript
-import AdminContext from './context/AdminContext';
+import AdminContext from "./context/AdminContext";
 // ...
 function App() {
   // ...
   const handleRemove = (column, cardToRemove) => {
-    updaters[column]((currentStat) =>
-      currentStat.filter((item) => item.title !== cardToRemove.title)
-    );
-  };
-  const [isAdmin, setIsAdmin] = useState(false);
-  const handleToggleAdmin = (evt) => {
-    setIsAdmin(!isAdmin);
-  };
+    updaters[column]((currentStat) =>
+      currentStat.filter((item) => item.title !== cardToRemove.title),
+    );
+  };
+  const [isAdmin, setIsAdmin] = useState(false);
+  const handleToggleAdmin = (evt) => {
+    setIsAdmin(!isAdmin);
+  };
   return (
     <div className="App">
       <header className="App-header">
         <h1>
-          我的看板 
+          我的看板
           <button onClick={handleSaveAll}>保存所有卡片</button>
           <label>
-            <input type="checkbox" value={isAdmin} onChange={handleToggleAdmin} />
+            <input
+              type="checkbox"
+              value={isAdmin}
+              onChange={handleToggleAdmin}
+            />
             管理员模式
           </label>
         </h1>
@@ -466,18 +478,21 @@ function App() {
 
 ```javascript
 export default function KanbanCard({ title, status, onDragStart, onRemove }) {
-  // ...
-  const isAdmin = useContext(AdminContext);
+  // ...
+  const isAdmin = useContext(AdminContext);
 
-  return (
-    <li css={kanbanCardStyles} draggable onDragStart={handleDragStart}>
-      <div css={kanbanCardTitleStyles}>{title}</div>
-      <div css={css`
-      `} title={status}>{displayTime} {isAdmin && onRemove && (
-        <button onClick={() => onRemove({title})}>X</button>
-      )}</div>
-    </li>
-  );
+  return (
+    <li css={kanbanCardStyles} draggable onDragStart={handleDragStart}>
+            <div css={kanbanCardTitleStyles}>{title}</div>     {" "}
+      <div css={css``} title={status}>
+        {displayTime}{" "}
+        {isAdmin && onRemove && (
+          <button onClick={() => onRemove({ title })}>X</button>
+        )}
+      </div>
+         {" "}
+    </li>
+  );
 }
 ```
 

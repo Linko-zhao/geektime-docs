@@ -143,7 +143,7 @@ for(let i = 1; i <= n; i++){
 function getCanvasPoint(canvas, x, y){
   let rect = canvas.getBoundingClientRect();
   return {
-    x: 2 * (x - rect.left), 
+    x: 2 * (x - rect.left),
     y: 2 * (y - rect.top),
   };
 }
@@ -178,7 +178,7 @@ function recorded(res){
   }else{
     console.log(res.records);
     recorder.record().then(recorded);
-  }      
+  }
 }
 
 
@@ -270,7 +270,7 @@ export default class Recorder{
         overflow: 'hidden',
         backgroundColor: options.bgColor
       });
-      document.body.appendChild(container); 
+      document.body.appendChild(container);
     }
     this.container = container;
 
@@ -279,7 +279,7 @@ export default class Recorder{
 
 
     //画圆的 canvas，也是最外层监听事件的 canvas
-    let circleCanvas = document.createElement('canvas'); 
+    let circleCanvas = document.createElement('canvas');
 
 
     //2 倍大小，为了支持 retina 屏
@@ -289,7 +289,7 @@ export default class Recorder{
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%, -50%) scale(0.5)', 
+        transform: 'translate(-50%, -50%) scale(0.5)',
       });
     }
 
@@ -312,7 +312,7 @@ export default class Recorder{
     this.circleCanvas = circleCanvas;
 
 
-    this.container.addEventListener('touchmove', 
+    this.container.addEventListener('touchmove',
       evt => evt.preventDefault(), {passive: false});
 
 
@@ -424,7 +424,7 @@ export default class Recorder{
 
 
         moveCtx.clearRect(0, 0, moveCanvas.width, moveCanvas.height);
-        drawLine(moveCtx, focusColor, x0, y0, x1, y1);        
+        drawLine(moveCtx, focusColor, x0, y0, x1, y1);
       }
     };
 
@@ -512,7 +512,7 @@ async check(password){
   if(this.mode !== Locker.MODE_CHECK){
     await this.cancel();
     this.mode = Locker.MODE_CHECK;
-  }  
+  }
 
 
   let checked = this.options.check.checked;
@@ -547,7 +547,7 @@ async update(){
   }
 
 
-  let beforeRepeat = this.options.update.beforeRepeat, 
+  let beforeRepeat = this.options.update.beforeRepeat,
       afterRepeat = this.options.update.afterRepeat;
 
 
@@ -562,14 +562,14 @@ async update(){
   if(first.err){
     this.update();
     beforeRepeat.call(this, first);
-    return Promise.resolve(first);   
+    return Promise.resolve(first);
   }
 
 
   beforeRepeat.call(this, first);
 
 
-  let second = await this.record();      
+  let second = await this.record();
 
 
   if(second.err && second.err.message === Locker.ERR_USER_CANCELED){
@@ -592,7 +592,7 @@ async update(){
 另外，我们还要注意一些细节问题。由于实际在手机上触屏时，如果上下拖动，浏览器的默认行为会导致页面上下移动，因此我们需要阻止 touchmove 的默认事件。
 
 ```
-this.container.addEventListener('touchmove', 
+this.container.addEventListener('touchmove',
       evt => evt.preventDefault(), {passive: false});
 
 ```
@@ -609,7 +609,7 @@ touchmove 事件在 Chrome 下默认是一个 [Passive Event](https://dom.spec.w
 2. 做好技术调研和核心方案研究，选择合适的方案
 3. 着手优化和解决细节问题，要站在API使用者的角度思考
 
-* * *
+---
 
 ## 源码
 

@@ -178,7 +178,7 @@ export const RouterViewImpl = /*#__PURE__*/ defineComponent({
   setup(props, { attrs, slots }) {
     // 全局的reactiveRoute对象注入
     const injectedRoute = inject(routerViewLocationKey)!
-    
+
     const routeToDisplay = computed(() => props.route || injectedRoute.value)
     const depth = inject(viewDepthKey, 0)
     const matchedRouteRef = computed<RouteLocationMatched | undefined>(
@@ -226,7 +226,7 @@ export const RouterViewImpl = /*#__PURE__*/ defineComponent({
           ref: viewRef,
         })
       )
-  
+
       return (
         // pass the vnode to the slot as a prop.
         // h and <component :is="..."> both accept vnodes
@@ -263,7 +263,7 @@ export function createRouterMatcher(
   function remoteRoute(){}
   function getRoutes(){
     return matchers
-  }  
+  }
   function insertMatcher(){}
   function resolve(){}
   // add initial routes
@@ -276,7 +276,7 @@ export function createRouterMatcher(
 在下面的代码中我们可以看到，addRoute函数内部通过createRouteRecordMatcher创建扩展之后的matcher对象，包括了record、parent、children等树形，可以很好地描述路由之间的嵌套父子关系。这样整个路由对象就已经创建完毕，那我们如何在路由切换的时候寻找到正确的路由对象呢？
 
 ```javascript
-function addRoute(    
+function addRoute(
   record: RouteRecordRaw,
   parent?: RouteRecordMatcher,
   originalRecord?: RouteRecordMatcher
@@ -288,7 +288,7 @@ function addRoute(
     // ...
     matcher = createRouteRecordMatcher(normalizedRecord, parent, options)
     insertMatcher(matcher)
-      
+
   }
   return originalMatcher
     ? () => {
@@ -402,7 +402,7 @@ function pushWithRedirect(
 
   const toLocation = targetLocation as RouteLocationNormalized
 
-  
+
   return (failure ? Promise.resolve(failure) : navigate(toLocation, from))
     .catch((error: NavigationFailure | NavigationRedirectError) =>
       isNavigationFailure(error)
@@ -465,7 +465,7 @@ routerHistory在createRouter中通过option.history获取，就是我们创建vu
 
     markAsReady()
   }
-  
+
   function markAsReady(err?: any): void {
     if (ready) return
     ready = true

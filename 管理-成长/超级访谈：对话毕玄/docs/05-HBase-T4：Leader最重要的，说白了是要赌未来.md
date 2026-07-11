@@ -81,7 +81,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/c9/80/c90380a223bc69d5e23ee6b7b1357c80.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 
@@ -136,7 +136,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/73/14/735f734af23b75596f7c6417fe37ee14.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 
@@ -180,7 +180,7 @@
 
 ![图片](https://static001.geekbang.org/resource/image/05/73/05b76143ecae6520e3017f177c071873.jpg?wh=1920x674)
 
-* * *
+---
 
 　
 

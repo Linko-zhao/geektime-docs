@@ -44,7 +44,7 @@ node 'db02' {
     default_master = "db01"
   }
 }
-... 
+...
 ```
 
 结合代码可以看到，redis01这个节点里要应用Redis这个模块，db01和db02要应用MySQL这个模块，db02里的参数表示它是db01的slave节点。Puppet agent会根据节点定义拉取对应的配置，然后应用到主机上。
@@ -134,7 +134,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 0.0.0.0/0  
+          CidrIp: 0.0.0.0/0
 ```
 
 在这个配置中，我们定义了这个EC2的镜像、安全组、ssh登陆公钥等信息，将命令转化成了声明式的配置。之后再结合模版的方式，就能达到IaC管理**快速、可靠、可重复的标准**。

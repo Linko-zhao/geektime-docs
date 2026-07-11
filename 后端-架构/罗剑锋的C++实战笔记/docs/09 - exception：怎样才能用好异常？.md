@@ -56,7 +56,7 @@ C++里异常的用法想必你已经知道了：**用try把可能发生异常的
 try
 {
   int n = read_data(fd, ...);    // 读取数据，可能抛出异常
-  
+
   ...                         // do some right thing
 }
 catch(...)
@@ -90,7 +90,7 @@ public:
 public:
     my_exception(const char* msg):            // 构造函数
         super_type(msg)                      // 别名也可以用于构造
-    {}  
+    {}
 
     my_exception() = default;                // 默认构造函数
    ~my_exception() = default;                // 默认析构函数
@@ -266,23 +266,26 @@ public:
     {}
 
     my_exception() = default;
-   ~my_exception() = default;
+
+~my_exception() = default;
 private:
-    int code = 0;
+int code = 0;
 };
 
 请问老师，这一句是什么语法？没看懂
 my_exception(const char* msg):
-        super_type(msg)
-    {}
+super_type(msg)
+{}
 
-列表初始化吗？但是 super_type 不是成员变量呀</p>2020-06-20</li><br/><li><span>xGdl</span> 👍（2） 💬（1）<p>两try-catch当函数体还是挺丑的吧</p>2020-06-04</li><br/><li><span>reverse</span> 👍（2） 💬（1）<p>老师，在下说一下我在工作写代码三四年的时间内的一些感受 ，在下主要用的是nodejs java  ， node这块我觉得在es6之后可以结合promise async 函数 再配合try catch 写出简洁的的函数，java 要求的比较严格  ，它的编译器会强制要求你加上 try catch 尤其是对 io操作 来说 ，实际上node的io操作也需要如此，综上所述，偏向于业务逻辑的错误码需要自己合理的定义范围自己意义，涉及到硬件磁盘的需要强制性的捕获异常，设计大于编程，函数规格大于功能本身</p>2020-05-26</li><br/><li><span>禾众</span> 👍（1） 💬（3）<p>老师如果代码中没有写过异常处理逻辑，那么类的构造析构函数还有必要写noexcept吗？如果也需要的话，代码中到处都要加noexcept就太累赘了。</p>2020-06-21</li><br/><li><span>EncodedStar</span> 👍（1） 💬（1）<p>异常不要乱用，乱用容易把bug隐藏起来，出现假象，让你看起来程序跑的很稳定。</p>2020-05-26</li><br/><li><span>java2c++</span> 👍（1） 💬（1）<p>用途1:捕获到异常后可以记录到日志文件中，很容易找到出问题的地方以及出问题的原因，比coredump分析容易多了。用途2:代码分支处理，一个经典的案例就是入参需要string转int，可以转换就走正常逻辑，不可以转换出现异常就直接返回错误原因给上游</p>2020-05-26</li><br/><li><span>Yarco</span> 👍（0） 💬（1）<p>这... 我的困扰在于当你调用一个API时，你怎么知道它是用错误码还是异常来做错误处理的？
+列表初始化吗？但是 super_type 不是成员变量呀</p>2020-06-20</li><br/><li><span>xGdl</span> 👍（2） 💬（1）<p>两try-catch当函数体还是挺丑的吧</p>2020-06-04</li><br/><li><span>reverse</span> 👍（2） 💬（1）<p>老师，在下说一下我在工作写代码三四年的时间内的一些感受 ，在下主要用的是nodejs java ， node这块我觉得在es6之后可以结合promise async 函数 再配合try catch 写出简洁的的函数，java 要求的比较严格 ，它的编译器会强制要求你加上 try catch 尤其是对 io操作 来说 ，实际上node的io操作也需要如此，综上所述，偏向于业务逻辑的错误码需要自己合理的定义范围自己意义，涉及到硬件磁盘的需要强制性的捕获异常，设计大于编程，函数规格大于功能本身</p>2020-05-26</li><br/><li><span>禾众</span> 👍（1） 💬（3）<p>老师如果代码中没有写过异常处理逻辑，那么类的构造析构函数还有必要写noexcept吗？如果也需要的话，代码中到处都要加noexcept就太累赘了。</p>2020-06-21</li><br/><li><span>EncodedStar</span> 👍（1） 💬（1）<p>异常不要乱用，乱用容易把bug隐藏起来，出现假象，让你看起来程序跑的很稳定。</p>2020-05-26</li><br/><li><span>java2c++</span> 👍（1） 💬（1）<p>用途1:捕获到异常后可以记录到日志文件中，很容易找到出问题的地方以及出问题的原因，比coredump分析容易多了。用途2:代码分支处理，一个经典的案例就是入参需要string转int，可以转换就走正常逻辑，不可以转换出现异常就直接返回错误原因给上游</p>2020-05-26</li><br/><li><span>Yarco</span> 👍（0） 💬（1）<p>这... 我的困扰在于当你调用一个API时，你怎么知道它是用错误码还是异常来做错误处理的？
 （当然如果文档有写或者看源码是另一个回事... 似乎光凭声明看不出来）
 我记得似乎 java 里方法定义的时候会写 throws？
 ====
+
     private static void setZero(int[] a,int index) throws ArrayIndexOutOfBoundsException {
         a[index] = 0;
     }
+
 ====
 似乎清楚一点
 </p>2023-09-11</li><br/><li><span>学习者</span> 👍（0） 💬（1）<p>打卡</p>2023-05-19</li><br/>

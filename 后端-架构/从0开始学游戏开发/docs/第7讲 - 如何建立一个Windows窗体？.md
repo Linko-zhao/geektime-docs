@@ -55,8 +55,8 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
     WNDCLASSEX wincl;        /* 前面详细介绍过的WNDCLASSEX结构的对象 */
     wincl.hInstance = hThisInstance;
     wincl.lpszClassName = szClassName;
-    wincl.lpfnWndProc = WindowProcedure;      
-    wincl.style = CS_DBLCLKS;                
+    wincl.lpfnWndProc = WindowProcedure;
+    wincl.style = CS_DBLCLKS;
     wincl.cbSize = sizeof(WNDCLASSEX);
 ```
 
@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
     wincl.hCursor = LoadCursor(NULL, IDC_ARROW);
     wincl.lpszMenuName = NULL; /* 没有菜单栏 */
     wincl.cbClsExtra = 0;                      /* 没有多余的字节跟在窗体类的后面 */
-    wincl.cbWndExtra = 0;                      
+    wincl.cbWndExtra = 0;
     wincl.hbrBackground = (HBRUSH) GetStockObject(LTGRAY_BRUSH);
     if(!RegisterClassEx(&wincl)) return 0;
 ```
@@ -77,7 +77,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
 代码在窗口过程调用函数的时候，将地址赋值给lpfnWndProc，然后呼叫RegisterClassEx(&amp;wincl)注册窗口类，系统就拥有了窗口过程函数的地址。如果注册失败，则返回0。
 
 ```
- hwnd = CreateWindowEx( 0,            /* 扩展风格为0*/                               
+ hwnd = CreateWindowEx( 0,            /* 扩展风格为0*/
            szClassName,         /* 类名 */
            "Windows App",         /* 窗体抬头标题 */
            WS_OVERLAPPEDWINDOW, /* 默认窗体 */
@@ -93,9 +93,9 @@ int WINAPI WinMain(HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszA
     ShowWindow(hwnd, nFunsterStil);
     /* 要显示窗体，使用的是ShowWindow函数 */
     while(GetMessage(&messages, NULL, 0, 0))
-    {      
+    {
            TranslateMessage(&messages);
-           DispatchMessage(&messages);    
+           DispatchMessage(&messages);
     }
     return messages.wParam;
 }
@@ -109,11 +109,11 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     switch (message)                  /* 指向消息的句柄 */
     {
            case WM_DESTROY:
-           PostQuitMessage(0);        
+           PostQuitMessage(0);
            break;
-           default:                   
+           default:
            return DefWindowProc(hwnd, message, wParam, lParam);
-                 
+
     }
     return 0;
 }

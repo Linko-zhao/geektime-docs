@@ -30,7 +30,7 @@ Salesforce成立于1999年，创始人是马克·贝尼奥夫（Marc Benioff）�
 
 离开Oracle后，贝尼奥夫开始全力经营自己的公司，谨慎招人。到1999年下半年的时候，Salesforce有了10名员工。公司也终于从他家旁边的公寓搬去了旧金山市中心的某栋楼里。
 
-于此同时，贝尼奥夫也开始通过他的渠道给即将发布的Salesforce造势。1999年7月21日，华尔街日报正式发表封面文章：*Canceled Programs: Software Is Becoming an Online Service, Shaking Up an Entire Industry*。这篇谁也说不清楚到底是不是给贝尼奥夫做广告的文章宣扬了软件正在消亡，而在线服务却在兴起。Salesforce这个名字也第一次引起了大家的注意。
+于此同时，贝尼奥夫也开始通过他的渠道给即将发布的Salesforce造势。1999年7月21日，华尔街日报正式发表封面文章：_Canceled Programs: Software Is Becoming an Online Service, Shaking Up an Entire Industry_。这篇谁也说不清楚到底是不是给贝尼奥夫做广告的文章宣扬了软件正在消亡，而在线服务却在兴起。Salesforce这个名字也第一次引起了大家的注意。
 
 6个月以后，Salesforce正式发布。为了这次发布会，贝尼奥夫投入了很多的钱。其主要宣扬的观点依然是华尔街日报那篇文章的：软件已死，服务当立。他表示和当时软件业的领袖比起来，Salesforce这个创业公司的使命就是提供更领先的方式去和传统的、低效率的软硬件购买模式战斗。
 

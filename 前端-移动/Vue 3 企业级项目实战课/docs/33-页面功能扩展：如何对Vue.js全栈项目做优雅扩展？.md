@@ -137,13 +137,13 @@
 ```typescript
 // packages/work-server/src/router.ts
 
-import Router from '@koa/router';
+import Router from "@koa/router";
 const router = new Router();
 // 其它代码 ...
 
 // checkAccountOnlineStatus 方法是检查账号是否有在线登录态
 // renderPage 方法是渲染页面
-router.get('/page/:pageName', checkAccountOnlineStatus, renderPage);
+router.get("/page/:pageName", checkAccountOnlineStatus, renderPage);
 
 // 只有checkAccountOnlineStatus验证状态通过后，
 // 才能进入renderPage渲染页面
@@ -209,6 +209,7 @@ router.get('/page/:pageName', checkAccountOnlineStatus, renderPage);
 期待在留言区看到你的思考，我们下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/33-34)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-10-06</li><br/>
 </ul>

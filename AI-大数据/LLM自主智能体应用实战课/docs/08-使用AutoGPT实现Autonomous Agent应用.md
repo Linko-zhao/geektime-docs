@@ -160,7 +160,7 @@ LlmModel.OLLAMA_QWEN2_5_MATH_7B: 1,  # 新增内容
 ```plain
     def run(self, input_data: Input, **kwargs) -> BlockOutput:
         last_cards_posted = get_last_cards_posted()
-                
+
         if last_cards_posted == "":
             yield "expression", "expression not found"
         else:
@@ -190,7 +190,7 @@ LlmModel.OLLAMA_QWEN2_5_MATH_7B: 1,  # 新增内容
         self, input_data: Input, *, credentials: APIKeyCredentials, **kwargs
     ) -> BlockOutput:
         last_cards_posted = get_last_cards_posted()
-        
+
         expression = input_data.expression
         if expression == "expression not found":
             yield "check_result", "Correct"
@@ -210,7 +210,7 @@ LlmModel.OLLAMA_QWEN2_5_MATH_7B: 1,  # 新增内容
                 ),
                 credentials=credentials,
             )
-            
+
             check_result = extract_result(rsp)
             yield "check_result", check_result
             yield "last_cards_posted", last_cards_posted

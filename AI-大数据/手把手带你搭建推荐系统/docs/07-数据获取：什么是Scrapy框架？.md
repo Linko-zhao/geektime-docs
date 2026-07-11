@@ -185,13 +185,13 @@ scrapy genspider sina_spider sina.com.cn
 
 ```
 import scrapy
- 
- 
+
+
 class SinaSpiderSpider(scrapy.Spider):
     name = 'sina_spider'
     allowed_domains = ['sina.com.cn']
     start_urls = ['http://sina.com.cn/']
- 
+
     def parse(self, response):
         pass
 ```
@@ -232,7 +232,7 @@ chrome://settings/help
 
 ```
 from scrapy import cmdline
- 
+
 cmdline.execute('scrapy crawl sina_spider'.split())
 ```
 

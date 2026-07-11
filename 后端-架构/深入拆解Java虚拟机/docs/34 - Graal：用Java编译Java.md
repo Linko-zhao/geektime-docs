@@ -87,11 +87,12 @@ Graal是一个用Java写就的、并能够将Java字节码转换成二进制码�
 
 对Java程序而言，Graal编译结果的性能略优于OpenJDK中的C2；对Scala程序而言，它的性能优势可达到10%（企业版甚至可以达到20%！）。这背后离不开Graal所采用的激进优化方式。
 
-* * *
+---
 
 今天的实践环节，你可以尝试使用附带Graal编译器的JDK。在Java 10，11中，你可以通过添加虚拟机参数`-XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler`来启用，或者下载我们部署在[Oracle OTN](https://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html)上的基于Java 8的版本。
 
 > 在刚开始运行的过程中，Graal编译器本身需要被即时编译，会抢占原本可用于编译应用代码的计算资源。因此，目前Graal编译器的启动性能会较差。最后一篇我会介绍解决方案。
+
 <div><strong>精选留言（9）</strong></div><ul>
 <li><span>Len</span> 👍（26） 💬（1）<p>我们可不可以把 profile 和编译的机器码保存到磁盘，在代码和运行平台不变的情况下，下次启动（或部署多实例）的时候直接装载这部分数据？这算作是一种系统预热的可行性方案吗？</p>2018-10-12</li><br/><li><span>金龙</span> 👍（10） 💬（2）<p>GraalVM和JVM是什么关系？它在OpenJDK上是怎么运行的？求解惑</p>2018-10-08</li><br/><li><span>xiaobang</span> 👍（7） 💬（1）<p>openjdk里Graal自身的及时编译是调用Graal自身吗？如果这么做会不会出现无穷递归？</p>2018-10-10</li><br/><li><span>ZY</span> 👍（3） 💬（1）<p>GraalVM大概什么时候会发布release版本？</p>2018-10-16</li><br/><li><span>钱</span> 👍（7） 💬（0）<p>阅过留痕
 最后几篇了，这个专栏马上结束了，回头想想自己都学到了那些内容了呢？

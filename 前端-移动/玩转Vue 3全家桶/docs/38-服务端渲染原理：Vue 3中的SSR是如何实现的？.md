@@ -28,7 +28,7 @@
   </head>
   <body>
     <div id="app"></div>
-    
+
   </body>
 </html>
 
@@ -47,7 +47,7 @@
 首先创建一个新的文件夹vue-ssr，执行下面命令来安装server-renderer、vue和express：
 
 ```xml
-npm init -y 
+npm init -y
 npm install @vue/server-renderer vue@next express --save
 ```
 
@@ -57,11 +57,11 @@ npm install @vue/server-renderer vue@next express --save
 
 ```javascript
 // 引入express
-const express = require('express') 
-const app = express()
-const Vue = require('vue') // vue@next
-const renderer3 = require('@vue/server-renderer')
-const vue3Compile= require('@vue/compiler-ssr')
+const express = require("express");
+const app = express();
+const Vue = require("vue"); // vue@next
+const renderer3 = require("@vue/server-renderer");
+const vue3Compile = require("@vue/compiler-ssr");
 
 // 一个vue的组件
 const vueapp = {
@@ -71,26 +71,29 @@ const vueapp = {
       <li v-for="(todo,n) in todos" >{{n+1}}--{{todo}}</li>
     </ul>
   </div>`,
-  data(){
+  data() {
     return {
-      num:1,
-      todos:['吃饭','睡觉','学习Vue']
-    }
+      num: 1,
+      todos: ["吃饭", "睡觉", "学习Vue"],
+    };
   },
-  methods:{
-    add(){
-      this.num++
-    }
-  } 
-}
+  methods: {
+    add() {
+      this.num++;
+    },
+  },
+};
 // 使用@vue/compiler-ssr解析template
-vueapp.ssrRender = new Function('require',vue3Compile.compile(vueapp.template).code)(require)
+vueapp.ssrRender = new Function(
+  "require",
+  vue3Compile.compile(vueapp.template).code,
+)(require);
 // 路由首页返回结果
-app.get('/',async function(req,res){
-    let vapp = Vue.createSSRApp(vueapp)
-    let html = await renderer3.renderToString(vapp)
-    const title = "Vue SSR"
-    let ret = `
+app.get("/", async function (req, res) {
+  let vapp = Vue.createSSRApp(vueapp);
+  let html = await renderer3.renderToString(vapp);
+  const title = "Vue SSR";
+  let ret = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -104,13 +107,13 @@ app.get('/',async function(req,res){
       ${html}
     </div>
   </body>
-</html>`    
-    res.send(ret)
-})
+</html>`;
+  res.send(ret);
+});
 
-app.listen(9093,()=>{
-    console.log('listen 9093')
-}) 
+app.listen(9093, () => {
+  console.log("listen 9093");
+});
 ```
 
 现在我们访问页面后，点击右键查看网页源代码，会出现下图所示的页面：  
@@ -125,21 +128,30 @@ app.listen(9093,()=>{
 在CSR环境下，template解析的render函数用来返回组件的虚拟DOM，而SSR环境下template解析的ssrRender函数，函数内部是通过\_push对字符串进行拼接，最终生成组件渲染的结果的。你可以在官方的[模板渲染演示页面](https://vue-next-template-explorer.netlify.app/#%7B%22src%22%3A%22%3Cdiv%3E%5Cn%20%20%20%20%3Cul%20%3E%5Cn%20%20%20%20%20%20%3Cli%20v-for%3D%5C%22%28todo%2Cn%29%20in%20todos%5C%22%20%3E%7B%7Bn%2B1%7D%7D--%7B%7Btodo%7D%7D%3C%2Fli%3E%5Cn%20%20%20%20%3C%2Ful%3E%5Cn%20%20%3C%2Fdiv%3E%22%2C%22ssr%22%3Atrue%2C%22options%22%3A%7B%22mode%22%3A%22function%22%2C%22filename%22%3A%22Foo.vue%22%2C%22prefixIdentifiers%22%3Afalse%2C%22hoistStatic%22%3Atrue%2C%22cacheHandlers%22%3Atrue%2C%22scopeId%22%3Anull%2C%22inline%22%3Afalse%2C%22ssrCssVars%22%3A%22%7B%20color%20%7D%22%2C%22compatConfig%22%3A%7B%22MODE%22%3A3%7D%2C%22whitespace%22%3A%22condense%22%2C%22bindingMetadata%22%3A%7B%22TestComponent%22%3A%22setup-const%22%2C%22setupRef%22%3A%22setup-ref%22%2C%22setupConst%22%3A%22setup-const%22%2C%22setupLet%22%3A%22setup-let%22%2C%22setupMaybeRef%22%3A%22setup-maybe-ref%22%2C%22setupProp%22%3A%22props%22%2C%22vMySetupDir%22%3A%22setup-const%22%7D%2C%22optimizeBindings%22%3Afalse%7D%7D)选择ssr设置后，看到渲染的结果：
 
 ```javascript
-const { mergeProps: _mergeProps } = require("vue")
-const { ssrRenderAttrs: _ssrRenderAttrs, ssrInterpolate: _ssrInterpolate, ssrRenderList: _ssrRenderList } = require("vue/server-renderer")
+const { mergeProps: _mergeProps } = require("vue");
+const {
+  ssrRenderAttrs: _ssrRenderAttrs,
+  ssrInterpolate: _ssrInterpolate,
+  ssrRenderList: _ssrRenderList,
+} = require("vue/server-renderer");
 
-return function ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
-  const _cssVars = { style: { color: _ctx.color }}
-  _push(`<div${_ssrRenderAttrs(_mergeProps(_attrs, _cssVars))}><ul><!--[-->`)
+return function ssrRender(
+  _ctx,
+  _push,
+  _parent,
+  _attrs,
+  $props,
+  $setup,
+  $data,
+  $options,
+) {
+  const _cssVars = { style: { color: _ctx.color } };
+  _push(`<div${_ssrRenderAttrs(_mergeProps(_attrs, _cssVars))}><ul><!--[-->`);
   _ssrRenderList(_ctx.todos, (todo, n) => {
-    _push(`<li>${
-      _ssrInterpolate(n+1)
-    }--${
-      _ssrInterpolate(todo)
-    }</li>`)
-  })
-  _push(`<!--]--></ul></div>`)
-}
+    _push(`<li>${_ssrInterpolate(n + 1)}--${_ssrInterpolate(todo)}</li>`);
+  });
+  _push(`<!--]--></ul></div>`);
+};
 ```
 
 可以看到ssrRender函数内部通过传递的\_push函数拼接组件渲染的结果后，直接返回renderToString函数的执行结果。

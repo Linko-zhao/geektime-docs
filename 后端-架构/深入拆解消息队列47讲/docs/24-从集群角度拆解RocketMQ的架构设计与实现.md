@@ -107,8 +107,8 @@ Controller 模式的数据一致性策略和Pulsar的策略是一样的，都是
 
 ```plain
 Broker端配置：
-tls.test.mode.enable=false                     
-tls.server.need.client.auth=require   
+tls.test.mode.enable=false
+tls.server.need.client.auth=require
 tls.server.keyPath=/opt/certFiles/server.key
 tls.server.keyPassword=123456
 tls.server.certPath=/opt/certFiles/server.pem
@@ -119,7 +119,7 @@ tls.server.trustCertPath=/opt/certFiles/ca.pem
 tls.client.keyPath=/opt/certFiles/client.key
 tls.client.keyPassword=123456
 tls.client.certPath=/opt/certFiles/client.pem
-tls.client.authServer=false                    
+tls.client.authServer=false
 tls.client.trustCertPath=/opt/certFiles/ca.pem
 ```
 
@@ -139,7 +139,7 @@ tls.client.trustCertPath=/opt/certFiles/ca.pem
 2. 检查是否命中用户 IP 白名单，如果是，则认为校验通过；否则走 3。
 3. 校验签名，校验不通过，抛出异常；校验通过，则走 4。
 4. 对用户请求所需的权限和用户所拥有的权限进行校验，通过就走后续逻辑，不通过，抛出异常。用户所需权限的校验需要注意以下内容：
-   
+
    - 特殊的请求，例如 UPDATE\_AND\_CREATE\_TOPIC，只能由 Admin 账户进行操作；
    - 对于某个资源，如果有显性配置权限，则采用配置的权限，如果没有显性配置权限，则采用默认的权限。
 
@@ -220,8 +220,8 @@ RocketMQ 的底层的日志，使用的是Java 中标准的 Logback 和 SLF4J �
 2.Controller模式，文中提到Controller之间选主节点，这是通过选择完整性最高的Controller，在某个Master不可用之后，由Controller选择新的Master吗？</p>2024-01-01</li><br/><li><span>shan</span> 👍（1） 💬（0）<p>RocketMQ的三种部署模式
 
 1. Master&#47;Slave模式
-分为Master、Slave两个角色，集群中可以有多个Master节点，一个Master节点可以有多个Slave节点。Master节点负责接收生产者发送的写入请求，将消息写入CommitLog文件，Slave节点会与Master节点建立连接，从Master节点同步消息数据（有同步复制和异步复制两种方式）。
-消费者可以从Master节点拉取消息，也可以从Slave节点拉取消息。在RocketMQ 4.5版本之前，如果Master宕机，不支持自动将Slave切换为Master，需要人工介入。
+   分为Master、Slave两个角色，集群中可以有多个Master节点，一个Master节点可以有多个Slave节点。Master节点负责接收生产者发送的写入请求，将消息写入CommitLog文件，Slave节点会与Master节点建立连接，从Master节点同步消息数据（有同步复制和异步复制两种方式）。
+   消费者可以从Master节点拉取消息，也可以从Slave节点拉取消息。在RocketMQ 4.5版本之前，如果Master宕机，不支持自动将Slave切换为Master，需要人工介入。
 
 优点
 负载过高时，可以快速通过横向添加节点来扩容。
@@ -231,15 +231,15 @@ RocketMQ 的底层的日志，使用的是Java 中标准的 Logback 和 SLF4J �
 （2）每个节点上都需要创建全量的Topic，存在性能瓶颈；
 
 2. Dledger模式
-为了解决主从架构下Slave不能自动切换为Master的问题，4.5版本之后提供了DLedger模式，使用Raft算法，如果Master节点出现故障，可以自动从Slave节点中选举出新的Master进行切换。
+   为了解决主从架构下Slave不能自动切换为Master的问题，4.5版本之后提供了DLedger模式，使用Raft算法，如果Master节点出现故障，可以自动从Slave节点中选举出新的Master进行切换。
 
 存在问题
 （1）根据Raft算法的多数原则，集群至少有三个节点以上，在消息写入时，也需要大多数的Follower节点响应成功才能认为消息写入成功；
 （2）存在两套HA复制流程（个人认为是主从模式下一套、Dledger模式下一套），Dledger模无法利用RocketMQ原生的存储和复制能力。
 
 3. DLedger Controller模式
-RocketMQ 5.0以后推出了DLedger Controller模式，支持独立部署，也可以嵌入在NameServer中，Broker通过与Controller交互完成Master的选举。
-在DLedger Controller模式中，数据的一致性可以通过参数inSyncReplicas配置来配置，不用向Dledger模式一样，需要要过半的Follower节点响应才算写入成功。
+   RocketMQ 5.0以后推出了DLedger Controller模式，支持独立部署，也可以嵌入在NameServer中，Broker通过与Controller交互完成Master的选举。
+   在DLedger Controller模式中，数据的一致性可以通过参数inSyncReplicas配置来配置，不用向Dledger模式一样，需要要过半的Follower节点响应才算写入成功。
 
 关于DLedger Controller模式详细信息可以参考
 https:&#47;&#47;github.com&#47;apache&#47;rocketmq&#47;blob&#47;develop&#47;docs&#47;cn&#47;controller&#47;design.md</p>2023-09-22</li><br/>

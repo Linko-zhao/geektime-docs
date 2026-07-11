@@ -110,7 +110,7 @@ datadir指定了proxysql内置数据库的存放路径。需要注意的是，pr
 # mysql -uadmin -padmin -P6032 -h127.0.0.1
 Server version: 5.5.30 (ProxySQL Admin Module)
 
-mysql> 
+mysql>
 
 mysql> show databases;
 +-----+---------------+-------------------------------------+
@@ -148,16 +148,16 @@ ProxySQL使用监控账号来探测后端MySQL实例的健康度。监控账号�
 使用下面这些命令创建监控账号。
 
 ```plain
-create user 'dbmonitor'@'%' identified with mysql_native_password 
+create user 'dbmonitor'@'%' identified with mysql_native_password
  by 'monitorpasswd';
- 
+
 grant replication client on *.* to 'dbmonitor'@'%';
 
 -- group replication
-grant select on performance_schema.replication_group_member_stats 
+grant select on performance_schema.replication_group_member_stats
  to 'dbmonitor'@'%';
 
-grant select on performance_schema.replication_group_members 
+grant select on performance_schema.replication_group_members
  to 'dbmonitor'@'%';
 ```
 
@@ -199,7 +199,7 @@ insert into mysql_servers (
   hostgroup_id, hostname, port, max_replication_lag)
 values ( 201, '172.16.121.237', 3308, 3);
 
-load mysql servers  to runtime; 
+load mysql servers  to runtime;
 save mysql servers  to disk;
 ```
 
@@ -215,7 +215,7 @@ insert into mysql_users
 values ('user1', 'somepass', 200, 1, 1, 1, 'user1');
 
 
-load mysql users  to runtime; 
+load mysql users  to runtime;
 save mysql users  TO disk;
 ```
 
@@ -254,8 +254,8 @@ load mysql users to runtime;
 save mysql users to disk;
 
 -- 确认runtime_mysql_users表中的密码是明文
-mysql> select username, password 
-  from runtime_mysql_users 
+mysql> select username, password
+  from runtime_mysql_users
   where username = 'user1';
 +----------+---------------+
 | username | password      |
@@ -276,7 +276,7 @@ insert into mysql_query_rules
 (rule_id, username, match_pattern, destination_hostgroup, active, apply, comment)
 values (102, 'user1', '^SELECT', 201,1,1, 'select query route to hostgroup 201');
 
-load mysql query rules to runtime; 
+load mysql query rules to runtime;
 save mysql query rules to disk;
 ```
 
@@ -422,7 +422,7 @@ insert into mysql_servers (
 values ( 501, '172.16.121.237', 3307, 3);
 
 
-load mysql servers  to runtime; 
+load mysql servers  to runtime;
 save mysql servers  to disk;
 ```
 
@@ -432,7 +432,7 @@ save mysql servers  to disk;
 
 ```plain
 insert into mysql_group_replication_hostgroups
-(writer_hostgroup, backup_writer_hostgroup, reader_hostgroup, 
+(writer_hostgroup, backup_writer_hostgroup, reader_hostgroup,
 offline_hostgroup, active, max_writers, writer_is_also_reader,
 max_transactions_behind, comment)
 values(500, 502, 501, 503, 1, 1, 0, 0, 'mysql mgr cluster 1');
@@ -450,7 +450,7 @@ insert into mysql_users
 (username, password, transaction_persistent, backend, frontend, default_hostgroup, comment)
 values ('mgr', 'mgr123', 1, 1, 1, 500, 'backend user for mgr cluster');
 
-load mysql users  to runtime; 
+load mysql users  to runtime;
 save mysql users to disk;
 ```
 
@@ -464,7 +464,7 @@ grant select,insert,update,delete,create,alter on *.* to 'mgr'@'%';
 都配置好之后，查看集群的配置信息。
 
 ```plain
-mysql> select hostgroup_id, hostname, port, status 
+mysql> select hostgroup_id, hostname, port, status
   from runtime_mysql_servers
   where hostgroup_id >= 500;
 +--------------+----------------+------+--------------+
@@ -585,7 +585,7 @@ select count(*) from information_schema.tables;
 先到stats\_mysql\_query\_digest查询这个SQL的摘要，使用SQL摘要可以精确屏蔽某一类SQL。
 
 ```plain
-mysql> select * from stats.stats_mysql_query_digest 
+mysql> select * from stats.stats_mysql_query_digest
   where digest_text like '%tables%' limit 1\G
 
 *************************** 1. row ***************************
@@ -637,11 +637,11 @@ ERROR 1148 (42000): request denied by rule
 delete from mysql_query_rules;
 
 insert into mysql_query_rules
-(rule_id, username, match_pattern, replace_pattern, 
+(rule_id, username, match_pattern, replace_pattern,
   destination_hostgroup, active, apply, comment )
 values (20, 'user1',
   '^SELECT\s+(.*?)\s+FROM\s+ta\s+where\s+a\s+=\s+(\d+)$',
-  'SELECT \1 FROM ta force index(idx_a) WHERE A = \2', 
+  'SELECT \1 FROM ta force index(idx_a) WHERE A = \2',
   200, 1, 1, 'add force index');
 
 load mysql query rules to runtime;
@@ -670,16 +670,16 @@ delete from mysql_query_rules;
 
 -- 执行SQL，同时将SQL mirror一份
 insert into mysql_query_rules
-(rule_id, username, match_pattern, destination_hostgroup, 
+(rule_id, username, match_pattern, destination_hostgroup,
  mirror_flagOut, active, apply, comment )
-values (20, 'user1', '^SELECT', 200, 
+values (20, 'user1', '^SELECT', 200,
   1001, 1, 1, 'mirror');
 
 -- 对于mirror的SQL，增加注释，发送到hostgroup 201执行
 insert into mysql_query_rules
-(rule_id, username, flagIn, match_pattern, destination_hostgroup, 
+(rule_id, username, flagIn, match_pattern, destination_hostgroup,
  replace_pattern, active, apply, comment )
-values (21, 'user1', 1001, '^SELECT', 201, 
+values (21, 'user1', 1001, '^SELECT', 201,
   'select /*+ mirrored */', 1, 1, 'mirror sql modified');
 
 
@@ -737,8 +737,8 @@ Create Table: CREATE TABLE proxysql_servers (
 
 insert into proxysql_servers（hostname, port, weight, comment)
     values('172.16.121.234', 6032, 1, 'proxysql node 1');
-    
-insert into proxysql_servers 
+
+insert into proxysql_servers
     values('172.16.121.236', 7032, 1, 'proxysql node 2');
 
 

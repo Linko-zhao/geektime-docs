@@ -213,7 +213,7 @@ fn main() {
         READY.wait_force();
         println!("终于等待正确初始化了");
     });
-    
+
     let handle2 = thread::spawn(|| {
         READY.call_once(|| panic!("poisoned"));
     });
@@ -222,7 +222,7 @@ fn main() {
         thread::sleep(Duration::from_secs(5));
         READY.call_once_force(|_| println!("强制初始化"));
     });
-    
+
     println!("thread2: {}", handle2.join().is_err()); //true
     println!("thread1: {}", handle1.join().is_err()); // false
     println!("thread3: {}", handle3.join().is_err()); // false

@@ -12,8 +12,8 @@
 
 ```java
 int[] arr = { 102，230，320，431，130};
-int sum = 0;   
-for(int i: arr){   
+int sum = 0;
+for(int i: arr){
    sum += i;
 }
 System.out.println("Sum is: " + sum);
@@ -81,13 +81,13 @@ public class Demo {
     private int a = 0;
     private  boolean flag = false;
     public void writer() {
-        a = 1;                  
-        flag = true;            
+        a = 1;
+        flag = true;
     }
 
     public void reader() {
-        if (flag) {             
-            int i = a * a;      
+        if (flag) {
+            int i = a * a;
             System.out.println(i);
         }
     }
@@ -160,13 +160,13 @@ public class Demo {
     private int a = 0;
     private  boolean flag = false;
     public void writer() {
-        a = 1;                  
-        flag = true;            
+        a = 1;
+        flag = true;
     }
 
     public void reader() {
-        if (flag) {             
-            int i = a * a;      
+        if (flag) {
+            int i = a * a;
             System.out.println(i);
         }
     }
@@ -194,7 +194,7 @@ public class Demo {
 <li><span>喆</span> 👍（11） 💬（4）<p>“相对于普通计算机基于寄存器的架构，JVM 是基于栈的虚拟机，正是因为基于栈的特性，使 JVM 具备了平台无关性”，基于栈的特性是什么意思，什么叫基于栈？可以展开说一下吗？为什么基于栈的特性就能平台无关了？</p>2023-08-23</li><br/><li><span>Johar</span> 👍（2） 💬（1）<p>请教一下加载的class文件什么时候会卸载？</p>2023-08-21</li><br/><li><span>seker</span> 👍（1） 💬（1）<p>文稿中的代码，如果thread1先执行完，那么程序会正常输出1。如果是thread2先执行完，那么程序没有任何输出。由于引入多线程，导致线程执行先后顺序不确定出现上述问题。
 
 从程序的意图看是想thread1先写，thread2再读，那么修改start()、join()顺序就可以避免问题。即修改为：
-thread1.start(); 
+thread1.start();
 thread1.join();
 thread2.start();
 thread2.join();
@@ -214,8 +214,8 @@ jvm就是对操作系统和硬件资源的抽象封装，让你无需考虑是x8
 
 附问题1的代码：
 public class Demo {
-    private volatile int a = 0;
-    private final Semaphore semaphore = new Semaphore(1);
+private volatile int a = 0;
+private final Semaphore semaphore = new Semaphore(1);
 
     public void writer() {
         a = 1;
@@ -241,13 +241,14 @@ public class Demo {
         thread1.join();
         thread2.join();
     }
+
 }</p>2023-08-23</li><br/><li><span>edward</span> 👍（0） 💬（1）<p>最后这张图很赞👍</p>2023-08-22</li><br/><li><span>码小呆</span> 👍（0） 💬（1）<p>jvm 对于计算机来说,只能算是一个中间件工具,用于把字节码翻译成计算机能识别的机器码而已!</p>2023-08-21</li><br/><li><span>Calvin</span> 👍（0） 💬（1）<p>给大佬点赞666，期待半桶水的自己学习这个课程后能查漏补缺底层知识更精进一些，PS：JVM 虚拟机类比真实的计算机之前我怎么没想到呢？😂
 
 另外我看思考题有提到Thread线程，而 JDK 21 下个月就要 GA 了，到时“虚拟线程”（协程）就正式可用了，不知道利用其结构化编程能力能否实现优化它的目的？
 
 以及大佬会否考虑在后面的章节中添加相关的知识点或者加餐介绍一下这个新特性呢？</p>2023-08-21</li><br/><li><span>轻风悠扬</span> 👍（0） 💬（1）<p>flag应该用volatile来修饰以确保对其他线程可见。</p>2023-08-21</li><br/><li><span>老衲</span> 👍（1） 💬（1）<p>public class Demo {
-    private AtomicInteger a = new AtomicInteger(0);
-    private volatile boolean flag = false;
+private AtomicInteger a = new AtomicInteger(0);
+private volatile boolean flag = false;
 
     public void writer() {
         a = new AtomicInteger(1);
@@ -270,6 +271,7 @@ public class Demo {
         thread1.join();
         thread2.join();
     }
+
 }</p>2023-08-21</li><br/><li><span>ZYJ</span> 👍（0） 💬（0）<p>思考题:
 1,如果想让程序输出1,只需要调整thread1.join()的顺序,让主线程等待thread1执行完再start t2线程
 2,join的原理是,主线程调用thread1.join()时,join里会调用wait方法使主线程等待, 等thread1执行完后才会唤醒主线程(run方法里,最终会notifyAll唤醒主线程)
@@ -278,10 +280,10 @@ public class Demo {
 老师在下面评论里提到的volatile和Raft协议的关系具体指的是什么?
 
 final Demo example = new Demo();
- Thread thread1 = new Thread(() -&gt; example.writer()); 
-Thread thread2 = new Thread(() -&gt; example.reader()); 
-thread1.start(); 
-thread1.join(); 
-thread2.start(); 
+Thread thread1 = new Thread(() -&gt; example.writer());
+Thread thread2 = new Thread(() -&gt; example.reader());
+thread1.start();
+thread1.join();
+thread2.start();
 thread2.join();</p>2023-09-22</li><br/><li><span>on</span> 👍（0） 💬（0）<p>文中指出的重排的例子不是很好吧。他实际和cpu线程调度关系更大点，指令重排体现不出来</p>2023-09-07</li><br/><li><span>雷小鸿</span> 👍（0） 💬（1）<p>其实 我看到这段代码，没想要怎么去改，我再想什么情况下，什么业务场景下，会这样写代码，我自己在什么场景下会这样写，对于我们这种业务小的公司很难再实际开发中这样去写。</p>2023-08-24</li><br/>
 </ul>

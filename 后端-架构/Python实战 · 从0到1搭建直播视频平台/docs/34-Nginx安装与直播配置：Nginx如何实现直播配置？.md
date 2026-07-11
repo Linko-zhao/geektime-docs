@@ -87,27 +87,27 @@ Nginx的反向代理功能的作用是根据配置规则，将客户端的请求
 我们打开nginx.conf文件，找到http部分的配置段，添加后面的内容。
 
 ```plain
-# 禁止未经授权的访问  
-location / {  
-    deny all;  
-    allow 127.0.0.1;  
-    # 添加允许访问的IP地址  
-    # ...  
-}  
-  
-# 禁止不安全的HTTP方法  
-if ($request_method !~ ^(GET|HEAD|POST)$) {  
-    return 403;  
+# 禁止未经授权的访问
+location / {
+    deny all;
+    allow 127.0.0.1;
+    # 添加允许访问的IP地址
+    # ...
+}
+
+# 禁止不安全的HTTP方法
+if ($request_method !~ ^(GET|HEAD|POST)$) {
+    return 403;
 }
      
 # 防止SQL注入攻击
     location ~ inj/ {
         deny all;
-    }  
-  
-# 禁止爬虫  
-if ($http_user_agent ~* (Baiduspider|Googlebot|Yandex|Sogou)) {  
-    return 403;  
+    }
+
+# 禁止爬虫
+if ($http_user_agent ~* (Baiduspider|Googlebot|Yandex|Sogou)) {
+    return 403;
 }
 ```
 
@@ -139,7 +139,7 @@ $ sudo systemctl restart nginx
 #user  nobody;
 worker_processes  1; #指令用于指定Nginx工作进程的数量
 #指令用于指定Nginx的事件处理配置
-events {  
+events {
     worker_connections  1024;
 }
 #指令用于指定HTTP服务器的配置

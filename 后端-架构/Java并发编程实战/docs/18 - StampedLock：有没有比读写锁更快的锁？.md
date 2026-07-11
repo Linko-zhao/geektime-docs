@@ -9,9 +9,9 @@
 ReadWriteLock支持两种模式：一种是读锁，一种是写锁。而StampedLock支持三种模式，分别是：**写锁**、**悲观读锁**和**乐观读**。其中，写锁、悲观读锁的语义和ReadWriteLock的写锁、读锁的语义非常类似，允许多个线程同时获取悲观读锁，但是只允许一个线程获取写锁，写锁和悲观读锁是互斥的。不同的是：StampedLock里的写锁和悲观读锁加锁成功之后，都会返回一个stamp；然后解锁的时候，需要传入这个stamp。相关的示例代码如下。
 
 ```
-final StampedLock sl = 
+final StampedLock sl =
   new StampedLock();
-  
+
 // 获取/释放悲观读锁示意代码
 long stamp = sl.readLock();
 try {
@@ -38,12 +38,12 @@ StampedLock的性能之所以比ReadWriteLock还要好，其关键是StampedLock
 ```
 class Point {
   private int x, y;
-  final StampedLock sl = 
+  final StampedLock sl =
     new StampedLock();
-  //计算到原点的距离  
+  //计算到原点的距离
   int distanceFromOrigin() {
     // 乐观读
-    long stamp = 
+    long stamp =
       sl.tryOptimisticRead();
     // 读入局部变量，
     // 读的过程数据可能被修改
@@ -87,7 +87,7 @@ where id=777
 用户在生产订单UI执行保存操作的时候，后台利用下面的SQL语句更新生产订单，此处我们假设该条生产订单的 version=9。
 
 ```
-update product_doc 
+update product_doc
 set version=version+1，...
 where id=777 and version=9
 ```
@@ -140,11 +140,11 @@ StampedLock的使用看上去有点复杂，但是如果你能理解乐观锁背
 StampedLock读模板：
 
 ```
-final StampedLock sl = 
+final StampedLock sl =
   new StampedLock();
 
 // 乐观读
-long stamp = 
+long stamp =
   sl.tryOptimisticRead();
 // 读入方法局部变量
 ......

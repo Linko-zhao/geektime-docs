@@ -163,74 +163,74 @@ JVM 相关的指标，上一讲 Kafka 监控我们已经介绍过了，不过当
 
 ```json
 {
-    "timestamp": 1670041198455,
-    "uptime_in_millis": 92165514,
-    "mem": {
-        "heap_used_in_bytes": 752914744,
-        "heap_used_percent": 35,
-        "heap_committed_in_bytes": 2147483648,
-        "heap_max_in_bytes": 2147483648,
-        "non_heap_used_in_bytes": 265504880,
-        "non_heap_committed_in_bytes": 269877248,
-        "pools": {
-            "young": {
-                "used_in_bytes": 289406976,
-                "max_in_bytes": 0,
-                "peak_used_in_bytes": 1283457024,
-                "peak_max_in_bytes": 0
-            },
-            "old": {
-                "used_in_bytes": 419899904,
-                "max_in_bytes": 2147483648,
-                "peak_used_in_bytes": 641861120,
-                "peak_max_in_bytes": 2147483648
-            },
-            "survivor": {
-                "used_in_bytes": 43607864,
-                "max_in_bytes": 0,
-                "peak_used_in_bytes": 115343360,
-                "peak_max_in_bytes": 0
-            }
-        }
-    },
-    "threads": {
-        "count": 150,
-        "peak_count": 161
-    },
-    "gc": {
-        "collectors": {
-            "young": {
-                "collection_count": 8501,
-                "collection_time_in_millis": 157112
-            },
-            "old": {
-                "collection_count": 0,
-                "collection_time_in_millis": 0
-            }
-        }
-    },
-    "buffer_pools": {
-        "mapped": {
-            "count": 2490,
-            "used_in_bytes": 9927166600,
-            "total_capacity_in_bytes": 9927166600
-        },
-        "direct": {
-            "count": 129,
-            "used_in_bytes": 6017066,
-            "total_capacity_in_bytes": 6017065
-        },
-        "mapped - 'non-volatile memory'": {
-            "count": 0,
-            "used_in_bytes": 0,
-            "total_capacity_in_bytes": 0
-        }
-    },
-    "classes": {
-        "current_loaded_count": 28215,
-        "total_loaded_count": 28291,
-        "total_unloaded_count": 76
-    }
+  "timestamp": 1670041198455,
+  "uptime_in_millis": 92165514,
+  "mem": {
+    "heap_used_in_bytes": 752914744,
+    "heap_used_percent": 35,
+    "heap_committed_in_bytes": 2147483648,
+    "heap_max_in_bytes": 2147483648,
+    "non_heap_used_in_bytes": 265504880,
+    "non_heap_committed_in_bytes": 269877248,
+    "pools": {
+      "young": {
+        "used_in_bytes": 289406976,
+        "max_in_bytes": 0,
+        "peak_used_in_bytes": 1283457024,
+        "peak_max_in_bytes": 0
+      },
+      "old": {
+        "used_in_bytes": 419899904,
+        "max_in_bytes": 2147483648,
+        "peak_used_in_bytes": 641861120,
+        "peak_max_in_bytes": 2147483648
+      },
+      "survivor": {
+        "used_in_bytes": 43607864,
+        "max_in_bytes": 0,
+        "peak_used_in_bytes": 115343360,
+        "peak_max_in_bytes": 0
+      }
+    }
+  },
+  "threads": {
+    "count": 150,
+    "peak_count": 161
+  },
+  "gc": {
+    "collectors": {
+      "young": {
+        "collection_count": 8501,
+        "collection_time_in_millis": 157112
+      },
+      "old": {
+        "collection_count": 0,
+        "collection_time_in_millis": 0
+      }
+    }
+  },
+  "buffer_pools": {
+    "mapped": {
+      "count": 2490,
+      "used_in_bytes": 9927166600,
+      "total_capacity_in_bytes": 9927166600
+    },
+    "direct": {
+      "count": 129,
+      "used_in_bytes": 6017066,
+      "total_capacity_in_bytes": 6017065
+    },
+    "mapped - 'non-volatile memory'": {
+      "count": 0,
+      "used_in_bytes": 0,
+      "total_capacity_in_bytes": 0
+    }
+  },
+  "classes": {
+    "current_loaded_count": 28215,
+    "total_loaded_count": 28291,
+    "total_unloaded_count": 76
+  }
 }
 ```
 

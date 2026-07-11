@@ -5,7 +5,7 @@ var bar = {
     myName:"time.geekbang.com",
     printName: function () {
         console.log(myName)
-    }    
+    }
 }
 function foo() {
     let myName = "极客时间"
@@ -32,7 +32,7 @@ class Bar{
     }
     void printName(){
        cout<< myName <<endl;
-    }  
+    }
 } bar;
 
 char* myName = "极客邦";
@@ -49,7 +49,7 @@ int main() {
 ```
 printName: function () {
         console.log(this.myName)
-    }    
+    }
 ```
 
 接下来咱们就展开来介绍this，不过在讲解之前，希望你能区分清楚**作用域链**和**this**是两套不同的系统，它们之间基本没太多联系。在前期明确这点，可以避免你在学习this的过程中，和作用域产生一些不必要的关联。
@@ -114,7 +114,7 @@ console.log(myName)
 
 ```
 var myObj = {
-  name : "极客时间", 
+  name : "极客时间",
   showThis: function(){
     console.log(this)
   }
@@ -195,7 +195,7 @@ var myObj = new CreateObj()
 
 ```
 var myObj = {
-  name : "极客时间", 
+  name : "极客时间",
   showThis: function(){
     console.log(this)
     function bar(){console.log(this)}
@@ -213,7 +213,7 @@ myObj.showThis()
 
 ```
 var myObj = {
-  name : "极客时间", 
+  name : "极客时间",
   showThis: function(){
     console.log(this)
     var self = this
@@ -234,7 +234,7 @@ console.log(window.name)
 
 ```
 var myObj = {
-  name : "极客时间", 
+  name : "极客时间",
   showThis: function(){
     console.log(this)
     var bar = ()=>{
@@ -321,92 +321,93 @@ let userInfo = {
 
 userInfo.updateInfo()
 setTimeout(() =&gt; {
-  console.log(userInfo)
+console.log(userInfo)
 },200)
 
 &#47;&#47; 修改方法二：缓存外部的this
 let userInfo = {
-  name:&quot;jack.ma&quot;,
-  age:13,
-  sex:&#39;male&#39;,
-  updateInfo:function(){
-    let me = this;
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    setTimeout(function() {
-      me.name = &quot;pony.ma&quot;
-      me.age = 39
-      me.sex = &#39;female&#39;
-    },100)
-  }
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&#39;male&#39;,
+updateInfo:function(){
+let me = this;
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(function() {
+me.name = &quot;pony.ma&quot;
+me.age = 39
+me.sex = &#39;female&#39;
+},100)
+}
 }
 
 userInfo.updateInfo()
 setTimeout(() =&gt; {
-  console.log(userInfo);
+console.log(userInfo);
 },200)
 
 &#47;&#47; 修改方法三，其实和方法二的思路是相同的
 let userInfo = {
-  name:&quot;jack.ma&quot;,
-  age:13,
-  sex:&#39;male&#39;,
-  updateInfo:function(){
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    void function(me) {
-      setTimeout(function() {
-        me.name = &quot;pony.ma&quot;
-        me.age = 39
-        me.sex = &#39;female&#39;
-      },100)
-    }(this);
-  }
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&#39;male&#39;,
+updateInfo:function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+void function(me) {
+setTimeout(function() {
+me.name = &quot;pony.ma&quot;
+me.age = 39
+me.sex = &#39;female&#39;
+},100)
+}(this);
+}
 }
 
 userInfo.updateInfo()
 setTimeout(() =&gt; {
-  console.log(userInfo)
+console.log(userInfo)
 },200)
 
 let update = function() {
-  this.name = &quot;pony.ma&quot;
-  this.age = 39
-  this.sex = &#39;female&#39;
+this.name = &quot;pony.ma&quot;
+this.age = 39
+this.sex = &#39;female&#39;
 }
 
 方法四: 利用call或apply修改函数被调用时的this值(不知掉这么描述正不正确)
 let userInfo = {
-  name:&quot;jack.ma&quot;,
-  age:13,
-  sex:&#39;male&#39;,
-  updateInfo:function(){
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    setTimeout(function() {
-      update.call(userInfo);
-      &#47;&#47; update.apply(userInfo)
-    }, 100)
-  }
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&#39;male&#39;,
+updateInfo:function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(function() {
+update.call(userInfo);
+&#47;&#47; update.apply(userInfo)
+}, 100)
+}
 }
 
 userInfo.updateInfo()
 setTimeout(() =&gt; {
-  console.log(userInfo)
+console.log(userInfo)
 },200)
 
 &#47;&#47; 方法五: 利用bind返回一个新函数，新函数被调用时的this指定为userInfo
 let userInfo = {
-  name:&quot;jack.ma&quot;,
-  age:13,
-  sex:&#39;male&#39;,
-  update: function() {
-    this.name = &quot;pony.ma&quot;
-    this.age = 39
-    this.sex = &#39;female&#39;
-  },
-  updateInfo:function(){
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    setTimeout(this.update.bind(this), 100)
-  }
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&#39;male&#39;,
+update: function() {
+this.name = &quot;pony.ma&quot;
+this.age = 39
+this.sex = &#39;female&#39;
+},
+updateInfo:function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(this.update.bind(this), 100)
+}
 }</p>2019-08-29</li><br/><li><span>William</span> 👍（28） 💬（7）<p>setTimeOut() 函数内部的回调函数，this指向全局函数。修复：在外部绑this或者使用箭头函数。
+
 ```
 let userInfo = {
   name:&quot;jack.ma&quot;,
@@ -449,33 +450,33 @@ userInfo.updateInfo()
 2. 在 setTimeout 外将 this 赋值给其他的变量，setTimeout 里面的函数通过作用域链去改变 userInfo 的属性
 
 很不错的文章，受益匪浅，感谢老师。这里有一个疑问就是，关于箭头函数，文章中说其没有自己的执行上下文，这里指的是箭头函数并不会创建自己的执行上下文变量并压栈，其只是被看作是一个块区域吗？那么在实际的开发中如何在普通函数和箭头函数之间做选择？关于这一点，老师有没有相关推荐的文章呢？谢谢老师</p>2019-08-29</li><br/><li><span>朱维娜🍍</span> 👍（4） 💬（3）<p>之前看到一种说法：this指向的永远是调用它的对象。按照这种说法，嵌套函数的调用者是window，与文中所述的“showThis调用内部函数不能继承this”有所出入，想请老师解答一下这种说法是否正确？</p>2019-08-31</li><br/><li><span>潘启宝</span> 👍（3） 💬（6）<p>let userInfo = {
-  name:&quot;jack.ma&quot;,
-  age:13,
-  sex:&#39;male&#39;,
-  updateInfo:function(){
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    setTimeout(function(){
-      this.name = &quot;pony.ma&quot;
-      this.age = 39
-      this.sex = &#39;female&#39;
-    }.bind(this),100)
-  }
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&#39;male&#39;,
+updateInfo:function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(function(){
+this.name = &quot;pony.ma&quot;
+this.age = 39
+this.sex = &#39;female&#39;
+}.bind(this),100)
+}
 }
 
 userInfo.updateInfo()</p>2019-08-29</li><br/><li><span>子曰</span> 👍（1） 💬（1）<p>let userInfo = {
-    name:&quot;jack.ma&quot;,
-    age:13,
-    sex:&quot;male&quot;,
-    updateInfo:function(){
-      &#47;&#47; 模拟 xmlhttprequest 请求延时
-      setTimeout(()=&gt;{
-        this.name = &quot;pony.ma&quot;
-        this.age = 39
-        this.sex = &quot;female&quot;
-      },100)
-    }
-  }
-  userInfo.updateInfo()</p>2019-08-29</li><br/><li><span>mfist</span> 👍（1） 💬（1）<p>延时函数更新此时的this对象指向了window全局对象。
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&quot;male&quot;,
+updateInfo:function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(()=&gt;{
+this.name = &quot;pony.ma&quot;
+this.age = 39
+this.sex = &quot;female&quot;
+},100)
+}
+}
+userInfo.updateInfo()</p>2019-08-29</li><br/><li><span>mfist</span> 👍（1） 💬（1）<p>延时函数更新此时的this对象指向了window全局对象。
 解决方法就是文章老师提到的两种方法。
 1 this保存给self变量，通过变量作用域机制传递给嵌套函数。
 2箭头函数去锁定函数定义时候的this对象，箭头函数没有上下文，它会继承函数初始化对应上下文。
@@ -518,15 +519,15 @@ let userInfo = {
     },100)
   }
 
-  &#47;&#47; 2 
-  updateInfo :function(){
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    setTimeout(() =&gt; {
-      this.name = &quot;pony.ma&quot;
-      this.age = 39
-      this.sex = female
-    },100)
-  }
+&#47;&#47; 2
+updateInfo :function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(() =&gt; {
+this.name = &quot;pony.ma&quot;
+this.age = 39
+this.sex = female
+},100)
+}
 }
 
 userInfo.updateInfo()
@@ -536,21 +537,22 @@ userInfo.updateInfo()
 常见的方式是在后台的api中返回一个对象，如：{result: true, data:{name:&#39;pony.ma&#39;,age:39, sex:&#39;female&#39;}};
 
 let userInfo = {
-  name:&quot;jack.ma&quot;,
-  age:13,
-  sex:&#39;male&#39;,
-  updateInfo:function(){
-    &#47;&#47; 模拟 xmlhttprequest 请求延时
-    setTimeout(function(resp){
-	  if(resp.result){
-	     var data = {name:&#39;pony.ma&#39;, age:39, sex:&#39;female&#39;}
-         userInfo.name = data.name;
-          userInfo.age = data.age;
-          userInfo.sex = data.sex
-	  }
-      
+name:&quot;jack.ma&quot;,
+age:13,
+sex:&#39;male&#39;,
+updateInfo:function(){
+&#47;&#47; 模拟 xmlhttprequest 请求延时
+setTimeout(function(resp){
+if(resp.result){
+var data = {name:&#39;pony.ma&#39;, age:39, sex:&#39;female&#39;}
+userInfo.name = data.name;
+userInfo.age = data.age;
+userInfo.sex = data.sex
+}
+
     },100)
-  }
+
+}
 }
 
 userInfo.updateInfo()

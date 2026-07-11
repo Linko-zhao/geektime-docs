@@ -91,7 +91,7 @@ store training into ‘model/’ using FeaturesLRClassifierBuilder();
 > Twitter通过实现FeaturesLRClassifierBuilder，直接实现了逻辑回归算法，简单通过两行脚本就能实现机器学习的过程。
 
 ```java
-define Classify ClassifyWithLR(‘model/’); 
+define Classify ClassifyWithLR(‘model/’);
 data = load ‘test.txt’ using SVMLightStorage() as (target: double, features: map[]);
 data = foreach data generate target, Classify(features) as prediction;
 ```

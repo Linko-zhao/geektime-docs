@@ -25,7 +25,7 @@ void DepthFirstSearch(const T& tmpv) //tmpv代表从该顶点出发开始遍历�
 	{
 		vVArray[i] = false; 
 	} //end for
-	
+
 	int idx = GetVertexIdx(tmpv);
 	DepthFirstSearch(idx, vVArray);
 }
@@ -33,8 +33,8 @@ void DepthFirstSearch(int idx, bool vVArray[])
 {
 	cout << m_VertexArray[idx].data <<"-->"; //输出顶点数据（顶点值）
 	vVArray[idx] = true; //标记该顶点已经被访问过
-	
-	int idx2 = GetFirstNeighbor(idx); //获取第一个邻接顶点的下标，B的第一个邻接顶点是F	
+
+	int idx2 = GetFirstNeighbor(idx); //获取第一个邻接顶点的下标，B的第一个邻接顶点是F
 	while (idx2 != -1)
 	{
 		//(1)继续沿着深度访问节点
@@ -43,10 +43,10 @@ void DepthFirstSearch(int idx, bool vVArray[])
 			//没访问过，则进行递归访问
 			DepthFirstSearch(idx2, vVArray);
 		}
-		
+
 		//(2)找其他的邻接顶点（广度方向走）
 		idx2 = GetNextNeightbor(idx, idx2);  //获取某个顶点（下标为idx）的邻接顶点（下标为idx2）的下一个邻接顶点的下标
-	} //end while		
+	} //end while
 	return;
 }
 ```
@@ -104,16 +104,16 @@ void DepthFirstSearch(const T& tmpv) //tmpv代表从该顶点出发开始遍历�
 	{
 		vVArray[i] = false; 
 	} //end for
-	
+
 	int idx = GetVertexIdx(tmpv);
 	DepthFirstSearch(idx, vVArray);
-	
+
 	//如果是非连通图，则继续遍历其他子图
 	bool iffindnovisited; //是否找到了没被访问的顶点
 	int  idxnovisited;  //没被访问的顶点的下标
 lblloop:
 	iffindnovisited = false;
-	idxnovisited = -1;			
+	idxnovisited = -1;
 	for (int i = 0; i < m_numVertices; ++i)
 	{
 		if (vVArray[i] == false)
@@ -155,18 +155,18 @@ void BreadthFirstSearch(const T& tmpv) //tmpv代表从该顶点出发开始遍�
 	for (int i = 0; i < MaxVertices_size; ++i) //开始时所有顶点都没有被访问过
 	{
 		vVArray[i] = false;
-	} //end for			
-	
+	} //end for
+
 	int idx = GetVertexIdx(tmpv);
 	cout << m_VertexArray[idx].data <<"-->";
 	vVArray[idx] = true; //标记该顶点已经被访问过
-	
+
 	LinkQueue<int> lnobj;  //借助队列实现遍历
 	lnobj.EnQueue(idx); //先把起始顶点下标入队
 	while (!lnobj.IsEmpty()) //循环判断队列是否为空
 	{
 		lnobj.DeQueue(idx); //出队列
-		
+
 		int idx2 = GetFirstNeighbor(idx);
 		while (idx2 != -1)
 		{

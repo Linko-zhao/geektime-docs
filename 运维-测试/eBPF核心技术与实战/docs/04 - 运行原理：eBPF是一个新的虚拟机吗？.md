@@ -205,11 +205,12 @@ int bpf(int cmd, union bpf_attr *attr, unsigned int size);
 
 - 第一个参数是 `BPF_PROG_LOAD` ， 表示加载 BPF 程序。
 - 第二个参数是 `bpf_attr` 类型的结构体，表示 BPF 程序的属性。其中，有几个需要你留意的参数，比如：
-  
+
   - `prog_type` 表示 BPF 程序的类型，这儿是 `BPF_PROG_TYPE_KPROBE` ，跟我们Python 代码中的 `attach_kprobe` 一致；
   - `insn_cnt` (instructions count) 表示指令条数；
   - `insns` (instructions) 包含了具体的每一条指令，这儿的 13 条指令跟我们前面 `bpftool prog dump` 的结果是一致的（具体的指令格式，你可以参考内核中 [bpf\_insn](https://elixir.bootlin.com/linux/v5.4/source/include/uapi/linux/bpf.h#L65) 的定义）；
   - `prog_name` 则表示 BPF 程序的名字，即 `hello_world` 。
+
 - 第三个参数 128 表示属性的大小。
 
 到这里，我们已经了解了 bpf 系统调用的基本格式。对于 `bpf` 系统调用在内核中的实现原理，你并不需要详细了解。我们只要知道它的具体功能，就可以掌握 eBPF 的核心原理了。当然，如果你对它的实现方法有兴趣的话，可以参考内核源码 kernel/bpf/syscall.c 中 [SYSCALL\_DEFINE3](https://elixir.bootlin.com/linux/v5.4/source/kernel/bpf/syscall.c#L2837) 的实现。
@@ -296,8 +297,8 @@ ioctl(5, PERF_EVENT_IOC_SET_BPF, 4)     = 0
 
 TRACEPOINT_PROBE(syscalls, sys_enter_bpf)
 {
-    bpf_trace_printk(&quot;%d\\n&quot;, args-&gt;cmd);
-    return 0;
+bpf_trace_printk(&quot;%d\\n&quot;, args-&gt;cmd);
+return 0;
 }
 
 -------------- example.py -----------------
@@ -307,6 +308,7 @@ TRACEPOINT_PROBE(syscalls, sys_enter_bpf)
 from bcc import BPF
 
 # load BPF program
+
 b = BPF(src_file=&quot;example.c&quot;)
 b.trace_print()
 
@@ -323,19 +325,19 @@ uname -r
 apt-cache search linux-source
 apt install linux-source-5.13.0
 
-cd  &#47;usr&#47;src&#47;
+cd &#47;usr&#47;src&#47;
 tar -jxvf linux-source-5.13.0.tar.bz2
 
 apt install libelf-dev
 cd linux-source-5.13.0&#47;tools
-make -C  bpf&#47;bpftool
+make -C bpf&#47;bpftool
 .&#47;bpf&#47;bpftool&#47;bpftool version -p
 {
-    &quot;version&quot;: &quot;5.13.19&quot;,
-    &quot;features&quot;: {
-        &quot;libbfd&quot;: true,
-        &quot;skeletons&quot;: true
-    }
+&quot;version&quot;: &quot;5.13.19&quot;,
+&quot;features&quot;: {
+&quot;libbfd&quot;: true,
+&quot;skeletons&quot;: true
+}
 }
 </p>2022-02-09</li><br/><li><span>不了峰</span> 👍（5） 💬（1）<p>你通常是如何快速理解一门新技术的运行原理的？
 --- 看一下官方文档，了解体系架构，多看几遍。买书看感觉也是一个快速入门的方法。
@@ -344,26 +346,26 @@ Get Essentials， ADEPT五步法：类比，画图，例子，文字说明，定
 
 剩下的就是根据需要侧重地深入到细节。</p>2022-02-26</li><br/><li><span>七里</span> 👍（1） 💬（1）<p>请问，不能执行&#39;bpftool prog dump jited id 78&#39;是怎么回事？bpf相关的包都按照上一讲的提示按照上了
 
-root@maqi-ubt:~# bpftool prog dump xlated id 78
+root@maqi-ubt:~~# bpftool prog dump xlated id 78
 int hello_world(void * ctx):
 ; int hello_world(void *ctx)
-   0: (b7) r1 = 33
+0: (b7) r1 = 33
 ; ({ char _fmt[] = &quot;Hello, World!&quot;; bpf_trace_printk_(_fmt, sizeof(_fmt)); });
-   1: (6b) *(u16 *)(r10 -4) = r1
-   2: (b7) r1 = 1684828783
-   3: (63) *(u32 *)(r10 -8) = r1
-   4: (18) r1 = 0x57202c6f6c6c6548
-   6: (7b) *(u64 *)(r10 -16) = r1
-   7: (bf) r1 = r10
+1: (6b) *(u16 *)(r10 -4) = r1
+2: (b7) r1 = 1684828783
+3: (63) *(u32 *)(r10 -8) = r1
+4: (18) r1 = 0x57202c6f6c6c6548
+6: (7b) *(u64 *)(r10 -16) = r1
+7: (bf) r1 = r10
 ;
-   8: (07) r1 += -16
+8: (07) r1 += -16
 ; ({ char _fmt[] = &quot;Hello, World!&quot;; bpf_trace_printk_(_fmt, sizeof(_fmt)); });
-   9: (b7) r2 = 14
-  10: (85) call bpf_trace_printk#-63952
+9: (b7) r2 = 14
+10: (85) call bpf_trace_printk#-63952
 ; return 0;
-  11: (b7) r0 = 0
-  12: (95) exit
-root@maqi-ubt:~#
+11: (b7) r0 = 0
+12: (95) exit
+root@maqi-ubt:~~#
 root@maqi-ubt:~# bpftool prog dump jited id 78
 Error: No libbfd support</p>2022-02-02</li><br/><li><span>写点啥呢</span> 👍（1） 💬（2）<p>请问老师，像上节课例子中 trace openat系统调用的这个函数int hello_world(struct pt_regs *ctx, int dfd, const char __user * filename, struct open_how *how)，bpf会自动把系统调用参数注入bpf函数执行中。本节课提到bpf虚拟机中对bpf函数的参数个数有限制，那如果碰到系统调用参数个数大于bpf限制了，该如何处理呢？
 
@@ -385,10 +387,11 @@ root@ubuntu-impish:~#
 -----
 是不是因为新版的bpftool  Remove bpf_jit_enable=2 debugging mode。
 
------
-root@ubuntu-impish:~#  bpftool prog profile
+---
+
+root@ubuntu-impish:~~# bpftool prog profile
 Error: bpftool prog profile command is not supported. Please build bpftool with clang &gt;= 10.0.0
-root@ubuntu-impish:~# clang -v
+root@ubuntu-impish:~~# clang -v
 Ubuntu clang version 13.0.0-2
 Target: x86_64-pc-linux-gnu</p>2022-01-27</li><br/><li><span>ZR2021</span> 👍（0） 💬（3）<p>老师，我这边执行 bpftool prog dump jited id xxx，报&quot;Error: No libbfd support&quot; 错误，网上也没找到原因，系统是最新的ubuntu 21.10，vmvare的虚拟机，执行xlated是可以打印出指令的，不知道啥个情况</p>2022-01-27</li><br/><li><span>ZR2021</span> 👍（0） 💬（2）<p>老师，sudo bpftool prog dump xlated id 89，这条命令输出的指令是存储模块存储的指令吗，这个指令是在验证器里进行转换的吗，验证器用转换后的指令去模拟执行是否安全，对bpf 接触的比较少，可能问的有点低级……</p>2022-01-26</li><br/><li><span>Geek_b84e15</span> 👍（4） 💬（1）<p>倪老师您好，我看hello_world的参数列表是(void * ctx)，而有的例子里参数是这样的：int hello_world(struct pt_regs *ctx, int dfd, const char __user * filename, struct open_how *how)，请问怎么确定参数的个数和参数的类型呢？</p>2022-04-25</li><br/><li><span>Sudouble</span> 👍（2） 💬（0）<p>对于运行了sudo strace -v -f -ebpf .&#47;hello.py报了以下错误的小伙伴
 strace: exec: Exec format error

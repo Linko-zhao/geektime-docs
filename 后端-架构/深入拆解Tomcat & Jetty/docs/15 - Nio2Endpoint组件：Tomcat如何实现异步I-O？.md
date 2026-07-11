@@ -31,7 +31,7 @@ public class Nio2Server {
 
       //2.创建异步通道群组
       AsynchronousChannelGroup tg = AsynchronousChannelGroup.withCachedThreadPool(es, 1);
-      
+
       //3.创建服务端异步通道
       AsynchronousServerSocketChannel assc = AsynchronousServerSocketChannel.open(tg);
 
@@ -39,7 +39,7 @@ public class Nio2Server {
       assc.bind(new InetSocketAddress(8080));
 
       //5. 监听连接，传入回调类处理连接请求
-      assc.accept(this, new AcceptHandler()); 
+      assc.accept(this, new AcceptHandler());
    }
 }
 ```
@@ -62,15 +62,15 @@ public class AcceptHandler implements CompletionHandler<AsynchronousSocketChanne
 
    //具体处理连接请求的就是completed方法，它有两个参数：第一个是异步通道，第二个就是上面传入的NioServer对象
    @Override
-   public void completed(AsynchronousSocketChannel asc, Nio2Server attachment) {      
+   public void completed(AsynchronousSocketChannel asc, Nio2Server attachment) {
       //调用accept方法继续接收其他客户端的请求
       attachment.assc.accept(attachment, this);
-      
+
       //1. 先分配好Buffer，告诉内核，数据拷贝到哪里去
       ByteBuffer buf = ByteBuffer.allocate(1024);
-      
+
       //2. 调用read函数读取数据，除了把buf作为参数传入，还传入读回调类
-      channel.read(buf, buf, new ReadHandler(asc)); 
+      channel.read(buf, buf, new ReadHandler(asc));
 
 }
 ```
@@ -93,15 +93,15 @@ CompletionHandler有两个方法：completed和failed，分别在I/O操作成功
 下面我们再来看看处理读的回调类ReadHandler长什么样子。
 
 ```
-public class ReadHandler implements CompletionHandler<Integer, ByteBuffer> {   
-    //读取到消息后的处理  
-    @Override  
-    public void completed(Integer result, ByteBuffer attachment) {  
+public class ReadHandler implements CompletionHandler<Integer, ByteBuffer> {
+    //读取到消息后的处理
+    @Override
+    public void completed(Integer result, ByteBuffer attachment) {
         //attachment就是数据，调用flip操作，其实就是把读的位置移动最前面
-        attachment.flip();  
+        attachment.flip();
         //读取数据
-        ... 
-    }  
+        ...
+    }
 
     void failed(Throwable exc, A attachment){
         ...
@@ -142,11 +142,11 @@ serverSock.accept(null, this);
 ```
 protected class Nio2Acceptor extends Acceptor<AsynchronousSocketChannel>
     implements CompletionHandler<AsynchronousSocketChannel, Void> {
-    
+
 @Override
 public void completed(AsynchronousSocketChannel socket,
         Void attachment) {
-        
+
     if (isRunning() && !isPaused()) {
         if (getMaxConnections() == -1) {
             //如果没有连接限制，继续接收新的连接
@@ -159,7 +159,7 @@ public void completed(AsynchronousSocketChannel socket,
         if (!setSocketOptions(socket)) {
             closeSocket(socket);
         }
-    } 
+    }
 }
 ```
 
@@ -215,6 +215,7 @@ this.readCompletionHandler = new CompletionHandler<Integer, SocketWrapperBase<Ni
 2. 异步我看发了一个read 就返回了，那实际是应该是指异步非阻塞 ， 那么存在异步阻塞的模型么？
 
 3. 老师说从tcp&#47;ip那层解数据包。我理解的过程是 当客户端发一个uri请求，当通过一系列的路由后最终到我们的服务器，再从七层网络模型的最底层开始一路向上到最顶层的应用层。 当应用层（Tomcat容器）接收到请求（连接器endpoint监听端口）后向操作系统发送一个read请求 ，然后等待操作系统内核回调应用程序（Tomcat容器）的回调接口 。那么按照我这种脑补的过程，实际上当服务端tomcat接收到客户端的I&#47;O请求时，向操作系统发送read请求要求操作系统将客户端发送的数据（前台的入参信息）从内核拷贝到用户空间。因为tcp&#47;ip层在应用层下面，那么从网卡解析数据到内核这个过程是不是在tomcat获取到请求之前的的时候就已经处理好了，而不是在tomcat发送read请求时再去从网卡解析数据..？
+
 </p>2019-06-14</li><br/><li><span>yungoo</span> 👍（8） 💬（3）<p>我所看的tomcat 8.5的代码跟专栏所讲已经有些不一致了。已经没有Nio2Acceptor了，accept获取连接用的是Future aceept()。</p>2019-06-13</li><br/><li><span>nimil</span> 👍（7） 💬（1）<p>问下老师，这个Tomcat这个IO模型是将数据拷贝了两次么，还是有做特殊优化</p>2019-06-13</li><br/><li><span>802.11</span> 👍（6） 💬（3）<p>怎么模拟呢。现在springboot内置的Tomcat使用的都是nio  。设定NIO2呢</p>2019-06-21</li><br/><li><span>Standly</span> 👍（6） 💬（1）<p>linux没有真正实现异步IO，所以linux环境下NIO和NIO2的性能差别是不是不大 ？</p>2019-06-15</li><br/><li><span>802.11</span> 👍（6） 💬（1）<p>Http11Processor的2次read是在哪个类中呢，没有找到。。。。</p>2019-06-15</li><br/><li><span>WL</span> 👍（4） 💬（1）<p>老师关于IO模型内存我有两个问题：
 1. 配内存的时候，是不是因为堆内存会受到GC的影响导致地址变化，所以不能直接使用不能使用堆内存， 如果使用堆内存的话也需要先指向一个固定的堆外内存，所以使用堆外内存就可以避免GC对内存地址的影响。
 2. 是不是IO在读数据的时候经过两次数据拷贝，从网卡到内核态，从内核态到用户态，这两次数据拷贝有什么方法可以减少1次吗？</p>2019-06-13</li><br/><li><span>Geek_0quh3e</span> 👍（3） 💬（3）<p>Http11Processor 是通过 2 次 read 调用来完成数据读取操作的。

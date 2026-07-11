@@ -267,11 +267,11 @@ hello.m:10: warning: DIRECT_ATOMIC_PROPERTY_ACCESS
 
 hello.m:4: warning: ASSIGN_POINTER_WARNING
   Property `s` is a pointer type marked with the `assign` attribute at line 4, column 1. Use a different attribute like `strong` or `weak`.
-  2.   
+  2.
   3.   @interface Hello: NSObject
   4. *>*@property NSString* s;
   5.   @end
-  6.   
+  6.
 
 hello.m:10: warning: DIRECT_ATOMIC_PROPERTY_ACCESS
   Direct access to ivar `_s` of an atomic property at line 10, column 12. Accessing an ivar of an atomic property makes the property nonatomic.
@@ -282,11 +282,11 @@ hello.m:10: warning: DIRECT_ATOMIC_PROPERTY_ACCESS
 
 hello.m:4: warning: ASSIGN_POINTER_WARNING
   Property `s` is a pointer type marked with the `assign` attribute at line 4, column 1. Use a different attribute like `strong` or `weak`.
-  2.   
+  2.
   3.   @interface Hello: NSObject
   4. *>*@property NSString* s;
   5.   @end
-  6.   
+  6.
 
 
 *Summary of the reports*
@@ -324,11 +324,11 @@ infer -- clang -c Hello.m
 ```
 hello.m:4: warning: ASSIGN_POINTER_WARNING
   Property `s` is a pointer type marked with the `assign` attribute at line 4, column 1. Use a different attribute like `strong` or `weak`.
-  2.   
+  2.
   3.   @interface Hello: NSObject
   4. *>*@property NSString* s;
   5.   @end
-  6.  
+  6.
 ```
 
 这个警告的意思是说，属性 s 是指针类型，需要使用 strong 或 weak 属性。这时，我将s 的属性修改为 strong：
@@ -385,7 +385,7 @@ Infer 的效率高，支持增量分析，可小范围分析。可定制性不�
 
 感谢你的收听，欢迎你在评论区给我留言分享你的观点，也欢迎把它分享给更多的朋友一起阅读。
 <div><strong>精选留言（15）</strong></div><ul>
-<li><span>iLearn</span> 👍（20） 💬（4）<p>老师，Swift的要怎么搞？</p>2019-03-26</li><br/><li><span>scorpiozj</span> 👍（2） 💬（1）<p>请问Xcode中的静态检查就是clang 静态检查吗？</p>2019-03-29</li><br/><li><span>jimmy</span> 👍（2） 💬（1）<p>oclint的一些研究 https:&#47;&#47;xiaozhuanlan.com&#47;topic&#47;9647358012</p>2019-03-27</li><br/><li><span>頑 張</span> 👍（1） 💬（2）<p>infer跑不起来的 希望这篇能帮到https:&#47;&#47;blog.csdn.net&#47;elisa1988&#47;article&#47;details&#47;46531745?utm_source=blogxgwz7</p>2019-04-01</li><br/><li><span>择一城终老</span> 👍（0） 💬（1）<p>从来没有用过，感觉听天书一样，哈哈！不过大致了解了其功能，但是原理还真不好懂</p>2019-03-27</li><br/><li><span>Geek_wad2tx</span> 👍（0） 💬（1）<p>clang是一个c c++ oc 编译器，静态分析利用clang做代码编译层面的事情，内存泄露，强弱引用，方法调用深度等分析工作交给分析器本身。 
+<li><span>iLearn</span> 👍（20） 💬（4）<p>老师，Swift的要怎么搞？</p>2019-03-26</li><br/><li><span>scorpiozj</span> 👍（2） 💬（1）<p>请问Xcode中的静态检查就是clang 静态检查吗？</p>2019-03-29</li><br/><li><span>jimmy</span> 👍（2） 💬（1）<p>oclint的一些研究 https:&#47;&#47;xiaozhuanlan.com&#47;topic&#47;9647358012</p>2019-03-27</li><br/><li><span>頑 張</span> 👍（1） 💬（2）<p>infer跑不起来的 希望这篇能帮到https:&#47;&#47;blog.csdn.net&#47;elisa1988&#47;article&#47;details&#47;46531745?utm_source=blogxgwz7</p>2019-04-01</li><br/><li><span>择一城终老</span> 👍（0） 💬（1）<p>从来没有用过，感觉听天书一样，哈哈！不过大致了解了其功能，但是原理还真不好懂</p>2019-03-27</li><br/><li><span>Geek_wad2tx</span> 👍（0） 💬（1）<p>clang是一个c c++ oc 编译器，静态分析利用clang做代码编译层面的事情，内存泄露，强弱引用，方法调用深度等分析工作交给分析器本身。
 
 Clang是不是类似于oc中的runtime？</p>2019-03-26</li><br/><li><span>Roger</span> 👍（32） 💬（1）<p>给宝宝喂夜奶，顺便来看看新的一课讲什么</p>2019-03-26</li><br/><li><span>drunkenMouse</span> 👍（20） 💬（0）<p>1. OClint 想执行自己指定的项目，还是不会。。最后查了别的资料，说是要写脚本安装xcpretty，而且说是不维护了。
 
@@ -405,11 +405,11 @@ infer -- clang -c -isysroot &#47;Applications&#47;Xcode.app&#47;Contents&#47;Dev
 怎么解决？
 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
 
-Internal Error:   &#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;infer&#47;bin&#47;..&#47;lib&#47;python&#47;infer.py
-  -j 4 --project-root &#47;Users&#47;yy&#47;工作&#47;项目&#47;test --out
-  &#47;Users&#47;yy&#47;工作&#47;项目&#47;test&#47;infer-out -- xcodebuild build -scheme test
-  -workspace test.xcworkspace -configuration Debug -sdk iphonesimulator:
-  exited with code 1
+Internal Error: &#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;infer&#47;bin&#47;..&#47;lib&#47;python&#47;infer.py
+-j 4 --project-root &#47;Users&#47;yy&#47;工作&#47;项目&#47;test --out
+&#47;Users&#47;yy&#47;工作&#47;项目&#47;test&#47;infer-out -- xcodebuild build -scheme test
+-workspace test.xcworkspace -configuration Debug -sdk iphonesimulator:
+exited with code 1
 Error backtrace:
 Raised at file &quot;base&#47;Die.ml&quot; (inlined), line 25, characters 6-36
 Called from file &quot;base&#47;Logging.ml&quot;, line 314, characters 58-80
@@ -421,21 +421,21 @@ Called from file &quot;infer.ml&quot;, line 130, characters 8-54
 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</p>2019-04-04</li><br/><li><span>吴小安</span> 👍（4） 💬（0）<p>infer 扫描怎么过滤不想扫描的文件呢，例如pod</p>2019-03-29</li><br/><li><span>快到碗里来</span> 👍（3） 💬（0）<p>infer扫描单个文件 报错
 7 errors generated.
 Error: the following clang command did not run successfully:
-    &#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;facebook-clang-plugins&#47;clang&#47;install&#47;bin&#47;clang
-    @&#47;var&#47;folders&#47;j_&#47;tb3f_ly50rj_qylmtk1h8k2w0000gn&#47;T&#47;clang_command_.tmp.11b92e.txt
-  ++Contents of &#39;&#47;var&#47;folders&#47;j_&#47;tb3f_ly50rj_qylmtk1h8k2w0000gn&#47;T&#47;clang_command_.tmp.11b92e.txt&#39;:
-    &quot;-cc1&quot; &quot;-load&quot;
-    &quot;&#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;infer&#47;bin&#47;..&#47;..&#47;facebook-clang-plugins&#47;libtooling&#47;build&#47;FacebookClangPlugin.dylib&quot;
-    &quot;-add-plugin&quot; &quot;BiniouASTExporter&quot; &quot;-plugin-arg-BiniouASTExporter&quot; &quot;-&quot;
-    &quot;-plugin-arg-BiniouASTExporter&quot; &quot;PREPEND_CURRENT_DIR=1&quot;
-    &quot;-plugin-arg-BiniouASTExporter&quot; &quot;MAX_STRING_SIZE=65535&quot; &quot;-cc1&quot; &quot;-triple&quot;
-    &quot;x86_64-apple-macosx10.14.0&quot; &quot;-Wdeprecated-objc-isa-usage&quot;
-    &quot;-Werror=deprecated-objc-isa-usage&quot; &quot;-emit-obj&quot; &quot;-mrelax-all&quot;
-    &quot;-disable-free&quot; &quot;-disable-llvm-verifier&quot; &quot;-discard-value-names&quot;
-    &quot;-main-file-name&quot; &quot;RootVC.m&quot; &quot;-mrelocation-model&quot; &quot;pic&quot; &quot;-pic-level&quot; &quot;2&quot;
-    &quot;-mthread-model&quot; &quot;posix&quot; &quot;-mdisable-fp-elim&quot; &quot;-masm-verbose&quot;
-    &quot;-munwind-tables&quot; &quot;-target-cpu&quot; &quot;penryn&quot; &quot;-dwarf-column-info&quot;
-    &quot;-debugger-tuning=lldb&quot; &quot;-target-linker-version&quot; &quot;351.8&quot;
+&#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;facebook-clang-plugins&#47;clang&#47;install&#47;bin&#47;clang
+@&#47;var&#47;folders&#47;j_&#47;tb3f_ly50rj_qylmtk1h8k2w0000gn&#47;T&#47;clang_command_.tmp.11b92e.txt
+++Contents of &#39;&#47;var&#47;folders&#47;j_&#47;tb3f_ly50rj_qylmtk1h8k2w0000gn&#47;T&#47;clang_command_.tmp.11b92e.txt&#39;:
+&quot;-cc1&quot; &quot;-load&quot;
+&quot;&#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;infer&#47;bin&#47;..&#47;..&#47;facebook-clang-plugins&#47;libtooling&#47;build&#47;FacebookClangPlugin.dylib&quot;
+&quot;-add-plugin&quot; &quot;BiniouASTExporter&quot; &quot;-plugin-arg-BiniouASTExporter&quot; &quot;-&quot;
+&quot;-plugin-arg-BiniouASTExporter&quot; &quot;PREPEND_CURRENT_DIR=1&quot;
+&quot;-plugin-arg-BiniouASTExporter&quot; &quot;MAX_STRING_SIZE=65535&quot; &quot;-cc1&quot; &quot;-triple&quot;
+&quot;x86_64-apple-macosx10.14.0&quot; &quot;-Wdeprecated-objc-isa-usage&quot;
+&quot;-Werror=deprecated-objc-isa-usage&quot; &quot;-emit-obj&quot; &quot;-mrelax-all&quot;
+&quot;-disable-free&quot; &quot;-disable-llvm-verifier&quot; &quot;-discard-value-names&quot;
+&quot;-main-file-name&quot; &quot;RootVC.m&quot; &quot;-mrelocation-model&quot; &quot;pic&quot; &quot;-pic-level&quot; &quot;2&quot;
+&quot;-mthread-model&quot; &quot;posix&quot; &quot;-mdisable-fp-elim&quot; &quot;-masm-verbose&quot;
+&quot;-munwind-tables&quot; &quot;-target-cpu&quot; &quot;penryn&quot; &quot;-dwarf-column-info&quot;
+&quot;-debugger-tuning=lldb&quot; &quot;-target-linker-version&quot; &quot;351.8&quot;
 
     &quot;&#47;Applications&#47;Xcode.app&#47;Contents&#47;Developer&#47;Platforms&#47;iPhoneSimulator.platform&#47;Developer&#47;SDKs&#47;iPhoneSimulator.sdk&quot;
     &quot;-include&quot;
@@ -449,4 +449,5 @@ Error: the following clang command did not run successfully:
     &quot;objective-c&quot; &quot;RootVC.m&quot; &quot;-O0&quot; &quot;-include&quot;
     &quot;&#47;usr&#47;local&#47;Cellar&#47;infer&#47;0.15.0&#47;lib&#47;infer&#47;infer&#47;bin&#47;..&#47;lib&#47;clang_wrappers&#47;global_defines.h&quot;
     &quot;-Wno-everything&quot;</p>2019-04-19</li><br/><li><span>mosn</span> 👍（2） 💬（0）<p>infer --skip-analysis-in-path Pods </p>2019-04-08</li><br/>
+
 </ul>

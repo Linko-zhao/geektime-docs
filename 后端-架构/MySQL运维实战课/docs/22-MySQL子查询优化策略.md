@@ -9,15 +9,15 @@
 在13讲的思考题中，就有一个执行了几天都没有完成的SQL。
 
 ```plain
-Command: Query 
-Time: 184551 
-State: Sending data 
-Info: select item_id, sum(sold) as sold 
-      from stat_item_detail 
+Command: Query
+Time: 184551
+State: Sending data
+Info: select item_id, sum(sold) as sold
+      from stat_item_detail
       where item_id in (
-           select item_id 
-           from stat_item_detail 
-           where gmt_create >= '2019-10-05 08:59:00') 
+           select item_id
+           from stat_item_detail
+           where gmt_create >= '2019-10-05 08:59:00')
       group by item_id
 ```
 
@@ -36,18 +36,18 @@ create table stat_item_detail(
 ) engine=innodb;
 
 
-create view digit 
-  as select 0 as a union all select 1 union all select 2 union all select 3 
-     union all select 4  union all select 5 union all select 6 
+create view digit
+  as select 0 as a union all select 1 union all select 2 union all select 3
+     union all select 4  union all select 5 union all select 6
      union all select 7  union all select 8 union all select 9 ;
 
-create view numbers_1m AS 
+create view numbers_1m AS
 select ((((a.a * 10 + b.a)*10 + c.a)*10 + d.a)*10+e.a)*10+f.a as n
 from digit a, digit b, digit c, digit d, digit e, digit f;
 
 insert into stat_item_detail(item_id, sold, gmt_create, padding)
-select n + 1000000 - n % 2 as item_id, 
-    n % 100 - n%100%2,  
+select n + 1000000 - n % 2 as item_id,
+    n % 100 - n%100%2,
     date_add('2024-06-01 00:00:00', interval n minute) as gmt_create,
     rpad('x', 1000, 'abcdefg ') as padding
 from numbers_1m;
@@ -56,12 +56,12 @@ from numbers_1m;
 当时用的还是MySQL 5.1和5.5的版本。我们先来看一下在5.5中这个SQL的执行计划。
 
 ```plain
-mysql> explain select item_id, sum(sold) as sold 
-      from stat_item_detail 
+mysql> explain select item_id, sum(sold) as sold
+      from stat_item_detail
       where item_id in (
-           select item_id 
-           from stat_item_detail 
-           where Gmt_create >= '2026-04-26 10:30:00') 
+           select item_id
+           from stat_item_detail
+           where Gmt_create >= '2026-04-26 10:30:00')
       group by item_id;
 
 +----+--------------------+------------------+----------------+----------------------------+-------------+---------+------+---------+-------------+
@@ -187,7 +187,7 @@ select item_id, sum(sold) from (
 ```plain
 mysql> select t1.item_id, sum(t1.sold) as sold
 from stat_item_detail t1, (
-  select distinct item_id 
+  select distinct item_id
   from stat_item_detail t2
   where t2.gmt_create >= '2026-04-26 10:30:00') t22
 where t1.item_id = t22.item_id
@@ -233,12 +233,12 @@ MySQL 5.6开始引入了半连接转换，对于前面例子中的SQL，优化�
 在8.0的环境中执行这个SQL，MySQL自动把查询转换成了半连接。
 
 ```plain
-mysql> explain select item_id, sum(sold) as sold 
-      from stat_item_detail 
+mysql> explain select item_id, sum(sold) as sold
+      from stat_item_detail
       where item_id in (
-           select item_id 
-           from stat_item_detail 
-           where Gmt_create >= '2026-04-26 10:30:00') 
+           select item_id
+           from stat_item_detail
+           where Gmt_create >= '2026-04-26 10:30:00')
       group by item_id;
 
 +----+--------------+------------------+-------+----------------------------+----------------+---------+---------------------+------+----------+-----------------------+
@@ -255,7 +255,7 @@ mysql> explain select item_id, sum(sold) as sold
 ```plain
 mysql> select t1.item_id, sum(t1.sold) as sold
 from stat_item_detail t1, (
-  select distinct item_id 
+  select distinct item_id
   from stat_item_detail t2
   where t2.gmt_create >= '2026-04-26 10:30:00') t22
 where t1.item_id = t22.item_id
@@ -322,7 +322,7 @@ CREATE TABLE t_subq (
   KEY idx_abc (a,b,c)
 ) ENGINE=InnoDB;
 
-insert into t_parent(a,b,c) values 
+insert into t_parent(a,b,c) values
 (1,1,1),(2,2,2),(3,3,3),(4,4,4),(5,5,5),(null,0,0),(2,2,2);
 
 insert into t_subq (a,b,c,d) values
@@ -459,7 +459,7 @@ mysql> explain select item_id, sum(sold) as sold
 |  1 | SIMPLE       | stat_item_detail | ref   | idx_item_id                | idx_item_id    | 4       | <subquery2>.item_id |    1 |   100.00 | NULL                  |
 |  2 | MATERIALIZED | stat_item_detail | range | idx_item_id,idx_gmt_create | idx_gmt_create | 5       | NULL                |   10 |   100.00 | Using index condition |
 +----+--------------+------------------+-------+----------------------------+----------------+---------+---------------------+------+----------+-----------------------+
-    
+
 mysql> select * from information_schema.optimizer_trace\G
 ```
 
@@ -613,7 +613,7 @@ DuplicatesWeedout的成本，由正常的表连接成本和去重成本组成，
 但是在我的测试中，not in的执行计划中仍旧是相关子查询（DEPENDENT SUBQUERY）。
 
 ```plain
-mysql> explain select * from t_parent 
+mysql> explain select * from t_parent
     where b not in (
         select b from t_subq where b is not null
     );
@@ -628,9 +628,9 @@ mysql> explain select * from t_parent
 给主查询的not in字段加上not null条件后，查询才转换成了反连接。
 
 ```plain
-mysql> explain select * from t_parent 
+mysql> explain select * from t_parent
     where not exists (
-        select 1 from t_subq where a=t_parent.a) 
+        select 1 from t_subq where a=t_parent.a)
     and a is not null;
 +----+-------------+----------+-------+---------------+---------+---------+----------------+------+----------+--------------------------------------+
 | id | select_type | table    | type  | possible_keys | key     | key_len | ref            | rows | filtered | Extra                                |
@@ -645,9 +645,9 @@ mysql> show warnings\G
    Code: 1003
 Message: /* select#1 */ select `rep`.`t_parent`.`id` AS `id`,
      `rep`.`t_parent`.`a` AS `a`,`rep`.`t_parent`.`b` AS `b`,
-     `rep`.`t_parent`.`c` AS `c`,`rep`.`t_parent`.`padding` AS `padding` 
-from `rep`.`t_parent` anti join (`rep`.`t_subq`) 
-on((`rep`.`t_subq`.`a` = `rep`.`t_parent`.`a`)) 
+     `rep`.`t_parent`.`c` AS `c`,`rep`.`t_parent`.`padding` AS `padding`
+from `rep`.`t_parent` anti join (`rep`.`t_subq`)
+on((`rep`.`t_subq`.`a` = `rep`.`t_parent`.`a`))
 where (`rep`.`t_parent`.`a` is not null)
 ```
 
@@ -740,7 +740,7 @@ create table emp_salary(
 ) engine=innodb;
 
 insert into emp_salary(emp_id, dept_id, salary, padding)
-select 100000 + n, n % 10, 10000 + (n * n) % 10000, rpad('A', 1000, 'ABCD') 
+select 100000 + n, n % 10, 10000 + (n * n) % 10000, rpad('A', 1000, 'ABCD')
 from numbers;
 ```
 
@@ -748,8 +748,8 @@ from numbers;
 
 ```plain
 mysql> explain select * from emp_salary t1
-where salary > (select avg(salary) 
-                from emp_salary 
+where salary > (select avg(salary)
+                from emp_salary
                 where dept_id = t1.dept_id)
 
 +----+--------------------+------------+------+---------------+-------------+---------+-----------------+------+----------+-------------+
@@ -766,8 +766,8 @@ where salary > (select avg(salary)
 
 ```plain
 mysql> explain select * from (
-    select t1.emp_id, t1.dept_id, t1.salary, 
-        (select avg(salary) 
+    select t1.emp_id, t1.dept_id, t1.salary,
+        (select avg(salary)
          from emp_salary where dept_id = t1.dept_id
         ) as dept_avg_salary
     from emp_salary t1 ) t
@@ -785,10 +785,10 @@ where salary > dept_avg_salary;
 对于这样的SQL，我们可以尝试改写，将相关子查询改成不相关子查询，这样可以减少子查询的执行次数。
 
 ```plain
-mysql> select t1.* 
+mysql> select t1.*
 from emp_salary t1,  (
-    select dept_id, avg(salary) as avg_salary 
-    from emp_salary 
+    select dept_id, avg(salary) as avg_salary
+    from emp_salary
     group by dept_id ) t2
 where t1.dept_id = t2.dept_id
 and t1.salary > t2.avg_salary;
@@ -817,7 +817,7 @@ MySQL 8.0增强了子查询的优化能力，对很多简单的子查询，优�
 ```plain
 mysql> select t1.item_id, sum(t1.sold) as sold
 from stat_item_detail t1, (
-  select distinct item_id 
+  select distinct item_id
   from stat_item_detail t2
   where t2.gmt_create >= '2026-04-26 10:30:00') t22
 where t1.item_id = t22.item_id
@@ -848,35 +848,33 @@ select item_id, sum(sold) from (
 |  2 | DERIVED     | t2         | NULL       | range | Using index condition; Using temporary |
 +----+-------------+------------+------------+-------+----------------------------------------+
 
-
 第一种改写方式对应半连接转换中的 Materialize with deduplication 策略，
 从 distinct item_id 的语义和执行计划中 Extra 列中的 Using temporary，再通过执行计划的执行顺序可知，先生成一个内存临时表，将 item_id 列设置为唯一键，
 然后范围扫描索引 idx_gmt_create ，将满足查询条件的 item_id 插入到表中。插入完成后，用该临时表与表 stat_item_detail 进行 join 操作。
 这个过程与 materialize with deduplication 策略的过程一样——先将子查询物化成一个临时表，然后对临时表中的记录进行去重操作，最后将去重后的临时表与原主查询中的表进行关联查询。
 
-
 思路2
 +----+-------------+------------+------------+-------+----------------------------------------+
-| id | select_type | table      | partitions | type  | Extra                                  |
+| id | select_type | table | partitions | type | Extra |
 +----+-------------+------------+------------+-------+----------------------------------------+
-|  1 | PRIMARY     | &lt;derived2&gt; | NULL       | ALL   | Using temporary                        |
-|  2 | DERIVED     | t2         | NULL       | range | Using index condition; Using temporary |
-|  2 | DERIVED     | t1         | NULL       | ref   | NULL                                   |
+| 1 | PRIMARY | &lt;derived2&gt; | NULL | ALL | Using temporary |
+| 2 | DERIVED | t2 | NULL | range | Using index condition; Using temporary |
+| 2 | DERIVED | t1 | NULL | ref | NULL |
 +----+-------------+------------+------------+-------+----------------------------------------+
 
-第二种改写方式对应半连接转换中的 Duplicate Weedout 策略，使用到了内存临时表，并用主键来去重。</p>2024-10-12</li><br/><li><span>陈星宇(2.11)</span> 👍（0） 💬（1）<p>这些策略分别是 pullout、duplicate weedout、first match、loose scan、materialization。 这些是8.0才有吗？在5.7里很少看到。</p>2024-10-11</li><br/><li><span>陈星宇(2.11)</span> 👍（0） 💬（1）<p>mysql&gt; explain select item_id, sum(sold) as sold 
-      from stat_item_detail 
-      where item_id in (
-           select item_id 
-           from stat_item_detail 
-           where Gmt_create &gt;= &#39;2026-04-26 10:30:00&#39;) 
-      group by item_id;
+第二种改写方式对应半连接转换中的 Duplicate Weedout 策略，使用到了内存临时表，并用主键来去重。</p>2024-10-12</li><br/><li><span>陈星宇(2.11)</span> 👍（0） 💬（1）<p>这些策略分别是 pullout、duplicate weedout、first match、loose scan、materialization。 这些是8.0才有吗？在5.7里很少看到。</p>2024-10-11</li><br/><li><span>陈星宇(2.11)</span> 👍（0） 💬（1）<p>mysql&gt; explain select item_id, sum(sold) as sold
+from stat_item_detail
+where item_id in (
+select item_id
+from stat_item_detail
+where Gmt_create &gt;= &#39;2026-04-26 10:30:00&#39;)
+group by item_id;
 
 +----+--------------------+------------------+----------------+----------------------------+-------------+---------+------+---------+-------------+
-| id | select_type        | table            | type           | possible_keys              | key         | key_len | ref  | rows    | Extra       |
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |
 +----+--------------------+------------------+----------------+----------------------------+-------------+---------+------+---------+-------------+
-|  1 | PRIMARY            | stat_item_detail | index          | NULL                       | idx_item_id | 4       | NULL | 1000029 | Using where |
-|  2 | DEPENDENT SUBQUERY | stat_item_detail | index_subquery | idx_item_id,idx_gmt_create | idx_item_id | 4       | func |       1 | Using where |
+| 1 | PRIMARY | stat_item_detail | index | NULL | idx_item_id | 4 | NULL | 1000029 | Using where |
+| 2 | DEPENDENT SUBQUERY | stat_item_detail | index_subquery | idx_item_id,idx_gmt_create | idx_item_id | 4 | func | 1 | Using where |
 +----+--------------------+------------------+----------------+----------------------------+-------------+---------+------+---------+-------------+
 执行不是按id从大到小执行吗？感觉子查询应该走时间字段的索引，这里是不是有问题，有点没理解。
 “从上面的这个执行计划可以看到，这个 SQL 在执行时，先全量扫描索引 idx_item_id，每得到一个 item_id 后，执行相关子查询（DEPENDENT SUBQUERY）select 1 from stat_item_detail where gmt_create &gt;= ‘2026-04-26 10:30:00’ and item_id = primary.item_id。当主查询中表中的数据量很大的时候，子查询执行的次数也会很多，因此 SQL 的性能非常差。”</p>2024-10-11</li><br/>

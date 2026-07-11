@@ -226,6 +226,7 @@ for (i = 0; i<100000; i++){
 2. 这篇文章描述了Ignition的设计：[Ignition Design Doc](https://docs.google.com/document/d/11T2CRex9hXxoJwbYqVQ32yIPMh0uouUZLdyrtmMoL44/mobilebasic)，我在GitHub上也放了一个[拷贝](https://github.com/RichardGong/CompilersInPractice/blob/master/v8/Ignition%20Design%20Doc.pdf)
 3. 这篇文章有助于你了解Ignition的字节码：[Understanding V8’s bytecode](https://medium.com/dailyjs/understanding-v8s-bytecode-317d46c94775)
 4. V8项目的[官网](https://v8.dev/)，这里有一些重要的博客文章和文档
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>westfall</span> 👍（4） 💬（1）<p>“Ignition 是一个基于寄存器的解释器。它把函数的参数、变量等保存在寄存器里。不过，这里的寄存器并不是物理寄存器，而是指栈帧中的一个位置。”请问老师，这样的话它跟基于栈的解释器有多大区别呢？</p>2020-08-04</li><br/><li><span>sugar</span> 👍（2） 💬（1）<p>&quot;Preparser 粗略地解析一遍程序，在正式运行某个函数的时候，编译器才会按需解析这个函数。&quot;——是否可以理解为，v8的懒解析是以js中的函数为原子粒度的？是否存在对较大的语法块，比如switch、某个if的条件内逻辑非常庞大等部分单独作为懒解析呢？ 因为有可能说一个if判断条件很少为true，但内部代码行数达到几百行，一次性解析成AST比较浪费... 但如果按function的粒度，这种情况也都会被一次性完全解析成AST了</p>2020-07-22</li><br/><li><span>sugar</span> 👍（2） 💬（10）<p>宫老师，想请教下在自己的c++项目中 如果想引入v8，对js source code作AST-parse，甚至单独抽出v8当中的某一些部分来做些事情，这方面是否有什么好的资料可以参考？在v8.dev官网似乎并没找到很详细的这方面的guidance，我经常遇到的就是很多头文件的依赖需要手动处理，毕竟v8本身的编译是基于ninja的，而自己的一些c++项目通常在mac本地会用xcode（v8项目中似乎有个可以build出.xcodeproj工程目录的选项，但我build出来放进xcode里一大堆报错，根本跑不通&gt;.&lt;），或者在linux上用make方式，这会遇到很多坑需要踩，不知这方面有没有比较好的资料推荐？</p>2020-07-20</li><br/><li><span>刘強</span> 👍（0） 💬（0）<p>有点奇怪，解释器也是一个程序，解释执行字节码，为什么能用上物理寄存器</p>2023-11-04</li><br/><li><span>VoiceWitness</span> 👍（0） 💬（0）<p>【你可以在终端测试一下懒解析和完整解析的区别。针对 foo.js 示例程序，你输入“.&#47;d8 – ast-print foo.js”命令。】
 这里应该是 --print-ast

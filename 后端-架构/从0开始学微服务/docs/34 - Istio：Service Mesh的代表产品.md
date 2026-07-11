@@ -227,7 +227,7 @@ Mixer的一个功能是实现服务调用的日志收集，假如某一个服务
 
 欢迎你在留言区写下自己的思考，与我一起讨论。
 
-* * *
+---
 
 扩展阅读：
 
@@ -235,6 +235,7 @@ Mixer的一个功能是实现服务调用的日志收集，假如某一个服务
 - 授权策略：[https://istio.io/docs/concepts/security/#authentication-policies](https://istio.io/docs/concepts/security/#authentication-policies)
 - 安全命名信息：[https://istio.io/docs/concepts/security/#secure-naming](https://istio.io/docs/concepts/security/#secure-naming)
 - 双向TLS认证：[https://istio.io/docs/tasks/security/mtls-migration/](https://istio.io/docs/tasks/security/mtls-migration/)
+
 <div><strong>精选留言（9）</strong></div><ul>
 <li><span>mgxian</span> 👍（27） 💬（1）<p>日志使用批量加队列加异步处理</p>2018-11-08</li><br/><li><span>文敦复</span> 👍（3） 💬（1）<p>批量+异步！</p>2018-11-12</li><br/><li><span>风轨</span> 👍（3） 💬（1）<p>日志不是业务关键数据，丢一部分也问题不大，异步处理能减少正常业务时间等待。</p>2018-11-09</li><br/><li><span>拉欧</span> 👍（1） 💬（1）<p>可以配置日志上传的百分比，减少上传的数量</p>2018-11-08</li><br/><li><span>极极</span> 👍（3） 💬（0）<p>老师，我有几个关于长连的疑问 ，希望您能解答，谢谢！
 
@@ -243,4 +244,5 @@ Mixer的一个功能是实现服务调用的日志收集，假如某一个服务
 2. 长连的负载策略如何实现？istio 是不是做了其他优化或兼容？
 
 3. 还有长连的可靠性如何确保？发版时 pod 更换如何确保新旧长连接的交替？</p>2020-07-21</li><br/><li><span>松花皮蛋me</span> 👍（2） 💬（0）<p>异步上传日记，不需要ack</p>2018-11-08</li><br/><li><span>锋尘</span> 👍（1） 💬（0）<p>Kafka 顺序写硬盘据说效率堪比内存，未验证过！</p>2019-09-06</li><br/><li><span>技术修行者</span> 👍（0） 💬（0）<p>如果对日志收集的实时性要求不高，可以尝试用异步的方式来解决。</p>2019-09-22</li><br/><li><span>MJ</span> 👍（0） 💬（0）<p>异步处理</p>2018-12-29</li><br/>
+
 </ul>

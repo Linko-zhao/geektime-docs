@@ -136,18 +136,18 @@ make && sudo make install
 ...
 events {
   ...
-}	
+}
 
 #RTMP 服务
-rtmp { 
-  server{ 
+rtmp {
+  server{
 	#指定服务端口
 	listen 1935;     //RTMP协议使用的默认端口
 	chunk_size 4000; //RTMP分块大小
 
 	#指定RTMP流应用
 	application live //推送地址
-	{ 
+	{
 	   live on;      //打开直播流
 	   allow play all;
 	}
@@ -159,7 +159,7 @@ rtmp {
         hls_path /tmp/hls;
     }
   }
-}	
+}
 
 http {
   ...
@@ -188,13 +188,13 @@ http {
 通过上面的配置，我们就将 RTMP流媒体服务器配置好了。接下来我们可以通过下面的命令将配置好的流媒体服务器启动起来提供服务了：
 
 ```
- /usr/local/nginx/sbin/nginx 
+ /usr/local/nginx/sbin/nginx
 ```
 
 至此，我们的 RTMP 流媒体服务器就算搭建好了。我们可以在 Linux 系统下执行下面的命令来查看1935端口是否已经打开：
 
 ```
-netstat -ntpl | grep 1935 
+netstat -ntpl | grep 1935
 ```
 
 ## 音视频共享与观看

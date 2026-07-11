@@ -35,13 +35,13 @@ metadata:
   name: metrics-server
   namespace: kube-system
 spec:
-  ... ... 
+  ... ...
   template:
     spec:
       containers:
       - args:
         - --kubelet-insecure-tls
-        ... ... 
+        ... ...
 ```
 
 这是因为Metrics Server默认使用TLS协议，要验证证书才能与kubelet实现安全通信，而我们的实验环境里没有这个必要，加上这个参数可以让我们的部署工作简单很多（生产环境里就要慎用）。
@@ -135,7 +135,6 @@ spec:
             cpu: 100m
             memory: 20Mi
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -328,35 +327,34 @@ Grafana内部已经预置了很多强大易用的仪表盘，你可以在左侧�
 	kind: Deployment
 	metadata:
 	 ...
-	  
-	  template:
-	    ....
-	    spec:
-	      nodeName: k8s-master #你自己的节点名称
+
+      template:
+        ....
+        spec:
+          nodeName: k8s-master #你自己的节点名称
 
 2: prometheus 镜像问题
-   这里我偷懒，不用骑驴找驴了，直接用老师的
+这里我偷懒，不用骑驴找驴了，直接用老师的
 
-   这里我建议您push到docker hub (因为集群有多个节点，push到docker hub上，这样pod调度到任意一个节点都可以方便下载)
+这里我建议您push到docker hub (因为集群有多个节点，push到docker hub上，这样pod调度到任意一个节点都可以方便下载)
 
-   docker pull chronolaw&#47;kube-state-metrics:v2.5.0
-   docker tag chronolaw&#47;kube-state-metrics:v2.5.0 k8s.gcr.io&#47;kube-state-metrics&#47;kube-state-metrics:v2.5.0
-   docker rmi chronolaw&#47;kube-state-metrics:v2.5.0
-   docker push k8s.gcr.io&#47;kube-state-metrics&#47;kube-state-metrics:v2.5.0
+docker pull chronolaw&#47;kube-state-metrics:v2.5.0
+docker tag chronolaw&#47;kube-state-metrics:v2.5.0 k8s.gcr.io&#47;kube-state-metrics&#47;kube-state-metrics:v2.5.0
+docker rmi chronolaw&#47;kube-state-metrics:v2.5.0
+docker push k8s.gcr.io&#47;kube-state-metrics&#47;kube-state-metrics:v2.5.0
 
+prometheus-adapter 老师的版本运行不起来，我在docker hub上 找了一个可以用的
 
-   prometheus-adapter 老师的版本运行不起来，我在docker hub上 找了一个可以用的
-
-   docker pull pengyc2019&#47;prometheus-adapter:v0.9.1
-   docker tag pengyc2019&#47;prometheus-adapter:v0.9.1 k8s.gcr.io&#47;prometheus-adapter&#47;prometheus-adapter:v0.9.1
-   docker rmi pengyc2019&#47;prometheus-adapter:v0.9.1
-   docker push k8s.gcr.io&#47;prometheus-adapter&#47;prometheus-adapter:v0.9.1
+docker pull pengyc2019&#47;prometheus-adapter:v0.9.1
+docker tag pengyc2019&#47;prometheus-adapter:v0.9.1 k8s.gcr.io&#47;prometheus-adapter&#47;prometheus-adapter:v0.9.1
+docker rmi pengyc2019&#47;prometheus-adapter:v0.9.1
+docker push k8s.gcr.io&#47;prometheus-adapter&#47;prometheus-adapter:v0.9.1
 
 然后执行：
-	kubectl create -f manifests&#47;setup
-	kubectl create -f manifests
+kubectl create -f manifests&#47;setup
+kubectl create -f manifests
 
- 到此，运行成功
+到此，运行成功
 </p>2022-09-06</li><br/><li><span>邵涵</span> 👍（9） 💬（1）<p>在使用hpa做自动扩容&#47;缩容时，遇到了只扩容不缩容的问题，具体情况如下：
 1. 按文中的步骤，使用ab加压，可以看到pod增加到了10个
 [shaohan@k8s4 ~]$ kubectl get hpa ngx-hpa -w
@@ -400,17 +398,18 @@ kubectl create -f manifests&#47;setup
 kubectl create -f manifests
 
 部署后，如果想重新部署，需要清理环境，那么，怎么清理掉以前部署的东西？
-和kubectl create -f manifests&#47;setup相反的操作是“kubectl delete -f manifests&#47;setup”吗？</p>2022-08-31</li><br/><li><span>ningfei</span> 👍（3） 💬（1）<p>prometheus-adapter里使用这个willdockerhub&#47;prometheus-adapter:v0.9.1镜像,可以启动成功</p>2022-09-02</li><br/><li><span>XXG</span> 👍（2） 💬（1）<p>metrics-server-85bc76798b-hr56n           0&#47;1     ImagePullBackOff 原因：
+和kubectl create -f manifests&#47;setup相反的操作是“kubectl delete -f manifests&#47;setup”吗？</p>2022-08-31</li><br/><li><span>ningfei</span> 👍（3） 💬（1）<p>prometheus-adapter里使用这个willdockerhub&#47;prometheus-adapter:v0.9.1镜像,可以启动成功</p>2022-09-02</li><br/><li><span>XXG</span> 👍（2） 💬（1）<p>metrics-server-85bc76798b-hr56n 0&#47;1 ImagePullBackOff 原因：
 
 &lt;1&gt; 注意metrics-server版本，我拉下来的yml文件版本变成了v0.6.2，所以要根据最新的components.yaml文件中的metrics-server版本对应改一下老师的脚本；
 &lt;2&gt; 注意要在Worker节点执行脚本，我就在master节点上执行了好几遍。。。</p>2022-11-30</li><br/><li><span>dao</span> 👍（2） 💬（1）<p>简单的回答一下思考题，
 
 1，会根据设置进行扩容（scale out），但是如果不满足 HPA 的指标条件，接着会立即进行缩容（scale in），下面是我的操作观察到的日志
 ---
-Normal  SuccessfulCreate  3s    replicaset-controller  Created pod: ngx-hpa-dep-86f66c75f5-z2gjk
-Normal  SuccessfulCreate  3s    replicaset-controller  Created pod: ngx-hpa-dep-86f66c75f5-p46lr
-Normal  SuccessfulDelete  3s    replicaset-controller  Deleted pod: ngx-hpa-dep-86f66c75f5-z2gjk
-Normal  SuccessfulDelete  3s    replicaset-controller  Deleted pod: ngx-hpa-dep-86f66c75f5-p46lr
+
+Normal SuccessfulCreate 3s replicaset-controller Created pod: ngx-hpa-dep-86f66c75f5-z2gjk
+Normal SuccessfulCreate 3s replicaset-controller Created pod: ngx-hpa-dep-86f66c75f5-p46lr
+Normal SuccessfulDelete 3s replicaset-controller Deleted pod: ngx-hpa-dep-86f66c75f5-z2gjk
+Normal SuccessfulDelete 3s replicaset-controller Deleted pod: ngx-hpa-dep-86f66c75f5-p46lr
 ---
 
 2，我现有的经验很有限，主要集中在单机&#47;集群机器指标的监控，以及对于应用及产品的监控（通过监控日志实现的），同时结合一些告警系统（alert），以便快速发现故障及解决。
@@ -425,17 +424,18 @@ Error from server (ServiceUnavailable): the server is currently unable to handle
 
 执行kubectl get apiservice v1beta1.metrics.k8s.io -o yaml看到
 status:
-  conditions:
-  - lastTransitionTime: &quot;2022-10-29T09:57:08Z&quot;
-    message: &#39;failing or missing response from https:&#47;&#47;10.98.115.140:443&#47;apis&#47;metrics.k8s.io&#47;v1beta1:
-      Get &quot;https:&#47;&#47;10.98.115.140:443&#47;apis&#47;metrics.k8s.io&#47;v1beta1&quot;: dial tcp 10.98.115.140:443:
-      i&#47;o timeout&#39;
-    reason: FailedDiscoveryCheck
-    status: &quot;False&quot;
-    type: Available
-在components.yaml中给deployment对象添加hostNetwork: true（在spec-&gt;template-&gt;spec下）就可以解决这个问题</p>2022-11-01</li><br/><li><span>dao</span> 👍（1） 💬（1）<p>分享一下我的本课实践经验。当所有部署结束后，检查发现有 Pod 无法正常运行（也就是几个 Web UI 无法正常打开的）
+conditions:
 
-```bash
+- lastTransitionTime: &quot;2022-10-29T09:57:08Z&quot;
+  message: &#39;failing or missing response from https:&#47;&#47;10.98.115.140:443&#47;apis&#47;metrics.k8s.io&#47;v1beta1:
+  Get &quot;https:&#47;&#47;10.98.115.140:443&#47;apis&#47;metrics.k8s.io&#47;v1beta1&quot;: dial tcp 10.98.115.140:443:
+  i&#47;o timeout&#39;
+  reason: FailedDiscoveryCheck
+  status: &quot;False&quot;
+  type: Available
+  在components.yaml中给deployment对象添加hostNetwork: true（在spec-&gt;template-&gt;spec下）就可以解决这个问题</p>2022-11-01</li><br/><li><span>dao</span> 👍（1） 💬（1）<p>分享一下我的本课实践经验。当所有部署结束后，检查发现有 Pod 无法正常运行（也就是几个 Web UI 无法正常打开的）
+
+````bash
 # 查看 Pod 状态，发现 prometheus-operator 无法正常启动
 kubectl get pod -n monitoring
 NAME                                  READY   STATUS    RESTARTS   AGE
@@ -490,3 +490,4 @@ E0903 15:50:56.622351       1 scraper.go:140] &quot;Failed to scrape node&quot; 
 4. containerPort: 10250 改为 secure-port=4443
 5. metrics-server deployment 的镜像(image)改为 k8s.gcr.io&#47;metrics-server&#47;metrics-server:v0.6.1</p>2024-09-04</li><br/>
 </ul>
+````

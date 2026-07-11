@@ -90,7 +90,7 @@ Volatile 在Java中主要用来优化多线程共享数据的一致性，确保�
 假设我们需要实现一个定时任务调度器，其内部需要用到一个 flag 变量作为是否执行任务的标志。由于 flag 的值由多个线程设置和修改，因此需要确保其先行发生关系。
 
 ```plain
-public class TimerScheduler { 
+public class TimerScheduler {
     private volatile boolean flag;
     private Runnable task;
     public TimerScheduler(Runnable task) {
@@ -149,7 +149,7 @@ public class Singleton {
 public class DelayedInitialization {
 private volatile boolean initialized;
 private Runnable initTask;
-public DelayedInitialization(Runnable initTask) { 
+public DelayedInitialization(Runnable initTask) {
         this.initTask = initTask;
     }
     public void init() {

@@ -179,27 +179,27 @@ fun getHorArray(x: Int): Array&lt;Color&gt; {
         return pixels[x]
 }
 
-&#47;&#47;&#47;&#47; 
+&#47;&#47;&#47;&#47;
 fun Image.flipHorizontal(): Image {
-    for (i in (0 until this.height())) {
-        this.getHorArray(i).reverse()
-    }
-    return this
+for (i in (0 until this.height())) {
+this.getHorArray(i).reverse()
+}
+return this
 }
 
 fun Image.flipVertical(): Image {
-    this.pixels.reverse()
-    return this
+this.pixels.reverse()
+return this
 }
 
 fun Image.crop(startY: Int, startX: Int, width: Int, height: Int): Image {
-    return Array(width - startY) { y -&gt;
-        Array(height - startX) { x -&gt;
-            Color(this.getPixel(x, y).rgb)
-        }
-    }.let {
-        Image(it)
-    }
+return Array(width - startY) { y -&gt;
+Array(height - startX) { x -&gt;
+Color(this.getPixel(x, y).rgb)
+}
+}.let {
+Image(it)
+}
 }
 </p>2022-02-27</li><br/><li><span>白乾涛</span> 👍（1） 💬（1）<p>fun main() = runBlocking {
     File(BASE_PATH).mkdirs()
@@ -212,103 +212,111 @@ fun Image.crop(startY: Int, startX: Int, width: Int, height: Int): Image {
 }</p>2022-03-06</li><br/><li><span>A Lonely Cat</span> 👍（1） 💬（1）<p>图片下载功能
 
 private val client = OkHttpClient.Builder()
-    .build()
+.build()
 
 &#47;**
- * 挂起函数，以http的方式下载图片，保存到本地
- *&#47;
-suspend fun downloadImage(url: String, outputFile: File): Boolean = suspendCoroutine { con -&gt;
-    val request = Request.Builder()
-        .url(url)
-        .get()
-        .build()
-    client.newCall(request)
-        .enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-                con.resume(false)
-            }
 
-            override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    response.body?.bytes()?.let {
-                        outputFile.writeBytes(it)
-                    }
-                    con.resume(true)
-                } else {
-                    con.resume(false)
-                }
-            }
-        })
+- 挂起函数，以http的方式下载图片，保存到本地
+  *&#47;
+  suspend fun downloadImage(url: String, outputFile: File): Boolean = suspendCoroutine { con -&gt;
+  val request = Request.Builder()
+  .url(url)
+  .get()
+  .build()
+  client.newCall(request)
+  .enqueue(object : Callback {
+  override fun onFailure(call: Call, e: IOException) {
+  e.printStackTrace()
+  con.resume(false)
+  }
+
+           override fun onResponse(call: Call, response: Response) {
+               if (response.isSuccessful) {
+                   response.body?.bytes()?.let {
+                       outputFile.writeBytes(it)
+                   }
+                   con.resume(true)
+               } else {
+                   con.resume(false)
+               }
+           }
+       })
+
 }
 
 fun main() = runBlocking {
-    val url = &quot;http:&#47;&#47;img.netbian.com&#47;file&#47;2020&#47;1202&#47;smallaaa773e8cc9729977037e80b19f955891606922519.jpg&quot;
-    val file = File(&quot;${BASE_PATH}wallpaper.png&quot;)
+val url = &quot;http:&#47;&#47;img.netbian.com&#47;file&#47;2020&#47;1202&#47;smallaaa773e8cc9729977037e80b19f955891606922519.jpg&quot;
+val file = File(&quot;${BASE_PATH}wallpaper.png&quot;)
     val success = downloadImage(url, file)
     println(&quot;Download file status is success：$success&quot;)
 }</p>2022-02-25</li><br/><li><span>Geek_Adr</span> 👍（0） 💬（1）<p>&#47;&#47; 先交作业，后看参考实现
 &#47;&#47; 图片处理 单测Case 较难实现，偷懒写本地肉眼看
 
 &#47;**
- * 写到本地，方便可看效果
- *&#47;
-fun Image.writeJPEG(outputFile: File): Boolean =
-    ImageIO.write(BufferedImage(width(), height(), BufferedImage.TYPE_INT_RGB).apply {
-        repeat(height) { y -&gt;
-            repeat(width) { x -&gt;
-                setRGB(x, y, getPixel(y, x).rgb)
-            }
-        }
-    }, &quot;JPEG&quot;, outputFile)
+
+- 写到本地，方便可看效果
+  *&#47;
+  fun Image.writeJPEG(outputFile: File): Boolean =
+  ImageIO.write(BufferedImage(width(), height(), BufferedImage.TYPE_INT_RGB).apply {
+  repeat(height) { y -&gt;
+  repeat(width) { x -&gt;
+  setRGB(x, y, getPixel(y, x).rgb)
+  }
+  }
+  }, &quot;JPEG&quot;, outputFile)
 
 &#47;**
- * 图片裁切
- *&#47;
-fun Image.crop(startY: Int, startX: Int, width: Int, height: Int): Image =
-    Array(height) { y -&gt;
-        Array(width) { x -&gt;
-            getPixel(y + startY, x + startX)
-        }
-    }.let { Image(it) }
+
+- 图片裁切
+  *&#47;
+  fun Image.crop(startY: Int, startX: Int, width: Int, height: Int): Image =
+  Array(height) { y -&gt;
+  Array(width) { x -&gt;
+  getPixel(y + startY, x + startX)
+  }
+  }.let { Image(it) }
 
 &#47;**
- * 横向翻转图片
- *&#47;
-fun Image.flipHorizontal(): Image =
-    Array(height()) { y -&gt;
-        Array(width()) { x -&gt;
-            getPixel(y, width() - x - 1)
-        }
-    }.let { Image(it) }
+
+- 横向翻转图片
+  *&#47;
+  fun Image.flipHorizontal(): Image =
+  Array(height()) { y -&gt;
+  Array(width()) { x -&gt;
+  getPixel(y, width() - x - 1)
+  }
+  }.let { Image(it) }
 
 &#47;**
- * 纵向翻转图片
- *&#47;
-fun Image.flipVertical(): Image =
-    Array(height()) { y -&gt;
-        Array(width()) { x -&gt;
-            getPixel(height() - y - 1, x)
-        }
-    }.let { Image(it) }
+
+- 纵向翻转图片
+  *&#47;
+  fun Image.flipVertical(): Image =
+  Array(height()) { y -&gt;
+  Array(width()) { x -&gt;
+  getPixel(height() - y - 1, x)
+  }
+  }.let { Image(it) }
 
 &#47;**
- * 挂起函数，以http的方式下载图片，保存到本地
- *&#47;
-suspend fun downloadImage(url: String, outputFile: File): Boolean =
-    withContext(Dispatchers.IO) {
-        OkHttpClient.Builder().build().run {
-            newCall(Request.Builder().apply {
-                url(url)
-                get()
-            }.build()).execute().run {
-                if (!isSuccessful) {
-                    return@run false
-                }
-                return@run body?.byteStream()?.source()?.let { outputFile.sink().buffer().writeAll(it) &gt; 0 } ?: false
-            }
-        }
-    }
+
+- 挂起函数，以http的方式下载图片，保存到本地
+  *&#47;
+  suspend fun downloadImage(url: String, outputFile: File): Boolean =
+  withContext(Dispatchers.IO) {
+  OkHttpClient.Builder().build().run {
+  newCall(Request.Builder().apply {
+  url(url)
+  get()
+  }.build()).execute().run {
+  if (!isSuccessful) {
+  return@run false
+  }
+  return@run body?.byteStream()?.source()?.let { outputFile.sink().buffer().writeAll(it) &gt; 0 } ?: false
+  }
+  }
+  }
+
 </p>2022-03-12</li><br/><li><span>PoPlus</span> 👍（0） 💬（1）<p>&#47;**
  * 挂起函数，以http的方式下载图片，保存到本地
  *&#47;
@@ -332,29 +340,30 @@ suspend fun downloadImage(url: String, outputFile: File) = withContext(Dispatche
 }
 
 &#47;**
- * 主函数
- *&#47;
-fun main() = runBlocking {
-    val url = &quot;https:&#47;&#47;raw.githubusercontent.com&#47;chaxiu&#47;ImageProcessor&#47;main&#47;src&#47;main&#47;resources&#47;images&#47;android.png&quot;
-    val path = &quot;.&#47;download.png&quot;
 
-    val success = downloadImage(url, File(path))
-    println(success)
+- 主函数
+  *&#47;
+  fun main() = runBlocking {
+  val url = &quot;https:&#47;&#47;raw.githubusercontent.com&#47;chaxiu&#47;ImageProcessor&#47;main&#47;src&#47;main&#47;resources&#47;images&#47;android.png&quot;
+  val path = &quot;.&#47;download.png&quot;
 
-    val image = loadImage(File(path))
-    println(&quot;Width = ${image.width()};Height = ${image.height()}&quot;)
-}
+  val success = downloadImage(url, File(path))
+  println(success)
+
+  val image = loadImage(File(path))
+  println(&quot;Width = ${image.width()};Height = ${image.height()}&quot;)
+  }
 
 看到有同学使用 suspendCoroutine 函数处理，不知道和我这个方法比较有什么区别 👀</p>2022-02-28</li><br/><li><span>小江爱学术</span> 👍（0） 💬（0）<p>当然是要把第一部分和第二部分的内容结合起来啦：
 首先自己创建一个获取图片的接口：
-    @GetMapping(&quot;&#47;{name}&quot;, produces = [MediaType.IMAGE_JPEG_VALUE])
-    fun picture(@PathVariable name: String): ByteArray {
-        return pictureService.getPicture(name)
-    }
+@GetMapping(&quot;&#47;{name}&quot;, produces = [MediaType.IMAGE_JPEG_VALUE])
+fun picture(@PathVariable name: String): ByteArray {
+return pictureService.getPicture(name)
+}
 
 然后用之前的KtCall发请求：
-    @GET(&quot;&#47;picture&#47;mountain&quot;)
-    fun image(): KtCall&lt;ByteArray&gt;
+@GET(&quot;&#47;picture&#47;mountain&quot;)
+fun image(): KtCall&lt;ByteArray&gt;
 
     suspend fun downloadImage() = runBlocking {
         val deferred = async {
@@ -365,12 +374,13 @@ fun main() = runBlocking {
         println(&quot;still in progress&quot;)
         return@runBlocking deferred.await()
     }</p>2023-01-15</li><br/><li><span>Michael</span> 👍（0） 💬（0）<p>使用系统自带的 api 下载文件
+
 suspend fun downloadImage(url: String, outputFile: File): Boolean =
-    withContext(Dispatchers.IO) {
-      kotlin.runCatching {
-        URL(url).openStream().use {
-          outputFile.writeBytes(it.readAllBytes())
-        }
-      }
-    }.isSuccess</p>2022-06-29</li><br/>
+withContext(Dispatchers.IO) {
+kotlin.runCatching {
+URL(url).openStream().use {
+outputFile.writeBytes(it.readAllBytes())
+}
+}
+}.isSuccess</p>2022-06-29</li><br/>
 </ul>

@@ -128,7 +128,7 @@ MySQL默认的TCP/IP协议访问端口是3306，后面的X协议端口默认是3
 再尝试插入一条语句：
 
 ```
-INSERT INTO demo.test 
+INSERT INTO demo.test
 VALUES ('0003','橡皮',5);
 ```
 

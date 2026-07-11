@@ -8,7 +8,7 @@
 <bean id="realaction" class="com.test.service.Action1" />
 <bean id="action" class="com.minis.aop.ProxyFactoryBean">
     <property type="String" name="interceptorName" value="advisor" />
-    <property type="java.lang.Object" name="target" ref="realaction"/>	
+    <property type="java.lang.Object" name="target" ref="realaction"/>
 </bean>
 ```
 
@@ -176,10 +176,10 @@ singleton = applyBeanPostProcessorsBeforeInitialization(singleton, beanName);
     <property type="String" name="pattern" value="action*" />
     <property type="String" name="interceptorName" value="advisor" />
 </bean>
-	
+
 <bean id="action" class="com.test.service.Action1" /> 
 <bean id="action2" class="com.test.service.Action2" /> 
-	
+
 <bena id="beforeAdvice" class="com.test.service.MyBeforeAdvice" />
 <bean id="advisor" class="com.minis.aop.NameMatchMethodPointcutAdvisor">
     <property type="com.minis.aop.Advice" name="advice" ref="beforeAdvice"/>
@@ -194,7 +194,7 @@ singleton = applyBeanPostProcessorsBeforeInitialization(singleton, beanName);
 ```plain
 @Autowired
 IAction action;
-	
+
 @RequestMapping("/testaop")
 public void doTestAop(HttpServletRequest request, HttpServletResponse response) {
 	action.doAction();
@@ -202,7 +202,7 @@ public void doTestAop(HttpServletRequest request, HttpServletResponse response) 
 @RequestMapping("/testaop2")
 public void doTestAop2(HttpServletRequest request, HttpServletResponse response) {
 	action.doSomething();
-}	
+}
 
 @Autowired
 IAction action2;
@@ -245,7 +245,7 @@ Q1：Join Point和Pointcut的区别是什么？两个看起来是一回事啊。
 Q2：流程方面，Interceptor先拦截，拦截以后再进行增强操作。换一种说法，先是Interceptor工作，然后是Join Point、Pointcut、advice这些登场，对吗？
 Q3：19课的总结部分，是这样说的：“Advisor：通知者，它实现了 Advice”。19课的留言解答有这样一句话“advisor则是一个管理类，它包了一个advice，还能寻找到符合条件的方法名进行增强”。 留言的解释很不错，但总结部分，“实现了 Advice”，个人感觉这个措辞不是很合理啊，怎么是“实现”？这个词容易让人理解为接口与实现类的关系。</p>2023-04-27</li><br/><li><span>__@Wong</span> 👍（4） 💬（2）<p>补充一个点，这里需要保证AutowiredAnnotationBeanPostProcessor和BeanNameAutoProxyCreator两个BeanPostProcessor的优先级，AutowiredAnnotationBeanPostProcessor要在之前哦，在xml文件里面AutowiredAnnotationBeanPostProcessor的bean要放前面。</p>2023-06-24</li><br/><li><span>Geek_320730</span> 👍（1） 💬（1）<p>可以定义一个注解@Transaction并实现一个MethodMatcher，根据有没有这个注解来判断方法是否匹配，匹配的话，在方法执行前，手动开启事务，方法结束后，手动提交事务，有异常的话回滚事务。那事务方法调用事务方法的时候不知道会不会报错。。。
 
-另外遇到Bean可以一直嵌套代理的问题，比如上一章手动配置的action,本身就是一个ProxyFactoryBean了，但是他的名字依然符合本章的action*的匹配规则，这样就又加了一层代理，注入的时候就会失败。需要在获取类的时候判断一下类型递归返回，或者在bean匹配规则的时候做一下类型判断，如果本身是个ProxyFactoryBean了，就不做操作返回。</p>2023-04-26</li><br/><li><span>__@Wong</span> 👍（0） 💬（2）<p>将原有的bean替换成代理后的bean那里，如果遇到循环引用会有问题吧， 引用的还是旧的bean。</p>2023-06-20</li><br/><li><span>__Alucard</span> 👍（0） 💬（1）<p>完结撒花，谢谢指导</p>2023-05-29</li><br/><li><span>__Alucard</span> 👍（0） 💬（2）<p>动态代理失效的根本原因是@Autowired注解解析的时候，取到的spring bean还是没代理的对象； 我的临时解决方案是 在BeanNameAutoProxyCreator的postProcessBeforeInitialization手动把创建后的动态代理对象注入进spring ioc中， beanFactory.registerBean(beanName,proxyFactoryBean);  但是这样会导致BeanFactory又对外暴露了注册bean的接口，void registerBean(String beanName, Object obj);明显不合适，这个有没有更好的办法</p>2023-05-29</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（1）<p>老师你好，怎么github上面这块framework这个包下面有部分代码是重复的呢？建议可以来个代码结构的总结</p>2023-05-02</li><br/><li><span>dirtychill</span> 👍（0） 💬（0）<p>一步步录入代码完成，可运行的，利用lombok简化了代码，便于学习，可能还有一些bug或者一些扩展，可以来维护https:&#47;&#47;github.com&#47;DirtyBit64&#47;Mini-Spring</p>2024-07-06</li><br/><li><span>Geek_28bb47</span> 👍（0） 💬（0）<p>已学完，https:&#47;&#47;github.com&#47;ykexc&#47;minispring，每节课对应一个分支，欢迎大家来参考，感觉懂了一点，还需要看完spring源码再继续品味。</p>2024-04-10</li><br/><li><span>天敌</span> 👍（0） 💬（0）<p>老师，关于使用 Proxy.newProxyInstance 生成的对象在进行 xml 中 ref 的属性绑定过程中，由于生成的代理对象并没有继承被代理对象的类，导致进行赋值时
+另外遇到Bean可以一直嵌套代理的问题，比如上一章手动配置的action,本身就是一个ProxyFactoryBean了，但是他的名字依然符合本章的action*的匹配规则，这样就又加了一层代理，注入的时候就会失败。需要在获取类的时候判断一下类型递归返回，或者在bean匹配规则的时候做一下类型判断，如果本身是个ProxyFactoryBean了，就不做操作返回。</p>2023-04-26</li><br/><li><span>__@Wong</span> 👍（0） 💬（2）<p>将原有的bean替换成代理后的bean那里，如果遇到循环引用会有问题吧， 引用的还是旧的bean。</p>2023-06-20</li><br/><li><span>__Alucard</span> 👍（0） 💬（1）<p>完结撒花，谢谢指导</p>2023-05-29</li><br/><li><span>__Alucard</span> 👍（0） 💬（2）<p>动态代理失效的根本原因是@Autowired注解解析的时候，取到的spring bean还是没代理的对象； 我的临时解决方案是 在BeanNameAutoProxyCreator的postProcessBeforeInitialization手动把创建后的动态代理对象注入进spring ioc中， beanFactory.registerBean(beanName,proxyFactoryBean); 但是这样会导致BeanFactory又对外暴露了注册bean的接口，void registerBean(String beanName, Object obj);明显不合适，这个有没有更好的办法</p>2023-05-29</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（1）<p>老师你好，怎么github上面这块framework这个包下面有部分代码是重复的呢？建议可以来个代码结构的总结</p>2023-05-02</li><br/><li><span>dirtychill</span> 👍（0） 💬（0）<p>一步步录入代码完成，可运行的，利用lombok简化了代码，便于学习，可能还有一些bug或者一些扩展，可以来维护https:&#47;&#47;github.com&#47;DirtyBit64&#47;Mini-Spring</p>2024-07-06</li><br/><li><span>Geek_28bb47</span> 👍（0） 💬（0）<p>已学完，https:&#47;&#47;github.com&#47;ykexc&#47;minispring，每节课对应一个分支，欢迎大家来参考，感觉懂了一点，还需要看完spring源码再继续品味。</p>2024-04-10</li><br/><li><span>天敌</span> 👍（0） 💬（0）<p>老师，关于使用 Proxy.newProxyInstance 生成的对象在进行 xml 中 ref 的属性绑定过程中，由于生成的代理对象并没有继承被代理对象的类，导致进行赋值时
 IllegalArgumentException: argument type mismatch
 这个问题，应该如何解决呢？</p>2023-07-23</li><br/>
 </ul>

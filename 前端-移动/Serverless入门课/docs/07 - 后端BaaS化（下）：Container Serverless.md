@@ -195,9 +195,10 @@ BaaS化的内容，到今天，我们用了三节课讲完了，现在我们一�
 但是部署到阿里云serverless k8s的时候,遇到了一个坑,给大家分享一下.
 
 现象: 无法打开todolist页面.
-      但是控制面板上看pod和容器组状态正常,无重启记录.
+但是控制面板上看pod和容器组状态正常,无重启记录.
 
 排查过程:
+
 1. 使用golang服务制作了一个镜像,端口号也使用3001,部署的服务可以正常访问.
    (说明操作流程和相关配置无问题)
 2. 在控制面板上看,对应的pod运行状态健康,遂在index.js底部添加日志.
@@ -234,8 +235,7 @@ BaaS化的内容，到今天，我们用了三节课讲完了，现在我们一�
 就是，如果我现在要写一个应用，后端的接口要连数据库，我要怎么做给前端提供接口，难道还是一样直接部署到服务器？</p>2020-07-07</li><br/><li><span>托尼斯威特</span> 👍（0） 💬（3）<p>没有aliyunConfig 文件, 代码没法运行. 
 看用到aliyunConfig的地方, 读了endpoint, AK&#47;KS, instanceName, tableName, primaryKey.
 
-是不是意味着要想跑这个代码, 我们得自己去见一个tablestore的表格? instanceName填什么? 
-
+是不是意味着要想跑这个代码, 我们得自己去见一个tablestore的表格? instanceName填什么?
 
 </p>2020-07-06</li><br/><li><span>suke</span> 👍（0） 💬（1）<p>老师，这篇文章我看了好几遍，类似java这样的后端服务baas化，冷启动即使是docker容器化启动也是省略不了正常的启动过程的，也就是说无论你从裸机上启动还是docker化启动，时长都差不多呀，这样还是改变不了启动时间很长的问题；另外一种把db服务包装成restful接口，其实这种方式还是需要有状态服务一直存在的，同时，这种方式对于事务问题的解决又带来了新的问题，所以我个人感觉serverless目前局限性很大</p>2020-06-28</li><br/><li><span>博弈</span> 👍（0） 💬（1）<p>老师，registry.cn-shanghai.aliyuncs.com&#47;jike-serverless&#47;nodejs，这个基础镜像不能拉取，获取不到latest的版本，肿么破</p>2020-06-27</li><br/><li><span>电光火石</span> 👍（0） 💬（1）<p>老师，请问一下，Fass和Bass是不是都可以使用Docker来启动？但是因为Bass会连接数据库，启动时间较长，所以偏向于用Docker启动，而Fass层做服务编排，而且都会提供一项“函数初始化入口”的选项，启动时间会很短，所以是否Docker启动没有那么明显？谢谢了！</p>2020-05-06</li><br/><li><span>qinsi</span> 👍（0） 💬（1）<p>即便是用了docker，遇到需要编译的npm包，直接复制node_modules目录也可能会因为宿主系统和镜像系统的差异而导致问题吧</p>2020-05-03</li><br/><li><span>我来也</span> 👍（0） 💬（3）<p>课后作业:
 
@@ -254,20 +254,24 @@ BaaS化的内容，到今天，我们用了三节课讲完了，现在我们一�
    &#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:66
             throw err;
             ^
-Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-    at ServerResponse.setHeader (_http_outgoing.js:470:11)
-    at ServerResponse.header (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;express&#47;lib&#47;response.js:771:10)
-    at ServerResponse.send (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;express&#47;lib&#47;response.js:170:12)
-    at ServerResponse.json (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;express&#47;lib&#47;response.js:267:15)
-    at Response.&lt;anonymous&gt; (&#47;home&#47;myhome&#47;myapp&#47;index.js:151:16)
-    at Request.&lt;anonymous&gt; (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:162:18)
-    at Request.callListeners (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;sequential_executor.js:113:20)
-    at Request.emit (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;sequential_executor.js:81:10)
-    at Request.emit (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:189:14)
-    at Request.transition (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:57:10)
    ```
-   由于不太懂node.js,所以也不知道如何解决.
-   之前部署到阿里云FC时是没有遇到过该问题的.
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+at ServerResponse.setHeader (_http_outgoing.js:470:11)
+at ServerResponse.header (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;express&#47;lib&#47;response.js:771:10)
+at ServerResponse.send (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;express&#47;lib&#47;response.js:170:12)
+at ServerResponse.json (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;express&#47;lib&#47;response.js:267:15)
+at Response.&lt;anonymous&gt; (&#47;home&#47;myhome&#47;myapp&#47;index.js:151:16)
+at Request.&lt;anonymous&gt; (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:162:18)
+at Request.callListeners (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;sequential_executor.js:113:20)
+at Request.emit (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;sequential_executor.js:81:10)
+at Request.emit (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:189:14)
+at Request.transition (&#47;home&#47;myhome&#47;myapp&#47;node_modules&#47;tablestore&#47;lib&#47;request.js:57:10)
+
+```
+由于不太懂node.js,所以也不知道如何解决.
+之前部署到阿里云FC时是没有遇到过该问题的.
 </p>2020-05-01</li><br/><li><span>北冥神功</span> 👍（0） 💬（1）<p>我感觉谷歌的Cloud Run冷启动要比faas这种快，在腾讯部署的go服务冷启动要2s，cloud run只需要几百毫秒。cloud run是基于knative，不知道是不是因为是容器所以快？</p>2020-05-01</li><br/><li><span>奕</span> 👍（0） 💬（1）<p>利用实时监控，去控制扩缩容,
 向文中说的，云上有什么服务可以实时监控 一些指标进行扩缩容呢？ 现在基本上都是根据并发数来进行扩缩容的</p>2020-05-01</li><br/><li><span>奕</span> 👍（0） 💬（1）<p>这个把服务 docker  化，不就没有办法使用 FaaS 服务了？ FaaS 有么有哪个地方可以结合 容器化服务一起使用的？</p>2020-05-01</li><br/>
 </ul>
+```

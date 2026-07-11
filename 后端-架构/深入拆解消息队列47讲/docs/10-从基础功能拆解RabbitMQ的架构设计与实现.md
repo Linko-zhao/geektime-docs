@@ -127,7 +127,7 @@ RabbitMQ 内核本身不支持 HTTP 协议的生产、消费和集群管控等�
 开启插件后，就可以通过HTTP接口实现生产、消费、集群的配置、资源的创建、删除等操作。比如下面是一个查看 Vhost 列表的 curl 命令示例：
 
 ```plain
-curl -i --header "authorization: Bearer <token>" http://localhost:15672/api/vhosts       
+curl -i --header "authorization: Bearer <token>" http://localhost:15672/api/vhosts
 ```
 
 ## 总结

@@ -102,7 +102,7 @@ go get: downgraded github.com/sirupsen/logrus v1.8.1 => v1.7.0
 
 ```plain
 $go mod edit -require=github.com/sirupsen/logrus@v1.7.0
-$go mod tidy       
+$go mod tidy
 go: downloading github.com/sirupsen/logrus v1.7.0
 ```
 
@@ -283,15 +283,15 @@ vendor
 1. 空导入的方式的作用吗？我看很多源码中有使用这种包导入的方式。
 
 2. 在go module构建模式下，怎么对vendor目录的有无进行取舍呢？老师有什么实战建议呢？</p>2021-10-27</li><br/><li><span>blur</span> 👍（28） 💬（2）<p>go mod edit -require=github.com&#47;sirupsen&#47;logrus@v1.7.0这个指令在win 上的golangd好像会因github 后面的那个 . 识别不出来path,加引号变成 go mod edit -require=&quot;github.com&#47;sirupsen&#47;logrus@v1.7.0&quot;就可以了</p>2021-10-28</li><br/><li><span>Aaron Liu</span> 👍（17） 💬（7）<p>如果之前引用的包是v1，之后升级v2，go get可以替换引用的包，但源码里的import要怎么改，如果很多go文件都引用了呢</p>2021-10-27</li><br/><li><span>return</span> 👍（14） 💬（2）<p>老师讲太好了， 有主线 有关键细节，
-请教老师， 关于vendor， 存好副本后， 一般在其他地方怎么用呢，
-手动传输过去 还是 上传到代码库再下载呢</p>2021-10-27</li><br/><li><span>女干部</span> 👍（13） 💬（1）<p>老师你好，
-有一个疑问困扰我很久了，这样一个例子:
-安装 go get -u github.com&#47;cweill&#47;gotests&#47;...
-然后就可以在命令行里执行 gotests了，
-我想知道&#47;...这是个什么写法，
-还有gotests.exe，是怎么构建并被放到我的%USERPROFILE%\go\bin目录下的
-辛苦</p>2021-12-01</li><br/><li><span>运维夜谈</span> 👍（11） 💬（3）<p>老师这个专栏绝了，真的收获很大！
-老师，想请教个问题，在一些无法连接外网的环境下，Go Module有没有类似maven和Nexus一样可以搭建自己的私库，然后私库去连接外部代理去下载依赖？</p>2021-12-22</li><br/><li><span>lesserror</span> 👍（6） 💬（2）<p>大白老师，如果我想升级go.mod中定义的Go版本的话，最佳实践是不是这么操作：
+   请教老师， 关于vendor， 存好副本后， 一般在其他地方怎么用呢，
+   手动传输过去 还是 上传到代码库再下载呢</p>2021-10-27</li><br/><li><span>女干部</span> 👍（13） 💬（1）<p>老师你好，
+   有一个疑问困扰我很久了，这样一个例子:
+   安装 go get -u github.com&#47;cweill&#47;gotests&#47;...
+   然后就可以在命令行里执行 gotests了，
+   我想知道&#47;...这是个什么写法，
+   还有gotests.exe，是怎么构建并被放到我的%USERPROFILE%\go\bin目录下的
+   辛苦</p>2021-12-01</li><br/><li><span>运维夜谈</span> 👍（11） 💬（3）<p>老师这个专栏绝了，真的收获很大！
+   老师，想请教个问题，在一些无法连接外网的环境下，Go Module有没有类似maven和Nexus一样可以搭建自己的私库，然后私库去连接外部代理去下载依赖？</p>2021-12-22</li><br/><li><span>lesserror</span> 👍（6） 💬（2）<p>大白老师，如果我想升级go.mod中定义的Go版本的话，最佳实践是不是这么操作：
 
 go mod edit -go=1.17
 </p>2021-12-17</li><br/><li><span>ll</span> 👍（6） 💬（5）<p>我是一名前端，初“卷”到go，对比 go module 对比 npm （node 的包管理）：
@@ -301,5 +301,6 @@ go mod edit -go=1.17
 老师的课条理清晰，深入浅出，点赞</p>2021-11-17</li><br/><li><span>Paradise</span> 👍（5） 💬（1）<p>Tony 的专栏不适合跳着看，因为细节干货太多啦哈哈，感谢老师</p>2022-04-09</li><br/><li><span>jacky</span> 👍（5） 💬（1）<p>讲得挺好，就是更新有点慢啊，这得更到啥时候</p>2021-10-28</li><br/><li><span>阿星</span> 👍（4） 💬（1）<p>两个问题请教 Tony Bai 老师,
 1. go mod edit -require=github.com&#47;sirupsen&#47;logrus@v1.7.0 这种方式和直接改go.mod中对应的依赖效果是一样的吗？如果依赖更新多了，go get 肯定没有go mod tidy 方便
 
-2. 如果go mod vendor 建立了当前依赖库的副本的话，默认go build 会用vendor来构建，那样依赖更新后，就必须再执行下go mod vendor 了，除非手动指定 -mod=mod 是这样吗？ </p>2023-01-19</li><br/><li><span>Hank_Yan</span> 👍（3） 💬（1）<p>解决了我的疑问，之前还在想，如果是内网部署的服务，go 里面的依赖怎么处理呢？  原来还是可以继续使用 vendor 的，绝了！</p>2022-10-20</li><br/><li><span>CLMOOK🐾</span> 👍（3） 💬（1）<p>老师好，如果用go get给一个依赖包降为低一个次版本的，再跑go mod tidy是否会自动把这个依赖包升级成之前的新版本？</p>2022-09-17</li><br/><li><span>泽韦德</span> 👍（3） 💬（1）<p>老师，当前Go Module自身的版本号怎么设置的，是不是没讲？</p>2022-09-01</li><br/><li><span>何以解忧</span> 👍（3） 💬（2）<p>vendor 模式和 module 模式，互相有影响么，比如顶级目录下面，有go.mod 同时有vendor 目录。 vendor 下的modules.txt 和go.mod 可以理解为两种模式的类似的定位么，记录版本</p>2022-06-23</li><br/>
+2. 如果go mod vendor 建立了当前依赖库的副本的话，默认go build 会用vendor来构建，那样依赖更新后，就必须再执行下go mod vendor 了，除非手动指定 -mod=mod 是这样吗？ </p>2023-01-19</li><br/><li><span>Hank_Yan</span> 👍（3） 💬（1）<p>解决了我的疑问，之前还在想，如果是内网部署的服务，go 里面的依赖怎么处理呢？ 原来还是可以继续使用 vendor 的，绝了！</p>2022-10-20</li><br/><li><span>CLMOOK🐾</span> 👍（3） 💬（1）<p>老师好，如果用go get给一个依赖包降为低一个次版本的，再跑go mod tidy是否会自动把这个依赖包升级成之前的新版本？</p>2022-09-17</li><br/><li><span>泽韦德</span> 👍（3） 💬（1）<p>老师，当前Go Module自身的版本号怎么设置的，是不是没讲？</p>2022-09-01</li><br/><li><span>何以解忧</span> 👍（3） 💬（2）<p>vendor 模式和 module 模式，互相有影响么，比如顶级目录下面，有go.mod 同时有vendor 目录。 vendor 下的modules.txt 和go.mod 可以理解为两种模式的类似的定位么，记录版本</p>2022-06-23</li><br/>
+
 </ul>

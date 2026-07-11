@@ -118,7 +118,7 @@ public class Point {
 
     double distanceFormOrigin() {
         //乐观读操作
-        long stamp = s1.tryOptimisticRead();  
+        long stamp = s1.tryOptimisticRead();
         //拷贝变量
         double currentX = x, currentY = y;
         //判断读期间是否有写操作

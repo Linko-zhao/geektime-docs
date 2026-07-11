@@ -748,35 +748,36 @@ c := make(chan os.Signal, 1)
 ```
 
 参考：https:&#47;&#47;blog.wu-boy.com&#47;2021&#47;03&#47;why-use-buffered-channel-in-signal-notify&#47;</p>2021-09-02</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（4） 💬（2）<p>老师，没有理解编码实现优雅关闭服务的程序。这段程序和我们期望的：【期望 HTTP 服务可以在处理完所有请求后，正常地关闭这些连接，也就是优雅地关闭服务】有什么关系？</p>2021-09-08</li><br/><li><span>🌀🐑hfy🐣</span> 👍（3） 💬（1）<p>请问老师觉得go-zero怎样？值得学习吗？</p>2022-09-22</li><br/><li><span>Neroldy</span> 👍（3） 💬（1）<p>Get handler函数用Rlock会不会更合适？因为好像只有对product的读操作而没有写操作。</p>2021-07-26</li><br/><li><span>tajizhijia</span> 👍（1） 💬（2）<p>在goroute里log.Fatal()之后程序不就推出了么？</p>2022-08-26</li><br/><li><span>wei 丶</span> 👍（1） 💬（2）<p>老师想问下server.key这个用cfssl怎么生成呀？ 我往回翻了下只看到了cfssl生成的 .pem 证书文件 🙈</p>2021-09-24</li><br/><li><span>LosinGrip</span> 👍（1） 💬（1）<p>curl -XGET http:&#47;&#47;127.0.0.1:8080&#47;v1&#47;products&#47;iphone12
-获取如下 
+获取如下
 Client sent an HTTP request to an HTTPS server.
 什么原因</p>2021-09-18</li><br/><li><span>Bynow</span> 👍（0） 💬（1）<p> c.JSON(http.StatusNotFound, gin.H{&quot;error&quot;: fmt.Errorf(&quot;can not found product %s&quot;, c.Param(&quot;name&quot;))}) 这行代码是错误的，应该是Sprintf</p>2022-05-31</li><br/><li><span>平常心</span> 👍（0） 💬（1）<p>如何用 curl 来访问 https的 服务呢？ ca.pem 放到本机的证书库里，运行了一下，还是跑不通 https的服务呢。</p>2021-12-19</li><br/><li><span>授人以🐟，不如授人以渔</span> 👍（0） 💬（1）<p>「表单参数 form」是否可以和「请求消息体参数 body」合并在一起，因为后者是包含前者的。其请求内容都是在请求体部分，而且格式有多种，比如 application&#47;json、application&#47;xml、text&#47;plain，再比如就是 application&#47;form。</p>2021-10-16</li><br/><li><span>huntersudo</span> 👍（12） 💬（0）<p>Gin的示例和代码看了很多，知道这样写，有时候就不知道为啥这样写，老师的文章不少地方给了解释，给力给力！！</p>2021-07-20</li><br/><li><span>Sch0ng</span> 👍（2） 💬（0）<p>写web服务，就用Gin框架。
 从需求出发，介绍Gin框架的核心功能，即成体系又便于理解。</p>2021-08-13</li><br/><li><span>ling.zeng</span> 👍（1） 💬（0）<p>老师您可太赞了。</p>2021-07-25</li><br/><li><span>秋天</span> 👍（0） 💬（0）<p>package main
 
 import (
-    &quot;net&#47;http&quot;
-    &quot;time&quot;
+&quot;net&#47;http&quot;
+&quot;time&quot;
 
     &quot;github.com&#47;gin-gonic&#47;gin&quot;
     &quot;golang.org&#47;x&#47;time&#47;rate&quot;
+
 )
 
 &#47;&#47; 创建限流器，限制每秒最多5个请求
 var healthzLimiter = rate.NewLimiter(5, 10)
 
 func rateLimiterMiddleware(limiter *rate.Limiter) gin.HandlerFunc {
-    return func(c *gin.Context) {
-        if !limiter.Allow() {
-            c.JSON(http.StatusTooManyRequests, gin.H{&quot;error&quot;: &quot;请求过于频繁，请稍后再试&quot;})
-            c.Abort()
-            return
-        }
-        c.Next()
-    }
+return func(c *gin.Context) {
+if !limiter.Allow() {
+c.JSON(http.StatusTooManyRequests, gin.H{&quot;error&quot;: &quot;请求过于频繁，请稍后再试&quot;})
+c.Abort()
+return
+}
+c.Next()
+}
 }
 
 func main() {
-    router := gin.Default()
+router := gin.Default()
 
     &#47;&#47; 健康检查路由，应用限流中间件
     router.GET(&quot;&#47;healthz&quot;, rateLimiterMiddleware(healthzLimiter), func(c *gin.Context) {
@@ -789,5 +790,6 @@ func main() {
     })
 
     router.Run(&quot;:8080&quot;)
+
 }</p>2024-12-06</li><br/><li><span>P=NP?</span> 👍（0） 💬（0）<p>这个项目的github地址是多少</p>2024-06-13</li><br/>
 </ul>

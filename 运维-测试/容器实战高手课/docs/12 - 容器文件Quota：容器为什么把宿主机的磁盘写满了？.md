@@ -182,7 +182,7 @@ func (q *Control) SetQuota(targetPath string, quota Quota) error {
                 q.Unlock()
         }
 
- 
+
 
         //
         // set the quota limit for the container's project id
@@ -236,7 +236,7 @@ Docker正是使用了这个方法，也就是**用XFS Quota来限制OverlayFS的
         &quot;Id&quot;: &quot;5440662c8db65d5d9ab522e0be1a3911584c492527fcde334c3fdec090cd3857&quot;,
 
         &quot;Image&quot;: &quot;sha256:300e315adb2f96afe5f0b2780b87f28ae95231fe3bdd1e16b9ba606307728f55&quot;,
-  
+
         &quot;GraphDriver&quot;: {
             &quot;Data&quot;: {
                 &quot;LowerDir&quot;: &quot;&#47;home&#47;data&#47;docker&#47;overlay2&#47;4146b7c314a97b46695a59ccdc323709eda7177b3e91ed30d3f4f9326a061584-init&#47;diff:&#47;home&#47;data&#47;docker&#47;overlay2&#47;dc1e8c89044058319c4e0b6917603f3ed8972cd155bfced0c7c0c2509ddaae14&#47;diff&quot;,
@@ -248,6 +248,7 @@ Docker正是使用了这个方法，也就是**用XFS Quota来限制OverlayFS的
         },
 
     }
+
 ]
 </p>2020-12-16</li><br/><li><span>宝仔</span> 👍（1） 💬（1）<p>这个是一定要基于xfs文件系统吗？如果是ext4文件系统呢？</p>2020-12-11</li><br/><li><span>谢哈哈</span> 👍（6） 💬（0）<p>可以通过xfs_quota -x -c &quot;report -pbih &quot; 目录名称查询projectid</p>2020-12-11</li><br/><li><span>上邪忘川</span> 👍（3） 💬（0）<p>[root@localhost ~]# xfs_quota -x -c &#39;report -h &#47;tmp&#47;xfs_prjquota&#39;
 Project quota on &#47; (&#47;dev&#47;mapper&#47;centos-root)

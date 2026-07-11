@@ -383,8 +383,8 @@ if __name__ == "__main__":
     llm = OpenAI(temperature=0)
     verbose = False
     max_iterations: Optional[int] = 6
-    baby_agi = BabyAGI.from_llm(llm=llm, vectorstore=vectorstore, 
-                                verbose=verbose, 
+    baby_agi = BabyAGI.from_llm(llm=llm, vectorstore=vectorstore,
+                                verbose=verbose,
                                 max_iterations=max_iterations)
     baby_agi({"objective": OBJECTIVE})
 ```
@@ -537,13 +537,13 @@ Based on the current climate conditions in Beijing, the most suitable materials 
 6: Develop a plan for storing flowers in Beijing that takes into account the local climate conditions.
 
 *****TASK RESULT*****
-Based on the previously completed tasks, I have developed a plan for storing flowers in Beijing that takes into account the local climate conditions. 
+Based on the previously completed tasks, I have developed a plan for storing flowers in Beijing that takes into account the local climate conditions.
 
-First, I will analyze the current climate conditions in Beijing, including temperature, humidity, and air quality. This will help me identify the most suitable materials for flower storage in Beijing. 
+First, I will analyze the current climate conditions in Beijing, including temperature, humidity, and air quality. This will help me identify the most suitable materials for flower storage in Beijing.
 
-Second, I will create a to-do list of tasks that need to be completed in order to properly store the flowers. This list should include tasks such as selecting the right materials for flower storage, ensuring the flowers are kept in a cool and dry environment, and regularly monitoring the flowers for any changes in condition. 
+Second, I will create a to-do list of tasks that need to be completed in order to properly store the flowers. This list should include tasks such as selecting the right materials for flower storage, ensuring the flowers are kept in a cool and dry environment, and regularly monitoring the flowers for any changes in condition.
 
-Third, I will develop a strategy for flower storage that takes into account the local climate conditions. This strategy should include steps such as selecting the right materials for flower storage, ensuring the flowers are kept in a cool and dry environment, and regularly monitoring the flowers for any changes in condition. 
+Third, I will develop a strategy for flower storage that takes into account the local climate conditions. This strategy should include steps such as selecting the right materials for flower storage, ensuring the flowers are kept in a cool and dry environment, and regularly monitoring the flowers for any changes in condition.
 
 Finally, I will monitor the flowers for any changes in condition and make adjustments to the plan as needed. This will help ensure that the flowers are stored in the most suitable environment for their preservation.
 
@@ -580,61 +580,82 @@ Finally, I will monitor the flowers for any changes in condition and make adjust
 1. GitHub 项目 [AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) [官网](https://autogpt.net/)
 2. GitHub 项目 [BabyAGI](https://github.com/yoheinakajima/babyagi) [官网](https://yoheinakajima.com/task-driven-autonomous-agent-utilizing-gpt-4-pinecone-and-langchain-for-diverse-applications/)
 3. 论文 [HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in Hugging Face](https://arxiv.org/pdf/2303.17580.pdf) [官网](https://huggingface.co/spaces/microsoft/HuggingGPT)
+
 <div><strong>精选留言（11）</strong></div><ul>
 <li><span>不吃苦瓜</span> 👍（4） 💬（1）<p>单从这babyAGI的DEMO就决定了这个课值不值，太赞了，写的太好了</p>2023-12-10</li><br/><li><span>AAT天宇</span> 👍（2） 💬（1）<p>如果将自主代理和Camel结合呢？
 
 通过自主代理的方式，解决长期记忆的问题，将自主代理的示例编程领域专家；
 通过Camel代理的方式，完成多校色，多领域认知和复杂任务的解决问题；</p>2024-01-06</li><br/><li><span>陈东</span> 👍（2） 💬（1）<p>hugging和大模型在老师的企业工作实践产生的什么作用？和大家分享吗？学习了还找不到技术点的抓手。</p>2023-10-20</li><br/><li><span>Liberalism</span> 👍（1） 💬（1）<p>老师您好，在结尾处您有提到 AI 在未来项目管理领域有很大的想象空间，方便细讲一下吗？</p>2023-11-29</li><br/><li><span>鲸鱼</span> 👍（1） 💬（2）<p>老师，vectorstore可以换成其他的吗？比如Chroma？faiss这个库安装遇到问题了，上网搜了一圈，运行时总是遇到各种问题，一直跑不起来</p>2023-11-14</li><br/><li><span>陈东</span> 👍（1） 💬（1）<p>练习以上代码自己部署本地，还是使用云平台合适，老师平时生产时使用什么设备生产，我想练习到生产一起使用，请老师可以推荐吗？谢谢。</p>2023-10-22</li><br/><li><span>曙光</span> 👍（0） 💬（8）<p>老师，运行代码的时候报这个错误，Chain, BaseModel他们共同基类是哪个呀？
 Traceback (most recent call last):
-  File &quot;D:\py_dev\langchain19\BabyAGI_CN.py&quot;, line 160, in &lt;module&gt;
-    class BabyAGI(Chain, BaseModel):
+File &quot;D:\py_dev\langchain19\BabyAGI_CN.py&quot;, line 160, in &lt;module&gt;
+class BabyAGI(Chain, BaseModel):
 TypeError: metaclass conflict: the metaclass of a derived class must be a (non-strict) subclass of the metaclasses of all its bases
 </p>2023-10-24</li><br/><li><span>yanyu-xin</span> 👍（2） 💬（0）<p>用国产大模型代替 OpenAI ，调试很久，才终于成功！太难啦。
 
-###1  出现Chain, BaseModel 共同基类错误。按留言安装 pydantic 1.10.12 
+###1 出现Chain, BaseModel 共同基类错误。按留言安装 pydantic 1.10.12
 
-###2  替换模型：
-# 旧代码1： 
+###2 替换模型：
+
+# 旧代码1：
+
 embeddings_model = OpenAIEmbeddings()
-# 新代码1：（用百川模型）
-from langchain_community.embeddings import BaichuanTextEmbeddings 
-embeddings_model = BaichuanTextEmbeddings(baichuan_api_key=&quot; sk-KEY&quot;)  #此用你的百川智能API KEY 代替
-# 旧代码2：
-llm = OpenAI(temperature=0)
-# 新代码2：（用阿里模型）
-llm = ChatOpenAI(
-        api_key=&quot;sk-KYE&quot;,   # 此用您的阿里 DASHSCOPE_API_KEY替换
-        base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;, 
-        model_name=&quot;qwen-turbo&quot;)
 
-###3  更新导入路径
+# 新代码1：（用百川模型）
+
+from langchain_community.embeddings import BaichuanTextEmbeddings
+embeddings_model = BaichuanTextEmbeddings(baichuan_api_key=&quot; sk-KEY&quot;) #此用你的百川智能API KEY 代替
+
+# 旧代码2：
+
+llm = OpenAI(temperature=0)
+
+# 新代码2：（用阿里模型）
+
+llm = ChatOpenAI(
+api_key=&quot;sk-KYE&quot;, # 此用您的阿里 DASHSCOPE_API_KEY替换
+base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;,
+model_name=&quot;qwen-turbo&quot;)
+
+###3 更新导入路径
+
 # 旧代码3：
+
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import BaseLLM, OpenAI
 from langchain.vectorstores import FAISS
 from langchain.docstore import InMemoryDocstore
+
 # 新代码3：
+
 from langchain_community.embeddings import OpenAIEmbeddings  
 from langchain_community.llms import BaseLLM, OpenAI  
 from langchain_community.vectorstores import FAISS  
-from langchain_community.docstore.in_memory import InMemoryDocstore  
+from langchain_community.docstore.in_memory import InMemoryDocstore
 
-###4  发生异常: AssertionError 。
-exception: no description：  results = vectorstore.similarity_search_with_score(query, k=k)
+###4 发生异常: AssertionError 。
+exception: no description： results = vectorstore.similarity_search_with_score(query, k=k)
 查找 FAISS 文档，并采用其代码类似例子调试，发现 vectorstore 调用 FAISS 时，index 是不能随意设置的，修改如下：
+
 # 旧代码4：
+
 embedding_size = 1536
+
 # 新代码4：
+
 embedding_size = 1024
 
-###5  出现不定期的代码错误，在  # Step 2: Execute the task  中 发生异常: ValueError
-invalid literal for int() with base 10: &#39;#&#39; ， this_task_id = int(task[&quot;task_id&quot;]) 
-这个错误在代码前2轮循环中是不会产生的，但在第3轮循环产生。检查代码，task字典中的 task_id  值是‘#’ 号，不是数字，但是这是模型自动生成。而模型的生成是很魔幻的，如何是好？
-检查任务优先级模块，核查提示词，发现要求的生成的例子是：#. First task   ，  #. Second task  格式的。将 # 改为数字，一举成功！
+###5 出现不定期的代码错误，在 # Step 2: Execute the task 中 发生异常: ValueError
+invalid literal for int() with base 10: &#39;#&#39; ， this_task_id = int(task[&quot;task_id&quot;])
+这个错误在代码前2轮循环中是不会产生的，但在第3轮循环产生。检查代码，task字典中的 task_id 值是‘#’ 号，不是数字，但是这是模型自动生成。而模型的生成是很魔幻的，如何是好？
+检查任务优先级模块，核查提示词，发现要求的生成的例子是：#. First task ， #. Second task 格式的。将 # 改为数字，一举成功！
+
 # 旧代码5
+
 &quot; #. First task&quot;
 &quot; #. Second task&quot;
+
 # 新代码5
+
 &quot; 1. First task&quot;
 &quot; 2. Second task&quot;</p>2024-09-07</li><br/><li><span>张帅</span> 👍（0） 💬（0）<p>学完这个篇章，LLM给出的成果相比开发所需的代码量来说，真是令人惊讶。也许以后更重要的能力，是发现需求，以及能将需求拆分成合适的颗粒度并写出合适的提示词。这个感觉是一个可以努力达成的目标。</p>2024-12-30</li><br/><li><span>chenyang</span> 👍（0） 💬（0）<p>老师，请问task1执行时，怎么获得北京当前的天气状况的呀？ 这里没看到用到search相关的tools呀</p>2024-08-02</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第19讲打卡~</p>2024-07-22</li><br/>
 </ul>

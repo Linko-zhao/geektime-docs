@@ -156,7 +156,7 @@ kubectl exec -it vault-0 -- vault operator unseal <UnsealKey1>
 如果看到如下状态，就代表我们已经完成了安装。
 
 ```yaml
-~ ❯❯❯ kubectl get pod -n vault                                        
+~ ❯❯❯ kubectl get pod -n vault
 NAME                                   READY   STATUS    RESTARTS   AGE
 vault-0                                1/1     Running   0          18h
 vault-agent-injector-d986fcb9b-jwhc5   1/1     Running   0          18h

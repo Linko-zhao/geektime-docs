@@ -227,7 +227,7 @@ META-INF/maven/org.apache.commons/commons-math3/pom.properties
 
 $ unzip -c target/benchmarks.jar META-INF/MANIFEST.MF
 Archive:  target/benchmarks.jar
-  inflating: META-INF/MANIFEST.MF    
+  inflating: META-INF/MANIFEST.MF
 Manifest-Version: 1.0
 Archiver-Version: Plexus Archiver
 Created-By: Apache Maven 3.5.4
@@ -237,12 +237,12 @@ Main-Class: org.openjdk.jmh.Main
 
 $ unzip -c target/benchmarks.jar META-INF/BenchmarkList
 Archive:  target/benchmarks.jar
-  inflating: META-INF/BenchmarkList  
+  inflating: META-INF/BenchmarkList
 JMH S 22 org.sample.MyBenchmark S 51 org.sample.generated.MyBenchmark_testMethod_jmhTest S 10 testMethod S 10 Throughput E A 1 1 1 E E E E E E E E E E E E E E E E E
 
 $ unzip -c target/benchmarks.jar META-INF/CompilerHints
 Archive:  target/benchmarks.jar
-  inflating: META-INF/CompilerHints  
+  inflating: META-INF/CompilerHints
 dontinline,*.*_all_jmhStub
 dontinline,*.*_avgt_jmhStub
 dontinline,*.*_sample_jmhStub
@@ -283,7 +283,7 @@ Java程序的性能测试存在着许多深坑，有来自Java虚拟机的，有
 
 开发人员仅需将所要测试的业务逻辑通过`@Benchmark`注解，便可以让JMH的注解处理器自动生成真正的性能测试代码，以及相应的性能测试配置文件。
 
-* * *
+---
 
 今天的实践环节，请生成一个JMH项目，并且在`MyBenchmark.testMethod`方法中填入自己的业务逻辑。（除非你已经提前了解`@State`等JMH功能，否则请不要在`MyBenchmark`中定义实例变量。）
 

@@ -140,9 +140,10 @@ fn foo() -> {
 这个很容易理解，因为所谓引用，就是必定有效的指针。**必定有效的意思就是，只要这个引用型变量还在，那它所指向的那个目标对象就一定在**。Rust中采用的是彻底的静态分析技术（相对于运行时检查），希望在编译期间能够清楚地计算出每个资源，还有指向这个资源的引用的有效存在区间。要准确，既不能多，也不能少，并且两个要匹配好。于是Rust引入了所有权的设计，来描述对资源的管理。这是一个根上的设计，它的引入不可避免地带来了一整套后续的机制。
 
 - 借用与引用
-  
+
   - 不可变引用
   - 可变引用
+
 - 引用的生命周期分析
 
 所有权的生命周期scope的分析是比较简单的，用所在层次花括号规则就可以处理。难点在于引用的生命周期scope的分析，这个工作就是由Borrow Checker来做的。因为代码逻辑可能非常复杂，很难找到一种智能的方法可以通用地并且完全正确地处理所有代码中的引用。这非常困难，编程语言发展了几十年，其他语言要么如C这种放弃治疗，把这个问题全部交给程序员自己处理，要么像 Java 这种引入GC层，用GC来统一管理对资源的引用。
@@ -224,7 +225,7 @@ struct Request<'a> {
 ```plain
 fn foo() -> &str {
     let s = String::from("abc");
-    &s  
+    &s 
 }
 ```
 
@@ -234,7 +235,7 @@ fn foo() -> &str {
 error[E0515]: cannot return reference to local variable `s`
  --> src/main.rs:3:5
   |
-3 |     &s  
+3 |     &s 
   |     ^^ returns a reference to data owned by the current function
 ```
 
@@ -549,18 +550,18 @@ Rust牵涉面过于广泛，学习语言不是为了炫技，应该以实用为�
 }
 
 impl A {
-    fn play&lt;&#39;a&gt;(&amp;&#39;a self, a: &amp;&#39;a str, b: &amp;str) -&gt; &amp;str {
-        a
-    }
+fn play&lt;&#39;a&gt;(&amp;&#39;a self, a: &amp;&#39;a str, b: &amp;str) -&gt; &amp;str {
+a
+}
 }
 返回a的时候只需要标注a参数，而返回b的时候只需要标准b参数，这里进一步说明了类型标注只关注传入传出</p>2023-12-04</li><br/><li><span>Calvin</span> 👍（0） 💬（0）<p>【函数返回值中的引用】一个函数中返回一个类型的引用的第一种可能的情况（返回对外部全局变量的引用）示例的 foo() 函数的返回值类型应该也需要一个生命周期参数标注：
 static ASTRING: &amp;&#39;static str = &quot;abc&quot;;
-fn foo() -&gt; &amp;&#39;static str {    &#47;&#47; 默认的全局 &#39;static
-    ASTRING
+fn foo() -&gt; &amp;&#39;static str { &#47;&#47; 默认的全局 &#39;static
+ASTRING
 }
 或：
 static ASTRING: &amp;&#39;static str = &quot;abc&quot;;
-fn foo&lt;&#39;a&gt;() -&gt; &amp;&#39;a str {    &#47;&#47; 自定义的 &#39;a
-    ASTRING
+fn foo&lt;&#39;a&gt;() -&gt; &amp;&#39;a str { &#47;&#47; 自定义的 &#39;a
+ASTRING
 }</p>2024-04-25</li><br/><li><span>伯阳</span> 👍（0） 💬（0）<p>Rust 牵涉面过于广泛，学习语言不是为了炫技，应该以实用为主，学以致用，边学边用。Rust 没有天花板</p>2023-12-04</li><br/>
 </ul>

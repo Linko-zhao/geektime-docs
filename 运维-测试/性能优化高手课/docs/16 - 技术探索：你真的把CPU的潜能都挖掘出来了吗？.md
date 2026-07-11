@@ -40,7 +40,7 @@
 void vectorAdd(double* a, double* b, double* c){
     for(int i=0; i<4; i++) {
         c[i] = a[i] + b[i];  //一条代码仅能实现两个数字的计算。
-    }                      
+    }
 }
 ```
 
@@ -83,7 +83,7 @@ gcc -mavx, -mavx2, -march=native
 
 ```
 #pragma vector aligned
-#pragma simd 
+#pragma simd
 ```
 
 当然，你还可以使用英特尔开发的Cilk Plus并行编程库，来更高效地开发支持并行与向量化的程序，以此帮助提升软件性能。

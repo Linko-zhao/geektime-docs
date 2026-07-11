@@ -116,8 +116,8 @@ Task ID:
 
 
 # 使用实例：之后git commit 命令自动使用上述模板
-> git add app.js 
-> git commit 
+> git add app.js
+> git commit
 
 Summary:
 

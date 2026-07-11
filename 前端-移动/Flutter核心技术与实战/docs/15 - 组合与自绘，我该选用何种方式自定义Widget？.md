@@ -190,7 +190,7 @@ Flutter提供了非常丰富的控件和布局方式，使得我们可以通过�
 
 ```
 class WheelPainter extends CustomPainter {
- // 设置画笔颜色 
+ // 设置画笔颜色
   Paint getColoredPaint(Color color) {//根据颜色返回不同的画笔
     Paint paint = Paint();//生成画笔
     paint.color = color;//设置画笔颜色
@@ -270,21 +270,21 @@ class Cake extends StatelessWidget {
 
 &#47;&#47;绘制自定义view，其中画笔 paint ，画布 canvas，而 CustomPainter 负责具体的绘制逻辑处理
 class WheelPainter extends CustomPainter {
-  List&lt;double&gt; _list;
-  List&lt;Color&gt; _listColor;
-  double _total; &#47;&#47;总份数
+List&lt;double&gt; _list;
+List&lt;Color&gt; _listColor;
+double _total; &#47;&#47;总份数
 
-  WheelPainter(this._list, this._listColor);
+WheelPainter(this._list, this._listColor);
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    double wheelSize = min(size.width, size.height) &#47; 2; &#47;&#47;饼图的尺寸
-    &#47;&#47;用一个矩形框来包裹饼图
-    Rect boundingRect = Rect.fromCircle(
-        center: Offset(wheelSize, wheelSize), radius: wheelSize);
-    &#47;&#47;求出数组中所有数值的和
-    _total = _list.reduce((value, element) =&gt; value + element);
-    print(&quot;总份额是：$_total&quot;);
+@override
+void paint(Canvas canvas, Size size) {
+double wheelSize = min(size.width, size.height) &#47; 2; &#47;&#47;饼图的尺寸
+&#47;&#47;用一个矩形框来包裹饼图
+Rect boundingRect = Rect.fromCircle(
+center: Offset(wheelSize, wheelSize), radius: wheelSize);
+&#47;&#47;求出数组中所有数值的和
+_total = _list.reduce((value, element) =&gt; value + element);
+print(&quot;总份额是：$_total&quot;);
     &#47;&#47;求出每一份所占的角度
     double radius = (2 * pi) &#47; _total; &#47;&#47;求出每一份的弧度
     print(&quot;总角度是${2 * pi},每份额角度是:$radius&quot;);
@@ -308,39 +308,40 @@ class WheelPainter extends CustomPainter {
       canvas.drawArc(boundingRect, startRadius, sweepRadius, true,
           getPaintByColor(_listColor[i]));
     }
-  }
 
-  &#47;&#47;根据不同的 color 来获取对应的画笔
-  Paint getPaintByColor(Color color) {
-    Paint paint = Paint();
-    paint.color = color;
-    return paint;
-  }
+}
 
-  &#47;&#47;判断是否需要重绘
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) =&gt; oldDelegate != this;
+&#47;&#47;根据不同的 color 来获取对应的画笔
+Paint getPaintByColor(Color color) {
+Paint paint = Paint();
+paint.color = color;
+return paint;
+}
+
+&#47;&#47;判断是否需要重绘
+@override
+bool shouldRepaint(CustomPainter oldDelegate) =&gt; oldDelegate != this;
 }
 
 Padding getCustomPaint() {
-  return Padding(
-      padding: EdgeInsets.all(10),
-      child: CustomPaint(
-        size: Size(200, 200), 
-        painter: WheelPainter(
-            List.of([1.0, 2.0, 3.0, 4.0, 20]),
-            List.of([
-              Colors.red,
-              Colors.blue,
-              Colors.green,
-              Colors.amber,
-              Colors.black54
-            ])),
-      ));
-}</p>2019-09-05</li><br/><li><span>wanggw</span> 👍（5） 💬（3）<p>功能算是差不多实现了，但是还存在一个核心的问题不知道应该解决，就是我怎么获取Text展示文本的行数，我需要行数才能控制 more 按钮的显示和隐藏，否则我默认超过2行显示 more 按钮，当文本只有1行的时候，more 按钮也显示了😂。暂时还没找到解决方案。这是我写的例子：https:&#47;&#47;github.com&#47;wanggw911&#47;flutter_hello&#47;blob&#47;master&#47;lib&#47;widget&#47;Listview02.dart</p>2019-08-22</li><br/><li><span>davidzhou</span> 👍（4） 💬（2）<p>我的思路这样，先自定义一个statefulwidget，里面用过一个变量控制两个text，因为text是statelesswidget，无法动态去刷新，一个widget设置Maxlines=2，另一个不设置，more是一个floatbutton，点击事件里面实现setstate改变先前定义的变量就行了</p>2019-08-01</li><br/><li><span>獸丶</span> 👍（3） 💬（1）<p>老师，Flutter代码规范方面会讲吗，如果代码全写在一个Dart文件里，有点太冗杂了，还是说遵循SRP，一个类一个Dart文件？</p>2019-08-02</li><br/><li><span>Geek_e7jq8k</span> 👍（2） 💬（3）<p>请问下，再混合开发的场景下,module类型的对于root Widget，我们必须使用MaterialApp或者CupertinoApp二选一么？如果不使用这两个基础的widgetApp，除了不能享受封装好的Theme、封装好的Widget组件这些便利外，是否有无法实现的基础功能（比如在iOS中的右滑返回等等）？ 同时想问下目前国内很多App在安卓上的表现都不是Material风格的，同时也不完全是Cupertino风格，所以在实际应用中，主流的做法是使用 MaterialApp&#47;CupertinoApp&#47;完全自定义 这三种的哪一种呢？以及在开发过程中的是否有什么弊端呢？</p>2019-10-08</li><br/><li><span>Neil 陈荣</span> 👍（1） 💬（2）<p>老师，我想绘制一个围棋游戏的棋盘，并在上面实现落子、提子等各种操作。大致估计了一下，如果用组合的方案，算上棋子，棋盘，各种线，至少会有接近400个 widget. 这种情况下性能会有问题吗？我想知道 widget 数量一般在多少以内采用组合不会出现性能问题，这个有没有一个指导性的最佳实践？如果一上来就用自绘的方案的话，担心各种操作的交互功能不容易实现。谢谢！</p>2019-12-11</li><br/><li><span>毛哥来了</span> 👍（1） 💬（3）<p>我是用Builder(builder: (Buildcontext context){})来创建description那个Text组件，然后就可以通过context.size.height获取Text的高度，然后就能判断按钮何时展示了</p>2019-10-24</li><br/><li><span>浣熊特工队</span> 👍（1） 💬（2）<p>请问老师，more按钮那里的左右渐隐是怎么实现的啊，我用TextOverflow.fade是向下渐隐的啊</p>2019-09-03</li><br/><li><span>🌙</span> 👍（1） 💬（1）<p>如果说尽量使用stateless，但是只要需要交互都必须是stateful吧？怎么尽量来使用成stateless呢？</p>2019-08-23</li><br/><li><span>楼外楼</span> 👍（1） 💬（1）<p>哪些算是非可视容器呢？</p>2019-08-10</li><br/><li><span>Simon</span> 👍（1） 💬（2）<p>老师，Flutter其中一个游戏引擎flame，也是通过自绘的方式实现的吗？</p>2019-08-01</li><br/><li><span>Captain</span> 👍（0） 💬（1）<p>老师，pi是在哪里定义的？</p>2019-11-18</li><br/><li><span>leslee</span> 👍（0） 💬（2）<p>老师我把你的案例跑起来了, 但是我把 我把计数器那个案列的代码里面的 MaterialApp 的 themeData 的 primaryColor 的颜色改成你的 ligjtblue[800] 后他报错, 报 type color is not a subtype of type materialcolor 我看了文档确实颜色是分好几个类型,   可是为什么你的可以运行我的不可以运行........</p>2019-10-21</li><br/><li><span>离尘不离人คิดถึง</span> 👍（0） 💬（1）<p>功能都实现了，抽象了一个有状态的组件：https:&#47;&#47;github.com&#47;lichenbuliren&#47;flutter_study&#47;blob&#47;master&#47;lib&#47;components&#47;appUpdateItemCard.dart；
+return Padding(
+padding: EdgeInsets.all(10),
+child: CustomPaint(
+size: Size(200, 200),
+painter: WheelPainter(
+List.of([1.0, 2.0, 3.0, 4.0, 20]),
+List.of([
+Colors.red,
+Colors.blue,
+Colors.green,
+Colors.amber,
+Colors.black54
+])),
+));
+}</p>2019-09-05</li><br/><li><span>wanggw</span> 👍（5） 💬（3）<p>功能算是差不多实现了，但是还存在一个核心的问题不知道应该解决，就是我怎么获取Text展示文本的行数，我需要行数才能控制 more 按钮的显示和隐藏，否则我默认超过2行显示 more 按钮，当文本只有1行的时候，more 按钮也显示了😂。暂时还没找到解决方案。这是我写的例子：https:&#47;&#47;github.com&#47;wanggw911&#47;flutter_hello&#47;blob&#47;master&#47;lib&#47;widget&#47;Listview02.dart</p>2019-08-22</li><br/><li><span>davidzhou</span> 👍（4） 💬（2）<p>我的思路这样，先自定义一个statefulwidget，里面用过一个变量控制两个text，因为text是statelesswidget，无法动态去刷新，一个widget设置Maxlines=2，另一个不设置，more是一个floatbutton，点击事件里面实现setstate改变先前定义的变量就行了</p>2019-08-01</li><br/><li><span>獸丶</span> 👍（3） 💬（1）<p>老师，Flutter代码规范方面会讲吗，如果代码全写在一个Dart文件里，有点太冗杂了，还是说遵循SRP，一个类一个Dart文件？</p>2019-08-02</li><br/><li><span>Geek_e7jq8k</span> 👍（2） 💬（3）<p>请问下，再混合开发的场景下,module类型的对于root Widget，我们必须使用MaterialApp或者CupertinoApp二选一么？如果不使用这两个基础的widgetApp，除了不能享受封装好的Theme、封装好的Widget组件这些便利外，是否有无法实现的基础功能（比如在iOS中的右滑返回等等）？ 同时想问下目前国内很多App在安卓上的表现都不是Material风格的，同时也不完全是Cupertino风格，所以在实际应用中，主流的做法是使用 MaterialApp&#47;CupertinoApp&#47;完全自定义 这三种的哪一种呢？以及在开发过程中的是否有什么弊端呢？</p>2019-10-08</li><br/><li><span>Neil 陈荣</span> 👍（1） 💬（2）<p>老师，我想绘制一个围棋游戏的棋盘，并在上面实现落子、提子等各种操作。大致估计了一下，如果用组合的方案，算上棋子，棋盘，各种线，至少会有接近400个 widget. 这种情况下性能会有问题吗？我想知道 widget 数量一般在多少以内采用组合不会出现性能问题，这个有没有一个指导性的最佳实践？如果一上来就用自绘的方案的话，担心各种操作的交互功能不容易实现。谢谢！</p>2019-12-11</li><br/><li><span>毛哥来了</span> 👍（1） 💬（3）<p>我是用Builder(builder: (Buildcontext context){})来创建description那个Text组件，然后就可以通过context.size.height获取Text的高度，然后就能判断按钮何时展示了</p>2019-10-24</li><br/><li><span>浣熊特工队</span> 👍（1） 💬（2）<p>请问老师，more按钮那里的左右渐隐是怎么实现的啊，我用TextOverflow.fade是向下渐隐的啊</p>2019-09-03</li><br/><li><span>🌙</span> 👍（1） 💬（1）<p>如果说尽量使用stateless，但是只要需要交互都必须是stateful吧？怎么尽量来使用成stateless呢？</p>2019-08-23</li><br/><li><span>楼外楼</span> 👍（1） 💬（1）<p>哪些算是非可视容器呢？</p>2019-08-10</li><br/><li><span>Simon</span> 👍（1） 💬（2）<p>老师，Flutter其中一个游戏引擎flame，也是通过自绘的方式实现的吗？</p>2019-08-01</li><br/><li><span>Captain</span> 👍（0） 💬（1）<p>老师，pi是在哪里定义的？</p>2019-11-18</li><br/><li><span>leslee</span> 👍（0） 💬（2）<p>老师我把你的案例跑起来了, 但是我把 我把计数器那个案列的代码里面的 MaterialApp 的 themeData 的 primaryColor 的颜色改成你的 ligjtblue[800] 后他报错, 报 type color is not a subtype of type materialcolor 我看了文档确实颜色是分好几个类型, 可是为什么你的可以运行我的不可以运行........</p>2019-10-21</li><br/><li><span>离尘不离人คิดถึง</span> 👍（0） 💬（1）<p>功能都实现了，抽象了一个有状态的组件：https:&#47;&#47;github.com&#47;lichenbuliren&#47;flutter_study&#47;blob&#47;master&#47;lib&#47;components&#47;appUpdateItemCard.dart；
 基本思路：
-1、用 Contaner  的 decoration 绘制一个圆角白色渐变的白底；
+1、用 Contaner 的 decoration 绘制一个圆角白色渐变的白底；
 2、抽取 UI 组件，内部维护一个 『showMore』 状态
 3、描述文本组件根据 『showMore』 来动态设置 『maxLines』属性值，并且设置 『overflow』为省略号
-唯一存在的小瑕疵就是我的 FlatButton  控件中的文本一直存在 padding；手动设置了 0 也不生效；因为我看该章节里面的 『more』文本应该是靠右对齐的，这里麻烦老师帮忙看下，我尝试了各种方案都没法实现</p>2019-10-20</li><br/>
+唯一存在的小瑕疵就是我的 FlatButton 控件中的文本一直存在 padding；手动设置了 0 也不生效；因为我看该章节里面的 『more』文本应该是靠右对齐的，这里麻烦老师帮忙看下，我尝试了各种方案都没法实现</p>2019-10-20</li><br/>
 </ul>

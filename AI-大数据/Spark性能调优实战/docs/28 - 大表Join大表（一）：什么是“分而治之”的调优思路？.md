@@ -66,7 +66,7 @@ orderId: Int
 customerId: Int
 status: String
 date: Date //分区键
- 
+
 //lineitems表的关键字段
 orderId: Int //分区键
 txId: Int
@@ -82,13 +82,13 @@ orders和transactions都是事实表，体量都在TB级别。基于这两张事
 //统计订单交易额的代码实现
 val txFile: String = _
 val orderFile: String = _
- 
+
 val transactions: DataFrame = spark.read.parquent(txFile)
 val orders: DataFrame = spark.read.parquent(orderFile)
- 
+
 transactions.createOrReplaceTempView("transactions")
 orders.createOrReplaceTempView("orders")
- 
+
 val query: String = "
 select sum(tx.price * tx.quantity) as revenue, o.orderId
 from transactions as tx inner join orders as o
@@ -97,7 +97,7 @@ where o.status = 'COMPLETE'
 and o.date between '2020-01-01' and '2020-03-31'
 group by o.orderId
 "
- 
+
 val outFile: String = _
 spark.sql(query).save.parquet(outFile)
 
@@ -127,9 +127,9 @@ group by o.orderId
 ```
 //循环遍历dates、完成“分而治之”的计算
 val dates: Seq[String] = Seq("2020-01-01", "2020-01-02", … "2020-03-31")
- 
+
 for (date <- dates) {
- 
+
 val query: String = s"
 select sum(tx.price * tx.quantity) as revenue, o.orderId
 from transactions as tx inner join orders as o
@@ -138,7 +138,7 @@ where o.status = 'COMPLETE'
 and o.date = ${date}
 group by o.orderId
 "
- 
+
 val file: String = s"${outFile}/${date}"
 spark.sql(query).save.parquet(file)
 }

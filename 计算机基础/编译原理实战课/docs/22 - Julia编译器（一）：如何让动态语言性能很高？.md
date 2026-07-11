@@ -98,7 +98,7 @@ Julia的作者用C语言实现了一些运行时的核心功能，包括垃圾�
                 	  if n <= 0
                 		    println(\"end\")
                 	  else
-                		    print(n, \" \")        
+                		    print(n, \" \")
                 		    countdown(n-1)
                 	  end
                 end")
@@ -253,7 +253,7 @@ add(a, b)
 
 ```
 julia> foo(x::Int64, y::Int64) = x + y  #第一个方法
-foo (generic function with 1 method)    
+foo (generic function with 1 method)
 
 julia> foo(x, y) = x - y                #第二个方法
 foo (generic function with 2 methods)

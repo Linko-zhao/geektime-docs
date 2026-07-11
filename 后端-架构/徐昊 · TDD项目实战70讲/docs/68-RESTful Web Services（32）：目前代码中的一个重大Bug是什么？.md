@@ -8,7 +8,7 @@
 目前的任务列表：
 
 - Resource/RootResource/ResourceMethods
-  
+
   - 当HEAD方法映射到GET方法时，忽略GET的返回值
   - 当没有OPTIONS方法时，提供默认实现
 
@@ -58,7 +58,7 @@ class DefaultResourceRouter implements ResourceRouter {
                 Collections.list(request.getHeaders(HttpHeaders.ACCEPT)).toArray(String[]::new), resourceContext, uri);
     }
 }
-    
+
 class DefaultResourceMethod implements ResourceRouter.ResourceMethod {
     private String httpMethod;
     private UriTemplate uriTemplate;
@@ -196,7 +196,7 @@ class ResourceHandler implements ResourceRouter.Resource {
     private ResourceMethods resourceMethods;
     private SubResourceLocators subResourceLocators;
     private Function<ResourceContext, Object> resource;
-    
+
     public ResourceHandler(Class<?> resourceClass) {
         this(resourceClass, new PathTemplate(getTemplate(resourceClass)), rc -> rc.getResource(resourceClass));
     }

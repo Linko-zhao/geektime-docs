@@ -206,7 +206,7 @@ def get_job_by_resume(jobs: str, resume: str) -> str:
     #将简历以及岗位列表注入到 prompt 模板
     prompt = Job_Search_Prompt.format(resume=resume,job_list=jobs)
     messages = [{"role": "user", "content": prompt}]
-    
+   
     self.logger.info(f"prompt: {prompt}")
 
     #发送给 ds
@@ -224,17 +224,17 @@ def get_job_by_resume(jobs: str, resume: str) -> str:
 
 ```json
 {
-  "mcpServers": {
-    "jobsearch": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "D:\\workspace\\python\\mcp-test\\jobsearch-mcp-server\\src\\jobsearch_mcp_server",
-        "run",
-        "jobsearch-mcp-server"
-      ]
-    }
-  }
+  "mcpServers": {
+    "jobsearch": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "D:\\workspace\\python\\mcp-test\\jobsearch-mcp-server\\src\\jobsearch_mcp_server",
+        "run",
+        "jobsearch-mcp-server"
+      ]
+    }
+  }
 }
 ```
 
@@ -294,6 +294,7 @@ def get_job_by_resume(jobs: str, resume: str) -> str:
 4. 提供烹饪建议，例如火候、调料替代等。
 
 要求：
+
 - 不需要过分创新菜品，尽量选择已知的家常菜、快手菜。
 - 菜谱中的主要食材必须存在于用户提供的食材清单中，配菜可以提醒用户补充。
 - 菜谱要简单、清晰，步骤明确，在关键的火候、时机处描述清楚，易于用户操作。
@@ -306,18 +307,18 @@ def get_job_by_resume(jobs: str, resume: str) -> str:
 4.做菜助手的数据库可以做一些优化，按照菜品功能或者热量等等标签做一些分类，不但有利于智能体做数据查找，还能在输出时给出菜品营养、功效、热量等方面的信息。</p>2025-04-02</li><br/><li><span>Feng</span> 👍（3） 💬（1）<p>这里get_job_by_resume中获取提示词模板后，是在mcp server中调用了LLM，之前以为mcp server只需要负责返回提示词模板</p>2025-04-07</li><br/><li><span>jogholy</span> 👍（3） 💬（1）<p>通过输入的口味或菜名去食谱网站上抓取对应食谱，然后根据食材内容构造提示词让选出最合适的食谱并给出烹饪建议交给大模型，最后获取反馈的答案。</p>2025-04-02</li><br/><li><span>晓波</span> 👍（2） 💬（1）<p>@mcp.tool(description=&quot;根据求职者的简历获取适合该求职者的岗位以及求职建议&quot;)
 
 请教下，为什么大模型处理的逻辑是写在mcp server端进行处理，而不是在mcp clinet端处理？</p>2025-04-29</li><br/><li><span>南天</span> 👍（2） 💬（0）<p>能否举例使用mysql或其他数据库里的信息进行案例讲解</p>2025-04-17</li><br/><li><span>Geek_30842d</span> 👍（1） 💬（1）<p>老师，我想通过 运行python server.py 的方式,然后通过 curl -X POST http:&#47;&#47;localhost:8000&#47;tools&#47;get_job_by_resume \
-  -H &quot;Content-Type: application&#47;json&quot; \
-  -d &#39;{
-    &quot;jobs&quot;: &quot;Python工程师,Java工程师&quot;,
-    &quot;resume&quot;: &quot;我有5年Python开发经验...&quot;
-  }&#39; 这样可以吗？
+-H &quot;Content-Type: application&#47;json&quot; \
+-d &#39;{
+&quot;jobs&quot;: &quot;Python工程师,Java工程师&quot;,
+&quot;resume&quot;: &quot;我有5年Python开发经验...&quot;
+}&#39; 这样可以吗？
 
-目前FastMCP 不能暴露端口号 
+目前FastMCP 不能暴露端口号
 
 class JobSearchServer:
-    def __init__(self):
-        self.name = &quot;jobsearch_mcp_server&quot;
-        self.mcp = FastMCP(self.name, host=&quot;0.0.0.0&quot;, port=8000,debug=True)
+def **init**(self):
+self.name = &quot;jobsearch_mcp_server&quot;
+self.mcp = FastMCP(self.name, host=&quot;0.0.0.0&quot;, port=8000,debug=True)
 
         # 配置日志
         logging.basicConfig(
@@ -342,27 +343,25 @@ class JobSearchServer:
             self.logger.error(f&quot;Server failed to start: {str(e)}&quot;)
             raise
 
-
 def main():
-    server = JobSearchServer()
-    server.run()
+server = JobSearchServer()
+server.run()
 
+if **name** == &quot;**main**&quot;:
+main()</p>2025-05-07</li><br/><li><span>CrazyCodes</span> 👍（1） 💬（1）<p>老师，claude是不是必须用pro版本才可以选择mcp，我用模型 claude 3.7 sonnet得free版本找不到导入的地方</p>2025-04-28</li><br/><li><span>Geek_5dacb9</span> 👍（1） 💬（1）<p>&quot;jobsearch&quot;: {
+&quot;command&quot;: &quot;uv&quot;,
+&quot;args&quot;: [
+&quot;--directory&quot;,
+&quot;D:\\python-study\\AI\\极客时间\\searchjobs\\jobsearch\\src\\jobsearch_mcp_server&quot;,
+&quot;run&quot;,
+&quot;jobsearch-mcp-server&quot;
+]
+}
 
-if __name__ == &quot;__main__&quot;:
-    main()</p>2025-05-07</li><br/><li><span>CrazyCodes</span> 👍（1） 💬（1）<p>老师，claude是不是必须用pro版本才可以选择mcp，我用模型 claude 3.7 sonnet得free版本找不到导入的地方</p>2025-04-28</li><br/><li><span>Geek_5dacb9</span> 👍（1） 💬（1）<p>&quot;jobsearch&quot;: {
-  &quot;command&quot;: &quot;uv&quot;,
-   &quot;args&quot;: [
-     &quot;--directory&quot;,
-     &quot;D:\\python-study\\AI\\极客时间\\searchjobs\\jobsearch\\src\\jobsearch_mcp_server&quot;,
-     &quot;run&quot;,
-     &quot;jobsearch-mcp-server&quot;
-    ]
-  }  
-	
 class JobSearchMCPServer:
-    def __init__(self):
-        self.name = &quot;jobsearch_mcp_server&quot;
-        self.mcp = FastMCP(self.name)
+def **init**(self):
+self.name = &quot;jobsearch_mcp_server&quot;
+self.mcp = FastMCP(self.name)
 
-老师，mccserver中jobsearch这段配置我有些不太理解，参数args中run后边的参数为&quot;jobsearch-mcp-server&quot;，是什么意思啊，我看注册时用的是&quot;jobsearch_mcp_server&quot;，中间是带下划线的啊？</p>2025-04-17</li><br/><li><span>Geek_ca6a8b</span> 👍（1） 💬（2）<p>老师您好，有两个问题： 1. 在job.py的代码中 get_job_by_resume的jobs入参是怎么知道需要输入get_joblist_by_expect_job的输出呢，是自动按照tool的顺序运行吗？2. 如果配置多个独立的任务（比如找工作和做饭两套程序） 该怎么在roo code中配置？</p>2025-04-13</li><br/><li><span>Johar</span> 👍（1） 💬（1）<p>vscode 插件Roo Code调用本地mcp server，示例中的mcp server 日志是否打印？打印的具体路径多少？是否可以支持配置？</p>2025-04-06</li><br/><li><span>maybe</span> 👍（0） 💬（1）<p>cline配置mcp服务报错，in __init__ raise OpenAIError( &quot;The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable&quot; ) openai.OpenAIError: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable MCP error -32000: Connection closed</p>2025-05-19</li><br/><li><span>完美坚持</span> 👍（0） 💬（1）<p>做起来还是太难了</p>2025-05-05</li><br/><li><span>完美坚持</span> 👍（0） 💬（1）<p>老师，那种付费的API接口有吗</p>2025-05-05</li><br/><li><span>Ryan</span> 👍（0） 💬（2）<p>Job_Search_Prompt 是怎么来的？</p>2025-04-16</li><br/><li><span>ifelse</span> 👍（1） 💬（0）<p>学习打卡</p>2025-04-15</li><br/>
+老师，mccserver中jobsearch这段配置我有些不太理解，参数args中run后边的参数为&quot;jobsearch-mcp-server&quot;，是什么意思啊，我看注册时用的是&quot;jobsearch_mcp_server&quot;，中间是带下划线的啊？</p>2025-04-17</li><br/><li><span>Geek_ca6a8b</span> 👍（1） 💬（2）<p>老师您好，有两个问题： 1. 在job.py的代码中 get_job_by_resume的jobs入参是怎么知道需要输入get_joblist_by_expect_job的输出呢，是自动按照tool的顺序运行吗？2. 如果配置多个独立的任务（比如找工作和做饭两套程序） 该怎么在roo code中配置？</p>2025-04-13</li><br/><li><span>Johar</span> 👍（1） 💬（1）<p>vscode 插件Roo Code调用本地mcp server，示例中的mcp server 日志是否打印？打印的具体路径多少？是否可以支持配置？</p>2025-04-06</li><br/><li><span>maybe</span> 👍（0） 💬（1）<p>cline配置mcp服务报错，in **init** raise OpenAIError( &quot;The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable&quot; ) openai.OpenAIError: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable MCP error -32000: Connection closed</p>2025-05-19</li><br/><li><span>完美坚持</span> 👍（0） 💬（1）<p>做起来还是太难了</p>2025-05-05</li><br/><li><span>完美坚持</span> 👍（0） 💬（1）<p>老师，那种付费的API接口有吗</p>2025-05-05</li><br/><li><span>Ryan</span> 👍（0） 💬（2）<p>Job_Search_Prompt 是怎么来的？</p>2025-04-16</li><br/><li><span>ifelse</span> 👍（1） 💬（0）<p>学习打卡</p>2025-04-15</li><br/>
 </ul>

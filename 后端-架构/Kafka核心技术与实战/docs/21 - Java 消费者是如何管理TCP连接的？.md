@@ -32,29 +32,29 @@ Broker处理完上一步发送的FindCoordinator请求之后，会返还对应�
 
 我们来看看这段日志。
 
-> *\[2019-05-27 10:00:54,142] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9092 (id: -1 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)*
+> _\[2019-05-27 10:00:54,142] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9092 (id: -1 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)_
 
-> *......*
+> _......_
 
-> *\[2019-05-27 10:00:54,188] DEBUG \[Consumer clientId=consumer-1, groupId=test] Sending metadata request MetadataRequestData(topics=\[MetadataRequestTopic(name='t4')], allowAutoTopicCreation=true, includeClusterAuthorizedOperations=false, includeTopicAuthorizedOperations=false) to node localhost:9092 (id: -1 rack: null) (org.apache.kafka.clients.NetworkClient:1097)*
+> _\[2019-05-27 10:00:54,188] DEBUG \[Consumer clientId=consumer-1, groupId=test] Sending metadata request MetadataRequestData(topics=\[MetadataRequestTopic(name='t4')], allowAutoTopicCreation=true, includeClusterAuthorizedOperations=false, includeTopicAuthorizedOperations=false) to node localhost:9092 (id: -1 rack: null) (org.apache.kafka.clients.NetworkClient:1097)_
 
-> *......*
+> _......_
 
-> *\[2019-05-27 10:00:54,188] TRACE \[Consumer clientId=consumer-1, groupId=test] Sending FIND\_COORDINATOR {key=test,key\_type=0} with correlation id 0 to node -1 (org.apache.kafka.clients.NetworkClient:496)*
+> _\[2019-05-27 10:00:54,188] TRACE \[Consumer clientId=consumer-1, groupId=test] Sending FIND\_COORDINATOR {key=test,key\_type=0} with correlation id 0 to node -1 (org.apache.kafka.clients.NetworkClient:496)_
 
-> *\[2019-05-27 10:00:54,203] TRACE \[Consumer clientId=consumer-1, groupId=test] Completed receive from node -1 for FIND\_COORDINATOR with correlation id 0, received {throttle\_time\_ms=0,error\_code=0,error\_message=null, node\_id=2,host=localhost,port=9094} (org.apache.kafka.clients.NetworkClient:837)*
+> _\[2019-05-27 10:00:54,203] TRACE \[Consumer clientId=consumer-1, groupId=test] Completed receive from node -1 for FIND\_COORDINATOR with correlation id 0, received {throttle\_time\_ms=0,error\_code=0,error\_message=null, node\_id=2,host=localhost,port=9094} (org.apache.kafka.clients.NetworkClient:837)_
 
-> *......*
+> _......_
 
-> *\[2019-05-27 10:00:54,204] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9094 (id: 2147483645 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)*
+> _\[2019-05-27 10:00:54,204] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9094 (id: 2147483645 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)_
 
-> *......*
+> _......_
 
-> *\[2019-05-27 10:00:54,237] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9094 (id: 2 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)*
+> _\[2019-05-27 10:00:54,237] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9094 (id: 2 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)_
 
-> *\[2019-05-27 10:00:54,237] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9092 (id: 0 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)*
+> _\[2019-05-27 10:00:54,237] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9092 (id: 0 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)_
 
-> *\[2019-05-27 10:00:54,238] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9093 (id: 1 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)*
+> _\[2019-05-27 10:00:54,238] DEBUG \[Consumer clientId=consumer-1, groupId=test] Initiating connection to node localhost:9093 (id: 1 rack: null) using address localhost/127.0.0.1 (org.apache.kafka.clients.NetworkClient:944)_
 
 这里我稍微解释一下，日志的第一行是消费者程序创建的第一个TCP连接，就像我们前面说的，这个Socket用于发送FindCoordinator请求。由于这是消费者程序创建的第一个连接，此时消费者对于要连接的Kafka集群一无所知，因此它连接的Broker节点的ID是-1，表示消费者根本不知道要连接的Kafka Broker的任何信息。
 

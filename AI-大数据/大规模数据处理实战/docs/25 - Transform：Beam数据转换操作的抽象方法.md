@@ -91,7 +91,7 @@ static class UpperCaseFn extends DoFn<String, String> {
 
 PCollection<String> upperCaseWords = words.apply(
     ParDo
-    .of(new UpperCaseFn())); 
+    .of(new UpperCaseFn()));
 ```
 
 在上面的代码中你可以看出，每个DoFn的@ProcessElement标注的函数processElement，就是这个DoFn真正的功能模块。在上面这个DoFn中，我们把输入的一个词转化成了它的大写形式。之后在调用apply(ParDo.of(new UpperCaseFn()))的时候，Beam就会把输入的PCollection中的每个元素都使用刚才的processElement处理一遍。

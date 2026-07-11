@@ -55,7 +55,7 @@ use std::fs;
 fn main() {
   let url = "https://www.rust-lang.org/";
   let output = "rust.md";
-  
+
   println!("Fetching url: {}", url);
   let body = reqwest::blocking::get(url).unwrap().text().unwrap();
 
@@ -159,7 +159,7 @@ fn main() {
   let is_unit2 = {
     pi();
   };
-  
+
   println!("is_pi: {:?}, is_unit1: {:?}, is_unit2: {:?}", is_pi, is_unit1, is_unit2);
 }
 ```
@@ -364,7 +364,7 @@ use std::fs;
 fn main() {
   let url = "https://www.rust-lang.org/";
   let output = "rust.md";
-  
+
   println!("Fetching url: {}", url);
   let body = reqwest::blocking::get(url).unwrap().text().unwrap();
 
@@ -479,6 +479,7 @@ for arg in std::env::args() {
 5. [How to write tests](https://doc.rust-lang.org/book/ch11-01-writing-tests.html)
 6. [More about cargo and crates.io](https://doc.rust-lang.org/book/ch14-00-more-about-cargo.html)
 7. Rust 支持声明宏（declarative macro）和过程宏（procedure macro），其中过程宏又包含三种方式：函数宏（function macro），派生宏（derive macro）和属性宏（attribute macro）。println! 是函数宏，是因为 Rust 是强类型语言，函数的类型需要在编译期敲定，而 println! 接受任意个数的参数，所以只能用宏来表达。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>树静风止</span> 👍（8） 💬（1）<p>2022-12-28，这是一条较新的错误处理解决留言。
 如果你是在windows环境下cargo run课程中的代码发现出现以下错误：
@@ -520,9 +521,9 @@ Copy trait规定了这个类型在执行变量绑定、函数参数传递、函�
 
 let args = std::env::args().collect::&lt;Vec&lt;String&gt;&gt;();
 if let [_path, url, output, ..] = args.as_slice() {
-    println!(&quot;url: {}, output: {}&quot;, url, output);
+println!(&quot;url: {}, output: {}&quot;, url, output);
 } else {
-    eprintln!(&quot;参数缺失&quot;);
+eprintln!(&quot;参数缺失&quot;);
 }</p>2021-09-03</li><br/><li><span>Kerry</span> 👍（10） 💬（3）<p>课后习题需要自己查一点接口资料，结合错误信息来逐步解决编译问题。
 
 问题一：
@@ -543,7 +544,7 @@ fn next_fib(a: &amp;mut i32, b: &amp;mut i32) {
 
 fn fib_for(n: u8) {
     let (mut a, mut b) = (1, 1);
-    
+
     for _i in 2..n {
         next_fib(&amp;mut a, &amp;mut b);
         println!(&quot;next val is {}&quot;, b);
@@ -587,14 +588,14 @@ use structopt::StructOpt;
 #[derive(StructOpt, Debug)]
 #[structopt(name=&quot;scrape_url&quot;)]
 struct Opt {
-    #[structopt(help=&quot;input url&quot;)]
-    pub url: String,
-    #[structopt(help=&quot;output file, stdout if not present&quot;)]
-    pub output: Option&lt;String&gt;,
+#[structopt(help=&quot;input url&quot;)]
+pub url: String,
+#[structopt(help=&quot;output file, stdout if not present&quot;)]
+pub output: Option&lt;String&gt;,
 }
 
 fn main() {
-    let opt = Opt::from_args();
+let opt = Opt::from_args();
 
     let url = opt.url;
     let output = &amp;opt.output.unwrap_or(&quot;rust.md&quot;.to_string());
@@ -607,6 +608,7 @@ fn main() {
 
     fs::write(output, md.as_bytes()).unwrap();
     println!(&quot;Converted markdown has been saved in {}.&quot;, output);
+
 }
 </p>2021-08-27</li><br/><li><span>慢动作</span> 👍（9） 💬（1）<p>字符串字面量为什么有into方法，这中间经历了什么过程？看文档根本不知道这个方法哪里来的，😂。还是有点操之过急，看到不明白就瞎忙活，感觉还是得循序渐进</p>2021-08-27</li><br/><li><span>🔥神山 | 雷神山</span> 👍（8） 💬（1）<p>
 2. 在 scrape_url 的例子里，我们在代码中写死了要获取的 URL 和要输出的文件名，这太不灵活了。你能改进这个代码，从命令行参数中获取用户提供的信息来绑定 URL 和文件名么？类似这样：
@@ -622,14 +624,14 @@ const CAN_NOT_CONVERT_MD_CODE: i32 = 3;
 
 #[derive(Debug)]
 struct Config {
-    url: String,    &#47;&#47;网址
-    output: String, &#47;&#47;输出文件名
+url: String, &#47;&#47;网址
+output: String, &#47;&#47;输出文件名
 }
 
 impl Config {
-    fn new(url: String, output: String) -&gt; Config {
-        Config { url, output }
-    }
+fn new(url: String, output: String) -&gt; Config {
+Config { url, output }
+}
 
     fn curl_url(&amp;self) -&gt; Result&lt;String, Box&lt;dyn error::Error&gt;&gt; {
         println!(&quot;Fetching url: {}&quot;, self.url);
@@ -644,40 +646,42 @@ impl Config {
         println!(&quot;Converted markdown has been saved in {}.&quot;, self.output);
         Ok(())
     }
+
 }
 
 fn parse_args(args: &amp;[String]) -&gt; Result&lt;Config, &amp;str&gt; {
-    if args.len() &lt; 3 {
-        return Err(&quot;Not enough arguments!&quot;);
-    }
-    let url = args[1].clone();
-    let output = args[2].clone();
-    Ok(Config::new(url, output))
+if args.len() &lt; 3 {
+return Err(&quot;Not enough arguments!&quot;);
+}
+let url = args[1].clone();
+let output = args[2].clone();
+Ok(Config::new(url, output))
 }
 
 fn main() {
-    let args: Vec&lt;String&gt; = env::args().collect();
-    match parse_args(&amp;args) {
-        Err(err) =&gt; {
-            println!(&quot;Error: {}&quot;, err);
-            process::exit(NOT_ENOUGH_ARGS_CODE);
-        }
-        Ok(cfg) =&gt; match cfg.curl_url() {
-            Err(err) =&gt; {
-                println!(&quot;Error: {}&quot;, err.to_string());
-                process::exit(NOT_GET_HTTP_DATA_CODE);
-            }
-            Ok(body) =&gt; {
-                let result = cfg.convert_md_file(body);
-                if result.is_err() {
-                    println!(&quot;Error: Can NOT write data to {}&quot;, cfg.output);
-                    process::exit(CAN_NOT_CONVERT_MD_CODE);
-                }
-            }
-        },
-    }
+let args: Vec&lt;String&gt; = env::args().collect();
+match parse_args(&amp;args) {
+Err(err) =&gt; {
+println!(&quot;Error: {}&quot;, err);
+process::exit(NOT_ENOUGH_ARGS_CODE);
 }
-```</p>2021-08-27</li><br/><li><span>核桃</span> 👍（6） 💬（1）<p>这里有几个小疑惑.
+Ok(cfg) =&gt; match cfg.curl_url() {
+Err(err) =&gt; {
+println!(&quot;Error: {}&quot;, err.to_string());
+process::exit(NOT_GET_HTTP_DATA_CODE);
+}
+Ok(body) =&gt; {
+let result = cfg.convert_md_file(body);
+if result.is_err() {
+println!(&quot;Error: Can NOT write data to {}&quot;, cfg.output);
+process::exit(CAN_NOT_CONVERT_MD_CODE);
+}
+}
+},
+}
+}
+
+````</p>2021-08-27</li><br/><li><span>核桃</span> 👍（6） 💬（1）<p>这里有几个小疑惑.
 1.首先把函数作为参数这里，例如a(1，b(2))这样的，那么和先调用b得到结果再填入a中有什么本质区别吗？我不理解的是，分开调用好像也没什么问题，有什么场景下需要函数作为参数这样调用的？
 2.派生宏这里#[derive(Debug)]，这个例子中实现的是什么功能不太理解？
 3.println! 这里的语法多了一个感叹号，很多语言都有println，多了这个感叹号封装多了一些什么吗？看过一些资料也不太理解
@@ -694,10 +698,12 @@ let args: Vec&lt;String&gt; = env::args().collect();
     if let Err(e) = scrape_url::scrape(url, output) {
         println!(&quot;{}&quot;, e);
     }
-```
+````
 
-课程真心不错~深入浅出不啰嗦~</p>2021-08-30</li><br/><li><span>🔥神山 | 雷神山</span> 👍（4） 💬（3）<p>1. 在上面的斐波那契数列的代码中，你也许注意到计算数列中下一个数的代码在三个函数中不断重复。这不符合 DRY（Don’t Repeat Yourself）原则。你可以写一个函数把它抽取出来么？
-1) 定义一个loop_calc:
+课程真心不错~~深入浅出不啰嗦~~</p>2021-08-30</li><br/><li><span>🔥神山 | 雷神山</span> 👍（4） 💬（3）<p>1. 在上面的斐波那契数列的代码中，你也许注意到计算数列中下一个数的代码在三个函数中不断重复。这不符合 DRY（Don’t Repeat Yourself）原则。你可以写一个函数把它抽取出来么？
+
+1. 定义一个loop_calc:
+
 ```rust
 fn loop_calc(mut first_num: i32, mut second_num: i32, limit: u8) {
     for _i in 2..limit {
@@ -708,8 +714,10 @@ fn loop_calc(mut first_num: i32, mut second_num: i32, limit: u8) {
     }
 }
 ```
-2) 在三个函数:fib_loop, fib_while, fib_for分别调用loop_calc(a, b, n)即可
-完整版本:
+
+2. 在三个函数:fib_loop, fib_while, fib_for分别调用loop_calc(a, b, n)即可
+   完整版本:
+
 ```rust
 fn loop_calc(mut first_num: i32, mut second_num: i32, limit: u8) {
     for _i in 2..limit {
@@ -743,17 +751,18 @@ fn main() {
     fib_for(n);
 }
 ```
+
 </p>2021-08-27</li><br/><li><span>Geek_67a5d1</span> 👍（3） 💬（1）<p>初学者，花了一天时间才基本消化了老师讲20分钟的东西😅。简单方式做一下思考题2：
 
 use std::fs;
 
 fn print_usage_prompt_and_exit() {
-    println!(&quot;USAGE: cargo run -- url file.md&quot;);
-    std::process::exit(-1);
+println!(&quot;USAGE: cargo run -- url file.md&quot;);
+std::process::exit(-1);
 }
 
 fn main() {
-    let args: Vec&lt;String&gt; = std::env::args().skip(1).collect();
+let args: Vec&lt;String&gt; = std::env::args().skip(1).collect();
 
     if args.len() != 2 {
         print_usage_prompt_and_exit();
@@ -769,6 +778,7 @@ fn main() {
 
     fs::write(output, md.as_bytes()).unwrap();
     println!(&quot;Converted markdown has been saved in {}.&quot;, output);
+
 }
 </p>2021-09-23</li><br/>
 </ul>

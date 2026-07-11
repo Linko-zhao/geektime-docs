@@ -33,7 +33,7 @@ public static void main(String[] args) {
   Handler hd = new ConsoleHandler();
   hd.setLevel(Level.FINE);
   logger.addHandler(hd);
-  logger.info("start log"); 
+  logger.info("start log");
 }
 ```
 
@@ -54,7 +54,7 @@ private LogFactory() {
     // 通过ServiceLoader尝试加载Log的实现类
     ServiceLoader<Log> logLoader = ServiceLoader.load(Log.class);
     Constructor<? extends Log> m=null;
-    
+
     for (Log log: logLoader) {
         Class<? extends Log> c=log.getClass();
         try {
@@ -65,7 +65,7 @@ private LogFactory() {
             throw new Error(e);
         }
     }
-    
+
     //如何没有定义Log的实现类，discoveredLogConstructor为null
     discoveredLogConstructor = m;
 }
@@ -95,9 +95,9 @@ public Log getInstance(String name) throws LogConfigurationException {
 AsyncFileHandler继承自FileHandler，实现了异步的写操作。其中缓存存储是通过阻塞双端队列LinkedBlockingDeque来实现的。当应用要通过这个Handler来记录一条消息时，消息会先被存储到队列中，而在后台会有一个专门的线程来处理队列中的消息，取出的消息会通过父类的publish方法写入相应文件内。这样就可以在大量日志需要写入的时候起到缓冲作用，防止都阻塞在写日志这个动作上。需要注意的是，我们可以为阻塞双端队列设置不同的模式，在不同模式下，对新进入的消息有不同的处理方式，有些模式下会直接丢弃一些日志：
 
 ```
-OVERFLOW_DROP_LAST：丢弃栈顶的元素 
-OVERFLOW_DROP_FIRSH：丢弃栈底的元素 
-OVERFLOW_DROP_FLUSH：等待一定时间并重试，不会丢失元素 
+OVERFLOW_DROP_LAST：丢弃栈顶的元素
+OVERFLOW_DROP_FIRSH：丢弃栈底的元素
+OVERFLOW_DROP_FLUSH：等待一定时间并重试，不会丢失元素
 OVERFLOW_DROP_CURRENT：丢弃放入的元素
 ```
 

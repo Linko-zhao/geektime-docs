@@ -47,7 +47,7 @@ public final class Router{
   private final Integer port;
   private final String  iface;
   //构造函数
-  public Router(String ip, 
+  public Router(String ip,
       Integer port, String iface){
     this.ip = ip;
     this.port = port;
@@ -71,7 +71,7 @@ public final class Router{
 public class RouterTable {
   //Key:接口名
   //Value:路由集合
-  ConcurrentHashMap<String, CopyOnWriteArraySet<Router>> 
+  ConcurrentHashMap<String, CopyOnWriteArraySet<Router>>
     rt = new ConcurrentHashMap<>();
   //根据接口名获取路由表
   public Set<Router> get(String iface){
@@ -87,7 +87,7 @@ public class RouterTable {
   //增加路由
   public void add(Router router) {
     Set<Router> set = rt.computeIfAbsent(
-      route.iface, r -> 
+      route.iface, r ->
         new CopyOnWriteArraySet<>());
     set.add(router);
   }

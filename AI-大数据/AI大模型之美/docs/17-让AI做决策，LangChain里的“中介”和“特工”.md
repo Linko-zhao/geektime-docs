@@ -65,7 +65,7 @@ print(choice_chain(question))
 
 ```python
 question = "我有一张订单，订单号是 2022ABCDE，一直没有收到，能麻烦帮我查一下吗？"
-print(choice_chain(question)) 
+print(choice_chain(question))
 ```
 
 输出结果：
@@ -127,10 +127,10 @@ def faq(intput: str) -> str:
 
 tools = [
     Tool(
-        name = "Search Order",func=search_order, 
+        name = "Search Order",func=search_order,
         description="useful for when you need to answer questions about customers orders"
     ),
-    Tool(name="Recommend Product", func=recommend_product, 
+    Tool(name="Recommend Product", func=recommend_product,
          description="useful for when you need to answer questions about product recommendations"
     ),
     Tool(name="FAQ", func=faq,
@@ -242,7 +242,7 @@ Final Answer: 我们可以把货送到三亚，大概需要7天。
 # flake8: noqa
 PREFIX = """Answer the following questions as best you can. You have access to the following tools:"""
 FORMAT_INSTRUCTIONS = """Use the following format:
-	
+
 Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take, should be one of [{tool_names}]
@@ -252,7 +252,7 @@ Observation: the result of the action
 Thought: I now know the final answer
 Final Answer: the final answer to the original input question"""
 SUFFIX = """Begin!
-	
+
 Question: {input}
 Thought:{agent_scratchpad}"""
 ```
@@ -330,10 +330,10 @@ def faq(intput: str) -> str:
 
 tools = [
     Tool(
-        name = "Search Order",func=search_order, 
+        name = "Search Order",func=search_order,
         description="useful for when you need to answer questions about customers orders"
     ),
-    Tool(name="Recommend Product", func=recommend_product, 
+    Tool(name="Recommend Product", func=recommend_product,
          description="useful for when you need to answer questions about product recommendations"
     ),
     faq
@@ -395,7 +395,7 @@ def recommend_product(input: str) -> str:
 
 tools = [
     Tool(
-        name = "Search Order",func=search_order, 
+        name = "Search Order",func=search_order,
         description="useful for when you need to answer questions about customers orders"
     ),
     recommend_product, faq]
@@ -443,7 +443,7 @@ ORDER_1_DETAIL = {
     "status": "已发货",
     "shipping_date" : "2023-01-03",
     "estimated_delivered_date": "2023-01-05",
-} 
+}
 
 ORDER_2_DETAIL = {
     "order_number": ORDER_2,
@@ -582,7 +582,7 @@ def search_order(input:str)->str:
         order_number = match.group(0)
     else:
         return "请问您的订单号是多少？"
-    if order_number == ORDER_1:        
+    if order_number == ORDER_1:
         return answer_order_llm.run(json.dumps(ORDER_1_DETAIL))
     elif order_number == ORDER_2:
         return answer_order_llm.run(json.dumps(ORDER_2_DETAIL))
@@ -595,8 +595,8 @@ from langchain.chat_models import ChatOpenAI
 tools = [search_order,recommend_product, faq]
 chatllm=ChatOpenAI(temperature=0)
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-conversation_agent = initialize_agent(tools, chatllm, 
-                                      agent="conversational-react-description", 
+conversation_agent = initialize_agent(tools, chatllm,
+                                      agent="conversational-react-description",
                                       memory=memory, verbose=True)
 ```
 
@@ -644,7 +644,7 @@ print(answer2)
 Thought: Do I need to use a tool? Yes
 Action: Search Order
 Action Input: 20230101ABC
-Observation: 
+Observation:
 尊敬的用户，您的订单信息如下：
 订单号：20230101ABC
 订单状态：已发货
@@ -709,7 +709,6 @@ Langchain里面的zero-shot-react-description这个想法，来自一个知名�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>孟健</span> 👍（8） 💬（3）<p>最近的autogpt，agentgpt是不是都是这个思路</p>2023-04-14</li><br/><li><span>一叶</span> 👍（5） 💬（1）<p>老师,这是我让让用中文回答的代码,你看下这样对不对? 或是说还有更加简单的方法?
 
-
 ```python
 from langchain import LLMChain
 from langchain.agents import Tool, AgentExecutor, ZeroShotAgent
@@ -760,10 +759,11 @@ agent_chain = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbo
 result = agent_chain.run(&quot;我有一张订单，订单号是 2022ABCDE，一直没有收到，能麻烦帮我查一下吗？&quot;)
 print(result)
 ```
+
 </p>2023-04-14</li><br/><li><span>Leo</span> 👍（3） 💬（2）<p>老师，我想基于这个做一个对人的检索，用户输入姓名、年龄、性别等能找到相关的人，这个用embedding index能实现吗？或者有其他思路可以实现吗？求解答</p>2023-05-04</li><br/><li><span>李蕾</span> 👍（3） 💬（1）<p>关于老师思考题的第一个问题，经过自己的尝试，比较简单的方式是在Template中明确要求必须用中文返回即可。
 answer_order_info = PromptTemplate(    template=&quot;请把下面的订单信息用中文回复给用户： \n\n {order}?&quot;, input_variables=[&quot;order&quot;])
 我的第一想法和Geek_4ec46c一样，也是尝试着在Prompt中规定返回必须是中文，但是没有生效，可能是自己当前的功力不够导致的bug，哈哈</p>2023-04-19</li><br/><li><span>树静风止</span> 👍（3） 💬（1）<p>这么强大超期的课程，人怎么这么少呢</p>2023-04-17</li><br/><li><span>智能</span> 👍（3） 💬（1）<p>所以这里chatGPT其实相当于一个调度者？识别用户意图然后调用其他应用</p>2023-04-14</li><br/><li><span>Jacob.C</span> 👍（2） 💬（1）<p>老师，请问 agent 的 一个 tool如果需要 llm 做两件事再回来，应该怎么玩呢？</p>2023-04-14</li><br/><li><span>～鹏～</span> 👍（1） 💬（1）<p>请问下我用chatglm我试了下上面写的agent例子，发现不支持，这个只能openai可以用吗</p>2023-05-18</li><br/><li><span>Jacob.C</span> 👍（1） 💬（1）<p>解决的方法也不复杂，我们只需要调整一下 search_order 这个 Tool 的提示语。通过这个提示语，Agent 会知道，这个工具就应该在找不到订单的时候，告诉用户找不到订单或者请它再次确认。这个时候，它就会根据这个答案去回复用户。下面是对应修改运行后的结果。
 
 老师这里两段代码实在看不出来修改了啥，麻烦看出来的人说明一下！</p>2023-04-14</li><br/><li><span>Viktor</span> 👍（1） 💬（1）<p>如果按照这个思路，我们还可以添加更多的功能，比如更细致的订单查询，商品咨询，修改收货地址等。只是这些功能如果每个都独立开发还是需要花费很多时间，所以这个时候就需要开发一个框架的工作流，在这个框架下面更方便做功能集成。点赞👍。</p>2023-04-14</li><br/><li><span>Oli张帆</span> 👍（1） 💬（1）<p>请教老师，第一步的Intent Detection，是不是算是zero shot的？在这种情况下，如果我给出几个输出的例子，强化一下它的输出形式，会不会效果更好？</p>2023-04-14</li><br/><li><span>风</span> 👍（0） 💬（2）<p>你好，我尝试使用ChatGLM实现这一节的内容，但是效果很差，经常没办法像OpenAI那样进行“思考”，最后返回正常的结果。有什么好的办法吗？或者，有什么其他可用的中文LLM模型可以使用agent和tool实现类似的功能。</p>2023-04-30</li><br/><li><span>江湖中人</span> 👍（0） 💬（2）<p>老师，请教一下，如果想做一个特定行业的客服机器人，有一些私有的数据需要喂给AI，是有现成的东西可以用，还是利用我们课程学的东西去开发训练，可以大致梳理一下流程吗？很多有这种需求的但是对技术并不了解的人，他们要怎么做呢？</p>2023-04-21</li><br/><li><span>Geek_3d7708</span> 👍（0） 💬（1）<p>1、 LLM 换成了 ChatOpenAI，不知道怎么 回答过程都是英文了；
-2、converstional-react-description  采用这个，回答就不是从知识库了。 比如我用藤野显示，问鲁迅老师是谁？zero-shot-react-description 的时候，是藤野先生，但是换成converstional-react-description 就变成 陈寅格，不知道哪来的。</p>2023-04-18</li><br/><li><span>xianbin.yang</span> 👍（0） 💬（1）<p>老师，很喜欢您这个专栏，您除了这个专栏，还有其他的博客、社群或者知识星球吗？</p>2023-04-18</li><br/>
+2、converstional-react-description 采用这个，回答就不是从知识库了。 比如我用藤野显示，问鲁迅老师是谁？zero-shot-react-description 的时候，是藤野先生，但是换成converstional-react-description 就变成 陈寅格，不知道哪来的。</p>2023-04-18</li><br/><li><span>xianbin.yang</span> 👍（0） 💬（1）<p>老师，很喜欢您这个专栏，您除了这个专栏，还有其他的博客、社群或者知识星球吗？</p>2023-04-18</li><br/>
 </ul>

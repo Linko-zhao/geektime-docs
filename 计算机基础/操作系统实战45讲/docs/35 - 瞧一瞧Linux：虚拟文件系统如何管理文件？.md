@@ -55,9 +55,9 @@ struct super_block {
     time64_t           s_time_max;//最大时间限制
     char            s_id[32];   //标识名称
     uuid_t          s_uuid;     //文件系统的UUID
-    struct list_lru     s_dentry_lru;//LRU方式挂载的目录 
+    struct list_lru     s_dentry_lru;//LRU方式挂载的目录
     struct list_lru     s_inode_lru;//LRU方式挂载的索引结点
-    struct mutex        s_sync_lock;//同步锁  
+    struct mutex        s_sync_lock;//同步锁
     struct list_head    s_inodes;   //所有的索引节点
     spinlock_t      s_inode_wblist_lock;//回写索引节点的锁
     struct list_head    s_inodes_wb;    //挂载所有要回写的索引节点
@@ -128,10 +128,10 @@ struct qstr {
 struct dentry {
     unsigned int d_flags;       //目录标志
     seqcount_spinlock_t d_seq;  //锁
-    struct hlist_bl_node d_hash;//目录的哈希链表    
+    struct hlist_bl_node d_hash;//目录的哈希链表
     struct dentry *d_parent;    //指向父目录
     struct qstr d_name;         //目录名称
-    struct inode *d_inode;      //指向目录文件的索引节点 
+    struct inode *d_inode;      //指向目录文件的索引节点
     unsigned char d_iname[DNAME_INLINE_LEN];    //短目录名
     struct lockref d_lockref;   //目录锁与计数
     const struct dentry_operations *d_op;//目录的函数集
@@ -142,7 +142,7 @@ struct dentry {
         struct list_head d_lru;     //LRU链表
         wait_queue_head_t *d_wait;
     };
-    struct list_head d_child;   //挂入父目录的链表节点 
+    struct list_head d_child;   //挂入父目录的链表节点
     struct list_head d_subdirs; //挂载所有子目录的链表
 } __randomize_layout;
 ```
@@ -165,7 +165,7 @@ struct dentry_operations {
             unsigned int, const char *, const struct qstr *);
     //当目录项对象的计数值等于0时，VFS调用该函数
     int (*d_delete)(const struct dentry *);
-    //当分配目录时调用 
+    //当分配目录时调用
     int (*d_init)(struct dentry *);
     //当目录项对象要被释放时，VFS调用该函数，默认情况下，它什么也不做
     void (*d_release)(struct dentry *);
@@ -212,17 +212,17 @@ struct inode {
     u8          i_blkbits;//以位为单位的块大小；
     u8          i_write_hint;
     blkcnt_t        i_blocks;
-    struct list_head    i_io_list;  
+    struct list_head    i_io_list;
     struct list_head    i_lru;      //在缓存LRU中的链表节点
     struct list_head    i_sb_list;//在超级块中的链表节点
     struct list_head    i_wb_list;
     atomic64_t      i_version;//版本号
-    atomic64_t      i_sequence; 
+    atomic64_t      i_sequence;
     atomic_t        i_count;//计数
     atomic_t        i_dio_count;//直接io进程计数
     atomic_t        i_writecount;//写进程计数
     union {
-        const struct file_operations    *i_fop;//文件函数集合 
+        const struct file_operations    *i_fop;//文件函数集合
         void (*free_inode)(struct inode *);
     };
     struct file_lock_context    *i_flctx;
@@ -277,7 +277,7 @@ struct inode_operations {
     //该函数将特定文件所有属性列表拷贝到一个缓冲列表中
     ssize_t (*listxattr) (struct dentry *, char *, size_t);
     //该函数从给定文件中删除指定的属性
-    int (*removexattr) (struct dentry *, const char *);      
+    int (*removexattr) (struct dentry *, const char *);
 };
 ```
 
@@ -423,7 +423,7 @@ module_exit(trfs_exit);
 注册了trfs文件系统，这不等于可以使用这个文件系统存取文件了。那么如何使用trfs文件系统呢？当然首先是编译trfs内核模块代码，在终端中cd到对应的目录下执行make，然后把编译好的内核模块插入到系统中，最后就是将这个文件系统挂载到一个具体的目录下。代码如下。
 
 ```
-make                           //编译内核模块 
+make                           //编译内核模块
 sudo insmod trfs.ko            //把内核模块插入到内核
 sudo mount -t trfs none /mnt/  // 挂载trfs文件系统到mnt目录下
 ```
@@ -497,7 +497,7 @@ D、查找和枚举就是通过file找到fileinfo.data，然后访问其中的�
 </p>2021-07-29</li><br/><li><span>蓝色梦幻</span> 👍（0） 💬（1）<p>请教一下：＂有了上述代码，挂载 trfs 到 &#47;mnt 下，我们就可以用 touch 建立一个文件，然后用 cat 读取这个文件了。＂
 这里具体要怎么操作呀？我可以用findmnt 查看到trfs系统的挂载，后续要怎么操作呢？
 
-TARGET                       SOURCE     FSTYPE          OPTIONS
-├─&#47;mnt                                none       trfs            rw,relatime
+TARGET SOURCE FSTYPE OPTIONS
+├─&#47;mnt none trfs rw,relatime
 </p>2022-05-14</li><br/><li><span>艾恩凝</span> 👍（0） 💬（1）<p>打卡</p>2022-05-13</li><br/><li><span>Geek_cb2b43</span> 👍（0） 💬（1）<p>请问在一个新建的空文件，从100兆的位置写200兆数据，操作的流程是什么，文件的大小是300兆吗？</p>2021-11-13</li><br/><li><span>不及胜于过之</span> 👍（0） 💬（1）<p>文件系统就是 super_block&#47;和super_operations，dentry和dentry_operations，inode和inode_operations，file 和 file_operations，真的是醍醐灌顶，大佬可以按这个表述风格，详细说下mount 嘛， 一直理解的不是很深刻，尤其是容器用到的union mount</p>2021-08-08</li><br/>
 </ul>

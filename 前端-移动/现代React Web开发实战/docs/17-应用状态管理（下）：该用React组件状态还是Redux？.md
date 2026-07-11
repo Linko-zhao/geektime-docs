@@ -122,11 +122,11 @@ const selectBooks = (state) => state.books.allBooks;
 const selectFavIds = (state) => state.user.favIds;
 
 export const selectFavBooks = createSelector(
-  selectBooks,
-  selectFavIds,
-  (books, ids) => {
-    return books.filter(book => ids.includes(book.id));
-  },
+  selectBooks,
+  selectFavIds,
+  (books, ids) => {
+    return books.filter((book) => ids.includes(book.id));
+  },
 );
 ```
 
@@ -143,51 +143,60 @@ npm install @reduxjs/toolkit react-redux
 用Provider组件包住整个应用，传入上节课Redux Toolkit样例代码中创建的store对象：
 
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 // ...
-import { Provider } from 'react-redux';
-import store from './store';
+import { Provider } from "react-redux";
+import store from "./store";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <App />
-  </Provider>
+  </Provider>,
 );
 ```
 
 然后在组件中就可以使用这个store了：
 
 ```javascript
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addCard, removeCard } from './cardListSlice';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addCard, removeCard } from "./cardListSlice";
 
 export function CardList() {
-  const cardList = useSelector(state => state);
-  const dispatch = useDispatch();
+  const cardList = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  return (
-    <div>
-      <button onClick={() => {
-        const payload = { newCard: { title: '开发任务-1' } };
-        dispatch(addCard(payload));
-      }}>添加</button>
-      <ul>
-        {
-          cardList.map(card => (
-            <li key={card.title}>
-              {card.title}
-              <button onClick={() => {
-                dispatch(removeCard({ title: '开发任务-1' }));
-              }}>删除</button>
-            </li>
-          ))
-        }
+  return (
+    <div>
+           {" "}
+      <button
+        onClick={() => {
+          const payload = { newCard: { title: "开发任务-1" } };
+          dispatch(addCard(payload));
+        }}
+      >
+        添加
+      </button>
+           {" "}
+      <ul>
+        {cardList.map((card) => (
+          <li key={card.title}>
+            {card.title}
+            <button
+              onClick={() => {
+                dispatch(removeCard({ title: "开发任务-1" }));
+              }}
+            >
+              删除
+            </button>
+          </li>
+        ))}
       </ul>
-    </div>
-  );
+         {" "}
+    </div>
+  );
 }
 ```
 

@@ -175,7 +175,7 @@ OK
 TS.ADD device:temperature 1596416700 25.1
 1596416700
 
-TS.GET device:temperature 
+TS.GET device:temperature
 25.1
 ```
 
@@ -186,7 +186,7 @@ TS.GET device:temperature
 举个例子。假设我们一共用4个集合为4个设备保存时间序列数据，设备的ID号是1、2、3、4，我们在创建数据集合时，把device\_id设置为每个集合的标签。此时，我们就可以使用下列TS.MGET命令，以及FILTER设置（这个配置项用来设置集合标签的过滤条件），查询device\_id不等于2的所有其他设备的数据集合，并返回各自集合中的最新的一条数据。
 
 ```
-TS.MGET FILTER device_id!=2 
+TS.MGET FILTER device_id!=2
 1) 1) "device:temperature:1"
    2) (empty list or set)
    3) 1) (integer) 1596417000
@@ -261,10 +261,10 @@ TS.RANGE device:temperature 1596416700 1596417120 AGGREGATION avg 180000
 
 2，作者是怎么把这事给讲明白的？
 结合具体场景，探讨解决方案
-    1，介绍需求背景，用户行为，设备监控数据分析
-    2，介绍数据特点，时间线连续，没有逻辑关系，数据量大
-    3，介绍操作场景，插入多且快，常单点查询，分组统计聚合
- 
+1，介绍需求背景，用户行为，设备监控数据分析
+2，介绍数据特点，时间线连续，没有逻辑关系，数据量大
+3，介绍操作场景，插入多且快，常单点查询，分组统计聚合
+
 3，作者为了把这事给讲清楚，讲了那些要点？有哪些亮点？
 1，亮点1：先讲清楚需求背景，从实际问题出发，推演出存储时间序列数据适合使用sort set 和hash解决点查询和范围查询的需求
 2，要点1：同时写入sort set和hash 两种数据类型的存储，需要使用原子操作，可以借助MULTI和 EXEC命令
@@ -282,17 +282,19 @@ QUEUED
 127.0.0.1:6379&gt; HSET dev:temp4 2020092201 26.8
 QUEUED
 127.0.0.1:6379&gt; EXEC
-1) (integer) 1
-2) (error) WRONGTYPE Operation against a key holding the wrong kind of value
-127.0.0.1:6379&gt; MULTI
-OK
-127.0.0.1:6379&gt; HSET dev:temp5 2020092201 26.8
-QUEUED
-127.0.0.1:6379&gt; ZADD dev:temp6 2020092201 26.8
-QUEUED
-127.0.0.1:6379&gt; EXEC
-1) (integer) 1
-2) (integer) 1
+
+1. (integer) 1
+2. (error) WRONGTYPE Operation against a key holding the wrong kind of value
+   127.0.0.1:6379&gt; MULTI
+   OK
+   127.0.0.1:6379&gt; HSET dev:temp5 2020092201 26.8
+   QUEUED
+   127.0.0.1:6379&gt; ZADD dev:temp6 2020092201 26.8
+   QUEUED
+   127.0.0.1:6379&gt; EXEC
+3. (integer) 1
+4. (integer) 1
+
 </p>2020-09-22</li><br/><li><span>Eric.Lee</span> 👍（11） 💬（5）<p>有个问题：市面上有成熟的时间序列数据库如：influxdb、Prometheus等。这一讲，我理解是介绍了Redis支持通过加载模块的形式也能支持这种数据类型的存储。单从时间序列管理、功能方面上个人感觉不如专业数据库成熟？还是作者做过这些数据库的比较专门选用的Redis做数据存储？</p>2020-10-27</li><br/><li><span>凯文小猪</span> 👍（10） 💬（3）<p>虽然有点泼冷水 但实际上点击流数据 通常是用kafka 作为日志来中转的。这里面涉及几个问题：
 1。数据的维度并不总是固定的。比方说今天要聚合统计 明天可能要最值或基数统计。那这时候用redis存储显然不是第一选择。
 2. 数据清洗问题。不是所有的数据都是我们期望的 但我们不能要求埋点方来做数据清洗 我们只能要求埋点方尽可能多的上报 才能保证数据是正确的 偏差值 最小。

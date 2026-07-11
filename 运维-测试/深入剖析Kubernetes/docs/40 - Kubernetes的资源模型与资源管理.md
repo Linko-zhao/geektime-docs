@@ -240,13 +240,13 @@ Pod ，即容器组，由多个容器组成，其 CPU 和内存配额在 Contain
 - requests：kube-scheduler 只会按照 requests 的值进行计算。
 - limits：kubelet 则会按照 limits 的值来进行设置 Cgroups 限制.
 
-
 ## QoS 模型
+
 - Guaranteed： 同时设置 requests 和 limits，并且 requests 和 limit 值相等。优势一是在资源不足 Eviction 发生时，最后被删除；并且删除的是 Pod 资源用量超过 limits 时才会被删除；优势二是该模型与 docker cpuset 的方式绑定 CPU 核，避免频繁的上下午文切换，性能会得到大幅提升。
 - Burstable：不满足 Guaranteed 条件， 但至少有一个 Container 设置了 requests
 - BestEffort：没有设置 requests 和 limits。
 
-## Eviction 
+## Eviction
 
 ```bash
 kubelet --eviction-hard=imagefs.available&lt;10%,memory.available&lt;500Mi,nodefs.available&lt;5%,nodefs.inodesFree&lt;5% --eviction-soft=imagefs.available&lt;30%,nodefs.available&lt;10% \
@@ -255,11 +255,11 @@ kubelet --eviction-hard=imagefs.available&lt;10%,memory.available&lt;500Mi,nodef
 ```
 
 两种模式：
-- soft: 如 `eviction-soft-grace-period=imagefs.available=2m`  eviction 会在阈值达到 2 分钟后才会开始
+
+- soft: 如 `eviction-soft-grace-period=imagefs.available=2m` eviction 会在阈值达到 2 分钟后才会开始
 - hard：evivtion 会立即开始。
 
 **eviction 计算原理**： 将 Cgroups （limits属性）设置的值和 cAdvisor 监控的数据相比较。
-
 
 最佳实践：DaemonSet 的 Pod 都设置为 Guaranteed， 避免进入“回收-&gt;创建-&gt;回收-&gt;创建”的“死循环”。</p>2020-03-19</li><br/><li><span>wilder</span> 👍（30） 💬（1）<p>极客时间里面最爱的课程，没有之一，哈哈哈哈哈哈</p>2018-11-23</li><br/><li><span>Flying</span> 👍（12） 💬（2）<p>请用老师，cpuset为2，这个Pod就独占两个cpu核上，假如宿主机总共只有10个cpu核，那么这台机就只能运行5个cpuset=2的Pod吗</p>2018-11-30</li><br/><li><span>虎虎❤️</span> 👍（8） 💬（3）<p>能否分享一下给namespace 设置quota的经验呢？
 

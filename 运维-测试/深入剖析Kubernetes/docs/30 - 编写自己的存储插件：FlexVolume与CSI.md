@@ -53,24 +53,24 @@ spec:
 func (f *flexVolumeMounter) SetUpAt(dir string, fsGroup *int64) error {
   ...
   call := f.plugin.NewDriverCall(mountCmd)
-  
+
   // Interface parameters
   call.Append(dir)
-  
+
   extraOptions := make(map[string]string)
-  
+
   // pod metadata
   extraOptions[optionKeyPodName] = f.podName
   extraOptions[optionKeyPodNamespace] = f.podNamespace
-  
+
   ...
-  
+
   call.AppendSpec(f.spec, f.plugin.host, extraOptions)
-  
+
   _, err = call.Run()
-  
+
   ...
-  
+
   return nil
 }
 ```
@@ -112,14 +112,14 @@ func (f *flexVolumeMounter) SetUpAt(dir string, fsGroup *int64) error {
 ```
 domount() {
  MNTPATH=$1
- 
+
  NFS_SERVER=$(echo $2 | jq -r '.server')
  SHARE=$(echo $2 | jq -r '.share')
- 
+
  ...
- 
+
  mkdir -p ${MNTPATH} &> /dev/null
- 
+
  mount -t nfs ${NFS_SERVER}:/${SHARE} ${MNTPATH} &> /dev/null
  if [ $? -ne 0 ]; then
   err "{ \"status\": \"Failure\", \"message\": \"Failed to mount ${NFS_SERVER}:${SHARE} at ${MNTPATH}\"}"
@@ -220,29 +220,29 @@ service Controller {
   // provisions a volume
   rpc CreateVolume (CreateVolumeRequest)
     returns (CreateVolumeResponse) {}
-    
+
   // deletes a previously provisioned volume
   rpc DeleteVolume (DeleteVolumeRequest)
     returns (DeleteVolumeResponse) {}
-    
+
   // make a volume available on some required node
   rpc ControllerPublishVolume (ControllerPublishVolumeRequest)
     returns (ControllerPublishVolumeResponse) {}
-    
+
   // make a volume un-available on some required node
   rpc ControllerUnpublishVolume (ControllerUnpublishVolumeRequest)
     returns (ControllerUnpublishVolumeResponse) {}
-    
+
   ...
-  
+
   // make a snapshot
   rpc CreateSnapshot (CreateSnapshotRequest)
     returns (CreateSnapshotResponse) {}
-    
+
   // Delete a given snapshot
   rpc DeleteSnapshot (DeleteSnapshotRequest)
     returns (DeleteSnapshotResponse) {}
-    
+
   ...
 }
 ```
@@ -258,25 +258,25 @@ service Node {
   // temporarily mount the volume to a staging path
   rpc NodeStageVolume (NodeStageVolumeRequest)
     returns (NodeStageVolumeResponse) {}
-    
+
   // unmount the volume from staging path
   rpc NodeUnstageVolume (NodeUnstageVolumeRequest)
     returns (NodeUnstageVolumeResponse) {}
-    
+
   // mount the volume from staging to target path
   rpc NodePublishVolume (NodePublishVolumeRequest)
     returns (NodePublishVolumeResponse) {}
-    
+
   // unmount the volume from staging path
   rpc NodeUnpublishVolume (NodeUnpublishVolumeRequest)
     returns (NodeUnpublishVolumeResponse) {}
-    
+
   // stats for the volume
   rpc NodeGetVolumeStats (NodeGetVolumeStatsRequest)
     returns (NodeGetVolumeStatsResponse) {}
-    
+
   ...
-  
+
   // Similar to NodeGetId
   rpc NodeGetInfo (NodeGetInfoRequest)
     returns (NodeGetInfoResponse) {}
@@ -310,20 +310,18 @@ service Node {
 
 1. Register过程： csi 插件应该作为 daemonSet 部署到每个节点（node）。然后插件 container 挂载 hostpath 文件夹，把插件可执行文件放在其中，并启动rpc服务（identity, controller, node）。External component Driver Registrar 利用 kubelet plugin watcher 特性watch指定的文件夹路径来自动检测到这个存储插件。然后通过调用identity rpc服务，获得driver的信息，并完成注册。
 
-
 2. Provision过程：部署External Provisioner。 Provisioner 将会 watch apiServer 中 PVC 资源的创建，并且PVC 所指定的 storageClass 的 provisioner是我们上面启动的插件。那么，External Provisioner 将会调用 插件的 controller.createVolume() 服务。其主要工作应该是通过阿里云的api 创建网络磁盘，并根据磁盘的信息创建相应的pv。
 
 3. Attach过程：部署External Attacher。Attacher 将会监听 apiServer 中 VolumeAttachment 对象的变化。一旦出现新的VolumeAttachment，Attacher 会调用插件的 controller.ControllerPublish() 服务。其主要工作是调用阿里云的api，把相应的磁盘 attach 到声明使用此 PVC&#47;PV 的 pod 所调度到的 node 上。挂载的目录：&#47;var&#47;lib&#47;kubelet&#47;pods&#47;&lt;Pod ID&gt;&#47;volumes&#47;aliyun~netdisk&#47;&lt;name&gt;
 
-
 4. Mount过程：mount 不可能在远程的container里完成，所以这个工作需要kubelet来做。kubelet 的 VolumeManagerReconciler 控制循环，检测到需要执行 Mount 操作的时候，通过调用 pkg&#47;volume&#47;csi 包，调用 CSI Node 服务，完成 volume 的 Mount 阶段。具体工作是调用 CRI 启动带有 volume 参数的container，把上阶段准备好的磁盘 mount 到 container指定的目录。</p>2018-10-31</li><br/><li><span>ch_ort</span> 👍（19） 💬（0）<p>PVC描述的，是Pod想要使用的持久化存储的属性，比如存储的大小、读写权限等
-PV描述的，则是一个具体的Volume的属性，比如Volume的类型、挂载目录、远程存储服务器地址等
+   PV描述的，则是一个具体的Volume的属性，比如Volume的类型、挂载目录、远程存储服务器地址等
 
-有两种管理PV的方式：  人工管理（Static Provisioning），自动创建（Dynamic Provisioning）。Dynamic Provisioning机制工作的核心，就在于一个名叫StorageClass的API对象。Kubernetes能够根据用户提交的PVC，找到一个对应的StorageClass了。然后，Kuberentes就会调用该StorageClass声明的存储插件，创建出需要的PV。
+有两种管理PV的方式： 人工管理（Static Provisioning），自动创建（Dynamic Provisioning）。Dynamic Provisioning机制工作的核心，就在于一个名叫StorageClass的API对象。Kubernetes能够根据用户提交的PVC，找到一个对应的StorageClass了。然后，Kuberentes就会调用该StorageClass声明的存储插件，创建出需要的PV。
 
 需要注意的是，StorageClass并不是专门为了Dynamic Provisioning而设计的。比如，我在PV和PVC里都声明了storageClassName=manual。而我的集群里，实际上并没有一个叫manual的StorageClass对象。这完全没有问题，这个时候Kubernetes进行的是Static Provisioning，但在做绑定决策的时候，它依然会考虑PV和PVC的StorageClass定义。而这么做的好处也很明显：这个PVC和PV的绑定关系，就完全在我自己的掌握之中。
 
-存储插件的开发方式有两种：FlexVolume和CSI 
+存储插件的开发方式有两种：FlexVolume和CSI
 
 FlexVolume： kubelet --&gt; pkg&#47;volume&#47;flexvolume.SetUpAt() --&gt; &#47;usr&#47;libexec&#47;kubernetes&#47;kubelet-plugins&#47;volume&#47;exec&#47;k8s~nfs&#47;nfs mount &lt;mount dir&gt; &lt;json param&gt;
 
@@ -338,8 +336,9 @@ attach + mount
 
 1. 既然csi的PV是自己定义的类型，那么volume controller应该不会做这个红娘吧？所以问题是，他们是怎么完成绑定的？绑定后的状态会改变为 bound 吗？
 2. 按照我的理解 driver 插件应该安装到每个node上，那么适合使用 daemonSet 去部署插件和 Driver Registerar sidecar。而 External Provisioner&#47;Attacher 则只需要一份部署就可以。为什么文中建议把三个 External components 都部署为sidecar？</p>2018-10-31</li><br/><li><span>guolisen</span> 👍（0） 💬（0）<p>kubelet为什么会知道 对应的可执行程序叫做nfs(k8s~nfs&#47;nfs)？是在哪里告诉kubelet的？</p>2023-02-15</li><br/><li><span>BobToGo</span> 👍（0） 💬（0）<p>🐮🍺</p>2021-11-12</li><br/><li><span>chenkai-1</span> 👍（0） 💬（0）<p>1.register(包含调用identity获取插件信息）：将插件注册到kubelet里面，将可执行文件放在插件目录下
-2.External Provisioner：处理 Provision 的阶段。External Provisioner 监听APIServer 里的 PVC 对象。当一个 PVC 被创建时，调用 CSI Controller 的 CreateVolume 方法，创建PV。
-3.External Attacher ：处理“Attach 阶段”。监听了 APIServer 里 VolumeAttachment 对象的变化。一旦出现了 VolumeAttachment 对象，External Attacher 就会调用 CSI Controller 服务的 ControllerPublish 方法，完成它所对应的 Volume 的 Attach 阶段。
-4.mount：kubelet 的 VolumeManagerReconciler 控制循环检查到它需要执行 Mount 操作的时候，会通过 pkg&#47;volume&#47;csi 包，直接调用 CSI Node 服务完成 Volume 的“Mount 阶段”。
+   2.External Provisioner：处理 Provision 的阶段。External Provisioner 监听APIServer 里的 PVC 对象。当一个 PVC 被创建时，调用 CSI Controller 的 CreateVolume 方法，创建PV。
+   3.External Attacher ：处理“Attach 阶段”。监听了 APIServer 里 VolumeAttachment 对象的变化。一旦出现了 VolumeAttachment 对象，External Attacher 就会调用 CSI Controller 服务的 ControllerPublish 方法，完成它所对应的 Volume 的 Attach 阶段。
+   4.mount：kubelet 的 VolumeManagerReconciler 控制循环检查到它需要执行 Mount 操作的时候，会通过 pkg&#47;volume&#47;csi 包，直接调用 CSI Node 服务完成 Volume 的“Mount 阶段”。
+
 </p>2021-07-01</li><br/><li><span>惘 闻</span> 👍（0） 💬（1）<p>脑壳疼... 没用过docker 没用过k8s,操作系统知识不扎实,导致我看到这里好累啊,还是基础差</p>2021-02-05</li><br/><li><span>左氧佛沙星人</span> 👍（0） 💬（0）<p>思考题，应该参考local path storage provisioner 或者 local volume storage provisioner，需要新增的是，讲创建好的云盘，attach到主机上，这样对吗？</p>2019-10-16</li><br/><li><span>大星星</span> 👍（0） 💬（1）<p>有个问题，请教下，三个external组建为什么要独立出来。这个不需要吧。只要csi 三个服务起来了，自动注册插件。他们三个服务也负责watch api，每当有请求过来，provision attatch.mount动作时候分别找对应服务请求就行。不知道都一个个分出来有必要么？</p>2019-03-15</li><br/>
 </ul>

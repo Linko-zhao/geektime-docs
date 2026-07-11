@@ -67,7 +67,7 @@ OS:
 
 ```json
 {
-  "OS": ["linux", "macOS", "Windows"]
+  "OS": ["linux", "macOS", "Windows"]
 }
 ```
 
@@ -86,10 +86,10 @@ Kubernetes:
 
 ```json
 {
-  "Kubernetes": {
-    "master": 1,
-    "worker": 3
-  }
+  "Kubernetes": {
+    "master": 1,
+    "worker": 3
+  }
 }
 ```
 
@@ -320,9 +320,10 @@ Kubernetes采用YAML作为工作语言是它有别与其他系统的一大特色
 空调是“声明式”的原因是我不知道当前温度是多少，只需要我知道应该开成多少度即可，即我们在操作遥控器之前就知道我们要将空调调成多少度，这是预期值。
 
 2. 使用 --v=9 参数，试着解释一下 YAML 是如何被 kubectl 转换成 HTTP 请求的。
-虽然yaml格式是json的超集，但在k8s中的yaml文件最终都是被转换为json格式字符串放在request body中提交到apiserver的，从`kubectl -v=9`对各种操作的调试中可以看到。
-除此之外，还发现一些有规律的地方，如下：
-可见简单对象（如pod, configmap, secret, serviceaccount等）调用的接口形式如 `&#47;api&#47;&lt;apiVersion&gt;&#47;namespaces&#47;&lt;namespace&gt;&#47;&lt;kinds&gt;[&#47;&lt;name&gt;]`，其中对象类型为复数形式即`kubectl api-resources`中的name字段，修改、删除与查询具体对象时在URL中有`&#47;&lt;name&gt;`部分，其它如创建、查询所有就没有。对于复合对象（简单对象的包装对象，如replicaset, deployment, statefulset, cronjob等）的URL不同的是以`&#47;apis`开头，说明是属于复合型的接口（组合服务）。
+   虽然yaml格式是json的超集，但在k8s中的yaml文件最终都是被转换为json格式字符串放在request body中提交到apiserver的，从`kubectl -v=9`对各种操作的调试中可以看到。
+   除此之外，还发现一些有规律的地方，如下：
+   可见简单对象（如pod, configmap, secret, serviceaccount等）调用的接口形式如 `&#47;api&#47;&lt;apiVersion&gt;&#47;namespaces&#47;&lt;namespace&gt;&#47;&lt;kinds&gt;[&#47;&lt;name&gt;]`，其中对象类型为复数形式即`kubectl api-resources`中的name字段，修改、删除与查询具体对象时在URL中有`&#47;&lt;name&gt;`部分，其它如创建、查询所有就没有。对于复合对象（简单对象的包装对象，如replicaset, deployment, statefulset, cronjob等）的URL不同的是以`&#47;apis`开头，说明是属于复合型的接口（组合服务）。
+
 </p>2022-07-15</li><br/><li><span>陶乐思</span> 👍（9） 💬（2）<p>请问一下老师, —dry-run=client -o yaml生成的YAML默认情况下会将文件保存在哪里啊？没有找到呢…环境：windows+minikube</p>2022-07-15</li><br/><li><span>aoe</span> 👍（8） 💬（1）<p>终于对一头雾水的yaml文件有了一个正确的了解，感谢老师</p>2022-07-21</li><br/><li><span>安迪密恩</span> 👍（5） 💬（1）<p>这门课太棒了，以前接触的杂乱的知识点在学完这一章之后逐渐变得脉络清晰！</p>2022-07-20</li><br/><li><span>郑海成</span> 👍（3） 💬（2）<p>有了刚才 YAML 语言知识“打底”，相信你基本上能够把它看明白，知道它是一个 Pod，要使用 nginx:alpine 镜像创建一个容器，开放端口 80，而其他的部分，就是 Kubernetes 对 API 对象强制的格式要求了。
 ————
 查了一下官方文档，其实不是“开放”，好像是是“说明”容器中暴露的端口是80</p>2022-07-22</li><br/><li><span>aLong</span> 👍（2） 💬（1）<p>首先感谢老师三个技巧。这块配置的内容我确实很头大啊。初学时看书都想跳过去看看后面内容。今天看完老师讲的有点意思啊。尤其是我喜欢那种比喻生动的多。
@@ -332,22 +333,22 @@ Kubernetes采用YAML作为工作语言是它有别与其他系统的一大特色
 yaml文件：文件描述了What，即应用最终要达到的状态。配置文件提供了创建资源的模板，能够重复部署。可以像管理代码一样管理部署。适合正式的、跨环境的、规模化部署。这种方式要求熟悉配置文件的语法，有一定难度。
 另外 kubectl apply不但能够创建Kubernetes资源，也能对资源进行更新，非常方便。
 
-
 空调这种有些需求没办法直接达到预期工作，比如制冷、制热、温度调整。 反观：电视，你想换台就换了，声音控制多少按+ -就行了。 所以空调很多功能更像是声明式。</p>2023-01-06</li><br/><li><span>bruce</span> 👍（2） 💬（2）<p>
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ngx-pod
-  labels:
-    env: demo
-    owner: chrono
+name: ngx-pod
+labels:
+env: demo
+owner: chrono
 
 spec:
-  containers:
-  - image: nginx:alpine
-    name: ngx
-    ports:
-    - containerPort: 80
+containers:
+
+- image: nginx:alpine
+  name: ngx
+  ports:
+  - containerPort: 80
 
 metadata里的name和spec里的name有啥区别？</p>2022-12-20</li><br/><li><span>沃德天·泥维森陌·拉莫帅</span> 👍（2） 💬（1）<p>1. “命令式”是指采用命令式语言编写的程序，这种语言通常会指定程序执行的每一个步骤，并指定具体的操作来完成每一个步骤。
 
@@ -356,7 +357,6 @@ metadata里的name和spec里的name有啥区别？</p>2022-12-20</li><br/><li><s
 例如，如果要编写一个程序来控制空调，那么“命令式”的方法可能是指定每一个步骤，例如打开空调、调整温度、打开风扇等，而“声明式”的方法可能是指定空调最终的状态，例如“调节到25摄氏度”。
 
 因此，空调可以被认为是“声明式”的，因为它通过声明最终的状态来控制空调的工作方式，而不是通过指定具体的操作。
-
 
 2. 当 kubectl 读取 YAML 文件时，它会将 YAML 文件转换成对应的 Kubernetes API 对象。比如，一个 YAML 文件可能会声明一个 pod 对象，而 kubectl 可以将这个 pod对象转换成 Kubernetes API 所需的 JSON 格式。
 
@@ -376,7 +376,7 @@ kubectl 会使用一个 HTTP 客户端库（比如 http.Client）来将这个 JS
 yaml错误:
 TypeError: Cannot read properties of undefined (reading &#39;split&#39;)
 
-感觉像是缩进的问题</p>2022-07-21</li><br/><li><span>赤色闪电</span> 👍（2） 💬（1）<p>“声明式”：空调遥控器操控空调设定想要的温度和模式即可。“命令式”：电视遥控器操控电视，按一个钮换一个台。</p>2022-07-15</li><br/><li><span>Geek_adb513</span> 👍（1） 💬（1）<p>yaml 以前都是直接抄现成的用法，只知道必须这么用，这里把为什么讲解的很到位，的确让思绪一下明朗了，三要素 和 自定义</p>2023-01-02</li><br/><li><span>Liang Li</span> 👍（1） 💬（1）<p>一个好的老师能在一堆复杂的网状知识中，找到非常清晰的线性脉络，并把这些知识给串联表达起来，难得的好文章。</p>2022-12-15</li><br/><li><span>云韵</span> 👍（1） 💬（6）<p>老师 我执行了这些命令  （环境是 mac m1 直接在本机上运行的 docker minikube）
+感觉像是缩进的问题</p>2022-07-21</li><br/><li><span>赤色闪电</span> 👍（2） 💬（1）<p>“声明式”：空调遥控器操控空调设定想要的温度和模式即可。“命令式”：电视遥控器操控电视，按一个钮换一个台。</p>2022-07-15</li><br/><li><span>Geek_adb513</span> 👍（1） 💬（1）<p>yaml 以前都是直接抄现成的用法，只知道必须这么用，这里把为什么讲解的很到位，的确让思绪一下明朗了，三要素 和 自定义</p>2023-01-02</li><br/><li><span>Liang Li</span> 👍（1） 💬（1）<p>一个好的老师能在一堆复杂的网状知识中，找到非常清晰的线性脉络，并把这些知识给串联表达起来，难得的好文章。</p>2022-12-15</li><br/><li><span>云韵</span> 👍（1） 💬（6）<p>老师 我执行了这些命令 （环境是 mac m1 直接在本机上运行的 docker minikube）
 export out=&quot;--dry-run=client -o yaml&quot;
 kubectl run ngx --image=nginx:alpine $out
 但是报这个错 error: Invalid dry-run value (client -o yaml). Must be &quot;none&quot;, &quot;server&quot;, or &quot;client&quot;.

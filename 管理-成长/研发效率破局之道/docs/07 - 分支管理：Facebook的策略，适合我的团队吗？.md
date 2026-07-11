@@ -31,7 +31,7 @@ git rebase origin/master
 第二步，本地开发，然后执行
 
 ```
-git add 
+git add
 git commit
 ```
 
@@ -156,7 +156,7 @@ Facebook使用主干分支模式的好处，主要可以总结为以下两点：
 事实上，Git本身就提供了一个命令git bisect支持折半查找。比如，在刚才的例子中，如果运行测试的命令行是 runtest.sh。那么，我们可以使用下面的命令来自动化这个定位流程：
 
 ```
-> git checkout master # 使用最新提交的代码 
+> git checkout master # 使用最新提交的代码
 > git bisect start
 > git bisect bad HEAD # 告知 git bisect，当前commit是有问题的提交
 > git bisect good C100 # 告知 git bisect，C100是没有问题的提交

@@ -199,62 +199,64 @@ select count(*) as c,role_main,avg(hp_max) as v  from heros where hp_max &gt; 60
 
 在MySQL里会报错：[Err] 1054 - Unknown column &#39;num&#39; in &#39;order clause&#39;
 
-要改为：SELECT COUNT(*) as num, role_main, role_assist FROM heros GROUP BY role_main, role_assist ORDER BY num DESC;</p>2019-06-28</li><br/><li><span>mickey</span> 👍（3） 💬（4）<p>&#47;*
+要改为：SELECT COUNT(_) as num, role_main, role_assist FROM heros GROUP BY role_main, role_assist ORDER BY num DESC;</p>2019-06-28</li><br/><li><span>mickey</span> 👍（3） 💬（4）<p>&#47;_
 1.筛选最大生命值大于6000的英雄，按照主要定位进行分组，选择分组英雄数量大于5的分组，
 按照分组英雄数从高到低进行排序，并显示每个分组的英雄数量、主要定位和平均最大生命值。
-*&#47;
-SELECT count(*) as num, role_main, AVG(hp_max)
-FROM heros 
-WHERE hp_max &gt; 6000 
-GROUP BY role_main 
-HAVING num &gt; 5 
-ORDER BY num DESC 
+_&#47;
+SELECT count(_) as num, role_main, AVG(hp_max)
+FROM heros
+WHERE hp_max &gt; 6000
+GROUP BY role_main
+HAVING num &gt; 5
+ORDER BY num DESC
 
 num role_main AVG(hp_max)
 ------------------------------------
-17	战士	7028
-10	坦克	8312.4
-6	法师	6417
+
+17 战士 7028
+10 坦克 8312.4
+6 法师 6417
 
 &#47;*
 2.筛选最大生命值与最大法力值之和大于7000的英雄，按照攻击范围来进行分组，
 显示分组的英雄数量，以及分组英雄的最大生命值与法力值之和的平均值、最大值和最小值，
 并按照分组英雄数从高到低进行排序，其中聚集函数的结果包括小数点后两位。
-*&#47;
-SELECT count(*) as num, ROUND(AVG(hp_max + mp_max), 2), MAX(hp_max + mp_max), MIN(hp_max + mp_max)
-FROM heros 
-WHERE hp_max + mp_max &gt; 7000 
+_&#47;
+SELECT count(_) as num, ROUND(AVG(hp_max + mp_max), 2), MAX(hp_max + mp_max), MIN(hp_max + mp_max)
+FROM heros
+WHERE hp_max + mp_max &gt; 7000
 GROUP BY attack_range
-HAVING num &gt; 5 
-ORDER BY num DESC 
+HAVING num &gt; 5
+ORDER BY num DESC
 
 num, ROUND(AVG(hp_max + mp_max), 2), MAX(hp_max + mp_max), MIN(hp_max + mp_max)
 ------------------------------------------------------------------------
-62	8272.53	11036	7025</p>2019-06-28</li><br/><li><span>圆子蛋</span> 👍（3） 💬（1）<p>1.SELECT COUNT(*) as num,role_main,AVG(hp_max) FROM heros WHERE hp_max &gt; 6000 GROUP BY role_main HAVING num&gt;5 ORDER BY num DESC; 
-2.SELECT COUNT(*) as num,ROUND(MAX(hp_max+mp_max),2),ROUND(AVG(hp_max+mp_max),2),ROUND(MIN(hp_max+mp_max),2) FROM heros WHERE (hp_max+mp_max) &gt; 7000 GROUP BY attack_range ORDER BY num DESC;
-老师在“如何对数据进行分组，并进行聚集统计”的第三个例子里，COUNT(*) 后面没有加 as num，但是 ORDER BY 里直接出现了 num？</p>2019-06-28</li><br/><li><span>supermouse</span> 👍（2） 💬（1）<p>思考题 1：
-SELECT 
-    COUNT(*) AS num, role_main, AVG(hp_max)
+
+62 8272.53 11036 7025</p>2019-06-28</li><br/><li><span>圆子蛋</span> 👍（3） 💬（1）<p>1.SELECT COUNT(_) as num,role_main,AVG(hp_max) FROM heros WHERE hp_max &gt; 6000 GROUP BY role_main HAVING num&gt;5 ORDER BY num DESC;
+2.SELECT COUNT(_) as num,ROUND(MAX(hp_max+mp_max),2),ROUND(AVG(hp_max+mp_max),2),ROUND(MIN(hp_max+mp_max),2) FROM heros WHERE (hp_max+mp_max) &gt; 7000 GROUP BY attack_range ORDER BY num DESC;
+老师在“如何对数据进行分组，并进行聚集统计”的第三个例子里，COUNT(_) 后面没有加 as num，但是 ORDER BY 里直接出现了 num？</p>2019-06-28</li><br/><li><span>supermouse</span> 👍（2） 💬（1）<p>思考题 1：
+SELECT
+COUNT(_) AS num, role_main, AVG(hp_max)
 FROM
-    heros
+heros
 WHERE
-    hp_max &gt; 6000
+hp_max &gt; 6000
 GROUP BY role_main
 HAVING num &gt; 5
 ORDER BY num DESC;
 思考题 2：
-SELECT 
-    COUNT(*) AS num,
-    attack_range,
-    ROUND(AVG(hp_max + mp_max), 2),
-    ROUND(MAX(hp_max + mp_max), 2),
-    ROUND(MIN(hp_max + mp_max), 2)
+SELECT
+COUNT(_) AS num,
+attack_range,
+ROUND(AVG(hp_max + mp_max), 2),
+ROUND(MAX(hp_max + mp_max), 2),
+ROUND(MIN(hp_max + mp_max), 2)
 FROM
-    heros
+heros
 WHERE
-    hp_max + mp_max &gt; 7000
+hp_max + mp_max &gt; 7000
 GROUP BY attack_range
-ORDER BY num DESC;</p>2019-06-29</li><br/><li><span>太精</span> 👍（2） 💬（1）<p>SELECT COUNT(*) AS num, role_main, AVG(hp_max)  AS avg_max FROM heros WHERE hp_max &gt; 6000 GROUP BY role_main HAVING num &gt; 5 ORDER BY num DESC;
+ORDER BY num DESC;</p>2019-06-29</li><br/><li><span>太精</span> 👍（2） 💬（1）<p>SELECT COUNT(_) AS num, role_main, AVG(hp_max) AS avg_max FROM heros WHERE hp_max &gt; 6000 GROUP BY role_main HAVING num &gt; 5 ORDER BY num DESC;
 SELECT ROUND((COUNT(*)),2) AS num, ROUND((AVG(hp_max+mp_max)),2) AS heros_avg, ROUND((MAX(hp_max+mp_max)),2) AS max_avg, ROUND((MIN(hp_max+mp_max)),2) AS min_avg FROM heros WHERE (hp_max+mp_max) &gt; 7000 GROUP BY attack_range ORDER BY num desc;
 </p>2019-06-28</li><br/><li><span>Geek_157522</span> 👍（1） 💬（1）<p>筛选最大生命值大于 6000 的英雄，按照主要定位进行分组，选择分组英雄数量大于 5 的分组，按照分组英雄数从高到低进行排序，并显示每个分组的英雄数量、主要定位和平均最大生命值。
 SELECT COUNT(*) as num, role_main, AVG(hp_max)FROM heros WHERE hp_max&gt;6000 GROUP BY role_main HAVING num&gt;5  ORDER BY  num DESC

@@ -48,7 +48,7 @@ public class UserOrdersResource {
         return Response.created(Link.of("/users/{uid}/orders/{oid}").expand(user.getId().value(), order.getId().value()).toUri()).build();
     }
 }
-    
+
 public class UserResource {
     private User user;
     public UserResource(User user) {
@@ -64,7 +64,7 @@ public class UserResource {
         return context.initResource(new UserOrdersResource(user));
     }
 }
-    
+
 @Path("/users")
 public class UsersResource {
     @Context

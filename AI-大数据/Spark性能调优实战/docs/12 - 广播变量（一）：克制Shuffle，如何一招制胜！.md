@@ -113,10 +113,10 @@ Shuffle完成之后，**第二步就是在同一个Executors内，Reduce task就
 
 ```
 import org.apache.spark.sql.functions.broadcast
- 
+
 val transactionsDF: DataFrame = _
 val userDF: DataFrame = _
- 
+
 val bcUserDF = broadcast(userDF)
 transactionsDF.join(bcUserDF, Seq(“userID”), “inner”)
 
@@ -149,53 +149,55 @@ Driver从所有Executors收集userDF所属的所有数据分片，在本地汇�
 
 2.当两个需要join的数据集都很大时，使用broadcast join需要将一个很大的数据集进行网络分发多次，已经远超出了shuffle join需要传输的数据</p>2021-04-09</li><br/><li><span>Geek_d794f8</span> 👍（21） 💬（3）<p>磊哥，为什么我测试了广播rdd不行：
 我写了个demo，广播rdd是报错的，代码如下：
-    val userFile: String =&quot;spark-basic&#47;File&#47;csv_data.csv&quot;
-    val df: DataFrame = spark.read.csv(userFile)
-    val rdd = spark.sparkContext.textFile(&quot;userFile&quot;)
-    val bc_df: Broadcast[RDD[String]] = spark.sparkContext.broadcast(rdd)
-    bc_df.value.collect().foreach(println)
+val userFile: String =&quot;spark-basic&#47;File&#47;csv_data.csv&quot;
+val df: DataFrame = spark.read.csv(userFile)
+val rdd = spark.sparkContext.textFile(&quot;userFile&quot;)
+val bc_df: Broadcast[RDD[String]] = spark.sparkContext.broadcast(rdd)
+bc_df.value.collect().foreach(println)
 
 报错如下：Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: requirement failed: Can not directly broadcast RDDs; instead, call collect() and broadcast the result.
 
 然后看了一下源码：SparkContext中的broadcast方法：
 
 def broadcast[T: ClassTag](value: T): Broadcast[T] = {
-    assertNotStopped()
-    require(!classOf[RDD[_]].isAssignableFrom(classTag[T].runtimeClass),
-      &quot;Can not directly broadcast RDDs; instead, call collect() and broadcast the result.&quot;)
-    val bc = env.broadcastManager.newBroadcast[T](value, isLocal)
-    val callSite = getCallSite
-    logInfo(&quot;Created broadcast &quot; + bc.id + &quot; from &quot; + callSite.shortForm)
-    cleaner.foreach(_.registerBroadcastForCleanup(bc))
-    bc
-  }
+assertNotStopped()
+require(!classOf[RDD[_]].isAssignableFrom(classTag[T].runtimeClass),
+&quot;Can not directly broadcast RDDs; instead, call collect() and broadcast the result.&quot;)
+val bc = env.broadcastManager.newBroadcast[T](value, isLocal)
+val callSite = getCallSite
+logInfo(&quot;Created broadcast &quot; + bc.id + &quot; from &quot; + callSite.shortForm)
+cleaner.foreach(_.registerBroadcastForCleanup(bc))
+bc
+}
 
 第4行的代码显示的Can not directly broadcast RDDs
 是不是我哪里不太对？</p>2021-05-12</li><br/><li><span>Jack</span> 👍（6） 💬（8）<p>老师，对于第1题，看了下spark的源码，目前Broadcast只有一个实现类TorrentBroadcast，看代码的注释，这个类通过使用类似Bit-torrent协议的方法解决了Driver成为瓶颈的问题。目前Spark还会存在广播变量的数据太大造成Driver成为瓶颈的问题吗？
 
 &#47;**
- * A BitTorrent-like implementation of [[org.apache.spark.broadcast.Broadcast]].
- *
- * The mechanism is as follows:
- *
- * The driver divides the serialized object into small chunks and
- * stores those chunks in the BlockManager of the driver.
- *
- * On each executor, the executor first attempts to fetch the object from its BlockManager. If
- * it does not exist, it then uses remote fetches to fetch the small chunks from the driver and&#47;or
- * other executors if available. Once it gets the chunks, it puts the chunks in its own
- * BlockManager, ready for other executors to fetch from.
- *
- * This prevents the driver from being the bottleneck in sending out multiple copies of the
- * broadcast data (one per executor).
- *
- * When initialized, TorrentBroadcast objects read SparkEnv.get.conf.
- *
- * @param obj object to broadcast
- * @param id A unique identifier for the broadcast variable.
- *&#47;
-private[spark] class TorrentBroadcast[T: ClassTag](obj: T, id: Long)
+
+- A BitTorrent-like implementation of [[org.apache.spark.broadcast.Broadcast]].
+-
+- The mechanism is as follows:
+-
+- The driver divides the serialized object into small chunks and
+- stores those chunks in the BlockManager of the driver.
+-
+- On each executor, the executor first attempts to fetch the object from its BlockManager. If
+- it does not exist, it then uses remote fetches to fetch the small chunks from the driver and&#47;or
+- other executors if available. Once it gets the chunks, it puts the chunks in its own
+- BlockManager, ready for other executors to fetch from.
+-
+- This prevents the driver from being the bottleneck in sending out multiple copies of the
+- broadcast data (one per executor).
+-
+- When initialized, TorrentBroadcast objects read SparkEnv.get.conf.
+-
+- @param obj object to broadcast
+- @param id A unique identifier for the broadcast variable.
+  *&#47;
+  private[spark] class TorrentBroadcast[T: ClassTag](obj: T, id: Long)
   extends Broadcast[T](id) with Logging with Serializable {
+
 </p>2021-04-09</li><br/><li><span>冯杰</span> 👍（5） 💬（1）<p>老师你好，关于broacast join，遇到了一个特别的问题请教一下。
 1、Fact(订单) 和 DIM(门店) 关联。  其中门店表量级为 3w(条数) * 10个(字段)，采用Parquet存储在Hive上，大小1M左右。
 2、运行参数，并行度 = 200，Executor = 50，CPU核数 = 2，内存&#47;Executor = 6G，Drvier内存=2G。 PS：没有特别配置Broadcast 相关参数

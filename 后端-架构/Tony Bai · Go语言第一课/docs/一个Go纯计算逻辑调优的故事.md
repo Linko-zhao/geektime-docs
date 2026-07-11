@@ -15,7 +15,7 @@
 下面是此项测试的原作者给出的Go测试程序：
 
 ```plain
-// why-go-sucks/billion-loops/go/code.go 
+// why-go-sucks/billion-loops/go/code.go
 
 
 package main
@@ -126,7 +126,7 @@ COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/4.8.5/lto-wrapper
 目标：x86_64-redhat-linux
 配置为：../configure --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-bootstrap --enable-shared --enable-threads=posix --enable-checking=release --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-linker-hash-style=gnu --enable-languages=c,c++,objc,obj-c++,java,fortran,ada,go,lto --enable-plugin --enable-initfini-array --disable-libgcj --with-isl=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/isl-install --with-cloog=/builddir/build/BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/cloog-install --enable-gnu-indirect-function --with-tune=generic --with-arch_32=x86-64 --build=x86_64-redhat-linux
 线程模型：posix
-gcc 版本 4.8.5 20150623 (Red Hat 4.8.5-44) (GCC) 
+gcc 版本 4.8.5 20150623 (Red Hat 4.8.5-44) (GCC)
 ```
 
 测试步骤与结果如下：
@@ -176,11 +176,11 @@ sys    0m0.027s
 我们可以从测试结果中看到（基于real时间）：采用-O3优化的C代码最快，Java落后一个身位，**Go则比C慢了25%，比Java慢了21%**。
 
 > 这里要补充说明的是，time命令的输出结果通常包含三个主要部分：real、user和sys。
-> 
+>
 > - real是从命令开始执行到结束所经过的实际时间（墙钟时间），我们以这个指标为准。
 > - user是程序在**用户模式下执行所消耗的CPU时间**。
 > - sys则是程序**在内核模式下执行所消耗的CPU时间（系统调用）**。
-> 
+>
 > 如果总时间（real）略低于用户时间（user），表明程序可能在某些时刻被调度或等待，而不是持续占用CPU。这种情况可能是由于输入输出操作、等待资源等原因。如果real时间显著小于user时间，这种情况通常发生在并发程序中，其中多个线程或进程在不同的时间段执行，导致总的用户CPU时间远大于实际的墙钟时间。sys时间保持在较低数值，说明系统调用的频率较低，程序主要是执行计算而非进行大量的系统交互。
 
 上述三种语言的代码都是常规代码，不是最优化的代码。我们还可以优化Go代码，让它的性能超过Java甚至是C，但不能忘了“同等条件”这个前提。Go采用的优化方法，其他语言（C、Java）也可以采用。
@@ -199,7 +199,7 @@ sys    0m0.027s
 下面是修改之后的Go代码：
 
 ```plain
-// why-go-sucks/billion-loops/go/code_optimize.go 
+// why-go-sucks/billion-loops/go/code_optimize.go
 
 
 package main
@@ -256,7 +256,7 @@ sys    0m0.011s
 如果我们手工在Go中实施这一优化，能达到什么效果呢？我们改一下最初版本的Go代码（code.go），新代码如下：
 
 ```plain
-// why-go-sucks/billion-loops/go/code_local_var.go 
+// why-go-sucks/billion-loops/go/code_local_var.go
 
 
 package main
@@ -293,7 +293,7 @@ func main() {
 然后我们编译并运行测试，结果如下：
 
 ```plain
-$go build -o code_local_var code_local_var.go 
+$go build -o code_local_var code_local_var.go
 $time ./code_local_var 10
 459169
 

@@ -17,7 +17,7 @@ var title = <h1 className="title">页面标题</h1>;
 但是像上面这样的标签，我们知道JS引擎是没办法理解的，那它如何被运行呢？这时，我们可以通过我们在上一讲提到的 Babel 把 JSX 的表达**先转译成标准的 JavaScript，然后才会给到浏览器做编译和执行**。Babel 会把上面变量声明赋值中的 JSX 表达，转换成一个符合 JavaScript 规范的 createElement() 函数，来进行函数的调用。
 
 ```javascript
-var title = React.createElement("h1", {className: 'title'}, "页面标题");
+var title = React.createElement("h1", { className: "title" }, "页面标题");
 ```
 
 因为通过 JSX 来创建的 React 元素和 HTML 的标签元素类似，所以 JSX 生成的 React 元素表达也可以带有属性。当一个元素有一个或多个属性的时候，会作为 createElement() 的第二个参数传入，参数的值是一个带有元素相关属性的对象。
@@ -28,9 +28,9 @@ var image = <img src="logo.png" alt="company logo" />;
 
 // 转译后
 var image = React.createElement("img", {
-              src: "logo.png",
-              alt: "company logo"
-            });
+  src: "logo.png",
+  alt: "company logo",
+});
 ```
 
 像 HTML 的元素一样，除了字符串，React 的元素中也可以有子元素。React 元素也可以通过层级的嵌套，来创建 DOM 树。在转译的过程中，上面的这些 JSX 嵌套的 DOM 子元素，将作为 createElement() 调用的第三个参数及以后的参数来传递。
@@ -46,10 +46,10 @@ var sidebar = (
 
 // 转译后
 var sidebar = React.createElement(
-    "div", { className: "sidebar"},  
-    React.createElement("h1", className: "menu"},  
-                        "菜单"),    
-    React.createElement("p", className: "text"},   
+    "div", { className: "sidebar"},
+    React.createElement("h1", className: "menu"},
+                        "菜单"),
+    React.createElement("p", className: "text"},
                         "菜单内容"));
 ```
 
@@ -91,21 +91,24 @@ root.render(element);
 React 元素的一个重要特性是可以在 JSX 表达式中嵌入标准的 JavaScript 表达式。你可以使用**大括号**来嵌入标准的 JavaScript 表达式。大括号内的脚本，会在转译的环节被解释为标准的 JavaScript。React 元素中的嵌套表达式可以作为属性值和子元素。下面就是一个例子：
 
 ```javascript
-function article(className, title, content, linebreak=true) {
+function article(className, title, content, linebreak = true) {
   return (
     <div className={className}>
       <h1>{title}</h1>
-      { linebreak && <br /> }
+      {linebreak && <br />}
       <p>{content}</p>
     </div>
   );
 }
 
-function article(className, title, content, subtitle=true) {
-  return React.createElement("div", { className: className },
-                             React.createElement("h1", null, title),
-                             subtitle && React.createElement("br", null),
-                             React.createElement("p", null, content));
+function article(className, title, content, subtitle = true) {
+  return React.createElement(
+    "div",
+    { className: className },
+    React.createElement("h1", null, title),
+    subtitle && React.createElement("br", null),
+    React.createElement("p", null, content),
+  );
 }
 ```
 
@@ -118,9 +121,11 @@ function article(className, title, content, subtitle=true) {
 ```javascript
 function list(items, callback) {
   return (
-    <ul style={ {padding:10, border:"solid red 4px"} }>
-      {items.map((item,index) => {
-        <li onClick={() => callback(index)} key={index}>{item}</li>
+    <ul style={{ padding: 10, border: "solid red 4px" }}>
+      {items.map((item, index) => {
+        <li onClick={() => callback(index)} key={index}>
+          {item}
+        </li>;
       })}
     </ul>
   );
@@ -140,9 +145,9 @@ function list(items, callback) {
       React.createElement(
         "li",
         { onClick: () => callback(index), key: index },
-        item
-      )
-    )
+        item,
+      ),
+    ),
   );
 }
 ```
@@ -162,17 +167,17 @@ function Article(props) {
   return (
     <div>
       <h1>{props.title}</h1>
-      { props.linebreak && <br /> }
+      {props.linebreak && <br />}
       <p>{props.content}</p>
     </div>
   );
 }
 
-function article(className, title, content, linebreak=true) {
+function article(className, title, content, linebreak = true) {
   return (
     <div className={className}>
       <h1>{title}</h1>
-      { linebreak && <br /> }
+      {linebreak && <br />}
       <p>{content}</p>
     </div>
   );
@@ -182,7 +187,7 @@ function article(className, title, content, linebreak=true) {
 这个新的 Article() 函数很像以前的 article() 函数。但它的名称以大写字母开头，并且只有一个对象作为参数。这可以使得它成为一个 React 的组件，这就意味着它可以用来代替 JSX 表达式中标准的 HTML 标记：
 
 ```javascript
-var article = <Article title="文章标题" content="文章内容"/>;
+var article = <Article title="文章标题" content="文章内容" />;
 ```
 
 **这个 ＜Article/＞ 元素在转译后如下：**
@@ -190,7 +195,7 @@ var article = <Article title="文章标题" content="文章内容"/>;
 ```javascript
 var article = React.createElement(Article, {
   title: "文章标题",
-  content: "文章内容"
+  content: "文章内容",
 });
 ```
 
@@ -199,16 +204,15 @@ var article = React.createElement(Article, {
 另外，如果我们的一个模块中有多个组件的话，也可以用 **dot notation** 的方式，来表达模块中的组件。
 
 ```javascript
-import React from 'react';
+import React from "react";
 var MyComponents = {
   Calendar: function Calendar(props) {
     return <div>一个{props.color}颜色的日历.</div>;
-  }
-}
+  },
+};
 function GreenCalendar() {
   return <MyComponents.DatePicker color="绿" />;
 }
-
 ```
 
 JSX 中对象表达式的另一个用途是使用对象扩展运算符一次指定多个属性。如果你编写了一组带有可能被重用的公共属性的 JSX 表达式，则可以通过将属性抽象定义为一个属性对象，并将其“扩展”到 JSX 元素中，来简化表达式。
@@ -216,16 +220,17 @@ JSX 中对象表达式的另一个用途是使用对象扩展运算符一次指�
 ```javascript
 var greeting = <div firstName="三" lastName="张" />;
 
-var props = {firstName: '三', lastName: '张'};
-var greeting = <div className = "greeting" {...props} />;
+var props = { firstName: "三", lastName: "张" };
+var greeting = <div className="greeting" {...props} />;
 ```
 
 Babel 会将其编译为一个使用 \_extends() 的函数，该函数将 className 属性与 props 对象中包含的属性相结合。
 
 ```javascript
-var greeting = React.createElement("div",
-                                 _extends({className: "greeting"}, props)
-                                );
+var greeting = React.createElement(
+  "div",
+  _extends({ className: "greeting" }, props),
+);
 ```
 
 ## 总结

@@ -53,7 +53,7 @@ def VideoList():
     return 'VideoList'
 
 @app.route('/VideoDetail')
-def VideoDetail():  
+def VideoDetail():
 @app.route('/')
 def admin_home():
     return 'admin_home'
@@ -97,10 +97,10 @@ def VideoList():
 @app.route('/VideoDetail')
 def VideoDetail():
     return 'VideoDetail'
-    
+
 if __name__=='__main__':
     app.run()
-    
+
 
 //  admin.py文件，进行模块化分别管理
 @app.route('/')
@@ -237,7 +237,7 @@ app.register_blueprint(admin,url_prefix='/admin')
 
 接下来我们来尝试实操一下怎么搭建蓝图，帮助你更全面地掌握蓝图。话不多说，我们按步骤分解一下。
 
-第一步，在项目的app文件之下创建一个index package。\_*init*\_.py文件之下的代码如下所示。
+第一步，在项目的app文件之下创建一个index package。\__init_\_.py文件之下的代码如下所示。
 
 ```plain
 app的__init__.py文件
@@ -342,7 +342,7 @@ class Redprint:
 
 ### 代码实操环节
 
-**第一步，我们需要在app/api/lib目录下创建一个红图类的包文件，将其命名为redprint**。 \_*init*\_.py文件内容放的就是红图的类，因为我们之后要调用它，代码如下。
+**第一步，我们需要在app/api/lib目录下创建一个红图类的包文件，将其命名为redprint**。 \__init_\_.py文件内容放的就是红图的类，因为我们之后要调用它，代码如下。
 
 ```plain
 redprint/__init__.py文件：
@@ -408,7 +408,7 @@ api = Redprint('user')
 def user_index():
   return 'user_index'
 --------------------------------------------------------------------
-  
+
 admin.py文件
 from app.lib.redprint import Redprint
 
@@ -419,7 +419,7 @@ api = Redprint('admin')
 @api.route('/')
 def admin_index():
   return 'admin _index'
-  
+
 ```
 
 **第四步，**将我们的红图对象注册在蓝图上。
@@ -434,7 +434,7 @@ from app.v1 improt user,admin
 def creat_blueprint_v1():
   bp_v1 = Blueprint('v1',__name__)
   //将红图对象使用register方法注册到蓝图上
-  user.api.register(bp_v1, url_prefix='/user') //使用url_prefix指定前缀 
+  user.api.register(bp_v1, url_prefix='/user') //使用url_prefix指定前缀
   admin.api.register(bp_v1, url_prefix='/admin')
   return bp_v1
 ```

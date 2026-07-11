@@ -73,18 +73,18 @@ wget https://atp-modelzoo-sh.oss-cn-shanghai.aliyuncs.com/release/llama_factory/
 
 ```json
 [
-    {
-        "conversations": [
-            {
-                "from": "human",
-                "value": "新闻分类：给力！中国两次出手，美到手的订单黄了，该国从此只认中国制造！"
-            },
-            {
-                "from": "gpt",
-                "value": "<think>\n首先，我需要分析给出的新闻标题：“给力！中国两次出手，美到手的订单黄了，该国从此只认中国制造！”\n\n接下来，根据标题内容进行分类。标题中提到了中国两次行动导致美国订单出现问题，并且其他国家开始依赖中国制造，说明这涉及国家之间的经济合作和社会影响。\n\n结合新闻种类，考虑到涉及国际贸易和经济合作，最合适的分类是“经济”。所以，这条新闻应该归类到“经济”类别中。\n</think>\n\n经济"
-            }
-        ]
-    }
+  {
+    "conversations": [
+      {
+        "from": "human",
+        "value": "新闻分类：给力！中国两次出手，美到手的订单黄了，该国从此只认中国制造！"
+      },
+      {
+        "from": "gpt",
+        "value": "<think>\n首先，我需要分析给出的新闻标题：“给力！中国两次出手，美到手的订单黄了，该国从此只认中国制造！”\n\n接下来，根据标题内容进行分类。标题中提到了中国两次行动导致美国订单出现问题，并且其他国家开始依赖中国制造，说明这涉及国家之间的经济合作和社会影响。\n\n结合新闻种类，考虑到涉及国际贸易和经济合作，最合适的分类是“经济”。所以，这条新闻应该归类到“经济”类别中。\n</think>\n\n经济"
+      }
+    ]
+  }
 ]
 ```
 
@@ -269,34 +269,38 @@ LLama-Factory 对多种模型训练方法进行了整合，并针对新手提供
 
 1. 周围人都在说unsloth，那这个llama factory和unsloth是竞品吗？各有啥优缺点？
 2. 如果任务是continued pretrain &#47; 继续预训练，而非微调，有没有框架推荐？</p>2025-03-20</li><br/><li><span>samam</span> 👍（3） 💬（1）<p>老师，模型微调怎么才能做到只对特定领域进行调整，而尽量不影响通用能力呢，还是说这种场景不是太注重这个问题，因为本来也只是为了解决特定领域的问题。
-从训练过程来看，我们只是输入了特定领域的数据集，并进行一些训练参数和流程控制。不太理解是如何影响大模型的。</p>2025-04-11</li><br/><li><span>CrazyCodes</span> 👍（1） 💬（1）<p>老师，必须自建才可以微调吗？使用商业API可以吗？</p>2025-04-27</li><br/><li><span>cyz</span> 👍（1） 💬（2）<p>老师好，请教几个问题：
-1. 在私有化大模型的场景下，微调后的模型是应该保存下来重新部署使用微调后的模型么？
-2. 如果使用此课程微调方法进行微调后，是对后续所有用户（apikey）都可以达到一样的效果么？
-3. 如果用户使用已部署后的大模型进行微调，那这个大模型是只对这个apikey生效么，还是对所有存量的apikey达到一样的效果。</p>2025-04-13</li><br/><li><span>ifelse</span> 👍（1） 💬（1）<p>学习打卡</p>2025-04-09</li><br/><li><span>周斌</span> 👍（1） 💬（1）<p>老师好，请问如何准备对话样本呢？对话样本有什么特点呢？用什么工具准备好呢？</p>2025-03-29</li><br/><li><span>Geek_12153f</span> 👍（1） 💬（1）<p>学习这个课程，是需要自己搭建deepseek吗</p>2025-03-19</li><br/><li><span>willmyc</span> 👍（1） 💬（1）<p>完全按照老师的方法和参数复现了一下，predict_rouge-1 的得分只有35分左右，好在结果也是准确的。同其他同学的问题，希望老师能把微调中的参数设置那里能详细讲解一下，谢谢老师！</p>2025-03-19</li><br/><li><span>小手冰凉*^O^*</span> 👍（1） 💬（1）<p>老师好，文中“首先如下图所示，选择数据集，并设置学习率为 5e-6，梯度累积为 2，有利于模型拟合。”，这几个值是依据什么确定的？</p>2025-03-19</li><br/><li><span>kevin</span> 👍（1） 💬（1）<p>你好，请教一下学习率这个参数的设置规则</p>2025-03-19</li><br/><li><span>Tom</span> 👍（1） 💬（3）<p>老师，微调的数据集要怎样调整效果会比较好？如:我要对某复杂的产品手册进行微调实现智能客服，我需要把我的产品手册转换成什么样的格式微调效果才会比较好？</p>2025-03-19</li><br/><li><span>老实人</span> 👍（0） 💬（1）<p>执行文章中的编译命名：docker build -f .&#47;docker&#47;docker-cuda&#47;Dockerfile xxxx
-如下报错，请问啥原因，实验环境是跟文档中一样，在线等！！！
+   从训练过程来看，我们只是输入了特定领域的数据集，并进行一些训练参数和流程控制。不太理解是如何影响大模型的。</p>2025-04-11</li><br/><li><span>CrazyCodes</span> 👍（1） 💬（1）<p>老师，必须自建才可以微调吗？使用商业API可以吗？</p>2025-04-27</li><br/><li><span>cyz</span> 👍（1） 💬（2）<p>老师好，请教几个问题：
+3. 在私有化大模型的场景下，微调后的模型是应该保存下来重新部署使用微调后的模型么？
+4. 如果使用此课程微调方法进行微调后，是对后续所有用户（apikey）都可以达到一样的效果么？
+5. 如果用户使用已部署后的大模型进行微调，那这个大模型是只对这个apikey生效么，还是对所有存量的apikey达到一样的效果。</p>2025-04-13</li><br/><li><span>ifelse</span> 👍（1） 💬（1）<p>学习打卡</p>2025-04-09</li><br/><li><span>周斌</span> 👍（1） 💬（1）<p>老师好，请问如何准备对话样本呢？对话样本有什么特点呢？用什么工具准备好呢？</p>2025-03-29</li><br/><li><span>Geek_12153f</span> 👍（1） 💬（1）<p>学习这个课程，是需要自己搭建deepseek吗</p>2025-03-19</li><br/><li><span>willmyc</span> 👍（1） 💬（1）<p>完全按照老师的方法和参数复现了一下，predict_rouge-1 的得分只有35分左右，好在结果也是准确的。同其他同学的问题，希望老师能把微调中的参数设置那里能详细讲解一下，谢谢老师！</p>2025-03-19</li><br/><li><span>小手冰凉*^O^*</span> 👍（1） 💬（1）<p>老师好，文中“首先如下图所示，选择数据集，并设置学习率为 5e-6，梯度累积为 2，有利于模型拟合。”，这几个值是依据什么确定的？</p>2025-03-19</li><br/><li><span>kevin</span> 👍（1） 💬（1）<p>你好，请教一下学习率这个参数的设置规则</p>2025-03-19</li><br/><li><span>Tom</span> 👍（1） 💬（3）<p>老师，微调的数据集要怎样调整效果会比较好？如:我要对某复杂的产品手册进行微调实现智能客服，我需要把我的产品手册转换成什么样的格式微调效果才会比较好？</p>2025-03-19</li><br/><li><span>老实人</span> 👍（0） 💬（1）<p>执行文章中的编译命名：docker build -f .&#47;docker&#47;docker-cuda&#47;Dockerfile xxxx
+   如下报错，请问啥原因，实验环境是跟文档中一样，在线等！！！
 
- =&gt; ERROR [internal] load metadata for nvcr.io&#47;nvidia&#47;pytorch:24.02-py3                                                                                                                                  0.7s
+=&gt; ERROR [internal] load metadata for nvcr.io&#47;nvidia&#47;pytorch:24.02-py3 0.7s
 ------
- &gt; [internal] load metadata for nvcr.io&#47;nvidia&#47;pytorch:24.02-py3:
+
+&gt; [internal] load metadata for nvcr.io&#47;nvidia&#47;pytorch:24.02-py3:
 ------
+
 Dockerfile:4
 --------------------
-   2 |     # https:&#47;&#47;docs.nvidia.com&#47;deeplearning&#47;frameworks&#47;pytorch-release-notes&#47;index.html
-   3 |     ARG BASE_IMAGE=nvcr.io&#47;nvidia&#47;pytorch:24.02-py3
-   4 | &gt;&gt;&gt; FROM ${BASE_IMAGE}
-   5 |     
-   6 |     # Define environments
+
+2 | # https:&#47;&#47;docs.nvidia.com&#47;deeplearning&#47;frameworks&#47;pytorch-release-notes&#47;index.html
+3 | ARG BASE_IMAGE=nvcr.io&#47;nvidia&#47;pytorch:24.02-py3
+4 | &gt;&gt;&gt; FROM ${BASE_IMAGE}
+5 |  
+6 | # Define environments
 --------------------
+
 ERROR: failed to solve: nvcr.io&#47;nvidia&#47;pytorch:24.02-py3: failed to resolve source metadata for nvcr.io&#47;nvidia&#47;pytorch:24.02-py3: unexpected status from HEAD request to https:&#47;&#47;nvcr.io&#47;v2&#47;nvidia&#47;pytorch&#47;manifests&#47;24.02-py3: 403 Forbidden</p>2025-03-24</li><br/><li><span>b1a2e1u1u</span> 👍（0） 💬（3）<p>老师好，用docker启动完llama-factory并在docker内启动服务后，在web界面上的模型名称找不到DeepSeek-R1-Distill-Qwen-7B这个模型，以下是docker的启动命令，之前使用huggingface-cl已将DeepSeek-R1-Distill-Qwen-7B的模型文件下载至宿主机&#47;root&#47;hf_cache路径下，并挂给了docker内的&#47;root&#47;.cache&#47;huggingface，为啥下拉框没有DeepSeek-R1-Distill-Qwen-7B，您看看是哪还有问题么
 
 docker run -dit --gpus=all \
-    -v &#47;root&#47;hf_cache&#47;:&#47;root&#47;.cache&#47;huggingface \
-    -v &#47;root&#47;data:&#47;app&#47;modeldata&#47;data \
-    -v &#47;root&#47;config:&#47;app&#47;config \
-    -v &#47;root&#47;saves:&#47;app&#47;saves \
-    -v &#47;root&#47;output:&#47;app&#47;output \
-    -p 7860:7860 \
-    -p 8000:8000 \
-    --name llamafactory \
-    llamafactory:v0.9.2</p>2025-03-19</li><br/>
+-v &#47;root&#47;hf_cache&#47;:&#47;root&#47;.cache&#47;huggingface \
+-v &#47;root&#47;data:&#47;app&#47;modeldata&#47;data \
+-v &#47;root&#47;config:&#47;app&#47;config \
+-v &#47;root&#47;saves:&#47;app&#47;saves \
+-v &#47;root&#47;output:&#47;app&#47;output \
+-p 7860:7860 \
+-p 8000:8000 \
+--name llamafactory \
+llamafactory:v0.9.2</p>2025-03-19</li><br/>
 </ul>

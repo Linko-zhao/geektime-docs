@@ -148,7 +148,7 @@ a utral detailed portrait of a beautiful women,
 
 应对手部和脸部的瑕疵，使用了下面的负面提示词:
 
-mutated hands, fused fingers, too many fingers, missing fingers, poorly drawn hands, blurry eyes, blurred iris, blurry face, poorly drawn face, mutation, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, out of frame, multiple faces, long neck, nsfw, 
+mutated hands, fused fingers, too many fingers, missing fingers, poorly drawn hands, blurry eyes, blurred iris, blurry face, poorly drawn face, mutation, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, out of frame, multiple faces, long neck, nsfw,
 
 请大家补充好的想法。</p>2023-07-19</li><br/><li><span>IT蜗壳-Tango</span> 👍（8） 💬（2）<p>介绍两个插件，方便小伙伴们更好的使用webui和提示词
 http:&#47;&#47;gk.link&#47;a&#47;1277p</p>2023-07-19</li><br/><li><span>天敌</span> 👍（5） 💬（1）<p>找到一个还不错的提示词网站

@@ -14,11 +14,11 @@
 
 ```
 func NewRaft(
-        conf *Config, 
-        fsm FSM, 
-        logs LogStore, 
-        stable StableStore, 
-        snaps SnapshotStore, 
+        conf *Config,
+        fsm FSM,
+        logs LogStore,
+        stable StableStore,
+        snaps SnapshotStore,
         trans Transport) (*Raft, error)
 ```
 
@@ -105,7 +105,7 @@ BootstrapCluster()函数只支持一个参数，也就是Raft集群的配置信�
 后续的节点在启动的时候，可以通过向第一个节点发送加入集群的请求，然后加入到集群中。具体来说，先启动的节点（也就是第一个节点）收到请求后，获取对方的地址（指Raft集群内部通信的TCP地址），然后调用AddVoter()把新节点加入到集群就可以了。具体代码如下：
 
 ```
-raftNode.AddVoter(id,  
+raftNode.AddVoter(id,
             addr, prevIndex, timeout)
 ```
 

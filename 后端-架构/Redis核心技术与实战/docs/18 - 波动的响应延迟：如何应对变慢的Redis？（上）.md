@@ -175,34 +175,33 @@ SCAN是遍历整个实例的所有key，另外Redis针对Hash&#47;Set&#47;Sorted
 但Hash&#47;Set&#47;Sorted Set元素数量比较少时，底层会采用intset&#47;ziplist方式存储，如果以这种方式存储，在执行HSCAN&#47;SSCAN&#47;ZSCAN命令时，会无视count参数，直接把所有元素一次性返回，也就是说，得到的元素数量是会大于count参数的。当底层转为哈希表或跳表存储时，才会真正使用发count参数，最多返回count个元素。</p>2020-09-18</li><br/><li><span>青青子衿</span> 👍（75） 💬（10）<p>当你发现 Redis 性能变慢时，可以通过 Redis 日志，或者是 latency monitor 工具，查询变慢的请求，根据请求对应的具体命令以及官方文档，确认下是否采用了复杂度高的慢查询命令。
 其实这个排除过程才是我们最想学习的，却被作者一带而过了。。。。</p>2020-09-18</li><br/><li><span>Geek_9b08a5</span> 👍（20） 💬（3）<p>第十八课：
 1.作者讲了什么？
-	当redis查询变慢了怎么办，如何排查，如何进行处理？
+当redis查询变慢了怎么办，如何排查，如何进行处理？
 2.作者是怎么把这件事将明白的？
-	1、通过分析redis各组件及硬件，找出问题所在
+1、通过分析redis各组件及硬件，找出问题所在
 3.为了讲明白，作者讲了哪些要点，哪些亮点？
-	1、亮点：通过redis-cli --intrinsic-latency 120可以得知redis的基准线。后续可以根据基准线的响应速度进行判断是否查询慢，这是我之前所不知道的判断方法
-	2、要点：基于自己对 Redis 本身的工作原理的理解，并且结合和它交互的操作系统、存储以及网络等外部系统关键机制，再借助一些辅助工具来定位原因，并制定行之有效的解决方案
-	3、要点：Redis 自身操作特性的影响
-		1. 慢查询命令：命令操作的复杂度有关
-			排查方法：通过 Redis 日志，或者是 latency monitor 工具，查询变慢的请求
-			解决方法：1.用其他高效命令代替。如不要使用keys查询所有key，可以使用scan进行查询，不会阻塞线程
-					  2.当你需要执行排序、交集、并集操作时，可以在客户端完成，而不要用 SORT、SUNION、SINTER 这些命令，以免拖慢 Redis 实例。
-		2.过期 key 操作：redis本身的内存回收机制会造成redis操作阻塞，导致性能变慢（Redis 4.0 后可以用异步线程机制来减少阻塞影响）
-		    导致原因：大批量的key同时间内过期，导致删除过期key的机制一直触发，引起redis操作阻塞
-			解决方法：对key设定过期时间时，添加一个删除的时间随机数，能避免key存在同一时间过期
-	4、要点：redis删除过期key的机制，每100毫秒对一些key进行删除。算法如下
-		1.采样 ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP 个数的 key，并将其中过期的 key 全部删除；
-		2.如果超过 25% 的 key 过期了，则重复删除的过程，直到过期 key 的比例降至 25% 以下。
+1、亮点：通过redis-cli --intrinsic-latency 120可以得知redis的基准线。后续可以根据基准线的响应速度进行判断是否查询慢，这是我之前所不知道的判断方法
+2、要点：基于自己对 Redis 本身的工作原理的理解，并且结合和它交互的操作系统、存储以及网络等外部系统关键机制，再借助一些辅助工具来定位原因，并制定行之有效的解决方案
+3、要点：Redis 自身操作特性的影响1. 慢查询命令：命令操作的复杂度有关
+排查方法：通过 Redis 日志，或者是 latency monitor 工具，查询变慢的请求
+解决方法：1.用其他高效命令代替。如不要使用keys查询所有key，可以使用scan进行查询，不会阻塞线程
+2.当你需要执行排序、交集、并集操作时，可以在客户端完成，而不要用 SORT、SUNION、SINTER 这些命令，以免拖慢 Redis 实例。
+2.过期 key 操作：redis本身的内存回收机制会造成redis操作阻塞，导致性能变慢（Redis 4.0 后可以用异步线程机制来减少阻塞影响）
+导致原因：大批量的key同时间内过期，导致删除过期key的机制一直触发，引起redis操作阻塞
+解决方法：对key设定过期时间时，添加一个删除的时间随机数，能避免key存在同一时间过期
+4、要点：redis删除过期key的机制，每100毫秒对一些key进行删除。算法如下
+1.采样 ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP 个数的 key，并将其中过期的 key 全部删除；
+2.如果超过 25% 的 key 过期了，则重复删除的过程，直到过期 key 的比例降至 25% 以下。
 
 4.对于作者所讲的，我有哪些发散性思考？
 
 5.将来在哪些场景里，我能够使用它？
 
 6.留言区收获
-	1.在生产环境中，可以使用scan替代keys命令（答案来自@kaito 大佬）
-		当scan在Redis在做Rehash时，会不会漏key或返回重复的key？
-			1.不漏keys：Redis在SCAN遍历全局哈希表时，采用*高位进位法*的方式遍历哈希桶（可网上查询图例，一看就明白），当哈希表扩容后，通过这种算法遍历，旧哈希表中的数据映射到新哈希表，依旧会保留原来的先后顺序，这样就可以保证遍历时不会遗漏也不会重复。
-			2.key重复：这个情况主要发生在哈希表缩容。已经遍历过的哈希桶在缩容时，会映射到新哈希表没有遍历到的位置，所以继续遍历就会对同一个key返回多次。处理方法是在客户端直接做重复过滤
-	2.在redis-cluster中，不能使用一次scan在整个集群中获取所有的key，只能通过在每个实例上单独执行scan才可以，再到客户端进行合并	</p>2020-12-30</li><br/><li><span>花儿少年</span> 👍（8） 💬（2）<p>好像说了什么，好像又什么都没说
+1.在生产环境中，可以使用scan替代keys命令（答案来自@kaito 大佬）
+当scan在Redis在做Rehash时，会不会漏key或返回重复的key？
+1.不漏keys：Redis在SCAN遍历全局哈希表时，采用*高位进位法*的方式遍历哈希桶（可网上查询图例，一看就明白），当哈希表扩容后，通过这种算法遍历，旧哈希表中的数据映射到新哈希表，依旧会保留原来的先后顺序，这样就可以保证遍历时不会遗漏也不会重复。
+2.key重复：这个情况主要发生在哈希表缩容。已经遍历过的哈希桶在缩容时，会映射到新哈希表没有遍历到的位置，所以继续遍历就会对同一个key返回多次。处理方法是在客户端直接做重复过滤
+2.在redis-cluster中，不能使用一次scan在整个集群中获取所有的key，只能通过在每个实例上单独执行scan才可以，再到客户端进行合并 </p>2020-12-30</li><br/><li><span>花儿少年</span> 👍（8） 💬（2）<p>好像说了什么，好像又什么都没说
 生产系统中出问题哪有时间整这些，赶紧恢复老板都在后面站着呢
 同时这些命令，keys、集合操作基本都是被禁用的；所以正常情况下，生产系统中Redis变慢一般都是bigkey，同时过期，热点数据等等</p>2021-07-23</li><br/><li><span>test</span> 👍（7） 💬（0）<p>通常线上是不能使用keys的，标准替代方案就是scan。scan不会导致redis变慢，只是如果在scan过程中kv表扩容的话可能会遇到重复key。
 PS：sort的时间复杂度是O(N+M*log(M)) 是因为需要创建一个新的数字，并且用快排去排序。</p>2020-09-18</li><br/><li><span>范闲</span> 👍（5） 💬（0）<p>可以利用scan命令。但是scan可能会返回重复key，使用方做个去重即可。</p>2020-12-03</li><br/><li><span>王益新</span> 👍（4） 💬（5）<p>&quot;默认情况下，Redis 每 100 毫秒会删除一些过期 key，具体的算法如下：采样 ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP 个数的 key，并将其中过期的 key 全部删除，ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP默认是 20，那么，一秒内基本有 200 个过期 key 会被删除。&quot;
@@ -210,7 +209,7 @@ PS：sort的时间复杂度是O(N+M*log(M)) 是因为需要创建一个新的数
 这里的采样是什么意思？获取ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP个过期的key吗？那为什么说是其中过期的key？
 
 如果采样得到的不全是过期的key，一秒内怎么还会有 200 个过期 key 会被删除？</p>2020-10-21</li><br/><li><span>那时刻</span> 👍（3） 💬（0）<p>前段时间时间刚好看了redis里sort的实现，说说的我的理解。sort是基于Bentley &amp; McIlroy&#39;s Engineering a Sort Function。可以认为是partial qsort，只保证指定返回的数据（函数参数里的lrange和rrange）有序即可。在元素个数小于7的时候，采用插入排序，因为元素个数小的时候，快速排序并不高效。元素个数大大于7的时候，采用快速排序，经过这些优化之后，SORT操作复杂度为 O(N+M*log(M))。</p>2020-09-18</li><br/><li><span>William Ning</span> 👍（2） 💬（0）<p>本机【Mac M1】运行情况如下：
-➜  bin .&#47;redis-cli --intrinsic-latency 120
+➜ bin .&#47;redis-cli --intrinsic-latency 120
 Max latency so far: 1 microseconds.
 Max latency so far: 3 microseconds.
 Max latency so far: 5 microseconds.
@@ -234,7 +233,7 @@ Max latency so far: 9128 microseconds.
 
 2686736240 total runs (avg latency: 0.0447 microseconds &#47; 44.66 nanoseconds per run).
 Worst run took 204371x longer than the average latency.
-➜  bin </p>2022-04-01</li><br/><li><span>唐朝首都</span> 👍（2） 💬（8）<p>定时删除是个异步流程吧？为啥会是一个阻塞操作？是要删除的key特别多会导致cpu被大量占用，影响了主线程调用？</p>2020-10-21</li><br/><li><span>勿更改任何信息</span> 👍（1） 💬（0）<p>Redis过期删除是在主线程里吗</p>2022-10-31</li><br/><li><span>escray</span> 👍（1） 💬（0）<p>执行了一下 redis-cli --intrinsic-latency 120 命令，发现结果比较有意思，两次的结果差不多，从一开始 1 ms 的延迟，一直到后来的 8000+ ms。我访问的是 aliyun 上的 Redis。
+➜ bin </p>2022-04-01</li><br/><li><span>唐朝首都</span> 👍（2） 💬（8）<p>定时删除是个异步流程吧？为啥会是一个阻塞操作？是要删除的key特别多会导致cpu被大量占用，影响了主线程调用？</p>2020-10-21</li><br/><li><span>勿更改任何信息</span> 👍（1） 💬（0）<p>Redis过期删除是在主线程里吗</p>2022-10-31</li><br/><li><span>escray</span> 👍（1） 💬（0）<p>执行了一下 redis-cli --intrinsic-latency 120 命令，发现结果比较有意思，两次的结果差不多，从一开始 1 ms 的延迟，一直到后来的 8000+ ms。我访问的是 aliyun 上的 Redis。
 
 ```
 &gt; redis-cli --intrinsic-latency 120

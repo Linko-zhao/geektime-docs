@@ -34,10 +34,10 @@ docker run -dp 8881:11434 --runtime=nvidia --gpus device=1 --name DeepSeek-R1-2 
 我们使用 docker ps 查看一下启动情况：
 
 ```plain
-root@aitest:~# docker ps                                                                                                                                                                                                                                                                                                                               
-CONTAINER ID   IMAGE                                 COMMAND               CREATED          STATUS          PORTS                                           NAMES                                                                                                                                                                                      
-db280e09c715   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   4 seconds ago    Up 3 seconds    0.0.0.0:8881->11434/tcp, [::]:8881->11434/tcp   DeepSeek-R1-2                                                                                                                                                                              
-30ea38431349   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   17 seconds ago   Up 16 seconds   0.0.0.0:8880->11434/tcp, [::]:8880->11434/tcp   DeepSeek-R1-1 
+root@aitest:~# docker ps
+CONTAINER ID   IMAGE                                 COMMAND               CREATED          STATUS          PORTS                                           NAMES
+db280e09c715   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   4 seconds ago    Up 3 seconds    0.0.0.0:8881->11434/tcp, [::]:8881->11434/tcp   DeepSeek-R1-2
+30ea38431349   docker.1ms.run/ollama/ollama:0.5.11   "/bin/ollama serve"   17 seconds ago   Up 16 seconds   0.0.0.0:8880->11434/tcp, [::]:8880->11434/tcp   DeepSeek-R1-1
 ```
 
 可以看到两个实例都启动了。此时，你可以使用上节课的 curl 命令，来分别测试一下两个实例通过 API 方式的对话是否正常。
@@ -243,66 +243,65 @@ $ docker run -d -p 3210:3210 \
 docker run -dp 8880:11434 --name ollama1 --hostname ollama1 -v ~&#47;.ollama&#47;models:&#47;root&#47;.ollama&#47;models docker.1ms.run&#47;ollama&#47;ollama:0.5.11
 docker run -dp 8881:11434 --name ollama2 --hostname ollama2 -v ~&#47;.ollama&#47;models:&#47;root&#47;.ollama&#47;models docker.1ms.run&#47;ollama&#47;ollama:0.5.11
 docker run -d --rm --name higress-ai --hostname higress-ai \
-        -p 8001:8001 -p 8089:8080 -p 8443:8443  \
-        higress-registry.cn-hangzhou.cr.aliyuncs.com&#47;higress&#47;all-in-one:latest
+-p 8001:8001 -p 8089:8080 -p 8443:8443 \
+higress-registry.cn-hangzhou.cr.aliyuncs.com&#47;higress&#47;all-in-one:latest
 
 在 higress-ai 容器中，执行以下命令测试都是正常的
 curl -sv http:&#47;&#47;172.17.0.2:11434&#47;v1&#47;chat&#47;completions \
-    -X POST \
-    -H &#39;Content-Type: application&#47;json&#39; \
-    -d \
+-X POST \
+-H &#39;Content-Type: application&#47;json&#39; \
+-d \
 &#39;{
-  &quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
-  &quot;messages&quot;: [
-    {
-      &quot;role&quot;: &quot;user&quot;,
-      &quot;content&quot;: &quot;你是一个python编程专家，请帮我写一个计算加法的程序&quot;
-    }
-  ]
+&quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
+&quot;messages&quot;: [
+{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;你是一个python编程专家，请帮我写一个计算加法的程序&quot;
+}
+]
 }&#39;
 
 curl -sv http:&#47;&#47;172.17.0.4:11434&#47;v1&#47;chat&#47;completions \
-    -X POST \
-    -H &#39;Content-Type: application&#47;json&#39; \
-    -d \
+-X POST \
+-H &#39;Content-Type: application&#47;json&#39; \
+-d \
 &#39;{
-  &quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
-  &quot;messages&quot;: [
-    {
-      &quot;role&quot;: &quot;user&quot;,
-      &quot;content&quot;: &quot;你是一个python编程专家，请帮我写一个计算加法的程序&quot;
-    }
-  ]
+&quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
+&quot;messages&quot;: [
+{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;你是一个python编程专家，请帮我写一个计算加法的程序&quot;
+}
+]
 }&#39;
 
-
 curl -sv http:&#47;&#47;localhost:8880&#47;v1&#47;chat&#47;completions \
-    -X POST \
-    -H &#39;Content-Type: application&#47;json&#39; \
-    -d \
+-X POST \
+-H &#39;Content-Type: application&#47;json&#39; \
+-d \
 &#39;{
-  &quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
-  &quot;messages&quot;: [
-    {
-      &quot;role&quot;: &quot;user&quot;,
-      &quot;content&quot;: &quot;你是一个python编程专家，请帮我写一个计算加法的程序&quot;
-    }
-  ]
+&quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
+&quot;messages&quot;: [
+{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;你是一个python编程专家，请帮我写一个计算加法的程序&quot;
+}
+]
 }&#39;
 
 最后一步测路由
 curl -sv http:&#47;&#47;localhost:8001&#47;v1&#47;chat&#47;completions \
-    -X POST \
-    -H &#39;Content-Type: application&#47;json&#39; \
-    -d \
+-X POST \
+-H &#39;Content-Type: application&#47;json&#39; \
+-d \
 &#39;{
-  &quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
-  &quot;messages&quot;: [
-    {
-      &quot;role&quot;: &quot;user&quot;,
-      &quot;content&quot;: &quot;Hello!&quot;
-    }
-  ]
+&quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,
+&quot;messages&quot;: [
+{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;Hello!&quot;
+}
+]
 }&#39;
 报错 404
 {&quot;timestamp&quot;:1745311351102,&quot;status&quot;:404,&quot;error&quot;:&quot;Not Found&quot;,&quot;path&quot;:&quot;&#47;v1&#47;chat&#47;completions&quot;}%</p>2025-04-22</li><br/><li><span>Eric</span> 👍（0） 💬（4）<p>老师，我在使用本节课方式部署Higress后，发现监控面板的指标记录只保留了当天的数据，查历史时间范围的指标统计数据都是0，这个要怎样解决？</p>2025-04-13</li><br/>

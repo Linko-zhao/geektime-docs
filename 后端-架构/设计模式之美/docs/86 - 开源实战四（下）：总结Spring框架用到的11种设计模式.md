@@ -14,10 +14,10 @@
 public class DemoController {
     @RequestMapping("/employname")
     public ModelAndView getEmployeeName() {
-        ModelAndView model = new ModelAndView("Greeting");        
-        model.addObject("message", "Dinesh");       
-        return model; 
-    }  
+        ModelAndView model = new ModelAndView("Greeting");
+        model.addObject("message", "Dinesh");
+        return model;
+    }
 }
 
 // 方法二：实现Controller接口 + xml配置文件:配置DemoController与URL的对应关系
@@ -36,7 +36,7 @@ public class DemoServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     this.doPost(req, resp);
   }
-  
+
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     resp.getWriter().write("Hello World.");
@@ -349,7 +349,7 @@ public class TransactionAwareCacheDecorator implements Cache {
       this.targetCache.put(key, value);
     }
   }
-  
+
   public ValueWrapper putIfAbsent(Object key, Object value) {
     return this.targetCache.putIfAbsent(key, value);
   }
@@ -391,16 +391,16 @@ public class TransactionAwareCacheDecorator implements Cache {
 public class Student {
   private long id;
   private String name;
-  
+
   public Student(long id, String name) {
     this.id = id;
     this.name = name;
   }
-  
+
   public void setId(long id) {
     this.id = id;
   }
-  
+
   public void setName(String name) {
     this.name = name;
   }
@@ -424,13 +424,13 @@ public class Student {
 ```
 public class StudentFactory {
   private static Map<Long, Student> students = new HashMap<>();
-  
+
   static{
     map.put(1, new Student(1,"wang"));
     map.put(2, new Student(2,"zheng"));
     map.put(3, new Student(3,"xzg"));
   }
- 
+
   public static Student getStudent(long id){
     return students.get(id);
   }
@@ -438,7 +438,7 @@ public class StudentFactory {
 
 // 通过工厂方法getStudent(2)来创建BeanId="zheng""的Bean
 <bean id="zheng" class="com.xzg.cd.StudentFactory" factory-method="getStudent">
-    <constructor-arg value="2"></constructor-arg>           
+    <constructor-arg value="2"></constructor-arg>
 </bean>
 ```
 
@@ -477,35 +477,34 @@ public class HttpFactoryBean implements FactoryBean&lt;HttpClient&gt;{
 private String host;
 private int port;
 
-
 public HttpClient getObject() throws Exception {
-    return new StdHttpClient.Builder()
-                            .host(host)
-                            .port(port)
-                            .build();
+return new StdHttpClient.Builder()
+.host(host)
+.port(port)
+.build();
 }
 
 public Class&lt;? extends HttpClient&gt; getObjectType() {
-    return StdHttpClient.class;
+return StdHttpClient.class;
 }
 
 public boolean isSingleton() {
-    return true;
+return true;
 }
 
 public void setHost(String host) {
-    this.host = host;
+this.host = host;
 }
 
 public void setPort(int port) {
-    this.port = port;
+this.port = port;
 }}
 添加配置到bean定义：
-&lt;beans ...&gt; 
-   &lt;bean name=&quot;myHttpClient&quot; class=&quot;HttpFactoryBean&quot;&gt;
-       &lt;property name=&quot;port&quot; value=&quot;8080&quot;&#47;&gt;
-       &lt;property name=&quot;host&quot; value=&quot;localhost&quot;&#47;&gt;
-   &lt;&#47;bean&gt;
+&lt;beans ...&gt;
+&lt;bean name=&quot;myHttpClient&quot; class=&quot;HttpFactoryBean&quot;&gt;
+&lt;property name=&quot;port&quot; value=&quot;8080&quot;&#47;&gt;
+&lt;property name=&quot;host&quot; value=&quot;localhost&quot;&#47;&gt;
+&lt;&#47;bean&gt;
 &lt;&#47;beans&gt;
 之后你就可以使用StdHttpClient实例了。</p>2020-05-20</li><br/><li><span>岁月</span> 👍（18） 💬（1）<p>不是做java的看的好累....看源码必须是先知道怎么使用, 然后才看源码, 这样才比较好看懂源码.</p>2020-05-20</li><br/><li><span>饭</span> 👍（15） 💬（2）<p>越看到后面，越觉得最好的模式就是没有模式，用好并理解基本的面向对象设计就成功一半了。</p>2020-05-20</li><br/><li><span>Jie</span> 👍（6） 💬（3）<p>这篇内容密度很大，可以看上两天。
 
@@ -513,8 +512,8 @@ public void setPort(int port) {
 类：
 
 public class Student {
-    private long id;
-    private String name;
+private long id;
+private String name;
 
     private Student(Builder builder) {
         this.id =builder.id;
@@ -544,21 +543,22 @@ public class Student {
             this.name = name;
         }
     }
+
 }
 配置：
 &lt;bean id=&quot;build&quot; class=&quot;cn.gitv.rt.advertisv5.utils.Student.Builder&quot; &gt;
-        &lt;property name=&quot;name&quot; value=&quot;aa&quot;&#47;&gt;
-        &lt;property name=&quot;id&quot; value=&quot;2&quot;&#47;&gt;
-    &lt;&#47;bean&gt;
-    &lt;bean id=&quot;student&quot; class=&quot;cn.gitv.rt.advertisv5.utils.Student&quot;&gt;
-        &lt;constructor-arg ref=&quot;build&quot;&#47;&gt;
-    &lt;&#47;bean&gt;
+&lt;property name=&quot;name&quot; value=&quot;aa&quot;&#47;&gt;
+&lt;property name=&quot;id&quot; value=&quot;2&quot;&#47;&gt;
+&lt;&#47;bean&gt;
+&lt;bean id=&quot;student&quot; class=&quot;cn.gitv.rt.advertisv5.utils.Student&quot;&gt;
+&lt;constructor-arg ref=&quot;build&quot;&#47;&gt;
+&lt;&#47;bean&gt;
 2、“实际上，我们可以利用是适配器模式对代码进行改造，让其满足开闭原则，能更好地支持扩赞”。 这一句应该 “赞” 敲串行了。
 </p>2020-05-20</li><br/><li><span>电光火石</span> 👍（3） 💬（1）<p>&#47;&#47; 通过参考工厂方法来创建BeanId=&quot;zheng&quot;&quot;的Bean
 
 &lt;bean id=&quot;zheng&quot; class=&quot;com.xzg.cd.StudentBuilder&quot; build-method=&quot;build&quot;&gt;
-	&lt;property name=&quot;id&quot; value=&quot;1&quot;&gt;&lt;&#47;property&gt;
-	&lt;property name=&quot;name&quot; value=&quot;wangzheng&quot;&gt;&lt;&#47;property&gt;
+&lt;property name=&quot;id&quot; value=&quot;1&quot;&gt;&lt;&#47;property&gt;
+&lt;property name=&quot;name&quot; value=&quot;wangzheng&quot;&gt;&lt;&#47;property&gt;
 &lt;&#47;bean&gt;
 把factory-method改成build-method</p>2020-05-20</li><br/><li><span>Heaven</span> 👍（3） 💬（0）<p>对象的初始化有两种实现方式。一种是在类中自定义一个初始化函数，并且通过配置文件，显式地告知 Spring，哪个函数是初始化函数
 </p>2020-05-20</li><br/><li><span>第一装甲集群司令克莱斯特</span> 👍（2） 💬（0）<p>一看就会，一写就废！</p>2022-11-11</li><br/><li><span>牛凡</span> 👍（2） 💬（0）<p>在Spring中没有找到AnnotationMethodHandlerAdapter，应该是RequestMappingHandlerAdapter吧</p>2021-12-14</li><br/><li><span>Geek_3b1096</span> 👍（1） 💬（0）<p>信息量很大慢慢消化谢谢老师</p>2020-05-25</li><br/><li><span>Geek_f73a3e</span> 👍（0） 💬（0）<p>关于适配器模式，adaptee角色是谁呢？</p>2023-08-11</li><br/><li><span>prader26</span> 👍（0） 💬（0）<p>实现接口+ 组合类，实现装饰器模式</p>2023-04-13</li><br/><li><span>小王在努力</span> 👍（0） 💬（0）<p>坚持！</p>2022-06-30</li><br/><li><span>🚦注意有车              ༽</span> 👍（0） 💬（2）<p>看了开头老师讲的适配器模式，跟策略模式好像差不多，总觉得适配器模式就是策略模式；两者该怎么具体区分呢</p>2022-05-19</li><br/>

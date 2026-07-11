@@ -104,7 +104,7 @@ return response.text()
 
 console.log(response)//输出最终的结果
 
-})  
+})
 ```
 
 我们可以看到，改造后的代码是先获取用户ID，等到返回了结果之后，再利用用户ID生成新的获取用户名称的URL，然后再获取用户名，最终返回用户名。使用Promise，我们就可以按照线性的思路来编写代码，非常符合人的直觉。所以说，使用Promise可以解决回调地狱中编码不线性的问题。
@@ -238,7 +238,7 @@ async function getResult() {
         let id_res = await fetch(id_url)
         let id_text = await id_res.text()
         console.log(id_text)
-  
+
         let new_name_url = name_url+"?id="+id_text
         console.log(new_name_url)
 
@@ -377,31 +377,32 @@ console.log(&#39;in then&#39;)
 })
 老师，想问下promise创建的then是微任务，是宏任务中创建的队列保存的消息队列中维护的。那么我这里这样一个场景，在promise中通过setTimeout(模拟宏任务http request)异步resolve的场景下，then也就会在下一个宏任务执行之后再执行了。这种当前宏任务中注册的微任务被拖到下一个宏任务执行，是怎么实现的呢？</p>2020-05-05</li><br/><li><span>断线人偶</span> 👍（0） 💬（2）<p>老师可以讲一下为什么在使用async...await...可以通过try...catch...来捕获到异步函数中的异常吗，v8是怎么实现的</p>2020-05-24</li><br/><li><span>地球外地人</span> 👍（0） 💬（1）<p>老师能讲讲 generate 和 await async中的闭包吗？</p>2020-05-04</li><br/><li><span>天然呆</span> 👍（0） 💬（1）<p>
 function HaveResolvePromise(){
-    return new Promise((resolve, reject) =&gt; {
-        setTimeout(() =&gt; {
-            resolve(100)
-          }, 0);
-      })
+return new Promise((resolve, reject) =&gt; {
+setTimeout(() =&gt; {
+resolve(100)
+}, 0);
+})
 }
 async function getResult() {
-    console.log(1)
-    let a = await NoResolvePromise()
-    console.log(a)
-    console.log(2)
+console.log(1)
+let a = await NoResolvePromise()
+console.log(a)
+console.log(2)
 }
 console.log(0)
 getResult()
 console.log(3)
 
 是不是要改动？NoResolvePromise ==&gt;&gt; HaveResolvePromise</p>2020-04-28</li><br/><li><span>Geek_f74777</span> 👍（0） 💬（1）<p>看来一下co源码, 我的理解是: co的执行原理就是通过promise将generator函数中yield的异步操作的暂停和恢复执行自动化</p>2020-04-28</li><br/><li><span>写点啥呢</span> 👍（0） 💬（1）<p>async&#47;await章节的示例代码看着迷糊了，想和老师请教下，
+
 1. 这部分代码，foo是不是应该调用getResult
 
 function NeverResolvePromise(){
-    return new Promise((resolve, reject) =&gt; {})
+return new Promise((resolve, reject) =&gt; {})
 }
 async function getResult() {
-    let a = await NeverResolvePromise()
-    console.log(a)
+let a = await NeverResolvePromise()
+console.log(a)
 }
 foo()
 console.log(0)
@@ -409,17 +410,17 @@ console.log(0)
 2. 在这个代码片段里，foo函数内await的应该是HasResolvePromise
 
 function HaveResolvePromise(){
-    return new Promise((resolve, reject) =&gt; {
-        setTimeout(() =&gt; {
-            resolve(100)
-          }, 0);
-      })
+return new Promise((resolve, reject) =&gt; {
+setTimeout(() =&gt; {
+resolve(100)
+}, 0);
+})
 }
 async function foo() {
-    console.log(1)
-    let a = await NoResolvePromise()
-    console.log(a)
-    console.log(2)
+console.log(1)
+let a = await NoResolvePromise()
+console.log(a)
+console.log(2)
 }
 console.log(0)
 foo()

@@ -9,11 +9,11 @@
 ```
 $ dstat
 --total-cpu-usage-- -dsk/total- -net/total- ---paging-- ---system--
-usr sys idl wai stl| read  writ| recv  send|  in   out | int   csw 
-  8   1  91   0   0|   0  4096B|7492B 7757B|   0     0 |4029  7399 
-  8   1  91   0   0|   0     0 |7245B 7276B|   0     0 |4049  6967 
-  8   1  91   0   0|   0   144k|7148B 7386B|   0     0 |3896  6971 
-  9   2  89   0   0|   0     0 |7397B 7285B|   0     0 |4611  7426 
+usr sys idl wai stl| read  writ| recv  send|  in   out | int   csw
+  8   1  91   0   0|   0  4096B|7492B 7757B|   0     0 |4029  7399
+  8   1  91   0   0|   0     0 |7245B 7276B|   0     0 |4049  6967
+  8   1  91   0   0|   0   144k|7148B 7386B|   0     0 |3896  6971
+  9   2  89   0   0|   0     0 |7397B 7285B|   0     0 |4611  7426
   8   1  91   0   0|   0     0 |7294B 7258B|   0     0 |3976  7062
 ```
 
@@ -26,7 +26,7 @@ usr sys idl wai stl| read  writ| recv  send|  in   out | int   csw
 ```
 $ dstat --tcp
 ------tcp-sockets-------
-lis  act  syn  tim  clo 
+lis  act  syn  tim  clo
   27   38    0    0    0
   27   38    0    0    0
 ```
@@ -39,11 +39,11 @@ lis  act  syn  tim  clo
 
 ```
 $ ss -natp
-State         Recv-Q         Send-Q                                       Local Address:Port                     Peer Address:Port                                                                        
-LISTEN0      100                                  0.0.0.0:36457         0.0.0.0:*                                                                                users:(("test",pid=11307,fd=17))                                       
-LISTEN0      5                                    0.0.0.0:33811         0.0.0.0:*                                                                                users:(("test",pid=11307,fd=19))                                       
-ESTAB 0      0                                  127.0.0.1:57396       127.0.1.1:34751                                                                            users:(("test",pid=11307,fd=106))                                      
-ESTAB 0      0                                  127.0.0.1:57384       127.0.1.1:34751                                                                            users:(("test",pid=11307,fd=100))                                                                          
+State         Recv-Q         Send-Q                                       Local Address:Port                     Peer Address:Port
+LISTEN0      100                                  0.0.0.0:36457         0.0.0.0:*                                                                                users:(("test",pid=11307,fd=17))
+LISTEN0      5                                    0.0.0.0:33811         0.0.0.0:*                                                                                users:(("test",pid=11307,fd=19))
+ESTAB 0      0                                  127.0.0.1:57396       127.0.1.1:34751                                                                            users:(("test",pid=11307,fd=106))
+ESTAB 0      0                                  127.0.0.1:57384       127.0.1.1:34751                                                                            users:(("test",pid=11307,fd=100))
 ```
 
 如上所示，我们能查看到每个TCP连接的状态（State）、接收队列大小（Recv-Q）、发送队列大小（Send-Q）、本地IP和端口（Local Address:Port ）、远端IP和端口（Peer Address:Port）以及打开该TCP连接的进程信息。

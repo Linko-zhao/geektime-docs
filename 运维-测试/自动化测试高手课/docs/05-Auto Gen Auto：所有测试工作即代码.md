@@ -129,15 +129,7 @@ http://{host}:{port}/api/users?username=liusheng
 而server如果查询到了User，它应该返回这样一个http status code为200的response，内容如下：
 
 ```yaml
-{
-        "items": [
-          {
-            "ID": "123456",
-            "name": "liusheng",
-            "age": 18
-          }
-          ]
-}
+{ "items": [{ "ID": "123456", "name": "liusheng", "age": 18 }] }
 ```
 
 YAML文件里定义接口所用到的关键字，像get、description、parameters等等，它们都是Open API里定义好的，含义也是明确的，那么YAML表达出来的规则内容也是可以解析出来的。因此，我们同样可以根据规则内容，直接生成测试代码。
@@ -162,7 +154,7 @@ java -jar openapi-generator-cli.jar generate
 ```java
 @ApiOperation(value = "Get user by user name",
         notes = "通过name查询用户")
-@ApiResponses(value = { 
+@ApiResponses(value = {
         @ApiResponse(code = 200, message = "成功返回符合查询条件的用户列表") })
 public GetUserByNameOper testGetUserByName() {
     return new GetUserByNameOper(createReqSpec());

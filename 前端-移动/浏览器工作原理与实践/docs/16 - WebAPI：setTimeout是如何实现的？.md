@@ -79,12 +79,12 @@ void MainTherad(){
     //执行消息队列中的任务
     Task task = task_queue.takeTask();
     ProcessTask(task);
-    
+
     //执行延迟队列中的任务
     ProcessDelayTask()
 
     if(!keep_running) //如果设置了退出标志，那么直接退出线程循环
-        break; 
+        break;
   }
 }
 ```
@@ -258,17 +258,19 @@ setTimeout是在特定的时间间隔去执行任务，不到时间间隔不会�
 今日得到
 浏览器的页面是通过消息队列和事件循环系统来驱动的。settimeout的函数会被加入到延迟消息队列中，
 等到执行完Task任务之后就会执行延迟队列中的任务。然后分析几种场景下面的setimeout的执行方式。
+
 1. 如果执行一个很耗时的任务，会影响延迟消息队列中任务的执行
 2. 存在嵌套带调用时候，系统会设置最短时间间隔为4s（超过5层）
 3. 未激活的页面，setTimeout最小时间间隔为1000ms
 4. 延时执行时间的最大值2147483647，溢出会导致定时器立即执行
 5. setTimeout设置回调函数this会是回调时候对应的this对象，可以使用箭头函数解决</p>2019-09-11</li><br/><li><span>moss</span> 👍（21） 💬（8）<p>这一节学习到了不少setTimeout的知识。不过关于消息队列我有不同的理解。
-1. 关于任务优先级。whatwg标准里，“An event loop has one or more task queues”。消息队列其实不算是队列，因为有很多个task queue。“a task queue is a set of tasks”。每一个task queue才是一个队列。而对于每一个task queue里的task，其task source是一致的，或者说不同的task source会被推入到不同的task queue。就是规范里说的“every task source must be associated with a specific task queue”。而task sources都有哪些呢？比如DOM操作，UI事件，网络事件等。这个setTimout应该也算是一种task source吧？会放到专门的队列里。上一轮事件循环结束后，会先选择一个高优先级的task queue，然后取出task queue的第一个task，也因此而有了事件的优先级，老师将的延时队列我有点不太知道怎么融入我现有的知识体系。
-2. “重新布局”是task吗？
-老师说“重新布局”的事件会被放到消息队列。我的理解是task -&gt; microtask -&gt; update the rendering。当然不是每次循环都走渲染过程，因为每次循环都特别快不可能每次都走一次渲染，浏览器会遵循17ms一桢的原则走一次update the rendering，其中rAF也在此阶段执行，也是老师题目里rAF更流畅的原因。而重新布局也是在update the rendering阶段执行的，resize和onscroll都是在update the rendering阶段。标准里在update the rendering阶段，会有“run the resize steps”，“run the scroll steps”，这也是为啥scrolling自带节流效果最多17ms触发一次回调的原因，所以我认为连续事件（resize，scroll）既然都不是task -&gt; microtask -&gt; update the rendering里的task，而是update the rendering阶段，应该不会推送到某一个task queue才对。</p>2019-09-18</li><br/><li><span>淡</span> 👍（12） 💬（6）<p>老师，你好。
-请问微任务的执行是在延迟队列任务执行之前吗？</p>2019-09-17</li><br/><li><span>Zzzrd</span> 👍（11） 💬（4）<p>看完还是很迷惑：
-1. setTimeout是宏任务，宏任务应该放在消息队列中，文中说是放在延迟队列中，为什么？延迟队列和消息队列的区别是什么？
-2. 延迟队列的任务是在当前宏任务执行完之后执行，微任务队列是在当前宏任务将要结束时执行对吗？
+6. 关于任务优先级。whatwg标准里，“An event loop has one or more task queues”。消息队列其实不算是队列，因为有很多个task queue。“a task queue is a set of tasks”。每一个task queue才是一个队列。而对于每一个task queue里的task，其task source是一致的，或者说不同的task source会被推入到不同的task queue。就是规范里说的“every task source must be associated with a specific task queue”。而task sources都有哪些呢？比如DOM操作，UI事件，网络事件等。这个setTimout应该也算是一种task source吧？会放到专门的队列里。上一轮事件循环结束后，会先选择一个高优先级的task queue，然后取出task queue的第一个task，也因此而有了事件的优先级，老师将的延时队列我有点不太知道怎么融入我现有的知识体系。
+7. “重新布局”是task吗？
+   老师说“重新布局”的事件会被放到消息队列。我的理解是task -&gt; microtask -&gt; update the rendering。当然不是每次循环都走渲染过程，因为每次循环都特别快不可能每次都走一次渲染，浏览器会遵循17ms一桢的原则走一次update the rendering，其中rAF也在此阶段执行，也是老师题目里rAF更流畅的原因。而重新布局也是在update the rendering阶段执行的，resize和onscroll都是在update the rendering阶段。标准里在update the rendering阶段，会有“run the resize steps”，“run the scroll steps”，这也是为啥scrolling自带节流效果最多17ms触发一次回调的原因，所以我认为连续事件（resize，scroll）既然都不是task -&gt; microtask -&gt; update the rendering里的task，而是update the rendering阶段，应该不会推送到某一个task queue才对。</p>2019-09-18</li><br/><li><span>淡</span> 👍（12） 💬（6）<p>老师，你好。
+   请问微任务的执行是在延迟队列任务执行之前吗？</p>2019-09-17</li><br/><li><span>Zzzrd</span> 👍（11） 💬（4）<p>看完还是很迷惑：
+8. setTimeout是宏任务，宏任务应该放在消息队列中，文中说是放在延迟队列中，为什么？延迟队列和消息队列的区别是什么？
+9. 延迟队列的任务是在当前宏任务执行完之后执行，微任务队列是在当前宏任务将要结束时执行对吗？
+
 </p>2019-12-19</li><br/><li><span>Djan Unchained</span> 👍（11） 💬（1）<p>requestAnimationFrame 也是在主线程上执行吗？如果当前任务执行时间过久，也会导致 requestAnimationFrame 被延后执行吗？</p>2019-10-25</li><br/><li><span>李懂</span> 👍（10） 💬（3）<p>1.执行延迟队列的任务，是一次循环只取出一个，还是检查只要时间到了，就执行？
 2.微任务是在宏任务里的，是执行完一个宏任务，就去执行宏任务里面的微任务？</p>2019-09-10</li><br/><li><span>Wlt</span> 👍（8） 💬（1）<p>老师，您好，延迟队列和消息队列是什么关系，怎么配合工作的？</p>2019-10-28</li><br/><li><span>Cris</span> 👍（6） 💬（1）<p>老师，您这里未激活的页面是什么意思？</p>2020-01-03</li><br/><li><span>纪年</span> 👍（4） 💬（1）<p>如果 setTimeout 设置的延迟值大于 2147483647 毫秒时就会溢出，这导致定时器会被立即执行。
 问题：这里的立即执行其实是不是相当于setTimeout（fun, 0）的意思？</p>2019-11-23</li><br/><li><span>follaw</span> 👍（4） 💬（2）<p>系统如何筛选出到期的任务，如果有10000个呢，是循环一万次？这个系统内部怎么处理的呢？</p>2019-11-14</li><br/><li><span>晓东</span> 👍（3） 💬（1）<p>老师，对processDelayTask这块有个疑惑。这里会把所有的到期任务都执行完才会开始下一个while循环吗？</p>2019-12-18</li><br/><li><span>-_-|||</span> 👍（3） 💬（1）<p>&#39;32bit 最大只能存放的数字是 2147483647 毫秒&#39;,最大能存放的数字不是2^32-1吗？4294967295，为什么是 2147483647 毫秒</p>2019-12-06</li><br/><li><span>趁你还年轻233</span> 👍（1） 💬（1）<p>虽然老师的英语发音很不标准···

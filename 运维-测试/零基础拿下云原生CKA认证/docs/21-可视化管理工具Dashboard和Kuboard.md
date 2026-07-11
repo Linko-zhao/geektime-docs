@@ -123,7 +123,7 @@ configs:
 services:
   db:
     image: swr.cn-east-2.myhuaweicloud.com/kuboard/mariadb:11.3.2-jammy
-    # image: mariadb:11.3.2-jammy  
+    # image: mariadb:11.3.2-jammy
     # swr.cn-east-2.myhuaweicloud.com/kuboard/mariadb:11.3.2-jammy 与 mariadb:11.3.2-jammy 镜像完全一致
     environment:
       MARIADB_ROOT_PASSWORD: kuboardpwd
@@ -148,7 +148,7 @@ services:
       - DB_USERNAME=kuboard
       - DB_PASSWORD=kuboardpwd
     ports:
-      - '8000:80'
+      - "8000:80"
     depends_on:
       - db
     networks:

@@ -102,7 +102,7 @@ $ iotop
 ```
 Total DISK READ :       0.00 B/s | Total DISK WRITE :      15.75 K/s
 Actual DISK READ:       0.00 B/s | Actual DISK WRITE:      35.44 K/s
-  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND                                             
+  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
   104 be/3 root        0.00 B/s    7.88 K/s  0.00 %  0.18 % [jbd2/sda1-8]
   383 be/4 root        0.00 B/s    3.94 K/s  0.00 %  0.00 % rsyslogd -n [rs:main Q:Reg]
  1514 be/4 www-data    0.00 B/s    3.94 K/s  0.00 %  0.00 % nginx: worker process
@@ -129,7 +129,7 @@ top - 06:56:02 up 3 days, 19:34,  2 users,  load average: 5.99, 1.82, 0.63
 Tasks:  88 total,   3 running,  85 sleeping,   0 stopped,   0 zombie
 %Cpu(s):  3.0 us, 29.9 sy,  0.0 ni,  0.0 id, 67.2 wa,  0.0 hi,  0.0 si,  0.0 st
 KiB Mem :  1741304 total,  1004404 free,   307152 used,   429748 buff/cache
-KiB Swap:        0 total,        0 free,        0 used.  1245700 avail Mem 
+KiB Swap:        0 total,        0 free,        0 used.  1245700 avail Mem
 ```
 
 ```
@@ -154,7 +154,7 @@ $ iotop
 ```
 Total DISK READ :       0.00 B/s | Total DISK WRITE :       0.00 B/s
 Actual DISK READ:       0.00 B/s | Actual DISK WRITE:       0.00 B/s
-  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND                                             
+  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
 29161 be/4 xuwenhao    0.00 B/s    0.00 B/s  0.00 % 56.71 % stress -i 2
 29162 be/4 xuwenhao    0.00 B/s    0.00 B/s  0.00 % 46.89 % stress -i 2
     1 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % init

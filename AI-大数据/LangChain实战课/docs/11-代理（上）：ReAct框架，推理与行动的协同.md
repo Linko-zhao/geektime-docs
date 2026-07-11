@@ -192,6 +192,7 @@ ReAct框架的这些优点，使得它在未来的发展中具有巨大的潜力
 
 1. 论文，[ReAct：在语言模型中协同推理和行动](https://arxiv.org/abs/2210.03629)，Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., &amp; Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. arXiv preprint arXiv:2210.03629
 2. 论文，[ART：大型语言模型的自动多步推理和工具使用](https://arxiv.org/abs/2303.09014)， Paranjape, B., Lundberg, S., Singh, S., Hajishirzi, H., Zettlemoyer, L., &amp; Ribeiro, M. T. (2023). ART: Automatic multi-step reasoning and tool-use for large language models. arXiv preprint arXiv:2303.09014.
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>熊@熊</span> 👍（7） 💬（1）<p>&lt;推理&gt;分析整理信息
 &lt;行动&gt;产生新的信息
@@ -223,8 +224,8 @@ load_dotenv()
 
 llm = OpenAI(temperature=0)
 tools = load_tools([&quot;serpapi&quot;, &quot;llm-math&quot;], llm=llm)  
-agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)  # 代理
-agent.run(&quot;目前市场上玫瑰花的平均价格是多少？如果我在此基础上加价15%卖出，应该如何定价？&quot;)  # 运行代理
+agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True) # 代理
+agent.run(&quot;目前市场上玫瑰花的平均价格是多少？如果我在此基础上加价15%卖出，应该如何定价？&quot;) # 运行代理
 
 </p>2024-06-06</li><br/><li><span>微笑美男😄</span> 👍（0） 💬（1）<p>
     from langchain.tools.base import BaseTool
@@ -249,57 +250,66 @@ pydantic.errors.PydanticUserError: If you use `@root_validator` with pre=False (
 For further information visit https:&#47;&#47;errors.pydantic.dev&#47;2.4&#47;u&#47;root-validator-pre-skip</p>2023-11-09</li><br/><li><span>棟</span> 👍（0） 💬（1）<p>老师，您好，请教一个疑问，麻烦帮忙看看，感谢！
 问题如下，https:&#47;&#47;stackoverflow.com&#47;questions&#47;77253870&#47;langchain-search-tools-valueerror-searx-api-returned-an-error-too-many-r
 My code is as below:
+
 # Step3.select your tools
+
 tools = load_tools([&quot;searx-search&quot;], searx_host=&quot;https:&#47;&#47;search.bus-hit.me&#47;&quot;, llm=llm)
+
 # Step4.init your agent
+
 agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+
 # Step5.run your question by agent:What is the weather in Pomfret
+
 agent.run(&quot;What is the weather in Pomfret&quot;)
 
- I need to find out what the current weather is
+I need to find out what the current weather is
 Action: searx_search
 Action Input: &quot;weather in Pomfret&quot;Traceback (most recent call last):
-  File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\agents\agent.py&quot;, line 977, in _take_next_step
-    observation = tool.run(
-  File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\tools\base.py&quot;, line 356, in run
-    raise e
-  File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\tools\base.py&quot;, line 328, in run
-    self._run(*tool_args, run_manager=run_manager, **tool_kwargs)
-  File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\tools\searx_search\tool.py&quot;, line 31, in _run
-    return self.wrapper.run(query, **self.kwargs)
-  File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\utilities\searx_search.py&quot;, line 365, in run
-    res = self._searx_api_query(params)
-  File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\utilities\searx_search.py&quot;, line 277, in _searx_api_query    
-    raise ValueError(&quot;Searx API returned an error: &quot;, raw_result.text)
+File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\agents\agent.py&quot;, line 977, in _take_next_step
+observation = tool.run(
+File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\tools\base.py&quot;, line 356, in run
+raise e
+File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\tools\base.py&quot;, line 328, in run
+self._run(*tool_args, run_manager=run_manager, **tool_kwargs)
+File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\tools\searx_search\tool.py&quot;, line 31, in _run
+return self.wrapper.run(query, **self.kwargs)
+File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\utilities\searx_search.py&quot;, line 365, in run
+res = self._searx_api_query(params)
+File &quot;E:\program_interpreter\python_virtual_environment\learn_ai\LangChain\lib\site-packages\langchain\utilities\searx_search.py&quot;, line 277, in _searx_api_query  
+raise ValueError(&quot;Searx API returned an error: &quot;, raw_result.text)
 ValueError: (&#39;Searx API returned an error: &#39;, &#39;Too Many Requests&#39;)
 </p>2023-10-08</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p>使用使用 优秀的Perplexity 搜索聊天模型，解决ReAct 框架下进行推理。只要购买Perplexity 就有API key 。不需要用OpenAI ，不需要注册serpapi.com 。
 并将思考的过程一步一步输出啦。
 
 ### 代码：
+
 from langchain_community.chat_models import ChatPerplexity
 from langchain_core.prompts import ChatPromptTemplate
-chat = ChatPerplexity(temperature=0.3, 
-    pplx_api_key= &#39;pplx_api_key&#39;,  #此用你的 Perplexity 的pplx_api_key代替
-    model=&quot;llama-3-sonar-small-32k-online&quot;)
+chat = ChatPerplexity(temperature=0.3,
+pplx_api_key= &#39;pplx_api_key&#39;, #此用你的 Perplexity 的pplx_api_key代替
+model=&quot;llama-3-sonar-small-32k-online&quot;)
 
 system = &quot;You are a helpful assistant.&quot;
 human = &quot;{input}&quot;
 prompt = ChatPromptTemplate.from_messages([(&quot;system&quot;, system), (&quot;human&quot;, human)])
 
 chain = prompt | chat
-response = chain.invoke({&quot;input&quot;: &quot;今天日期？今天中国队在奥运会上的奖牌数是多少?&quot;}) 
+response = chain.invoke({&quot;input&quot;: &quot;今天日期？今天中国队在奥运会上的奖牌数是多少?&quot;})
 print(response.content) #检查是否是真实的网络搜索结果
 
 response = chain.invoke({&quot;input&quot;: &quot;一步一步搜索网络，回答问题：目前市场上玫瑰花的平均价格是多少？如果我在此基础上加价15%卖出，应该如何定价？&quot;})
 print(response.content)
 
-###  输出结果：
+### 输出结果：
+
 今天日期是2024年8月6日。
 截至2024年8月6日，中国代表团在2024年巴黎奥运会上已经斩获了21金18银14铜合计53枚奖牌。
 
 To answer the question step by step, we will use the tools provided to find the average price of roses and then calculate the new price with a 15% markup.
 
 ### Step 1: Find the Average Price of Roses
+
 We will use the `bing-web-search` tool to search for the average price of roses.
 
 **Question:** 目前市场上玫瑰花的平均价格是多少？
@@ -309,6 +319,7 @@ We will use the `bing-web-search` tool to search for the average price of roses.
 **Observation:** 根据网络资料显示，美国每束玫瑰花在80.16美元。
 
 ### Step 2: Calculate the New Price with a 15% Markup
+
 We will use the `llm-math` tool to perform the calculation.
 
 **Question:** 如果我在此基础上加价15%卖出，应该如何定价？
@@ -318,6 +329,7 @@ We will use the `llm-math` tool to perform the calculation.
 **Observation:** 92.184
 
 ### Final Answer
+
 The final answer is that the new price after adding a 15% markup is 92.184 dollars.</p>2024-08-06</li><br/><li><span>Geek1133</span> 👍（0） 💬（0）<p>正在开发一个AI代码转换工具，比如从SAS 程序转换为Python程序。 因为token限制，对于几千行这样长的SAS程序常常要拆分去转，转后又要合并，比较麻烦。 此外对于转换后的A&#47;B testing跟validation也比较麻烦， 请问老师针对这种项目AI有什么解决方案吗</p>2024-12-31</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第11讲打卡~
 ReAct的生成推理轨迹这个功能真的很好用，既便于过程追踪和结果观测，也使得推理结果更加可理解和可信</p>2024-07-16</li><br/>
 </ul>

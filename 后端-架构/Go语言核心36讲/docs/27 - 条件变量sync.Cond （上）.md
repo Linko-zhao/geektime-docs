@@ -148,126 +148,125 @@ recvCond := sync.NewCond(&amp;lock)
 package lesson27
 
 import (
-	&quot;sync&quot;
-	&quot;testing&quot;
-	&quot;time&quot;
+&quot;sync&quot;
+&quot;testing&quot;
+&quot;time&quot;
 )
 
 &#47;&#47; 利用条件变量实现协调多协程发取信件操作
 func TestCond(t *testing.T) {
-	var wg sync.WaitGroup
-	var mu sync.RWMutex
-	&#47;&#47; 信箱
-	mail := false
-	&#47;&#47; 两个条件变量
-	&#47;&#47; 发送信条件变量
-	sendCond := sync.NewCond(&amp;mu)
-	&#47;&#47; 接收信条件变量, 对于接收实际是只读操作,因此只需要使用读锁就可以
-	receiveCond := sync.NewCond(mu.RLocker())
-	&#47;&#47; 最大发送接收次数
-	max := 5
-	wg.Add(2)
-	&#47;&#47; 发送人协程
-	go func(i int) {
-		for ; i &gt; 0; i-- {
-			time.Sleep(time.Second * 3)
-			mu.Lock()
-			&#47;&#47; 如果信箱不为空,则需要等待
-			&#47;&#47;for mail {
-			if mail {
-				&#47;&#47; 发送者等待
-				t.Log(&quot;sendCond准备进入等待队列&quot;)
-				sendCond.Wait()
-				t.Log(&quot;sendCond进入等待队列&quot;)
-			}
-			mail = true
-			t.Log(&quot;发送信件成功&quot;)
-			mu.Unlock()
-			&#47;&#47; 通知发送者
-			receiveCond.Signal()
-			t.Log(&quot;唤醒receiveCond&quot;)
-		}
-		wg.Done()
-	}(max)
+var wg sync.WaitGroup
+var mu sync.RWMutex
+&#47;&#47; 信箱
+mail := false
+&#47;&#47; 两个条件变量
+&#47;&#47; 发送信条件变量
+sendCond := sync.NewCond(&amp;mu)
+&#47;&#47; 接收信条件变量, 对于接收实际是只读操作,因此只需要使用读锁就可以
+receiveCond := sync.NewCond(mu.RLocker())
+&#47;&#47; 最大发送接收次数
+max := 5
+wg.Add(2)
+&#47;&#47; 发送人协程
+go func(i int) {
+for ; i &gt; 0; i-- {
+time.Sleep(time.Second * 3)
+mu.Lock()
+&#47;&#47; 如果信箱不为空,则需要等待
+&#47;&#47;for mail {
+if mail {
+&#47;&#47; 发送者等待
+t.Log(&quot;sendCond准备进入等待队列&quot;)
+sendCond.Wait()
+t.Log(&quot;sendCond进入等待队列&quot;)
+}
+mail = true
+t.Log(&quot;发送信件成功&quot;)
+mu.Unlock()
+&#47;&#47; 通知发送者
+receiveCond.Signal()
+t.Log(&quot;唤醒receiveCond&quot;)
+}
+wg.Done()
+}(max)
 
-	go func(i int) {
-		for ; i &gt; 0; i-- {
-			mu.RLock()
-			&#47;&#47;for !mail {
-			if !mail {
-				&#47;&#47;接收者等待
-				t.Log(&quot;receiveCond准备进入等待队列&quot;)
-				receiveCond.Wait() &#47;&#47; 如果没有被唤醒会一直阻塞在此
-				t.Log(&quot;receiveCond进入等待队列&quot;)
-			}
-			mail = false
-			t.Log(&quot;获取信件成功&quot;)
-			mu.RUnlock()
-			&#47;&#47; 通知接收者
-			sendCond.Signal()
-			t.Log(&quot;唤醒sendCond&quot;)
-		}
-		wg.Done()
-	}(max)
-	wg.Wait()
+    go func(i int) {
+    	for ; i &gt; 0; i-- {
+    		mu.RLock()
+    		&#47;&#47;for !mail {
+    		if !mail {
+    			&#47;&#47;接收者等待
+    			t.Log(&quot;receiveCond准备进入等待队列&quot;)
+    			receiveCond.Wait() &#47;&#47; 如果没有被唤醒会一直阻塞在此
+    			t.Log(&quot;receiveCond进入等待队列&quot;)
+    		}
+    		mail = false
+    		t.Log(&quot;获取信件成功&quot;)
+    		mu.RUnlock()
+    		&#47;&#47; 通知接收者
+    		sendCond.Signal()
+    		t.Log(&quot;唤醒sendCond&quot;)
+    	}
+    	wg.Done()
+    }(max)
+    wg.Wait()
+
 }
 </p>2020-09-02</li><br/><li><span>啦啦啦</span> 👍（3） 💬（1）<p>想请问下老师，两个goroutine都使用了同一把锁，26讲（Mutex）里不是说明，尽量使用：是让每一个互斥锁都只保护一个临界区或一组相关临界区。有点搞不明白，望老师指点
 
-
-
 go func(max int) { &#47;&#47; 用于发信。
-		defer func() {
-			sign &lt;- struct{}{}
-		}()
-		for i := 1; i &lt;= max; i++ {
-			time.Sleep(time.Millisecond * 500)
-			lock.Lock()
-			for mailbox == 1 {
-				sendCond.Wait()
-			}
-			log.Printf(&quot;sender [%d]: the mailbox is empty.&quot;, i)
-			mailbox = 1
-			log.Printf(&quot;sender [%d]: the letter has been sent.&quot;, i)
-			lock.Unlock()
-			recvCond.Signal()
-		}
-	}(max)
-	go func(max int) { &#47;&#47; 用于收信。
-		defer func() {
-			sign &lt;- struct{}{}
-		}()
-		for j := 1; j &lt;= max; j++ {
-			time.Sleep(time.Millisecond * 500)
-			lock.RLock()
-			for mailbox == 0 {
-				recvCond.Wait()
-			}
-			log.Printf(&quot;receiver [%d]: the mailbox is full.&quot;, j)
-			mailbox = 0
-			log.Printf(&quot;receiver [%d]: the letter has been received.&quot;, j)
-			lock.RUnlock()
-			sendCond.Signal()
-		}
-	}(max)</p>2022-06-07</li><br/><li><span>lesserror</span> 👍（3） 💬（1）<p>郝林老师，demo61.go 中的  两个go function（收信 和 发信），是怎么保证先 发信 后收信的呢？
+defer func() {
+sign &lt;- struct{}{}
+}()
+for i := 1; i &lt;= max; i++ {
+time.Sleep(time.Millisecond * 500)
+lock.Lock()
+for mailbox == 1 {
+sendCond.Wait()
+}
+log.Printf(&quot;sender [%d]: the mailbox is empty.&quot;, i)
+mailbox = 1
+log.Printf(&quot;sender [%d]: the letter has been sent.&quot;, i)
+lock.Unlock()
+recvCond.Signal()
+}
+}(max)
+go func(max int) { &#47;&#47; 用于收信。
+defer func() {
+sign &lt;- struct{}{}
+}()
+for j := 1; j &lt;= max; j++ {
+time.Sleep(time.Millisecond * 500)
+lock.RLock()
+for mailbox == 0 {
+recvCond.Wait()
+}
+log.Printf(&quot;receiver [%d]: the mailbox is full.&quot;, j)
+mailbox = 0
+log.Printf(&quot;receiver [%d]: the letter has been received.&quot;, j)
+lock.RUnlock()
+sendCond.Signal()
+}
+}(max)</p>2022-06-07</li><br/><li><span>lesserror</span> 👍（3） 💬（1）<p>郝林老师，demo61.go 中的 两个go function（收信 和 发信），是怎么保证先 发信 后收信的呢？
 
 不是说 go function 函数 的执行 是 随机的么？ 我打印了很多遍，发现 都是执行的 发信 操作，然后是 收信 操作。</p>2021-08-15</li><br/><li><span>会玩code</span> 👍（2） 💬（2）<p>老师，不懂这里的recvCond为什么可以用读锁呢？这里也是有对资源做操作的呀（将mailbox置为0），用读锁不会有问题吗？</p>2020-05-15</li><br/><li><span>lofaith</span> 👍（1） 💬（1）<p>老师，读写锁之间不是互斥的吗，我理解应该在加上读锁的时候，写锁就会阻塞在lock这里，不会走到 sendCond.Wait() 这里啊。虽然能明白条件变量的作用了，但还是不清楚它的使用场景，老师能说一下使用场景吗</p>2021-11-15</li><br/><li><span>...</span> 👍（1） 💬（3）<p>老师 wait会释放锁吗</p>2019-02-20</li><br/><li><span>CrazyCodes</span> 👍（0） 💬（1）<p>*sync.Cond类型的值可以被传递吗？那sync.Cond类型的值呢？
 
-代码测试*sync.Cond 可以被传递，但sync.Cond不能，是因为必须是指针类型吗？</p>2023-11-24</li><br/><li><span>川川</span> 👍（0） 💬（1）<p>老师，我没太理解为啥 广播 是要在解锁之后再 触发吗？  client-go 中广播都是在锁内发生的啊
+代码测试*sync.Cond 可以被传递，但sync.Cond不能，是因为必须是指针类型吗？</p>2023-11-24</li><br/><li><span>川川</span> 👍（0） 💬（1）<p>老师，我没太理解为啥 广播 是要在解锁之后再 触发吗？ client-go 中广播都是在锁内发生的啊
 
 func (f *FIFO) Add(obj interface{}) error {
-	id, err := f.keyFunc(obj)
-	if err != nil {
-		return KeyError{obj, err}
-	}
-	f.lock.Lock()
-	defer f.lock.Unlock()
-	f.populated = true
-	if _, exists := f.items[id]; !exists {
-		f.queue = append(f.queue, id)
-	}
-	f.items[id] = obj
-	f.cond.Broadcast()
-	return nil
+id, err := f.keyFunc(obj)
+if err != nil {
+return KeyError{obj, err}
+}
+f.lock.Lock()
+defer f.lock.Unlock()
+f.populated = true
+if _, exists := f.items[id]; !exists {
+f.queue = append(f.queue, id)
+}
+f.items[id] = obj
+f.cond.Broadcast()
+return nil
 }</p>2022-05-22</li><br/><li><span>jxs1211</span> 👍（0） 💬（1）<p>在运行读取mailbox的goroutine中，当mailbox=1时，可以取信，在这段由读锁锁定的临界区中，mailbox=0实际是一个写入操作，怎么理解这个读锁锁定的临界区中实则为一个写操作呢
 log.Printf(&quot;receiver [%d]: the mailbox is full.&quot;, j)
 mailbox = 0

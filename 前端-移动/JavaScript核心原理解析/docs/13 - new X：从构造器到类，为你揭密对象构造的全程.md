@@ -292,8 +292,10 @@ Car.prototype = new Device();
 var x = new Car();
 console.log(x.id); &#47;&#47;
 ```
+
 这个例子中， 为什么`x.constructor === Device`，按我的理解应该是`x.constructor === Car`才对。但是如果我把`Car.prototype = new Device()`这行代码注释掉，那么就符合我的理解了。。。</p>2020-01-12</li><br/><li><span>油菜</span> 👍（4） 💬（1）<p>“函数的“.prototype”的属性描述符中的设置比较特殊，它不能删除，但可以修改（‘writable’ is true）。当这个值被修改成 null 值时，它的子类对象是以 null 值为原型的；当它被修改成非对象值时，它的子类对象是以 Object.prototype 为原型的；否则，当它是一个对象类型的值时，它的子类才会使用该对象作为原型来创建实例。”
 ---------------------
+
 老师，我的测试结果和这个结论不大一样。
 function F(){ this.name1 = &#39;father&#39;}
 function S1(){ this.name1 = &#39;son1&#39;}
@@ -301,12 +303,13 @@ F.prototype = null;
 S1.prototype =F;
 var s1 = new S1();
 s1.constructor.prototype; &#47;&#47;原型对象是[Function] 而不是null
-s1 instanceof S1;  &#47;&#47;true;
-s1 instanceof F;  &#47;&#47;TypeError: Function has non-object prototype &#39;null&#39; in instanceof check
+s1 instanceof S1; &#47;&#47;true;
+s1 instanceof F; &#47;&#47;TypeError: Function has non-object prototype &#39;null&#39; in instanceof check
 -------------
+
 class S2 extends F {}
 var s2 = new S2();
-s2.constructor.prototype; &#47;&#47;  &#47;原型对象是S2 {}，不是null
+s2.constructor.prototype; &#47;&#47; &#47;原型对象是S2 {}，不是null
 s2 instanceof S2; &#47;&#47; true;
 s2 instanceof F; &#47;&#47;Function has non-object prototype &#39;null&#39; in instanceof check</p>2020-11-16</li><br/><li><span>westfall</span> 👍（1） 💬（1）<p>请问老师，constructor 这个属性是不是可有可无的？</p>2021-02-04</li><br/><li><span>二二</span> 👍（1） 💬（1）<p>老师您好，关于：有一些“类 &#47; 构造器”在 ECMAScript 6 之前是不能派生子类的，例如 Function，又例如 Date。
 但是我看babel将es6转成es5是可以实现对于Function的继承，并调用的，请问babel是怎么达到这个效果的呢？

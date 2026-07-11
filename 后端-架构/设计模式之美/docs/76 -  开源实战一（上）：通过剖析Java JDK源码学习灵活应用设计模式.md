@@ -85,7 +85,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private int firstDayOfWeek, minimalDaysInFirstWeek;
 
     public Builder() {}
-    
+
     public Builder setInstant(long instant) {
         if (fields != null) {
             throw new IllegalStateException();
@@ -95,7 +95,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         return this;
     }
     //...省略n多set()方法
-    
+
     public Calendar build() {
       if (locale == null) {
         locale = Locale.getDefault();
@@ -201,7 +201,7 @@ Collections类是一个集合容器的工具类，提供了很多静态方法，
 ```
 public class Collections {
   private Collections() {}
-    
+
   public static <T> Collection<T> unmodifiableCollection(Collection<? extends T> c) {
     return new UnmodifiableCollection<>(c);
   }
@@ -356,19 +356,20 @@ public static <T> Enumeration<T> enumeration(final Collection<T> c) {
 
 拿餐厅类比，对于披萨加番茄，起司等不同配料来定制披萨，这属于建造者模式要解决的问题（实例对象的定制）。而stringbuild的应用场景，更像是对披萨加一个番茄还是两个番茄更或者三个番茄的定制方式（某个字段的定制）。
 
-所以strbuild的应用场景比传统的建造者模式更细更具体（前者实现字段的定制，后者实现对象的定制）。但字段定制依旧属于对象定制的范涛，所以我认为其依旧算是建造者模式。</p>2020-04-27</li><br/><li><span>守拙</span> 👍（5） 💬（0）<p>课堂讨论: 
-StringBuilder应用了Builder模式. 其主要方式是append(), 即通过不断append创建复杂对象. 
-不同于传统Builder模式的是: 
+所以strbuild的应用场景比传统的建造者模式更细更具体（前者实现字段的定制，后者实现对象的定制）。但字段定制依旧属于对象定制的范涛，所以我认为其依旧算是建造者模式。</p>2020-04-27</li><br/><li><span>守拙</span> 👍（5） 💬（0）<p>课堂讨论:
+StringBuilder应用了Builder模式. 其主要方式是append(), 即通过不断append创建复杂对象.
+不同于传统Builder模式的是:
+
 1. StringBuilder的目的是创建String, 但StringBuilder并不是String的内部类.
 2. StringBuilder的创建过程可以断续, 传统的Builder模式一次性填入参数后调用build()方法创建对象.
 3. StringBuilder通过内部维护字符数组(char[])的方式实现拼接. </p>2020-04-27</li><br/><li><span>QQ怪</span> 👍（5） 💬（0）<p>StringBuilder的append()方法使用了建造者模式，StringBuilder把构建者的角色交给了其的父类AbstractStringBuilder，最终调用的是父类的append（）方法</p>2020-04-27</li><br/><li><span>Richie</span> 👍（4） 💬（1）<p>The intent of the Builder design pattern is to separate the construction of a complex object from its representation. By doing so the same construction process can create different representations.
 
 从StringBuilder的代码实现来看，他通过append方法来设置其value属性，最终使用toString()方法来创建对象。这符合建造者模式的定义。这跟我们平时使用的建造者模式唯一的不同就是他一直设置的是同一个属性，而平时我们会设置多个属性，并最终调用build()方法来创建对象。</p>2020-05-08</li><br/><li><span>javaadu</span> 👍（3） 💬（0）<p>StringBuilder并没有使用构造者模式，从设计意图上看这俩不是一回事—构造者模式得意图是为同一个类生成不同定制需求的对象，而StringBuilder的设计意图是为了实现可变更的字符串来优化内存占用</p>2020-05-03</li><br/><li><span>Demon.Lee</span> 👍（3） 💬（0）<p>如果说要创建一个复杂的String对象，那么通过StringBuilder的append()方法会非常方便，最后通过toString()方法返回，从这个角度看算建造者模式。
-    @Override
-    public String toString() {
-        &#47;&#47; Create a copy, don&#39;t share the array
-        return new String(value, 0, count);
-    }</p>2020-04-27</li><br/><li><span>J.Smile</span> 👍（3） 💬（0）<p>总结：
+@Override
+public String toString() {
+&#47;&#47; Create a copy, don&#39;t share the array
+return new String(value, 0, count);
+}</p>2020-04-27</li><br/><li><span>J.Smile</span> 👍（3） 💬（0）<p>总结：
 1 工厂模式：简单工厂模式+工厂方法模式
 ● 简单工厂模式直接在条件判断中根据不同参数将目标对象new了出来。
 ● 工厂方法模式是将目标对象的创建过程根据参数分类抽取到各自独立的工厂类中，以应对目标对象创建过程的复杂度。条件分支可以使用map来缓存起来！

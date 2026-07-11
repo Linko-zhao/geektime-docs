@@ -179,7 +179,7 @@ print(u'score 准确率为 %.4lf' % acc_decision_tree)
 结果：
 
 ```plain
-----测试数据---- 
+----测试数据----
       state   sla   latency   waterlevel   follow
   0      1      1         1            1        1
   1      1      1         1            1        1
@@ -246,8 +246,8 @@ print(pred_labels)
 
 ```plain
 ---结果判断----
-[1] 
-1代表为故障；0代表为正常 
+[1]
+1代表为故障；0代表为正常
 ```
 
 ### 传统监控+智能模型

@@ -99,8 +99,8 @@ SQL：SELECT name, hp_max, mp_max FROM heros WHERE ((hp_max+mp_max) > 8000 OR hp
 ```
 SQL：
 SELECT name, role_main, role_assist, hp_max, mp_max, birthdate
-FROM heros 
-WHERE (role_main IN ('法师', '射手') OR role_assist IN ('法师', '射手')) 
+FROM heros
+WHERE (role_main IN ('法师', '射手') OR role_assist IN ('法师', '射手'))
 AND DATE(birthdate) NOT BETWEEN '2016-01-01' AND '2017-01-01'
 ORDER BY (hp_max + mp_max) DESC
 ```
@@ -128,7 +128,7 @@ SQL：SELECT name FROM heros WHERE name LIKE '%太%'
 ![](https://static001.geekbang.org/resource/image/b1/18/b18de17c2517d7c06c56f324309c4c18.png?wh=199%2A183)  
 需要说明的是不同DBMS对通配符的定义不同，在Access中使用的是（\*）而不是（%）。另外关于字符串的搜索可能是需要区分大小写的，比如`'liu%'`就不能匹配上`'LIU BEI'`。具体是否区分大小写还需要考虑不同的DBMS以及它们的配置。
 
-如果我们想要匹配单个字符，就需要使用下划线(*)通配符。（%）和（*）的区别在于，（%）代表零个或多个字符，而（\_）只代表一个字符。比如我们想要查找英雄名除了第一个字以外，包含‘太’字的英雄有哪些。
+如果我们想要匹配单个字符，就需要使用下划线(_)通配符。（%）和（_）的区别在于，（%）代表零个或多个字符，而（\_）只代表一个字符。比如我们想要查找英雄名除了第一个字以外，包含‘太’字的英雄有哪些。
 
 ```
 SQL：SELECT name FROM heros WHERE name LIKE '_%太%'
@@ -171,34 +171,34 @@ SQL：SELECT name FROM heros WHERE name LIKE &#39;_% 太 %&#39;
 因为太乙真人的太是第一个字符，而_%太%中的太不是在第一个字符，所以匹配不到“太乙真人”，只可以匹配上“东皇太一”。
 
 说明：
-&quot;_&quot;：匹配任意一个字符，包括可以匹配到“太乙真人”的太字。 
-但是，整体的通配符  &#39;_% 太 %&#39;，需要后面继续匹配到一个&quot;太&quot;字符，显然，&quot;太乙真人&quot;不符合了，如果是，&quot;太乙真人太太&quot;，就可以匹配到。</p>2019-06-24</li><br/><li><span>stormsc</span> 👍（23） 💬（2）<p>有个问题想问老师：
-SELECT name,role_main,role_assist from heros where role_assist is not null LIMIT 5 
+&quot;_&quot;：匹配任意一个字符，包括可以匹配到“太乙真人”的太字。
+但是，整体的通配符 &#39;_% 太 %&#39;，需要后面继续匹配到一个&quot;太&quot;字符，显然，&quot;太乙真人&quot;不符合了，如果是，&quot;太乙真人太太&quot;，就可以匹配到。</p>2019-06-24</li><br/><li><span>stormsc</span> 👍（23） 💬（2）<p>有个问题想问老师：
+SELECT name,role_main,role_assist from heros where role_assist is not null LIMIT 5
 这样限定的查询结果为5条数据，是随机选择的5条数据吗？</p>2019-06-25</li><br/><li><span>看，有只猪</span> 👍（20） 💬（3）<p>解答一下对使用DATE函数的疑问：
-birthdate字段可能会有时间包含在里面，如2019-01-01 00:00:00，如果直接和2019-01-01比较是会失败的，用DATE函数可以提取出原始数据的日期部分</p>2019-06-25</li><br/><li><span>stormsc</span> 👍（11） 💬（4）<p>作业 mysql: select name 英雄名称, role_main 主要定位, role_assist 次要定位,hp_max 最大生命值,mp_max 最大法力值 from heros where (role_main in (&#39;坦克&#39;,&#39;战士&#39;) 
+birthdate字段可能会有时间包含在里面，如2019-01-01 00:00:00，如果直接和2019-01-01比较是会失败的，用DATE函数可以提取出原始数据的日期部分</p>2019-06-25</li><br/><li><span>stormsc</span> 👍（11） 💬（4）<p>作业 mysql: select name 英雄名称, role_main 主要定位, role_assist 次要定位,hp_max 最大生命值,mp_max 最大法力值 from heros where (role_main in (&#39;坦克&#39;,&#39;战士&#39;)
 AND role_assist is not null) AND (hp_max &gt; 8000 or mp_max &lt;1500) ORDER BY (hp_max+mp_max) DESC</p>2019-06-25</li><br/><li><span>hlz-123</span> 👍（9） 💬（1）<p>where子句WHERE 子句中比较运算符、逻辑运算符和通配符这三者各自作用？
 1、比较运算符，比较数值的大小，数值类型可以是整数，浮点数，字符串，布尔类型等等。
 2、逻辑运算符，定义where子句中多个条件之间的关系。
 3、通配符，对文本类型字段进行模糊查询。
 Mysql查询语句：
-SELECT name,role_main,role_assist,hp_max,mp_max FROM heros 
-WHERE (role_main in (&#39;坦克&#39;,&#39;战士&#39;) AND role_assist is not null) 
-AND (hp_max&gt;8000 OR mp_max&lt;1500) order by (hp_max+mp_max) DESC;</p>2019-06-24</li><br/><li><span>华夏</span> 👍（5） 💬（3）<p>SELECT name, role_main, role_assist, hp_max, mp_max 
-FROM heros 
-WHERE (role_main IN (&#39;坦克&#39;, &#39;战士&#39;) AND role_assist IS NOT NULL) 
-AND (hp_max &gt; 8000 OR mp_max &lt; 1500) 
+SELECT name,role_main,role_assist,hp_max,mp_max FROM heros
+WHERE (role_main in (&#39;坦克&#39;,&#39;战士&#39;) AND role_assist is not null)
+AND (hp_max&gt;8000 OR mp_max&lt;1500) order by (hp_max+mp_max) DESC;</p>2019-06-24</li><br/><li><span>华夏</span> 👍（5） 💬（3）<p>SELECT name, role_main, role_assist, hp_max, mp_max
+FROM heros
+WHERE (role_main IN (&#39;坦克&#39;, &#39;战士&#39;) AND role_assist IS NOT NULL)
+AND (hp_max &gt; 8000 OR mp_max &lt; 1500)
 ORDER BY (hp_max+mp_max) DESC;
 +-----------+-----------+-------------+--------+--------+
-| name      | role_main | role_assist | hp_max | mp_max |
+| name | role_main | role_assist | hp_max | mp_max |
 +-----------+-----------+-------------+--------+--------+
-| 牛魔      | 坦克      | 辅助        |   8476 |   1926 |
-| 刘邦      | 坦克      | 辅助        |   8073 |   1940 |
-| 程咬金    | 坦克      | 战士        |   8611 |      0 |
-| 张飞      | 坦克      | 辅助        |   8341 |    100 |
-| 亚瑟      | 战士      | 坦克        |   8050 |      0 |
-| 吕布      | 战士      | 坦克        |   7344 |      0 |
-| 关羽      | 战士      | 坦克        |   7107 |     10 |
-| 花木兰    | 战士      | 刺客        |   5397 |    100 |
+| 牛魔 | 坦克 | 辅助 | 8476 | 1926 |
+| 刘邦 | 坦克 | 辅助 | 8073 | 1940 |
+| 程咬金 | 坦克 | 战士 | 8611 | 0 |
+| 张飞 | 坦克 | 辅助 | 8341 | 100 |
+| 亚瑟 | 战士 | 坦克 | 8050 | 0 |
+| 吕布 | 战士 | 坦克 | 7344 | 0 |
+| 关羽 | 战士 | 坦克 | 7107 | 10 |
+| 花木兰 | 战士 | 刺客 | 5397 | 100 |
 +-----------+-----------+-------------+--------+--------+
 8 rows in set (0.00 sec)
 </p>2019-06-30</li><br/><li><span>晓涛</span> 👍（4） 💬（2）<p>sql建立索引是什么意思，老师能详细解释下不？

@@ -861,8 +861,8 @@ return fmt.Sprintf("name: %s, address: %s, phone: %v, sex: %v", name, address, c
 一个业务通过A-&gt;B-&gt;C完成，通过requestID可以串起来，假如严格一点，是不是还要搞个parnent-request-id ？</p>2021-08-01</li><br/><li><span>宙斯</span> 👍（3） 💬（1）<p>健康检查这里有两个疑问：
 1 配置了健康检查会阻塞，不会运行 eg.Wait() ，这是故意阻塞在ping这里的吗？
 2 健康检查ping函数for中，我查看到逻辑是这样的，
-  a) 在启动时web服务还未启动，会出错err，每隔1s运行一次，
-  b) 当服务正常启动后，这是能请求通畅，然后就return nil，只运行一次就不再运行了。
+a) 在启动时web服务还未启动，会出错err，每隔1s运行一次，
+b) 当服务正常启动后，这是能请求通畅，然后就return nil，只运行一次就不再运行了。
 这个逻辑有些疑惑，健康检查不应该总是运行的么？
 
 代码位置：iam&#47;internal&#47;pkg&#47;server&#47;genericapiserver.go
@@ -872,24 +872,28 @@ return fmt.Sprintf("name: %s, address: %s, phone: %v, sex: %v", name, address, c
 官方文档也说
 &quot;Use context Values only for request-scoped data that transits processes and APIs, not for passing optional parameters to functions.&quot;
 https:&#47;&#47;pkg.go.dev&#47;context</p>2022-08-04</li><br/><li><span>Geek_63505f</span> 👍（1） 💬（2）<p>老师请问下这里 下面那个run方法是启动命令行的命令吗？我看a.cmd.Execute()命令里面是执行os.Args[1:] 。
-         apiserver.NewApp(&quot;iam-apiserver&quot;).Run()
-                   func (a *App) Run() {
-	if err := a.cmd.Execute(); err != nil {
-		fmt.Printf(&quot;%v %v\n&quot;, color.RedString(&quot;Error:&quot;), err)
-		os.Exit(1)
-	}
-}   </p>2022-01-27</li><br/><li><span>Geek_433b2b</span> 👍（1） 💬（1）<p>孔老师，你好。我是 Go 语言初学者，在并发处理模板这块有个疑问：
+apiserver.NewApp(&quot;iam-apiserver&quot;).Run()
+func (a *App) Run() {
+if err := a.cmd.Execute(); err != nil {
+fmt.Printf(&quot;%v %v\n&quot;, color.RedString(&quot;Error:&quot;), err)
+os.Exit(1)
+}
+} </p>2022-01-27</li><br/><li><span>Geek_433b2b</span> 👍（1） 💬（1）<p>孔老师，你好。我是 Go 语言初学者，在并发处理模板这块有个疑问：
 为什么在协程中不是直接对参数 user 赋值：user.TotalPolicy = policies.TotalCount，最后直接返回 users。而是重新创建一个 User 对象？包括在 ListWithBadPerformance 中也是重新创建了一个对象。
 我写了个 demo 是可以正常赋值的。这样做的话不就可以不使用 map 了吗，而且也能保证顺序。</p>2021-12-29</li><br/><li><span>ppd0705</span> 👍（1） 💬（1）<p>请问SQL文件里面时间字段为什么是如下语句？和实际gorm的逻辑不一致
+
 ```sql
 `createdAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 `updatedAt` timestamp NOT NULL DEFAULT &#39;0000-00-00 00:00:00&#39;,
 ```
+
 实际表现应该是如下
+
 ```sql
 `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
 `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 ```
+
 </p>2021-10-03</li><br/><li><span>XI</span> 👍（1） 💬（2）<p> go func() {        &#47;&#47; 将服务在 goroutine 中启动        if err := srv.ListenAndServe(); err != nil &amp;&amp; err != http.ErrServerClosed {            log.Fatalf(&quot;listen: %s\n&quot;, err)        }    }()
 优雅关停机这段代码，当前面有nginx的时候是无法拿到客户端ip的，拿到的ip 会是nginx的ip 详请可见gin 的r.run 方法
 
@@ -897,26 +901,27 @@ https:&#47;&#47;pkg.go.dev&#47;context</p>2022-08-04</li><br/><li><span>Geek_635
 【见iam&#47;internal&#47;apiserver&#47;server.go的函数initRedisStore()】
 
 func (s *apiServer) initRedisStore() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+ctx, cancel := context.WithCancel(context.Background())
+defer cancel()
 
-	config := &amp;storage.Config{
-		Host:                  s.redisOptions.Host,
-		Port:                  s.redisOptions.Port,
-		Addrs:                 s.redisOptions.Addrs,
-		MasterName:            s.redisOptions.MasterName,
-		Username:              s.redisOptions.Username,
-		Password:              s.redisOptions.Password,
-		Database:              s.redisOptions.Database,
-		MaxIdle:               s.redisOptions.MaxIdle,
-		MaxActive:             s.redisOptions.MaxActive,
-		Timeout:               s.redisOptions.Timeout,
-		EnableCluster:         s.redisOptions.EnableCluster,
-		UseSSL:                s.redisOptions.UseSSL,
-		SSLInsecureSkipVerify: s.redisOptions.SSLInsecureSkipVerify,
-	}
+    config := &amp;storage.Config{
+    	Host:                  s.redisOptions.Host,
+    	Port:                  s.redisOptions.Port,
+    	Addrs:                 s.redisOptions.Addrs,
+    	MasterName:            s.redisOptions.MasterName,
+    	Username:              s.redisOptions.Username,
+    	Password:              s.redisOptions.Password,
+    	Database:              s.redisOptions.Database,
+    	MaxIdle:               s.redisOptions.MaxIdle,
+    	MaxActive:             s.redisOptions.MaxActive,
+    	Timeout:               s.redisOptions.Timeout,
+    	EnableCluster:         s.redisOptions.EnableCluster,
+    	UseSSL:                s.redisOptions.UseSSL,
+    	SSLInsecureSkipVerify: s.redisOptions.SSLInsecureSkipVerify,
+    }
 
-	&#47;&#47; try to connect to redis
-	go storage.ConnectToRedis(ctx, config)
-}</p>2021-08-30</li><br/><li><span>helloworld</span> 👍（1） 💬（1）<p>源码中的storeIns, _ := mysql.GetMySQLFactoryOr(nil),  其中GetMySQLFactoryOr这个函数名的Or是表达的什么意思呢</p>2021-08-13</li><br/><li><span>旋风</span> 👍（1） 💬（1）<p>并发处理模板如何复用，只能复制粘贴吗？</p>2021-08-01</li><br/><li><span>tiny🌾</span> 👍（0） 💬（2）<p>Extend和ExtendShadow 存储在db是json格式，这个怎么去SQL查询了？ 还有每次都需要编解码性能怎么样</p>2022-11-04</li><br/>
+    &#47;&#47; try to connect to redis
+    go storage.ConnectToRedis(ctx, config)
+
+}</p>2021-08-30</li><br/><li><span>helloworld</span> 👍（1） 💬（1）<p>源码中的storeIns, _ := mysql.GetMySQLFactoryOr(nil), 其中GetMySQLFactoryOr这个函数名的Or是表达的什么意思呢</p>2021-08-13</li><br/><li><span>旋风</span> 👍（1） 💬（1）<p>并发处理模板如何复用，只能复制粘贴吗？</p>2021-08-01</li><br/><li><span>tiny🌾</span> 👍（0） 💬（2）<p>Extend和ExtendShadow 存储在db是json格式，这个怎么去SQL查询了？ 还有每次都需要编解码性能怎么样</p>2022-11-04</li><br/>
 </ul>

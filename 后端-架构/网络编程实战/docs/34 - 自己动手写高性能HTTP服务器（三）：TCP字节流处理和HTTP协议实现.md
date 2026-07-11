@@ -445,14 +445,14 @@ nuc@nuc-NUC8i5BEHS:~&#47;learn&#47;GeekTime&#47;net_prog&#47;yolanda&#47;build&#
 [msg] get message from tcp connection connection-13
 段错误 (核心已转储)</p>2021-07-09</li><br/><li><span>JeQer</span> 👍（1） 💬（1）<p>没有经过压力测试的服务器怎么能称为高性能呢?</p>2021-02-17</li><br/><li><span>TinyCalf</span> 👍（1） 💬（1）<p>&#47;&#47;初始化一个request对象
 struct http_request *http_request_new() {
-    struct http_request *httpRequest = malloc(sizeof(struct http_request));
-    httpRequest-&gt;method = NULL;
-    httpRequest-&gt;current_state = REQUEST_STATUS;
-    httpRequest-&gt;version = NULL;
-    httpRequest-&gt;url = NULL;
-    httpRequest-&gt;request_headers = malloc(sizeof(struct http_request) * INIT_REQUEST_HEADER_SIZE);
-    httpRequest-&gt;request_headers_number = 0;
-    return httpRequest;
+struct http_request *httpRequest = malloc(sizeof(struct http_request));
+httpRequest-&gt;method = NULL;
+httpRequest-&gt;current_state = REQUEST_STATUS;
+httpRequest-&gt;version = NULL;
+httpRequest-&gt;url = NULL;
+httpRequest-&gt;request_headers = malloc(sizeof(struct http_request) * INIT_REQUEST_HEADER_SIZE);
+httpRequest-&gt;request_headers_number = 0;
+return httpRequest;
 }
 这里的
 httpRequest-&gt;request_headers = malloc(sizeof(struct http_request) * INIT_REQUEST_HEADER_SIZE);

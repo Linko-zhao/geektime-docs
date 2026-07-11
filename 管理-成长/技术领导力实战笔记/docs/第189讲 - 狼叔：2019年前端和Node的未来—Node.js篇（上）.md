@@ -126,7 +126,7 @@ import { renderToNodeStream } from "react-dom/server"
 import MyPage from "./MyPage"
 app.get("/", (req, res) => {
   res.write("<!DOCTYPE html><html><head><title>My Page</title></head><body>");
-  res.write("<div id='content'>"); 
+  res.write("<div id='content'>");
   const stream = renderToNodeStream(<MyPage/>);
   stream.pipe(res, { end: false });
   stream.on('end', () => {

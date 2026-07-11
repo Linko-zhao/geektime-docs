@@ -41,7 +41,7 @@
 
 ```JavaScript
     names = names.filter( e => {
-        try { 
+        try {
             return !(window[e].prototype instanceof Node)
         } catch(err) {
             return true;
@@ -75,7 +75,7 @@
     names = names.filter(e => !js.has(e));
 
     names = names.filter( e => {
-        try { 
+        try {
             return !(window[e].prototype instanceof Node)
         } catch(err) {
             return true;
@@ -290,51 +290,58 @@ names = filterOut(names, ["MediaSource", "SourceBuffer", "SourceBufferList"]);
 分享整理所得：
 
 W3C 标准下的 API：
-* Web Audio API
-* Web Cryptography API
-* Media Source Extensions
-* The Screen Orientation API
-* Network Information API
-* Web MIDI (Musical Instrument Digital Interface ) API 
-* IndexedDB API
-* Gamepad API
-* DeviceOrientation Event
-* Web App Manifest
-* WebVTT: The Web Video Text Tracks Format
-* Touch Events
-* Scalable Vector Graphics (SVG)
-* Resize Observer API
-* Intersection Observer
-* Mutation Observer
-* Cooperative Scheduling of Background Tasks
-* Service Worker API
-* Payment Request API
-* Presentation API
-* Web Authentication API
+
+- Web Audio API
+- Web Cryptography API
+- Media Source Extensions
+- The Screen Orientation API
+- Network Information API
+- Web MIDI (Musical Instrument Digital Interface ) API
+- IndexedDB API
+- Gamepad API
+- DeviceOrientation Event
+- Web App Manifest
+- WebVTT: The Web Video Text Tracks Format
+- Touch Events
+- Scalable Vector Graphics (SVG)
+- Resize Observer API
+- Intersection Observer
+- Mutation Observer
+- Cooperative Scheduling of Background Tasks
+- Service Worker API
+- Payment Request API
+- Presentation API
+- Web Authentication API
 
 WICG 标准下的 API：
-* Input Device Capabilitie
-* Web Bluetooth API
-* WebUSB API
+
+- Input Device Capabilitie
+- Web Bluetooth API
+- WebUSB API
 
 ECMA 标准下的 API：
-* JavaScript 全局变量
-* ECMAScript 2018 Internationalization API
+
+- JavaScript 全局变量
+- ECMAScript 2018 Internationalization API
 
 WHATWG 标准下的 API：
-* Streams
-* Encoding
-* URL
+
+- Streams
+- Encoding
+- URL
 
 Khronos 标准下的 API：
-* WebGL
+
+- WebGL
 
 未标准化的 API：
-* Web Background Synchronization
-* WebRTC API
-* Document Object Model XPath
-* Visual Viewport API
-* Performance Timeline API
+
+- Web Background Synchronization
+- WebRTC API
+- Document Object Model XPath
+- Visual Viewport API
+- Performance Timeline API
+
 </p>2019-04-24</li><br/><li><span>阿成</span> 👍（26） 💬（0）<p>整理的过程中，我发现我对翻阅标准的恐惧心降低了... 而且大概了解了一下这些spec都在干些啥(虽然也有很多并不知道他们是在干啥)...
 
 就是花的时间有点长... 都整理完太累了... 有些词实在是检索不到spec，只能在一些犄角旮旯的地方甚至源码里看到引用...
@@ -348,8 +355,7 @@ https:&#47;&#47;gist.github.com&#47;aimergenge&#47;c0fb01dbdbf3aa1c2b31e3f2ae779
 
 tc39,w3c,whatwg 基本就这几个组织在推动web发展....
 另外还有个khronos管openGL、webGL等图形标准的...</p>2019-04-19</li><br/><li><span>champ可口可乐了</span> 👍（14） 💬（0）<p>其实，MDN上已经整理好了
-https:&#47;&#47;developer.mozilla.org&#47;en-US&#47;docs&#47;Web&#47;API</p>2020-05-03</li><br/><li><span>mfist</span> 👍（6） 💬（0）<p>1. 通过老师的课，感觉慢慢会去翻标准了，之前学习没有见过的API，只是到MDN为止。
-2. 浏览器器中大多数的对象都原型继承自Object，是否可以根据原型继承关系 将window上面的api绘制成一颗树？有了这些继承关系 是否更容易理清这些全局属性呢。
+https:&#47;&#47;developer.mozilla.org&#47;en-US&#47;docs&#47;Web&#47;API</p>2020-05-03</li><br/><li><span>mfist</span> 👍（6） 💬（0）<p>1. 通过老师的课，感觉慢慢会去翻标准了，之前学习没有见过的API，只是到MDN为止。2. 浏览器器中大多数的对象都原型继承自Object，是否可以根据原型继承关系 将window上面的api绘制成一颗树？有了这些继承关系 是否更容易理清这些全局属性呢。
 </p>2019-04-18</li><br/><li><span>🐳李小博🐳</span> 👍（4） 💬（1）<p>有一个疑惑是，大小写的两个属性有什么区别
 Screen，screen
 Event，event</p>2019-05-08</li><br/><li><span>余文郁</span> 👍（2） 💬（0）<p>winter老师，问个关于DOM获取的问题，通过querySelectorAll获取的是静态集合，但通过getElementByClassName获取的是动态集合，会随着DOM结构的变化而变化，想这些获取的HTMLCollection和NodeList如何判断是不是动态的呢，以及他们底层的原理是怎么样的呢，为什么会有动态静态之分</p>2019-12-31</li><br/><li><span>扩散性百万咸面包</span> 👍（1） 💬（0）<p>说实话，老师这个整理API的学习方法挺好，加深对API的整体理解，对技术也有了更全面的认知。（还可以归个类，大致分分组）以后我学其他技术的时候也用这个办法，快速上手。</p>2020-04-20</li><br/><li><span>*</span> 👍（0） 💬（0）<p>WHATWG、W3C这两个组织有什么区别啊</p>2022-04-01</li><br/><li><span>Marvin</span> 👍（0） 💬（1）<p>我过滤到其他API之前还剩下523个，大家呢？</p>2020-08-24</li><br/><li><span>李岩</span> 👍（0） 💬（0）<p>醍醐灌顶

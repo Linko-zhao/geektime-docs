@@ -36,18 +36,18 @@ Node.js是运行JavaScript语言的一种环境，而JavaScript是“单线程�
 
 ```typescript
 // demos/http.cjs
-const Koa = require('Koa');
-const Router = require('@koa/router');
+const Koa = require("Koa");
+const Router = require("@koa/router");
 
 const app = new Koa();
 const router = new Router();
 const port = 9001;
 
-router.get('/001', async (ctx) => {
-  ctx.body = '<div>普通页面结果</div>';
+router.get("/001", async (ctx) => {
+  ctx.body = "<div>普通页面结果</div>";
 });
 
-router.get('/002', async (ctx) => {
+router.get("/002", async (ctx) => {
   let count = 0;
   for (let i = 0; i < 9999999999; i++) {
     count++;
@@ -58,11 +58,10 @@ router.get('/002', async (ctx) => {
 app.use(router.routes());
 
 app.listen(port, () => {
-  console.log('服务已启动');
+  console.log("服务已启动");
   console.log(`访问普通请求 http://127.0.0.1:${port}/001`);
   console.log(`访问CPU密集计算请求 http://127.0.0.1:${port}/002`);
 });
-
 ```
 
 这段代码是一个简单的Koa.js实现的Node.js服务，提供了两个HTTP页面，页面路径分别是 “/001”和“/002”。其中，路径“/001”请求是普通的HTML页面，路径“/002”请求是经过九十多亿次计算后才响应的HTML页面。这里，九十多亿次的计算属于CPU密集计算，在这个环节，Node.js单线程服务会被阻塞住，直到被占用CPU的资源被释放。
@@ -75,7 +74,7 @@ app.listen(port, () => {
 // demos/http-get.cjs
 // 单独请求 /001
 const start = Date.now();
-fetch('http://127.0.0.1:9001/001')
+fetch("http://127.0.0.1:9001/001")
   .then((res) => res.text())
   .then(() => {
     console.log(`/001 请求耗时 ${Date.now() - start}ms`);
@@ -94,7 +93,7 @@ fetch('http://127.0.0.1:9001/001')
 // demos/http-get.cjs
 // 单独请求 /002
 const start = Date.now();
-fetch('http://127.0.0.1:9001/002')
+fetch("http://127.0.0.1:9001/002")
   .then((res) => res.text())
   .then(() => {
     console.log(`/002 请求耗时 ${Date.now() - start}ms`);
@@ -113,16 +112,16 @@ fetch('http://127.0.0.1:9001/002')
 // demos/http-get.cjs
 // 模拟并发请求两种路径
 const startFor002 = Date.now();
-console.log('开始执行请求 /002 ...');
-fetch('http://127.0.0.1:9001/002')
+console.log("开始执行请求 /002 ...");
+fetch("http://127.0.0.1:9001/002")
   .then((res) => res.text())
   .then(() => {
     console.log(`/002 请求耗时 ${Date.now() - startFor002}ms`);
   });
 
 const startFor001 = Date.now();
-console.log('开始执行请求 /001 ...');
-fetch('http://127.0.0.1:9001/001')
+console.log("开始执行请求 /001 ...");
+fetch("http://127.0.0.1:9001/001")
   .then((res) => res.text())
   .then(() => {
     console.log(`/001 请求耗时 ${Date.now() - startFor001}ms`);
@@ -182,8 +181,8 @@ fetch('http://127.0.0.1:9001/001')
 
 ```typescript
 // demos/html-action.js
-const { h, renderList, toDisplayString, createSSRApp } = require('vue');
-const { renderToString } = require('vue/server-renderer');
+const { h, renderList, toDisplayString, createSSRApp } = require("vue");
+const { renderToString } = require("vue/server-renderer");
 
 // Vue.js组件
 const Item = {
@@ -191,33 +190,33 @@ const Item = {
   setup(props) {
     const { text, index } = props;
     return () => {
-      return h('div', { class: 'v-item' }, [
+      return h("div", { class: "v-item" }, [
         toDisplayString(index),
-        toDisplayString(text)
+        toDisplayString(text),
       ]);
     };
-  }
+  },
 };
 
 // Vue.js组件
 const List = {
   props: {
-    list: Array
+    list: Array,
   },
   setup(props) {
     const { list } = props;
     return () => {
       return h(
-        'ul',
-        { class: 'v-list' },
+        "ul",
+        { class: "v-list" },
         renderList(list, (item, index) => {
-          return h('li', null, [
-            h('li', null, [h(Item, { text: item.text, index: index })])
+          return h("li", null, [
+            h("li", null, [h(Item, { text: item.text, index: index })]),
           ]);
-        })
+        }),
       );
     };
-  }
+  },
 };
 
 // Vue.js服务端渲染代码
@@ -237,7 +236,7 @@ const dataList = [100000, 200000, 300000, 400000];
 
 module.exports = {
   createAppHTML,
-  dataList
+  dataList,
 };
 ```
 
@@ -245,7 +244,7 @@ module.exports = {
 
 ```typescript
 // demos/html.js
-const { createAppHTML, dataList } = require('./html-action');
+const { createAppHTML, dataList } = require("./html-action");
 
 async function main() {
   const htmlList = [];
@@ -255,7 +254,7 @@ async function main() {
     const html = await createAppHTML(dataList[i]);
     htmlList.push(html);
     console.log(
-      `编译数据量为 [${dataList[i]}] 的Vue模板，耗时 ${Date.now() - s}ms`
+      `编译数据量为 [${dataList[i]}] 的Vue模板，耗时 ${Date.now() - s}ms`,
     );
   }
   console.log(`编译HTML结束，总耗时为 ${Date.now() - start}ms`);
@@ -273,14 +272,14 @@ main();
 这个CPU使用率怎么理解呢？如果是多核CPU的机器，96%使用率是比较低的。我们可以用Node.js多线程的方式来处理，得到新的CPU使用率，对比一下。
 
 ```typescript
-// demos/html-thread.js 
+// demos/html-thread.js
 const {
   isMainThread,
   workerData,
   Worker,
-  parentPort
-} = require('worker_threads');
-const { createAppHTML, dataList } = require('./html-action');
+  parentPort,
+} = require("worker_threads");
+const { createAppHTML, dataList } = require("./html-action");
 
 const htmlList = [];
 // 线程数量为 多次密集计算的数量
@@ -288,25 +287,25 @@ const threadCount = dataList.length;
 
 if (isMainThread) {
   // 如果是在主线程内
-  console.log('Main Thread: 主线程');
+  console.log("Main Thread: 主线程");
   const mainStart = Date.now();
   // 触发多线程
   for (let i = 0; i < threadCount; i++) {
     // 将多次Vue.js服务端渲染的密集计算分配给子线程
     const worker = new Worker(__filename, {
-      workerData: { count: dataList[i] }
+      workerData: { count: dataList[i] },
     });
     // 线程间的通信
-    worker.on('message', (data) => {
+    worker.on("message", (data) => {
       htmlList.push(data.html);
       console.log(
-        `Child Thread (${worker.threadId}) 子线程执行耗时：${data.time}ms`
+        `Child Thread (${worker.threadId}) 子线程执行耗时：${data.time}ms`,
       );
       if (htmlList.length >= dataList.length) {
         console.log(`执行全部结束，总耗时: ${Date.now() - mainStart}ms`);
       }
       // 子线程执行完计算后，触发结束子线程
-      worker.emit('end');
+      worker.emit("end");
     });
   }
 } else {
@@ -330,8 +329,8 @@ if (isMainThread) {
 
 ```typescript
 // demos/html-process.js
-const cluster = require('cluster');
-const { createAppHTML, dataList } = require('./html-action');
+const cluster = require("cluster");
+const { createAppHTML, dataList } = require("./html-action");
 
 const htmlList = [];
 // 进程数量为 多次密集计算的数量
@@ -339,7 +338,7 @@ const processCount = dataList.length;
 
 if (cluster.isMaster) {
   // 进入主进程
-  console.log('Main Process: 主进程');
+  console.log("Main Process: 主进程");
   const mainStart = Date.now();
 
   for (let i = 0; i < processCount; i++) {
@@ -349,10 +348,10 @@ if (cluster.isMaster) {
 
     // 进程之间的IPC通信
     // 主进程向子进程发送任务数据
-    worker.on('message', (data) => {
+    worker.on("message", (data) => {
       htmlList.push(data.html);
       console.log(
-        `Child Process (${worker.process.pid}) 子进程执行耗时：${data.time}ms`
+        `Child Process (${worker.process.pid}) 子进程执行耗时：${data.time}ms`,
       );
       if (htmlList.length >= dataList.length) {
         console.log(`执行全部结束，总耗时: ${Date.now() - mainStart}ms`);
@@ -365,7 +364,7 @@ if (cluster.isMaster) {
   console.log(`Child Process: 启动子进程 (pid: ${process.pid})`);
   // 进程之间的IPC通信
   // 接收主进程的消息
-  process.on('message', (data) => {
+  process.on("message", (data) => {
     const start = Date.now();
     // 执行Vue.js服务端渲染的密集计算
     createAppHTML(data.count).then((html) => {
@@ -398,15 +397,15 @@ if (cluster.isMaster) {
 
 ```typescript
 // packages/work-server/start.cjs
-const cluster = require('cluster');
-const path = require('path');
-const os = require('os');
+const cluster = require("cluster");
+const path = require("path");
+const os = require("os");
 
 const processCount = os.cpus().length;
-const entryFile = path.join(__dirname, 'dist', 'index.cjs');
+const entryFile = path.join(__dirname, "dist", "index.cjs");
 
 cluster.setupMaster({
-  exec: entryFile
+  exec: entryFile,
 });
 
 // 根据CPU核数，启动多进程
@@ -449,6 +448,7 @@ for (let i = 0; i < processCount; i++) {
 欢迎留言分享你的思考。在掌握Node.js服务端的性能优化操作的同时，也要记得举一反三应用到其它开发场景中。我们下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/35)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>ifelse</span> 👍（0） 💬（0）<p>多线程和多进程主要是解决cpu阻塞操作问题，比如io阻塞，网络阻塞问题。
 至于计算密集型，一般就是要改代码才能充分利用cpu多核的性能优势，比如大任务切分为小任务，然后利用多任务执行提高性能。</p>2024-10-08</li><br/>

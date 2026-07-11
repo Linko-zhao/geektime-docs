@@ -60,7 +60,7 @@ ENTRY (_start)
   mov %RDX_LP, %R9_LP	 /* 保存 FINI 函数的地址到 r9 */
 #ifdef __ILP32__
   /* 模拟 ILP32 模型下的栈操作，将位于栈顶的 argc 放入 rsi */
-  mov (%rsp), %esi  
+  mov (%rsp), %esi
   add $4, %esp  /* 同时让栈顶向高地址移动 4 字节 */
 #else
   popq %rsi  /* 将位于栈顶的 argc 放入 rsi */
@@ -74,13 +74,13 @@ ENTRY (_start)
   xorl %ecx, %ecx  /* 复位 ecx */
 #ifdef PIC
   /* 将 GOT 表项中的 main 函数地址存放到 rdi */
-  mov main@GOTPCREL(%rip), %RDI_LP  
+  mov main@GOTPCREL(%rip), %RDI_LP
 #else
   mov $main, %RDI_LP  /* 将 main 函数的绝对地址存放到 rdi */
 #endif
   /* 调用 __libc_start_main 函数 */
   call *__libc_start_main@GOTPCREL(%rip)
-  hlt	
+  hlt
 END (_start)
   .data
   .globl __data_start
@@ -93,12 +93,12 @@ __data_start:
 总的来看，这部分汇编代码主要完成了相应的参数准备工作，以及对函数 \_\_libc\_start\_main 的调用过程。这个函数的原型如下所示：
 
 ```bash
-int __libc_start_main(int (*main) (int, char**, char**), 
-                      int argc, 
-                      char **argv, 
-                      void (*init) (void), 
-                      void (*fini) (void), 
-                      void (*rtld_fini) (void), 
+int __libc_start_main(int (*main) (int, char**, char**),
+                      int argc,
+                      char **argv,
+                      void (*init) (void),
+                      void (*fini) (void),
+                      void (*rtld_fini) (void),
                       void *stack_end);
 ```
 

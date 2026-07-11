@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
 
 ```c++
 class Cat {  // 对象猫；
- public: 
+ public:
   void eat();
 };
 void Cat::eat(void) {
@@ -58,7 +58,7 @@ void Cat::eat(void) {
   return;
 }
 class People {  // 对象人；
- public: 
+ public:
   void eat();
 };
 void People::eat(void) {
@@ -129,7 +129,7 @@ typedef struct MLOCK {
   UInt Count;  // 计数器；
   void (*MLocked)(MLock* Lock);  // 加锁函数指针；
   void (*MUnLock)(MLock* Lock);  // 解锁函数指针；
-} MLock; 
+} MLock;
 // 初始化；
 void MLockInit(MLock* init) {
   SpinLockInit(&init->Locks);

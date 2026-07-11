@@ -70,7 +70,7 @@ image_prompt += """
 ```plain
 # 步骤2: 用Claude等文本模型生成图片提示
 import anthropic
-MODEL_NAME = "claude-3-opus-20240229" 
+MODEL_NAME = "claude-3-opus-20240229"
 CLIENT = anthropic.Anthropic()
 
 # 定义与Claude交互的函数

@@ -468,12 +468,13 @@ protoc -I. --go-grpc_out=$GOPATH&#47;src helloworld.proto
 helloworld.pb.go      helloworld_grpc.pb.go
 这两个文件分别生成message和service的代码，合起来就是老版本的代码
 
-这是排查了两小时的坑，希望大家注意！</p>2022-01-21</li><br/><li><span>柠柠</span> 👍（16） 💬（1）<p>RPC 与 RESTful 共通逻辑抽象出来 Service 层，RPC server 和 RESTful server 初始化or 启动时时都需要指定 service，真正提供服务的是 Service 层</p>2021-06-25</li><br/><li><span>💎A</span> 👍（10） 💬（1）<p>https:&#47;&#47;www.bookstack.cn&#47;read&#47;API-design-guide&#47;API-design-guide-04-%E6%A0%87%E5%87%86%E6%96%B9%E6%B3%95.md  我又来做贡献了</p>2021-06-25</li><br/><li><span>fliyu</span> 👍（6） 💬（1）<p>想方便调用grpc，可以使用grpcurl和grpcui，基于反射的方式使用</p>2022-01-10</li><br/><li><span>不明真相的群众</span> 👍（6） 💬（1）<p>你有一个 gRPC 服务，但是却希望该服务同时也能提供 RESTful API 接口，这该如何实现？
+这是排查了两小时的坑，希望大家注意！</p>2022-01-21</li><br/><li><span>柠柠</span> 👍（16） 💬（1）<p>RPC 与 RESTful 共通逻辑抽象出来 Service 层，RPC server 和 RESTful server 初始化or 启动时时都需要指定 service，真正提供服务的是 Service 层</p>2021-06-25</li><br/><li><span>💎A</span> 👍（10） 💬（1）<p>https:&#47;&#47;www.bookstack.cn&#47;read&#47;API-design-guide&#47;API-design-guide-04-%E6%A0%87%E5%87%86%E6%96%B9%E6%B3%95.md 我又来做贡献了</p>2021-06-25</li><br/><li><span>fliyu</span> 👍（6） 💬（1）<p>想方便调用grpc，可以使用grpcurl和grpcui，基于反射的方式使用</p>2022-01-10</li><br/><li><span>不明真相的群众</span> 👍（6） 💬（1）<p>你有一个 gRPC 服务，但是却希望该服务同时也能提供 RESTful API 接口，这该如何实现？
 ---------------------------
+
 在封装一层？</p>2021-06-24</li><br/><li><span>Juniper</span> 👍（4） 💬（2）<p>查了下文档，optional是protoco 3.12版本加入的，如果参数设置成optional，执行时必须要带--experimental_allow_proto3_optional。但是我是3.15.8版本，执行时没有加上--experimental_allow_proto3_optional也没有报错</p>2021-10-02</li><br/><li><span>wei 丶</span> 👍（4） 💬（2）<p>老师有个疑问
 protoc --go_out=. *.proto
 protoc --go_out=plugins=grpc:. *.proto
-这俩有啥啥区别  😵</p>2021-08-12</li><br/><li><span>张名哲</span> 👍（4） 💬（1）<p>老师，文章中有四种模式，平时用的最多的是哪一种模式？</p>2021-07-13</li><br/><li><span>learner2021</span> 👍（3） 💬（4）<p>哪里设置错误了？
+这俩有啥啥区别 😵</p>2021-08-12</li><br/><li><span>张名哲</span> 👍（4） 💬（1）<p>老师，文章中有四种模式，平时用的最多的是哪一种模式？</p>2021-07-13</li><br/><li><span>learner2021</span> 👍（3） 💬（4）<p>哪里设置错误了？
 [going@dev server]$ pwd
 &#47;home&#47;going&#47;workspace&#47;golang&#47;src&#47;github.com&#47;marmotedu&#47;gopractise-demo&#47;apistyle&#47;greeter&#47;server
 [going@dev server]$ go run main.go
@@ -481,11 +482,9 @@ main.go:8:2: no required module provides package github.com&#47;marmotedu&#47;go
 main.go:9:2: no required module provides package google.golang.org&#47;grpc: go.mod file not found in current directory or any parent directory; see &#39;go help modules&#39;</p>2021-06-24</li><br/><li><span>朱元彬🗿</span> 👍（2） 💬（1）<p>生产环境中，使用服务提供者的接口，如果遇到接口更新的情况，要怎么跟服务提供者沟通更新协议呢？</p>2022-08-22</li><br/><li><span>顺势而为</span> 👍（2） 💬（1）<p>建议作者的命令行，多点pwd，方便我们定位</p>2022-07-28</li><br/><li><span>江湖夜雨十年灯</span> 👍（2） 💬（2）<p>老师，我的proto文件是这样写的，go_package用的是我本地项目的目录：
 option go_package = &quot;whw_scripts_stroage&#47;a_grpc_tests&#47;helloworld&quot;;
 在helloworld目录中执行下面命令：
-sudo protoc -I. --go_out=. .&#47;helloworld.proto 
+sudo protoc -I. --go_out=. .&#47;helloworld.proto
 但是最后在helloworld目录中，与helloworld.proto文件同一个级别生成的不是helloworld.pb.go，而是：whw_scripts_stroage&#47;a_grpc_tests&#47;helloworld.pb.go
 请问为什么生成的是目录加go文件呢？
-
-
 
 </p>2021-10-22</li><br/><li><span>andox</span> 👍（2） 💬（1）<p>grpc有推荐的服务治理方案吗</p>2021-10-14</li><br/><li><span>顺势而为</span> 👍（1） 💬（2）<p>对protoc为什么生成.pb.go的函数，不是很理解。</p>2022-07-29</li><br/>
 </ul>

@@ -186,55 +186,56 @@ B	[1, 4]
 C	[1, 3, 4]
 
 Multiple编码采用类似oneHot编码的形式进行编码，根据物品种类数目，展成物品种类数目大小的向量，当某个用户感兴趣时，对应维度为1，反之为0，如下
-用户	UserInterests
-A	[1, 1, 0, 0]
-B	[1, 0, 0, 1]
-C	[1, 0, 1, 1]
+用户 UserInterests
+A [1, 1, 0, 0]
+B [1, 0, 0, 1]
+C [1, 0, 1, 1]
 
 如何使用Multiple编码呢？
 我们将多个属性同时编码到同一个特征中，目的就是同时利用多个属性的特征。经过Multiple编码后的特征大小为[batch_size, num_items]，记作U，构建物品items的Embedding矩阵，该矩阵维度为[num_items, embedding_size]，记作V，将矩阵U和矩阵V相乘，我们就得到了大小为[batch_size， embedding_size]的多属性表示。
-参考资料：https:&#47;&#47;www.codeleading.com&#47;article&#47;97252516619&#47;#_OneHot_19</p>2020-10-12</li><br/><li><span>twzd</span> 👍（13） 💬（3）<p>老师请教一下，movieIdVector列输出结果中(1001,[1],[1.0])，每一列表示什么含义啊</p>2020-11-10</li><br/><li><span>Geek_ddf8b1</span> 👍（10） 💬（1）<p>老师 我看您FeatureEngForRecModel.scala代码中将特征写入redis是以哈希表的格式写入的，而且有些特征直接是类别型的文本数据。 
-       这种方式线上读取特征再后续处理输入排序模型预估的时候会不会效率很低，预估打分时间较长？比如取出文本特征做onehot 或者multihot变换等等，是否可以将文本特征onehot 或者multihot处理后再写入redis？ 
-     还有特征除了以hash表形式还可以以其它数据结构存到redis，比如以probuf对象、libsvm数据格式的特征索引：特征值的字符串存到redis 您对这几种存储方式怎么看？哪种更好？</p>2020-12-06</li><br/><li><span>Capricornus</span> 👍（6） 💬（1）<p>我使用的spark3.0的环境，脱离老师的项目，单独建立的用来学习。
-1. 下载Scala支持，[下载链接](https:&#47;&#47;www.scala-lang.org&#47;download&#47;2.12.12.html)
+参考资料：https:&#47;&#47;www.codeleading.com&#47;article&#47;97252516619&#47;#_OneHot_19</p>2020-10-12</li><br/><li><span>twzd</span> 👍（13） 💬（3）<p>老师请教一下，movieIdVector列输出结果中(1001,[1],[1.0])，每一列表示什么含义啊</p>2020-11-10</li><br/><li><span>Geek_ddf8b1</span> 👍（10） 💬（1）<p>老师 我看您FeatureEngForRecModel.scala代码中将特征写入redis是以哈希表的格式写入的，而且有些特征直接是类别型的文本数据。
+这种方式线上读取特征再后续处理输入排序模型预估的时候会不会效率很低，预估打分时间较长？比如取出文本特征做onehot 或者multihot变换等等，是否可以将文本特征onehot 或者multihot处理后再写入redis？
+还有特征除了以hash表形式还可以以其它数据结构存到redis，比如以probuf对象、libsvm数据格式的特征索引：特征值的字符串存到redis 您对这几种存储方式怎么看？哪种更好？</p>2020-12-06</li><br/><li><span>Capricornus</span> 👍（6） 💬（1）<p>我使用的spark3.0的环境，脱离老师的项目，单独建立的用来学习。
+
+1. 下载Scala支持，[下载链接](https://www.scala-lang.org/download/2.12.12.html)
 2. 解压后放在指定的目录
-    ```bash
-    vi ~&#47;.bash_profile
-    export PATH=&quot;$PATH:&#47;Library&#47;Scala&#47;scala-2.12.12&#47;bin&quot;
-    ```
+   ```bash
+   vi ~&#47;.bash_profile
+   export PATH=&quot;$PATH:&#47;Library&#47;Scala&#47;scala-2.12.12&#47;bin&quot;
+   ```
 3. 在IDEA的项目中引入，点击“+”号，根据路径添加
 4. 右键项目的目录，添加框架支持
 5. 添加IDEA的插件，preferences中
 
-
 6. porm.xml的环境依赖
 
-    ```xml
-    &lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.spark&lt;&#47;groupId&gt;
-        &lt;artifactId&gt;spark-core_2.12&lt;&#47;artifactId&gt;
-        &lt;version&gt;3.0.0&lt;&#47;version&gt;
-    &lt;&#47;dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.spark&lt;&#47;groupId&gt;
-        &lt;artifactId&gt;spark-mllib_2.12&lt;&#47;artifactId&gt;
-        &lt;version&gt;3.0.0&lt;&#47;version&gt;
-    &lt;&#47;dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.spark&lt;&#47;groupId&gt;
-        &lt;artifactId&gt;spark-sql_2.12&lt;&#47;artifactId&gt;
-        &lt;version&gt;3.0.0&lt;&#47;version&gt;
-    &lt;&#47;dependency&gt;
-    &lt;&#47;dependencies&gt;
-    ```
-    **注意：路径中不要包括中文，否则可能会出现路径不存在的问题。**
+   ```xml
+   &lt;dependencies&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.apache.spark&lt;&#47;groupId&gt;
+       &lt;artifactId&gt;spark-core_2.12&lt;&#47;artifactId&gt;
+       &lt;version&gt;3.0.0&lt;&#47;version&gt;
+   &lt;&#47;dependency&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.apache.spark&lt;&#47;groupId&gt;
+       &lt;artifactId&gt;spark-mllib_2.12&lt;&#47;artifactId&gt;
+       &lt;version&gt;3.0.0&lt;&#47;version&gt;
+   &lt;&#47;dependency&gt;
+   &lt;dependency&gt;
+       &lt;groupId&gt;org.apache.spark&lt;&#47;groupId&gt;
+       &lt;artifactId&gt;spark-sql_2.12&lt;&#47;artifactId&gt;
+       &lt;version&gt;3.0.0&lt;&#47;version&gt;
+   &lt;&#47;dependency&gt;
+   &lt;&#47;dependencies&gt;
+   ```
+
+   **注意：路径中不要包括中文，否则可能会出现路径不存在的问题。**
 
 然后有两处需要更改
-    val oneHotEncoder = new OneHotEncoder()
-      .setInputCols(Array(&quot;movieIdNumber&quot;))
-      .setOutputCols(Array(&quot;movieIdVector&quot;))
-      .setDropLast(false)
+val oneHotEncoder = new OneHotEncoder()
+.setInputCols(Array(&quot;movieIdNumber&quot;))
+.setOutputCols(Array(&quot;movieIdVector&quot;))
+.setDropLast(false)
 &#47;&#47; 官网的说法：OneHotEncoder which is deprecated in 2.3,is removed in 3.0 and OneHotEncoderEstimator is now renamed to OneHotEncoder.
 
     val movieFeatures = samples.groupBy(col(&quot;movieId&quot;))
@@ -242,6 +243,7 @@ C	[1, 0, 1, 1]
         avg(col(&quot;rating&quot;)).as(&quot;avgRating&quot;),
         functions.variance(col(&quot;rating&quot;)).as(&quot;ratingVar&quot;))
       .withColumn(&quot;avgRatingVec&quot;, double2vec(col(&quot;avgRating&quot;)))</p>2021-01-05</li><br/><li><span>张弛 Conor</span> 👍（6） 💬（2）<p>请教老师，像在电影评分这样的离散数值(且比较稀疏)例子中，如果需要取得分桶数较多，而导致分位数附近均是同一数值的情况下，如何使用分桶的方法呢？
+
 比如按照分桶法首先排序得到评分为5,5,4,4,4,4,4,4,3,3,3,3,2,2,1(共15个)。取桶数为3时，第一个桶内有前两个5，而后面的6个4中应该选择哪3个来分到第一个桶呢？</p>2020-10-14</li><br/><li><span>神经蛙</span> 👍（4） 💬（2）<p>--- 看了几位同学的留言，受益匪浅啊。希望大家多多交流~
 
 1.请你查阅一下 Spark MLlib 的编程手册，找出 Normalizer、StandardScaler、RobustScaler、MinMaxScaler 这个几个特征处理方法有什么不同。
@@ -258,7 +260,6 @@ RobustScaler
 
 MinMaxScaler
 将数据变为到[0,1]之间，也需要训练，得到每个维度的最大最小值。然后变化Y= (X-X_min)&#47;(X_max-X_min)
-
 
 2.你能试着运行一下 SparrowRecSys 中的 FeatureEngineering 类，从输出的结果中找出，到底哪一列是我们处理好的 One-hot 特征和 Multi-hot 特征吗？以及这两个特征是用 Spark 中的什么数据结构来表示的呢？
 
@@ -300,12 +301,12 @@ Multi-hot 特征是调用Vectors.sparse方法，对处理后的genreIndexes转�
 |     47|       9335|             12.0|
 +-------+-----------+-----------------+
 老师我设置的分桶数是20，为什么最大的桶标号不是19啊？</p>2021-01-24</li><br/><li><span>杨佳亦</span> 👍（3） 💬（2）<p>MinMaxScaler: 
-记录数据整体的最大&#47;最小值为max&#47;min, 对于Feature E，若Emax!=Emin, 则rescale后值=(Ei - Emin) &#47; (Emax - Emin) * (max - min) + min. 若Emax == Emin, 则rescale后值=0.5*(min + max). 
+记录数据整体的最大&#47;最小值为max&#47;min, 对于Feature E，若Emax!=Emin, 则rescale后值=(Ei - Emin) &#47; (Emax - Emin) * (max - min) + min. 若Emax == Emin, 则rescale后值=0.5*(min + max).
 
-Normalizer: 
+Normalizer:
 参考了其他留言才看懂了：这步做的是正则化。正则化将向量的范数缩放到单位1，即可对「样本」也可对「特征」，此处是对样本的正则化，即求样本在所有特征下的取值的P范数(l1, l2). 用通俗的话解释，l1范数计算的是每个元素在同一样本的所有特征取值之和下占的比例，l2范数计算的是每个元素与P维空间中欧氏距离的比值。
 
-StandardScaler: 
+StandardScaler:
 常用的数据标准化方法，即计算样本在所有特征下的均值和标准差，用数据减均值以中心化，再除以标准差以缩放至单位1. 就是一个把分布未知（通常情况下）的数据拉回到正态分布的函数。
 
 RobustScaler：

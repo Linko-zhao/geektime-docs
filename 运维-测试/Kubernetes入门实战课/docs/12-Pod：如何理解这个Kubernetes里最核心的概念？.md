@@ -220,56 +220,59 @@ Pod屏蔽了容器的一些底层细节，同时又具有足够的控制管理�
 1. 可以把 Pod 看作是介于容器之上的一层抽象，之所以需要这一层抽象是因为容器与容器之间有着不确定的关系，有的容器需要与彼此隔离，而有的容器却需要彼此交互。当容器规模增大，容器之间的作用关系就会变得极其复杂，难于管理。Pod 的出现就是为了解决容器管理的问题，让大规模应用下的容器编排变得更加清晰有序，易于维护
 
 2. 不管是容器还是 Pod，都是虚拟概念。把普通进程或应用加上权限限制就成了容器，再把容器加上权限限制就成了 Pod。说白了，就是不断地抽象封装，这也是软件中解决复杂问题的唯一手段。容器之于Pod，就好比 线程之于进程、函数之于类、文件之于文件夹等等</p>2022-07-21</li><br/><li><span>三溪</span> 👍（36） 💬（3）<p>我这里补充下个人遇到的坑，希望对大家有所帮助！
-当你使用kubectl apply -f指定YAML文件来创建pod时，只要你spec.containers.image里面的tag是latest，那么无论你的imagePullpolicy策略是什么，无论本地是否已存在该镜像文件，一定会先联网查询镜像信息，如果此时正好是私网无法连接互联网时，那么pod就会直接创建失败，你使用describe查询时报错也是无法拉取镜像。
-只要tag不是latest，比如stable或者1.23什么的具体版本，本地已存在对应镜像文件，这时设置为IfNotPresent和Never才会生效，就可以在私网环境下愉快地离线创建pod。</p>2022-07-27</li><br/><li><span>江湖十年</span> 👍（15） 💬（2）<p>imagePullPolicy 默认值并非 IfNotPresent，而是 Always：
+   当你使用kubectl apply -f指定YAML文件来创建pod时，只要你spec.containers.image里面的tag是latest，那么无论你的imagePullpolicy策略是什么，无论本地是否已存在该镜像文件，一定会先联网查询镜像信息，如果此时正好是私网无法连接互联网时，那么pod就会直接创建失败，你使用describe查询时报错也是无法拉取镜像。
+   只要tag不是latest，比如stable或者1.23什么的具体版本，本地已存在对应镜像文件，这时设置为IfNotPresent和Never才会生效，就可以在私网环境下愉快地离线创建pod。</p>2022-07-27</li><br/><li><span>江湖十年</span> 👍（15） 💬（2）<p>imagePullPolicy 默认值并非 IfNotPresent，而是 Always：
 
 ➜ kubectl explain pod.spec.containers.imagePullPolicy
-KIND:     Pod
-VERSION:  v1
+KIND: Pod
+VERSION: v1
 
-FIELD:    imagePullPolicy &lt;string&gt;
+FIELD: imagePullPolicy &lt;string&gt;
 
 DESCRIPTION:
-     Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always
-     if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated.
-     More info:
-     https:&#47;&#47;kubernetes.io&#47;docs&#47;concepts&#47;containers&#47;images#updating-images</p>2022-07-18</li><br/><li><span>奕</span> 👍（13） 💬（1）<p>container 对象. env：定义 Pod 的环境变量
+Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always
+if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated.
+More info:
+https:&#47;&#47;kubernetes.io&#47;docs&#47;concepts&#47;containers&#47;images#updating-images</p>2022-07-18</li><br/><li><span>奕</span> 👍（13） 💬（1）<p>container 对象. env：定义 Pod 的环境变量
 -------------
-这里 不应该是 container 的环境变量吗？</p>2022-07-18</li><br/><li><span>美妙的代码</span> 👍（11） 💬（5）<p>老师 ，一般情况下，pod里只定义一个容器吗？  还是可以定义多个容器。  它们之间没有什么区别吗？</p>2022-07-20</li><br/><li><span>Apple_d39574</span> 👍（7） 💬（1）<p>您好，想问一下，为什么要定义容器启动时要执行的命令？不设置会怎么样？</p>2022-11-28</li><br/><li><span>Guder</span> 👍（6） 💬（1）<p>感觉pod有点像是docker-compose</p>2022-07-19</li><br/><li><span>咩咩咩</span> 👍（6） 💬（1）<p>1.若直接使用容器来管理应用，只能一个个容器去调度。应用之间一般都有进程和进程组的关系，而容器又只是单进程模型，无法管理多个进程
+
+这里 不应该是 container 的环境变量吗？</p>2022-07-18</li><br/><li><span>美妙的代码</span> 👍（11） 💬（5）<p>老师 ，一般情况下，pod里只定义一个容器吗？ 还是可以定义多个容器。 它们之间没有什么区别吗？</p>2022-07-20</li><br/><li><span>Apple_d39574</span> 👍（7） 💬（1）<p>您好，想问一下，为什么要定义容器启动时要执行的命令？不设置会怎么样？</p>2022-11-28</li><br/><li><span>Guder</span> 👍（6） 💬（1）<p>感觉pod有点像是docker-compose</p>2022-07-19</li><br/><li><span>咩咩咩</span> 👍（6） 💬（1）<p>1.若直接使用容器来管理应用，只能一个个容器去调度。应用之间一般都有进程和进程组的关系，而容器又只是单进程模型，无法管理多个进程
 2.Pod是一组共享了某些资源的容器，只是一个逻辑概念</p>2022-07-18</li><br/><li><span>摊牌</span> 👍（5） 💬（1）<p>个人观点，不知道对不对，我觉得pod就应该叫做k8s自己的容器，如果没有pod, k8s直接调度容器对象，比如docker, 那它就永远要依赖docker; 如果k8s不对容器包装一下，没有类似pod这种粒度的话，k8s就必须选择一种现有容器技术，限制了其现在和未来的灵活性。所以，于公于私，构建pod这个基本调度单元是非常明智的选择，将来如果有新的容器技术代替了docker，但是k8s的基本单元永远是pod</p>2022-07-18</li><br/><li><span>bjdz</span> 👍（3） 💬（1）<p>向老师请教一个问题，被折磨坏了，
 docker images 显示本地是有 busybox:stable-glibc 这个版本的，yaml文件中的 imagePullPolicy: IfNotPresent，image: busybox:stable-glibc，
 根据这个yaml文件创建pod，显示 pod&#47;busybox created，但是 kubectl logs busybox，就显示镜像拉取失败
 Error from server (BadRequest): container &quot;busybox&quot; in pod &quot;busybox&quot; is waiting to start: trying and failing to pull image
 不明白为什么本地已经有镜像了，且不是最新的tag，为什么还要去拉取镜像？
 
-get pod报错：busybox   0&#47;1     CrashLoopBackOff   7 (4m47s ago)   22m
+get pod报错：busybox 0&#47;1 CrashLoopBackOff 7 (4m47s ago) 22m
 
 Events:
-  Normal   Scheduled  28m                   default-scheduler  Successfully assigned default&#47;busybox to minikube
-  Warning  Failed     24m                   kubelet            Failed to pull image &quot;busybox:stable-glibc&quot;: rpc error: code = Unknown desc = context canceled
-  Warning  Failed     24m (x2 over 24m)     kubelet            Error: ErrImagePull
-  Warning  Failed     24m                   kubelet            Failed to pull image &quot;busybox:stable-glibc&quot;: rpc error: code = Unknown desc = error pulling image configuration: Get &quot;xxx&quot;: net&#47;http: TLS handshake timeout
-  Normal   BackOff    24m (x2 over 24m)     kubelet            Back-off pulling image &quot;busybox:stable-glibc&quot;
-  Warning  Failed     24m (x2 over 24m)     kubelet            Error: ImagePullBackOff
-  Normal   Pulling    24m (x3 over 28m)     kubelet            Pulling image &quot;busybox:stable-glibc&quot;
-  Normal   Pulled     21m                   kubelet            Successfully pulled image &quot;busybox:stable-glibc&quot; in 2m20.001262902s
-  Normal   Created    20m (x4 over 21m)     kubelet            Created container busybox
-  Normal   Started    20m (x4 over 21m)     kubelet            Started container busybox
-  Normal   Pulled     20m (x3 over 21m)     kubelet            Container image &quot;busybox:stable-glibc&quot; already present on machine
-  Warning  BackOff    2m55s (x86 over 21m)  kubelet            Back-off restarting failed container</p>2022-10-28</li><br/><li><span>凯</span> 👍（3） 💬（4）<p>想请教一下老师，除了您讲解的内容。我更想知道您学习k8s的路线，您是怎么做到到精通的。我也自己学习，可是学习的都是一下粗略的内容。您是精读k8s的文档么，参加k8s的开源项目贡献代码么？</p>2022-07-21</li><br/><li><span>peter</span> 👍（3） 💬（1）<p>请教老师两个问题：
+Normal Scheduled 28m default-scheduler Successfully assigned default&#47;busybox to minikube
+Warning Failed 24m kubelet Failed to pull image &quot;busybox:stable-glibc&quot;: rpc error: code = Unknown desc = context canceled
+Warning Failed 24m (x2 over 24m) kubelet Error: ErrImagePull
+Warning Failed 24m kubelet Failed to pull image &quot;busybox:stable-glibc&quot;: rpc error: code = Unknown desc = error pulling image configuration: Get &quot;xxx&quot;: net&#47;http: TLS handshake timeout
+Normal BackOff 24m (x2 over 24m) kubelet Back-off pulling image &quot;busybox:stable-glibc&quot;
+Warning Failed 24m (x2 over 24m) kubelet Error: ImagePullBackOff
+Normal Pulling 24m (x3 over 28m) kubelet Pulling image &quot;busybox:stable-glibc&quot;
+Normal Pulled 21m kubelet Successfully pulled image &quot;busybox:stable-glibc&quot; in 2m20.001262902s
+Normal Created 20m (x4 over 21m) kubelet Created container busybox
+Normal Started 20m (x4 over 21m) kubelet Started container busybox
+Normal Pulled 20m (x3 over 21m) kubelet Container image &quot;busybox:stable-glibc&quot; already present on machine
+Warning BackOff 2m55s (x86 over 21m) kubelet Back-off restarting failed container</p>2022-10-28</li><br/><li><span>凯</span> 👍（3） 💬（4）<p>想请教一下老师，除了您讲解的内容。我更想知道您学习k8s的路线，您是怎么做到到精通的。我也自己学习，可是学习的都是一下粗略的内容。您是精读k8s的文档么，参加k8s的开源项目贡献代码么？</p>2022-07-21</li><br/><li><span>peter</span> 👍（3） 💬（1）<p>请教老师两个问题：
 Q1:：YAML中可以定义多个POD吗？
 Q2：k8s集群启动命令每次开机后都要执行吗？
-       minikube start --kubernetes-version=v1.23.3，这个命令是启动k8s集群，
-       现在好像每次重启虚拟机后都要执行该命令，必须执行吗？</p>2022-07-18</li><br/><li><span>潜光隐耀</span> 👍（2） 💬（2）<p>请教下，kubectl exec -it podname -- sh报错，提示：
+minikube start --kubernetes-version=v1.23.3，这个命令是启动k8s集群，
+现在好像每次重启虚拟机后都要执行该命令，必须执行吗？</p>2022-07-18</li><br/><li><span>潜光隐耀</span> 👍（2） 💬（2）<p>请教下，kubectl exec -it podname -- sh报错，提示：
 
 error: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec &quot;xxx&quot;: OCI runtime exec failed: exec failed: unable to start container process: exec: &quot;sh&quot;: executable file not found in $PATH: unknown
 
 这个错误该如何解决呢？</p>2022-08-16</li><br/><li><span>psoracle</span> 👍（2） 💬（1）<p>来回答下作业：
+
 1. 如果没有 Pod，直接使用容器来管理应用会有什么样的麻烦？
-Pod是一个或多个容器的集合，首先，如果Pod中运行的是单容器，则使用Pod包一层的好处是可以管理其中容器的状态如暂停、重启等（因Pod短暂的生命周期，不清楚这么做有什么好处，debug？），比如可以替换容器镜像；其次，如果Pod中运行的是多容器，则这些容器之间共享网络与存储，可以高效的分享资源与本地化服务调用，在调度方面，如果关联容器不使用Pod包一层则会增加调试的复杂度，影响性能，有了Pod则可以统一调度方便管理。
+   Pod是一个或多个容器的集合，首先，如果Pod中运行的是单容器，则使用Pod包一层的好处是可以管理其中容器的状态如暂停、重启等（因Pod短暂的生命周期，不清楚这么做有什么好处，debug？），比如可以替换容器镜像；其次，如果Pod中运行的是多容器，则这些容器之间共享网络与存储，可以高效的分享资源与本地化服务调用，在调度方面，如果关联容器不使用Pod包一层则会增加调试的复杂度，影响性能，有了Pod则可以统一调度方便管理。
 
 2. 你觉得 Pod 和容器之间有什么区别和联系？
-Pod是一个或多个关联容器的组合，它是一逻辑概念，它要解决的是在资源隔离的容器之上，如何实现关联容器之间高效的共享网络与存储。
-实现层面首先启动infra容器pause用来创建并保持网络空间，与Pod保持一致的生命周期，再启动业务容器加入到此NET空间，在docker运行时中同一Pod中的容器共享ipc&#47;net&#47;user&#47;uts等命名空间。
-Pod与容器之间的关系类似于Linux进程组与进程的关系。</p>2022-07-18</li><br/><li><span>密码123456</span> 👍（2） 💬（1）<p>🤣原来是网线，没有插好。不说了。接受惩罚去。找了半天。</p>2022-07-18</li><br/>
+   Pod是一个或多个关联容器的组合，它是一逻辑概念，它要解决的是在资源隔离的容器之上，如何实现关联容器之间高效的共享网络与存储。
+   实现层面首先启动infra容器pause用来创建并保持网络空间，与Pod保持一致的生命周期，再启动业务容器加入到此NET空间，在docker运行时中同一Pod中的容器共享ipc&#47;net&#47;user&#47;uts等命名空间。
+   Pod与容器之间的关系类似于Linux进程组与进程的关系。</p>2022-07-18</li><br/><li><span>密码123456</span> 👍（2） 💬（1）<p>🤣原来是网线，没有插好。不说了。接受惩罚去。找了半天。</p>2022-07-18</li><br/>
+
 </ul>

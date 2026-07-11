@@ -21,7 +21,7 @@
 ```java
 @GetMapping("/getBatch")
 @SentinelResource(value = "getTemplateInBatch",
-        fallback = "getTemplateInBatch_fallback",  
+        fallback = "getTemplateInBatch_fallback",
         blockHandler = "getTemplateInBatch_block")
 public Map<Long, CouponTemplateInfo> getTemplateInBatch(
         @RequestParam("ids") Collection<Long> ids) {

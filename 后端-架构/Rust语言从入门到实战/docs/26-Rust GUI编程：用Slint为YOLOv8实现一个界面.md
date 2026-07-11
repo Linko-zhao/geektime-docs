@@ -107,11 +107,11 @@ export component AppWindow inherits Window {
     in-out property <image> orig-image;
     in-out property <string> orig-image-path;
     in-out property <image> generated-image;
-    
+   
     callback select-orig-pic();
     callback probe-objects();
     callback probe-poses();
-    
+   
     VerticalBox {
         width: 100%;
         vertical-stretch: 1;
@@ -156,7 +156,7 @@ export component AppWindow inherits Window {
                 }
             }
         }
-        
+       
     }
 }
 ```

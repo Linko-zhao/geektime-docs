@@ -102,15 +102,17 @@ Transfer/sec:     13.70MB
 
 - 144 threads and 30000 connections：用144个线程模拟20000个连接，分别对应-t和-c参数。
 - Thread Stats是线程统计，包括Latency和Req/Sec。
-  
+
   - Latency：响应时间，有平均值、标准偏差、最大值、正负一个标准差占比。
   - Req/Sec：每个线程每秒完成的请求数, 同样有平均值、标准偏差、最大值、正负一个标准差占比。
+
 - Latency Distribution是响应时间分布。
-  
+
   - 50%：50%的响应时间为413.35ms。
   - 75%：75%的响应时间为948.99ms。
   - 90%：90%的响应时间为1.33s。
   - 99%：99%的响应时间为2.44s。
+
 - 2276265 requests in 30.10s, 412.45MB read：30.10s完成的总请求数（2276265）和数据读取量（412.45MB）。
 - Socket errors: connect 1754, read 40, write 0, timeout 0：错误统计，会统计connect连接失败请求个数（1754）、读失败请求个数、写失败请求个数、超时请求个数。
 - Requests/sec：QPS。
@@ -397,7 +399,7 @@ github.com/tpkeeper/gin-dump.DumpWithOptions.func1
 
 ![图片](https://static001.geekbang.org/resource/image/88/a7/88e9fdfe7ba14061e979d0195b45cca7.png?wh=640x480 "成功率对比")
 
-可以看到，删除无用的Gin中间件后，API Server的性能有了很大的提升，并发数为`200`时性能最好，此时QPS为`47812`，响应时间为```4.33``ms```，成功率为```100.00``%```。在并发数为`50000`的时候，其QPS是原生HTTP Server的`75.02%`。
+可以看到，删除无用的Gin中间件后，API Server的性能有了很大的提升，并发数为`200`时性能最好，此时QPS为`47812`，响应时间为`4.33``ms`，成功率为`100.00``%`。在并发数为`50000`的时候，其QPS是原生HTTP Server的`75.02%`。
 
 ### API接口性能参考
 

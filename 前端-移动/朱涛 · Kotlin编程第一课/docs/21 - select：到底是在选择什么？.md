@@ -608,12 +608,12 @@ public interface Deferred : CoroutineContext.Element {
     public suspend fun join()
     public suspend fun await(): T
 
-    // select相关  
+    // select相关
     public val onJoin: SelectClause0
     public val onAwait: SelectClause1<T>
 }
 
-public interface SendChannel<in E> 
+public interface SendChannel<in E>
     public suspend fun send(element: E)
 
     // select相关

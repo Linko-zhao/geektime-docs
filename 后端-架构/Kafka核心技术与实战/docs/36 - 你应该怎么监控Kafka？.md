@@ -121,22 +121,24 @@ Kafka提供了超多的JMX指标供用户实时监测，我来介绍几个比较
 
 这个nonactive 在ZK上是不是有节点？</p>2020-05-28</li><br/><li><span>追光者</span> 👍（1） 💬（3）<p>老师，您好，想请教一个关于  Metricbeat 采集 kafka 数据的问题：
 配置好 modules.d&#47;kafka.yml 启动 metricbeat 采集不到数据，提示信息：
-2019-08-29T16:13:33.827+0800    INFO    kafka&#47;log.go:53 kafka message: Successful SASL handshake
-2019-08-29T16:13:33.828+0800    INFO    kafka&#47;log.go:53 SASL authentication successful with broker 10.162.7.2:9092:4 - [0 0 0 0]
-2019-08-29T16:13:33.828+0800    INFO    kafka&#47;log.go:53 Connected to broker at 10.162.7.2:9092 (unregistered)
-2019-08-29T16:13:33.832+0800    INFO    kafka&#47;log.go:53 Closed connection to broker 10.162.7.2:9092
+2019-08-29T16:13:33.827+0800 INFO kafka&#47;log.go:53 kafka message: Successful SASL handshake
+2019-08-29T16:13:33.828+0800 INFO kafka&#47;log.go:53 SASL authentication successful with broker 10.162.7.2:9092:4 - [0 0 0 0]
+2019-08-29T16:13:33.828+0800 INFO kafka&#47;log.go:53 Connected to broker at 10.162.7.2:9092 (unregistered)
+2019-08-29T16:13:33.832+0800 INFO kafka&#47;log.go:53 Closed connection to broker 10.162.7.2:9092
 system 的可以采集到，请问这是什么原因呀
 配置文件：
+
 - module: kafka
-metricsets:
+  metricsets:
 - partition
 - consumergroup
-period: 10s
-hosts: [&quot;10.162.3.90:9092&quot;]
-client_id: xl
-retries: 3
-backoff: 250ms
-topics: []
-username: &quot;admin&quot;
-password: &quot;admin&quot;</p>2019-08-30</li><br/>
+  period: 10s
+  hosts: [&quot;10.162.3.90:9092&quot;]
+  client_id: xl
+  retries: 3
+  backoff: 250ms
+  topics: []
+  username: &quot;admin&quot;
+  password: &quot;admin&quot;</p>2019-08-30</li><br/>
+
 </ul>

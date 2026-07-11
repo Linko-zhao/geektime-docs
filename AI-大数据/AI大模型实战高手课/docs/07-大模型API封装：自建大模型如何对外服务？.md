@@ -127,7 +127,7 @@ project_name/
 │   ├── conftest.py              # 测试配置和夹具
 │   ├── test_services/           # 服务层测试
 │   │   ├── test_chat_service.py
-│   └── test_controller/                
+│   └── test_controller/               
 │       ├── test_chat_controller.py
 │
 ├── requirements.txt             # 项目依赖文件
@@ -197,7 +197,7 @@ class ChatMessage(BaseModel):
     max_tokens: int
     temperature: float = Field(default=1.0)
     top_p: float = Field(default=1.0)
-    
+
 ```
 
 我们可以在chat\_service里进行详细地业务逻辑处理，到这里基本就和Java里一样了。下面是一段简单的测试代码：
@@ -273,7 +273,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 class ModelManager:
     _model = None
     _tokenizer = None
-    
+
     @classmethod
     def get_model(cls):
         if cls._model is None:

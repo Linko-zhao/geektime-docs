@@ -20,7 +20,7 @@ trxDate: Timestamp
 productId: Int
 price: Float
 volume: Int
- 
+
 //用户维度表Schema
 userID: Int
 name: String
@@ -53,7 +53,7 @@ gender: String
 ```
 val df: DataFrame = _
 df.cache.count
- 
+
 val plan = df.queryExecution.logical
 val estimated: BigInt = spark
 .sessionState
@@ -82,7 +82,7 @@ val table1: DataFrame = spark.read.parquet(path1)
 val table2: DataFrame = spark.read.parquet(path2)
 table1.createOrReplaceTempView("t1")
 table2.createOrReplaceTempView("t2")
- 
+
 val query: String = “select /*+ broadcast(t2) */ * from t1 inner join t2 on t1.key = t2.key”
 val queryResutls: DataFrame = spark.sql(query)
 ```
@@ -172,6 +172,7 @@ table1.join(broadcast(table2), Seq(“key”), “right”)
     dataFrame.show()
     val dataFrame2 = transactionsDF.join(bcUserDF2.value, Seq(&quot;userID&quot;), &quot;inner&quot;)
     dataFrame2.show()
+
 </p>2021-04-12</li><br/><li><span>Geek_d794f8</span> 👍（19） 💬（5）<p>老师我做了一个测试，我的表数据是parquet存储，snappy压缩的，磁盘的存储大小为133.4M。我将广播变量的阈值调到了134M，它却可以自动广播；当我将阈值调到132M，则不会自动广播。
 我用老师的方法做了一个数据在内存展开的预估，大概1000M左右，那么为什么我按照磁盘的大小设定广播阈值，它能够广播呢？</p>2021-05-18</li><br/><li><span>YJ</span> 👍（16） 💬（3）<p>老师，我有一个问题。 
 bigTableA.Join(broadcast(smallTable), ...);
@@ -184,9 +185,9 @@ val plan = df.queryExecution.logicalval estimated: BigInt = spark.sessionState.e
 这个查看内存占用的方法是在哪里看到的呢？我在官方文档 
 https:&#47;&#47;spark.apache.org&#47;docs&#47;2.4.0&#47;api&#47;scala&#47;index.html#org.apache.spark.sql.DataFrameNaFunctions 里把这些方法都搜了一遍没有搜到QAQ</p>2022-01-06</li><br/><li><span>笨小孩</span> 👍（2） 💬（1）<p>老师你好  在SparkSql中使用类似with  as  这样的语法  会自动广播这张表嘛</p>2021-05-25</li><br/><li><span>魏海霞</span> 👍（1） 💬（2）<p>老师您好，用sparksql开发，遇到一个写了hint也不走broadcast的情况。具体情况是这样的，A表是个大表,有20多亿条记录，b,c,d都是小表，表就几个字段，数据最多也就3000多条，select &#47;*+ broadcast(b,c,d) from a join b jion c left join d
 执行计划里b c都用的是BroadcastHashJOIN,d表是SortMergeJoin。d表不走bhj的原因大概是什么？能给个思路吗？</p>2021-09-08</li><br/><li><span>Sampson</span> 👍（0） 💬（1）<p>磊哥你好 ，请教一下，我在我的任务中设置的如下的参数提交Spark任务，
---master yarn --deploy-mode cluster --num-executors 20 --executor-cores 1 --executor-memory 5G --driver-memory 2G  --conf spark.yarn.executor.memoryOverhead=2048M --conf spark.sql.shuffle.partitions=30 --conf spark.default.parallelism=30 --conf spark.sql.autoBroadcastJoinThreshold=1024 
+--master yarn --deploy-mode cluster --num-executors 20 --executor-cores 1 --executor-memory 5G --driver-memory 2G  --conf spark.yarn.executor.memoryOverhead=2048M --conf spark.sql.shuffle.partitions=30 --conf spark.default.parallelism=30 --conf spark.sql.autoBroadcastJoinThreshold=1024
 
-按照上文中讲到的我设置了广播变量的阀值是 1024 = 1G ，但是看任务运行中的日志 
+按照上文中讲到的我设置了广播变量的阀值是 1024 = 1G ，但是看任务运行中的日志
 
 storage.BlockManagerInfo: Added broadcast_4_piece0 in memory on miai7:38123 (size: 14.5 KB, free: 2.5 GB)
 storage.BlockManagerInfo: Added broadcast_4_piece0 in memory on miai9:38938 (size: 14.5 KB, free: 2.5 GB)

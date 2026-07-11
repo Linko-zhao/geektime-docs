@@ -60,13 +60,15 @@ Cassandra对范围查询的能力比起HBase要差了很多。因此，通常来
 <div><strong>精选留言（7）</strong></div><ul>
 <li><span>尹徐</span> 👍（0） 💬（2）<p>飞总能不能介绍下Cassandra目前的发展，国内饿了么和360虽然也在用，更多的拥趸都迈向Mongo了，那么国外怎么样</p>2018-06-28</li><br/><li><span>阿卡斯</span> 👍（3） 💬（0）<p>那篇2012年论文链接能粘贴出来么？</p>2018-07-05</li><br/><li><span>xiaoc10</span> 👍（1） 💬（0）<p>这些Casandra系统拥有的弊端，是否也适用于dynamo? amazon是怎么解决的呢</p>2018-06-27</li><br/><li><span>滩涂曳尾</span> 👍（0） 💬（0）<p>Amazon: Dynamo
 
- --Avinash跳槽--&gt; 
+--Avinash跳槽--&gt;
 
 Facebook: 开启Cassandra，后抛弃之，选择HBase
 
 --&gt;
 
 DataStax:
+
 1. 接手并持续贡献Cassandra，使之成为Apache顶级开源项目；
-2. 以Cassandra为核心整合诸多开源项目的主打产品DataStax Enterprise</p>2021-10-09</li><br/><li><span>丁乐洪</span> 👍（0） 💬（0）<p>听故事，长见识</p>2020-03-24</li><br/><li><span>小侠</span> 👍（0） 💬（0）<p>无法保持一致性的问题现在还存在吗？</p>2019-12-28</li><br/><li><span>燃</span> 👍（0） 💬（0）<p>datastax  enterprise要花钱买的吗？</p>2018-06-29</li><br/>
+2. 以Cassandra为核心整合诸多开源项目的主打产品DataStax Enterprise</p>2021-10-09</li><br/><li><span>丁乐洪</span> 👍（0） 💬（0）<p>听故事，长见识</p>2020-03-24</li><br/><li><span>小侠</span> 👍（0） 💬（0）<p>无法保持一致性的问题现在还存在吗？</p>2019-12-28</li><br/><li><span>燃</span> 👍（0） 💬（0）<p>datastax enterprise要花钱买的吗？</p>2018-06-29</li><br/>
+
 </ul>

@@ -44,7 +44,7 @@ StringBuilder是Java 1.5中新增的，在能力上和StringBuffer没有本质�
 String strByBuilder  = new
 StringBuilder().append("aa").append("bb").append("cc").append
             ("dd").toString();
-             
+
 String strByConcat = "aa" + "bb" + "cc" + "dd";
 ```
 
@@ -87,7 +87,7 @@ JDK 8的输出片段是：
 ```
          // concat method
          1: invokedynamic #2,  0              // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
-         
+
          // ...
          // 实际是利用了MethodHandle,统一了入口
          0: #15 REF_invokeStatic java/lang/invoke/StringConcatFactory.makeConcatWithConstants:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/invoke/CallSite;
@@ -132,11 +132,11 @@ Intern是一种**显式地排重机制**，但是它也有一定的副作用，�
 
 ```
 -XX:+PrintCompilation -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining
-    //样例输出片段    
-        180    3       3       java.lang.String::charAt (25 bytes)  
-                                  @ 1   java.lang.String::isLatin1 (19 bytes)   
-                                  ...  
-                                  @ 7 java.lang.StringUTF16::getChar (60 bytes) intrinsic 
+    //样例输出片段
+        180    3       3       java.lang.String::charAt (25 bytes)
+                                  @ 1   java.lang.String::isLatin1 (19 bytes)
+                                  ...
+                                  @ 7 java.lang.StringUTF16::getChar (60 bytes) intrinsic
 ```
 
 可以看出，仅仅是字符串一个实现，就需要Java平台工程师和科学家付出如此大且默默无闻的努力，我们得到的很多便利都是来源于此。
@@ -169,7 +169,6 @@ Intern是一种**显式地排重机制**，但是它也有一定的副作用，�
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Bin</span> 👍（87） 💬（12）<p>jdk1.8中，string是标准的不可变类，但其hash值没有用final修饰，其hash值计算是在第一次调用hashcode方法时计算，但方法没有加锁，变量也没用volatile关键字修饰就无法保证其可见性。当有多个线程调用的时候，hash值可能会被计算多次，虽然结果是一样的，但jdk的作者为什么不将其优化一下呢？</p>2018-05-16</li><br/><li><span>公号-技术夜未眠</span> 👍（635） 💬（18）<p>今日String&#47;StringBuffer&#47;StringBuilder心得:
 
-
 1 String
 
 (1) String的创建机理
@@ -179,7 +178,6 @@ Intern是一种**显式地排重机制**，但是它也有一定的副作用，�
 String str2 = new String(“123”);&#47;&#47;通过new方式赋值方式，不放入字符串常量池
 
 注意：String提供了inter()方法。调用该方法时，如果常量池中包括了一个等于此String对象的字符串（由equals方法确定），则返回池中的字符串。否则，将此String对象添加到池中，并且返回此池中对象的引用。
-
 
 (2) String的特性
 [A] 不可变。是指String对象一旦生成，则不能再对它进行改变。不可变的主要作用在于当一个对象需要被多线程共享，并且访问频繁时，可以省略同步和锁等待的时间，从而大幅度提高系统性能。不可变模式是一个可以提高多线程程序的性能，降低多线程程序复杂度的设计模式。
@@ -192,23 +190,23 @@ StringBuffer和StringBuilder都实现了AbstractStringBuilder抽象类，拥有�
 
 唯一需要注意的是：StringBuffer是线程安全的，但是StringBuilder是线程不安全的。可参看Java标准类库的源代码，StringBuffer类中方法定义前面都会有synchronize关键字。为此，StringBuffer的性能要远低于StringBuilder。
 
-
-3 应用场景	
+3 应用场景
 
 [A]在字符串内容不经常发生变化的业务场景优先使用String类。例如：常量声明、少量的字符串拼接操作等。如果有大量的字符串内容拼接，避免使用String与String之间的“+”操作，因为这样会产生大量无用的中间对象，耗费空间且执行效率低下（新建对象、回收对象花费大量时间）。
 
 [B]在频繁进行字符串的运算（如拼接、替换、删除等），并且运行在多线程环境下，建议使用StringBuffer，例如XML解析、HTTP参数解析与封装。
 
-[C]在频繁进行字符串的运算（如拼接、替换、删除等），并且运行在单线程环境下，建议使用StringBuilder，例如SQL语句拼装、JSON封装等。</p>2018-05-15</li><br/><li><span>愉悦在花香的日子里</span> 👍（54） 💬（2）<p>getBytes和String相关的转换时根据业务需要建议指定编码方式，如果不指定则看看JVM参数里有没有指定file.encoding参数，如果JVM没有指定，那使用的默认编码就是运行的操作系统环境的编码了，那这个编码就变得不确定了。常见的编码iso8859-1是单字节编码，UTF-8是变长的编码。</p>2018-05-15</li><br/><li><span>Van</span> 👍（39） 💬（1）<p>String myStr = &quot;aa&quot; +&quot;bb&quot; + &quot;cc&quot; +&quot;dd&quot;;反编译后并不会用到StringBuilder，老师反编译结果中出现StringBuilder是因为输出中拼接了字符串System.out.println(&quot;My String:&quot; + myStr);</p>2018-09-19</li><br/><li><span>DoctorDeng</span> 👍（32） 💬（8）<p>		String s = new String(&quot;1&quot;);
-		s.intern();
-		String s2 = &quot;1&quot;;
-		System.out.println(s == s2);
+[C]在频繁进行字符串的运算（如拼接、替换、删除等），并且运行在单线程环境下，建议使用StringBuilder，例如SQL语句拼装、JSON封装等。</p>2018-05-15</li><br/><li><span>愉悦在花香的日子里</span> 👍（54） 💬（2）<p>getBytes和String相关的转换时根据业务需要建议指定编码方式，如果不指定则看看JVM参数里有没有指定file.encoding参数，如果JVM没有指定，那使用的默认编码就是运行的操作系统环境的编码了，那这个编码就变得不确定了。常见的编码iso8859-1是单字节编码，UTF-8是变长的编码。</p>2018-05-15</li><br/><li><span>Van</span> 👍（39） 💬（1）<p>String myStr = &quot;aa&quot; +&quot;bb&quot; + &quot;cc&quot; +&quot;dd&quot;;反编译后并不会用到StringBuilder，老师反编译结果中出现StringBuilder是因为输出中拼接了字符串System.out.println(&quot;My String:&quot; + myStr);</p>2018-09-19</li><br/><li><span>DoctorDeng</span> 👍（32） 💬（8）<p> String s = new String(&quot;1&quot;);
+s.intern();
+String s2 = &quot;1&quot;;
+System.out.println(s == s2);
 
-		String s3 = new String(&quot;1&quot;) + new String(&quot;1&quot;);
-		s3.intern();
-		String s4 = &quot;11&quot;;
-		System.out.println(s3 == s4);
-  这道面试题不错，即考察了 intern() 的用法，也考察了字符串常量池在不同版本 JDK 的实际存储，具体可以看看美团博客：https:&#47;&#47;tech.meituan.com&#47;in_depth_understanding_string_intern.html，</p>2018-09-21</li><br/><li><span>Jerry银银</span> 👍（29） 💬（1）<p>特别喜欢这句话：“仅仅是字符串一个实现，就需要 Java 平台工程师和科学家付出如此大且默默无闻的努力，我们得到的很多便利都是来源于此。”
+    	String s3 = new String(&quot;1&quot;) + new String(&quot;1&quot;);
+    	s3.intern();
+    	String s4 = &quot;11&quot;;
+    	System.out.println(s3 == s4);
+
+这道面试题不错，即考察了 intern() 的用法，也考察了字符串常量池在不同版本 JDK 的实际存储，具体可以看看美团博客：https:&#47;&#47;tech.meituan.com&#47;in_depth_understanding_string_intern.html，</p>2018-09-21</li><br/><li><span>Jerry银银</span> 👍（29） 💬（1）<p>特别喜欢这句话：“仅仅是字符串一个实现，就需要 Java 平台工程师和科学家付出如此大且默默无闻的努力，我们得到的很多便利都是来源于此。”
 
 我想说，同学们，写代码的时候记得感恩哦😄
 
@@ -216,11 +214,11 @@ StringBuffer和StringBuilder都实现了AbstractStringBuilder抽象类，拥有�
 
 小小的字符串有着诸多巨人的影子</p>2018-05-15</li><br/><li><span>肖一林</span> 👍（14） 💬（1）<p>这篇文章写的不错，由浅入深，把来龙去脉写清楚了</p>2018-05-15</li><br/><li><span>好运来</span> 👍（9） 💬（1）<p>老师，可以讲解这一句话的具体含义吗，谢谢！
 你可以思考下，原来 char 数组的实现，字符串的最大长度就是数组本身的长度限制，但是替换成 byte 数组，同样数组长度下，存储能力是退化了一倍的！还好这是存在于理论中的极限，还没有发现现实应用受此影响。</p>2018-05-15</li><br/><li><span>©®</span> 👍（7） 💬（1）<p>String s2=new String(&quot;AB&quot;)，，如果，常量池中没有AB,那么会不会去常量池创建，望解答</p>2018-05-23</li><br/><li><span>So Leung</span> 👍（5） 💬（3）<p>经过验证new String时，不会再常量池中创建对象。</p>2018-05-24</li><br/><li><span>Len</span> 👍（4） 💬（1）<p>老师，这章学习到了 Java 8 以后，字符串常量池被移到了堆中，那么，如果通过 String.intern() 产生了大量的字符串常量，JVM 会对它们进行垃圾回收吗？</p>2018-06-18</li><br/><li><span>嘎哈</span> 👍（4） 💬（1）<p>char 数组的实现，字符串的最大长度就是数组本身的长度限制，但是替换成 byte 数组，同样数组长度下，存储能力是退化了一倍的！
-怎么理解呢？ 举个例子呗</p>2018-05-15</li><br/><li><span>淡定</span> 👍（3） 💬（1）<p>  public class StringConcat {
-        public static void main(String[] args) {
-             String myStr = &quot;aa&quot; + &quot;bb&quot; + &quot;cc&quot; + &quot;dd&quot;;   
-             System.out.println(&quot;My String:&quot; + myStr);   
-        } 
-  }
-作者举得的这个例子,和后面的解释有迷惑性 ,首先 ,第一句  String myStr = &quot;aa&quot; + &quot;bb&quot; + &quot;cc&quot; + &quot;dd&quot;;    编译器已经帮你合并为 myStr = &quot;aabbccdd&quot; 了,所谓后面的StringBuilder 是因为System.out.println 里面有字符串拼接..... </p>2018-11-06</li><br/><li><span>Nick</span> 👍（3） 💬（1）<p>请问老师该怎么证明new String(&quot;ABCDE&quot;)不会将&quot;ABCDE&quot;放在常量池中呢？</p>2018-09-21</li><br/><li><span>晓</span> 👍（3） 💬（1）<p>数组的大小是int型的，所以int最大值就是它的限制吗？</p>2018-08-13</li><br/>
+怎么理解呢？ 举个例子呗</p>2018-05-15</li><br/><li><span>淡定</span> 👍（3） 💬（1）<p> public class StringConcat {
+public static void main(String[] args) {
+String myStr = &quot;aa&quot; + &quot;bb&quot; + &quot;cc&quot; + &quot;dd&quot;;  
+System.out.println(&quot;My String:&quot; + myStr);  
+}
+}
+作者举得的这个例子,和后面的解释有迷惑性 ,首先 ,第一句 String myStr = &quot;aa&quot; + &quot;bb&quot; + &quot;cc&quot; + &quot;dd&quot;; 编译器已经帮你合并为 myStr = &quot;aabbccdd&quot; 了,所谓后面的StringBuilder 是因为System.out.println 里面有字符串拼接..... </p>2018-11-06</li><br/><li><span>Nick</span> 👍（3） 💬（1）<p>请问老师该怎么证明new String(&quot;ABCDE&quot;)不会将&quot;ABCDE&quot;放在常量池中呢？</p>2018-09-21</li><br/><li><span>晓</span> 👍（3） 💬（1）<p>数组的大小是int型的，所以int最大值就是它的限制吗？</p>2018-08-13</li><br/>
 </ul>

@@ -57,8 +57,9 @@ IO的内容比较多，专栏一讲很难能够说清楚。IO不仅仅是多路�
 
 - Buffer，高效的数据容器，除了布尔类型，所有原始数据类型都有相应的Buffer实现。
 - Channel，类似在Linux之类操作系统上看到的文件描述符，是NIO中被用来支持批量式IO操作的一种抽象。
-  
+
   File或者Socket，通常被认为是比较高层次的抽象，而Channel则是更加操作系统底层的一种抽象，这也使得NIO得以充分利用现代操作系统底层机制，获得特定场景的性能优化，例如，DMA（Direct Memory Access）等。不同层次的抽象是相互关联的，我们可以通过Socket获取Channel，反之亦然。
+
 - Selector，是NIO实现多路复用的基础，它提供了一种高效的机制，可以检测到注册在Selector上的多个Channel中，是否有Channel处于就绪状态，进而实现了单线程对多Channel的高效管理。Selector同样是基于底层操作系统机制，不同模式、不同版本都存在区别，例如，在最新的代码库里，相关实现如下：
 
 > Linux上依赖于[epoll](http://hg.openjdk.java.net/jdk/jdk/file/d8327f838b88/src/java.base/linux/classes/sun/nio/ch/EPollSelectorImpl.java)，Windows上NIO2（AIO）模式则是依赖于[iocp](http://hg.openjdk.java.net/jdk/jdk/file/d8327f838b88/src/java.base/windows/classes/sun/nio/ch/Iocp.java)。
@@ -200,8 +201,9 @@ public class NIOServer extends Thread {
 
 - 首先，通过Selector.open()创建一个Selector，作为类似调度员的角色。
 - 然后，创建一个ServerSocketChannel，并且向Selector注册，通过指定SelectionKey.OP\_ACCEPT，告诉调度员，它关注的是新的连接请求。
-  
+
   **注意**，为什么我们要明确配置非阻塞模式呢？这是因为阻塞模式下，注册操作是不允许的，会抛出IllegalBlockingModeException异常。
+
 - Selector阻塞在select操作，当有Channel发生接入请求，就会被唤醒。
 - 在sayHelloWorld方法中，通过SocketChannel和Buffer进行数据操作，在本例中是发送了一段字符串。
 
@@ -244,17 +246,16 @@ serverSock.accept(serverSock, new CompletionHandler<>() { //为异步操作指�
 
 《操作系统（第9版）》中关于进程通信中有对这部分概念做过解释， 在进程间通信的维度， 同步和阻塞，异步和非阻塞是相同的概念。
 
- 沿着作者的概念解释简单推论一下就可以发现: 
+沿着作者的概念解释简单推论一下就可以发现:
 
-如果同步操作是需要等待调用返回才能进行下一步， 显然这个调用是阻塞的。 
+如果同步操作是需要等待调用返回才能进行下一步， 显然这个调用是阻塞的。
 
 反之， 不需要等待调用返回的接口，必然需要提供事件， 回调等机制，这种调用显然是非阻塞的。 </p>2018-08-08</li><br/><li><span>yxw</span> 👍（9） 💬（1）<p>java nio的selector主要的问题是效率，当并发连接数达到数万甚至数十万的时候 ，单线程的selector会是一个瓶颈；另一个问题就是再线上运行过程中经常出现cpu占用100%的情况，原因也是由于selector依赖的操作系统底层机制bug 导致的selector假死，需要程序重建selector来解决，这个问题再jdk中似乎并没有很好的解决，netty成为了线上更加可靠的网络框架。不知理解的是否正确，请老师指教。</p>2018-06-03</li><br/><li><span>zjh</span> 👍（9） 💬（1）<p>看nio代码部分，请求接受和处理都是一个线程在做。这样的话，如果有多个请求过来都是按顺序处理吧，其中一个处理时间比较耗时的话那所有请求不都卡住了吗？如果把nio的处理部分也改成多线程会有什么问题吗</p>2018-05-31</li><br/><li><span>lorancechen</span> 👍（9） 💬（1）<p>我也自己写过一个基于nio2的网络程序，觉得配合futrue写起来很舒服。
-仓库地址：https:&#47;&#47;github.com&#47;LoranceChen&#47;RxSocket  欢迎相互交流开发经验～
+仓库地址：https:&#47;&#47;github.com&#47;LoranceChen&#47;RxSocket 欢迎相互交流开发经验～
 
 记得在netty中，有一个搁置的netty5.x项目被废弃掉了，原因有一点官方说是性能提升不明显，这是可以理解的，因为linux下是基于epoll，本质还是select操作。
 
 听了课程之后，有一点印象比较深刻，select模式是使用一个线程做监听，而bio每次来一个链接都要做线程切换，所以节省的时间在线程切换上，当然如果是c&#47;c++实现，原理也是一样的。
-
 
 想问一个一直困惑的问题，select内部如何实现的呢？
 个人猜测：不考虑内核，应用层的区分，单纯从代码角度考虑，我猜测，当select开始工作时，有一个定时器，比如每10ms去检查一下网络缓冲区中是否有tcp的链接请求包，然后把这些包筛选出来，作为一个集合（即代码中的迭代器）填入java select类的一个集合成员中，然后唤醒select线程，做一个while遍历处理链接请求，这样一次线程调度就可以处理10ms内的所有链接。与bio比，节省的时间在线程上下文切换上。不知道这么理解对不对。

@@ -124,7 +124,7 @@ def draw_image_grids(images, rows, cols):
       ax.axis('off')
   # Display the grid
   plt.show()
-    
+
 draw_image_grids(output.images, 2, 2)
 ```
 
@@ -328,17 +328,18 @@ prompt = [t + prompt for t in [&quot;Audrey Hepburn&quot;, &quot;Elizabeth Taylo
 generator = [torch.Generator(device=&quot;cpu&quot;).manual_seed(42) for i in range(len(prompt))]
 
 output = pipe(
-    prompt,
-    canny_image,
-    negative_prompt=[&quot;monochrome, lowres, bad anatomy, worst quality, low quality&quot;] * 4,
-    num_inference_steps=20,
-    generator=generator,
+prompt,
+canny_image,
+negative_prompt=[&quot;monochrome, lowres, bad anatomy, worst quality, low quality&quot;] * 4,
+num_inference_steps=20,
+generator=generator,
 )
 
 显示最后&quot;卷&quot;出来的结果:
 draw_image_grids(output.images, 2, 2)
 
----------------
+---
+
 用 Scarlett Johanssona ... 生成的铜版字最清晰，字体突起明显。用不同的提示词，会有不同的展现。
 AI 千变万化，无限可能。这里只是沧海一粟。
 

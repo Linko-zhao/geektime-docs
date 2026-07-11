@@ -268,11 +268,12 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
 
 - 无需构造的组件——组件实例
 - 如果注册的组件不可实例化，则抛出异常
-  
+
   - 抽象类
   - 接口
+
 - 构造函数注入
-  
+
   - 无依赖的组件应该通过默认构造函数生成组件实例
   - 有依赖的组件，通过Inject标注的构造函数生成组件实例
   - 如果所依赖的组件也存在依赖，那么需要对所依赖的组件也完成依赖注入
@@ -280,20 +281,23 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
   - 如果组件没有Inject标注的构造函数，也没有默认构造函数（新增任务）
   - 如果组件需要的依赖不存在，则抛出异常
   - 如果组件间存在循环依赖，则抛出异常
+
 - 字段注入
-  
+
   - 通过Inject标注将字段声明为依赖组件
   - 如果字段为final则抛出异常
   - 依赖中应包含Inject Field声明的依赖
+
 - 方法注入
-  
+
   - 通过Inject标注的方法，其参数为依赖组件
   - 通过Inject标注的无参数方法，会被调用
   - 按照子类中的规则，覆盖父类中的Inject方法
   - 如果方法定义类型参数，则抛出异常
   - 依赖中应包含Inject Method声明的依赖
+
 - 对Provider类型的依赖
-  
+
   - 从容器中取得组件的Provider（新增任务）
   - 注入构造函数中可以声明对于Provider的依赖
   - 注入字段中可以声明对于Provider的依赖
@@ -301,41 +305,48 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
   - 将构造函数中的Provider加入依赖（新增任务）
   - 将字段中的Provider加入依赖（新增任务）
   - 将方法中的Provider加入依赖（新增任务）
+
 - 自定义Qualifier的依赖
-  
+
   - 注册组件时，可额外指定Qualifier
-    
+
     - 针对instance指定一个Qualifieri（新增任务）
     - 针对组件指定一个Qualiifer（新增任务）
     - 针对instance指定多个Qualifieri（新增任务）
     - 针对组件指定多个Qualiifer（新增任务）
+
   - 注册组件时，如果不是合法的Qualifier，则不接受组件注册（新增任务）
   - 寻找依赖时，需同时满足类型与自定义Qualifier标注
-    
+
     - 在检查依赖时使用Qualifier（新增任务）
     - 在检查循环依赖时使用Qualifier（新增任务）
     - 构造函数注入可以使用Qualifier声明依赖（新增任务）
-      
+
       - 依赖中包含Qualifier（新增任务）
       - 如果不是合法的Qualifier，则组件非法
+
     - 字段注入可以使用Qualifier声明依赖（新增任务）
-      
+
       - 依赖中包含Qualifier（新增任务）
       - 如果不是合法的Qualifier，则组件非法
+
     - 函数注入可以使用Qualifier声明依赖（新增任务）
-      
+
       - 依赖中包含Qualifier（新增任务）
       - 如果不是合法的Qualifier，则组件非法
+
   - 支持默认Qualifier——Named（不需要）
   - 注册组件时，可从类对象上提取Qualifier（不需要）
+
 - Singleton生命周期
-  
+
   - 注册组件时，可额外指定是否为Singleton
   - 注册组件时，可从类对象上提取Singleton标注
   - 对于包含Singleton标注的组件，在容器范围内提供唯一实例
   - 容器组件默认不是Single生命周期
+
 - 自定义Scope标注
-  
+
   - 可向容器注册自定义Scope标注的回调
 
 ## 视频演示
@@ -366,4 +377,5 @@ class InjectionProvider<T> implements ContextConfig.ComponentProvider<T> {
 - 模型不能真正反应需求上要解决的问题
 - 对概念上的封装存在缺失
 - 在工作中很难发现，缓慢的让代码进入到一个滑坡状态、越来越复杂</p>2022-05-24</li><br/><li><span>人间四月天</span> 👍（0） 💬（0）<p>厉害，重构真厉害</p>2022-05-24</li><br/>
+
 </ul>

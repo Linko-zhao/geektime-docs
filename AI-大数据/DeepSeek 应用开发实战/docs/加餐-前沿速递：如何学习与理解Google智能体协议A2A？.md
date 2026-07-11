@@ -184,7 +184,7 @@ task\_manager 的主要作用是实现调用 Agent 获取 Agent 输出的过程�
 
 这段代码的完整版本在[https://A2A/samples/python/agents/langgraph/agent.py](%3Ca%20href=) at main · google/A2A"&gt;这里，为了帮你抓住重点，我只展示了关键内容。
 
-这基本就是 A2A Server 的大概逻辑，我们再来简单看一下 hosts目录下的 A2A Client。代码在 \_*main*\_.py 中，其实也非常简单，同样是调用 common 包的 A2AClient 等接口去实现与 A2A Server 端的通信。
+这基本就是 A2A Server 的大概逻辑，我们再来简单看一下 hosts目录下的 A2A Client。代码在 \__main_\_.py 中，其实也非常简单，同样是调用 common 包的 A2AClient 等接口去实现与 A2A Server 端的通信。
 
 那最后呢，我就画一张图总结一下上面所讲的内容。
 
@@ -208,12 +208,12 @@ task\_manager 的主要作用是实现调用 Agent 获取 Agent 输出的过程�
 def invoke(self, query, session_id=None):
         prompt = REACT_PROMPT.replace("{tools}", json.dumps(tools)).replace("{input}", query)
         messages = [{"role": "user", "content": prompt}]
-        
+       
         while True:
             response = send_messages(messages)
             response_text = response.choices[0].message.content
 
-.            
+.           
             ...以前的main中的老代码
 
         return {
@@ -321,7 +321,7 @@ async def main():
 
         print("======= Agent Card ========")
         print(card.model_dump_json(exclude_none=True))
-        
+       
         client = A2AClient(agent_card=card)
 
         payload = {

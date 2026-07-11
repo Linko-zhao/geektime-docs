@@ -5,27 +5,27 @@
 ExecutorService executor =
   Executors.newFixedThreadPool(3);
 // 异步向电商S1询价
-Future<Integer> f1 = 
+Future<Integer> f1 =
   executor.submit(
     ()->getPriceByS1());
 // 异步向电商S2询价
-Future<Integer> f2 = 
+Future<Integer> f2 =
   executor.submit(
     ()->getPriceByS2());
 // 异步向电商S3询价
-Future<Integer> f3 = 
+Future<Integer> f3 =
   executor.submit(
     ()->getPriceByS3());
-    
+
 // 获取电商S1报价并保存
 r=f1.get();
 executor.execute(()->save(r));
-  
+
 // 获取电商S2报价并保存
 r=f2.get();
 executor.execute(()->save(r));
-  
-// 获取电商S3报价并保存  
+
+// 获取电商S3报价并保存
 r=f3.get();
 executor.execute(()->save(r));
 
@@ -39,20 +39,20 @@ executor.execute(()->save(r));
 // 创建阻塞队列
 BlockingQueue<Integer> bq =
   new LinkedBlockingQueue<>();
-//电商S1报价异步进入阻塞队列  
+//电商S1报价异步进入阻塞队列
 executor.execute(()->
   bq.put(f1.get()));
-//电商S2报价异步进入阻塞队列  
+//电商S2报价异步进入阻塞队列
 executor.execute(()->
   bq.put(f2.get()));
-//电商S3报价异步进入阻塞队列  
+//电商S3报价异步进入阻塞队列
 executor.execute(()->
   bq.put(f3.get()));
-//异步保存所有报价  
+//异步保存所有报价
 for (int i=0; i<3; i++) {
   Integer r = bq.take();
   executor.execute(()->save(r));
-}  
+}
 ```
 
 ## 利用CompletionService实现询价系统
@@ -74,10 +74,10 @@ CompletionService接口的实现类是ExecutorCompletionService，这个实现�
 
 ```
 // 创建线程池
-ExecutorService executor = 
+ExecutorService executor =
   Executors.newFixedThreadPool(3);
 // 创建CompletionService
-CompletionService<Integer> cs = new 
+CompletionService<Integer> cs = new
   ExecutorCompletionService<>(executor);
 // 异步向电商S1询价
 cs.submit(()->getPriceByS1());
@@ -103,10 +103,10 @@ CompletionService接口其余的3个方法，都是和阻塞队列相关的，ta
 ```
 Future<V> submit(Callable<V> task);
 Future<V> submit(Runnable task, V result);
-Future<V> take() 
+Future<V> take()
   throws InterruptedException;
 Future<V> poll();
-Future<V> poll(long timeout, TimeUnit unit) 
+Future<V> poll(long timeout, TimeUnit unit)
   throws InterruptedException;
 ```
 
@@ -116,7 +116,7 @@ Dubbo中有一种叫做**Forking的集群模式**，这种集群模式下，支�
 
 ```
 geocoder(addr) {
-  //并行执行以下3个查询服务， 
+  //并行执行以下3个查询服务，
   r1=geocoderByS1(addr);
   r2=geocoderByS2(addr);
   r3=geocoderByS3(addr);
@@ -138,7 +138,7 @@ CompletionService<Integer> cs =
 // 用于保存Future对象
 List<Future<Integer>> futures =
   new ArrayList<>(3);
-//提交异步任务，并保存future到futures 
+//提交异步任务，并保存future到futures
 futures.add(
   cs.submit(()->geocoderByS1()));
 futures.add(
@@ -177,10 +177,10 @@ CompletionService的实现类ExecutorCompletionService，需要你自己创建�
 
 ```
 // 创建线程池
-ExecutorService executor = 
+ExecutorService executor =
   Executors.newFixedThreadPool(3);
 // 创建CompletionService
-CompletionService<Integer> cs = new 
+CompletionService<Integer> cs = new
   ExecutorCompletionService<>(executor);
 // 异步向电商S1询价
 cs.submit(()->getPriceByS1());
@@ -285,16 +285,17 @@ private long acquireWrite(boolean interruptible, long deadline) {
         }
 
         </p>2019-04-25</li><br/><li><span>Sunqc</span> 👍（3） 💬（1）<p>&#47;&#47; 获取电商 S1 报价并保存
+
 r=f1.get();
 executor.execute(()-&gt;save(r));
 
 如果把r=f1.get（）放进execute里应该是也能保证先执行完的先保存</p>2019-05-01</li><br/><li><span>黄海峰</span> 👍（3） 💬（1）<p>我实际测试了第一段代码，确实是异步的，f1.get不会阻塞主线程。。。
 
 public static void main(String[] args) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-        Future&lt;Integer&gt; f1 = executor.submit(()-&gt;getPriceByS1());
-        Future&lt;Integer&gt; f2 = executor.submit(()-&gt;getPriceByS2());
-        Future&lt;Integer&gt; f3 = executor.submit(()-&gt;getPriceByS3());
+ExecutorService executor = Executors.newFixedThreadPool(3);
+Future&lt;Integer&gt; f1 = executor.submit(()-&gt;getPriceByS1());
+Future&lt;Integer&gt; f2 = executor.submit(()-&gt;getPriceByS2());
+Future&lt;Integer&gt; f3 = executor.submit(()-&gt;getPriceByS3());
 
         executor.execute(()-&gt; {
             try {
@@ -352,17 +353,18 @@ public static void main(String[] args) {
     private static void save(Integer i) {
         System.out.println(&quot;save &quot; + i);
     }</p>2019-04-25</li><br/><li><span>Corner</span> 👍（3） 💬（1）<p>1.AtomicReference&lt;Integer&gt;的get方法应该改成使用cas方法
+
 2.最后筛选最小结果的任务是异步执行的，应该在return之前做同步，所以最好使用sumit提交该任务便于判断任务的完成
 最后请教老师一下，第一个例子中为什么主线程会阻塞在f1.get()方法呢？</p>2019-04-25</li><br/><li><span>空空空空</span> 👍（2） 💬（1）<p>算低价的时候是用三个不同的线程去计算，是异步的，因此可能算出来并不是预期的结果
 老师，这样理解对吗？</p>2019-04-25</li><br/><li><span>梅小西</span> 👍（1） 💬（1）<p>老师讲的挺不错的，看了这个例子，有几点疑问，还希望老师说明下：
 &#47;&#47; 这个是老师例子：
 
 &#47;&#47; 创建线程池
-ExecutorService executor = 
-  Executors.newFixedThreadPool(3);
+ExecutorService executor =
+Executors.newFixedThreadPool(3);
 &#47;&#47; 创建CompletionService
-CompletionService&lt;Integer&gt; cs = new 
-  ExecutorCompletionService&lt;&gt;(executor);
+CompletionService&lt;Integer&gt; cs = new
+ExecutorCompletionService&lt;&gt;(executor);
 &#47;&#47; 异步向电商S1询价
 cs.submit(()-&gt;getPriceByS1());
 &#47;&#47; 异步向电商S2询价
@@ -371,8 +373,8 @@ cs.submit(()-&gt;getPriceByS2());
 cs.submit(()-&gt;getPriceByS3());
 &#47;&#47; 将询价结果异步保存到数据库
 for (int i=0; i&lt;3; i++) {
-  Integer r = cs.take().get();
-  executor.execute(()-&gt;save(r));
+Integer r = cs.take().get();
+executor.execute(()-&gt;save(r));
 }
 
 首先，CompletionService应该是要绑定泛型，代表异步任务的返回结果，实际应用中，几乎不太可能所有的异步任务的返回类型是一样的，除非设置成Object这种通用型，那又会导致拿到结果后需要强转，代码看起来更难受；
@@ -382,39 +384,39 @@ for (int i=0; i&lt;3; i++) {
 
 以上两点是个人见解，有不对之处请老师指教！</p>2019-10-27</li><br/><li><span>helloworld</span> 👍（1） 💬（1）<p>老师，冒昧的问下：在文章刚开始的例子，无论是三个询价任务（通过submit方法提交），还是保存询价任务（通过execute方法提交）都是异步的执行执行的啊！如果s1询价的时间过长的话，也不会影响到s2保存保价的先执行啊！他只影响到s1保存询价的动作。老师不知道我说的有么有道理，有问题请老师帮忙指正</p>2019-08-30</li><br/><li><span>胡小禾</span> 👍（1） 💬（1）<p>&#47;&#47; 创建线程池
 ExecutorService executor =
-  Executors.newFixedThreadPool(3);
+Executors.newFixedThreadPool(3);
 &#47;&#47; 创建 CompletionService
 CompletionService&lt;Integer&gt; cs =
-  new ExecutorCompletionService&lt;&gt;(executor);
+new ExecutorCompletionService&lt;&gt;(executor);
 &#47;&#47; 用于保存 Future 对象
 List&lt;Future&lt;Integer&gt;&gt; futures =
-  new ArrayList&lt;&gt;(3);
-&#47;&#47; 提交异步任务，并保存 future 到 futures 
+new ArrayList&lt;&gt;(3);
+&#47;&#47; 提交异步任务，并保存 future 到 futures
 futures.add(
-  cs.submit(()-&gt;geocoderByS1()));
+cs.submit(()-&gt;geocoderByS1()));
 futures.add(
-  cs.submit(()-&gt;geocoderByS2()));
+cs.submit(()-&gt;geocoderByS2()));
 futures.add(
-  cs.submit(()-&gt;geocoderByS3()));
+cs.submit(()-&gt;geocoderByS3()));
 &#47;&#47; 获取最快返回的任务执行结果
 Integer r = 0;
 try {
-  &#47;&#47; 只要有一个成功返回，则 break
-  for (int i = 0; i &lt; 3; ++i) {
-    r = cs.take().get();
-    &#47;&#47; 简单地通过判空来检查是否成功返回
-    if (r != null) {
-      break;
-    }
-  }
-  &#47;&#47; **********************************
-  &#47;&#47; for 循环其实没有必要吧？
-  &#47;&#47; take() 是阻塞的拿到结果，get()也是阻塞的
-  &#47;&#47; 只要有个任务完成，这个for循环就结束了
+&#47;&#47; 只要有一个成功返回，则 break
+for (int i = 0; i &lt; 3; ++i) {
+r = cs.take().get();
+&#47;&#47; 简单地通过判空来检查是否成功返回
+if (r != null) {
+break;
+}
+}
+&#47;&#47; **********************************
+&#47;&#47; for 循环其实没有必要吧？
+&#47;&#47; take() 是阻塞的拿到结果，get()也是阻塞的
+&#47;&#47; 只要有个任务完成，这个for循环就结束了
 } finally {
-  &#47;&#47; 取消所有任务
-  for(Future&lt;Integer&gt; f : futures)
-    f.cancel(true);
+&#47;&#47; 取消所有任务
+for(Future&lt;Integer&gt; f : futures)
+f.cancel(true);
 }
 &#47;&#47; 返回结果
 return r;

@@ -20,9 +20,9 @@ create table t_dynamic(
   primary key(id)
 ) engine=innodb row_format=dynamic charset=latin1;
 
-insert into t_dynamic(id, c1, c2, c3, c4) 
+insert into t_dynamic(id, c1, c2, c3, c4)
 values
- ('ROW_001', rpad('', 5, 'A1'), rpad('', 13, 'A2'), 
+ ('ROW_001', rpad('', 5, 'A1'), rpad('', 13, 'A2'),
       rpad('',8123,'A3'), rpad('', 8124, 'A4')),
  ('ROW_003', rpad('', 5, 'B1'), rpad('', 13, 'B2'), null, rpad('', 129, 'B4')),
  ('ROW_002', rpad('', 5, 'E1'), rpad('', 13, 'E2'), null, rpad('', 22, 'E4')),
@@ -30,7 +30,7 @@ values
  ('ROW_004', rpad('', 5, 'F1'), rpad('', 13, 'F2'), null, rpad('', 24, 'F4')),
  ('ROW_005', rpad('', 5, 'C1'), rpad('', 13, 'C2'), null, rpad('', 35, 'C4')),
  ('ROW_006', rpad('', 5, 'G1'), rpad('', 13, 'G2'), null, rpad('', 26, 'G4')),
- ('ROW_008', rpad('', 5, 'H1'), rpad('', 13, 'H2'), 
+ ('ROW_008', rpad('', 5, 'H1'), rpad('', 13, 'H2'),
       rpad('', 28, 'H3'), rpad('', 28, 'H4'));
 ```
 
@@ -96,7 +96,7 @@ InnoDB将数据文件划分为页面（Page）进行管理。每个页面的大�
 type为0x45BF，这是一个B+树页面。space id是0x00 00 01 96。从INNODB\_TABLESPACES表可以查到每个表空间的ID，我们的测试表space id是406，转换成十六进制就是0x0196。
 
 ```plain
-mysql> select space, name, space_type, row_format, page_size 
+mysql> select space, name, space_type, row_format, page_size
     from information_schema.INNODB_TABLESPACES where name='rep/t_dynamic';
 +-------+---------------+------------+------------+-----------+
 | space | name          | space_type | row_format | page_size |
@@ -207,7 +207,7 @@ create table test_1(
     a int,
     b varchar(10),
     c datetime
-) 
+)
 [engine = innodb]
 [row_format=DYNAMIC
    |COMPACT
@@ -283,7 +283,7 @@ order字段中保存了记录插入的顺序。row\_001的order是2，row\_003�
 ![图片](https://static001.geekbang.org/resource/image/0d/d5/0d4765fcea679047b73ab63a3a1b48d5.png?wh=1920x1159)
 
 ```plain
-mysql> select id, length(id), length(c1), length(c2), length(c3), length(c4) 
+mysql> select id, length(id), length(c1), length(c2), length(c3), length(c4)
     from t_dynamic where id in ('row_001', 'row_002', 'row_003');
 +---------+------------+------------+------------+------------+------------+
 | id      | length(id) | length(c1) | length(c2) | length(c3) | length(c4) |
@@ -362,22 +362,22 @@ create table t_column_storage(
   primary key(id)
 )engine=innodb row_format=compact charset gbk;
 
-insert into t_column_storage(id, c1, c2) 
+insert into t_column_storage(id, c1, c2)
     values('ROW_01', '中文符号', '中文符号');
 
-insert into t_column_storage(id, c3, c4) 
+insert into t_column_storage(id, c3, c4)
     values('ROW_02', 12345, 12345);
 
-insert into t_column_storage(id, c5, c6) 
+insert into t_column_storage(id, c5, c6)
     values('ROW_03', '2024-09-11 12:34:56', '2024-09-11 12:34:56');
 
-insert into t_column_storage(id, c7, c8, c9) 
+insert into t_column_storage(id, c7, c8, c9)
     values('ROW_04', 3141.59, 3141.59, 3141.59);
 
 insert into t_column_storage(id, c10, c11)
     values('ROW_05', 'SHORT VARCHAR', 'SHORT TEXT');
 
-insert into t_column_storage(id, c10, c11) 
+insert into t_column_storage(id, c10, c11)
     values('ROW_06', rpad('',9999,'LONG VARCHAR '), rpad('',999999,'LONG TEXT '));
 ```
 

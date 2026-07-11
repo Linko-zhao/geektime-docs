@@ -57,7 +57,7 @@ public class HelloWorldController {
 
 ```
 basic.request {
- 
+
 
   # The consistency level.
   #
@@ -65,8 +65,8 @@ basic.request {
   # Modifiable at runtime: yes, the new value will be used for requests issued after the change.
   # Overridable in a profile: yes
   consistency = LOCAL_ONE
- 
-//省略其他非关键配置 
+
+//省略其他非关键配置
 }
 ```
 
@@ -151,12 +151,12 @@ Spring依赖了大量的其他组件来协同完成功能，但是完成同一�
 ```
 @RestController
 public class HelloController {
-    
+
     @PostMapping("/hi2")
     public Student hi2(@RequestBody Student student) {
         return student;
     }
-    
+
 }
 ```
 
@@ -208,8 +208,8 @@ public class HelloWorldController {
     @RequestMapping(path = "/hi1/{name}", method = RequestMethod.GET)
     public String hello1(@PathVariable("name") String name){
         return name;
-        
-    };  
+
+    };
 }
 ```
 

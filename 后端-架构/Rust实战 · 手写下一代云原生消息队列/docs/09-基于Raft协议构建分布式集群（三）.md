@@ -105,7 +105,7 @@ pub async fn new_node(&self) -> RawNode<RaftMachineStorage> {
         let mut cs = storage.read_lock().conf_state();
         cs.voters = cluster.node_ids();
         let _ = storage.write_lock().save_conf_state(cs);
-        
+
         // raft-rs 库有自己的日志实现，也就是会打印 raft 运行日志到一个独立的文件
         let logger = self.build_slog();
 
@@ -209,7 +209,7 @@ pub async fn run(&mut self) {
                 raft_node.tick();
                 now = Instant::now();
             }
-            
+
             // 在每个驱动周期(收到业务消息或者每 100ms)，尝试去处理 Raft Message
             self.on_ready(&mut raft_node).await;
         }
@@ -258,10 +258,10 @@ async fn on_ready(&mut self, raft_node: &mut RawNode<RaftRocksDBStorage>) {
         if !raft_node.has_ready() {
             return;
         }
-        
+
         // 获取到这一批次需要处理的数据
         let mut ready = raft_node.ready();
-        
+
         // 判断消息是否为空
         // 如果不为空，表示 有Raft Message需要发给其他Raft Node，
         // 则需要把 Raft 消息通过我们构建的网络层发送给其他的 Raft Node
@@ -269,7 +269,7 @@ async fn on_ready(&mut self, raft_node: &mut RawNode<RaftRocksDBStorage>) {
             // mark 1
             self.send_message(ready.take_messages()).await;
         }
-        
+
         // 判断这次向前驱动，是否有快照数据需要恢复
         // 如果有快照数据，则需要恢复快照数据，即将快照数据持久化存储到存储层
         if *ready.snapshot() != Snapshot::default() {
@@ -282,7 +282,7 @@ async fn on_ready(&mut self, raft_node: &mut RawNode<RaftRocksDBStorage>) {
             );
             raft_node.mut_store().apply_snapshot(s).unwrap();
         }
-        
+
         // 持久化存储 Raft 日志
         // 即判断是否有 Entry 需要保存
         // 如果有 Entry 需要保存，则需要将 Entry 持久化保存
@@ -306,17 +306,17 @@ async fn on_ready(&mut self, raft_node: &mut RawNode<RaftRocksDBStorage>) {
             debug!("save hardState!!!,len:{:?}", hs);
             raft_node.mut_store().set_hard_state(hs.clone()).unwrap();
         }
-        
+
         // 判断是否有persisted messages 消息
         // 有的话就发送给其他 Raft 节点
         if !ready.persisted_messages().is_empty() {
             // mark 6
             self.send_message(ready.take_persisted_messages()).await;
         }
-    
+
         // 在确保一个 Ready 中的所有进度被正确处理完成之后，调用 RawNode::advance 接口。
         let mut light_rd = raft_node.advance(ready);
-    
+
         // 更新 HardState 中的 commit inde 信息
         if let Some(commit) = light_rd.commit_index() {
             // mark 7
@@ -335,7 +335,7 @@ async fn on_ready(&mut self, raft_node: &mut RawNode<RaftRocksDBStorage>) {
 1. on\_ready 代码把我们之前实现的网络层和存储层的逻辑都集成进来了。也就是代码中标记了 mark 1～9 位置的代码。比如当状态机生成需要发送给其他节点的消息，就调用send\_message 方法将消息发给其他节点。如果需要持久化存储消息，就调用RaftMachineStorage 中对应的方法完成存储。
 2. 你可以认为 on\_ready 代码逻辑步骤是固定的，假设你要实现自己的 Raft 状态机，那么直接把这段代码复制下来，把代码中标记了 mark 1～9 位置的代码变为自己的实现即可。
 3. 总结一下标记了 mark 的代码块的作用：
-   
+
    1. mark 1/6/8：如果有需要发送给其他 Raft Node 的消息，则通过 send\_message 方法，调用 gRPC 模块，将消息发送给其他节点。
    2. mark 2：恢复快照，将快照中的数据持久化到本地的 RocksDB 中。
    3. mark 3：持久化存储 Raft 日志，将数据持久化存储到 RocksDB 中。

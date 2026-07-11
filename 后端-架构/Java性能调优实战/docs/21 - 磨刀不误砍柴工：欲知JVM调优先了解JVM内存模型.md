@@ -85,14 +85,14 @@ public class JVMCase {
 	public static String WOMAN_SEX_TYPE = "woman";
 
 	public static void main(String[] args) {
-		
+
 		Student stu = new Student();
 		stu.setName("nick");
 		stu.setSexType(MAN_SEX_TYPE);
 		stu.setAge(20);
-		
+
 		JVMCase jvmcase = new JVMCase();
-		
+
 		// 调用静态方法
 		print(stu);
 		// 调用非静态方法
@@ -102,13 +102,13 @@ public class JVMCase {
 
 	// 常规静态方法
 	public static void print(Student stu) {
-		System.out.println("name: " + stu.getName() + "; sex:" + stu.getSexType() + "; age:" + stu.getAge()); 
+		System.out.println("name: " + stu.getName() + "; sex:" + stu.getSexType() + "; age:" + stu.getAge());
 	}
 
 
 	// 非静态方法
 	public void sayHello(Student stu) {
-		System.out.println(stu.getName() + "say: hello"); 
+		System.out.println(stu.getName() + "say: hello");
 	}
 }
 
@@ -116,14 +116,14 @@ class Student{
 	String name;
 	String sexType;
 	int age;
-	
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getSexType() {
 		return sexType;
 	}
@@ -180,11 +180,11 @@ class Student{
 <li><span>张学磊</span> 👍（95） 💬（4）<p>String a=&quot;b&quot;可能创建一个对象或者不创建对象,如果&quot;b&quot;这个字符串在常量池里不存在会在常量池创建一个String对象&quot;b&quot;,如果已经存在则a直接reference to这个常量池里的对象;
 String c= new String(&quot;b&quot;)至少创建一个对象,也可能两个,因为用到new关键字,会在堆内在创建一个的String对象,它的值是&quot;b&quot;。同时,如果&quot;b&quot;这个字符串在常量池里不存在,会在常量池创建这个一个String对象&quot;b&quot;。</p>2019-07-09</li><br/><li><span>Xiao</span> 👍（41） 💬（1）<p>老师，这儿其实应该说JVM内存结构更合适！JVM内存模型是一种规范，和JVM内存结构不是一个概念。其次，元空间，在Java8，不是在堆内分配的，它的大小是依赖于本地内存大小！</p>2019-07-09</li><br/><li><span>Liam</span> 👍（24） 💬（2）<p>请教一个问题，所以1.8开始，方法区是堆的一部分吗？也即是说，方法区的大小受限于堆</p>2019-07-09</li><br/><li><span>夏天39度</span> 👍（13） 💬（2）<p>超哥，我可以这样理解吗，方法区只是一个逻辑概念，方法区是包括元空间物理内存和堆内存</p>2019-07-31</li><br/><li><span>Gred</span> 👍（9） 💬（3）<p>老师，运行时变量应该都在方法区中，从java7开始只有字符串常量池移到堆中而已</p>2019-08-02</li><br/><li><span>我又不乱来</span> 👍（8） 💬（1）<p>String a=&quot;b&quot;应该会放在字符串常量池中。
 String c= new String(&quot;b&quot;) 首先应该放在 堆中一份，再在常量池中放一份。但是常量池中有b了。
-第一次留言。不知道理解的对不对。超哥</p>2019-07-09</li><br/><li><span>发条橙子 。</span> 👍（6） 💬（1）<p>老师，这句话怎么理解 
+第一次留言。不知道理解的对不对。超哥</p>2019-07-09</li><br/><li><span>发条橙子 。</span> 👍（6） 💬（1）<p>老师，这句话怎么理解
 
 之前永久代的类的元数据存储在了元空间，永久代的静态变量（class static variables）以及运行时常量池（runtime constant pool）则跟 Java7 一样，转移到了堆中。
 
-方法区的一部分是由永久代实现的，永久代主要存储类的静态数据以及运行时常量池并储存在堆内存中。 但是由于容易发生permen内存溢出，后来就发明了元数据空间。那我理解元空间除了存储之前方法区的类信息还包括之前放在永久代中的 静态变量 和 运行时常量池 。 
+方法区的一部分是由永久代实现的，永久代主要存储类的静态数据以及运行时常量池并储存在堆内存中。 但是由于容易发生permen内存溢出，后来就发明了元数据空间。那我理解元空间除了存储之前方法区的类信息还包括之前放在永久代中的 静态变量 和 运行时常量池 。
 文中为什么说和jdk7一样还是转移到堆中，那不是没有变化么？</p>2019-07-20</li><br/><li><span>尔东橙</span> 👍（5） 💬（2）<p>老师，我看有人说字符串常量池只放引用；那new出来除了堆中会有一个对象，如果字符串常量池没有，也会创建一个，这个对象是在堆中非字符串常量池的地方么</p>2019-09-02</li><br/><li><span>黑夜里的猫</span> 👍（5） 💬（1）<p>字符串常量不是在java8中已经被放入到堆中了吗，应该不在方法区中了，但是看到老师的图中还在方法区中</p>2019-07-09</li><br/><li><span>东方奇骥</span> 👍（3） 💬（1）<p>老师，问一下，1.8静态变量和常量存储在的堆里面，那元空间里是什么？文中说之前永久带类的数据存储在了元空间，不是很理解，</p>2019-07-12</li><br/><li><span>晓杰</span> 👍（3） 💬（1）<p>创建一个线程，就会在虚拟机中申请一个栈帧，这句话有问题吧
 应该是创建一个线程，会创建一个栈，然后方法调用一次，就会申请一个栈帧吧</p>2019-07-11</li><br/><li><span>Cain</span> 👍（3） 💬（1）<p>常量池在哪个区？堆区？栈区？方法区？静态区？方法区，静态区他俩是什么关系？</p>2019-07-10</li><br/><li><span>crazypokerk</span> 👍（3） 💬（1）<p>引用a和c都会放在栈中，但是a直接指向堆中的运行时常量池中的&quot;b&quot;，而引用c会先在堆中创建一个String对象，该对象会指向运行时常量池中的&quot;b&quot;。</p>2019-07-09</li><br/><li><span>ZHANG</span> 👍（2） 💬（1）<p>老师，是这样吗，java8中类的静态变量，运行时常量池，字符串常量池都在堆中，那元空间只有一些类的信息了，比如版本什么的。</p>2019-10-31</li><br/><li><span>帽子丨影</span> 👍（2） 💬（2）<p>元空间的存储位置时本地内存，请问下本地内存是个什么东西，在第一张图里没找到啊。</p>2019-08-20</li><br/>
 </ul>

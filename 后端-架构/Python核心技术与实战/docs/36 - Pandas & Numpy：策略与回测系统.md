@@ -36,17 +36,17 @@ K线的“小蜡烛” -- OHLC
 def assert_msg(condition, msg):
     if not condition:
         raise Exception(msg)
-    
+
 def read_file(filename):
     # 获得文件绝对路径
     filepath = path.join(path.dirname(__file__), filename)
-    
+
     # 判定文件是否存在
     assert_msg(path.exists(filepath), "文件不存在")
-    
+
     # 读取CSV文件并返回
     return pd.read_csv(filepath,
-                       index_col=0, 
+                       index_col=0,
                        parse_dates=True,
                        infer_datetime_format=True)
 
@@ -57,7 +57,7 @@ print(BTCUSD.head())
 
 ########## 输出 ##########
 Time                 Symbol      Open      High       Low     Close     Volume
-Date                                                                          
+Date
 2019-07-08 00:00:00  BTCUSD  11475.07  11540.33  11469.53  11506.43  10.770731
 2019-07-07 23:00:00  BTCUSD  11423.00  11482.72  11423.00  11475.07  32.996559
 2019-07-07 22:00:00  BTCUSD  11526.25  11572.74  11333.59  11423.00  48.937730
@@ -567,14 +567,14 @@ if __name__ == '__main__':
 将传入的values转成一位数组以n个数据为单位滚动切分取平均值，返回一个均值数组
 SMA的调用位置：
 SmaCross在继承Strategy后必须要重写的抽象方法init中：
-self.sma1 = self.I(SMA, self.data.Close, self.fast)  # 用收盘价计算的10日均线
-self.sma2 = self.I(SMA, self.data.Close, self.slow)  # 用收盘价计算的20日均线
+self.sma1 = self.I(SMA, self.data.Close, self.fast) # 用收盘价计算的10日均线
+self.sma2 = self.I(SMA, self.data.Close, self.slow) # 用收盘价计算的20日均线
 
 提议：数据可视化更能直观表达实现策略的方案。</p>2019-09-01</li><br/><li><span>小侠龙旋风</span> 👍（1） 💬（0）<p>30日均线、10日均线、5日均线、小时、分钟...
 大窗口SMA -&gt; 小窗口SMA
 策略：小窗口SMA从下穿过大窗口SMA，买入。大窗口SMA从下方突破小窗口 SMA，卖出。
-这要先看看股市的简单策略分析才能明白。刚开始看，完全不懂。。。</p>2019-09-01</li><br/><li><span>长青</span> 👍（1） 💬（1）<p>老师iself._indicators.append(value)这一步有有什么意义呢   没大看明白。还有
-buy和sell是不是应该在下一根K线执行才对？比如我指标计算时用的15分钟K线   在10:15分出现买卖信号后，应该在10:30执行操作 ，因为指标时根据收盘价计算的
+这要先看看股市的简单策略分析才能明白。刚开始看，完全不懂。。。</p>2019-09-01</li><br/><li><span>长青</span> 👍（1） 💬（1）<p>老师iself._indicators.append(value)这一步有有什么意义呢 没大看明白。还有
+buy和sell是不是应该在下一根K线执行才对？比如我指标计算时用的15分钟K线 在10:15分出现买卖信号后，应该在10:30执行操作 ，因为指标时根据收盘价计算的
 
 </p>2019-08-12</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第36讲打卡~</p>2024-07-17</li><br/><li><span>杨宇</span> 👍（0） 💬（0）<p>def __init__(self, data: pd.DataFrame, ...)
 def crossover(series1, series2) -&gt; bool: ...

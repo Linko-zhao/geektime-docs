@@ -32,7 +32,7 @@ acquire_lock(){
      return 1
   else
      return 0
-} 
+}
 
 release_lock(){
   lock = 0
@@ -153,7 +153,7 @@ end
 最后，我们执行下面的命令，就可以完成锁释放操作了。
 
 ```
-redis-cli  --eval  unlock.script lock_key , unique_value 
+redis-cli  --eval  unlock.script lock_key , unique_value
 ```
 
 你可能也注意到了，在释放锁操作中，我们使用了Lua脚本，这是因为，释放锁操作的逻辑也包含了读取锁变量、判断值、删除锁变量的多个操作，而Redis在执行Lua脚本时，可以以原子性的方式执行，从而保证了锁释放操作的原子性。
@@ -271,20 +271,17 @@ Etcd 可以为存储的 KV 对设置租约，当租约到期，KV 将失效删�
 
 Redis在这方面很难实现，一般假设通过SETNX设置的时间10S，如果发生网络抖动，万一业务执行超过10S，此时别的线程就能回去到锁；
 
-
 2、Revision 机制：
 
 Etcd 每个 key 带有一个 Revision 属性值，每进行一次事务对应的全局 Revision 值都会加一，因此每个 key 对应的 Revision 属性值都是全局唯一的。通过比较 Revision 的大小就可以知道进行写操作的顺序。 在实现分布式锁时，多个程序同时抢锁，根据 Revision 值大小依次获得锁，可以避免 “惊群效应”，实现公平锁；
 
 Redis很难实现公平锁，而且在某些情况下，也会产生 “惊群效应”；
- 
 
 3、Prefix 即前缀机制，也称目录机制：
 
 Etcd 可以根据前缀（目录）获取该目录下所有的 key 及对应的属性（包括 key, value 以及 revision 等）；
 
 Redis也可以的，使用keys命令或者scan，生产环境一定要使用scan；
-
 
 4、Watch 机制：
 
@@ -298,10 +295,11 @@ Redis只能通过客户端定时轮训的形式去判断key是否存在；</p>20
 一个key过期了 但是代码还没处理完 此时就发生了重复加锁的问题。
 
 通常我们有两种方式处理：
+
 1. 设置看门狗 也就是redision的处理方式
 2. 设置状态机 由最后的业务层来做代码回溯</p>2021-06-10</li><br/><li><span>Geek_lijia</span> 👍（6） 💬（0）<p>关于分布式锁，两个大神的争论，我站Martin这边。
-https:&#47;&#47;martin.kleppmann.com&#47;2016&#47;02&#47;08&#47;how-to-do-distributed-locking.html 
-http:&#47;&#47;antirez.com&#47;news&#47;101 </p>2022-01-13</li><br/><li><span>喰</span> 👍（5） 💬（0）<p>对于给锁设置过期时间，即使再怎么预估也很难保证线程在锁有效时间内完成操作。而且预估时间设置的过大也会影响系统性能，所以可以使用一个守护线程进行续租。</p>2021-07-02</li><br/><li><span>COLDLY</span> 👍（3） 💬（1）<p>老师，请问锁的过期时间怎么设置，会不会因为客户端执行业务操作时耗时太久超过过期时间，导致锁过期被释放了</p>2021-01-05</li><br/><li><span>范闲</span> 👍（3） 💬（1）<p>不可以。这两个命令不是原子的。发生异常的时候，可能会有正常的加锁结果。
+   https:&#47;&#47;martin.kleppmann.com&#47;2016&#47;02&#47;08&#47;how-to-do-distributed-locking.html
+   http:&#47;&#47;antirez.com&#47;news&#47;101 </p>2022-01-13</li><br/><li><span>喰</span> 👍（5） 💬（0）<p>对于给锁设置过期时间，即使再怎么预估也很难保证线程在锁有效时间内完成操作。而且预估时间设置的过大也会影响系统性能，所以可以使用一个守护线程进行续租。</p>2021-07-02</li><br/><li><span>COLDLY</span> 👍（3） 💬（1）<p>老师，请问锁的过期时间怎么设置，会不会因为客户端执行业务操作时耗时太久超过过期时间，导致锁过期被释放了</p>2021-01-05</li><br/><li><span>范闲</span> 👍（3） 💬（1）<p>不可以。这两个命令不是原子的。发生异常的时候，可能会有正常的加锁结果。
 
 分布式锁:
 1.唯一性
@@ -311,9 +309,9 @@ http:&#47;&#47;antirez.com&#47;news&#47;101 </p>2022-01-13</li><br/><li><span>�
 Redlock Redisson zookeeper etcd都是业界常用的分布式锁方案。</p>2020-12-03</li><br/><li><span>漂泊者及其影子</span> 👍（3） 💬（12）<p>
 &#47;&#47;释放锁 比较unique_value是否相等，避免误释放
 if redis.call(&quot;get&quot;,KEYS[1]) == ARGV[1] then
-    return redis.call(&quot;del&quot;,KEYS[1])
+return redis.call(&quot;del&quot;,KEYS[1])
 else
-    return 0
+return 0
 end
 
 释放锁为什么不能使用delete操作？</p>2020-10-30</li><br/><li><span>每天晒白牙</span> 👍（3） 💬（0）<p>是不能把setnx 和 expire 命令分开的，因为无法保证两个操作执行的原子性，可能遇到各种异常，无法满足预期</p>2020-10-30</li><br/><li><span>BingoJ</span> 👍（2） 💬（0）<p>目前这把锁还有一个问题，就是不能保证可重入</p>2021-07-31</li><br/><li><span>Geek_d45d62</span> 👍（1） 💬（0）<p>“如果客户端 A 执行了 SETNX 命令加锁后，假设客户端 B 执行了 DEL 命令释放锁&quot;

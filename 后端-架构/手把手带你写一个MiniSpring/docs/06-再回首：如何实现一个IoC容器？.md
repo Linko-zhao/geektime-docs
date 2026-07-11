@@ -148,7 +148,7 @@ MiniSpring中，对注解的解释是通过BeanPostProcessor来完成的。我�
 然后改写ClassPathXmlApplicationContext类中的registerBeanPostProcessors()方法，将这个新定义的beanpostprocessor注册进去。
 
 ```java
-beanFactory.addBeanPostProcessor(new 
+beanFactory.addBeanPostProcessor(new
 RequireAnnotationBeanPostProcessor());
 ```
 
@@ -193,6 +193,7 @@ RequireAnnotationBeanPostProcessor());
 目前我们所实现的IoC容器还没有对象销毁功能，所有的示例都还保存在容器中，那也就不会被JVM回收吧？后续是否需要实现bean的销毁功能呢？
 
 2. 没想明白怎么实现“构造器注解autowired注入”：autowired processor是在bean实例化之后，也就是构造函数完成之后，那这个时候还如何通过autowired注入呢?这个时候构造函数要么调用完成了，要么调用失败了呀？</p>2023-03-24</li><br/><li><span>peter</span> 👍（2） 💬（1）<p>请问：ThreadLocal方法有数据一致性问题吗？假设两个线程共享数据A，线程1在自己的ThreadLocal中有副本A1，线程2在自己的ThreadLocal中有副本A2，那么，A1、A2和A之间会存在数据一致性问题吗？ A1、A2需要更新到A吗？</p>2023-03-25</li><br/><li><span>Geek_a551cb</span> 👍（0） 💬（1）<p>ListableBeanFactory和ConfigurableBeanFactory都继承自BeanFactory；ConfigurableListableBeanFactory又继承ListableBeanFactory和ConfigurableBeanFactory；可不可以改成ConfigurableListableBeanFactory继承Listable、Configurable和BeanFactory;重复继承总感觉不好</p>2024-02-14</li><br/><li><span>dirtychill</span> 👍（1） 💬（0）<p>https:&#47;&#47;github.com&#47;DirtyBit64&#47;Mini-Spring.git  
-跟着课程一节一节做的，有完整的提交记录，和课程源码不完全相同，因为遇到了一些bug，不过已经解决</p>2024-05-17</li><br/><li><span>星光灼人</span> 👍（0） 💬（0）<p>老师，构造器注入时，如果有很多类，岂不是每个类都判断一下</p>2025-01-17</li><br/><li><span>1184507801</span> 👍（0） 💬（1）<p>老师 04 ioc 您回答的 支持多个注解的问题 ，新增RequireAnnotationBeanPostProcessor 类，那是不是还得创建相应的BeanFactory，后面的步骤是啥啊</p>2024-04-16</li><br/><li><span>Geek_08c860</span> 👍（0） 💬（0）<p>代码仓库：https:&#47;&#47;gitee.com&#47;funktest7ff&#47;mini-spring
-划分了多个模块，每个模块是一个版本的实现</p>2023-12-20</li><br/>
+   跟着课程一节一节做的，有完整的提交记录，和课程源码不完全相同，因为遇到了一些bug，不过已经解决</p>2024-05-17</li><br/><li><span>星光灼人</span> 👍（0） 💬（0）<p>老师，构造器注入时，如果有很多类，岂不是每个类都判断一下</p>2025-01-17</li><br/><li><span>1184507801</span> 👍（0） 💬（1）<p>老师 04 ioc 您回答的 支持多个注解的问题 ，新增RequireAnnotationBeanPostProcessor 类，那是不是还得创建相应的BeanFactory，后面的步骤是啥啊</p>2024-04-16</li><br/><li><span>Geek_08c860</span> 👍（0） 💬（0）<p>代码仓库：https:&#47;&#47;gitee.com&#47;funktest7ff&#47;mini-spring
+   划分了多个模块，每个模块是一个版本的实现</p>2023-12-20</li><br/>
+
 </ul>

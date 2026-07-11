@@ -46,7 +46,7 @@ var p *int = &a  // 给整型指针变量p赋初值
 
 ```plain
 var b byte = 10
-var p *int = &b // Go编译器报错：cannot use &b (value of type *byte) as type *int in variable declaration 
+var p *int = &b // Go编译器报错：cannot use &b (value of type *byte) as type *int in variable declaration
 ```
 
 到这里，我们可以看到：指针类型变量的值与我们之前所了解的任何类型的值都不同，那它究竟有什么特别之处呢？我们继续往下看。
@@ -85,7 +85,7 @@ func main() {
     var p4 *[20]int
     var p5 *foo
     var p6 unsafe.Pointer
-    println(unsafe.Sizeof(p1)) // 8 
+    println(unsafe.Sizeof(p1)) // 8
     println(unsafe.Sizeof(p2)) // 8
     println(unsafe.Sizeof(p3)) // 8
     println(unsafe.Sizeof(p4)) // 8
@@ -111,7 +111,7 @@ func Sizeof(x ArbitraryType) uintptr
 ```plain
 var a int = 17
 var p *int = &a
-println(*p) // 17 
+println(*p) // 17
 (*p) += 3
 println(a)  // 20
 ```
@@ -169,9 +169,9 @@ func main() {
 
     var pp **int = &p1
     println(**pp) // 5
-    pp = &p2      
+    pp = &p2
     println(**pp) // 55
-}  
+}
 ```
 
 在这个例子中，我们声明了两个\*int类型指针p1和p2，分别指向两个整型变量a和b，我们还声明了一个\*\*int型的指针变量pp，它的初值为指针变量p1的地址。之后我们用p2的地址为pp变量作了重新赋值。
@@ -249,12 +249,12 @@ Go是带有垃圾回收的编程语言，指针在Go中依旧位于C位，它的
 
 ```plain
 #include <stdio.h>
-  
+
 int main() {
     int a = 0x12345678;
     int *p = &a;
     char *p1 = (char*)p; // 将一个整型指针显式转换为一个char型指针
-    printf("%x\n", *p1); 
+    printf("%x\n", *p1);
 }
 ```
 
@@ -279,12 +279,12 @@ func main() {
 如果我们“一意孤行”，非要进行这个转换，Go也提供了unsafe的方式，因为我们需要使用到unsafe.Pointer，如下面代码：
 
 ```plain
-func main() {                                                                         
-    var a int = 0x12345678                                                            
-    var pa *int = &a                                                                  
+func main() {
+    var a int = 0x12345678
+    var pa *int = &a
     var pb *byte = (*byte)(unsafe.Pointer(pa)) // ok
-    fmt.Printf("%x\n", *pb) // 78                                                          
-} 
+    fmt.Printf("%x\n", *pb) // 78
+}
 ```
 
 如果我们使用unsafe包中类型或函数，代码的安全性就要由开发人员自己保证，也就是开发人员得明确知道自己在做啥！
@@ -295,13 +295,13 @@ func main() {
 
 ```plain
 #include <stdio.h>
-  
+
 int main() {
     int a[] = {1, 2, 3, 4, 5};
     int *p = &a[0];
     for (int i = 0; i < sizeof(a)/sizeof(a[0]); i++) {
             printf("%d\n", *p);
-            p = p + 1; 
+            p = p + 1;
     }
 }
 ```
@@ -334,7 +334,7 @@ func main() {
     for i = 0; i < uintptr(len(arr)); i++ {
         p1 := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + i*unsafe.Sizeof(*p)))
         println(*p1)
-    }           
+    }
 }
 ```
 

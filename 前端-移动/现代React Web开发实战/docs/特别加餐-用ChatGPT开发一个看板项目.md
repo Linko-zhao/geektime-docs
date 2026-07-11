@@ -15,16 +15,16 @@
 
 我选择的模型是GPT-4，首次使用的提示语（Prompt）如下。
 
-> 我需要用React.js 18实现一个单页应用。  
->   
-> 这个应用总体是上中下三行布局，页头显示“我的看板”标题，页脚显示一行版权信息。中间的内容区域分成左中右三列，每列都是一个任务列表，从左到右依次是“待处理”、“进行中”、“已完成”列表。用户可以向“待处理”列表添加新的任务；“待处理”列中的每个任务都有一个“开始”按钮，点击这个按钮会把对应的任务移动到“进行中”列表中；“进行中”中的每个任务都有一个“完成”按钮，点击这个按钮会把对应的任务移动到“已完成”列表中。  
->   
+> 我需要用React.js 18实现一个单页应用。
+>
+> 这个应用总体是上中下三行布局，页头显示“我的看板”标题，页脚显示一行版权信息。中间的内容区域分成左中右三列，每列都是一个任务列表，从左到右依次是“待处理”、“进行中”、“已完成”列表。用户可以向“待处理”列表添加新的任务；“待处理”列中的每个任务都有一个“开始”按钮，点击这个按钮会把对应的任务移动到“进行中”列表中；“进行中”中的每个任务都有一个“完成”按钮，点击这个按钮会把对应的任务移动到“已完成”列表中。
+>
 > 请提供对应的JSX和CSS代码。
 
 以下是ChatGPT返回的结果：
 
-> 创建这个React应用涉及到一些细节，包括如何处理状态和事件。下面是一个简单的示例，用React.js实现这个应用。  
->   
+> 创建这个React应用涉及到一些细节，包括如何处理状态和事件。下面是一个简单的示例，用React.js实现这个应用。
+>
 > 首先，我们需要安装react.js，如果还没有安装，可以在命令行中运行以下代码：
 
 ```bash
@@ -40,18 +40,18 @@ cd kanban-board
 > 然后在src文件夹中创建一个新的文件`KanbanBoard.js`，并且在这个文件中写下以下代码：
 
 ```javascript
-import React, { useState } from 'react';
-import './KanbanBoard.css';
+import React, { useState } from "react";
+import "./KanbanBoard.css";
 
 const KanbanBoard = () => {
-  const [task, setTask] = useState('');
+  const [task, setTask] = useState("");
   const [toDoList, setToDoList] = useState([]);
   const [doingList, setDoingList] = useState([]);
   const [doneList, setDoneList] = useState([]);
 
   const addTask = () => {
     setToDoList([...toDoList, task]);
-    setTask('');
+    setTask("");
   };
 
   const startTask = (index) => {
@@ -119,8 +119,8 @@ export default KanbanBoard;
 
 ChatGPT继续输出：
 
-> 对不起，CSS样式可能被意外地剪切。以下是完整的CSS样式。  
->   
+> 对不起，CSS样式可能被意外地剪切。以下是完整的CSS样式。
+>
 > 在`KanbanBoard.css`文件中：
 
 ```css
@@ -132,7 +132,8 @@ ChatGPT继续输出：
   height: 100vh;
 }
 
-header, footer {
+header,
+footer {
   height: 10vh;
   width: 100%;
   background-color: #f0f0f0;
@@ -172,7 +173,8 @@ header, footer {
   margin-bottom: 0.5em;
 }
 
-input, button {
+input,
+button {
   margin-top: 1em;
 }
 ```
@@ -180,9 +182,9 @@ input, button {
 > 然后在`src`文件夹的`App.js`文件中引入`KanbanBoard.js`：
 
 ```javascript
-import React from 'react';
-import KanbanBoard from './KanbanBoard';
-import './App.css';
+import React from "react";
+import KanbanBoard from "./KanbanBoard";
+import "./App.css";
 
 function App() {
   return (
@@ -237,10 +239,10 @@ ChatGPT回复：
 - 在更新state时，并没有去修改原始数组而是新建数组，参考专栏第15节[《不可变数据：为什么对React这么重要？》](https://time.geekbang.org/column/article/577223)。  
   有官方资料表明，ChatGPT训练数据里还是英文内容占了绝大多数，那么如果把提示语换成英文会有什么不一样呢？
 
-> I need to implement a SPA using React.js v18.x.  
->   
-> The app has a header-main-footer layout, the header pane shows a title “My Kanban”; and the footer is just a copyright line. The main pane has 3 columns, from left to right they are TODO, ONGOING, DONE, each of them is basically a task list. User can add new task to TODO column, each task in TODO column has a START button, clicking the button will move this task to ONGOING column; each task in ONGOING column has a DONE button, clicking the button will move the task to DONE column.  
->   
+> I need to implement a SPA using React.js v18.x.
+>
+> The app has a header-main-footer layout, the header pane shows a title “My Kanban”; and the footer is just a copyright line. The main pane has 3 columns, from left to right they are TODO, ONGOING, DONE, each of them is basically a task list. User can add new task to TODO column, each task in TODO column has a START button, clicking the button will move this task to ONGOING column; each task in ONGOING column has a DONE button, clicking the button will move the task to DONE column.
+>
 > Please provide JSX and CSS code.
 
 ChatGPT生成的代码结构和质量与前面中文的版本基本相当，在本地跑起来效果如下图。
@@ -257,8 +259,8 @@ ChatGPT生成的代码结构和质量与前面中文的版本基本相当，在�
 
 还是前面看板项目的例子，在同一ChatGPT对话中继续输入：
 
-> 请为“已完成”列表中的每个任务都加上一个“删除”按钮，点击即可从列表中删除该任务。  
->   
+> 请为“已完成”列表中的每个任务都加上一个“删除”按钮，点击即可从列表中删除该任务。
+>
 > 请以GNU patch命令可以识别的补丁格式提供所需的代码片段。
 
 ChatGPT会基于前面生成的代码，返回一个补丁：
@@ -362,38 +364,38 @@ npm install --save-dev jest @testing-library/react
 > 然后我们在`src`目录下创建`KanbanBoard.test.js`文件，用于写我们的单元测试。
 
 ```javascript
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import KanbanBoard from './KanbanBoard';
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import KanbanBoard from "./KanbanBoard";
 
-test('should allow tasks to be added, started, completed, and deleted', () => {
+test("should allow tasks to be added, started, completed, and deleted", () => {
   const { getByText, getByRole } = render(<KanbanBoard />);
 
-  const addTaskInput = getByRole('textbox');
-  const addTaskButton = getByText('添加任务');
+  const addTaskInput = getByRole("textbox");
+  const addTaskButton = getByText("添加任务");
 
-  fireEvent.change(addTaskInput, { target: { value: 'New Task' } });
+  fireEvent.change(addTaskInput, { target: { value: "New Task" } });
   fireEvent.click(addTaskButton);
 
-  expect(getByText('New Task')).toBeInTheDocument();
-  expect(addTaskInput.value).toBe('');
+  expect(getByText("New Task")).toBeInTheDocument();
+  expect(addTaskInput.value).toBe("");
 
-  const startButton = getByText('开始');
+  const startButton = getByText("开始");
   fireEvent.click(startButton);
 
-  expect(getByText('New Task')).toBeInTheDocument();
-  expect(() => getByText('开始')).toThrow();
+  expect(getByText("New Task")).toBeInTheDocument();
+  expect(() => getByText("开始")).toThrow();
 
-  const completeButton = getByText('完成');
+  const completeButton = getByText("完成");
   fireEvent.click(completeButton);
 
-  expect(getByText('New Task')).toBeInTheDocument();
-  expect(() => getByText('完成')).toThrow();
+  expect(getByText("New Task")).toBeInTheDocument();
+  expect(() => getByText("完成")).toThrow();
 
-  const deleteButton = getByText('删除');
+  const deleteButton = getByText("删除");
   fireEvent.click(deleteButton);
 
-  expect(() => getByText('New Task')).toThrow();
+  expect(() => getByText("New Task")).toThrow();
 });
 ```
 

@@ -126,15 +126,15 @@ Producer端关闭TCP连接的方式有两种：**一种是用户主动关闭；�
 			多路复用请求：multiplexing request，是将两个或多个数据合并到底层—物理连接中的过程。TCP的多路复用请求会在一条物理连接上创建若干个虚拟连接，每个虚拟连接负责流转各自对应的数据流。严格讲：TCP并不能多路复用，只是提供可靠的消息交付语义保证，如自动重传丢失的报文。
 
 2 何时创建TCP连接？
-	（1）在创建KafkaProducer实例时，
+（1）在创建KafkaProducer实例时，
 A：生产者应用会在后台创建并启动一个名为Sender的线程，该Sender线程开始运行时，首先会创建与Broker的连接。
 B：此时不知道要连接哪个Broker，kafka会通过METADATA请求获取集群的元数据，连接所有的Broker。
-	（2）还可能在更新元数据后，或在消息发送时
+（2）还可能在更新元数据后，或在消息发送时
 3 何时关闭TCP连接
-	（1）Producer端关闭TCP连接的方式有两种：用户主动关闭，或kafka自动关闭。
-		A：用户主动关闭，通过调用producer.close()方关闭，也包括kill -9暴力关闭。
-		B：Kafka自动关闭，这与Producer端参数connection.max.idles.ms的值有关，默认为9分钟，9分钟内没有任何请求流过，就会被自动关闭。这个参数可以调整。
-		C：第二种方式中，TCP连接是在Broker端被关闭的，但这个连接请求是客户端发起的，对TCP而言这是被动的关闭，被动关闭会产生大量的CLOSE_WAIT连接。
+（1）Producer端关闭TCP连接的方式有两种：用户主动关闭，或kafka自动关闭。
+A：用户主动关闭，通过调用producer.close()方关闭，也包括kill -9暴力关闭。
+B：Kafka自动关闭，这与Producer端参数connection.max.idles.ms的值有关，默认为9分钟，9分钟内没有任何请求流过，就会被自动关闭。这个参数可以调整。
+C：第二种方式中，TCP连接是在Broker端被关闭的，但这个连接请求是客户端发起的，对TCP而言这是被动的关闭，被动关闭会产生大量的CLOSE_WAIT连接。
 </p>2019-10-31</li><br/><li><span>旭杰</span> 👍（28） 💬（4）<p>Producer 通过 metadata.max.age.ms定期更新元数据，在连接多个broker的情况下，producer是如何决定向哪个broker发起该请求？</p>2019-07-23</li><br/><li><span>小马</span> 👍（23） 💬（2）<p>老师有个问题请教下：
 Producer 通过 metadata.max.age.ms 参数定期地去更新元数据信息，默认5分钟更新元数据，如果没建立TCP连接则会创建，而connections.max.idle.ms默认9分钟不使用该连接就会关闭。那岂不是会循环往复地不断地在创建关闭TCP连接了吗？</p>2020-01-09</li><br/><li><span>Frank</span> 👍（19） 💬（1）<p>最近在使用kafka Connector做数据同步服务，在kafka中创建了许多topic，目前对kafka了解还不够深入，不知道这个对性能有什么影响？topic的数量多大范围比较合适？</p>2019-07-10</li><br/><li><span>你好旅行者</span> 👍（16） 💬（4）<p>老师好，看了今天的文章我有几个问题：
 
@@ -145,8 +145,10 @@ Producer 通过 metadata.max.age.ms 参数定期地去更新元数据信息，�
 这段不敢苟同。作为消息服务器中国，连接应该是种必要资源，所以部署时就该充分给予，而且创建连接会消耗CPU,用到时再创建不合适，我甚至觉得Kafka应该有连接池的设计。
 
 另外最后一部分关于TCP关闭第二种情况，客户端到服务端没有关闭，只是服务端到客户端关闭了，tcp是四次断开，可以单方向关闭，另一方向继续保持连接</p>2019-07-02</li><br/><li><span>半瓶醋</span> 👍（9） 💬（2）<p>胡夕老师，Kafka集群的元数据信息是保存在哪里的呢，以CDH集群为例，我比较菜：）</p>2020-05-13</li><br/><li><span>yzh</span> 👍（8） 💬（1）<p>老是您好，咨询两个问题。
+
 1. Producer实例创建和维护的tcp连接在底层是否是多个Producer实例共享的，还是Jvm内，多个Producer实例会各自独立创建和所有broker的tcp连接
-2.Producer实例会和所有broker维持连接，这里的所有，是指和topic下各个分区leader副本所在的broker进行连接的，还是所有的broker，即使该broker下的所有topic分区都是flower
+   2.Producer实例会和所有broker维持连接，这里的所有，是指和topic下各个分区leader副本所在的broker进行连接的，还是所有的broker，即使该broker下的所有topic分区都是flower
+
 </p>2019-08-20</li><br/><li><span>电光火石</span> 👍（5） 💬（1）<p>谢谢老师。有几个问题请教一下：
 1. producer连接是每个broker一个连接，跟topic没有关系是吗？（consumer也是这样是吗？）
 2. 我们运维在所有的broker之前放了一个F5做负载均衡，但其实应该也没用，他会自动去获取kafka所有的broker，绕过这个F5，不知道我的理解是否正确？

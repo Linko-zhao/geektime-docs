@@ -49,8 +49,8 @@ class ShoppingCart {
   getInfo() {
     return '购物车信息:' +
           '\n-----------------------------' +
-          '\n用户名: ' + name+ 
-          '\n优惠码: ' + code + 
+          '\n用户名: ' + name+
+          '\n优惠码: ' + code +
           '\n总价: ' + price().toString() +
           '\n日期: ' + date.toString() +
           '\n-----------------------------';
@@ -130,7 +130,7 @@ class ShoppingCart extends Meta{
   DateTime date;
   String code;
   List<Item> bookings;
-  
+
   double get price {...}
   ShoppingCart(name, this.code) : date = DateTime.now(),super(name,0);
   getInfo() {...}
@@ -150,7 +150,7 @@ double get price {
     sum += i.price;
   }
   return sum;
-} 
+}
 ```
 
 在这个方法里，我采用了其他语言常见的求和算法，依次遍历bookings列表中的Item对象，累积相加求和。
@@ -163,7 +163,7 @@ double get price {
 class Item extends Meta{
   ...
   //重载了+运算符，合并商品为套餐商品
-  Item operator+(Item item) => Item(name + item.name, price + item.price); 
+  Item operator+(Item item) => Item(name + item.name, price + item.price);
 }
 
 class ShoppingCart extends Meta{
@@ -317,7 +317,7 @@ class Meta {
 class Item extends Meta{
   Item(name, price) : super(name, price);
   //重载+运算符，将商品对象合并为套餐商品
-  Item operator+(Item item) => Item(name + item.name, price + item.price); 
+  Item operator+(Item item) => Item(name + item.name, price + item.price);
 }
 
 abstract class PrintHelper {
@@ -380,132 +380,135 @@ double get price =&gt; bookings...
     sum += i.price;
   }
   return sum;
-} 
+}
 
 文中这里的price()是多了括号()，要去掉()</p>2019-07-16</li><br/><li><span>jia58960</span> 👍（10） 💬（2）<p>大概能看懂并实现代码，但构造函数中的属性什么时候用this.属性，什么时候不用this，希望老师能回答下。</p>2019-07-24</li><br/><li><span>灰灰</span> 👍（5） 💬（2）<p>abstract class PrintHelper {
-  printInfo() =&gt; print(getInfo());
-  getInfo();
+printInfo() =&gt; print(getInfo());
+getInfo();
 }
 
 class Meta {
-  double price;
-  String name;
-  Meta(this.name, this.price);
+double price;
+String name;
+Meta(this.name, this.price);
 }
 
 &#47;&#47; 定义商品Item类
 class Item extends Meta {
-  int count;
-  Item(name, price, this.count): super(name, price);
-  Item operator+(Item item) =&gt; Item(name + item.name, price * count + (item.price * item.count), 1);
+int count;
+Item(name, price, this.count): super(name, price);
+Item operator+(Item item) =&gt; Item(name + item.name, price * count + (item.price * item.count), 1);
 }
 
 &#47;&#47;定义购物车类
 class ShoppingCart extends Meta with PrintHelper {
-  DateTime date;
-  String code;
-  List&lt;Item&gt; bookings;
+DateTime date;
+String code;
+List&lt;Item&gt; bookings;
 
-  double get price =&gt; bookings.reduce((value, element) =&gt; (value + element)).price;
-&#47;&#47;  ShoppingCart(name, this.code): date = DateTime.now(), super(name,0);
-  ShoppingCart({name}): this.withCode(name: name, code: null);
-  ShoppingCart.withCode({name, this.code}): date = DateTime.now(), super(name, 0);
-  getInfo () =&gt; &#39;&#39;&#39;
-     购物车信息:
-     
+double get price =&gt; bookings.reduce((value, element) =&gt; (value + element)).price;
+&#47;&#47; ShoppingCart(name, this.code): date = DateTime.now(), super(name,0);
+ShoppingCart({name}): this.withCode(name: name, code: null);
+ShoppingCart.withCode({name, this.code}): date = DateTime.now(), super(name, 0);
+getInfo () =&gt; &#39;&#39;&#39;
+购物车信息:
+
      ----------------
      商品名    单价    数量    总价
      ----------------
      ${bookings.map((item) =&gt; &#39;${item.name}  ${item.price}  ${item.count}  ${item.price * item.count}&#39;).join(&#39;\n     &#39;)}
-     
+
      ================
      用户名： $name
      优惠码： ${code ?? &quot;没有&quot;}
      总价： $price
      日期： $date
-  &#39;&#39;&#39;;
+
+&#39;&#39;&#39;;
 }
 
 void main() {
-  ShoppingCart.withCode(name: &#39;张三&#39;, code: &#39;123456&#39;)
-  ..bookings = [Item(&#39;苹果&#39;, 10.0, 3), Item(&#39;鸭梨&#39;, 20.0, 1)]
-  ..printInfo();
+ShoppingCart.withCode(name: &#39;张三&#39;, code: &#39;123456&#39;)
+..bookings = [Item(&#39;苹果&#39;, 10.0, 3), Item(&#39;鸭梨&#39;, 20.0, 1)]
+..printInfo();
 
-  ShoppingCart(name: &#39;李四&#39;)
-  ..bookings = [Item(&#39;香蕉&#39;, 2.4, 2), Item(&#39;芒果&#39;, 6.8, 4)]
-  ..printInfo();
+ShoppingCart(name: &#39;李四&#39;)
+..bookings = [Item(&#39;香蕉&#39;, 2.4, 2), Item(&#39;芒果&#39;, 6.8, 4)]
+..printInfo();
 }</p>2019-07-27</li><br/><li><span>Uncle.Wang</span> 👍（3） 💬（1）<p>class Meta {
-  double price;
-  String name;
-  &#47;&#47; 成员变量初始化语法糖
-  Meta(this.name, this.price);
+double price;
+String name;
+&#47;&#47; 成员变量初始化语法糖
+Meta(this.name, this.price);
 }
 
 abstract class PrintHelper {
-  printInfo() =&gt; print(getInfo());
-  getInfo();
+printInfo() =&gt; print(getInfo());
+getInfo();
 }
 
 class Item extends Meta with PrintHelper {
-  int count;
-  Item(name, price, {int count = 1}): super(name, price) {
-    this.count = count;
-  }
-  &#47;&#47; 重载 + 运算符，将商品对象合并为套餐商品
-  Item operator+(Item item) =&gt; Item(name + item.name, price + item.price); 
-    @override
-  getInfo() =&gt; &#39;&#39;&#39;
-    商品名: $name
+int count;
+Item(name, price, {int count = 1}): super(name, price) {
+this.count = count;
+}
+&#47;&#47; 重载 + 运算符，将商品对象合并为套餐商品
+Item operator+(Item item) =&gt; Item(name + item.name, price + item.price);
+@override
+getInfo() =&gt; &#39;&#39;&#39;
+商品名: $name
     单价: $price
-    数量: $count
-    ---------------
+数量: $count
+\---------------
 &#39;&#39;&#39;;
 }
 
 &#47;&#47;with 表示以非继承的方式复用了另一个类的成员变量及函数
 class ShoppingCart extends Meta with PrintHelper{
-  DateTime date;
-  String code;
-  List&lt;Item&gt; bookings;
-  &#47;&#47; 以归纳合并方式求和
-  double get price =&gt; bookings.reduce((value, element) =&gt; value + element).price;
-  &#47;&#47; 默认初始化函数，转发至 withCode 函数
-  ShoppingCart({name}) : this.withCode(name:name, code:null);
-  &#47;&#47;withCode 初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
-  ShoppingCart.withCode({name, this.code}) : date = DateTime.now(), super(name,0);
+DateTime date;
+String code;
+List&lt;Item&gt; bookings;
+&#47;&#47; 以归纳合并方式求和
+double get price =&gt; bookings.reduce((value, element) =&gt; value + element).price;
+&#47;&#47; 默认初始化函数，转发至 withCode 函数
+ShoppingCart({name}) : this.withCode(name:name, code:null);
+&#47;&#47;withCode 初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
+ShoppingCart.withCode({name, this.code}) : date = DateTime.now(), super(name,0);
 
-  getBookingInfo() {
-    String str = &quot;&quot;;
-    for (Item item in bookings) {
-      str += item.getInfo();
-    }
-    return str;
-  }
+getBookingInfo() {
+String str = &quot;&quot;;
+for (Item item in bookings) {
+str += item.getInfo();
+}
+return str;
+}
 
-  &#47;&#47;?? 运算符表示为 code 不为 null，则用原值，否则使用默认值 &quot; 没有 &quot;
-  @override
-  getInfo() =&gt; &#39;&#39;&#39;
+&#47;&#47;?? 运算符表示为 code 不为 null，则用原值，否则使用默认值 &quot; 没有 &quot;
+@override
+getInfo() =&gt; &#39;&#39;&#39;
 购物车信息:
 -----------------------------
-  用户名: $name
+
+用户名: $name
   优惠码: ${code??&quot; 没有 &quot;}
-  总价: $price
+总价: $price
   Date: $date
-  商品列表：
-    ---------------
+商品列表：
+\---------------
 ${ getBookingInfo() }
 -----------------------------
+
 &#39;&#39;&#39;;
 }
 
 void main() {
-  ShoppingCart.withCode(name:&#39;张三&#39;, code:&#39;123456&#39;)
-  ..bookings = [Item(&#39;苹果&#39;,10.0, count: 10), Item(&#39;鸭梨&#39;,20.0, count: 5)]
-  ..printInfo();
+ShoppingCart.withCode(name:&#39;张三&#39;, code:&#39;123456&#39;)
+..bookings = [Item(&#39;苹果&#39;,10.0, count: 10), Item(&#39;鸭梨&#39;,20.0, count: 5)]
+..printInfo();
 
-  ShoppingCart(name:&#39;李四&#39;)
-  ..bookings = [Item(&#39;香蕉&#39;,15.0), Item(&#39;西瓜&#39;,40.0)]
-  ..printInfo();
+ShoppingCart(name:&#39;李四&#39;)
+..bookings = [Item(&#39;香蕉&#39;,15.0), Item(&#39;西瓜&#39;,40.0)]
+..printInfo();
 }
 </p>2019-08-20</li><br/><li><span>江宁彭于晏</span> 👍（3） 💬（1）<p>class Meta {
   double price;
@@ -515,67 +518,69 @@ void main() {
 }
 
 class Item extends Meta{
-  Item(name, price) : super(name, price);
-  &#47;&#47; 重载 + 运算符，将商品对象合并为套餐商品
-  Item operator+(Item item) =&gt; Item(name + item.name, price + item.price); 
+Item(name, price) : super(name, price);
+&#47;&#47; 重载 + 运算符，将商品对象合并为套餐商品
+Item operator+(Item item) =&gt; Item(name + item.name, price + item.price);
 }
 
 class Items {
-  Item item;
-  double num;
-  Items(this.item, this.num);
-  double get totalPrice =&gt; item.price * num; 
+Item item;
+double num;
+Items(this.item, this.num);
+double get totalPrice =&gt; item.price * num;
 }
 
 abstract class PrintHelper {
-  printInfo() =&gt; print(getInfo());
-  getInfo();
+printInfo() =&gt; print(getInfo());
+getInfo();
 }
 
 &#47;&#47;with 表示以非继承的方式复用了另一个类的成员变量及函数
 class ShoppingCart extends Meta with PrintHelper{
-  DateTime date;
-  String code;
-  List&lt;Items&gt; bookings;
-  &#47;&#47; 以归纳合并方式求和
-  double get shopPrice {
-     double result = 0.0;
-     bookings.forEach((element) =&gt; result+=element.totalPrice);
-     return result;
-  }
+DateTime date;
+String code;
+List&lt;Items&gt; bookings;
+&#47;&#47; 以归纳合并方式求和
+double get shopPrice {
+double result = 0.0;
+bookings.forEach((element) =&gt; result+=element.totalPrice);
+return result;
+}
 
-  &#47;&#47; 默认初始化函数，转发至 withCode 函数
-  ShoppingCart({name}) : this.withCode(name:name, code:null);
-  &#47;&#47;withCode 初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
-  ShoppingCart.withCode({name, this.code}) : date = DateTime.now(), super(name,0);
+&#47;&#47; 默认初始化函数，转发至 withCode 函数
+ShoppingCart({name}) : this.withCode(name:name, code:null);
+&#47;&#47;withCode 初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
+ShoppingCart.withCode({name, this.code}) : date = DateTime.now(), super(name,0);
 
-  &#47;&#47;?? 运算符表示为 code 不为 null，则用原值，否则使用默认值 &quot; 没有 &quot;
-  @override
-  String getInfo() {
-  String bookingsResult = &#39;商品明细: \n&#39;;
-  bookings.forEach((item) =&gt; bookingsResult += &#39;  商品名称：${item.item.name}  单价：${item.item.price} 数量 ：${item.num}  总价：${item.totalPrice}\n&#39;);
+&#47;&#47;?? 运算符表示为 code 不为 null，则用原值，否则使用默认值 &quot; 没有 &quot;
+@override
+String getInfo() {
+String bookingsResult = &#39;商品明细: \n&#39;;
+bookings.forEach((item) =&gt; bookingsResult += &#39; 商品名称：${item.item.name}  单价：${item.item.price} 数量 ：${item.num}  总价：${item.totalPrice}\n&#39;);
 
-  return &#39;&#39;&#39;
+return &#39;&#39;&#39;
 购物车信息:
 -----------------------------
-  用户名: $name
+
+用户名: $name
   优惠码: ${code??&quot; 没有 &quot;}
-  $bookingsResult
+$bookingsResult
   总价: $shopPrice
-  Date: $date
+Date: $date
 -----------------------------
+
 &#39;&#39;&#39;;
-  }
+}
 }
 
 void main() {
-  ShoppingCart.withCode(name:&#39;张三&#39;, code:&#39;123456&#39;)
-  ..bookings = [Items(Item(&#39;苹果&#39;,10.0),5.0), Items(Item(&#39;鸭梨&#39;,20.0),10.0)]
-  ..printInfo();
+ShoppingCart.withCode(name:&#39;张三&#39;, code:&#39;123456&#39;)
+..bookings = [Items(Item(&#39;苹果&#39;,10.0),5.0), Items(Item(&#39;鸭梨&#39;,20.0),10.0)]
+..printInfo();
 
-  ShoppingCart(name:&#39;李四&#39;)
-  ..bookings = [Items(Item(&#39;香蕉&#39;,15.0),10.0), Items(Item(&#39;西瓜&#39;,40.0),1.0)]
-  ..printInfo();
+ShoppingCart(name:&#39;李四&#39;)
+..bookings = [Items(Item(&#39;香蕉&#39;,15.0),10.0), Items(Item(&#39;西瓜&#39;,40.0),1.0)]
+..printInfo();
 }
 </p>2019-07-19</li><br/><li><span>Carlo</span> 👍（1） 💬（1）<p>看到一段代码：
 firebaseService.login().then(
@@ -587,88 +592,88 @@ firebaseService.login().then(
                         },
                       );
 
-请问这个onError是怎么回事啊。为什么会被执行呢？  这是dart特有的语法么？
+请问这个onError是怎么回事啊。为什么会被执行呢？ 这是dart特有的语法么？
 我所知道的一般sync function的语法是
 
 thisFunction()
-    .catch(console.error)
-    .then(() =&gt; console.log(&#39;We do cleanup here&#39;));</p>2019-10-15</li><br/><li><span>和小胖</span> 👍（1） 💬（1）<p>老师您的第二个题目，我理解是要做每一种商品的分类，但是我还是用了以前语言的思路来做了。麻烦老师，看看是否正确。
+.catch(console.error)
+.then(() =&gt; console.log(&#39;We do cleanup here&#39;));</p>2019-10-15</li><br/><li><span>和小胖</span> 👍（1） 💬（1）<p>老师您的第二个题目，我理解是要做每一种商品的分类，但是我还是用了以前语言的思路来做了。麻烦老师，看看是否正确。
 
 关键代码如下：
 &#47;&#47;定义购物车类
 class ShoppingCar extends Meta with PrintHelper {
-  DateTime date; &#47;&#47;购物日期
-  String code; &#47;&#47;优惠券
-  List&lt;Item&gt; _bookings; &#47;&#47;定义私有属性
-  num count; &#47;&#47;商品数量
+DateTime date; &#47;&#47;购物日期
+String code; &#47;&#47;优惠券
+List&lt;Item&gt; _bookings; &#47;&#47;定义私有属性
+num count; &#47;&#47;商品数量
 
-  &#47;&#47;求出总价
-  double get price =&gt;
-      books.reduce((value, element) =&gt; value + element).price;
+&#47;&#47;求出总价
+double get price =&gt;
+books.reduce((value, element) =&gt; value + element).price;
 
-  List&lt;Item&gt; get books =&gt; _bookings;
+List&lt;Item&gt; get books =&gt; _bookings;
 
-  &#47;&#47;给bookings定义set方法
-  set book(List&lt;Item&gt; bookings) {
-    this._bookings = bookings;
-    this.count = bookings.length;
-  }
+&#47;&#47;给bookings定义set方法
+set book(List&lt;Item&gt; bookings) {
+this._bookings = bookings;
+this.count = bookings.length;
+}
 
-  &#47;&#47;获取分类产品信息
-  String getGoodsInfo() {
-    StringBuffer temp = new StringBuffer();
-    Map map = new Map&lt;String, List&lt;Item&gt;&gt;();
-    books.forEach((item) {
-      if (!map.containsKey(item.name)) {
-        List list = new List&lt;Item&gt;();
-        list.add(item);
-        map[item.name] = list;
-      } else {
-        (map[item.name] as List&lt;Item&gt;).add(item);
-      }
-    });
-    map.forEach((k, v) {
-      temp.write(&quot;商品名称：$k,该种商品数量：${(v as List).length},该种商品单价：${(v as List&lt;Item&gt;)[0].price}元\n&quot;);
+&#47;&#47;获取分类产品信息
+String getGoodsInfo() {
+StringBuffer temp = new StringBuffer();
+Map map = new Map&lt;String, List&lt;Item&gt;&gt;();
+books.forEach((item) {
+if (!map.containsKey(item.name)) {
+List list = new List&lt;Item&gt;();
+list.add(item);
+map[item.name] = list;
+} else {
+(map[item.name] as List&lt;Item&gt;).add(item);
+}
+});
+map.forEach((k, v) {
+temp.write(&quot;商品名称：$k,该种商品数量：${(v as List).length},该种商品单价：${(v as List&lt;Item&gt;)[0].price}元\n&quot;);
       print(&quot;$k,$v&quot;);
-    });
-    return temp.toString();
-  }
+});
+return temp.toString();
+}
 
-  &#47;&#47;这种表达式赋值还是挺方便的
-  ShoppingCar.withCode({name, this.code}): this.date = DateTime.now(),super(name, 0.0);
+&#47;&#47;这种表达式赋值还是挺方便的
+ShoppingCar.withCode({name, this.code}): this.date = DateTime.now(),super(name, 0.0);
 
-  ShoppingCar({name}) : this.withCode(name: name, code: null);
+ShoppingCar({name}) : this.withCode(name: name, code: null);
 
-  @override
-  getInfo() {
-    return &#39;&#39;&#39;
-      购物车信息：
-      ----------------------
-      用户名：$name
+@override
+getInfo() {
+return &#39;&#39;&#39;
+购物车信息：
+\----------------------
+用户名：$name
       优惠码：${code ?? &quot;没有优惠券啊&quot;}
-      商品总量：$count
+商品总量：$count
       总价：$price  
-      日期：$date
+日期：$date
       ${getGoodsInfo()}
-      ----------------------
-  &#39;&#39;&#39;;
-  }
+\----------------------
+&#39;&#39;&#39;;
+}
 }
 
 运行后信息如下：购物车信息：
-      ----------------------
-      用户名：小李
-      优惠码：没有优惠券啊
-      商品总量：3
-      总价：29.0  
-      日期：2019-08-14 22:01:24.437085
-      商品名称：苹果,该种商品数量：2,该种商品单价：10.0元
-      商品名称：梨,该种商品数量：1,该种商品单价：9.0元
-      ----------------------</p>2019-08-14</li><br/><li><span>刘荣清</span> 👍（1） 💬（1）<p>在vs code已经安装dart、code runner插件，本地也安装完dart SDK，然后通过vs code运行dart 提示：dart : 无法将“dart”项识别为 cmdlet、函数...
+\----------------------
+用户名：小李
+优惠码：没有优惠券啊
+商品总量：3
+总价：29.0  
+日期：2019-08-14 22:01:24.437085
+商品名称：苹果,该种商品数量：2,该种商品单价：10.0元
+商品名称：梨,该种商品数量：1,该种商品单价：9.0元
+\----------------------</p>2019-08-14</li><br/><li><span>刘荣清</span> 👍（1） 💬（1）<p>在vs code已经安装dart、code runner插件，本地也安装完dart SDK，然后通过vs code运行dart 提示：dart : 无法将“dart”项识别为 cmdlet、函数...
 但在cmd 控制板中就可以正常运行，这是为咋啊，vs code需要额外配置咋吗</p>2019-08-03</li><br/><li><span>加温后的啤酒</span> 👍（0） 💬（1）<p>直接通过mixin关键字定义PrintHelper也比较简单：
-mixin  PrintHelper {
-  void printInfo() =&gt; print(getInfo());
-  String getInfo();
+mixin PrintHelper {
+void printInfo() =&gt; print(getInfo());
+String getInfo();
 }
 
 </p>2019-12-23</li><br/><li><span>庆</span> 👍（0） 💬（1）<p>
@@ -680,108 +685,109 @@ class Meta {
 }
 
 class Item extends Meta{
-  Item(name, price) : super(name, price);
-  &#47;&#47;重载+运算符，将商品对象合并为套餐商品
-  Item operator+(Item item) =&gt; Item(name + item.name, price + item.price); 
+Item(name, price) : super(name, price);
+&#47;&#47;重载+运算符，将商品对象合并为套餐商品
+Item operator+(Item item) =&gt; Item(name + item.name, price + item.price);
 }
 
 abstract class PrintHelper {
-  printInfo() =&gt; print(getInfo());
-  getInfo();
+printInfo() =&gt; print(getInfo());
+getInfo();
 }
 
 &#47;&#47;with表示以非继承的方式复用了另一个类的成员变量及函数
 class ShoppingCart extends Meta with PrintHelper{
-  DateTime date;
-  String code;
-  List&lt;Item&gt; bookings;
-  &#47;&#47;以归纳合并方式求和
-  double get price =&gt; bookings.reduce((value, element) =&gt; value + element).price;
-  &#47;&#47;默认初始化函数，转发至withCode函数
-  ShoppingCart({name}) : this.withCode(name:name, code:null);
-  &#47;&#47;withCode初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
-  ShoppingCart.withCode({name, this.code}) : date = DateTime.now(), super(name,0);
+DateTime date;
+String code;
+List&lt;Item&gt; bookings;
+&#47;&#47;以归纳合并方式求和
+double get price =&gt; bookings.reduce((value, element) =&gt; value + element).price;
+&#47;&#47;默认初始化函数，转发至withCode函数
+ShoppingCart({name}) : this.withCode(name:name, code:null);
+&#47;&#47;withCode初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
+ShoppingCart.withCode({name, this.code}) : date = DateTime.now(), super(name,0);
 
-  &#47;&#47;??运算符表示为code不为null，则用原值，否则使用默认值&quot;没有&quot;
-  @override
-  getInfo() =&gt; &#39;&#39;&#39;
+&#47;&#47;??运算符表示为code不为null，则用原值，否则使用默认值&quot;没有&quot;
+@override
+getInfo() =&gt; &#39;&#39;&#39;
 购物车信息:
 -----------------------------
-  用户名: $name
+
+用户名: $name
   优惠码: ${code??&quot;没有&quot;}
-  总价: $price
+总价: $price
   Date: $date
-  物品数量: ${bookings.length}
+物品数量: ${bookings.length}
 &#39;&#39;&#39;;
 
 printDetails(){
-   bookings.forEach((item){
-     print(&quot;物品 &quot;+item.name + &quot; 价格 ${item.price}&quot;);
-   });
+bookings.forEach((item){
+print(&quot;物品 &quot;+item.name + &quot; 价格 ${item.price}&quot;);
+});
 
-   print(&quot;-----------------------------&quot;);
+print(&quot;-----------------------------&quot;);
 
 }
 
 }
 
 void main() {
-  ShoppingCart.withCode(name:&#39;张三&#39;, code:&#39;123456&#39;)
-  ..bookings = [Item(&#39;苹果&#39;,10.0), Item(&#39;鸭梨&#39;,20.0)]
-  ..printInfo()
-  ..printDetails();
+ShoppingCart.withCode(name:&#39;张三&#39;, code:&#39;123456&#39;)
+..bookings = [Item(&#39;苹果&#39;,10.0), Item(&#39;鸭梨&#39;,20.0)]
+..printInfo()
+..printDetails();
 
-  ShoppingCart(name:&#39;李四&#39;)
-  ..bookings = [Item(&#39;香蕉&#39;,15.0), Item(&#39;西瓜&#39;,40.0)]
-  ..printInfo()
-  ..printDetails();
+ShoppingCart(name:&#39;李四&#39;)
+..bookings = [Item(&#39;香蕉&#39;,15.0), Item(&#39;西瓜&#39;,40.0)]
+..printInfo()
+..printDetails();
 }</p>2019-12-23</li><br/><li><span>DERUWE</span> 👍（0） 💬（1）<p>使用了这个Item operator+(Item item) =&gt; Item(name + item.name, price + item.price);最后的bookings就变为长度为1的吗</p>2019-12-09</li><br/><li><span>icer</span> 👍（0） 💬（1）<p>class Meta {
-  double price;
-  String name;
-  Meta(this.name,this.price);
+double price;
+String name;
+Meta(this.name,this.price);
 }
 
 class Item2 extends Meta {
-  int num;
-  Item2(String name, double price,{this.num=1}) :super(name, price);
-  Item2 operator + (Item2 item) =&gt; Item2(name + item.name,price * num + item.price * item.num);
+int num;
+Item2(String name, double price,{this.num=1}) :super(name, price);
+Item2 operator + (Item2 item) =&gt; Item2(name + item.name,price * num + item.price * item.num);
 }
 
 abstract class printHelper {
-  printInfo() =&gt; print(getInfo());
-  getInfo();
+printInfo() =&gt; print(getInfo());
+getInfo();
 }
 
 class ShoppingCart2 extends Meta with printHelper {
-  DateTime date;
-  String code;
-  List&lt;Item2&gt; bookings;
+DateTime date;
+String code;
+List&lt;Item2&gt; bookings;
 
-  ShoppingCart2({name}) : this.withCode(name:name,code:null);
-  ShoppingCart2.withCode({name,this.code}) : date = DateTime.now(),super(name, 0);
+ShoppingCart2({name}) : this.withCode(name:name,code:null);
+ShoppingCart2.withCode({name,this.code}) : date = DateTime.now(),super(name, 0);
 
-  double get price =&gt; bookings.reduce((value,element) =&gt; value + element).price;
+double get price =&gt; bookings.reduce((value,element) =&gt; value + element).price;
 
-  String get cardInfo {
-    String str = &quot;&quot;;
-    bookings.forEach((v) =&gt;
-    str +=&#39;${v.name} ----- ${v.num}\n&#39;);
-    return str;
-  }
+String get cardInfo {
+String str = &quot;&quot;;
+bookings.forEach((v) =&gt;
+str +=&#39;${v.name} ----- ${v.num}\n&#39;);
+return str;
+}
 
-  getInfo() {
-    return
-          &quot;&quot;&quot;
-        购物车信息:
-        -----------------------------
-        用户名: $name
+getInfo() {
+return
+&quot;&quot;&quot;
+购物车信息:
+\-----------------------------
+用户名: $name
         优惠码: ${code??&quot;没有&quot;}
-        $cardInfo
+$cardInfo
         总价:   $price
-        日期:   $date
-        -----------------------------
-        &quot;&quot;&quot;;
-  }
+日期: $date
+\-----------------------------
+&quot;&quot;&quot;;
+}
 </p>2019-11-19</li><br/><li><span>入夜、渐微凉</span> 👍（0） 💬（1）<p>在一个道友的回答上稍加改动，加了一个商品总数和购物车为空的情况，老师帮忙看看有没有可以优化的地方。
 class Meta {
   double price;
@@ -801,68 +807,70 @@ class Item extends Meta {
    ---------------
   &#39;&#39;&#39;;
   }
-  
-  Item operator +(Item item) =&gt;
-      Item(name + item.name, price + item.price, count: count + item.count);
+
+Item operator +(Item item) =&gt;
+Item(name + item.name, price + item.price, count: count + item.count);
 }
 
 abstract class PrintHelper {
-  printInfo() =&gt; print(getInfo());
-  getInfo();
+printInfo() =&gt; print(getInfo());
+getInfo();
 }
 
 &#47;&#47;with表示以非继承的方式复用了另一个类的成员变量及函数
 class ShoppingCart extends Meta with PrintHelper {
-  DateTime date;
-  String code;
-  List&lt;Item&gt; bookings;
-  &#47;&#47;以归纳合并方式求和
-  double get price =&gt;bookings != null ?
-      bookings.reduce((value, element) =&gt; value + element).price : 0.00;
-  int get count =&gt; bookings != null ? bookings.reduce((value, element) =&gt; value + element).count : 0;
-  &#47;&#47;默认初始化函数，转发至withCode函数
-  ShoppingCart({name, List&lt;Item&gt; bookings})
-      : this.withCode(name: name, code: null, bookings: bookings);
-  &#47;&#47;withCode初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
-  ShoppingCart.withCode({name, this.code, this.bookings})
-      : date = DateTime.now(),
-        super(name, 0) {
-        if (bookings != null) {
-            String str = &quot;&quot;;
-            for (Item item in bookings) {
-              str += item.info;
-            }
-            info = str;
-        }
-  }
+DateTime date;
+String code;
+List&lt;Item&gt; bookings;
+&#47;&#47;以归纳合并方式求和
+double get price =&gt;bookings != null ?
+bookings.reduce((value, element) =&gt; value + element).price : 0.00;
+int get count =&gt; bookings != null ? bookings.reduce((value, element) =&gt; value + element).count : 0;
+&#47;&#47;默认初始化函数，转发至withCode函数
+ShoppingCart({name, List&lt;Item&gt; bookings})
+: this.withCode(name: name, code: null, bookings: bookings);
+&#47;&#47;withCode初始化方法，使用语法糖和初始化列表进行赋值，并调用父类初始化方法
+ShoppingCart.withCode({name, this.code, this.bookings})
+: date = DateTime.now(),
+super(name, 0) {
+if (bookings != null) {
+String str = &quot;&quot;;
+for (Item item in bookings) {
+str += item.info;
+}
+info = str;
+}
+}
 
-  &#47;&#47;??运算符表示为code不为null，则用原值，否则使用默认值&quot;没有&quot;
-  @override
-  getInfo() =&gt; &#39;&#39;&#39;
+&#47;&#47;??运算符表示为code不为null，则用原值，否则使用默认值&quot;没有&quot;
+@override
+getInfo() =&gt; &#39;&#39;&#39;
 购物车信息:
 -----------------------------
-  用户名: $name
+
+用户名: $name
   优惠码: ${code ?? &quot;没有&quot;}
-  商品总数: $count
+商品总数: $count
   总价: $price
-  Date: $date
+Date: $date
   商品列表: 
   ${info ?? &quot;购物车为空&quot;}
 -----------------------------
+
 &#39;&#39;&#39;;
 }
 
 void main() {
-  ShoppingCart.withCode(
-      name: &#39;张三&#39;,
-      code: &#39;123456&#39;,
-      bookings: [Item(&#39;苹果&#39;, 10.0, count: 1), Item(&#39;鸭梨&#39;, 20.0, count: 2)])
-    ..printInfo();
+ShoppingCart.withCode(
+name: &#39;张三&#39;,
+code: &#39;123456&#39;,
+bookings: [Item(&#39;苹果&#39;, 10.0, count: 1), Item(&#39;鸭梨&#39;, 20.0, count: 2)])
+..printInfo();
 
-  ShoppingCart(
-      name: &#39;李四&#39;, bookings: [Item(&#39;香蕉&#39;, 15.0), Item(&#39;西瓜&#39;, 40.0, count: 4)])
-    ..printInfo();
+ShoppingCart(
+name: &#39;李四&#39;, bookings: [Item(&#39;香蕉&#39;, 15.0), Item(&#39;西瓜&#39;, 40.0, count: 4)])
+..printInfo();
 
-  ShoppingCart(name: &#39;王五&#39;)..printInfo();
+ShoppingCart(name: &#39;王五&#39;)..printInfo();
 }</p>2019-11-07</li><br/>
 </ul>

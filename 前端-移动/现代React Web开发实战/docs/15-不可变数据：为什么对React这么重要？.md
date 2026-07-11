@@ -129,13 +129,13 @@ const MyPureComponent = React.memo(MyComponent, compare);
 ```javascript
 // 数组
 const itemAdded = [...oldArray, newItem];
-const itemRemoved = oldArray.filter(item => item !== newItem);
+const itemRemoved = oldArray.filter((item) => item !== newItem);
 
 // 对象
-const propertyUpdated = { ...oldObj, property1: 'newValue' };
+const propertyUpdated = { ...oldObj, property1: "newValue" };
 
 // Map
-const keyUpdated = new Map(oldMap).set('key1', 'newValue');
+const keyUpdated = new Map(oldMap).set("key1", "newValue");
 ```
 
 要领就是“**别.改.原.对.象**”。
@@ -145,10 +145,10 @@ const keyUpdated = new Map(oldMap).set('key1', 'newValue');
 上面的手工实现在处理复杂对象时，很容易写错，有[第三方库](https://github.com/kolodny/immutability-helper)对此做了抽象，但目前基本已经不再维护了。
 
 ```javascript
-import update from 'immutability-helper';
+import update from "immutability-helper";
 
-const state1 = ['x'];
-const state2 = update(state1, {$push: ['y']}); // ['x', 'y']
+const state1 = ["x"];
+const state2 = update(state1, { $push: ["y"] }); // ['x', 'y']
 ```
 
 ### 可持久化数据结构和Immutable.js
@@ -163,7 +163,7 @@ const state2 = update(state1, {$push: ['y']}); // ['x', 'y']
 这里贴两段官方样例代码。首先是神似JS Array的List，你可以看到对List对象每个操作都会创建新的List：
 
 ```javascript
-const { List } = require('immutable');
+const { List } = require("immutable");
 const list1 = List([1, 2]);
 const list2 = list1.push(3, 4, 5);
 const list3 = list2.unshift(0);
@@ -178,19 +178,19 @@ assert.equal(list4.get(0), 1);
 还有这个库的强项嵌套结构，在对象树深处的更新也会返回新的不可变对象：
 
 ```javascript
-const { fromJS } = require('immutable');
+const { fromJS } = require("immutable");
 const nested = fromJS({ a: { b: { c: [3, 4, 5] } } });
 
 const nested2 = nested.mergeDeep({ a: { b: { d: 6 } } });
 // Map { a: Map { b: Map { c: List [ 3, 4, 5 ], d: 6 } } }
 
-console.log(nested2.getIn(['a', 'b', 'd'])); // 6
+console.log(nested2.getIn(["a", "b", "d"])); // 6
 
-const nested3 = nested2.updateIn(['a', 'b', 'd'], value => value + 1);
+const nested3 = nested2.updateIn(["a", "b", "d"], (value) => value + 1);
 console.log(nested3);
 // Map { a: Map { b: Map { c: List [ 3, 4, 5 ], d: 7 } } }
 
-const nested4 = nested3.updateIn(['a', 'b', 'c'], list => list.push(6));
+const nested4 = nested3.updateIn(["a", "b", "c"], (list) => list.push(6));
 // Map { a: Map { b: Map { c: List [ 3, 4, 5, 6 ], d: 7 } } }
 ```
 
@@ -209,12 +209,12 @@ Immutable.js很强大，在React技术社区也受到过追捧。然而，不知
 以下是来自Immer官网的一段样例代码，它的produce API接受原数据和数据变更回调函数两个参数，在回调函数中发生的变更，并不会修改原数据本身，而是会返回一个等同于变更结果的新数据：
 
 ```javascript
-import produce from "immer"
+import produce from "immer";
 
-const nextState = produce(baseState, draft => {
-    draft[1].done = true
-    draft.push({title: "Tweet about it"})
-})
+const nextState = produce(baseState, (draft) => {
+  draft[1].done = true;
+  draft.push({ title: "Tweet about it" });
+});
 ```
 
 ## 在React中使用Immer

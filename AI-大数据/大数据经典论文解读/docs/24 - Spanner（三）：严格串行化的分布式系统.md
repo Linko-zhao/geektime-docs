@@ -88,8 +88,8 @@ Spanner采用了两个主要的策略来解决这个问题，第一个是通过�
 
 对于TrueTime API来说，它保障的是：
 
-> *tt = TT.now()*  
-> *tt.ealierst* &lt; $t\_{abs}(e\_{now})$ &lt; *tt.latest*
+> _tt = TT.now()_  
+> _tt.ealierst_ &lt; $t\_{abs}(e\_{now})$ &lt; _tt.latest_
 
 ![图片](https://static001.geekbang.org/resource/image/bc/3b/bc144798946b44fc4edc09d60da4a13b.jpg?wh=1920x1080 "TrueTime API拿到的是一个包含误差的绝对时间范围")
 
@@ -176,8 +176,8 @@ Spanner是这样解决这个问题的。Spanner里的数据库读取，都会带
 
 所以，每个副本会在本地维护一个称之为$t\_{safe}$的值。只要请求带来的$s\_{read}$比这个值小，那就说明本地副本的数据足够新，可以返回$s\_{read}$这个时间节点下最新的数据快照。这个$t\_{safe}$是这样取值的：
 
-$$  
-t\_{safe} = min(t\_{safe}^{paxos},t\_{safe}^{TM})  
+$$
+t\_{safe} = min(t\_{safe}^{paxos},t\_{safe}^{TM})
 $$
 
 - 首先，每个副本会维护一个当前已经被应用了最大Paxos写入的时间戳$t\_{safe}^{paxos}$。这个时间戳，也就是已经提交并且更新到数据库里的最新的事务的时间戳。

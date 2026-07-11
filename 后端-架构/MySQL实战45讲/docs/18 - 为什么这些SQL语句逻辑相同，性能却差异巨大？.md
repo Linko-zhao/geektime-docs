@@ -61,7 +61,7 @@ key="t\_modified"表示的是，使用了t\_modified这个索引；我在测试�
 ```
 mysql> select count(*) from tradelog where
     -> (t_modified >= '2016-7-1' and t_modified<'2016-8-1') or
-    -> (t_modified >= '2017-7-1' and t_modified<'2017-8-1') or 
+    -> (t_modified >= '2017-7-1' and t_modified<'2017-8-1') or
     -> (t_modified >= '2018-7-1' and t_modified<'2018-8-1');
 ```
 
@@ -196,7 +196,7 @@ mysql> select d.* from tradelog l, trade_detail d where d.tradeid=l.tradeid and 
 我们说问题是出在执行步骤的第3步，如果单独把这一步改成SQL语句的话，那就是：
 
 ```
-mysql> select * from trade_detail where tradeid=$L2.tradeid.value; 
+mysql> select * from trade_detail where tradeid=$L2.tradeid.value;
 ```
 
 其中，$L2.tradeid.value的字符集是utf8mb4。
@@ -210,7 +210,7 @@ mysql> select * from trade_detail where tradeid=$L2.tradeid.value;
 也就是说，实际上这个语句等同于下面这个写法：
 
 ```
-select * from trade_detail  where CONVERT(traideid USING utf8mb4)=$L2.tradeid.value; 
+select * from trade_detail  where CONVERT(traideid USING utf8mb4)=$L2.tradeid.value;
 ```
 
 CONVERT()函数，在这里的意思是把输入的字符串转成utf8mb4字符集。
@@ -236,13 +236,13 @@ mysql>select l.operator from tradelog l , trade_detail d where d.tradeid=l.trade
 假设驱动表trade\_detail里id=4的行记为R4，那么在连接的时候（图5的第3步），被驱动表tradelog上执行的就是类似这样的SQL 语句：
 
 ```
-select operator from tradelog  where traideid =$R4.tradeid.value; 
+select operator from tradelog  where traideid =$R4.tradeid.value;
 ```
 
 这时候$R4.tradeid.value的字符集是utf8, 按照字符集转换规则，要转成utf8mb4，所以这个过程就被改写成：
 
 ```
-select operator from tradelog  where traideid =CONVERT($R4.tradeid.value USING utf8mb4); 
+select operator from tradelog  where traideid =CONVERT($R4.tradeid.value USING utf8mb4);
 ```
 
 你看，这里的CONVERT函数是加在输入参数上的，这样就可以用上被驱动表的traideid索引。
@@ -264,7 +264,7 @@ alter table trade_detail modify tradeid varchar(32) CHARACTER SET utf8mb4 defaul
 - 如果能够修改字段的字符集的话，是最好不过了。但如果数据量比较大， 或者业务上暂时不能做这个DDL的话，那就只能采用修改SQL语句的方法了。
 
 ```
-mysql> select d.* from tradelog l , trade_detail d where d.tradeid=CONVERT(l.tradeid USING utf8) and l.id=2; 
+mysql> select d.* from tradelog l , trade_detail d where d.tradeid=CONVERT(l.tradeid USING utf8) and l.id=2;
 ```
 
 ![](https://static001.geekbang.org/resource/image/aa/d6/aa844a7bf35d330b9ec96fc159331bd6.png?wh=1332%2A187)
@@ -307,23 +307,24 @@ mysql> select * from t limit N, M-N+1;
 
 > @老杨同志 提出了重新整理的方法、@雪中鼠\[悠闲] 提到了用rowid的方法，是类似的思路，就是让表里面保存一个无空洞的自增值，这样就可以用我们的随机算法1来实现；  
 > @吴宇晨 提到了拿到第一个值以后，用id迭代往下找的方案，利用了主键索引的有序性。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>冠超</span> 👍（34） 💬（2）<p>非常感谢老师分享的内容，实打实地学到了。这里提个建议，希望老师能介绍一下设计表的时候要怎么考虑这方面的知识哈😊</p>2019-01-28</li><br/><li><span>700</span> 👍（8） 💬（6）<p>老师您好，有个问题恳请指教。背景如下，我长话短说：
 
 mysql&gt;select @@version;
 5.6.30-log
 
- CREATE TABLE `t1` ( `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,  `plan_id` int(11) NOT NULL DEFAULT &#39;0&#39; ,  PRIMARY KEY (`id`),
-  KEY `userid` (`user_id`) USING BTREE,  KEY `idx_planid` (`plan_id`)
+CREATE TABLE `t1` ( `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`user_id` int(11) NOT NULL, `plan_id` int(11) NOT NULL DEFAULT &#39;0&#39; , PRIMARY KEY (`id`),
+KEY `userid` (`user_id`) USING BTREE, KEY `idx_planid` (`plan_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gb2312;
 
- CREATE TABLE `t3` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `status` int(4) NOT NULL DEFAULT &#39;0&#39;,
-  `ootime` varchar(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idx_xxoo` (`status`,`ootime`)
+CREATE TABLE `t3` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`status` int(4) NOT NULL DEFAULT &#39;0&#39;,
+`ootime` varchar(11) DEFAULT NULL,
+PRIMARY KEY (`id`),
+KEY `idx_xxoo` (`status`,`ootime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 t1 和 t3 表的字符集不一样
@@ -331,14 +332,14 @@ t1 和 t3 表的字符集不一样
 sql 执行计划如下：
 explain
 SELECT t1.id, t1.user_id
-  FROM t1, t3
- WHERE t1.plan_id = t3.id
-   AND t3.ootime &lt; UNIX_TIMESTAMP(&#39;2022-01-18&#39;)
+FROM t1, t3
+WHERE t1.plan_id = t3.id
+AND t3.ootime &lt; UNIX_TIMESTAMP(&#39;2022-01-18&#39;)
 +----+-------------+-------+-------+---------------+--------------+---------+--------------+-------+----------------------------------------+
-| id | select_type | table | type  | possible_keys | key          | key_len | ref          | rows  | Extra                                  |
+| id | select_type | table | type | possible_keys | key | key_len | ref | rows | Extra |
 +----+-------------+-------+-------+---------------+--------------+---------+--------------+-------+----------------------------------------+
-|  1 | SIMPLE      | t3    | index | PRIMARY       | idx_xxoo     | 51      | NULL         | 39106 | Using where; Using index               |
-|  1 | SIMPLE      | t1    | ref   | idx_planid    | idx_planid   | 4       |        t3.id |   401 | Using join buffer (Batched Key Access) |
+| 1 | SIMPLE | t3 | index | PRIMARY | idx_xxoo | 51 | NULL | 39106 | Using where; Using index |
+| 1 | SIMPLE | t1 | ref | idx_planid | idx_planid | 4 | t3.id | 401 | Using join buffer (Batched Key Access) |
 +----+-------------+-------+-------+---------------+--------------+---------+--------------+-------+----------------------------------------+
 
 我的疑惑是
@@ -357,19 +358,16 @@ SELECT * FROM b_side_order WHERE CODE = 332924 ;
 
 这两个语句 执行计划走 select 走了索引,update 没有走索引 是执行计划的bug 吗??
 
- 
-
-
 </p>2018-12-25</li><br/><li><span>赖阿甘</span> 👍（42） 💬（12）<p>“mysql&gt;select l.operator from tradelog l , trade_detail d where d.tradeid=l.tradeid and d.id=4;”
 图6上面那句sql是不是写错了。d.tradeid=l.tradeid是不是该写成l.tradeid = d.tradeid？不然函数会作用在索引字段上，就只能全表扫描了</p>2018-12-24</li><br/><li><span>老杨同志</span> 👍（179） 💬（30）<p>感谢老师鼓励，我本人工作时间比较长，有一定的基础，听老师的课还是收获很大。每次公司内部有技术分享，我都去听课，但是多数情况，一两个小时的分享，就只有一两句话受益。老师的每篇文章都能命中我的知识盲点，感觉太别爽。
 
 对应今天的隐式类型转换问题也踩过坑。
 我们有个任务表记录待执行任务，表结构简化后如下：
 CREATE TABLE `task` (
-  `task_id` int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;自增主键&#39;,
-  `task_type` int(11) DEFAULT NULL COMMENT &#39;任务类型id&#39;,
-  `task_rfid` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT &#39;关联外键1&#39;,
-  PRIMARY KEY (`task_id`)
+`task_id` int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;自增主键&#39;,
+`task_type` int(11) DEFAULT NULL COMMENT &#39;任务类型id&#39;,
+`task_rfid` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT &#39;关联外键1&#39;,
+PRIMARY KEY (`task_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT=&#39;任务表&#39;;
 
 task_rfid 是业务主键，当然都是数字，查询时使用sql：
@@ -381,7 +379,7 @@ select * from task_history where task_rfid =99;
 直接就等待很长时间后超时报错了。
 如果仔细看，其实我的表没有task_rfid 索引，写成task_rfid =‘99’也一样是全表扫描。
 运维时的套路是，猜测主键task_id的范围，怎么猜，我原表有creat_time字段，我会先查
-select max(task_id) from task_history   然后再看看 select * from task_history  where task_id = maxId - 10000的时间，估计出大概的id范围。然后语句变成
+select max(task_id) from task_history 然后再看看 select * from task_history where task_id = maxId - 10000的时间，估计出大概的id范围。然后语句变成
 select * from task_history where task_rfid =99 and id between ？ and ？;
 </p>2018-12-24</li><br/><li><span>探索无止境</span> 👍（230） 💬（14）<p>老师，有道面试题困扰了很久，求指教！题目是这样的，a表有100条记录，b表有10000条记录，两张表做关联查询时，是将a表放前面效率高，还是b表放前面效率高？网上各种答案，但感觉都没有十分的说服力，期待老师的指点！</p>2019-01-13</li><br/><li><span>geraltlaush</span> 👍（113） 💬（9）<p>索引字段不能进行函数操作，但是索引字段的参数可以玩函数，一言以蔽之</p>2018-12-24</li><br/><li><span>风轨</span> 👍（63） 💬（4）<p>刚试了文中穿插得思考题:当主键是整数类型条件是字符串时，会走索引。
 文中提到了当字符串和数字比较时会把字符串转化为数字，所以隐式转换不会应用到字段上，所以可以走索引。

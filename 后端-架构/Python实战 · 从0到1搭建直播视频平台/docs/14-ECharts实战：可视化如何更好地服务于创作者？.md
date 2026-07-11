@@ -224,7 +224,7 @@ methods: {
         });
       }
     });
-    
+
     //渲染ECharts视图的方法
     showLine() {
       //以下就是就是ECharts的配置项
@@ -269,7 +269,7 @@ methods: {
         myChart.resize();
       });
     },
-    
+
 }
 ```
 
@@ -310,7 +310,7 @@ methods: {
         });
       }
     });
-    
+
     //渲染ECharts视图的方法
     showLine() {
       //以下就是就是ECharts的配置项
@@ -355,7 +355,7 @@ methods: {
         myChart.resize();
       });
     }
-    
+
 }
 ```
 

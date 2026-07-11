@@ -253,37 +253,37 @@ func handleConn(c net.Conn) {
     defer func() {
         metrics.ClientConnected.Dec() // 连接断开，ClientConnected减1
         c.Close()
-    }() 
+    }()
     frameCodec := frame.NewMyFrameCodec()
-    
+
     for {
         // read from the connection
-        
+
         // decode the frame to get the payload
         // the payload is undecoded packet
         framePayload, err := frameCodec.Decode(c)
         if err != nil {
             fmt.Println("handleConn: frame decode error:", err)
             return
-        }   
+        }
         metrics.ReqRecvTotal.Add(1) // 收到并解码一个消息请求，ReqRecvTotal消息计数器加1
-        
+
         // do something with the packet
         ackFramePayload, err := handlePacket(framePayload)
         if err != nil {
             fmt.Println("handleConn: handle packet error:", err)
             return
-        }   
-        
+        }
+
         // write ack frame to the connection
         err = frameCodec.Encode(c, ackFramePayload)
         if err != nil {
             fmt.Println("handleConn: frame encode error:", err)
             return
-        }   
+        }
         metrics.RspSendTotal.Add(1) // 返回响应后，RspSendTotal消息计数器减1
-    }   
-} 
+    }
+}
 ```
 
 你可以看到，我们在每个连接的处理主函数handleConn中都埋入了各个度量数据项，并在特定事件发生时修改度量数据的值。
@@ -402,11 +402,11 @@ debug/pprof/profile提供的是CPU的性能采样数据。CPU类型采样数据�
      frameCodec := frame.NewMyFrameCodec()
      rbuf := bufio.NewReader(c)
      wbuf := bufio.NewWriter(c)
- 
+
      defer wbuf.Flush()
      for {
          // read from the connection
- 
+
          // decode the frame to get the payload
          // the payload is undecoded packet
          framePayload, err := frameCodec.Decode(rbuf)
@@ -415,14 +415,14 @@ debug/pprof/profile提供的是CPU的性能采样数据。CPU类型采样数据�
              return
          }
          metrics.ReqRecvTotal.Add(1)
- 
+
          // do something with the packet
          ackFramePayload, err := handlePacket(framePayload)
          if err != nil {
              fmt.Println("handleConn: handle packet error:", err)
              return
          }
-  
+
          // write ack frame to the connection
          err = frameCodec.Encode(wbuf, ackFramePayload)
          if err != nil {
@@ -509,7 +509,7 @@ ROUTINE ======================== github.com/bigwhite/tcp-server-demo2/packet.Dec
          .          .     84:		}
          .          .     85:		return &s, nil
          .          .     86:	case CommandSubmitAck:
-(pprof) 
+(pprof)
 ```
 
 我们看到，`s := Submit{}`这一行是分配内存的“大户”，每次服务端收到一个客户端submit请求时，都会在堆上分配一块内存表示Submit类型的实例。
@@ -625,62 +625,58 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
 <li><span>多选参数</span> 👍（8） 💬（1）<p>原本以为最后的实战课只是写一个稍微大点的项目。结果，恰恰相反，老师使用一个极小的项目，带着走了一遍 Go 开发和调优的过程，这种方法论或者思想的传授，真的比单纯写代码可以学到更多，是在其他书籍或专栏所没有的，很喜欢这种方式！感谢老师！
 
 简单总结下，最后实战课核心的内容：
+
 1. Go 开发的流程结合自己的几个月的经历，总结下：（1）首先是明确问题或需求，之后根据问题或需求，提炼出需要用到的技术点，比如 socket 技术；（2）之后，去调研相关的技术或相关项目；（3）最后写设计方案；（4）根据设计方案，实现代码。（PS：这个过程可以循环迭代）
 2. Go 程序优化的过程：（1）首先是明确衡量指标，比如某个函数的执行时间、程序在一定时间内可以处理的请求量、接受的数据包数量等等（并获取首次的指标情况）；（2）之后，使用 pprof 获取 CPU、内存的使用情况，并分析使用情况，得到整个程序的瓶颈所在；（3）最后，根据分析得到的结果，优化源码；（4）优化源码后，再次测试衡量指标，根据新获取的指标情况，决定是否继续分析和优化。
 
 另外，可以继续优化点的应该就是与 Submit 使用相同的地方，比如 submitAck。</p>2022-05-05</li><br/><li><span>罗杰</span> 👍（6） 💬（2）<p>什么时候能和老师一样有如此丰富的优化经验呢，讲的非常精彩。</p>2022-01-28</li><br/><li><span>菠萝吹雪—Code</span> 👍（3） 💬（1）<p>精彩的优化过程！感谢老师这个专栏，很喜欢这种讲解知识点的方式！第一遍结束，第二遍开始记笔记分析每一行代码，第三遍再过下老师的两本书，应该算是完全入门go了</p>2022-09-14</li><br/><li><span>骚动</span> 👍（3） 💬（2）<p>mac下的配置参考：
+
 1. mac不能用host，需要用ports端口映射
-version: &quot;3.2&quot;
-services:
-  prometheus:
-    container_name: prometheus
-    image: prom&#47;prometheus:latest
-    ports:
-      - &quot;9090:9090&quot;
-    volumes:
-      - .&#47;conf&#47;tcp-server-prometheus.yml:&#47;etc&#47;prometheus&#47;prometheus.yml
-      - &#47;etc&#47;localtime:&#47;etc&#47;localtime
-    restart: on-failure
+   version: &quot;3.2&quot;
+   services:
+   prometheus:
+   container_name: prometheus
+   image: prom&#47;prometheus:latest
+   ports:
+   - &quot;9090:9090&quot;
+     volumes:
+   - .&#47;conf&#47;tcp-server-prometheus.yml:&#47;etc&#47;prometheus&#47;prometheus.yml
+   - &#47;etc&#47;localtime:&#47;etc&#47;localtime
+     restart: on-failure
 
-  grafana:
-    container_name: grafana
-    image: grafana&#47;grafana:latest
-    restart: on-failure
-    ports:
-      - &quot;3000:3000&quot;
-    volumes:
-      - &#47;etc&#47;localtime:&#47;etc&#47;localtime
-      - .&#47;data&#47;grafana:&#47;var&#47;lib&#47;grafana
+grafana:
+container_name: grafana
+image: grafana&#47;grafana:latest
+restart: on-failure
+ports: - &quot;3000:3000&quot;
+volumes: - &#47;etc&#47;localtime:&#47;etc&#47;localtime - .&#47;data&#47;grafana:&#47;var&#47;lib&#47;grafana
 
-  node_exporter:
-    image: quay.io&#47;prometheus&#47;node-exporter:latest
-    restart: always
-    container_name: node_exporter
-    command:
-      - &#39;--path.rootfs=&#47;host&#39;
-    ports:
-      - &quot;9100:9100&quot;
-    volumes:
-      - &#47;Users&#47;zouqiang&#47;Documents&#47;docker&#47;monitor&#47;data&#47;node_exporter
+node_exporter:
+image: quay.io&#47;prometheus&#47;node-exporter:latest
+restart: always
+container_name: node_exporter
+command: - &#39;--path.rootfs=&#47;host&#39;
+ports: - &quot;9100:9100&quot;
+volumes: - &#47;Users&#47;zouqiang&#47;Documents&#47;docker&#47;monitor&#47;data&#47;node_exporter
 
-2. grafana上配置prometheus数据源时，url:  http:&#47;&#47;本机ip:端口 , 不要用http:&#47;&#47;localhost:9090这种方式，因为容器间的localhost不是同一个localhost, 用主机名直接指定即可</p>2022-08-19</li><br/><li><span>蔫巴的小白菜</span> 👍（3） 💬（1）<p>老师，有个问题，sync.pool也就是内存池那块，请求过来之后，我看到是直接放到内存池，没有置空数据，那么在内存池获取的时候，会不会出现数据错乱的问题呢？</p>2022-06-19</li><br/><li><span>顷</span> 👍（3） 💬（2）<p>bufio.Reader.Read 方法内部，每次从 net.Conn 尝试读取其内部缓存大小的数据，而不是用户传入的希望读取的数据大小 -----------这里有个疑问，server端for 循环里不是每次都是重新读取到的conn传过来的数据吗，也就是每次client端发送过来的payload都是要有一次必要的读取，为什么会减少读取的次数呢？</p>2022-04-14</li><br/><li><span>Geek_25f93f</span> 👍（2） 💬（1）<p>老师，看网上有种说法。池化这种事情，Java很早很早之前也做过 现在都不怎么提了，go的编译器太弱了？</p>2022-06-26</li><br/><li><span>Mew151</span> 👍（1） 💬（3）<p>老师，想问一下， tcp-server-demo2-with-pprof 的代码，我在我的 Mac 上分别启动 server 和 client ，过了一段时间后 server 报如下错误（打印是我加了些详细日志之后的）：
+2. grafana上配置prometheus数据源时，url: http:&#47;&#47;本机ip:端口 , 不要用http:&#47;&#47;localhost:9090这种方式，因为容器间的localhost不是同一个localhost, 用主机名直接指定即可</p>2022-08-19</li><br/><li><span>蔫巴的小白菜</span> 👍（3） 💬（1）<p>老师，有个问题，sync.pool也就是内存池那块，请求过来之后，我看到是直接放到内存池，没有置空数据，那么在内存池获取的时候，会不会出现数据错乱的问题呢？</p>2022-06-19</li><br/><li><span>顷</span> 👍（3） 💬（2）<p>bufio.Reader.Read 方法内部，每次从 net.Conn 尝试读取其内部缓存大小的数据，而不是用户传入的希望读取的数据大小 -----------这里有个疑问，server端for 循环里不是每次都是重新读取到的conn传过来的数据吗，也就是每次client端发送过来的payload都是要有一次必要的读取，为什么会减少读取的次数呢？</p>2022-04-14</li><br/><li><span>Geek_25f93f</span> 👍（2） 💬（1）<p>老师，看网上有种说法。池化这种事情，Java很早很早之前也做过 现在都不怎么提了，go的编译器太弱了？</p>2022-06-26</li><br/><li><span>Mew151</span> 👍（1） 💬（3）<p>老师，想问一下， tcp-server-demo2-with-pprof 的代码，我在我的 Mac 上分别启动 server 和 client ，过了一段时间后 server 报如下错误（打印是我加了些详细日志之后的）：
 
 metrics server start ok(*:8889)
 server start ok(on *:8888)
-[2022-10-13 13:41:54.562] io.ReadFull: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49689: read: operation timed out  totalLen is 28, n is 20
+[2022-10-13 13:41:54.562] io.ReadFull: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49689: read: operation timed out totalLen is 28, n is 20
 [2022-10-13 13:41:54.562] handleConn: frame decode error: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49689: read: operation timed out
-[2022-10-13 13:41:55.545] io.ReadFull: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49754: read: operation timed out  totalLen is 32, n is 15
+[2022-10-13 13:41:55.545] io.ReadFull: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49754: read: operation timed out totalLen is 32, n is 15
 [2022-10-13 13:41:55.545] handleConn: frame decode error: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49754: read: operation timed out
-[2022-10-13 13:41:55.590] io.ReadFull: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49729: read: operation timed out  totalLen is 31, n is 26
+[2022-10-13 13:41:55.590] io.ReadFull: read tcp 127.0.0.1:8888-&gt;127.0.0.1:49729: read: operation timed out totalLen is 31, n is 26
 ...
 
-请问这是什么原因呢？我看程序里也没有设置 SetReadDeadline 的地方，为什么会报读超时呢</p>2022-10-13</li><br/><li><span>Geek_25f93f</span> 👍（1） 💬（3）<p>老师，这个frame.decode解包过程为什么不会出现粘包的现象啊？按理说收到这个frame部分也可能出现半包的情况啊，为什么我不管怎么试 在服务端加sleep时间 或者 加client的发送包体长度和协程数量，也没办法进入 if n != int(totalLen-4) 这个判断分支呀</p>2022-06-27</li><br/><li><span>木木</span> 👍（1） 💬（2）<p>我这里Frame的Decode函数在读totalLen的时候会有小概率读到一个错误的数值，请问有人知道这是为什么吗？</p>2022-03-22</li><br/><li><span>Rayjun</span> 👍（1） 💬（1）<p>对于工程师来说，这种量化的能力非常重要，只有量化了数据，才能找到瓶颈，而不是通过感觉去判断，白老师能利用这些工具将量化的过程讲的这么清晰，太强了</p>2022-02-20</li><br/><li><span>$侯</span> 👍（1） 💬（1）<p>老师有时间的话，还能讲讲context相关的内容吗？</p>2022-01-29</li><br/><li><span>Geek_0d5d37</span> 👍（0） 💬（2）<p>老师，您好。在docker-compose.yml 文件的容器都没有看到有映射宿主机的端口，为什么可以访问对应几个端口的容器了。  PORTS 都是空白的
+请问这是什么原因呢？我看程序里也没有设置 SetReadDeadline 的地方，为什么会报读超时呢</p>2022-10-13</li><br/><li><span>Geek_25f93f</span> 👍（1） 💬（3）<p>老师，这个frame.decode解包过程为什么不会出现粘包的现象啊？按理说收到这个frame部分也可能出现半包的情况啊，为什么我不管怎么试 在服务端加sleep时间 或者 加client的发送包体长度和协程数量，也没办法进入 if n != int(totalLen-4) 这个判断分支呀</p>2022-06-27</li><br/><li><span>木木</span> 👍（1） 💬（2）<p>我这里Frame的Decode函数在读totalLen的时候会有小概率读到一个错误的数值，请问有人知道这是为什么吗？</p>2022-03-22</li><br/><li><span>Rayjun</span> 👍（1） 💬（1）<p>对于工程师来说，这种量化的能力非常重要，只有量化了数据，才能找到瓶颈，而不是通过感觉去判断，白老师能利用这些工具将量化的过程讲的这么清晰，太强了</p>2022-02-20</li><br/><li><span>$侯</span> 👍（1） 💬（1）<p>老师有时间的话，还能讲讲context相关的内容吗？</p>2022-01-29</li><br/><li><span>Geek_0d5d37</span> 👍（0） 💬（2）<p>老师，您好。在docker-compose.yml 文件的容器都没有看到有映射宿主机的端口，为什么可以访问对应几个端口的容器了。 PORTS 都是空白的
 
-$docker ps 
-CONTAINER ID   IMAGE                                     COMMAND                  CREATED        STATUS        PORTS     NAMES
-563d655cdf90   grafana&#47;grafana:latest                    &quot;&#47;run.sh&quot;                26 hours ago   Up 26 hours             grafana
-65616d1b6d1a   prom&#47;prometheus:latest                    &quot;&#47;bin&#47;prometheus --c…&quot;   26 hours ago   Up 26 hours             prometheus
-b29d3fef8572   quay.io&#47;prometheus&#47;node-exporter:latest   &quot;&#47;bin&#47;node_exporter …&quot;   26 hours ago   Up 26 hours             node_exporter</p>2023-05-05</li><br/><li><span>Geek_xbye50</span> 👍（0） 💬（1）<p>老师讲的太精彩！很喜欢老师讲课！期待后续的课程</p>2023-02-23</li><br/><li><span>军</span> 👍（0） 💬（1）<p>network_mode: host在mac不生效，改了ports映射的方式
+$docker ps
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+563d655cdf90 grafana&#47;grafana:latest &quot;&#47;run.sh&quot; 26 hours ago Up 26 hours grafana
+65616d1b6d1a prom&#47;prometheus:latest &quot;&#47;bin&#47;prometheus --c…&quot; 26 hours ago Up 26 hours prometheus
+b29d3fef8572 quay.io&#47;prometheus&#47;node-exporter:latest &quot;&#47;bin&#47;node_exporter …&quot; 26 hours ago Up 26 hours node_exporter</p>2023-05-05</li><br/><li><span>Geek_xbye50</span> 👍（0） 💬（1）<p>老师讲的太精彩！很喜欢老师讲课！期待后续的课程</p>2023-02-23</li><br/><li><span>军</span> 👍（0） 💬（1）<p>network_mode: host在mac不生效，改了ports映射的方式
 
 The host networking driver only works on Linux hosts, and is not supported on Docker Desktop for Mac, Docker Desktop for Windows, or Docker EE for Windows Server.</p>2022-07-04</li><br/>
 </ul>

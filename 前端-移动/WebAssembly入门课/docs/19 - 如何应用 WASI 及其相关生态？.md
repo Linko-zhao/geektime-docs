@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     if ((fd = fopen("wasi-static.txt", "w"))) {
       fwrite(buf, sizeof(char), counter, fd);
     } else {
-      perror("Open static file failed!");      
+      perror("Open static file failed!");
     }
   }
   return 0;
@@ -96,8 +96,8 @@ clang  wasi-app.c -o wasi-app && ./wasi-app
 
 ```
 ./wasi-sdk-11.0/bin/clang \
---target=wasm32-wasi \   
---sysroot=./wasi-sdk-11.0/share/wasi-sysroot \  
+--target=wasm32-wasi \
+--sysroot=./wasi-sdk-11.0/share/wasi-sysroot \
 wasi-app.c -o wasi-app.wasm
 ```
 

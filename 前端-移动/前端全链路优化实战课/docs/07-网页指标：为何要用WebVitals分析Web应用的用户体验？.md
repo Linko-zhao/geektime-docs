@@ -24,17 +24,17 @@
 
 ```javascript
 // 获取生命周期所有节点的时间戳对象
-const timing = window.performance.timing 
-// 获取首字节时间 
-const ttfbTime = timing.responseStart - timing.requestStart 
-// 首字节渲染时间 
-const fptTime = timing.responseEnd - timing.fetchStart
-// 页面完整加载时间 
-const loadPageTime = timing.loadEventStart - timing.fetchStart 
-// TCP连接时间 
-const tcpTime = timing.connectEnd - timing.connectStart 
-// dns连接时间 
-const dnsTime = timing.domainLookupEnd - timing.domainLookupStart
+const timing = window.performance.timing;
+// 获取首字节时间
+const ttfbTime = timing.responseStart - timing.requestStart;
+// 首字节渲染时间
+const fptTime = timing.responseEnd - timing.fetchStart;
+// 页面完整加载时间
+const loadPageTime = timing.loadEventStart - timing.fetchStart;
+// TCP连接时间
+const tcpTime = timing.connectEnd - timing.connectStart;
+// dns连接时间
+const dnsTime = timing.domainLookupEnd - timing.domainLookupStart;
 ```
 
 实际上，即使我们获取到上述的这些时间，也无法判断我们的Web应用是否有问题，甚至有时候计算出来的数值是负数，或者超过5位数。
@@ -44,7 +44,7 @@ const dnsTime = timing.domainLookupEnd - timing.domainLookupStart
 最后，你可能觉得还有官方推荐的PerformanceNavigationTiming对象呢，比如这样一串获取当前页面性能数据的代码：
 
 ```javascript
-performance.getEntriesByType("navigation")
+performance.getEntriesByType("navigation");
 ```
 
 其实，虽然它用的是相对时间值，但我们还是没法用什么标准去衡量指标的性能情况。

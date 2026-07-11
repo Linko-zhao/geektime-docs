@@ -108,7 +108,7 @@ function Discover({navigation}) {
   );
 }
 
-function Detail() {  
+function Detail() {
   return (
     <View>
       <Text>旺财旺财旺财~</Text>
@@ -221,7 +221,7 @@ navigation.navigate('Detail');
 在页面跳转的过程中，initialParams 对象和 params 对象会进行对象合并，而不是覆盖，演示代码如下：
 
 ```plain
-// 对象合并 
+// 对象合并
 跳转时： params {price: 99.9 }
 配置的： initialParams {symbol: '$'}
 获取后： route.params {symbol: '$', price: 99.9 }
@@ -236,18 +236,18 @@ navigation.navigate('Detail');
 ```plain
 // 初始化 params：{symbol: '$', price: 99.9, image: 'dog.png' }
 // 重置后 params：{symbol: '￥', price: 629.37, image: 'dog.png' }
-function Detail({route, navigation}) {  
-  const { price, symbol, image} = route.params 
+function Detail({route, navigation}) {
+  const { price, symbol, image} = route.params
   return (
       <>
         <Image source={image} />
       <Text>{symbol}{price}</Text>
       <Text onPress={() =>{
-        if (symbol === '￥') return 
+        if (symbol === '￥') return
         navigation.setParams({
           symbol:'￥',
-          price: price * 6.3 
-        })  
+          price: price * 6.3
+        })
       }}>切换成￥</Text>
     </>
      )
@@ -494,6 +494,7 @@ function Home() {return <Text>我是首页</Text>}
 ![图片](https://static001.geekbang.org/resource/image/22/e2/22507dc46d5022d45148e015742db7e2.png?wh=1920x911)
 
 2. React Navigation 目前已经更新到 v6 版本了，你在使用老版本的 React Navigation 时遇到过哪些问题呢？欢迎留言，我们大家一起讨论。
+
 <div><strong>精选留言（13）</strong></div><ul>
 <li><span>潇潇暮雨</span> 👍（3） 💬（1）<p>老师，可以讲一下原生页面与RN页面相互跳转吗</p>2022-05-09</li><br/><li><span>007</span> 👍（1） 💬（1）<p>老师，能讲一下Modal页面。还有自定义导航动画么？</p>2022-05-09</li><br/><li><span>维筱</span> 👍（0） 💬（1）<p>老师，求画图软件</p>2023-01-23</li><br/><li><span>追风</span> 👍（0） 💬（1）<p>方便讲解一下react-native中路由鉴权的方案吗？</p>2023-01-19</li><br/><li><span>郭浩</span> 👍（0） 💬（0）<p>如何解决两个Tab之间的滑动冲突问题？</p>2023-01-12</li><br/><li><span>章鱼哥</span> 👍（0） 💬（0）<p>老师您好，我想请教一下TS项目 { navigation }和{ route }的类型该如何写？</p>2022-10-19</li><br/><li><span>Geek_27a13a</span> 👍（0） 💬（0）<p>老师，您好
 react-native 新搭建的0.69.0项目怎么兼容  react-native-screens（3.13.1）这个问题应该怎么解决呢？</p>2022-06-26</li><br/><li><span>Geek_27a13a</span> 👍（0） 💬（0）<p>老师，您好

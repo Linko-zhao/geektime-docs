@@ -143,7 +143,7 @@ The prefix to prepend to all resource paths in etcd.
 --etcd-servers stringSlice
 List of etcd servers to connect with (scheme://ip:port), comma separated.
 --etcd-servers-overrides stringSlice
-Per-resource etcd servers overrides, comma separated. The individual override format: group/resource#servers, where servers are URLs, 
+Per-resource etcd servers overrides, comma separated. The individual override format: group/resource#servers, where servers are URLs,
 semicolon separated.
 ```
 

@@ -32,7 +32,7 @@ union IntOrFloat {
     f: f32,
 }
 let mut u = IntOrFloat { f: 1.0 };
-// 读取union字段时需要用 unsafe {} 包起来 
+// 读取union字段时需要用 unsafe {} 包起来
 assert_eq!(unsafe { u.i }, 1065353216);
 // 更新了i，结果f字段的值也变化了。
 u.i = 1073741824;
@@ -61,7 +61,7 @@ fn main() {
         println!("COUNTER: {}", COUNTER);
     }
 }
-// 输出 
+// 输出
 COUNTER: 3
 ```
 

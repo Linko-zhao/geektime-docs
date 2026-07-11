@@ -21,10 +21,10 @@ Thread-Per-Message模式的一个最经典的应用场景是**网络编程里服
 在Java语言中，实现echo程序的服务端还是很简单的。只需要30行代码就能够实现，示例代码如下，我们为每个请求都创建了一个Java线程，核心代码是：new Thread(()-&gt;{...}).start()。
 
 ```
-final ServerSocketChannel  = 
+final ServerSocketChannel  =
   ServerSocketChannel.open().bind(
     new InetSocketAddress(8080));
-//处理请求    
+//处理请求
 try {
   while (true) {
     // 接收请求
@@ -39,7 +39,7 @@ try {
         //模拟处理请求
         Thread.sleep(2000);
         // 写Socket
-        ByteBuffer wb = 
+        ByteBuffer wb =
           (ByteBuffer)rb.flip();
         sc.write(wb);
         // 关闭Socket
@@ -51,7 +51,7 @@ try {
   }
 } finally {
   ssc.close();
-}   
+}
 ```
 
 如果你熟悉网络编程，相信你一定会提出一个很尖锐的问题：上面这个echo服务的实现方案是不具备可行性的。原因在于Java中的线程是一个重量级的对象，创建成本很高，一方面创建线程比较耗时，另一方面线程占用的内存也比较大。所以，为每个请求创建一个新的线程并不适合高并发场景。
@@ -69,14 +69,14 @@ Java语言目前也已经意识到轻量级线程的重要性了，OpenJDK有个
 Loom项目在设计轻量级线程时，充分考量了当前Java线程的使用方式，采取的是尽量兼容的态度，所以使用上还是挺简单的。用Fiber实现echo服务的示例代码如下所示，对比Thread的实现，你会发现改动量非常小，只需要把new Thread(()-&gt;{...}).start()换成 Fiber.schedule(()-&gt;{})就可以了。
 
 ```
-final ServerSocketChannel ssc = 
+final ServerSocketChannel ssc =
   ServerSocketChannel.open().bind(
     new InetSocketAddress(8080));
 //处理请求
 try{
   while (true) {
     // 接收请求
-    final SocketChannel sc = 
+    final SocketChannel sc =
       ssc.accept();
     Fiber.schedule(()->{
       try {
@@ -87,7 +87,7 @@ try{
         //模拟处理请求
         LockSupport.parkNanos(2000*1000000);
         // 写Socket
-        ByteBuffer wb = 
+        ByteBuffer wb =
           (ByteBuffer)rb.flip()
         sc.write(wb);
         // 关闭Socket

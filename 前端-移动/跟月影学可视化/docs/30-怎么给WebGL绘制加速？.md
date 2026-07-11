@@ -39,7 +39,7 @@ function render() {
     const x = 2 * Math.random() - 1;
     const y = 2 * Math.random() - 1;
     const rotation = 2 * Math.PI * Math.random();
- 
+
     renderer.uniforms.u_color = [
       Math.random(),
       Math.random(),
@@ -458,7 +458,7 @@ gl_FragColor = vec4(1) * step(random(st), 0.5);
 
 欢迎在留言区和我讨论，分享你的答案和思考，也欢迎你把这节课分享给你的朋友，我们下节课见！
 
-* * *
+---
 
 ## 源码
 

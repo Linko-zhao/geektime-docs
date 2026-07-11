@@ -17,7 +17,7 @@ import java.lang.invoke.*;
 
 class Horse {
   public void race() {
-    System.out.println("Horse.race()"); 
+    System.out.println("Horse.race()");
   }
 }
 
@@ -40,7 +40,7 @@ public class Circuit {
     startRace(new Horse());
     // startRace(new Deer());
   }
-  
+
   public static CallSite bootstrap(MethodHandles.Lookup l, String name, MethodType callSiteType) throws Throwable {
     MethodHandle mh = l.findVirtual(Horse.class, name, MethodType.methodType(void.class));
     return new ConstantCallSite(mh.asType(callSiteType));

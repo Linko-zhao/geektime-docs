@@ -248,47 +248,47 @@ win本，32G mem，纯cpu 跑还是挺吃力的，速度慢到怀疑人生。今
 关于思考题，问了下ChatGPT，回答如下：
 大模型的参数指的是模型中的可调整的变量，这些变量决定了模型如何处理输入数据并生成输出。在人工智能和机器学习中，参数是模型学习和适应新数据的关键部分。常见的参数如权重（w）和偏置（b）。</p>2024-06-12</li><br/><li><span>Geek_0a4616</span> 👍（0） 💬（1）<p>老师 大模型 最终推理出来的是个数字，数字和词汇的映射关系 是存在权重文件 https:&#47;&#47;huggingface.co&#47;THUDM&#47;chatglm3-6b 里面的吗？</p>2024-09-22</li><br/><li><span>赵鹏</span> 👍（0） 💬（1）<p>pip3 install -r requirements.txt 执行报错，日志如下，请问如何解决？谢谢！
 
-  ERROR: Command errored out with exit status 1:
-   command: &#47;Library&#47;Developer&#47;CommandLineTools&#47;usr&#47;bin&#47;python3 &#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py get_requires_for_build_wheel &#47;var&#47;folders&#47;d_&#47;zyrnlk3j65l1rrm5vlz_khnm0000gn&#47;T&#47;tmpi1loqnkg
-       cwd: &#47;private&#47;var&#47;folders&#47;d_&#47;zyrnlk3j65l1rrm5vlz_khnm0000gn&#47;T&#47;pip-install-axuijjbp&#47;vllm_bde8e7d4069844fcbf5e5312fb56958f
-  Complete output (20 lines):
-  fatal: not a git repository (or any of the parent directories): .git
-  setup.py:56: RuntimeWarning: Failed to get commit hash:
-  Command &#39;[&#39;git&#39;, &#39;rev-parse&#39;, &#39;HEAD&#39;]&#39; returned non-zero exit status 128.
-    embed_commit_hash()
-  Traceback (most recent call last):
-    File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py&quot;, line 349, in &lt;module&gt;
-      main()
-    File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py&quot;, line 331, in main
-      json_out[&#39;return_val&#39;] = hook(**hook_input[&#39;kwargs&#39;])
-    File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py&quot;, line 117, in get_requires_for_build_wheel
-      return hook(config_settings)
-    File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;setuptools&#47;build_meta.py&quot;, line 154, in get_requires_for_build_wheel
-      return self._get_build_requires(
-    File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;setuptools&#47;build_meta.py&quot;, line 135, in _get_build_requires</p>2024-08-02</li><br/><li><span>废物点心的黄金时代</span> 👍（0） 💬（1）<p>为啥不直接用ollama部署本地模型呢？</p>2024-07-27</li><br/><li><span>Twein</span> 👍（0） 💬（1）<p>执行pip install -r requirements.txt报错：Getting requirements to build wheel ... error
-  error: subprocess-exited-with-error
-  × Getting requirements to build wheel did not run successfully.
-  │ exit code: 1
-  ╰─&gt; [20 lines of output]
-      Traceback (most recent call last):
-        File &quot;D:\tools\python\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py&quot;, line 353, in &lt;module&gt;
-          main()
-        File &quot;D:\tools\python\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py&quot;, line 335, in main
-          json_out[&#39;return_val&#39;] = hook(**hook_input[&#39;kwargs&#39;])
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File &quot;D:\tools\python\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py&quot;, line 118, in get_requires_for_build_wheel
-          return hook(config_settings)
-                 ^^^^^^^^^^^^^^^^^^^^^
-        File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\setuptools\build_meta.py&quot;, line 327, in get_requires_for_build_wheel
-          return self._get_build_requires(config_settings, requirements=[])
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\setuptools\build_meta.py&quot;, line 297, in _get_build_requires
-          self.run_setup()
-        File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\setuptools\build_meta.py&quot;, line 313, in run_setup
-          exec(code, locals())
-        File &quot;&lt;string&gt;&quot;, line 12, in &lt;module&gt;
-        File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\torch\__init__.py&quot;, line 143, in &lt;module&gt;
-          raise err
-      OSError: [WinError 126] 找不到指定的模块。 Error loading &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\torch\lib\fbgemm.dll&quot; or one of its dependencies.
+ERROR: Command errored out with exit status 1:
+command: &#47;Library&#47;Developer&#47;CommandLineTools&#47;usr&#47;bin&#47;python3 &#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;*in_process.py get_requires_for_build_wheel &#47;var&#47;folders&#47;d*&#47;zyrnlk3j65l1rrm5vlz_khnm0000gn&#47;T&#47;tmpi1loqnkg
+cwd: &#47;private&#47;var&#47;folders&#47;d_&#47;zyrnlk3j65l1rrm5vlz_khnm0000gn&#47;T&#47;pip-install-axuijjbp&#47;vllm_bde8e7d4069844fcbf5e5312fb56958f
+Complete output (20 lines):
+fatal: not a git repository (or any of the parent directories): .git
+setup.py:56: RuntimeWarning: Failed to get commit hash:
+Command &#39;[&#39;git&#39;, &#39;rev-parse&#39;, &#39;HEAD&#39;]&#39; returned non-zero exit status 128.
+embed_commit_hash()
+Traceback (most recent call last):
+File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py&quot;, line 349, in &lt;module&gt;
+main()
+File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py&quot;, line 331, in main
+json_out[&#39;return_val&#39;] = hook(**hook_input[&#39;kwargs&#39;])
+File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;pip&#47;_vendor&#47;pep517&#47;in_process&#47;_in_process.py&quot;, line 117, in get_requires_for_build_wheel
+return hook(config_settings)
+File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;setuptools&#47;build_meta.py&quot;, line 154, in get_requires_for_build_wheel
+return self._get_build_requires(
+File &quot;&#47;Library&#47;Developer&#47;CommandLineTools&#47;Library&#47;Frameworks&#47;Python3.framework&#47;Versions&#47;3.9&#47;lib&#47;python3.9&#47;site-packages&#47;setuptools&#47;build_meta.py&quot;, line 135, in _get_build_requires</p>2024-08-02</li><br/><li><span>废物点心的黄金时代</span> 👍（0） 💬（1）<p>为啥不直接用ollama部署本地模型呢？</p>2024-07-27</li><br/><li><span>Twein</span> 👍（0） 💬（1）<p>执行pip install -r requirements.txt报错：Getting requirements to build wheel ... error
+error: subprocess-exited-with-error
+× Getting requirements to build wheel did not run successfully.
+│ exit code: 1
+╰─&gt; [20 lines of output]
+Traceback (most recent call last):
+File &quot;D:\tools\python\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py&quot;, line 353, in &lt;module&gt;
+main()
+File &quot;D:\tools\python\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py&quot;, line 335, in main
+json_out[&#39;return_val&#39;] = hook(**hook_input[&#39;kwargs&#39;])
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File &quot;D:\tools\python\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py&quot;, line 118, in get_requires_for_build_wheel
+return hook(config_settings)
+^^^^^^^^^^^^^^^^^^^^^
+File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\setuptools\build_meta.py&quot;, line 327, in get_requires_for_build_wheel
+return self._get_build_requires(config_settings, requirements=[])
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\setuptools\build_meta.py&quot;, line 297, in _get_build_requires
+self.run_setup()
+File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\setuptools\build_meta.py&quot;, line 313, in run_setup
+exec(code, locals())
+File &quot;&lt;string&gt;&quot;, line 12, in &lt;module&gt;
+File &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\torch\_*init*_.py&quot;, line 143, in &lt;module&gt;
+raise err
+OSError: [WinError 126] 找不到指定的模块。 Error loading &quot;C:\Users\twein\AppData\Local\Temp\pip-build-env-y57aktmf\overlay\Lib\site-packages\torch\lib\fbgemm.dll&quot; or one of its dependencies.
 </p>2024-07-23</li><br/><li><span>黄蓉 Jessie</span> 👍（0） 💬（3）<p>MAC M2 pro的电脑安装ChatGLM3的依赖报错， AssertionError: vLLM only supports Linux platform (including WSL).应该是vllm这个包不支持</p>2024-07-22</li><br/>
 </ul>

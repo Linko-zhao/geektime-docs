@@ -167,7 +167,7 @@ rustflags = [
 
 二者的作用是等价的。
 
-然后我们创建一个目录 xunmi，再创建 xunmi/\_*init*\_.py，添入：
+然后我们创建一个目录 xunmi，再创建 xunmi/\__init_\_.py，添入：
 
 ```python
 from .xunmi import *
@@ -399,7 +399,7 @@ impl Indexer {
         let indexer = x::Indexer::open_or_create(config).map_err(to_pyerr)?;
         Ok(Indexer(indexer))
     }
-    
+
     // 获取 updater
     pub fn get_updater(&self) -> IndexUpdater {
         IndexUpdater(self.0.get_updater())
@@ -667,14 +667,14 @@ impl MyClass {
 感兴趣的同学可以尝试一下（记得要 m.add\_class 注册一下）。下面是运行结果：
 
 ```python
-In [6]: MyClass.test1()                                                                                                           
+In [6]: MyClass.test1()
 kwargs is none
 
-In [7]: MyClass.test1(a=1, b=2)                                                                                                   
+In [7]: MyClass.test1(a=1, b=2)
 ('a', 1)
 ('b', 2)
 
-In [8]: MyClass.test2(1,2,3)                                                                                                      
+In [8]: MyClass.test2(1,2,3)
 1
 2
 3

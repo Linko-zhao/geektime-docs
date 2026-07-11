@@ -108,7 +108,7 @@ RpcContext 通过调用 startAsync 方法开启异步模式之后，然后在另
 public class CommonController {
     // 响应码为成功时的值
     public static final String SUCC = "000000";
-    
+
     // 定义URL地址
     @PostMapping("/gateway/{className}/{mtdName}/{parameterTypeName}/request")
     public String commonRequest(@PathVariable String className,
@@ -118,7 +118,7 @@ public class CommonController {
         // 将入参的req转为下游方法的入参对象，并发起远程调用
         return commonInvoke(className, parameterTypeName, mtdName, reqBody);
     }
-    
+
     /**
      * <h2>模拟公共的远程调用方法.</h2>
      *
@@ -136,7 +136,7 @@ public class CommonController {
                                       String reqParamsStr) {
         // 然后试图通过类信息对象想办法获取到该类对应的实例对象
         ReferenceConfig<GenericService> referenceConfig = createReferenceConfig(className);
-        
+
         // 远程调用
         GenericService genericService = referenceConfig.get();
         // 泛化调用
@@ -144,23 +144,23 @@ public class CommonController {
                 mtdName,
                 new String[]{parameterTypeName},
                 new Object[]{JSON.parseObject(reqParamsStr, Map.class)});
-        
+
         // 判断响应对象的响应码，不是成功的话，则组装失败响应
         if(!SUCC.equals(OgnlUtils.getValue(resp, "respCode"))){
             return RespUtils.fail(resp);
         }
-        
+
         // 如果响应码为成功的话，则组装成功响应
         return RespUtils.ok(resp);
     }
-    
+
     private static ReferenceConfig<GenericService> createReferenceConfig(String className) {
         DubboBootstrap dubboBootstrap = DubboBootstrap.getInstance();
-        
+
         // 设置应用服务名称
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName(dubboBootstrap.getApplicationModel().getApplicationName());
-        
+
         // 设置注册中心的地址
         String address = dubboBootstrap.getConfigManager().getRegistries().iterator().next().getAddress();
         RegistryConfig registryConfig = new RegistryConfig(address);
@@ -168,7 +168,7 @@ public class CommonController {
         referenceConfig.setApplication(applicationConfig);
         referenceConfig.setRegistry(registryConfig);
         referenceConfig.setInterface(className);
-        
+
         // 设置泛化调用形式
         referenceConfig.setGeneric("true");
         // 设置默认超时时间5秒
@@ -295,7 +295,7 @@ public class InvokeDemoFacade {
     // 注意，@DubboReference 这里添加了 validation 属性
     @DubboReference(validation ＝ "jvalidation")
     private ValidationFacade validationFacade;
-    
+
     // 一个简单的触发调用下游 ValidationFacade.validateUser 的方法
     public String invokeValidate(String id, String name, String sex) {
         return validationFacade.validateUser(new ValidateUserInfo(id, name, sex));
@@ -388,21 +388,21 @@ Spring 的底层会回调 NamespaceHandler 接口的所有实现类，调用每�
 要想解答这个问题，避免不了查看源码。既然提到了 DubboProtocol 是如何处理调用的，那就有必要深入到 DubboProtocol 中接收数据的地方看看，一打开该类，就看到了 reply 响应数据的方法。
 
 ```java
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // org.apache.dubbo.remoting.exchange.support.ExchangeHandlerAdapter#reply
 // 接收请求，处理请求，响应数据
 ///////////////////////////////////////////////////
 @Override
 public CompletableFuture<Object> reply(ExchangeChannel channel, Object message) throws RemotingException {
 
-    // 省略其他部分代码...  
+    // 省略其他部分代码...
 
     Invocation inv = (Invocation) message;
-    
+
     // 找到了最核心的获取 invoker 代码的地方
     Invoker<?> invoker = getInvoker(channel, inv);
 
-    // 省略其他部分代码...    
+    // 省略其他部分代码...
 
     RpcContext.getServiceContext().setRemoteAddress(channel.getRemoteAddress());
     // 拿着找到的 invoker 就开始一路 invoke 调用了，最终得到的是一个 result 对象
@@ -411,7 +411,7 @@ public CompletableFuture<Object> reply(ExchangeChannel channel, Object message) 
     return result.thenApply(Function.identity());
 }
                   ↓
-///////////////////////////////////////////////////                  
+///////////////////////////////////////////////////
 // org.apache.dubbo.rpc.protocol.dubbo.DubboProtocol#getInvoker
 // 根据一系列
 ///////////////////////////////////////////////////
@@ -427,7 +427,7 @@ Invoker<?> getInvoker(Channel channel, Invocation inv) throws RemotingException 
     if (isStubServiceInvoke) {
         port = channel.getRemoteAddress().getPort();
     }
-    
+
     //callback
     // 获取重要 path 参数
     // path = com.hmilyylimh.cloud.facade.demo.DemoFacade
@@ -436,7 +436,7 @@ Invoker<?> getInvoker(Channel channel, Invocation inv) throws RemotingException 
         path += "." + inv.getObjectAttachments().get(CALLBACK_SERVICE_KEY);
         inv.getObjectAttachments().put(IS_CALLBACK_SERVICE_INVOKE, Boolean.TRUE.toString());
     }
-    
+
     // 拼接一个唯一字符串值
     // serviceKey = com.hmilyylimh.cloud.facade.demo.DemoFacade:28270
     String serviceKey = serviceKey(
@@ -445,7 +445,7 @@ Invoker<?> getInvoker(Channel channel, Invocation inv) throws RemotingException 
             (String) inv.getObjectAttachments().get(VERSION_KEY),
             (String) inv.getObjectAttachments().get(GROUP_KEY)
     );
-    
+
     // 通过拼接出来的唯一字符串，直接从 exporterMap 中找到对应的 invoker 对象
     DubboExporter<?> exporter = (DubboExporter<?>) exporterMap.get(serviceKey);
     if (exporter == null) {

@@ -56,7 +56,7 @@ listen(listenSocket); //将默认的主动套接字转换为服务器使用的�
 while (1) { //循环监听是否有客户端连接到来
    connSocket = accept(listenSocket); //接受客户端连接，返回已连接套接字
    pthread_create(processData, connSocket); //创建新线程对已连接套接字进行处理
-   
+
 }
 
 //处理已连接套接字上的读写请求
@@ -137,23 +137,23 @@ bind(sock_fd)   //绑定套接字
 listen(sock_fd) //在套接字上进行监听，将套接字转为监听套接字
 
 fd_set rset;  //被监听的描述符集合，关注描述符上的读事件
- 
+
 int max_fd = sock_fd
 
-//初始化rset数组，使用FD_ZERO宏设置每个元素为0 
+//初始化rset数组，使用FD_ZERO宏设置每个元素为0
 FD_ZERO(&rset);
 //使用FD_SET宏设置rset数组中位置为sock_fd的文件描述符为1，表示需要监听该文件描述符
 FD_SET(sock_fd,&rset);
 
-//设置超时时间 
+//设置超时时间
 struct timeval timeout;
 timeout.tv_sec = 3;
 timeout.tv_usec = 0;
- 
+
 while(1) {
    //调用select函数，检测rset数组保存的文件描述符是否已有读事件就绪，返回就绪的文件描述符个数
    n = select(max_fd+1, &rset, NULL, NULL, &timeout);
- 
+
    //调用FD_ISSET宏，在rset数组中检测sock_fd对应的文件描述符是否就绪
    if (FD_ISSET(sock_fd, &rset)) {
        //如果sock_fd已经就绪，表明已有客户端连接；调用accept函数建立连接
@@ -238,12 +238,12 @@ struct pollfd client[MAX_OPEN];
 
 //将创建的监听套接字加入pollfd数组，并监听其可读事件
 client[0].fd = sock_fd;
-client[0].events = POLLRDNORM; 
+client[0].events = POLLRDNORM;
 maxfd = 0;
 
 //初始化client数组其他元素为-1
 for (i = 1; i < MAX_OPEN; i++)
-    client[i].fd = -1; 
+    client[i].fd = -1;
 
 while(1) {
    //调用poll函数，检测client数组里的文件描述符是否有就绪的，返回就绪的文件描述符个数
@@ -261,9 +261,9 @@ while(1) {
            break;
           }
        }
-       maxfd = i; 
+       maxfd = i;
    }
-   
+
    //依次检查已连接套接字的文件描述符
    for (i = 1; i < MAX_OPEN; i++) {
        if (client[i].revents & (POLLRDNORM | POLLERR)) {
@@ -324,9 +324,9 @@ int sock_fd,conn_fd; //监听套接字和已连接套接字的变量
 sock_fd = socket() //创建套接字
 bind(sock_fd)   //绑定套接字
 listen(sock_fd) //在套接字上进行监听，将套接字转为监听套接字
-    
+
 epfd = epoll_create(EPOLL_SIZE); //创建epoll实例，
-//创建epoll_event结构体数组，保存套接字对应文件描述符和监听事件类型    
+//创建epoll_event结构体数组，保存套接字对应文件描述符和监听事件类型
 ep_events = (epoll_event*)malloc(sizeof(epoll_event) * EPOLL_SIZE);
 
 //创建epoll_event变量
@@ -336,22 +336,22 @@ ee.events = EPOLLIN;
 //监听的文件描述符是刚创建的监听套接字
 ee.data.fd = sock_fd;
 
-//将监听套接字加入到监听列表中    
-epoll_ctl(epfd, EPOLL_CTL_ADD, sock_fd, &ee); 
-    
+//将监听套接字加入到监听列表中
+epoll_ctl(epfd, EPOLL_CTL_ADD, sock_fd, &ee);
+
 while (1) {
-   //等待返回已经就绪的描述符 
-   n = epoll_wait(epfd, ep_events, EPOLL_SIZE, -1); 
-   //遍历所有就绪的描述符     
+   //等待返回已经就绪的描述符
+   n = epoll_wait(epfd, ep_events, EPOLL_SIZE, -1);
+   //遍历所有就绪的描述符
    for (int i = 0; i < n; i++) {
-       //如果是监听套接字描述符就绪，表明有一个新客户端连接到来 
-       if (ep_events[i].data.fd == sock_fd) { 
+       //如果是监听套接字描述符就绪，表明有一个新客户端连接到来
+       if (ep_events[i].data.fd == sock_fd) {
           conn_fd = accept(sock_fd); //调用accept()建立连接
-          ee.events = EPOLLIN;  
+          ee.events = EPOLLIN;
           ee.data.fd = conn_fd;
-          //添加对新创建的已连接套接字描述符的监听，监听后续在已连接套接字上的读事件      
-          epoll_ctl(epfd, EPOLL_CTL_ADD, conn_fd, &ee); 
-                
+          //添加对新创建的已连接套接字描述符的监听，监听后续在已连接套接字上的读事件
+          epoll_ctl(epfd, EPOLL_CTL_ADD, conn_fd, &ee);
+
        } else { //如果是已连接套接字描述符就绪，则可以读数据
            ...//读取数据并处理
        }
@@ -397,17 +397,17 @@ while (1) {
 
 &#47;&#47; ae.c
 #ifdef HAVE_EVPORT
-#include &quot;ae_evport.c&quot;  &#47;&#47; Solaris
+#include &quot;ae_evport.c&quot; &#47;&#47; Solaris
 #else
-    #ifdef HAVE_EPOLL
-    #include &quot;ae_epoll.c&quot;   &#47;&#47; Linux
-    #else
-        #ifdef HAVE_KQUEUE
-        #include &quot;ae_kqueue.c&quot;  &#47;&#47; MacOS
-        #else
-        #include &quot;ae_select.c&quot;  &#47;&#47; Windows
-        #endif
-    #endif
+#ifdef HAVE_EPOLL
+#include &quot;ae_epoll.c&quot; &#47;&#47; Linux
+#else
+#ifdef HAVE_KQUEUE
+#include &quot;ae_kqueue.c&quot; &#47;&#47; MacOS
+#else
+#include &quot;ae_select.c&quot; &#47;&#47; Windows
+#endif
+#endif
 #endif
 
 仔细看上面的代码逻辑，先判断了 Solaris&#47;Linux&#47;MacOS 系统，选择对应的多路复用模型，最后剩下的系统都用 select 模型。
@@ -422,23 +422,21 @@ int epoll_create(int size)；&#47;&#47;创建一个epoll的句柄，
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；
 int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);
 
-
 1. int epoll_create(int size);
-创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大，这个参数不同于select()中的第一个参数，给出最大监听的fd+1的值，参数size并不是限制了epoll所能监听的描述符最大个数，在2.6.8之后这个参数就没有实际价值了，因为内核维护一个动态的队列了。
+   创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大，这个参数不同于select()中的第一个参数，给出最大监听的fd+1的值，参数size并不是限制了epoll所能监听的描述符最大个数，在2.6.8之后这个参数就没有实际价值了，因为内核维护一个动态的队列了。
 
 当创建好epoll句柄后，它就会占用一个fd值，在linux下如果查看&#47;proc&#47;进程id&#47;fd&#47;，是能够看到这个fd的，所以在使用完epoll后，必须调用close()关闭，否则可能导致fd被耗尽。当某一进程调用epoll_create方法时，Linux内核会创建一个eventpoll结构体，这个结构体中有两个成员与epoll的使用方式密切相关。
 eventpoll结构体如下所示：
 struct eventpoll{
-    &#47;&#47; 红黑树的根节点，这棵树中存储着所有添加到epoll中的需要监控的事件
-    struct rb_root rbr;
-    &#47;&#47; 双链表中则存放着将要通过epoll_wait返回给用户的满足条件的事件
-    struct list_head rdlist;
-    ...
+&#47;&#47; 红黑树的根节点，这棵树中存储着所有添加到epoll中的需要监控的事件
+struct rb_root rbr;
+&#47;&#47; 双链表中则存放着将要通过epoll_wait返回给用户的满足条件的事件
+struct list_head rdlist;
+...
 }
 每一个epoll对象都有一个独立的eventpoll结构体，用于存放通过epoll_ctl方法向epoll对象中添加进来的事件。这些事件都会挂载在红黑树中，如此，重复添加的事件就可以通过红黑树而高效的识别出来(红黑树的插入时间效率是lgn，其中n为树的高度)。
 
-而所有添加到epoll中的事件都会与设备(网卡)驱动程序建立回调关系，也就是说，当相应的事件发生时会调用这个回调方法。这个回调方法在内核中叫ep_poll_callback,它会将发生的事件添加到rdlist双链表中。
-2. int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；
+而所有添加到epoll中的事件都会与设备(网卡)驱动程序建立回调关系，也就是说，当相应的事件发生时会调用这个回调方法。这个回调方法在内核中叫ep_poll_callback,它会将发生的事件添加到rdlist双链表中。2. int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；
 
 函数是对指定描述符fd执行op操作。
 
@@ -463,44 +461,45 @@ int select (int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct 
 select 函数监视的文件描述符分3类，分别是readfds、writefds、和exceptfds。调用后select函数会阻塞，直到有描述符就绪（有数据 可读、可写、或者有except），或者超时（timeout指定等待时间，如果立即返回设为null即可），函数返回。当select函数返回后，可以 通过遍历fdset，来找到就绪的描述符。
 
 优点：
-        select目前几乎在所有的平台(POSIX)上支持，其良好跨平台支持也是它的一个优点。
+select目前几乎在所有的平台(POSIX)上支持，其良好跨平台支持也是它的一个优点。
 缺点：
-        1、单个进程能够监视的文件描述符的数量存在最大限制，它由FD_SETSIZE设置，默认值是1024。可以通过修改宏定义甚至重新编译内核的方式提升这一限制，但是这样也会造成效率的降低。一般来说这个数目和系统内存关系很大。32位机默认是1024个。64位机默认是2048.
-        2、fd集合在内核被置位过，与传入的fd集合不同，不可重用。重复进行FD_ZERO(&amp;rset); FD_SET(fds[i],&amp;rset);操作
-        3、每次调⽤用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大。
-        4、每次调用select都需要在内核遍历传递进来的所有fd标志位，O(n)的时间复杂度，这个开销在fd很多时也很大。
+1、单个进程能够监视的文件描述符的数量存在最大限制，它由FD_SETSIZE设置，默认值是1024。可以通过修改宏定义甚至重新编译内核的方式提升这一限制，但是这样也会造成效率的降低。一般来说这个数目和系统内存关系很大。32位机默认是1024个。64位机默认是2048.
+2、fd集合在内核被置位过，与传入的fd集合不同，不可重用。重复进行FD_ZERO(&amp;rset); FD_SET(fds[i],&amp;rset);操作
+3、每次调⽤用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大。
+4、每次调用select都需要在内核遍历传递进来的所有fd标志位，O(n)的时间复杂度，这个开销在fd很多时也很大。
 
-int poll (struct pollfd *fds, unsigned int nfds, int timeout);
+int poll (struct pollfd _fds, unsigned int nfds, int timeout);
 不同与select使用三个位图bitmap(bit数组)来表示三个fdset的方式，poll使用一个 pollfd的指针实现。
 struct pollfd {
-    int fd;             &#47;* file descriptor *&#47;
-    &#47;&#47;读 POLLIN; 写POLLOUT;
-    short events;   &#47;* requested events to watch 要监视的event*&#47;
-    short revents;  &#47;* returned events witnessed 发生的event*&#47;
+int fd; &#47;_ file descriptor _&#47;
+&#47;&#47;读 POLLIN; 写POLLOUT;
+short events; &#47;_ requested events to watch 要监视的event*&#47;
+short revents; &#47;* returned events witnessed 发生的event*&#47;
 };
 优点：
-        1、poll用pollfd数组代替了bitmap，没有最大数量限制。（解决select缺点1）
-        2、利用结构体pollfd，每次置位revents字段，每次只需恢复revents即可。pollfd可重用。（解决select缺点2）
+1、poll用pollfd数组代替了bitmap，没有最大数量限制。（解决select缺点1）
+2、利用结构体pollfd，每次置位revents字段，每次只需恢复revents即可。pollfd可重用。（解决select缺点2）
 缺点：
-        1、每次调⽤用poll，都需要把pollfd数组从用户态拷贝到内核态，这个开销在fd很多时会很大。（同select缺点3）
-        2、和select函数一样，poll返回后，需要轮询pollfd来获取就绪的描述符。事实上，同时连接的大量客户端在一时刻可能只有很少的处于就绪状态，因此随着监视的描述符数量的增长，其效率也会线性下降。（同select缺点4）</p>2021-08-17</li><br/><li><span>可怜大灰狼</span> 👍（7） 💬（0）<p>poll相比select性能上变化不大，反而select可以运行在更多的系统上，兼容性更好。但是我记得rewrite aof的时候会用到poll。所以特意翻了下代码。aof.c中rewriteAppendOnlyFile方法调用了aeWait，aeWait里通过poll来完成阻塞时间。</p>2021-08-15</li><br/><li><span>曾轼麟</span> 👍（5） 💬（0）<p>首先回答老师的问题：为什么Redis没有使用poll这种机制？
+1、每次调⽤用poll，都需要把pollfd数组从用户态拷贝到内核态，这个开销在fd很多时会很大。（同select缺点3）
+2、和select函数一样，poll返回后，需要轮询pollfd来获取就绪的描述符。事实上，同时连接的大量客户端在一时刻可能只有很少的处于就绪状态，因此随着监视的描述符数量的增长，其效率也会线性下降。（同select缺点4）</p>2021-08-17</li><br/><li><span>可怜大灰狼</span> 👍（7） 💬（0）<p>poll相比select性能上变化不大，反而select可以运行在更多的系统上，兼容性更好。但是我记得rewrite aof的时候会用到poll。所以特意翻了下代码。aof.c中rewriteAppendOnlyFile方法调用了aeWait，aeWait里通过poll来完成阻塞时间。</p>2021-08-15</li><br/><li><span>曾轼麟</span> 👍（5） 💬（0）<p>首先回答老师的问题：为什么Redis没有使用poll这种机制？
 select 和 poll其实本质上没有太大的区别（二选一就好了，而select对windows较友好），poll的特点就是突破了select的最大套接字上限的问题，所以poll本身和select一样会存在，遍历所有套接字列表的情况，而如果Redis当前存在大量无效或者空闲的连接，这时候每次都遍历就会带来一定的开销了，而epoll可以直接返回已经触发事件（活跃）的套接字，避免了循环带来的开销。
 
 总结：
 今天老师主要和我们介绍了，Redis在IO多路复用的实现和设计思路。我回到源码阅读后大概整理了一下：
-	1、redis为了满足各种系统实现了多套IO多路复用，分别有：epoll，select，evport，kqueue
-	2、redis在IO多路复用的代码实现进行了抽象，通过同一实现了aeApiState，aeApiCreate，aeApiResize，aeApiFree等等方法（类比接口）实现了多套IO复用，方便在编译期间切换（文件：ae_epoll.c，ae_evport.c，ae_kqueue.c，ae_select.c）
-	3、在前面的文章中提到Redis启动的时候，在initServer方法中注册了acceptTcpHandler方法，用于处理连接事件，创建完成连接后交给对应IO多路复用
-	4、通过aeApiCreate方法创建对应的IO多路复用，在创建aeEventLoop中创建，然后开始接受处理对应的事件
+1、redis为了满足各种系统实现了多套IO多路复用，分别有：epoll，select，evport，kqueue
+2、redis在IO多路复用的代码实现进行了抽象，通过同一实现了aeApiState，aeApiCreate，aeApiResize，aeApiFree等等方法（类比接口）实现了多套IO复用，方便在编译期间切换（文件：ae_epoll.c，ae_evport.c，ae_kqueue.c，ae_select.c）
+3、在前面的文章中提到Redis启动的时候，在initServer方法中注册了acceptTcpHandler方法，用于处理连接事件，创建完成连接后交给对应IO多路复用
+4、通过aeApiCreate方法创建对应的IO多路复用，在创建aeEventLoop中创建，然后开始接受处理对应的事件
 
 此外Redis在整个IO多路复用上的实现，预留了很大的灵活空间，实现了类似java接口的效果，这点值得我们学习，能灵活的切换不同的IO复用的方式，并且也方便拓展新的IO复用方式。</p>2021-08-18</li><br/><li><span>lei</span> 👍（2） 💬（0）<p>JDK 里也有 select() 方法，但是底层它是基于 epoll 实现。
 
 select 函数将当前进程轮流加入每个 fd 对应设备的等待队列去询问该 fd 有无可读&#47;写事件。Linux 的开发者想到，找个“代理”的回调函数代替当前进程，去加入 fd 对应设备的等待队列，让这个代理的回调函数去等待设备就绪，当有设备就绪就将自己唤醒，然后该回调函数就把这个设备的 fd 放到一个就绪队列，同时通知可能在等待的轮询进程来这个就绪队列里取已经就绪的 fd。当前轮询的进程不需要遍历整个被侦听的 fd 集合。
 
 简单说：
-* epoll 将用户关心的 fd 放到了 Linux 内核里的一个事件表中，而不是像 select&#47;poll 函数那样，每次调用都需要复制 fd 到内核。内核将持久维护加入的 fd，减少了内核和用户空间复制数据的性能开销。
-* 当一个 fd 的事件发生（比如说读事件），epoll 机制无须遍历整个被侦听的 fd 集，只要遍历那些被内核 I&#47;O 事件异步唤醒而加入就绪队列的 fd 集合，减少了无用功。
-* epoll 机制支持的最大 fd 上限远远大于 1024，在1GB内存的机器上是 10 万左右，具体数目可以 cat&#47;proc&#47;sys&#47;fs&#47;file-max 查看。
+
+- epoll 将用户关心的 fd 放到了 Linux 内核里的一个事件表中，而不是像 select&#47;poll 函数那样，每次调用都需要复制 fd 到内核。内核将持久维护加入的 fd，减少了内核和用户空间复制数据的性能开销。
+- 当一个 fd 的事件发生（比如说读事件），epoll 机制无须遍历整个被侦听的 fd 集，只要遍历那些被内核 I&#47;O 事件异步唤醒而加入就绪队列的 fd 集合，减少了无用功。
+- epoll 机制支持的最大 fd 上限远远大于 1024，在1GB内存的机器上是 10 万左右，具体数目可以 cat&#47;proc&#47;sys&#47;fs&#47;file-max 查看。
 
 epoll缺点：
 epoll每次只遍历活跃的 fd (如果是 LT，也会遍历先前活跃的 fd)，在活跃fd较少的情况下就会很有优势，如果大部分fd都是活跃的，epoll的效率可能还不如 select&#47;poll。

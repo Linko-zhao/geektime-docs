@@ -176,6 +176,7 @@
 通过今天的学习，希望你能深刻理解企业级的发布生产流程，感受到企业中的安全生产规范，并且能举一反三，因地制宜设计和实现属于自己的项目的发布流程。我们下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/27-28)
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-29</li><br/>
 </ul>

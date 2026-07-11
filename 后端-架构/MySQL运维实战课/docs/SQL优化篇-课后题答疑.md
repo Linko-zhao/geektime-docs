@@ -163,8 +163,8 @@ create table t_business(
 一种方法是使用下面这种写法，‘id1’, ‘id2’,'id3’是上一批数据中的最后一条记录。不过这么写MySQL好像使用了全表扫描。
 
 ```plain
-select * 
-from t_business 
+select *
+from t_business
 where (id1, id2, id3) > ('id1', 'id2', 'id3')
 order by id1, id2, id3
 limit 1000
@@ -173,10 +173,10 @@ limit 1000
 另一种方法是使用下面这种写法。
 
 ```plain
-select * 
+select *
 from t_business
-where (id1 > 'id1') 
-or (id1 = 'id1' and id2 > 'id2') 
+where (id1 > 'id1')
+or (id1 = 'id1' and id2 > 'id2')
 or (id1 = 'id1' and id2 = 'id2' and id3 > 'id3')
 order by id1, id2, id3
 limit 1000
@@ -191,17 +191,17 @@ limit 1000
 ```plain
 select count(*)
 from t_order_detail
-where seller_id = ? 
-and order_status in (?) 
-and refund_status in(?) 
+where seller_id = ?
+and order_status in (?)
+and refund_status in(?)
 and is_deleted=0;
 
 select t2.* from (
   select id
   from t_order_detail
-  where seller_id = ? 
-  and order_status in (?) 
-  and refund_status in(?) 
+  where seller_id = ?
+  and order_status in (?)
+  and refund_status in(?)
   and is_deleted=0
   order by create_time
 limit M, N) t1 straight_join t_order_detail t2
@@ -263,12 +263,12 @@ mysql> show indexes from t_jointab;
 我们来看一下这个SQL的执行计划，使用了嵌套循环。
 
 ```plain
-mysql> explain format=tree 
-    select count(*) 
-    from t_jointab t1, t_jointab t2 
+mysql> explain format=tree
+    select count(*)
+    from t_jointab t1, t_jointab t2
     where t1.a = t2.a and t1.b = t2.b\G
 *************************** 1. row ***************************
-EXPLAIN: 
+EXPLAIN:
 -> Aggregate: count(0)  (cost=5079.75 rows=1)
     -> Nested loop inner join  (cost=4221.75 rows=8580)
         -> Table scan on t1  (cost=1218.75 rows=8580)
@@ -280,7 +280,7 @@ EXPLAIN:
 
 ```plain
 mysql> select count(*)
-   from t_jointab t1, t_jointab t2 
+   from t_jointab t1, t_jointab t2
    where t1.a = t2.a and t1.b = t2.b;
 +----------+
 | count(*) |
@@ -331,11 +331,11 @@ EXPLAIN: -> Aggregate: count(0)  (cost=4307.55 rows=1)
 ```
 
 ```plain
-mysql>explain format=tree  select count(*)     
-  from t_jointab t1 ignore index(idx_a)  , t_jointab t2 ignore index(idx_a)  
+mysql>explain format=tree  select count(*)
+  from t_jointab t1 ignore index(idx_a)  , t_jointab t2 ignore index(idx_a)
   where t1.a = t2.a and t1.b = t2.b\G
 *************************** 1. row ***************************
-EXPLAIN: 
+EXPLAIN:
 -> Aggregate: count(0)  (cost=7364171.96 rows=1)
     -> Inner hash join (t2.b = t1.b), (t2.a = t1.a)  (cost=7363313.96 rows=8580)
         -> Table scan on t2  (cost=0.05 rows=8580)
@@ -354,7 +354,7 @@ EXPLAIN:
 ```plain
 mysql> select t1.item_id, sum(t1.sold) as sold
 from stat_item_detail t1, (
-  select distinct item_id 
+  select distinct item_id
   from stat_item_detail t2
   where t2.gmt_create >= '2026-04-26 10:30:00') t22
 where t1.item_id = t22.item_id
@@ -421,7 +421,7 @@ select * from tab force index(idx_x) where id = 10
 比如下面这个查询，表tab上有索引idx\_abc(a,b,c)。虽然表中的所有记录都满足a &gt;=0的条件，这种情况下走全表扫描效率更高，但是优化器还是会使用idx\_abc的range访问路径。
 
 ```plain
-select * from tab force index(idx_abc) where a >=0 
+select * from tab force index(idx_abc) where a >=0
 ```
 
 因此使用force index有几点需要注意。
@@ -437,7 +437,7 @@ select * from tab force index(idx_abc) where a >=0
 问题：下面这类SQL按多个表的字段来排序，请分析下这么排序，对SQL性能的影响是什么？如果只使用一个表的字段来排序，性能上会有什么区别吗？
 
 ```plain
-select * 
+select *
 from t1, t2, t3
 where t1.c1 = t2.c1
 and t2.c2 = t3.c3
@@ -464,11 +464,11 @@ mysql> show indexes from tab;
 如果排序字段都来自于同一个表，可以先对这个表进行排序，然后再连接到另外一个表。
 
 ```plain
-mysql> explain format=tree 
-  select * 
-  from tab t1, tab t2 
-  where t1.id = t2.id 
-  order by t1.b, t1.c 
+mysql> explain format=tree
+  select *
+  from tab t1, tab t2
+  where t1.id = t2.id
+  order by t1.b, t1.c
   limit 10\G
 *************************** 1. row ***************************
 EXPLAIN: -> Limit: 10 row(s)  (cost=12089.17 rows=10)
@@ -481,10 +481,10 @@ EXPLAIN: -> Limit: 10 row(s)  (cost=12089.17 rows=10)
 如果排序字段来自不同的表，需要先进行表连接，数据写到临时表，然后再对临时表进行排序。
 
 ```plain
-mysql> explain format=tree 
-  select * 
-  from tab t1, tab t2 
-  where t1.id = t2.id 
+mysql> explain format=tree
+  select *
+  from tab t1, tab t2
+  where t1.id = t2.id
   order by t1.b, t2.c
   limit 10\G
 *************************** 1. row ***************************
@@ -517,6 +517,7 @@ EXPLAIN: -> Limit: 10 row(s)
   }
 }
 ```
+
 <div><strong>精选留言（1）</strong></div><ul>
 <li><span>Geek_9ius3m</span> 👍（0） 💬（1）<p>请问老师，是什么导致了数据库CPU居高不下呢？学了您的课程还是没有搞清楚。</p>2025-01-13</li><br/>
 </ul>

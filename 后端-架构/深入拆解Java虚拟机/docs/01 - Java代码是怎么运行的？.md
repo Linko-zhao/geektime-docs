@@ -17,7 +17,7 @@
 0x00:  55                    push   rbp
 0x01:  48 89 e5              mov    rbp,rsp
 0x04:  48 83 ec 10           sub    rsp,0x10
-0x08:  48 8d 3d 3b 00 00 00  lea    rdi,[rip+0x3b] 
+0x08:  48 8d 3d 3b 00 00 00  lea    rdi,[rip+0x3b]
                                     ; 加载"Hello, World!\n"
 0x0f:  c7 45 fc 00 00 00 00  mov    DWORD PTR [rbp-0x4],0x0
 0x16:  b0 00                 mov    al,0x0
@@ -149,11 +149,11 @@ $ java Foo
 \[2]: [https://wiki.openjdk.java.net/display/CodeTools/asmtools](https://wiki.openjdk.java.net/display/CodeTools/asmtools)
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>jiaobuchongจุ๊บ</span> 👍（97） 💬（1）<p>对老师写的那段 awk 不懂得可参考：
-https:&#47;&#47;blog.csdn.net&#47;jiaobuchong&#47;article&#47;details&#47;83037467</p>2018-10-14</li><br/><li><span>小名叫大明</span> 👍（49） 💬（5）<p>受益匪浅，多谢老师。 
+https:&#47;&#47;blog.csdn.net&#47;jiaobuchong&#47;article&#47;details&#47;83037467</p>2018-10-14</li><br/><li><span>小名叫大明</span> 👍（49） 💬（5）<p>受益匪浅，多谢老师。
 
-请教老师一个问题，网上我没有搜到。 
+请教老师一个问题，网上我没有搜到。
 
-服务器线程数爆满，使用jstack打印线程堆栈信息，想知道是哪类线程数太多，但是堆栈里全是一样的信息且没有任何关键信息，是哪个方法创建的，以及哪个线程池的都看不到。 
+服务器线程数爆满，使用jstack打印线程堆栈信息，想知道是哪类线程数太多，但是堆栈里全是一样的信息且没有任何关键信息，是哪个方法创建的，以及哪个线程池的都看不到。
 
 如何更改打印线程堆栈信息的代码（动态）让其打印线程池信息呢？</p>2018-07-26</li><br/><li><span>曲东方</span> 👍（430） 💬（10）<p>jvm把boolean当做int来处理
 
@@ -164,7 +164,6 @@ awk把stackframe中的flag改为iconst_2
 if（flag）比较时ifeq指令做是否为零判断，常数2仍为true，打印输出
 
 if（true == flag）比较时if_cmpne做整数比较，iconst_1是否等于flag，比较失败，不再打印输出
-
 
 </p>2018-07-20</li><br/><li><span>novembersky</span> 👍（150） 💬（7）<p>文中提到虚拟机会把部分热点代码编译成机器码，我有个疑问，为什么不把java代码全部编译成机器码？很多服务端应用发布频率不会太频繁，但是对运行时的性能和吞吐量要求较高。如果发布或启动时多花点时间编译，能够带来运行时的持久性能收益，不是很合适么？</p>2018-07-20</li><br/><li><span>钱</span> 👍（53） 💬（1）<p>1:为什么使用JVM？
 1-1:可以轻松实现Java代码的跨平台执行

@@ -94,7 +94,7 @@ GET http://<host>:<port>/get/gvr?resource=<资源名称>
 .
 |-- pkg
 | |-- config
-| | |-- k8sconfig.go 
+| | |-- k8sconfig.go
 | |-- controllers
 | | |-- resourceCtl.go
 | |-- services
@@ -146,13 +146,13 @@ func (r *ResourceService) mappingFor(resourceOrKindArg string, restMapper *meta.
         gvk := groupKind.WithVersion("")
         fullySpecifiedGVK = &gvk
     }
-  
+
     if !fullySpecifiedGVK.Empty() {
         if mapping, err := (*restMapper).RESTMapping(fullySpecifiedGVK.GroupKind(), fullySpecifiedGVK.Version); err == nil {
             return mapping, nil
         }
     }
-  
+
     mapping, err := (*restMapper).RESTMapping(groupKind, gvk.Version)
     if err != nil {
         if meta.IsNoMatchError(err) {
@@ -160,7 +160,7 @@ func (r *ResourceService) mappingFor(resourceOrKindArg string, restMapper *meta.
         }
         return nil, err
     }
-  
+
     return mapping, nil
 }
 ```

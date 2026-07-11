@@ -21,10 +21,10 @@ Worker Thread模式可以类比现实世界里车间的工作模式：车间里�
 ```
 ExecutorService es = Executors
   .newFixedThreadPool(500);
-final ServerSocketChannel ssc = 
+final ServerSocketChannel ssc =
   ServerSocketChannel.open().bind(
     new InetSocketAddress(8080));
-//处理请求    
+//处理请求
 try {
   while (true) {
     // 接收请求
@@ -39,7 +39,7 @@ try {
         //模拟处理请求
         Thread.sleep(2000);
         // 写Socket
-        ByteBuffer wb = 
+        ByteBuffer wb =
           (ByteBuffer)rb.flip();
         sc.write(wb);
         // 关闭Socket
@@ -52,7 +52,7 @@ try {
 } finally {
   ssc.close();
   es.shutdown();
-}   
+}
 ```
 
 ## 正确地创建线程池
@@ -95,13 +95,13 @@ ExecutorService es = new ThreadPoolExecutor(
 //L1、L2阶段共用的线程池
 ExecutorService es = Executors.
   newFixedThreadPool(2);
-//L1阶段的闭锁    
+//L1阶段的闭锁
 CountDownLatch l1=new CountDownLatch(2);
 for (int i=0; i<2; i++){
   System.out.println("L1");
   //执行L1阶段任务
   es.execute(()->{
-    //L2阶段的闭锁 
+    //L2阶段的闭锁
     CountDownLatch l2=new CountDownLatch(2);
     //执行L2阶段子任务
     for (int j=0; j<2; j++){
@@ -171,18 +171,18 @@ pool.submit(() -> {
 4. 在第二次submit时使用了.get()方法，这里会一直等到线程返回执行结果；
 
 5. 由于两次submit是嵌套执行的，并且此时线程池中也没有空闲线程，所以第二次submit的任务永远不会被执行，.get()方法会就被永远阻塞，从而导致第一次submit的线程也被永远阻塞。</p>2022-03-18</li><br/><li><span>zero</span> 👍（15） 💬（1）<p>感觉这程序会调用栈内存溢出，这段代码相当于无限的递归调用啊。不知道理解的对不对，请老师指点。</p>2019-05-18</li><br/><li><span>木刻</span> 👍（9） 💬（1）<p>希望老师能开一栏专门讲一讲Linux下多线程并发情况下程序性能的排查和调优。谢谢老师</p>2019-05-17</li><br/><li><span>ack</span> 👍（6） 💬（1）<p>老师，请教个问题，线程死锁那个代码，是活锁吗，思考题我也认为是活锁</p>2019-05-16</li><br/><li><span>Mr_杨</span> 👍（2） 💬（1）<p>老师请教个问题，如果不同业务用不同线程池，保证不了线程数量，会带来并发线程过大，如何控制频繁上下文切换的问题</p>2019-11-07</li><br/><li><span>王成</span> 👍（1） 💬（1）<p>最近工作中遇到一个关于线程池的问题，莫名其妙的线程就不在执行
-问题的原因是
-每个线程都会去请求一次http，但是时间长了会出现阻塞现象（http工具类写的有点问题）
-最终解决方案，除了优化工具类，还给每一个线程设置了超时时间</p>2021-07-07</li><br/><li><span>张申傲</span> 👍（1） 💬（1）<p>越来越发现，软件领域中的很多问题，都可以向现实世界寻求答案。</p>2021-03-22</li><br/><li><span>Monday</span> 👍（0） 💬（3）<p>本篇就是一个主题，java创建线程池，并特别注意
-1、生产中拒绝使用Executors提供的初始化线程池的方法（因为使用无解队列）
-2、生产环境应根据业务自定义拒绝策略</p>2020-12-20</li><br/><li><span>FH</span> 👍（0） 💬（1）<p>老师有个问题请教一下，线程池不应该是项目启动时加载或者懒加载模式吗，但是看示例代码都是调用业务代码时才去创建ExecutorService，这样合理吗？</p>2020-07-15</li><br/><li><span>QQ怪</span> 👍（0） 💬（1）<p>老师，有个疑问，想问下线程池该什么时候销毁?</p>2019-05-16</li><br/><li><span>linqw</span> 👍（23） 💬（2）<p>newSingleThreadExecutor线程池只有单个线程，先将外部线程提交给线程池，外部线程等待内部线程执行完成，但由于线程池只有单线程，导致内部线程一直没有执行的机会，相当于内部线程需要线程池的资源，外部线程需要内部线程的结果，导致死锁。</p>2019-05-26</li><br/><li><span>Geek_0quh3e</span> 👍（6） 💬（1）<p>原始的workerThread模式包含三种角色：工人、传送带、产品，
-传送带中维护一个productionsQueue以及最大的产品数量（为了防止产品无限积压）,
-在传送带初始化时，创建了若干个worker（线程），worker不断从传送带取产品进行加工，
-当传送带中无产品时，worker线程被挂起等待唤醒，当有新的产品加入到传送带中时，挂起的worker会被唤醒，取产品加工。
-当上游线程Thread往传送带中加入产品时，如果productionsQueue到达最大产品数量时，Thread会被挂起。
-当有worker线程取出产品后，会唤醒阻塞的线程Thread(当然这里也有可能唤醒worker)
-线程池只是workerThread的一种实现，那么线程池中创建的Thread就是工人，线程池本身就是传送带，产品就是提交到线程池中的Runnable，
-而在线程池中的阻塞队列就相当于productionsQueue，请问老师，我这样理解是否正确？
+   问题的原因是
+   每个线程都会去请求一次http，但是时间长了会出现阻塞现象（http工具类写的有点问题）
+   最终解决方案，除了优化工具类，还给每一个线程设置了超时时间</p>2021-07-07</li><br/><li><span>张申傲</span> 👍（1） 💬（1）<p>越来越发现，软件领域中的很多问题，都可以向现实世界寻求答案。</p>2021-03-22</li><br/><li><span>Monday</span> 👍（0） 💬（3）<p>本篇就是一个主题，java创建线程池，并特别注意
+   1、生产中拒绝使用Executors提供的初始化线程池的方法（因为使用无解队列）
+   2、生产环境应根据业务自定义拒绝策略</p>2020-12-20</li><br/><li><span>FH</span> 👍（0） 💬（1）<p>老师有个问题请教一下，线程池不应该是项目启动时加载或者懒加载模式吗，但是看示例代码都是调用业务代码时才去创建ExecutorService，这样合理吗？</p>2020-07-15</li><br/><li><span>QQ怪</span> 👍（0） 💬（1）<p>老师，有个疑问，想问下线程池该什么时候销毁?</p>2019-05-16</li><br/><li><span>linqw</span> 👍（23） 💬（2）<p>newSingleThreadExecutor线程池只有单个线程，先将外部线程提交给线程池，外部线程等待内部线程执行完成，但由于线程池只有单线程，导致内部线程一直没有执行的机会，相当于内部线程需要线程池的资源，外部线程需要内部线程的结果，导致死锁。</p>2019-05-26</li><br/><li><span>Geek_0quh3e</span> 👍（6） 💬（1）<p>原始的workerThread模式包含三种角色：工人、传送带、产品，
+   传送带中维护一个productionsQueue以及最大的产品数量（为了防止产品无限积压）,
+   在传送带初始化时，创建了若干个worker（线程），worker不断从传送带取产品进行加工，
+   当传送带中无产品时，worker线程被挂起等待唤醒，当有新的产品加入到传送带中时，挂起的worker会被唤醒，取产品加工。
+   当上游线程Thread往传送带中加入产品时，如果productionsQueue到达最大产品数量时，Thread会被挂起。
+   当有worker线程取出产品后，会唤醒阻塞的线程Thread(当然这里也有可能唤醒worker)
+   线程池只是workerThread的一种实现，那么线程池中创建的Thread就是工人，线程池本身就是传送带，产品就是提交到线程池中的Runnable，
+   而在线程池中的阻塞队列就相当于productionsQueue，请问老师，我这样理解是否正确？
 
  </p>2019-05-17</li><br/><li><span>扬～</span> 👍（2） 💬（0）<p>可以出个线程池异常处理的方案吗</p>2019-05-18</li><br/>
 </ul>

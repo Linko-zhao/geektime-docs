@@ -131,10 +131,10 @@ Consul提供了[多种机制给你注册健康检查](https://learn.hashicorp.co
 
 ```
 {
-  ​"check": 
+  ​"check":
     ​"id": "mem-util"
     ​"name": "Memory utilization"
-    ​"args": 
+    ​"args":
       ​"/bin/sh"
       ​"-c"
       ​"/usr/bin/free | awk '/Mem/{printf($3/$2*100)}' | awk '{ print($0); if($1 > 70) exit 1;}'

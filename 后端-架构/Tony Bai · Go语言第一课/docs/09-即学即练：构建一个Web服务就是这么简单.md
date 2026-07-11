@@ -32,9 +32,9 @@ $go mod init simple-http-server
 
 ```go
   package main
- 
+
   import "net/http"
-  
+
   func main() {
       http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
           w.Write([]byte("hello, world"))
@@ -117,11 +117,11 @@ go: creating new go.mod: module bookstore
 ├── go.sum
 ├── internal/              // 存放项目内部包的目录
 │   └── store/
-│       └── memstore.go     
+│       └── memstore.go
 ├── server/                // HTTP服务器模块
 │   ├── middleware/
 │   │   └── middleware.go
-│   └── server.go          
+│   └── server.go
 └── store/                 // 图书数据存储模块
     ├── factory/
     │   └── factory.go
@@ -140,7 +140,7 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
 
 ```go
   package main
- 
+
   import (
       _ "bookstore/internal/store"
       "bookstore/server"
@@ -152,25 +152,25 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
       "syscall"
       "time"
  )
- 
+
  func main() {
      s, err := factory.New("mem") // 创建图书数据存储模块实例
      if err != nil {
          panic(err)
      }
- 
+
      srv := server.NewBookStoreServer(":8080", s) // 创建http服务实例
- 
+
      errChan, err := srv.ListenAndServe() // 运行http服务
      if err != nil {
          log.Println("web server start failed:", err)
          return
      }
      log.Println("web server start ok")
- 
+
      c := make(chan os.Signal, 1)
      signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
- 
+
      select { // 监视来自errChan以及c的事件
      case err = <-errChan:
          log.Println("web server run failed:", err)
@@ -181,7 +181,7 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
          defer cf()
          err = srv.Shutdown(ctx) // 优雅关闭http服务实例
      }
- 
+
      if err != nil {
          log.Println("bookstore program exit error:", err)
          return
@@ -217,7 +217,7 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
      Authors []string `json:"authors"` // 图书作者
      Press   string   `json:"press"`   // 出版社
  }
- 
+
  type Store interface {
      Create(*Book) error        // 创建一个新图书条目
      Update(*Book) error        // 更新某图书条目
@@ -238,20 +238,20 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
      providersMu sync.RWMutex
      providers   = make(map[string]store.Store)
  )
- 
+
  func Register(name string, p store.Store) {
      providersMu.Lock()
     defer providersMu.Unlock()
      if p == nil {
          panic("store: Register provider is nil")
      }
- 
+
      if _, dup := providers[name]; dup {
          panic("store: Register called twice for provider " + name)
      }
      providers[name] = p
  }
- 
+
  func New(providerName string) (store.Store, error) {
      providersMu.RLock()
      p, ok := providers[providerName]
@@ -259,7 +259,7 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
      if !ok {
          return nil, fmt.Errorf("store: unknown provider %s", providerName)
      }
- 
+
      return p, nil
  }
 ```
@@ -274,19 +274,19 @@ main包是主要包，为了搞清楚各个模块之间的关系，我在这里�
 // internal/store/memstore.go
 
  package store
-  
+
  import (
      mystore "bookstore/store"
      factory "bookstore/store/factory"
      "sync"
  )
-  
+
  func init() {
      factory.Register("mem", &MemStore{
          books: make(map[string]*mystore.Book),
      })
  }
- 
+
  type MemStore struct {
      sync.RWMutex
      books map[string]*mystore.Book
@@ -341,14 +341,14 @@ HTTP服务模块的职责是**对外提供HTTP API服务，处理来自客户端
              Addr: addr,
          },
      }
- 
+
      router := mux.NewRouter()
      router.HandleFunc("/book", srv.createBookHandler).Methods("POST")
      router.HandleFunc("/book/{id}", srv.updateBookHandler).Methods("POST")
      router.HandleFunc("/book/{id}", srv.getBookHandler).Methods("GET")
      router.HandleFunc("/book", srv.getAllBooksHandler).Methods("GET")
      router.HandleFunc("/book/{id}", srv.delBookHandler).Methods("DELETE")
- 
+
      srv.srv.Handler = middleware.Logging(middleware.Validating(router))
      return srv
  }
@@ -372,7 +372,7 @@ HTTP服务模块的职责是**对外提供HTTP API服务，处理来自客户端
           http.Error(w, err.Error(), http.StatusBadRequest)
           return
       }
-  
+
       if err := bs.s.Create(&book); err != nil {
           http.Error(w, err.Error(), http.StatusBadRequest)
           return
@@ -385,13 +385,13 @@ HTTP服务模块的职责是**对外提供HTTP API服务，处理来自客户端
           http.Error(w, "no id found in request", http.StatusBadRequest)
           return
       }
-  
+
      book, err := bs.s.Get(id)
      if err != nil {
          http.Error(w, err.Error(), http.StatusBadRequest)
          return
      }
- 
+
      response(w, book)
  }
 
@@ -425,7 +425,7 @@ HTTP服务模块的职责是**对外提供HTTP API服务，处理来自客户端
          next.ServeHTTP(w, req)
      })
  }
- 
+
  func Validating(next http.Handler) http.Handler {
      return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
          contentType := req.Header.Get("Content-Type")
@@ -457,7 +457,7 @@ HTTP服务模块的职责是**对外提供HTTP API服务，处理来自客户端
          err = bs.srv.ListenAndServe()
          errChan <- err
      }()
- 
+
      select {
      case err = <-errChan:
          return nil, err
@@ -553,39 +553,41 @@ server.go 用于把路由和接口的方法对接起来</p>2021-11-30</li><br/><
 3. 这门课中的知识和你在另外的一个平台的《改善Go语言编程质量的50个有效实践》的内容重合度大吗？ 精力有限，如果重合度大，就专心看这个就好了。
 
 4. 这门课会讲讲Go写RPC服务方面的知识吗？ 这个在生产中挺常用的。</p>2021-11-02</li><br/><li><span>小明</span> 👍（4） 💬（3）<p>能在gitee 上也放一份吗？github现在已经没那么友好了
+
 </p>2022-03-20</li><br/><li><span>左耳朵东</span> 👍（4） 💬（3）<p>server&#47;server.go 文件中 select 那里，第二个 case 的意思是定时 1 秒后就会触发，从而执行后面的 return，为什么服务没有终止一直在运行呢？麻烦老师解答一下</p>2021-12-03</li><br/><li><span>snow</span> 👍（4） 💬（1）<p>我看这里使用了mux包，我只用过gin包，请问这两个老师更喜欢哪个？以及这里选择mux的原因。</p>2021-11-05</li><br/><li><span>邰洋一</span> 👍（4） 💬（2）<p>老师，采用Restful规范，更新一条图书条目  http方法采用PUT，当然post也是可以的，put book&#47;id，是我太限定自己了吗？</p>2021-11-05</li><br/><li><span>jc9090kkk</span> 👍（4） 💬（5）<p>这节课的项目内容理解起来不困难，但是对于实际的生产项目而言，尤其是对第三方的中间件有依赖的前提下，大都会针对的将配置单独存储为配置文件以方便维护，我想问下老师go项目针对配置文件有什么最佳实践方式吗? 我自己本地写了一个小项目，用的是以下方式来配置MySQL连接的，我总觉得不太优雅，大多项目会根据开发环境的不同选取不同的配置文件作为配置项加载，但是如果通过硬编码的方式添加进去会让项目变得很奇怪。。。
 
 package config
 
 &#47;&#47; GetDBConfig 数据库配置
 func GetDBConfig() map[string]string {
-	&#47;&#47; 初始化数据库配置map
-	dbConfig := make(map[string]string)
+&#47;&#47; 初始化数据库配置map
+dbConfig := make(map[string]string)
 
-	dbConfig[&quot;DB_HOST&quot;] = &quot;127.0.0.1&quot;
-	dbConfig[&quot;DB_PORT&quot;] = &quot;3306&quot;
-	dbConfig[&quot;DB_NAME&quot;] = &quot;test&quot;
-	dbConfig[&quot;DB_USER&quot;] = &quot;root&quot;
-	dbConfig[&quot;DB_PWD&quot;] = &quot;123456&quot;
-	dbConfig[&quot;DB_CHARSET&quot;] = &quot;utf8&quot;
+    dbConfig[&quot;DB_HOST&quot;] = &quot;127.0.0.1&quot;
+    dbConfig[&quot;DB_PORT&quot;] = &quot;3306&quot;
+    dbConfig[&quot;DB_NAME&quot;] = &quot;test&quot;
+    dbConfig[&quot;DB_USER&quot;] = &quot;root&quot;
+    dbConfig[&quot;DB_PWD&quot;] = &quot;123456&quot;
+    dbConfig[&quot;DB_CHARSET&quot;] = &quot;utf8&quot;
 
-	&#47;&#47; 连接池最大连接数
-	dbConfig[&quot;DB_MAX_OPEN_CONNECTS&quot;] = &quot;20&quot;
-	&#47;&#47; 连接池最大空闲数
-	dbConfig[&quot;DB_MAX_IDLE_CONNECTS&quot;] = &quot;10&quot;
-	&#47;&#47; 连接池链接最长生命周期
-	dbConfig[&quot;DB_MAX_LIFETIME_CONNECTS&quot;] = &quot;7200&quot;
+    &#47;&#47; 连接池最大连接数
+    dbConfig[&quot;DB_MAX_OPEN_CONNECTS&quot;] = &quot;20&quot;
+    &#47;&#47; 连接池最大空闲数
+    dbConfig[&quot;DB_MAX_IDLE_CONNECTS&quot;] = &quot;10&quot;
+    &#47;&#47; 连接池链接最长生命周期
+    dbConfig[&quot;DB_MAX_LIFETIME_CONNECTS&quot;] = &quot;7200&quot;
 
-	return dbConfig
+    return dbConfig
+
 }</p>2021-11-01</li><br/><li><span>莫名四下里</span> 👍（3） 💬（3）<p>Tony Bai 老师
-$ go build bookstore&#47;cmd&#47;bookstore&#47;        
+$ go build bookstore&#47;cmd&#47;bookstore&#47;  
 package bookstore&#47;cmd&#47;bookstore is not in GOROOT (&#47;usr&#47;local&#47;go&#47;src&#47;bookstore&#47;cmd&#47;bookstore)
-无法构建   
+无法构建
 
 配置 GOROOT=&quot;&#47;usr&#47;local&#47;go&quot;
-报错  &#47;usr&#47;local&#47;go&#47;src&#47;bookstore&#47;cmd&#47;bookstore</p>2021-11-25</li><br/><li><span>xsgzh</span> 👍（3） 💬（3）<p>老师请教个文件
+报错 &#47;usr&#47;local&#47;go&#47;src&#47;bookstore&#47;cmd&#47;bookstore</p>2021-11-25</li><br/><li><span>xsgzh</span> 👍（3） 💬（3）<p>老师请教个文件
 store&#47;memstore.go文件中第29 - 30行，直接赋值不可以么，ms.books[book.id] = book?
-	nBook := *book
-	ms.books[book.Id] = &amp;nBook
+nBook := *book
+ms.books[book.Id] = &amp;nBook
 </p>2021-11-08</li><br/><li><span>小明</span> 👍（2） 💬（1）<p>看了两遍代码，能跑起来，但是只吃透了百分之三十，好着急啊  memstore.go   没看懂</p>2022-07-28</li><br/>
 </ul>

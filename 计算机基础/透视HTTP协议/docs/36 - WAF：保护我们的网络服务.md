@@ -68,7 +68,7 @@ map $remote_addr $blocked {
 
 
 if ($blocked) {
-    return 403 "you are blocked.";  
+    return 403 "you are blocked.";
 }
 ```
 
@@ -78,8 +78,8 @@ Nginx的配置文件只能静态加载，改名单必须重启，比较麻烦。
 local ip_addr = ngx.var.remote_addr
 
 local rds = redis:new()
-if rds:get(ip_addr) == 1 then 
-    ngx.exit(403) 
+if rds:get(ip_addr) == 1 then
+    ngx.exit(403)
 end
 ```
 
@@ -174,5 +174,5 @@ DDoS、代码注入本身是遵循HTTPS协议的，它的攻击面不在HTTPS协
 
 你还知道有哪些手段能够抵御网络攻击吗？
 我还知道有CSP内容安全策略，CSRF防御，SYN cookie，流速控制等手段。</p>2019-08-19</li><br/><li><span>我行我素</span> 👍（8） 💬（1）<p>https是做数据加密防止泄露，而ddos是以数量取胜（伪装成正常请求），</p>2019-08-19</li><br/><li><span>Maske</span> 👍（5） 💬（1）<p>https是对数据的进行加密传输，并且保证了数据的有效性，而不关心数据本身是什么，所以不能防止sql注入。DDos本身也是符合http规范的请求，所以https也无法将其识别为攻击。</p>2020-06-27</li><br/><li><span>佳佳大魔王</span> 👍（4） 💬（1）<p>问题一，我觉得是因为https只提供了对通信过程中的数据进行加密，如果黑客用大量资源充当客户端，对服务器进行大量请求，https是无法阻止的，代码注入也是一样</p>2019-08-19</li><br/><li><span>snake</span> 👍（2） 💬（1）<p>那能否用waf来做https流量的入侵检测和防御呢？https的密文的，waf应该看不到吧？</p>2020-06-23</li><br/><li><span>二星球</span> 👍（2） 💬（1）<p>老师好，向您请教最近遇到的一个问题，APP应用通过http长链接向后台发送请求，中间有几个代理服务器，偶尔发现app发送的请求返回的状态码是正常的200，但是没有返回值，没有出错，后台也没有收到请求，这是什么原因，该如何解决呢？</p>2019-08-19</li><br/><li><span>Aaron</span> 👍（1） 💬（1）<p>这节课内容很重要呀，但有种只讲了冰山一角的感觉。老师能不能自己系统回答一下『你还知道有哪些手段能够抵御网络攻击吗？』呢？好期待官方答案~</p>2020-06-02</li><br/><li><span>钱</span> 👍（1） 💬（1）<p>HTTPS 为什么不能防御 DDoS、代码注入等攻击呢？
-因为HTTPS的核心工作是加密解密通过HTTPS传输的内容，保证传输的内容是安全的，至于内容是一个“炸弹”还是一把“匕首”她是管不着的。</p>2020-04-05</li><br/><li><span>dog_brother</span> 👍（0） 💬（1）<p>项目中使用过基于业务的规则引擎，完全自研的；waf应该是规则引擎比较典型的应用了。</p>2021-05-06</li><br/><li><span>fakership</span> 👍（0） 💬（1）<p>老师讲的太干货了 还想着2d看完。。 高估了。。</p>2020-08-16</li><br/><li><span>Geek_dn82ci</span> 👍（0） 💬（1）<p>请问老师如果我的业务接入ddos服务后，是否高防节点只会对请求流量进行4层行为的检查？</p>2020-08-08</li><br/><li><span>张三</span> 👍（0） 💬（1）<p>打卡！</p>2020-04-15</li><br/><li><span> 尿布</span> 👍（1） 💬（0）<p>“CC攻击”（Challenge Collapser）是“DDos”的一种，它使用代理服务器发动攻击</p>2020-09-11</li><br/><li><span>张良</span> 👍（0） 💬（0）<p>测试JS脚本共计	&lt;script&gt;alert(&#39;ok&#39;);&lt;&#47;script&gt;</p>2021-04-11</li><br/>
+因为HTTPS的核心工作是加密解密通过HTTPS传输的内容，保证传输的内容是安全的，至于内容是一个“炸弹”还是一把“匕首”她是管不着的。</p>2020-04-05</li><br/><li><span>dog_brother</span> 👍（0） 💬（1）<p>项目中使用过基于业务的规则引擎，完全自研的；waf应该是规则引擎比较典型的应用了。</p>2021-05-06</li><br/><li><span>fakership</span> 👍（0） 💬（1）<p>老师讲的太干货了 还想着2d看完。。 高估了。。</p>2020-08-16</li><br/><li><span>Geek_dn82ci</span> 👍（0） 💬（1）<p>请问老师如果我的业务接入ddos服务后，是否高防节点只会对请求流量进行4层行为的检查？</p>2020-08-08</li><br/><li><span>张三</span> 👍（0） 💬（1）<p>打卡！</p>2020-04-15</li><br/><li><span> 尿布</span> 👍（1） 💬（0）<p>“CC攻击”（Challenge Collapser）是“DDos”的一种，它使用代理服务器发动攻击</p>2020-09-11</li><br/><li><span>张良</span> 👍（0） 💬（0）<p>测试JS脚本共计 &lt;script&gt;alert(&#39;ok&#39;);&lt;&#47;script&gt;</p>2021-04-11</li><br/>
 </ul>

@@ -273,63 +273,68 @@ iter(tensor_dataloader).next() 是输出迭代器的下一个元素
 data_tensor = torch.randn(10, 3)
 target_tensor = torch.randint(2, (10,)) # 标签是0或1</p>2021-10-22</li><br/><li><span>乐呵的hehe</span> 👍（1） 💬（1）<p>老师，您好，下面这个问题，我也有些疑惑，但是我不在微信群里，您可以在这里再解释一下吗？谢谢！
 -------------------------------------------------------------------
+
 from torch.utils.data import DataLoader
 
 tensor_dataloader = DataLoader(dataset=my_dataset, batch_size=2, shuffle=True,
-                                               num_workers=0)# 进程数, 0表示只有主进程
+num_workers=0)# 进程数, 0表示只有主进程
 
 # 以循环形式输出
-for data, target in tensor_dataloader: 
-    print(data, target)
+
+for data, target in tensor_dataloader:
+print(data, target)
 
 # 输出一个batch
+
 print(&#39;One batch tensor data: &#39;, iter(tensor_dataloader).next())
 
 输出结果：
-tensor([[ 0.7989,  3.1884,  1.2282],
+tensor([[ 0.7989, 3.1884, 1.2282],
 
         [-0.6210, -0.9707,  2.5557]]) tensor([1, 0])
 
-tensor([[-0.8162, -0.5454,  2.1312],
+tensor([[-0.8162, -0.5454, 2.1312],
 
         [ 0.8296, -0.2082,  1.7351]]) tensor([0, 0])
 
-tensor([[ 1.3808,  0.2034,  0.3342],
+tensor([[ 1.3808, 0.2034, 0.3342],
 
         [ 0.4650, -1.1422, -0.4364]]) tensor([1, 1])
 
-tensor([[ 1.0286, -1.1956,  0.4743],
+tensor([[ 1.0286, -1.1956, 0.4743],
 
         [ 3.1708, -0.0568, -1.5444]]) tensor([1, 0])
 
-tensor([[ 0.1358,  1.2954, -0.0674],
+tensor([[ 0.1358, 1.2954, -0.0674],
 
         [-0.7422, -0.2062,  2.4920]]) tensor([0, 0])
 
-One batch tensor data:  [tensor([[ 3.1708, -0.0568, -1.5444],
+One batch tensor data: [tensor([[ 3.1708, -0.0568, -1.5444],
 
         [-0.7422, -0.2062,  2.4920]]), tensor([0, 0])]
 
 迭代器输出的tensor怎么会都不在一个batch里呢？正常情况下，不是应该输出第二个batch里的tensor嘛？</p>2022-04-27</li><br/><li><span>Geek_fc975d</span> 👍（1） 💬（2）<p>为什么我只有__next__函数，而没有next()函数</p>2022-04-07</li><br/><li><span>Swaggy</span> 👍（1） 💬（1）<p>老师好，我现在遇到一个问题，就是同一份代码，我在1.9.1中运行，会因为内存不足Kill掉，我开了htop和nvidia smi查看，一开始内存就直接拉满，下边的虚拟内存提示需要两倍的内存，然后GPU只用了五分之一还会横跳到0。一共300epochs 跑到第97-98epoch就会卡住不动，内存依旧拉满，六个CPU核心恢复正常状态，之前是一直拉满，然后GPU也恢复正常占用。我反复折腾了几次最后都只能强制关机。最后，我把环境换成1.5.1的版本，顺利跑完，只用了四百多秒。因为本身就是一个很简单的lstm网络，然后在新环境中内存占用一半多点，CPU全部拉满，GPU只用了五分之一多点。我想请问老师，我这种情况是为什么，版本区别这么大的吗？我遇到类似情况应该怎么排查，是不是我写的dataset部分有问题，因为本身数据量也不大，以mb计算的，网络更是很简单。对了，电脑配置CPU是i5-9600k，六核十二线程，GPU 2070单卡，内存16g。希望老师能指点迷津，非常感谢</p>2021-10-30</li><br/><li><span>peng</span> 👍（0） 💬（1）<p>老师您好，以下的例子，我调用时会报错，
+
 # 输出一个batch
+
 print(&#39;One batch tensor data: &#39;, iter(tensor_dataloader).next())
 
 报错信息如下，
-AttributeError                            Traceback (most recent call last)
+AttributeError Traceback (most recent call last)
 Cell In[17], line 11
-      8 for data, target in tensor_dataloader: 
-      9     print(data, target)
+8 for data, target in tensor_dataloader:
+9 print(data, target)
 ---&gt; 11 print(&#39;One batch tensor data: &#39;, iter(tensor_dataloader).next())
 
 AttributeError: &#39;_SingleProcessDataLoaderIter&#39; object has no attribute &#39;next&#39;
 把调用改为
-print(&#39;One batch tensor data: &#39;, iter(tensor_dataloader).__next__())
-才可以正常运行，这个是pytorch的版本问题？</p>2024-01-25</li><br/><li><span>Monin</span> 👍（0） 💬（3）<p>老师  你好 目前Pytorch框架跟TensorFlow相比市场应用还多吗？  目前除了这两个还有哪些深度学习框架值得关注和研究的？ </p>2023-08-23</li><br/><li><span>孙新</span> 👍（0） 💬（2）<p>display(mnist_dataset_list[0][0])  这一行没有成功，提示display错误
+print(&#39;One batch tensor data: &#39;, iter(tensor_dataloader).**next**())
+才可以正常运行，这个是pytorch的版本问题？</p>2024-01-25</li><br/><li><span>Monin</span> 👍（0） 💬（3）<p>老师 你好 目前Pytorch框架跟TensorFlow相比市场应用还多吗？ 目前除了这两个还有哪些深度学习框架值得关注和研究的？ </p>2023-08-23</li><br/><li><span>孙新</span> 👍（0） 💬（2）<p>display(mnist_dataset_list[0][0]) 这一行没有成功，提示display错误
 Traceback (most recent call last):
-  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
 NameError: name &#39;display&#39; is not defined
 我用的环境有问题吗？还是说需要什么IDE才能出效果？
-</p>2022-09-02</li><br/><li><span>ACT</span> 👍（0） 💬（1）<p>Dataset</p>2022-07-28</li><br/><li><span>John(易筋)</span> 👍（0） 💬（1）<p>IOPub data rate 超限 解决 
+</p>2022-09-02</li><br/><li><span>ACT</span> 👍（0） 💬（1）<p>Dataset</p>2022-07-28</li><br/><li><span>John(易筋)</span> 👍（0） 💬（1）<p>IOPub data rate 超限 解决
 
 This works for me in Mac and Windows (taken from here):
 

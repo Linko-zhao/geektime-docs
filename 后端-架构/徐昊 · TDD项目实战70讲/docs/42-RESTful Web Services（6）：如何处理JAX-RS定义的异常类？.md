@@ -10,20 +10,22 @@
 任务列表为：
 
 - ResourceServlet
-  
+
   - 将请求派分给对应的资源（Resource），并根据返回的状态、超媒体类型、内容，响应Http请求
-    
+
     - 使用OutboundResponse的status作为Http Response的状态
     - 使用OutboundResponse的headers作为Http Response的Http Headers
     - 通过MessageBodyWriter将OutboundResponse的GenericEntity写回为Body
     - 如果找不到对应的MessageBody，则返回500族错误
+
   - 当资源方法抛出异常时，根据异常影响Http请求
-    
+
     - 如果抛出WebApplicationException，且response不为null，则使用response响应Http
     - 如果抛出WebApplicationException，而response为null，则通过异常的具体类型查找ExceptionMapper，生产response响应Http请求
     - 如果抛出的不是WebApplicationException，则通过异常的具体类型查找ExceptionMapper，生产response响应Http请求
+
 - RuntimeDelegate
-  
+
   - 为MediaType提供HeaderDelegate
   - 为CacheControl提供HeaderDelegate
   - 为Cookie提供HeaderDelegates
@@ -51,27 +53,27 @@ import java.io.IOException;
 public class ResourceServlet extends HttpServlet {
 
     private Runtime runtime;
-    
+
     public ResourceServlet(Runtime runtime) {
         this.runtime = runtime;
     }
-    
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ResourceRouter router = runtime.getResourceRouter();
         Providers providers = runtime.getProviders();
-        
+
         OutboundResponse response = router.dispatch(req, runtime.createResourceContext(req, resp));
-        
+
         resp.setStatus(response.getStatus());
-        
+
         MultivaluedMap<String, Object> headers = response.getHeaders();
         for (String name : headers.keySet())
             for (Object value : headers.get(name)) {
                 RuntimeDelegate.HeaderDelegate headerDelegate = RuntimeDelegate.getInstance().createHeaderDelegate(value.getClass());
                 resp.addHeader(name, headerDelegate.toString(value));
             }
-            
+
         GenericEntity entity = response.getGenericEntity();
         MessageBodyWriter writer = providers.getMessageBodyWriter(entity.getRawType(), entity.getType(), response.getAnnotations(), response.getMediaType());
         writer.writeTo(entity.getEntity(), entity.getRawType(), entity.getType(), response.getAnnotations(), response.getMediaType(),

@@ -155,14 +155,14 @@ socket编程的核心在于服务端，而服务端有着自己一套相对固�
          //... ...
      }
  }
- 
+
  func main() {
      l, err := net.Listen("tcp", ":8888")
      if err != nil {
          fmt.Println("listen error:", err)
          return
      }
- 
+
      for {
          c, err := l.Accept()
          if err != nil {
@@ -189,8 +189,8 @@ bind: address already in use
 当服务程序启动成功后，我们可以通过netstat命令，查看端口的监听情况：
 
 ```plain
-$netstat -an|grep 8888    
-tcp46       0      0  *.8888                 *.*                    LISTEN     
+$netstat -an|grep 8888
+tcp46       0      0  *.8888                 *.*                    LISTEN
 ```
 
 了解了服务端的“套路”后，我们再来看看客户端。
@@ -492,8 +492,8 @@ type conn struct {
 
 // Network file descriptor.
 type netFD struct {
-    pfd poll.FD 
-    
+    pfd poll.FD
+
     // immutable until Close
     family      int
     sotype      int
@@ -501,7 +501,7 @@ type netFD struct {
     net         string
     laddr       Addr
     raddr       Addr
-}  
+}
 
 
 
@@ -517,16 +517,16 @@ netFD中最重要的字段是poll.FD类型的pfd，它用于表示一个网络�
 type FD struct {
     // Lock sysfd and serialize access to Read and Write methods.
     fdmu fdMutex
-    
+
     // System file descriptor. Immutable until Close.
     Sysfd int
-    
+
     // I/O poller.
-    pd pollDesc 
+    pd pollDesc
 
     // Writev cache.
     iovecs *[]syscall.Iovec
-    ... ...    
+    ... ...
 }
 ```
 
@@ -650,15 +650,16 @@ func (fd *FD) Write(p []byte) (int, error) {
 1. 多 goroutine 并发读，如何正确的指定度多少数据呢，给少了，会读不全，被其他 goroutine 读走，给多了，会读取不属于自己的数据吧。
 
 2. 多 goroutine 并发写，如果一次写入一个完整的”业务包“，一般能保证单个业务包的完整
-，如果写超时，会有部分写入问题吗？
-一次写入一个业务包，TCP会从面向数据流，退化到面向业务包码？
-读的一端，为了区分不同goroutine(共用连接，数据不共享)的数据，要采取特殊的读取方式吗，需要以包为单位读取？</p>2022-06-06</li><br/><li><span>bearlu</span> 👍（3） 💬（3）<p>谢谢老师。我跟上了。还特意买了你新出的Go语言精进之路1，2，打算过年继续精进。</p>2022-01-24</li><br/><li><span>Mew151</span> 👍（2） 💬（2）<p>本节课的代码参见：https:&#47;&#47;github.com&#47;dgqypl&#47;tcpprogramming</p>2022-10-10</li><br/><li><span>一打七</span> 👍（2） 💬（1）<p>老师，有个地方想不清楚，请教一下。现在都是长连接复用一个tcp连接，这时服务端读取一个请求的部分数据后异常了，还有一部分数据未读取，这时下一个请求过来了，服务端应该怎么处理上一个请求遗留的那部分数据？因为tcp层面是没有业务语义的，怎么区分这部分数据要不要丢弃。</p>2022-07-06</li><br/><li><span>lesserror</span> 👍（2） 💬（1）<p>以前没接触过socket编程，只是经常看到这个知识点。感谢Tony Bai老师的细致讲解。有几点疑惑，烦请老师解答。
+   ，如果写超时，会有部分写入问题吗？
+   一次写入一个业务包，TCP会从面向数据流，退化到面向业务包码？
+   读的一端，为了区分不同goroutine(共用连接，数据不共享)的数据，要采取特殊的读取方式吗，需要以包为单位读取？</p>2022-06-06</li><br/><li><span>bearlu</span> 👍（3） 💬（3）<p>谢谢老师。我跟上了。还特意买了你新出的Go语言精进之路1，2，打算过年继续精进。</p>2022-01-24</li><br/><li><span>Mew151</span> 👍（2） 💬（2）<p>本节课的代码参见：https:&#47;&#47;github.com&#47;dgqypl&#47;tcpprogramming</p>2022-10-10</li><br/><li><span>一打七</span> 👍（2） 💬（1）<p>老师，有个地方想不清楚，请教一下。现在都是长连接复用一个tcp连接，这时服务端读取一个请求的部分数据后异常了，还有一部分数据未读取，这时下一个请求过来了，服务端应该怎么处理上一个请求遗留的那部分数据？因为tcp层面是没有业务语义的，怎么区分这部分数据要不要丢弃。</p>2022-07-06</li><br/><li><span>lesserror</span> 👍（2） 💬（1）<p>以前没接触过socket编程，只是经常看到这个知识点。感谢Tony Bai老师的细致讲解。有几点疑惑，烦请老师解答。
 
-1. 我们的输入，是一个基于传输层自定义的应用层协议规范。 这里的输入该怎么理解呢？
+3. 我们的输入，是一个基于传输层自定义的应用层协议规范。 这里的输入该怎么理解呢？
 
-2. 在阻塞 I&#47;O 模型下，并等所有数据就绪后，将数据从内核空间拷贝到用户空间，最后系统调用从内核空间返回。为什么不是用户空间返回呢？
+4. 在阻塞 I&#47;O 模型下，并等所有数据就绪后，将数据从内核空间拷贝到用户空间，最后系统调用从内核空间返回。为什么不是用户空间返回呢？
 
-3. 文中的非阻塞 I&#47;O 模型架构图中的：EAGAIN&#47;EWOULDBLOCK 这几个英文单词是什么意思，没查出来。</p>2022-02-17</li><br/><li><span>Calvin</span> 👍（2） 💬（2）<p>老师，文章中“I&#47;O 多路复用框架”的举例中：
-1、libev 的链接点击没反应（是 http:&#47;&#47;software.schmorp.de&#47;pkg&#47;libev.html 这个链接吗？）；
-2、libuv 的链接对应的 github 仓库貌似已经迁移到 https:&#47;&#47;github.com&#47;libuv&#47;libuv 了。</p>2022-01-26</li><br/><li><span>罗杰</span> 👍（2） 💬（3）<p>并发往 socket 中写数据时，需要一次 write 操作完整的写入一个“业务包”，这实现有点难呀，万一只成功写入一部分，这可不能回滚呀。</p>2022-01-24</li><br/><li><span>X</span> 👍（1） 💬（1）<p>能把复杂的东西讲的老少皆宜,各层次人都能看懂，可见基础扎实,内功深厚,感谢老师！</p>2022-10-30</li><br/><li><span>菠萝吹雪—Code</span> 👍（1） 💬（1）<p>网络编程是自己的弱项，老师的这篇文章解决了我不少疑惑，需要再次消化。</p>2022-09-14</li><br/><li><span>qiutian</span> 👍（1） 💬（1）<p>文中“我们以net&#47;fd_posix.go中的netFD为例看看”这里的fd_posix.go是不是有问题呀，我看下面代码引用注释里是fd_unix.go</p>2022-06-09</li><br/><li><span>qiutian</span> 👍（1） 💬（2）<p>老师，文中的socket读设置超时时间的这个地方，“一旦通过这个方法设置了某个 socket 的 Read deadline，那么无论后续的 Read 操作是否超时，只要我们不重新设置 Deadline，那么后面与这个 socket 有关的所有读操作，都会返回超时失败错误。”这里是不是应该是“设置了某个socket的Read deadline，然后再发生了读超时，这个读超时后面如果不从新设置，后面所有的读操作都会返回超时失败错误呢？”。这里先是设置了，应该要发生读超时，才行吧？这里没看大懂</p>2022-06-09</li><br/><li><span>ddh</span> 👍（1） 💬（1）<p>老师什么时候出Go语言第二课</p>2022-04-28</li><br/>
+5. 文中的非阻塞 I&#47;O 模型架构图中的：EAGAIN&#47;EWOULDBLOCK 这几个英文单词是什么意思，没查出来。</p>2022-02-17</li><br/><li><span>Calvin</span> 👍（2） 💬（2）<p>老师，文章中“I&#47;O 多路复用框架”的举例中：
+   1、libev 的链接点击没反应（是 http:&#47;&#47;software.schmorp.de&#47;pkg&#47;libev.html 这个链接吗？）；
+   2、libuv 的链接对应的 github 仓库貌似已经迁移到 https:&#47;&#47;github.com&#47;libuv&#47;libuv 了。</p>2022-01-26</li><br/><li><span>罗杰</span> 👍（2） 💬（3）<p>并发往 socket 中写数据时，需要一次 write 操作完整的写入一个“业务包”，这实现有点难呀，万一只成功写入一部分，这可不能回滚呀。</p>2022-01-24</li><br/><li><span>X</span> 👍（1） 💬（1）<p>能把复杂的东西讲的老少皆宜,各层次人都能看懂，可见基础扎实,内功深厚,感谢老师！</p>2022-10-30</li><br/><li><span>菠萝吹雪—Code</span> 👍（1） 💬（1）<p>网络编程是自己的弱项，老师的这篇文章解决了我不少疑惑，需要再次消化。</p>2022-09-14</li><br/><li><span>qiutian</span> 👍（1） 💬（1）<p>文中“我们以net&#47;fd_posix.go中的netFD为例看看”这里的fd_posix.go是不是有问题呀，我看下面代码引用注释里是fd_unix.go</p>2022-06-09</li><br/><li><span>qiutian</span> 👍（1） 💬（2）<p>老师，文中的socket读设置超时时间的这个地方，“一旦通过这个方法设置了某个 socket 的 Read deadline，那么无论后续的 Read 操作是否超时，只要我们不重新设置 Deadline，那么后面与这个 socket 有关的所有读操作，都会返回超时失败错误。”这里是不是应该是“设置了某个socket的Read deadline，然后再发生了读超时，这个读超时后面如果不从新设置，后面所有的读操作都会返回超时失败错误呢？”。这里先是设置了，应该要发生读超时，才行吧？这里没看大懂</p>2022-06-09</li><br/><li><span>ddh</span> 👍（1） 💬（1）<p>老师什么时候出Go语言第二课</p>2022-04-28</li><br/>
+
 </ul>

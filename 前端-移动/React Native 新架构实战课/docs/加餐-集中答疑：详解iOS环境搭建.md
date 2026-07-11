@@ -107,7 +107,7 @@ $ ruby --version
 接着，你可以使用 Homebrew 安装 rbenv，安装命令如下：
 
 ```plain
-$ brew install rbenv ruby-build 
+$ brew install rbenv ruby-build
 ```
 
 安装完成后，运行 `init` 命令。运行完成后，它会提示你需要在 .zshrc 文件中执行 `rbenv init` 命令，因此你需要根据提示，使用 `echo` 将 `init` 命令添加到 Terminal 启动前。以保障 Terminal 启动时，rbenv 会生效。相关命令如下：
@@ -237,7 +237,7 @@ npx react-native init AwesomeProject
 这是由于没有切换 CocoaPods 的镜像源导致的。解决方案是，切换到[清华大学开源软件镜像站](https://mirrors.tuna.tsinghua.edu.cn/)的镜像，切换方式如下：
 
 ```plain
-$ cd ~/.cocoapods/repos 
+$ cd ~/.cocoapods/repos
 $ pod repo remove master
 $ git clone https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git master
 ```
@@ -350,20 +350,21 @@ npx react-native run-ios
 [!] Error installing OpenSSL-Universal
 [!] &#47;usr&#47;bin&#47;curl -f -L -o &#47;var&#47;folders&#47;dy&#47;y_3zjx6j0rdbcbzgm625f6yc0000gn&#47;T&#47;d20240119-11554-l0dvbm&#47;file.zip https:&#47;&#47;github.com&#47;krzyzanowskim&#47;OpenSSL&#47;archive&#47;1.1.1100.zip --create-dirs --netrc-optional --retry 2 -A &#39;CocoaPods&#47;1.14.3 cocoapods-downloader&#47;2.1&#39;
 
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:--  0:01:15 --:--:--     0
+% Total % Received % Xferd Average Speed Time Time Time Current
+Dload Upload Total Spent Left Speed
+0 0 0 0 0 0 0 0 --:--:-- 0:01:15 --:--:-- 0
 curl: (28) Failed to connect to github.com port 443 after 75016 ms: Couldn&#39;t connect to server
 Warning: Problem : timeout. Will retry in 1 seconds. 2 retries left.
-  0     0    0     0    0     0      0      0 --:--:--  0:01:15 --:--:--     0
+0 0 0 0 0 0 0 0 --:--:-- 0:01:15 --:--:-- 0
 curl: (28) Failed to connect to github.com port 443 after 75023 ms: Couldn&#39;t connect to server
 Warning: Problem : timeout. Will retry in 2 seconds. 1 retries left.
-  0     0    0     0    0     0      0      0 --:--:--  0:01:15 --:--:--     0
+0 0 0 0 0 0 0 0 --:--:-- 0:01:15 --:--:-- 0
 curl: (28) Failed to connect to github.com port 443 after 75019 ms: Couldn&#39;t connect to server
 我这个报错怎么解决啊 哪位大佬知道 实在没办法了</p>2024-01-19</li><br/><li><span>花永落</span> 👍（0） 💬（0）<p>bundle exec pod install;
 报错] Invalid `Podfile` file: exit.
 
- #  from &#47;Users&#47;luojx&#47;crossEndPro&#47;AwesomeProject&#47;ios&#47;Podfile:35
+# from &#47;Users&#47;luojx&#47;crossEndPro&#47;AwesomeProject&#47;ios&#47;Podfile:35
+
 有遇到该问题的吗?</p>2023-11-19</li><br/><li><span>Geek_f82ad7</span> 👍（0） 💬（0）<p>Mac OS X 10.11后安装cocoapods应该用下面的命令吧？
 sudo gem install -n &#47;usr&#47;local&#47;bin cocoapods</p>2023-10-23</li><br/><li><span>钙中钙</span> 👍（0） 💬（0）<p>rbenv install 2.7.6的时候， 一直停在
 

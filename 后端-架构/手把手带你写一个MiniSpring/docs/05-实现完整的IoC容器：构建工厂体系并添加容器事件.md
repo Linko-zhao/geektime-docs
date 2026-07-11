@@ -413,9 +413,9 @@ postProcessor) {
 ```java
     abstract void registerListeners();
     abstract void initApplicationEventPublisher();
-    abstract void postProcessBeanFactory(ConfigurableListableBeanFactory 
+    abstract void postProcessBeanFactory(ConfigurableListableBeanFactory
 beanFactory);
-    abstract void registerBeanPostProcessors(ConfigurableListableBeanFactory 
+    abstract void registerBeanPostProcessors(ConfigurableListableBeanFactory
 beanFactory);
     abstract void onRefresh();
     abstract void finishRefresh();
@@ -543,14 +543,16 @@ ConfigurableBeanFactory 中的 dependentBeanMap 等几个方法为什么要使�
 文档地址：https:&#47;&#47;docs.spring.io&#47;spring-framework&#47;docs&#47;5.3.27-SNAPSHOT&#47;reference&#47;html&#47;core.html#beans-factory-scopes
 遇到Spring的问题，可以多看看他们的文档，比搜索引擎强多了，写的很清晰
 另外，我有一个问题，请教一下老师，ClassPathXmlApplicationContext为啥要实现BeanFactory？感觉他们两个不是一个体系里的吧，一个是上下文，一个是bean工厂</p>2023-03-24</li><br/><li><span>Geek_03c08d</span> 👍（0） 💬（1）<p>BeanPostProcessor 接口 的 setFactory好像没有什么用</p>2024-02-28</li><br/><li><span>Geek_03c08d</span> 👍（0） 💬（1）<p>希望老师回答
+
 1. AbstractAutowireCapableBeanFactory 为什么不加一个继承AutowireCapableBeanFactory,这样就不用写抽象方法了
 2. AbstractAutowireCapableBeanFactory 为什么是抽象的? 好像所有的功能都实现了</p>2024-02-28</li><br/><li><span>Cornicione.</span> 👍（0） 💬（1）<p>ide一直提示DefaultListableBeanFactory没有实现ConfigurableBeanFactory的部分methods。看了github上的代码也是一样的问题。github上的源码ioc5真的是可以运行的吗？</p>2024-01-17</li><br/><li><span>Geek_7jwpfc</span> 👍（0） 💬（1）<p>ConfigurableBeanFactory定义了getDependentBeans()方法;
-ConfigurableBeanFactory的实现类是DefaultListableBeanFactory，但是
-DefaultListableBeanFactory没有实现getDependentBeans()方法，居然没有报错！
-要是极客时间能发图，我肯定发一个图上来！
-我到底错哪儿了！</p>2023-05-30</li><br/><li><span>Geek_7jwpfc</span> 👍（0） 💬（1）<p>原谅我实在没有看明白
-ConfigurableBeanFactory接口, 有一个方法getDependentBeans();
-DefaultListableBeanFactory是它的实现类，大师并没有实现getDependentBeans这个方法，表示看的很懵b
+   ConfigurableBeanFactory的实现类是DefaultListableBeanFactory，但是
+   DefaultListableBeanFactory没有实现getDependentBeans()方法，居然没有报错！
+   要是极客时间能发图，我肯定发一个图上来！
+   我到底错哪儿了！</p>2023-05-30</li><br/><li><span>Geek_7jwpfc</span> 👍（0） 💬（1）<p>原谅我实在没有看明白
+   ConfigurableBeanFactory接口, 有一个方法getDependentBeans();
+   DefaultListableBeanFactory是它的实现类，大师并没有实现getDependentBeans这个方法，表示看的很懵b
+
 </p>2023-05-30</li><br/><li><span>梦幻之梦想</span> 👍（0） 💬（2）<p>我想问下DefaultListableBeanFactory中的beanDefinitionMap是怎么来的</p>2023-04-25</li><br/><li><span>啊良梓是我</span> 👍（0） 💬（1）<p>String className = beanDefinition.getClassName();
             Class&lt;?&gt; aClass = null;
             try {
@@ -562,12 +564,14 @@ DefaultListableBeanFactory是它的实现类，大师并没有实现getDependent
 应该是这样子获取BeanDefinition定义的Bean类型才对?</p>2023-04-03</li><br/><li><span>啊良梓是我</span> 👍（0） 💬（2）<p>
 package com.minis.beans.factory.config;
 import com.minis.beans.factory.ListableBeanFactory;
-public interface ConfigurableListableBeanFactory 
-        extends ListableBeanFactory, AutowireCapableBeanFactory, 
+public interface ConfigurableListableBeanFactory
+extends ListableBeanFactory, AutowireCapableBeanFactory,
 ConfigurableBeanFactory {
 }
 
 这里是伪代码？ AutowireCapableBeanFactory按照流程下来，这里是一个Class的来哦。。。怎么可以用interface继承他的呢</p>2023-04-03</li><br/><li><span>宋健</span> 👍（0） 💬（1）<p>老师好，我想问几个小问题：
+
 1. 请问postProcessBeanFactory这个抽象方法的作用是什么呢？
-2.  我是不是可以在 registerBeanPostProcessors 中添加自己额外自定义的 BeanPostProcessor 来实现其他的注解解释器？</p>2023-04-03</li><br/>
+2. 我是不是可以在 registerBeanPostProcessors 中添加自己额外自定义的 BeanPostProcessor 来实现其他的注解解释器？</p>2023-04-03</li><br/>
+
 </ul>

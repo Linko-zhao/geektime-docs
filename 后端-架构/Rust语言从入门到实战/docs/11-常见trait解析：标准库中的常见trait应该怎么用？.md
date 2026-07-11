@@ -437,7 +437,7 @@ fn main() {
     println!("{a:?}");  // 对比两份值
     println!("{b:?}");
 }
-// 输出 
+// 输出
 Atype { num: 100, a_vec: [10, 20, 30] }
 Atype { num: 200, a_vec: [11, 21, 31] }
 ```
@@ -581,7 +581,7 @@ trait Fn<Args>: FnMut<Args> {
 
 ```plain
 let range = 0..10;
-let get_range_count = || range.count();  
+let get_range_count = || range.count();
 ```
 
 代码里的这个 get\_range\_count 就是闭包，range是被这个闭包捕获的环境变量。
@@ -650,7 +650,7 @@ fn add_one(x: i32) -> i32 {
 fn main() {
     let mut fn_ptr: fn(i32) -> i32 = add_one;  // 注意这里的类型定义
     assert_eq!(fn_ptr(1), 2); // ✅
-    
+
     // 如果一个闭包没有捕捉环境变量，它可以通过类型转换转成 fn 类型
     fn_ptr = |x| x + 1; // same as add_one
     assert_eq!(fn_ptr(1), 2); // ✅
@@ -740,7 +740,7 @@ impl Person {
     fn new1(name: String) -> Person {
         Person { name }
     }
-    // 这个方法可接收 
+    // 这个方法可接收
     // - String
     // - &String
     // - &str
@@ -869,90 +869,92 @@ AsRef&lt;T&gt; trait 用于将一个类型转换为另一个类型的引用。
 在使用上，如果你需要对一个类型进行解引用操作，你可以实现 Deref trait。如果你需要将一个类型转换为另一个类型的引用，你可以实现 AsRef&lt;T&gt; trait。</p>2023-12-22</li><br/><li><span>Zoom 6</span> 👍（2） 💬（1）<p>Deref 是重载了运算符，AsRef是做的类型转换</p>2024-01-04</li><br/><li><span>兰天白云</span> 👍（0） 💬（1）<p>老师，您在讲到from和into的时候，说“因为 into() 是方法，而 from() 是关联函数。”，而在trait声明里都是有返回值的呀？该怎样理解呢？</p>2024-02-22</li><br/><li><span>My dream</span> 👍（0） 💬（0）<p>能讲一下在trait中如何使用async fn吗？我还不会使用</p>2023-12-30</li><br/><li><span>superggn</span> 👍（0） 💬（1）<p>as_ref 没印象了， 找gpt4看了看， 总结了下核心就这俩：
 
 - implicit vs explicit
-    - Deref trait 自动运行， `*T` 直接触发 deref()， 看起来像是隐式触发
-    - AsRef trait 需要显式调用 as_ref()
+  - Deref trait 自动运行， `*T` 直接触发 deref()， 看起来像是隐式触发
+  - AsRef trait 需要显式调用 as_ref()
 - 功能不同（我看到这条的时候都愣了， 这谁不知道， 为撒还算是 key diff）
-    - Deref 是解引用的
-    - AsRef 是创建引用的</p>2023-12-15</li><br/><li><span>刘丹</span> 👍（0） 💬（1）<p>请问下面这一句，能否只写Ord和Eq？Ord是PartialOrd的超集, Eq是PartialEq的超集。 编译器应该可以判断出，已经实现了Ord和Eq，当然也肯定实现了PartialOrd和PartialEq。
-#[derive(Ord, PartialOrd, PartialEq, Eq)] &#47;&#47; 注意这一句，4个都写上</p>2023-11-13</li><br/><li><span>杨赛军</span> 👍（0） 💬（1）<p>Deref 不能传递所有权变量，Asref可以传递所有权变量</p>2023-11-13</li><br/><li><span>superggn</span> 👍（2） 💬（0）<p>笔记
+  - Deref 是解引用的
+  - AsRef 是创建引用的</p>2023-12-15</li><br/><li><span>刘丹</span> 👍（0） 💬（1）<p>请问下面这一句，能否只写Ord和Eq？Ord是PartialOrd的超集, Eq是PartialEq的超集。 编译器应该可以判断出，已经实现了Ord和Eq，当然也肯定实现了PartialOrd和PartialEq。
+    #[derive(Ord, PartialOrd, PartialEq, Eq)] &#47;&#47; 注意这一句，4个都写上</p>2023-11-13</li><br/><li><span>杨赛军</span> 👍（0） 💬（1）<p>Deref 不能传递所有权变量，Asref可以传递所有权变量</p>2023-11-13</li><br/><li><span>superggn</span> 👍（2） 💬（0）<p>笔记
 
 1. Deref trait =&gt; 给 typeA 实现了 Deref trait 之后就可以 *typeAinstance 了
 
 2. deref coercion =&gt; 我们要对 obj_0 做一些事情的时候， 如果发现 obj_0 不适配， 就试一下 *obj_0, 看看它的 deref 是否适配， 如果适配， 就对 deref result 搞事， 如果不适配， 就继续找 deref, 直到当前 obj 没有 deref 为止
+
 </p>2023-12-15</li><br/><li><span>Logical_Monster</span> 👍（0） 💬（0）<p>运算符重载那里的代码应该改为，直接那样写main函数会有所有权问题：
 use std::ops::Add;
 
 #[derive(Debug, PartialEq)]
 struct Point {
-    x: i32,
-    y: i32,
+x: i32,
+y: i32,
 }
 
 &#47;&#47; 为 Point 类型实现 Add trait，这样两个Point实例就可以直接相加
 impl Add for Point {
-    type Output = Point;
-    fn add(self, rhs: Point) -&gt; Point {
-        Point {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-        }
-    }
+type Output = Point;
+fn add(self, rhs: Point) -&gt; Point {
+Point {
+x: self.x + rhs.x,
+y: self.y + rhs.y,
+}
+}
 }
 
 fn main() {
-    let p1 = Point { x: 1, y: 2 };
-    let p2 = Point { x: 3, y: 4 };
-    let p3 = p1 + p2;
-    
+let p1 = Point { x: 1, y: 2 };
+let p2 = Point { x: 3, y: 4 };
+let p3 = p1 + p2;
+
     println!(&quot;{:?}&quot;, p3); &#47;&#47; Output: Point { x: 4, y: 6 }
     assert_eq!(p3, Point { x: 4, y: 6 });
+
 }</p>2024-07-26</li><br/><li><span>周鹏</span> 👍（0） 💬（0）<p>struct Point {
-    x: i32,
-    y: i32,
+x: i32,
+y: i32,
 }
 
 &#47;&#47; 为 Point 类型实现 Add trait，这样两个Point实例就可以直接相加
 impl Add for Point {
-    type Output = Point;
-    fn add(self, rhs: Point) -&gt; Point {
-        Point {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-        }
-    }
+type Output = Point;
+fn add(self, rhs: Point) -&gt; Point {
+Point {
+x: self.x + rhs.x,
+y: self.y + rhs.y,
+}
+}
 }
 
 fn main() {
-    let p1 = Point { x: 1, y: 2 };
-    let p2 = Point { x: 3, y: 4 };
-    let p3 = p1 + p2; &#47;&#47; 这里直接用+号作用在两个Point实例上
+let p1 = Point { x: 1, y: 2 };
+let p2 = Point { x: 3, y: 4 };
+let p3 = p1 + p2; &#47;&#47; 这里直接用+号作用在两个Point实例上
 &#47;&#47;这里move了
-    assert_eq!(p3.x, p1.x + p2.x); &#47;&#47; ✅
+assert_eq!(p3.x, p1.x + p2.x); &#47;&#47; ✅
 &#47;&#47;这里不能再用会报错
-    assert_eq!(p3.y, p1.y + p2.y); &#47;&#47; ✅
+assert_eq!(p3.y, p1.y + p2.y); &#47;&#47; ✅
 &#47;&#47;这里不能用
 }</p>2024-03-31</li><br/><li><span>周鹏</span> 👍（0） 💬（0）<p>struct Point {
-    x: i32,
-    y: i32,
+x: i32,
+y: i32,
 }
 
 &#47;&#47; 为 Point 类型实现 Add trait，这样两个Point实例就可以直接相加
 &#47;&#47; 建议加上
 impl std::ops::Add for Point {
-    type Output = Point;
-    fn add(self, rhs: Point) -&gt; Point {
-        Point {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-        }
-    }
+type Output = Point;
+fn add(self, rhs: Point) -&gt; Point {
+Point {
+x: self.x + rhs.x,
+y: self.y + rhs.y,
+}
+}
 }
 
 fn main() {
-    let p1 = Point { x: 1, y: 2 };
-    let p2 = Point { x: 3, y: 4 };
-    let p3 = p1 + p2; &#47;&#47; 这里直接用+号作用在两个Point实例上
-    assert_eq!(p3.x, p1.x + p2.x); &#47;&#47; ✅
-    assert_eq!(p3.y, p1.y + p2.y); &#47;&#47; ✅
+let p1 = Point { x: 1, y: 2 };
+let p2 = Point { x: 3, y: 4 };
+let p3 = p1 + p2; &#47;&#47; 这里直接用+号作用在两个Point实例上
+assert_eq!(p3.x, p1.x + p2.x); &#47;&#47; ✅
+assert_eq!(p3.y, p1.y + p2.y); &#47;&#47; ✅
 }</p>2024-03-31</li><br/>
 </ul>

@@ -41,7 +41,7 @@ sudo apt install git
 mkdir -p ~/work/learn_metagpt
 cd ~/work/learn_metagpt
 touch README.md
-poetry init  
+poetry init
 # 创建 poetry 虚拟环境，当出现以下提示
 Compatible Python versions [^3.10]:  时，输入 ">=3.9, <3.12" (注意别加引号)
 ```
@@ -57,7 +57,7 @@ poetry source add --priority=primary mirrors https://mirror.sjtu.edu.cn/pypi/web
 然后安装一些常用的 Python 库：
 
 ```plain
-poetry add pysocks socksio 
+poetry add pysocks socksio
 ```
 
 MetaGPT 项目的创始人是吴承霖老师，于 2023 年 6 月开源。
@@ -87,7 +87,7 @@ poetry install --no-root && poetry run pip install -e "../MetaGPT" --config-sett
 还记得在上一课的结尾，我们在 Linux 主机上使用 ollama 部署了一个开源 LLM——阿里巴巴的 qwen2.5。确保以下命令：
 
 ```plain
-ollama run qwen2.5 
+ollama run qwen2.5
 ```
 
 能够正常运行。然后我们使用这个开源 LLM 来运行 MetaGPT 官方提供的例子。
@@ -158,10 +158,10 @@ MetaGPT 官方文档中，初学者首先需要阅读最前面这三个部分。
 首先需要理解关于多 Agent 应用的一些核心概念。你不要急于运行示例代码，先认真阅读一下上述概念简述，这里我仅引用该文档里的一小部分内容：
 
 > 学术界和工业界对术语“**智能体**” (Agent) 提出了各种定义。大致来说，一个智能体应具备类似人类的思考和规划能力，拥有记忆甚至情感，并具备一定的技能以便与环境、智能体和人类进行交互。
-> 
+>
 > 在 MetaGPT 看来，可以将智能体想象成环境中的数字人，其中  
 > **智能体 = 大语言模型（LLM） + 观察 + 思考 + 行动 + 记忆**
-> 
+>
 > **多智能体** (MultiAgent) 系统可以视为一个智能体社会，其中  
 > **多智能体 = 智能体 + 环境 + 标准流程（SOP） + 通信 + 经济**
 
@@ -242,14 +242,14 @@ MetaGPT 最初的设计就是为了支持多 Agent 协作的，堪称目前最�
 然后检查 node -v
 npm -v</p>2025-01-08</li><br/><li><span>蝈大虾</span> 👍（0） 💬（2）<p>如何配置metagpt调用通过vllm部署的qwen模型?
 
-
 ### 测试设置config.yaml配置如下：
+
 llm:
-  api_type: &quot;ollama&quot; 
-  model: &quot;&#47;models&#47;Qwen2.5-72B-Instruct&quot;
-  base_url: &quot;http:&#47;&#47;localhost:8000&#47;v1&quot;
-  api_key: &quot;EMPTY&quot;
-  temperature: 0
+api_type: &quot;ollama&quot;
+model: &quot;&#47;models&#47;Qwen2.5-72B-Instruct&quot;
+base_url: &quot;http:&#47;&#47;localhost:8000&#47;v1&quot;
+api_key: &quot;EMPTY&quot;
+temperature: 0
 
 执行metagpt &quot;Create a 2048 game&quot;报错。
 
@@ -257,33 +257,32 @@ llm:
 
 ###vllm服务命令：
 vllm serve &#47;models&#47;Qwen2.5-72B-Instruct \
-              --host 0.0.0.0 \
-              --port 8000 \
-              --dtype bfloat16 \
-              --tensor_parallel_size 2 \
-              --max-num-seqs 1 \
-              --enforce-eager \
-              --gpu_memory_utilization 0.95 \
-              --max_model_len 16384 \
-              --max_seq_len_to_capture 16384 \
-              --max-num-batched-tokens 16384 \
-              --swap-space 8 \
-              --disable-log-requests \
-              --enable-auto-tool-choice \
-              --tool-call-parser hermes
-			  
-
+--host 0.0.0.0 \
+--port 8000 \
+--dtype bfloat16 \
+--tensor_parallel_size 2 \
+--max-num-seqs 1 \
+--enforce-eager \
+--gpu_memory_utilization 0.95 \
+--max_model_len 16384 \
+--max_seq_len_to_capture 16384 \
+--max-num-batched-tokens 16384 \
+--swap-space 8 \
+--disable-log-requests \
+--enable-auto-tool-choice \
+--tool-call-parser hermes
 
 ## 该服务经测试正常调用。
+
 from openai import OpenAI
 client = OpenAI(api_key=&quot;EMPTY&quot;, base_url=&quot;http:&#47;&#47;localhost:8000&#47;v1&quot;)
 model_type=&quot;&#47;models&#47;Qwen2.5-72B-Instruct&quot;
 ...
 response = client.chat.completions.create(
-    model=model_type,
-    messages=messages,
-    temperature=0,
-    stream=True
+model=model_type,
+messages=messages,
+temperature=0,
+stream=True
 )
 ...</p>2025-02-19</li><br/><li><span>yangchao</span> 👍（0） 💬（1）<p>思考题
 在 build_customized_multi_agents.py 中，不同的 Agent（即 Role 的子类实例）通过消息传递和动作执行来进行协作，具体就是每个角色都有特定的职责和可以执行的操作。角色之间通过_watch机制建立联系，形成工作流。</p>2025-02-19</li><br/><li><span>欠债太多</span> 👍（0） 💬（1）<p>老师，如果推荐的配置机器没有，使用mac air替代是否可行，现在机器的配置是Apple M3 16g内存？会有哪些影响
@@ -294,48 +293,46 @@ npm ERR! npm  v3.5.2
 npm ERR! code EMISSINGARG
 
 npm ERR! typeerror Error: Missing required argument #1
-npm ERR! typeerror     at andLogAndFinish (&#47;usr&#47;share&#47;npm&#47;lib&#47;fetch-package-metadata.js:31:3)
-npm ERR! typeerror     at fetchPackageMetadata (&#47;usr&#47;share&#47;npm&#47;lib&#47;fetch-package-metadata.js:51:22)
-npm ERR! typeerror     at resolveWithNewModule (&#47;usr&#47;share&#47;npm&#47;lib&#47;install&#47;deps.js:456:12)
-npm ERR! typeerror     at &#47;usr&#47;share&#47;npm&#47;lib&#47;install&#47;deps.js:190:5
-npm ERR! typeerror     at &#47;usr&#47;share&#47;npm&#47;node_modules&#47;slide&#47;lib&#47;async-map.js:52:35
-npm ERR! typeerror     at Array.forEach (&lt;anonymous&gt;)
-npm ERR! typeerror     at &#47;usr&#47;share&#47;npm&#47;node_modules&#47;slide&#47;lib&#47;async-map.js:52:11
-npm ERR! typeerror     at Array.forEach (&lt;anonymous&gt;)
-npm ERR! typeerror     at asyncMap (&#47;usr&#47;share&#47;npm&#47;node_modules&#47;slide&#47;lib&#47;async-map.js:51:8)
-npm ERR! typeerror     at exports.loadRequestedDeps (&#47;usr&#47;share&#47;npm&#47;lib&#47;install&#47;deps.js:188:3)
+npm ERR! typeerror at andLogAndFinish (&#47;usr&#47;share&#47;npm&#47;lib&#47;fetch-package-metadata.js:31:3)
+npm ERR! typeerror at fetchPackageMetadata (&#47;usr&#47;share&#47;npm&#47;lib&#47;fetch-package-metadata.js:51:22)
+npm ERR! typeerror at resolveWithNewModule (&#47;usr&#47;share&#47;npm&#47;lib&#47;install&#47;deps.js:456:12)
+npm ERR! typeerror at &#47;usr&#47;share&#47;npm&#47;lib&#47;install&#47;deps.js:190:5
+npm ERR! typeerror at &#47;usr&#47;share&#47;npm&#47;node_modules&#47;slide&#47;lib&#47;async-map.js:52:35
+npm ERR! typeerror at Array.forEach (&lt;anonymous&gt;)
+npm ERR! typeerror at &#47;usr&#47;share&#47;npm&#47;node_modules&#47;slide&#47;lib&#47;async-map.js:52:11
+npm ERR! typeerror at Array.forEach (&lt;anonymous&gt;)
+npm ERR! typeerror at asyncMap (&#47;usr&#47;share&#47;npm&#47;node_modules&#47;slide&#47;lib&#47;async-map.js:51:8)
+npm ERR! typeerror at exports.loadRequestedDeps (&#47;usr&#47;share&#47;npm&#47;lib&#47;install&#47;deps.js:188:3)
 npm ERR! typeerror This is an error with npm itself. Please report this error at:
-npm ERR! typeerror     &lt;http:&#47;&#47;github.com&#47;npm&#47;npm&#47;issues&gt;
+npm ERR! typeerror &lt;http:&#47;&#47;github.com&#47;npm&#47;npm&#47;issues&gt;
 </p>2025-02-11</li><br/><li><span>zshanjun</span> 👍（0） 💬（2）<p>运行报错，跑不通。老师帮忙看看
 
 poetry run metagpt &quot;write a cli blackjack game&quot;
-2025-02-10 17:24:03.997 | INFO     | metagpt.team:invest:93 - Investment: $3.0.
-2025-02-10 17:24:03.998 | INFO     | metagpt.roles.role:_act:403 - Alice(Product Manager): to do PrepareDocuments(PrepareDocuments)
-2025-02-10 17:24:04.062 | INFO     | metagpt.utils.file_repository:save:57 - save to: &#47;Users&#47;zhangsj190&#47;ai&#47;MetaGPT&#47;workspace&#47;20250210172403&#47;docs&#47;requirement.txt
-2025-02-10 17:24:04.062 | INFO     | metagpt.roles.role:_act:403 - Alice(Product Manager): to do WritePRD(WritePRD)
-2025-02-10 17:24:04.062 | INFO     | metagpt.actions.write_prd:run:86 - New requirement detected: write a cli blackjack game
-2025-02-10 17:24:04.091 | ERROR    | metagpt.utils.common:log_it:554 - Finished call to &#39;metagpt.actions.action_node.ActionNode._aask_v1&#39; after 0.028(s), this was the 1st time calling it. exp: &#39;dict&#39; object has no attribute &#39;lower&#39;
-2025-02-10 17:24:05.011 | ERROR    | metagpt.utils.common:log_it:554 - Finished call to &#39;metagpt.actions.action_node.ActionNode._aask_v1&#39; after 0.948(s), this was the 2nd time calling it. exp: &#39;dict&#39; object has no attribute &#39;lower&#39;
-2025-02-10 17:24:15.394 | WARNING  | metagpt.utils.common:wrapper:673 - There is a exception in role&#39;s execution, in order to resume, we delete the newest role communication message in the role&#39;s memory.
-2025-02-10 17:24:15.402 | ERROR    | metagpt.utils.common:wrapper:655 - Exception occurs, start to serialize the project, exp:
+2025-02-10 17:24:03.997 | INFO | metagpt.team:invest:93 - Investment: $3.0.
+2025-02-10 17:24:03.998 | INFO | metagpt.roles.role:_act:403 - Alice(Product Manager): to do PrepareDocuments(PrepareDocuments)
+2025-02-10 17:24:04.062 | INFO | metagpt.utils.file_repository:save:57 - save to: &#47;Users&#47;zhangsj190&#47;ai&#47;MetaGPT&#47;workspace&#47;20250210172403&#47;docs&#47;requirement.txt
+2025-02-10 17:24:04.062 | INFO | metagpt.roles.role:_act:403 - Alice(Product Manager): to do WritePRD(WritePRD)
+2025-02-10 17:24:04.062 | INFO | metagpt.actions.write_prd:run:86 - New requirement detected: write a cli blackjack game
+2025-02-10 17:24:04.091 | ERROR | metagpt.utils.common:log_it:554 - Finished call to &#39;metagpt.actions.action_node.ActionNode._aask_v1&#39; after 0.028(s), this was the 1st time calling it. exp: &#39;dict&#39; object has no attribute &#39;lower&#39;
+2025-02-10 17:24:05.011 | ERROR | metagpt.utils.common:log_it:554 - Finished call to &#39;metagpt.actions.action_node.ActionNode._aask_v1&#39; after 0.948(s), this was the 2nd time calling it. exp: &#39;dict&#39; object has no attribute &#39;lower&#39;
+2025-02-10 17:24:15.394 | WARNING | metagpt.utils.common:wrapper:673 - There is a exception in role&#39;s execution, in order to resume, we delete the newest role communication message in the role&#39;s memory.
+2025-02-10 17:24:15.402 | ERROR | metagpt.utils.common:wrapper:655 - Exception occurs, start to serialize the project, exp:
 Traceback (most recent call last):
-  File &quot;&#47;Users&#47;zhangsj190&#47;Library&#47;Caches&#47;pypoetry&#47;virtualenvs&#47;learn-metagpt-eQkDn61w-py3.10&#47;lib&#47;python3.10&#47;site-packages&#47;tenacity&#47;_asyncio.py&quot;, line 50, in __call__
-    result = await fn(*args, **kwargs)
-  File &quot;&#47;Users&#47;zhangsj190&#47;ai&#47;MetaGPT&#47;metagpt&#47;actions&#47;action_node.py&quot;, line 442, in _aask_v1
-    parsed_data = llm_output_postprocess(
+File &quot;&#47;Users&#47;zhangsj190&#47;Library&#47;Caches&#47;pypoetry&#47;virtualenvs&#47;learn-metagpt-eQkDn61w-py3.10&#47;lib&#47;python3.10&#47;site-packages&#47;tenacity&#47;_asyncio.py&quot;, line 50, in **call**
+result = await fn(*args, **kwargs)
+File &quot;&#47;Users&#47;zhangsj190&#47;ai&#47;MetaGPT&#47;metagpt&#47;actions&#47;action_node.py&quot;, line 442, in _aask_v1
+parsed_data = llm_output_postprocess(
 AttributeError: &#39;dict&#39; object has no attribute &#39;lower&#39;
-
-
 
 </p>2025-02-10</li><br/><li><span>月狼葱葱</span> 👍（0） 💬（1）<p>win11用户无法使用 命令
 mkdir ~&#47;.metagpt
 vi ~&#47;.metagpt&#47;config2.yaml 
 假设你的用户名是 username，转换命令如下
 mkdir C:\Users\username\.metagpt
-notepad C:\Users\username\.metagpt\config2.yaml</p>2025-02-05</li><br/><li><span>花前不枉此生壹梦</span> 👍（0） 💬（1）<p>poetry add pysocks socksio 
+notepad C:\Users\username\.metagpt\config2.yaml</p>2025-02-05</li><br/><li><span>花前不枉此生壹梦</span> 👍（0） 💬（1）<p>poetry add pysocks socksio
 
 The currently activated Python version 3.12.3 is not supported by the project (&gt;=3.9, &lt;3.12).
-Trying to find and use a compatible version. 
+Trying to find and use a compatible version.
 
 Poetry was unable to find a compatible version. If you have one, you can explicitly use it via the &quot;env use&quot; command.
 

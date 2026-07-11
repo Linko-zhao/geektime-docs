@@ -96,7 +96,7 @@ export CPPFLAGS="-I/usr/local/opt/llvm/include”
 从C语言代码生成IR代码比较简单，上一讲中我们已经用到过一个C语言的示例代码：
 
 ```
-//fun1.c 
+//fun1.c
 int fun1(int a, int b){
     int c = 10;
     return a+b+c;

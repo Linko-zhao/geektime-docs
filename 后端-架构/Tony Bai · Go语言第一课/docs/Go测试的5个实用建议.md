@@ -20,12 +20,12 @@ import (
 )
 
 
-func TestAdd(t *testing.T) { 
+func TestAdd(t *testing.T) {
     got := Add(2, 3)
-    want := 5 
-    if got != want { 
+    want := 5
+    if got != want {
         t.Errorf("want %d, but got %d", want, got)
-    } 
+    }
 }
 ```
 
@@ -36,7 +36,7 @@ func TestAdd(t *testing.T) {
 go test命令负责提取测试文件中以Test开头的测试用例，并驱动测试的执行。我们在add目录下执行go test来运行上面的测试用例：
 
 ```plain
-$go test        
+$go test
 PASS
 ok      add 0.007s
 ```
@@ -54,7 +54,7 @@ ok      add 0.007s
 如果我们想模拟测试失败的情况，可以将预期结果改为6，再运行go test将得到下面的结果：
 
 ```plain
-$go test -v 
+$go test -v
 === RUN   TestAdd
     add_test.go:11: want 6, but got 5
 --- FAIL: TestAdd (0.00s)
@@ -83,7 +83,7 @@ PASS
 ok      add 0.005s
 
 
-$go test add        
+$go test add
 ok      add 0.005s
 
 
@@ -325,14 +325,14 @@ if got != want {
 ```plain
 cases := []struct {
     name string
-    a    int 
-    b    int 
-    r    int 
+    a    int
+    b    int
+    r    int
 }{
-    {"2+3", 2, 3, 5}, 
-    {"2+0", 2, 0, 2}, 
-    {"2+(-2)", 2, -2, 0}, 
-    //... ... 
+    {"2+3", 2, 3, 5},
+    {"2+0", 2, 0, 2},
+    {"2+(-2)", 2, -2, 0},
+    //... ...
 }
 ```
 
@@ -650,7 +650,7 @@ func TestRedisClient(t *testing.T) {
 
 ```plain
 $go test
-2024/12/15 16:18:20 github.com/testcontainers/testcontainers-go - Connected to docker: 
+2024/12/15 16:18:20 github.com/testcontainers/testcontainers-go - Connected to docker:
   Server Version: 20.10.8
   API Version: 1.41
   Operating System: Ubuntu 20.04.3 LTS

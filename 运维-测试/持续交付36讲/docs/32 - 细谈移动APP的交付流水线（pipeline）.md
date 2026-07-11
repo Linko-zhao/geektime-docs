@@ -120,9 +120,9 @@
 lane :release do #发布到AppStore
   increment_build_number  #自增版本号的方法
   cocoapods #更新pod
-  gym #打包 
+  gym #打包
   deliver(force: true) #发布到AppStore
-end  
+end
 ```
 
 这是一段最简单的Fastfile脚本。它的功能是：利用Fastlane提供的Action完成了打包，并发布到AppStore。另外，你还可以在Appfile（Fastlane用来描述App基本信息的专用描述文件）中定义关于App的信息。
@@ -189,7 +189,6 @@ stages有如下特点 :
 如果任何一个 stage 失败，那么后面的 stages 不会执行，该构建任务 (Pipeline) 失败
 
 针对第三个特点，我们有没有办法，让所有stage都能够执行呢？
-
 
 另外经常遇到的
 Stage &quot;xxx&quot; skipped due to earlier failure(s)

@@ -14,9 +14,9 @@ Java SDK里很多类都具备不可变性，只是由于它们的使用太简单
 public final class String {
   private final char value[];
   // 字符替换
-  String replace(char oldChar, 
+  String replace(char oldChar,
       char newChar) {
-    //无需替换，直接返回this  
+    //无需替换，直接返回this
     if (oldChar == newChar){
       return this;
     }
@@ -24,7 +24,7 @@ public final class String {
     int len = value.length;
     int i = -1;
     /* avoid getfield opcode */
-    char[] val = value; 
+    char[] val = value;
     //定位到需要替换的字符位置
     while (++i < len) {
       if (val[i] == oldChar) {
@@ -34,7 +34,7 @@ public final class String {
     //未找到oldChar，无需替换
     if (i >= len) {
       return this;
-    } 
+    }
     //创建一个buf[]，这是关键
     //用来保存替换后的字符串
     char buf[] = new char[len];
@@ -43,7 +43,7 @@ public final class String {
     }
     while (i < len) {
       char c = val[i];
-      buf[i] = (c == oldChar) ? 
+      buf[i] = (c == oldChar) ?
         newChar : c;
       i++;
     }
@@ -72,7 +72,7 @@ Long这个类并没有照搬享元模式，Long内部维护了一个静态的对
 Long valueOf(long l) {
   final int offset = 128;
   // [-128,127]直接的数字做了缓存
-  if (l >= -128 && l <= 127) { 
+  if (l >= -128 && l <= 127) {
     return LongCache
       .cache[(int)l + offset];
   }
@@ -81,7 +81,7 @@ Long valueOf(long l) {
 //缓存，等价于对象池
 //仅缓存[-128,127]直接的数字
 static class LongCache {
-  static final Long cache[] 
+  static final Long cache[]
     = new Long[-(-128) + 127 + 1];
 
   static {
@@ -196,13 +196,13 @@ public class SafeWM {
 
 ```
 public final class Account{
-  private final 
+  private final
     StringBuffer user;
   public Account(String user){
-    this.user = 
+    this.user =
       new StringBuffer(user);
   }
-  
+
   public StringBuffer getUser(){
     return this.user;
   }
@@ -226,8 +226,7 @@ StingBuffer 是 引用 类型， 当我们说它final StingBuffer user 不可变
 思考题 ：
 不可变类的三要素 ：类、属性、方法都是不可变的。 思考题这个类虽然是final ，属性也是final并且没有修改的方法 ， 但是 stringbuffer这个属性的内容是可变的 ， 所以应该没有满足三要素中的属性不可变 ， 应该不属于不可变类 。
 
-
-另外老师我有个问题想问下， 我看jdk一些源码里，也用了对象做锁。 例如 我有个变量 final  ConcurrentHashMap cache , 有些方法中会对 cache变量 put新的值 ， 但是还有用这个对象做 synchronized(cache) 对象锁 ， 这种做法对么？ 如果对的话，是因为管程只判断对象的首地址没有改变的原因么 ，希望老师指点一下😁</p>2019-05-02</li><br/><li><span>pg逆袭的小红帽是谁</span> 👍（1） 💬（1）<p>“String 和 Long、Integer、Double 等基础类型的包装类都具备不可变性，这些对象的线程安全性都是靠不可变性来保证的。”
+另外老师我有个问题想问下， 我看jdk一些源码里，也用了对象做锁。 例如 我有个变量 final ConcurrentHashMap cache , 有些方法中会对 cache变量 put新的值 ， 但是还有用这个对象做 synchronized(cache) 对象锁 ， 这种做法对么？ 如果对的话，是因为管程只判断对象的首地址没有改变的原因么 ，希望老师指点一下😁</p>2019-05-02</li><br/><li><span>pg逆袭的小红帽是谁</span> 👍（1） 💬（1）<p>“String 和 Long、Integer、Double 等基础类型的包装类都具备不可变性，这些对象的线程安全性都是靠不可变性来保证的。”
 这里有点不太理解，既然String 和 Long、Integer、Double具备不可变，不可变意味着线程安全，那不就可以说String 和 Long、Integer、Double 是线程安全的了？</p>2022-05-09</li><br/><li><span>嗨喽</span> 👍（0） 💬（2）<p>上面得SafeWM类代码会不会有ABA问题呢，老师</p>2019-06-13</li><br/><li><span>Jialin</span> 👍（117） 💬（5）<p>根据文章内容,一个类具备不可变属性需要满足&quot;类和属性都必须是 final 的,所有方法均是只读的&quot;,类的属性如果是引用型,该属性对应的类也需要满足不可变类的条件,且不能提供修改该属性的方法,
 Account类的唯一属性user是final的,提供的方法是可读的,user的类型是StringBuffer,StringBuffer也是final的,这样看来,Account类是不可变性的,但是去看StringBuffer的源码,你会发现StringBuffer类的属性value是可变的&lt;String类中的value定义:private final char value[];StringBuffer类中的value定义:char[] value;&gt;,并且提供了append(Object object)和setCharAt(int index, char ch)修改value.
 所以,Account类不具备不可变性</p>2019-05-02</li><br/><li><span>张天屹</span> 👍（25） 💬（0）<p>具不具备不可变性看怎么界定边界了，类本身是具备的，StrnigBuffer的引用不可变。但是因为StringBuffer是一个对象，持有非final的char数组，所以底层数组是可变的。但是StringBuffer是并发安全的，因为方法加锁synchronized</p>2019-05-05</li><br/><li><span>对象正在输入...</span> 👍（8） 💬（1）<p>不可变类的三个要求 : 类和属性都是 final 的，所有方法均是只读的

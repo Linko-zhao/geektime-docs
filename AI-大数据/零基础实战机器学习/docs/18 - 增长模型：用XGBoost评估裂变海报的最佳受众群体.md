@@ -244,13 +244,13 @@ $增量分数 = (促销响应可能性的提升) + (别来烦我可能性的减�
 下面的代码就求出了这种裂变为每一个用户带来的增量分数。
 
 ```
-discount_uplift = X_test.copy() #构建增量分数数据集   
+discount_uplift = X_test.copy() #构建增量分数数据集
 discount_uplift['P_TR'] = uplift_probs[:,0] #添加有应答裂变概率
 discount_uplift['P_TN'] = uplift_probs[:,1] #添加无应答裂变概率
 discount_uplift['P_CR'] = uplift_probs[:,2] #添加有应答控制概率
 discount_uplift['P_CN'] = uplift_probs[:,3] #添加无应答控制概率
 #计算增量分数
-discount_uplift['增量分数'] = discount_uplift.eval('P_TR + P_CN - (P_TN + P_CR)') 
+discount_uplift['增量分数'] = discount_uplift.eval('P_TR + P_CN - (P_TN + P_CR)')
 discount_uplift #显示增量分数
 ```
 

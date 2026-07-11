@@ -26,23 +26,23 @@ console.log(y); // 100
 
 严格意义上讲，JavaScript只有变量和常量两种标识符，六条声明语句中：
 
-- **let** *x* …
+- **let** _x_ …
 
 声明变量x。不可在赋值之前读。
 
-- **const** *x* …
+- **const** _x_ …
 
 声明常量x。不可写。
 
-- **var** *x* …
+- **var** _x_ …
 
 声明变量x。在赋值之前可读取到undefined值。
 
-- **function** *x* …
+- **function** _x_ …
 
 声明变量x。该变量指向一个函数。
 
-- **class** *x* …
+- **class** _x_ …
 
 声明变量x。该变量指向一个类（该类的作用域内部是处理严格模式的）。
 
@@ -52,11 +52,11 @@ console.log(y); // 100
 
 除了这六个语句之外，还有两个语句有潜在的声明标识符的能力，不过它们并不是严格意义上的声明语句（声明只是它们的语法效果）。这两个语句是指：
 
-- **for** (***var***|***let***|***const*** *x* …) …
+- **for** (_**var**_|_**let**_|_**const**_ _x_ …) …
 
 for语句有多种语法来声明一个或多个标识符，用作循环变量。
 
-- **try** … **catch** (*x*) …
+- **try** … **catch** (_x_) …
 
 catch子句可以声明一个或多个标识符，用作异常对象变量。
 
@@ -122,7 +122,7 @@ lRef = rValue
 
 也就是将右操作数（的值）赋给左操作数（的引用）。它的严格语法表达是：
 
-> *LeftHandSideExpression* &lt; **=** | ***AssignmentOperator*** &gt; *AssignmentExpression*
+> _LeftHandSideExpression_ &lt; **=** | _**AssignmentOperator**_ > > > &gt; _AssignmentExpression_
 
 也就是说，在JavaScript中，一个赋值表达式的左边和右边其实“都是”表达式！
 
@@ -239,17 +239,17 @@ false
 
 var y = &quot;outer&quot;;
 
-function f() { 
+function f() {
 
-	console.log(y); &#47;&#47; undefined 
+    console.log(y); &#47;&#47; undefined
 
-	console.log(x); &#47;&#47; throw a Exception 
+    console.log(x); &#47;&#47; throw a Exception
 
-	let x = 100; 
+    let x = 100;
 
-	var y = 100; 
+    var y = 100;
 
-	...
+    ...
 
 }
 
@@ -265,40 +265,42 @@ function f() {
 
 function a() {
 
-	function b() {}
+    function b() {}
 
 }
 
 在代码执行前连函数b都被创建了吗？
 
 3. 老师对一定了解闭包的本质，后面有机会说到吗？
+
 </p>2019-11-19</li><br/><li><span>Ming</span> 👍（20） 💬（2）<p>〈以下是小生愚见〉
 概念纷繁，建议老师将讲解重心放到这门语言的现有特性，贯之历史脉络，是否（怎样）解决了某种设计缺陷。这样，知识纵深感更强，并可指导实际工作以避免踩坑。适当穿插示例代码和图文更佳。</p>2019-11-13</li><br/><li><span>Ppei</span> 👍（18） 💬（2）<p>老师你好，词法声明会有提升吗？
 一些书里面会说不存在变量提升，但是文中说，是拒绝访问。
 我是不是该从编译期跟运行期去理解？</p>2020-05-02</li><br/><li><span>Mr_Liu</span> 👍（13） 💬（1）<p>思考题: 小白的我，没有太明确的答案，暂时还不能明确自己理解究竟是否正确，希望听老师后续的课程能够明白
 
-读完今天的这篇理解了昨天的提问，为什么var x = &#39;123&#39;   delete x  是false, 
+读完今天的这篇理解了昨天的提问，为什么var x = &#39;123&#39; delete x 是false,
 即使是
 var obj ={
- a: &#39;123&#39;,
- b: {
-   name: &#39;123&#39;
-  }
-} 
+a: &#39;123&#39;,
+b: {
+name: &#39;123&#39;
+}
+}
 var z = obj.b
 delete z 返回也是false
 所以问了那么delete x 存在有什么意义。
 今天老师的科解答了
 x = &#39;123&#39;
-delete x 返回true 
+delete x 返回true
 是因为你可以删除掉这个动态添加的“变量”，因为本质上就是在删除全局对象的属性。同时也理解了上一讲的“只有在delete x等值于delete obj.x时 delete 才会有执行意义。例如with (obj) ...语句中的 delete x，以及全局属性 global.x。”这句
 但上一节关于“delete x”归根到底，是在删除一个表达式的、引用类型的结果（Result），而不是在删除 x 表达式，或者这个删除表达式的值（Value）。后一句理解了，但前一句是否可以理解为实际上是删除引用呢，希望老师解答一下
 立一个flag ，每个争取评论下面都有我的，不为别的，就为增加自己的思考</p>2019-11-13</li><br/><li><span>孜孜</span> 👍（10） 💬（2）<p>今天写IIFE,突然有点问题想问下老师，
+
 1. 为什么(function f(){ return this}) 可以，(var test=1) 不可以。
 2. 两种IIFE的写法，(function f(){ return this})() 和 (function f(){ return this}()) 有何区别。
 3. 函数调用（）和表达式取值（）如何在ECMAScript找到说明？</p>2020-07-11</li><br/><li><span>Isaac</span> 👍（10） 💬（1）<p>「一个赋值表达式操作本身也是有“结果（Result）”，它是右操作数的值。注意，这里是“值”而非“引用”」
-老师，你好，这句话从“值类型”的角度可以理解，但是对于引用类型怎么理解？
-比如：var x = y = { name: &#39;jack ma&#39; }。
+   老师，你好，这句话从“值类型”的角度可以理解，但是对于引用类型怎么理解？
+   比如：var x = y = { name: &#39;jack ma&#39; }。
 
 我的理解：
 由于 { name: &#39;jack ma&#39; } 本身是引用类型，所以 y = { name: &#39;jack ma&#39; } 的赋值操作的结果也是“一个引用”，所以这里的“值”其实和类型无关，仅仅是一个运算结果。
@@ -325,26 +327,24 @@ Object.getOwnPropertyDescriptor(global, &#39;y&#39;);
 在静态语法解析阶段，会在词法环境中添加所声明的标识符，那么像下面这样的代码：
 var arr = new Array;
 for (var i=0; i&lt;5; i++) arr.push(function f() {
-  &#47;&#47; ...
+&#47;&#47; ...
 });
 这段代码是在第八讲中粘贴过来的，第八讲中有说，静态函数f（）有且仅有一个。那么这个函数f是什么时候被定义的，又被定义在了什么样的词法环境下呢？
 我上面的表述可能不明确，我大概就是想问这么一个问题：
 let obj = {
-      test:function(cb){
-        cb();
-        (()=&gt;{console.log(this);})()
-      }
-    }
-    obj.test(() =&gt; {console.log(this);})
-
+test:function(cb){
+cb();
+(()=&gt;{console.log(this);})()
+}
+}
+obj.test(() =&gt; {console.log(this);})
 
 () =&gt; {console.log(this) 这个箭头函数，是在什么时候被定义的，定义在了哪里。
 从 cb执行 this打印来看，应该是定义在了全局环境下。
 但是由于它是一个匿名函数，所以我在全局无法打印出它来验证。但是我把
 () =&gt; {console.log(this)换成function f() {console.log(this)},全局下也没有办法访问到 f 。
 
-我描述的可能不太清楚，我大概是想知道，被当做实参传入的函数，是在什么时候被声明的，声明在了哪里。  
-
+我描述的可能不太清楚，我大概是想知道，被当做实参传入的函数，是在什么时候被声明的，声明在了哪里。
 
 </p>2020-10-31</li><br/><li><span>Marvin</span> 👍（6） 💬（1）<p>相当于
 var&#47;let&#47;const x = (y =100)

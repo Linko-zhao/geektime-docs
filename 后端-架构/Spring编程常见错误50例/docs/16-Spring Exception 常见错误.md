@@ -366,7 +366,7 @@ noHandlerFound() 的逻辑非常简单，如果 throwExceptionIfNoHandlerFound �
 
 设置完毕后，重启服务并再次尝试，你会发现结果没有任何变化，这个问题也没有被解决。
 
-实际上这里还存在另一个坑，在 Spring Web 的 WebMvcAutoConfiguration 类中，其默认添加的两个 ResourceHandler，一个是用来处理请求路径/webjars/\**\**，而另一个是/\*\*。
+实际上这里还存在另一个坑，在 Spring Web 的 WebMvcAutoConfiguration 类中，其默认添加的两个 ResourceHandler，一个是用来处理请求路径/webjars/\*_\*_，而另一个是/\*\*。
 
 即便当前请求没有定义任何对应的请求处理器，getHandler() 也一定会获取到一个 Handler 来处理当前请求，因为第二个匹配 /\** 路径的 ResourceHandler 决定了任何请求路径都会被其处理。mappedHandler == null 判断条件永远不会成立，显然就不可能走到 noHandlerFound()，那么就不会抛出 NoHandlerFoundException 异常，也无法被后续的异常处理器进一步处理。
 
@@ -450,7 +450,7 @@ public void addResourceHandlers(ResourceHandlerRegistry registry) {
 }
 ```
 
-从而验证我们一开始得出的结论，此处添加了两个 ResourceHandler，一个是用来处理请求路径/webjars/\**\**， 而另一个是/\*\*。
+从而验证我们一开始得出的结论，此处添加了两个 ResourceHandler，一个是用来处理请求路径/webjars/\*_\*_， 而另一个是/\*\*。
 
 这里你可以注意一下方法最开始的判断语句，如果 this.resourceProperties.isAddMappings() 为 false，那么会直接返回，后续的两个 ResourceHandler 也不会被添加。
 
@@ -461,7 +461,7 @@ public void addResourceHandlers(ResourceHandlerRegistry registry) {
    }
 ```
 
-​至此，有两个 ResourceHandler 被实例化且注册到了 Spirng 容器中，一个处理路径为/webjars/\**\** 的请求，另一个处理路径为 /\*\*的请求 。
+​至此，有两个 ResourceHandler 被实例化且注册到了 Spirng 容器中，一个处理路径为/webjars/\*_\*_ 的请求，另一个处理路径为 /\*\*的请求 。
 
 同样，当第一次请求发生时，DispatcherServlet 中的 initHandlerMappings() 将会获取所有注册到 Spring 的 HandlerMapping 类型的实例，而 SimpleUrlHandlerMapping 恰好实现了 HandlerMapping 接口，这些 SimpleUrlHandlerMapping 类型的实例则会被写入到类成员变量 handlerMappings 中。
 

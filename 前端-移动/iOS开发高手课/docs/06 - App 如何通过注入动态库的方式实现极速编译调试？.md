@@ -173,29 +173,31 @@ guard let newSymbol = dlsym(dl, info.dli_sname) else {
 2.选择项目的根目录
 3.项目的Appdelegate加入：
 #if DEBUG
- &#47;&#47; iOS
-    [[NSBundle bundleWithPath:@&quot;&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&quot;] load];
+&#47;&#47; iOS
+[[NSBundle bundleWithPath:@&quot;&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&quot;] load];
 #endif
 
 XCode10 是这个
 #if DEBUG
- &#47;&#47; iOS
-    [[NSBundle bundleWithPath:@&quot;&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection10.bundle&quot;] load];
+&#47;&#47; iOS
+[[NSBundle bundleWithPath:@&quot;&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection10.bundle&quot;] load];
 #endif
 
 而后启动，修改，保存，就会卡到断点位置了。</p>2019-03-23</li><br/><li><span>Daniel</span> 👍（21） 💬（0）<p>ios10之后由于沙盒的限制 应用无法加载自身bundle之外的动态库 这个工具只能在模拟器上使用</p>2019-04-10</li><br/><li><span>景天儿</span> 👍（17） 💬（2）<p>蛮好用的，但是有几个需要注意的地方：
+
 1. 进行swizzling的类不要动态修改，否则二次交换，会引起死循环。
 2. 不支持方法的删除：删除后，方法调用仍然有效，不抛异常。
 3. 不支持新增类：新增类引入后使用无效。但类的重命名是有效的。
 4. 属性新增、删除、修改：反射上体现不出来。
-其中后三个的原因，不知道戴铭老师有没有什么见解。
-在我的角度来看，应该不是InjectionIII的问题，可能与苹果动态库调用有关。</p>2019-05-28</li><br/><li><span>mαnajay</span> 👍（13） 💬（0）<p>InjectionIII 上面有个 issue 是解决 pod 组件引入修改源码无法进行注入的问题  https:&#47;&#47;github.com&#47;johnno1962&#47;InjectionIII&#47;issues&#47;34,  https:&#47;&#47;github.com&#47;johnno1962&#47;InjectionIII&#47;issues&#47;53 , 使用组件后接入还是有点麻烦</p>2019-03-23</li><br/><li><span>Geek_48dbbf</span> 👍（7） 💬（0）<p>真机上如何实现注入动态库实时调试？</p>2019-04-18</li><br/><li><span>Love mi</span> 👍（7） 💬（1）<p>1.在App Store下载InjectionIII, 打开。
-2.选择项目的根目录
-3.项目的Appdelegate加入：
-    [[NSBundle bundleWithPath:@&quot;&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&quot;] load];
-运行报
-Error loading &#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection:  dlopen(&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection, 265): Symbol not found: _$s19ArrayLiteralElements013ExpressibleByaB0PTl
-  Referenced from: &#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection
-  Expected in: &#47;Applications&#47;Xcode.app&#47;Contents&#47;Developer&#47;Toolchains&#47;XcodeDefault.xctoolchain&#47;usr&#47;lib&#47;swift&#47;iphonesimulator&#47;libswiftCore.dylib
- in &#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection</p>2019-03-28</li><br/><li><span>亡命之徒</span> 👍（6） 💬（0）<p>项目使用了cocopods、这个插件用不了呀，保存的时候报错😭，新建的demo使用就没问题,麻烦老师解答下</p>2019-03-29</li><br/>
+   其中后三个的原因，不知道戴铭老师有没有什么见解。
+   在我的角度来看，应该不是InjectionIII的问题，可能与苹果动态库调用有关。</p>2019-05-28</li><br/><li><span>mαnajay</span> 👍（13） 💬（0）<p>InjectionIII 上面有个 issue 是解决 pod 组件引入修改源码无法进行注入的问题 https:&#47;&#47;github.com&#47;johnno1962&#47;InjectionIII&#47;issues&#47;34, https:&#47;&#47;github.com&#47;johnno1962&#47;InjectionIII&#47;issues&#47;53 , 使用组件后接入还是有点麻烦</p>2019-03-23</li><br/><li><span>Geek_48dbbf</span> 👍（7） 💬（0）<p>真机上如何实现注入动态库实时调试？</p>2019-04-18</li><br/><li><span>Love mi</span> 👍（7） 💬（1）<p>1.在App Store下载InjectionIII, 打开。
+   2.选择项目的根目录
+   3.项目的Appdelegate加入：
+   [[NSBundle bundleWithPath:@&quot;&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&quot;] load];
+   运行报
+   Error loading &#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection: dlopen(&#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection, 265): Symbol not found: _$s19ArrayLiteralElements013ExpressibleByaB0PTl
+   Referenced from: &#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection
+   Expected in: &#47;Applications&#47;Xcode.app&#47;Contents&#47;Developer&#47;Toolchains&#47;XcodeDefault.xctoolchain&#47;usr&#47;lib&#47;swift&#47;iphonesimulator&#47;libswiftCore.dylib
+   in &#47;Applications&#47;InjectionIII.app&#47;Contents&#47;Resources&#47;iOSInjection.bundle&#47;iOSInjection</p>2019-03-28</li><br/><li><span>亡命之徒</span> 👍（6） 💬（0）<p>项目使用了cocopods、这个插件用不了呀，保存的时候报错😭，新建的demo使用就没问题,麻烦老师解答下</p>2019-03-29</li><br/>
+
 </ul>

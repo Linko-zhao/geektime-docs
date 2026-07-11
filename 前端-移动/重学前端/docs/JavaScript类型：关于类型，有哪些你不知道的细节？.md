@@ -117,10 +117,10 @@ Symbol 可以具有字符串类型的描述，但是即使描述相同，Symbol�
             next: function() {
                 return { value: v++, done: v > 10 }
             }
-        }        
+        }
     };
 
-    for(var v of o) 
+    for(var v of o)
         console.log(v); // 0 1 2 3 ... 9
 ```
 
@@ -333,7 +333,7 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
 
 最后我们留一个实践问题，如果我们不用原生的Number和parseInt，用JavaScript代码实现String到Number的转换，该怎么做呢？请你把自己的代码留言给我吧！
 
-* * *
+---
 
 ## 补充阅读
 
@@ -358,10 +358,10 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
 
 二：
 原文：
-    var o = {
-        valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}},
-        toString : () =&gt; {console.log(&quot;toString&quot;); return {}}
-    }
+var o = {
+valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}},
+toString : () =&gt; {console.log(&quot;toString&quot;); return {}}
+}
 
     o + &quot;&quot;
     &#47;&#47; toString
@@ -386,8 +386,8 @@ JavaScript 语言设计上试图模糊对象和基本类型之间的关系，我
 
 再回到我们的例子
 var o = {
-        valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}},
-        toString : () =&gt; {console.log(&quot;toString&quot;); return {}}
+valueOf : () =&gt; {console.log(&quot;valueOf&quot;); return {}},
+toString : () =&gt; {console.log(&quot;toString&quot;); return {}}
 }
 
 o + &quot;&quot;
@@ -397,16 +397,15 @@ o + &quot;&quot;
 我们再去看下规范，看看加法运算符的规则。
 
 加法运算符运算过程中有两行代码很重要，如下
-    Let lprim be ? ToPrimitive(lval).
-    Let rprim be ? ToPrimitive(rval).
+Let lprim be ? ToPrimitive(lval).
+Let rprim be ? ToPrimitive(rval).
 
 可以看出，调用ToPrimitive方法时，第二个参数是没有传参的。
 
 所以preferredType取默认的值&quot;number&quot;。最终先执行&quot;valueOf&quot;, 后执行&quot;toString&quot;。
 
 个人愚见，如有纰漏，还请各位同仁指正。</p>2019-02-15</li><br/><li><span>blueshell</span> 👍（17） 💬（3）<p>#### 重写十进制的parseInt&#47;parseFloat
-`
-var myParse = function (val) {
+`var myParse = function (val) {
     if (val) {
         var num = val.match(&#47;^\d*\.?\d+&#47;);
         if (num !== null) {
@@ -417,11 +416,8 @@ var myParse = function (val) {
     }else{
         return NaN;
     }
-}
-`</p>2019-02-19</li><br/><li><span>酷儿</span> 👍（7） 💬（1）<p>不用原生的 Number 和 parseInt 进行类型Stirng to Number转换用~~就好了， ~~&quot;7&quot; = 7</p>2019-10-10</li><br/><li><span>Leung</span> 👍（3） 💬（3）<p>+&#39;3&#39;转number,3+&#39;&#39;转string</p>2019-07-02</li><br/><li><span>geek_syk</span> 👍（1） 💬（1）<p>ES10 又推出了 BigInt 这种类型，javascript 的数据类型已增加至 8 种了是吧</p>2019-10-23</li><br/><li><span>逍竹</span> 👍（1） 💬（2）<p>作者您好，可以用 null 关键字来获取 null 值，这句话是什么意思呢？</p>2019-02-18</li><br/><li><span>mingingคิดถึง</span> 👍（0） 💬（1）<p>String 有最大长度是 2^53 - 1
+}`</p>2019-02-19</li><br/><li><span>酷儿</span> 👍（7） 💬（1）<p>不用原生的 Number 和 parseInt 进行类型Stirng to Number转换用~~就好了， ~~&quot;7&quot; = 7</p>2019-10-10</li><br/><li><span>Leung</span> 👍（3） 💬（3）<p>+&#39;3&#39;转number,3+&#39;&#39;转string</p>2019-07-02</li><br/><li><span>geek_syk</span> 👍（1） 💬（1）<p>ES10 又推出了 BigInt 这种类型，javascript 的数据类型已增加至 8 种了是吧</p>2019-10-23</li><br/><li><span>逍竹</span> 👍（1） 💬（2）<p>作者您好，可以用 null 关键字来获取 null 值，这句话是什么意思呢？</p>2019-02-18</li><br/><li><span>mingingคิดถึง</span> 👍（0） 💬（1）<p>String 有最大长度是 2^53 - 1
 
-我理解是String最多有53个二进制位，每个二级制位都有0&#47;1两种选择，一共有2^53中情况，那为什么要减一呢</p>2019-10-17</li><br/><li><span>Geek_c90ff4</span> 👍（0） 💬（2）<p>老师，您好！我好像还不太理解Symbol.iterator在时间工作中的使用场景</p>2019-10-11</li><br/><li><span>脱尼</span> 👍（0） 💬（1）<p>请问下2^53-1 是怎么得到的？</p>2019-08-31</li><br/><li><span>ionlyleaf</span> 👍（0） 💬（1）<p>上面类型转换的图，Object(null) 为TypeError？应该是{}才对吧：The Object constructor creates an object wrapper for the given value. If the value is null or undefined, it will create and return an empty object。</p>2019-08-22</li><br/><li><span>沙岵杨</span> 👍（0） 💬（1）<p>true + null = 1;   false + null = 0，并不是像作者说的那样</p>2019-08-12</li><br/><li><span>后知后觉</span> 👍（0） 💬（1）<p>字符串转化为数字可以用隐式转换： eg:   &#39;2&#39; - 1 + 1</p>2019-08-07</li><br/><li><span>后知后觉</span> 👍（0） 💬（1）<p>实例不是new 一个类吗，为什么是javascript的类型系统中的内置对象呢？</p>2019-08-07</li><br/><li><span>宗麒麟</span> 👍（0） 💬（2）<p>1. 0.8+0.4 -1.2  &lt; Number.EPSILON  false
-2. 0.8*7 -5.6 &lt; Number.EPSILON  false
-3. 0.1+0.2 - 0.3 &lt; Number.EPSILON true
+我理解是String最多有53个二进制位，每个二级制位都有0&#47;1两种选择，一共有2^53中情况，那为什么要减一呢</p>2019-10-17</li><br/><li><span>Geek_c90ff4</span> 👍（0） 💬（2）<p>老师，您好！我好像还不太理解Symbol.iterator在时间工作中的使用场景</p>2019-10-11</li><br/><li><span>脱尼</span> 👍（0） 💬（1）<p>请问下2^53-1 是怎么得到的？</p>2019-08-31</li><br/><li><span>ionlyleaf</span> 👍（0） 💬（1）<p>上面类型转换的图，Object(null) 为TypeError？应该是{}才对吧：The Object constructor creates an object wrapper for the given value. If the value is null or undefined, it will create and return an empty object。</p>2019-08-22</li><br/><li><span>沙岵杨</span> 👍（0） 💬（1）<p>true + null = 1; false + null = 0，并不是像作者说的那样</p>2019-08-12</li><br/><li><span>后知后觉</span> 👍（0） 💬（1）<p>字符串转化为数字可以用隐式转换： eg: &#39;2&#39; - 1 + 1</p>2019-08-07</li><br/><li><span>后知后觉</span> 👍（0） 💬（1）<p>实例不是new 一个类吗，为什么是javascript的类型系统中的内置对象呢？</p>2019-08-07</li><br/><li><span>宗麒麟</span> 👍（0） 💬（2）<p>1. 0.8+0.4 -1.2 &lt; Number.EPSILON false 2. 0.8*7 -5.6 &lt; Number.EPSILON false 3. 0.1+0.2 - 0.3 &lt; Number.EPSILON true
 老师，用这种方式判断 是否相等，怎么不大行</p>2019-07-24</li><br/><li><span>敏儿</span> 👍（0） 💬（2）<p>0.1+0.2不等于0.3的原因应该是进制转换造成的</p>2019-07-11</li><br/>
 </ul>

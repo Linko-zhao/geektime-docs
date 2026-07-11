@@ -34,21 +34,21 @@ VAE的全称是变分自动编码器（Variational Autoencoder），在2013年�
 
 ```python
 for epoch in range(epochs):
-    for batch in dataset_loader.get_batches(training_data, batch_size):  
-        
+    for batch in dataset_loader.get_batches(training_data, batch_size):
+
         # 清零梯度
         optimizer.zero_grad()
-     
+
         # 将本批次数据传递给自动编码器
         encoded_data = autoencoder.encode(batch)
         reconstructed_data = autoencoder.decode(encoded_data)
-        
+
         # 计算损失，比如使用L2损失
         loss = loss_function(reconstructed_data, batch)
-        
+
         # 反向传播
         loss.backward()
-        
+
         # 更新参数
         optimizer.step()
 ```
@@ -73,27 +73,27 @@ def add_noise(data, factor):
     noise = factor * np.random.normal(size=data.shape)
     noisy_data = data + noise
     return noisy_data.clip(0, 1)
-    
+
 # 开始训练循环
 for epoch in range(epochs):
     for batch in dataset_loader.get_batches(training_data, batch_size):
-        
+
         # 给本批次数据添加噪声
         noisy_batch = add_noise(batch, noise_factor)
-        
+
         # 清零梯度
         optimizer.zero_grad()
-        
+
         # 将带噪声的本批次数据传递给降噪自动编码器
         encoded_data = denoising_autoencoder.encode(noisy_batch)
         reconstructed_data = denoising_autoencoder.decode(encoded_data)
-        
+
         # 计算损失
         loss = loss_function(reconstructed_data, batch)
-        
+
         # 反向传播
         loss.backward()
-        
+
         # 更新参数
         optimizer.step()
 ```
@@ -119,32 +119,32 @@ def loss_function(reconstructed_data, original_data, mean, log_variance):
     kl_loss = -0.5 * torch.sum(1 + log_variance - mean.pow(2) - log_variance.exp())
     total_loss = reconstruction_loss + kl_loss
     return total_loss
-    
+
 # 定义优化器（如梯度下降）
 optimizer = optimizer.Adam(variational_autoencoder.parameters(), lr=learning_rate)
 
 # 开始训练循环
 for epoch in range(epochs):
     for batch in dataset_loader.get_batches(training_data, batch_size):
-        
+
         # 清零梯度
         optimizer.zero_grad()
-        
+
         # 将本批次数据传递给变分自动编码器
         mean, log_variance = variational_autoencoder.encode(batch)
-        
+
         # 重参数化技巧
         z = mean + torch.exp(log_variance * 0.5) * torch.randn_like(log_variance)
-        
+
         # 解码
         reconstructed_data = variational_autoencoder.decode(z)
-        
+
         # 计算损失
         loss = loss_function(reconstructed_data, batch, mean, log_variance)
-        
+
         # 反向传播
         loss.backward()
-        
+
         # 更新参数
         optimizer.step()
 
@@ -172,7 +172,7 @@ device = 'cuda'
 vae = AutoencoderKL.from_pretrained(
     'CompVis/stable-diffusion-v1-4', subfolder='vae')
 vae = vae.to(device)
-  
+
 pths = ["test_imgs/new.png", "test_imgs/full.png"]
 for pth in pths:
     img = Image.open(pth).convert('RGB')

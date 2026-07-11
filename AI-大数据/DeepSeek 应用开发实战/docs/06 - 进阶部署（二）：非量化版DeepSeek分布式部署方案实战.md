@@ -296,11 +296,11 @@ curl http://localhost:8000/v1/chat/completions \
 单台有8张显卡，这里虽然设置了--tensor-parallel-size=16，但实际只能调度8张卡，同时没有指定–pipeline-parallel-size，那目测应该拉不起来，显存少了一半，肯定是不足的！</p>2025-03-13</li><br/><li><span>grok</span> 👍（1） 💬（1）<p>老师，能否尽快上传vLLM + Ray的K8s yaml? 到这个课程的github repo</p>2025-03-13</li><br/><li><span>imxilife</span> 👍（1） 💬（1）<p>老师我是做移动应用开发的，我想在组内做 AI的结对编程，比如让 AI 去 Review整个项目代码从中找到存在的 bug 或逻辑缺陷？这个要怎么做呢？</p>2025-03-13</li><br/><li><span>b1a2e1u1u</span> 👍（1） 💬（2）<p>老师请教一下，使用docker搭建完vllm环境之后，文中所说的离线推理的那部分代码是要进入vllm的docker中使用python运行吗？</p>2025-03-12</li><br/><li><span>西钾钾</span> 👍（1） 💬（1）<p>思考题：当使用 2 台 8*A100 的服务器部署 DeepSeek-R1-671B 模型时，若设置  --tensor-parallel-size=16  会出现什么现象？
 在没有指定 pipeline-parallel-size 时，是只能用到 1 台服务器吗？这种情况下，应该是不是显存不够，不能正常启动了。</p>2025-03-12</li><br/><li><span>为立学习</span> 👍（0） 💬（1）<p>老师你好
 我执行vllm serve deepseek-ai&#47;DeepSeek-R1-Distill-Qwen-1.5B 可以成功
-但是 执行 
+但是 执行
 
 cd deepseek2025_yunyang&#47;git_client&#47;vllm
 vllm serve deepseek-ai&#47;DeepSeek-R1-Distill-Qwen-1.5B --chat-template .&#47;examples&#47;template_chatml.jinja
-时报错 
+时报错
 
 ValueError: Model architectures [&#39;Qwen2ForCausalLM&#39;] failed to be inspected. Please check the logs for more details.
 

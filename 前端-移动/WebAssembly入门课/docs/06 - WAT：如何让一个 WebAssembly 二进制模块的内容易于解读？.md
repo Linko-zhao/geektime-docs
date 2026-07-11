@@ -16,7 +16,7 @@ int factorial(int n) {
     return 1;
   } else {
     return n * factorial(n-1);
-  } 
+  }
 }
 ```
 
@@ -75,7 +75,7 @@ OK，既然我们之前提到，WAT 使用了 “S-表达式” 的形式来表�
 “S-表达式”，又被称为 “S-Expression”，或者简写为 “sexpr”，它是一种用于表达树形结构化数据的记号方式。最初，S-表达式被用于 Lisp 语言，表达其源代码以及所使用到的字面量数据。比如，在 Common Lisp 这个 Lisp 方言中，我们可以有如下形式的一段代码。
 
 ```
-(print 
+(print
  (* 2 (+ 3 4))
 )
 ```

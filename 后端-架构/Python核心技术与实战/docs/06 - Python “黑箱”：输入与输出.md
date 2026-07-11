@@ -100,23 +100,23 @@ def parse(text):
 
     # 转为小写
     text = text.lower()
-    
+
     # 生成所有单词的列表
     word_list = text.split(' ')
-    
+
     # 去除空白单词
     word_list = filter(None, word_list)
-    
+
     # 生成单词和词频的字典
     word_cnt = {}
     for word in word_list:
         if word not in word_cnt:
             word_cnt[word] = 0
         word_cnt[word] += 1
-    
+
     # 按照词频排序
     sorted_word_cnt = sorted(word_cnt.items(), key=lambda kv: kv[1], reverse=True)
-    
+
     return sorted_word_cnt
 
 with open('in.txt', 'r') as fin:
@@ -303,22 +303,23 @@ BASE_DIR = &#39;server&#47;&#39;
 NET_DIR = &#39;net&#47;&#39;
 
 def main():
-    filenames = os.listdir(BASE_DIR)
-    for i, filename in enumerate(filenames):
-        print(&#39;copying {} into net drive...  {}&#47;{}&#39;.format(filename, i + 1, len(filenames)))
-        copyfile(BASE_DIR + filename, NET_DIR + filename)
-        print(&#39;copied {} into net drive, waiting client complete...  {}&#47;{}&#39;.format(filename, i + 1, len(filenames)))
+filenames = os.listdir(BASE_DIR)
+for i, filename in enumerate(filenames):
+print(&#39;copying {} into net drive... {}&#47;{}&#39;.format(filename, i + 1, len(filenames)))
+copyfile(BASE_DIR + filename, NET_DIR + filename)
+print(&#39;copied {} into net drive, waiting client complete... {}&#47;{}&#39;.format(filename, i + 1, len(filenames)))
 
         while os.path.exists(NET_DIR + filename):
             time.sleep(3)
 
     print(&#39;transferred {} into client.  {}&#47;{}&#39;.format(filename, i + 1, len(filenames)))
 
-if __name__ == &quot;__main__&quot;:
-	main()
+if **name** == &quot;**main**&quot;:
+main()
 
 ++++++++++++++++++++++
 client.py
+
 # 我们假设 client 电脑上要输出的文件夹在 BASR_DIR ，网盘的路径在 NET_DIR
 
 import os
@@ -329,41 +330,44 @@ BASE_DIR = &#39;client&#47;&#39;
 NET_DIR = &#39;net&#47;&#39;
 
 def main():
-    while True:
-        filenames = os.listdir(NET_DIR)
-        for filename in filenames:
-            print(&#39;downloading {} into local disk...&#39;.format(filename))
-            copyfile(NET_DIR + filename, BASE_DIR + filename)
-            os.remove(NET_DIR + filename) # 我们需要删除这个文件，网盘会提我们同步这个操作，从而 server 知晓已完成
-            print(&#39;downloaded {} into local disk.&#39;.format(filename))
-        time.sleep(3)
+while True:
+filenames = os.listdir(NET_DIR)
+for filename in filenames:
+print(&#39;downloading {} into local disk...&#39;.format(filename))
+copyfile(NET_DIR + filename, BASE_DIR + filename)
+os.remove(NET_DIR + filename) # 我们需要删除这个文件，网盘会提我们同步这个操作，从而 server 知晓已完成
+print(&#39;downloaded {} into local disk.&#39;.format(filename))
+time.sleep(3)
 
-if __name__ == &quot;__main__&quot;:
-	main()</p>2019-05-26</li><br/><li><span>Jingxiao</span> 👍（53） 💬（20）<p>思考题第一题：
+if **name** == &quot;**main**&quot;:
+main()</p>2019-05-26</li><br/><li><span>Jingxiao</span> 👍（53） 💬（20）<p>思考题第一题：
 
 import re
 
 CHUNK_SIZE = 100 # 这个数表示一次最多读取的字符长度
 
 # 这个函数每次会接收上一次得到的 last_word，然后和这次的 text 合并起来处理。
+
 # 合并后判断最后一个词有没有可能连续，并分离出来，然后返回。
+
 # 这里的代码没有 if 语句，但是仍然是正确的，可以想一想为什么。
+
 def parse_to_word_list(text, last_word, word_list):
-    text = re.sub(r&#39;[^\w ]&#39;, &#39; &#39;, last_word + text)
-    text = text.lower()
-    cur_word_list = text.split(&#39; &#39;)
-    cur_word_list, last_word = cur_word_list[:-1], cur_word_list[-1]
-    word_list += filter(None, cur_word_list)
-    return last_word
+text = re.sub(r&#39;[^\w ]&#39;, &#39; &#39;, last_word + text)
+text = text.lower()
+cur_word_list = text.split(&#39; &#39;)
+cur_word_list, last_word = cur_word_list[:-1], cur_word_list[-1]
+word_list += filter(None, cur_word_list)
+return last_word
 
 def solve():
-    with open(&#39;in.txt&#39;, &#39;r&#39;) as fin:
-        word_list, last_word = [], &#39;&#39;
-        while True:
-            text = fin.read(CHUNK_SIZE)
-            if not text: 
-                break # 读取完毕，中断循环
-            last_word = parse_to_word_list(text, last_word, word_list)
+with open(&#39;in.txt&#39;, &#39;r&#39;) as fin:
+word_list, last_word = [], &#39;&#39;
+while True:
+text = fin.read(CHUNK_SIZE)
+if not text:
+break # 读取完毕，中断循环
+last_word = parse_to_word_list(text, last_word, word_list)
 
         word_cnt = {}
         for word in word_list:
@@ -381,39 +385,41 @@ f = open(&quot;ini.txt&quot;, mode=&quot;r&quot;, encoding=&quot;utf-8&quot;)
 d = defaultdict(int)
 
 for line in f:
-    for word in filter(lambda x: x, re.split(r&quot;\s&quot;, line)):
-        d[word] += 1
-
+for word in filter(lambda x: x, re.split(r&quot;\s&quot;, line)):
+d[word] += 1
 
 print(d)</p>2019-05-22</li><br/><li><span>逆光飞翔</span> 👍（31） 💬（3）<p>老师，为什么filter（none，list）可以过滤空值，不是保留空值嘛</p>2019-05-22</li><br/><li><span>lmingzhi</span> 👍（12） 💬（2）<p># 第一题， 修改parse函数，使其可以更新word_cnt
 import re
-def parse(text, word_cnt):
-    # 转为小写
-    text = text.lower()    
-    # 生成所有单词的列表
-    word_list = re.findall(r&#39;\w+&#39;, text) 
-    # 更新单词和词频的字典
-    for word in word_list:
-        word_cnt[word] = word_cnt.get(word,0) + 1
-    return word_cnt
+def parse(text, word_cnt): # 转为小写
+text = text.lower()
+
+# 生成所有单词的列表
+
+word_list = re.findall(r&#39;\w+&#39;, text) # 更新单词和词频的字典
+for word in word_list:
+word_cnt[word] = word_cnt.get(word,0) + 1
+return word_cnt
 
 # 初始化字典
+
 word_cnt = dict()
 with open(&#39;in.txt&#39;, &#39;r&#39;) as fin:
-    for text in fin.readlines():
-        word_cnt = parse(text, word_cnt)
-        print(len(word_cnt))
+for text in fin.readlines():
+word_cnt = parse(text, word_cnt)
+print(len(word_cnt))
 
 # 按照词频排序
+
 sorted_word_cnt = sorted(word_cnt.items(), key=lambda kv: kv[1], reverse=True)
 
 # 导出
+
 with open(&#39;out.txt&#39;, &#39;w&#39;) as fout:
-    for word, freq in word_and_freq:
-        fout.write(&#39;{} {}\n&#39;.format(word, freq))</p>2019-05-22</li><br/><li><span>許敲敲</span> 👍（11） 💬（1）<p>这门课太值了 哈哈哈 我以前学到的真的toy python</p>2019-05-22</li><br/><li><span>Python高效编程</span> 👍（9） 💬（1）<p>第一问:
+for word, freq in word_and_freq:
+fout.write(&#39;{} {}\n&#39;.format(word, freq))</p>2019-05-22</li><br/><li><span>許敲敲</span> 👍（11） 💬（1）<p>这门课太值了 哈哈哈 我以前学到的真的toy python</p>2019-05-22</li><br/><li><span>Python高效编程</span> 👍（9） 💬（1）<p>第一问:
 with open(&quot;in.txt&quot;, &quot;rt&quot;) as f:
-    for line in f:
-        Counter.update(line)</p>2019-05-22</li><br/><li><span>人间乐园</span> 👍（4） 💬（1）<p>第一道，for.line in fin读取单行，使用result = yied line进行双向传递，直接把line给计数器，先判断line结尾处，如果是单词或者半个单词，则返回result给生成器，拼接到下一个line前，如果是None则不拼接，继续生成这个line。</p>2019-05-22</li><br/><li><span>IT蜗壳-Tango</span> 👍（4） 💬（1）<p>第七天打卡。</p>2019-05-22</li><br/><li><span>mykgzy</span> 👍（3） 💬（1）<p>看着有点费力，但感觉超值，看到了好多python 书都没提到的生产网中涉及的知识。</p>2019-05-22</li><br/><li><span>edward0079</span> 👍（2） 💬（1）<p>判断是否为None的情况
+for line in f:
+Counter.update(line)</p>2019-05-22</li><br/><li><span>人间乐园</span> 👍（4） 💬（1）<p>第一道，for.line in fin读取单行，使用result = yied line进行双向传递，直接把line给计数器，先判断line结尾处，如果是单词或者半个单词，则返回result给生成器，拼接到下一个line前，如果是None则不拼接，继续生成这个line。</p>2019-05-22</li><br/><li><span>IT蜗壳-Tango</span> 👍（4） 💬（1）<p>第七天打卡。</p>2019-05-22</li><br/><li><span>mykgzy</span> 👍（3） 💬（1）<p>看着有点费力，但感觉超值，看到了好多python 书都没提到的生产网中涉及的知识。</p>2019-05-22</li><br/><li><span>edward0079</span> 👍（2） 💬（1）<p>判断是否为None的情况
 
 if not x
 
@@ -421,19 +427,16 @@ if x is None
 
 if not x is None
 
- 
-
 if x is not None`是最好的写法，清晰，不会出现错误，以后坚持使用这种写法。
 
-使用if not x这种写法的前提是：必须清楚x等于None,  False, 空字符串&quot;&quot;, 0, 空列表[], 空字典{}, 空元组()时对你的判断没有影响才行</p>2020-02-12</li><br/><li><span>vivien_zh</span> 👍（2） 💬（1）<p>努力跟上老师的进度。</p>2019-05-22</li><br/><li><span>🌻</span> 👍（1） 💬（1）<p>第一问：
+使用if not x这种写法的前提是：必须清楚x等于None, False, 空字符串&quot;&quot;, 0, 空列表[], 空字典{}, 空元组()时对你的判断没有影响才行</p>2020-02-12</li><br/><li><span>vivien_zh</span> 👍（2） 💬（1）<p>努力跟上老师的进度。</p>2019-05-22</li><br/><li><span>🌻</span> 👍（1） 💬（1）<p>第一问：
 
 import re
 from collections import defaultdict
 from pathlib import Path
 
-
 def parse(text, count):
-    words = re.split(r&#39;\W&#39;, text.lower())
+words = re.split(r&#39;\W&#39;, text.lower())
 
     for word in words:
         count[word] += 1
@@ -441,17 +444,17 @@ def parse(text, count):
 
 count = defaultdict(int)
 with open(&#39;in.txt&#39;, &#39;r&#39;) as f:
-    for line in f.readlines():
-        count = parse(line, count)
-        
+for line in f.readlines():
+count = parse(line, count)
+
 # 排序
+
 count.pop(&#39;&#39;)
 sort_by_value = sorted(count.items(), key=lambda x: x[1] * -1)
-
 
 Path(&#39;out.txt&#39;).touch()
 
 with open(&#39;out.txt&#39;, &#39;w&#39;) as f:
-    for word, count in sort_by_value:
-        f.writelines(&#39;{}: {}\n&#39;.format(word, count))</p>2020-04-02</li><br/><li><span>GentleCP</span> 👍（1） 💬（1）<p>老师github链接还没放出吗</p>2019-05-23</li><br/><li><span>Geek_Stone</span> 👍（1） 💬（1）<p>差不多10年了，还是个初学者。希望尽快摆脱初学者状态。</p>2019-05-22</li><br/>
+for word, count in sort_by_value:
+f.writelines(&#39;{}: {}\n&#39;.format(word, count))</p>2020-04-02</li><br/><li><span>GentleCP</span> 👍（1） 💬（1）<p>老师github链接还没放出吗</p>2019-05-23</li><br/><li><span>Geek_Stone</span> 👍（1） 💬（1）<p>差不多10年了，还是个初学者。希望尽快摆脱初学者状态。</p>2019-05-22</li><br/>
 </ul>

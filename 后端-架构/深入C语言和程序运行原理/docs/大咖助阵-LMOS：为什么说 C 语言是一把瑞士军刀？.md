@@ -93,7 +93,7 @@ int main(int argc, char const *argv[]) {
 第一步，观察C语言如何处理全局变量。代码如下：
 
 ```plain
-.globl hellostr  	
+.globl hellostr
 .section .rodata
 .LC0:
 	.string	"HelloWorld"  // 字符变量放在可执行文件的 rodata 段；

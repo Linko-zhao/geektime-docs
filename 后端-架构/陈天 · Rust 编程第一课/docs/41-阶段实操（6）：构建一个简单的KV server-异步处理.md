@@ -87,20 +87,20 @@ pub trait Stream {
     ) -> Poll<Option<Self::Item>>;
 }
 
-// 
+//
 pub trait Sink<Item> {
     type Error;
     fn poll_ready(
-        self: Pin<&mut Self>, 
+        self: Pin<&mut Self>,
         cx: &mut Context<'_>
     ) -> Poll<Result<(), Self::Error>>;
     fn start_send(self: Pin<&mut Self>, item: Item) -> Result<(), Self::Error>;
     fn poll_flush(
-        self: Pin<&mut Self>, 
+        self: Pin<&mut Self>,
         cx: &mut Context<'_>
     ) -> Poll<Result<(), Self::Error>>;
     fn poll_close(
-        self: Pin<&mut Self>, 
+        self: Pin<&mut Self>,
         cx: &mut Context<'_>
     ) -> Poll<Result<(), Self::Error>>;
 }

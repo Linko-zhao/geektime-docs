@@ -46,8 +46,8 @@ IntLiteral:        [0-9]+;
 StringLiteral:      '"' .*? '"' ;  //字符串字面量
 
 //操作符
-AssignmentOP:       '=' ;    
-RelationalOP:       '>'|'>='|'<' |'<=' ;    
+AssignmentOP:       '=' ;
+RelationalOP:       '>'|'>='|'<' |'<=' ;
 Star:               '*';
 Plus:               '+';
 Sharp:              '#';
@@ -129,7 +129,7 @@ fragment EscapeSequence
 
 fragment HexDigit
     : [0-9a-fA-F]
-    ;  
+    ;
 ```
 
 在这个规则文件中，fragment指的是一个语法片段，是为了让规则定义更清晰。它本身并不生成Token，只有StringLiteral规则才会生成Token。
@@ -273,6 +273,7 @@ age + 10 * 2  + 10
 - PlayScript.g4（用Antlr重写了前几讲的语法规则）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.g4) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.g4)
 - ASTEvaluator.java（对AST遍历，实现整数的算术运算）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/ASTEvaluator.java) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/ASTEvaluator.java)
 - PlayScript.java（一个测试程序，实现词法分析、语法分析、公式计算）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.java) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.java)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>京京beaver</span> 👍（21） 💬（4）<p>1. windows环境下配置
 可执行文件，放在D:\tools\antlr\antlr-4.7.2-complete.jar下面
@@ -293,10 +294,10 @@ if &quot;%TEST_CURRENT_DIR%&quot; == &quot;%CLASSPATH%&quot; ( SET CLASSPATH=.;%
 java org.antlr.v4.gui.TestRig %*
 
 4.然后就可以执行antlr4和grun命令了
-比如antlr4 Hello.g4,  javac Hello*.java, 
+比如antlr4 Hello.g4, javac Hello*.java,
 $ grun Hello r -gui
 hello parrt
-^Z (windows) 
+^Z (windows)
 
 5.java执行路径要注意事项
 在命令行执行java命令，记得把目录设置到src&#47;main&#47;java这里，然后输入包名.类名，才能找到。
@@ -345,7 +346,7 @@ https:&#47;&#47;github.com&#47;iostalks&#47;PlayWithCompiler&#47;tree&#47;lectur
 That ^D means EOF on unix; it&#39;s ^Z in Windows.</p>2019-08-26</li><br/><li><span>七月有风</span> 👍（3） 💬（1）<p>macOS下，需要将把 Antlr 的 JAR 文件设置到 CLASSPATH 环境变量中：
 如果是用Homebrew 安装的 Antlr，安装路径是：&#47;usr&#47;local&#47;Cellar&#47;antlr&#47;4.7.2&#47;antlr-4.7.2-complete.jar；
 可以使用vi ~&#47;.bash_profile命令打开bash_profile文件，将export CLASSPATH=&quot;.:&#47;usr&#47;local&#47;Cellar&#47;antlr&#47;4.7.2&#47;antlr-4.7.2-complete.jar:$CLASSPATH&quot;这段代码复制到里面。
-然后就可以运行javac *.java了</p>2019-12-23</li><br/><li><span>PythonAI</span> 👍（3） 💬（3）<p>➜  antlr grun antlrtest.PlayScriptexpression -gui
+然后就可以运行javac *.java了</p>2019-12-23</li><br/><li><span>PythonAI</span> 👍（3） 💬（3）<p>➜ antlr grun antlrtest.PlayScriptexpression -gui
 
 Can&#39;t load antlrtest.PlayScriptexpression as lexer or parser</p>2019-08-26</li><br/><li><span>江世民</span> 👍（2） 💬（1）<p>遇到了一个大坑。
 Windows环境下，添加jar包到CLASSPATH中时，最好写在前面。如果是追加在后面，系统很可能不识别。</p>2020-06-28</li><br/><li><span>七月有风</span> 👍（2） 💬（2）<p>不知道是什么问题？
@@ -359,12 +360,12 @@ Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: antlrtest&#
         at java.base&#47;jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(BuiltinClassLoader.java:623)
         at java.base&#47;jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
         at java.base&#47;jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
-        at java.base&#47;java.lang.ClassLoader.loadClass(ClassLoader.java:521)
-        at org.antlr.v4.gui.TestRig.process(TestRig.java:135)
-        at org.antlr.v4.gui.TestRig.main(TestRig.java:119)</p>2019-12-25</li><br/><li><span>mudfrog</span> 👍（2） 💬（2）<p>老师，我的程序能编译通过，也能正常运行，能正常的解析和运算出来，但就是想看看语法树直观一些。我使用grun的时候总是提示Can&#39;t load CalExpr as lexer or parser，这里CalExpr到底是G4文件还是tokens文件呢，我把这两个文件都拷贝到src目录下了。我用的是win7底下的eclipse，</p>2019-09-01</li><br/><li><span>minghu6</span> 👍（1） 💬（1）<p>ANTLR的使用一定要有 “The Definitive ANTLR 4 Reference”  推荐电子版 https:&#47;&#47;github.com&#47;antlr&#47;antlr4&#47;blob&#47;master&#47;doc&#47;index.md
+at java.base&#47;java.lang.ClassLoader.loadClass(ClassLoader.java:521)
+at org.antlr.v4.gui.TestRig.process(TestRig.java:135)
+at org.antlr.v4.gui.TestRig.main(TestRig.java:119)</p>2019-12-25</li><br/><li><span>mudfrog</span> 👍（2） 💬（2）<p>老师，我的程序能编译通过，也能正常运行，能正常的解析和运算出来，但就是想看看语法树直观一些。我使用grun的时候总是提示Can&#39;t load CalExpr as lexer or parser，这里CalExpr到底是G4文件还是tokens文件呢，我把这两个文件都拷贝到src目录下了。我用的是win7底下的eclipse，</p>2019-09-01</li><br/><li><span>minghu6</span> 👍（1） 💬（1）<p>ANTLR的使用一定要有 “The Definitive ANTLR 4 Reference” 推荐电子版 https:&#47;&#47;github.com&#47;antlr&#47;antlr4&#47;blob&#47;master&#47;doc&#47;index.md
 
 可以做关键字搜索，查点儿语法概念性的东西比较方便，用一位网友说的话：
-If you do not already have &quot;The Definitive ANTLR 4 Reference&quot; book I recommend getting hold of it. Will save you a lot of time. 
+If you do not already have &quot;The Definitive ANTLR 4 Reference&quot; book I recommend getting hold of it. Will save you a lot of time.
 话说极客时间的内容还不错，没有那么多花里胡哨的噱头，但是这个书签笔记和评论的体验太差！
 书签笔记甚至没有结构，留言也不支持markdown
 
@@ -382,18 +383,18 @@ https:&#47;&#47;github.com&#47;RichardGong&#47;PlayWithCompiler&#47;blob&#47;mas
 
 如果遇到找不到parse lexer问题，Class Path需要添加src目录</p>2020-03-24</li><br/><li><span>徐炜</span> 👍（1） 💬（1）<p>Antlr、Lex&#47;Flex、 Yacc&#47;Bison 在目前市场上哪个会比较常用呢，在时间有限的情况下，哪一种会比较合适去学习。</p>2020-02-15</li><br/><li><span>火火</span> 👍（1） 💬（3）<p>Hello.java:2: 错误: 程序包org.antlr.v4.runtime不存在
 import org.antlr.v4.runtime.Lexer;
-                           ^
+^
 Hello.java:3: 错误: 程序包org.antlr.v4.runtime不存在
 import org.antlr.v4.runtime.CharStream;
-                           ^
+^
 Hello.java:4: 错误: 程序包org.antlr.v4.runtime不存在
 import org.antlr.v4.runtime.Token;
-                           ^
+^
 Hello.java:5: 错误: 程序包org.antlr.v4.runtime不存在
 import org.antlr.v4.runtime.TokenStream;
-                           ^
+^
 Hello.java:8: 错误: 程序包org.antlr.v4.runtime.dfa不存在
 import org.antlr.v4.runtime.dfa.DFA;
-                               ^
+^
 Hello.java:12: 错误: 找不到符号</p>2019-11-28</li><br/><li><span>沉淀的梦想</span> 👍（1） 💬（2）<p>老师，为什么我用antlr生成的AdditiveExpressionContext就没有示例程序中的ADD() SUB()这些直接以token名字命名的方法呢？</p>2019-08-29</li><br/><li><span>紫灵斗圣</span> 👍（0） 💬（1）<p>antlr的语法规则的顺序又要求吗，是否规则1是程序的开头</p>2021-04-01</li><br/>
 </ul>

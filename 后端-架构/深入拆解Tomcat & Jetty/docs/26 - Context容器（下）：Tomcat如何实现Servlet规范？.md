@@ -21,13 +21,13 @@ protected volatile Servlet instance = null;
 ```
 public synchronized Servlet loadServlet() throws ServletException {
     Servlet servlet;
-  
+
     //1. 创建一个Servlet实例
-    servlet = (Servlet) instanceManager.newInstance(servletClass);    
-    
+    servlet = (Servlet) instanceManager.newInstance(servletClass);
+
     //2.调用了Servlet的init方法，这是Servlet规范要求的
     initServlet(servlet);
-    
+
     return servlet;
 }
 ```
@@ -47,7 +47,7 @@ public final void invoke(Request request, Response response) {
 
     //1.实例化Servlet
     servlet = wrapper.allocate();
-   
+
     //2.给当前请求创建一个Filter链
     ApplicationFilterChain filterChain =
         ApplicationFilterFactory.createFilterChain(request, wrapper, servlet);
@@ -82,23 +82,23 @@ private Map<String, FilterDef> filterDefs = new HashMap<>();
 
 ```
 public final class ApplicationFilterChain implements FilterChain {
-  
+
   //Filter链中有Filter数组，这个好理解
   private ApplicationFilterConfig[] filters = new ApplicationFilterConfig[0];
-    
+
   //Filter链中的当前的调用位置
   private int pos = 0;
-    
+
   //总共有多少了Filter
   private int n = 0;
 
   //每个Filter链对应一个Servlet，也就是它要调用的Servlet
   private Servlet servlet = null;
-  
+
   public void doFilter(ServletRequest req, ServletResponse res) {
         internalDoFilter(request,response);
   }
-   
+
   private void internalDoFilter(ServletRequest req,
                                 ServletResponse res){
 
@@ -112,7 +112,7 @@ public final class ApplicationFilterChain implements FilterChain {
     }
 
     servlet.service(request, response);
-   
+
 }
 ```
 
@@ -130,12 +130,12 @@ public final class ApplicationFilterChain implements FilterChain {
 ```
 public void doFilter(ServletRequest request, ServletResponse response,
         FilterChain chain){
-        
+
           ...
-          
+
           //调用Filter的方法
           chain.doFilter(request, response);
-      
+
       }
 ```
 

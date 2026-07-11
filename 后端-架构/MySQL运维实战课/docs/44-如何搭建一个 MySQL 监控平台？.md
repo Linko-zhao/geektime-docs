@@ -54,7 +54,7 @@ Last checkpoint at           3090029475
 如果使用了MGR，还要监控集群成员的状态，以及事务接收和应用延迟。从replication\_group\_members表获取节点的状态、角色。
 
 ```plain
-mysql> select member_host,member_port, member_state, member_role 
+mysql> select member_host,member_port, member_state, member_role
   from replication_group_members;
 +----------------+-------------+--------------+-------------+
 | member_host    | member_port | member_state | member_role |
@@ -96,11 +96,11 @@ COUNT_TRANSACTIONS_REMOTE_IN_APPLIER_QUEUE: 0
 ```plain
 # at 1722630
 #241031 15:01:15 server id 234  end_log_pos 1722716 CRC32 0xb2d35e04 	GTID
-last_committed=23	
-sequence_number=24	
-rbr_only=yes	
-original_committed_timestamp=1730358075343041	
-immediate_commit_timestamp=1730358075365889	
+last_committed=23
+sequence_number=24
+rbr_only=yes
+original_committed_timestamp=1730358075343041
+immediate_commit_timestamp=1730358075365889
 transaction_length=333
 ```
 
@@ -125,15 +125,15 @@ from replication_applier_status_by_worker;
 MySQL的会话信息在排查一些问题的时候有比较重要的作用。我们可以把ProcessList中运行时间超过一定阈值的会话采集下来。MySQL中的长事务和大事务有时也会对性能有负面影响，可以到innodb\_trx表把长事务也采集下来。
 
 ```plain
-select trx_id, 
-  trx_mysql_thread_id, 
-  trx_started, 
-  trx_tables_in_use, 
-  trx_tables_locked, 
-  trx_lock_structs, 
-  trx_lock_memory_bytes,  
-  trx_rows_locked, 
-  trx_rows_modified  
+select trx_id,
+  trx_mysql_thread_id,
+  trx_started,
+  trx_tables_in_use,
+  trx_tables_locked,
+  trx_lock_structs,
+  trx_lock_memory_bytes,
+  trx_rows_locked,
+  trx_rows_modified
 from innodb_trx
 ```
 
@@ -282,15 +282,15 @@ Prometheus也有很多不同的运行方式，下面的演示案例中使用了�
 
 ```plain
 global:
-  scrape_interval: 15s 
-  evaluation_interval: 15s 
+  scrape_interval: 15s
+  evaluation_interval: 15s
 .......
 
 scrape_configs:
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
-      
+
   - job_name: "linux"
     static_configs:
       - targets: ["172.16.121.234:9100", "172.16.121.236:9100", "172.16.121.237:9100"]

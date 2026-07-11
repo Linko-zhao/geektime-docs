@@ -20,28 +20,33 @@
 如果缺少类型定义，会导致什么问题？我们看一个例子：
 
 ```javascript
-const kanbanCard = { title: '开发任务-1', status: new Date().toString() };
+const kanbanCard = { title: "开发任务-1", status: new Date().toString() };
 // ...间隔了很远
-const TestComponent = (<>
-  <div>{kanbanCard.date}</div> /* 这个属性不存在 */
-  <div>{kanbanCard.status.toLocaleString()}</div> /* 字符串没有这个方法 */
-</>);
+const TestComponent = (
+  <>
+      <div>{kanbanCard.date}</div> /* 这个属性不存在 */  {" "}
+    <div>{kanbanCard.status.toLocaleString()}</div> /* 字符串没有这个方法 */
+  </>
+);
 // ...
-kanbanCard.step = 'ongoing'; /* 也许是临时起意加入这个属性 */
+kanbanCard.step = "ongoing"; /* 也许是临时起意加入这个属性 */
 // ...又隔了很远
-kanbanCard.stop = 'done'; /* 不小心拼错了属性名 */
+kanbanCard.stop = "done"; /* 不小心拼错了属性名 */
 // ...又隔了很远
-if (kanbanCard.step === 'done') {} /* 因为前面拼错了，这里会一直为false */
+if (kanbanCard.step === "done") {
+} /* 因为前面拼错了，这里会一直为false */
 // ...
 const ongoingList = [kanbanCard];
 // ...又隔了很远
 ongoingList.push({
-  cardTitle: '测试任务-2', /* 这个属性名与数组中其他成员不一致 */
-  status: new Date().toString()
+  cardTitle: "测试任务-2" /* 这个属性名与数组中其他成员不一致 */,
+  status: new Date().toString(),
 });
 // ...又隔了很远
 const TestComponent2 = ongoingList.map(({ title, status }) => (
-  <div key={title}>{title} {status}</div> /* 会有一张卡片的标题没有显示 */
+  <div key={title}>
+    {title} {status}
+  </div> /* 会有一张卡片的标题没有显示 */
 ));
 ```
 
@@ -66,11 +71,11 @@ TypeScript（以下简称TS）是微软推出一款**基于JavaScript的强类�
 
 ```typescript
 type CardType = {
-  title: string,
-  status: string,
-  step?: string
+  title: string;
+  status: string;
+  step?: string;
 };
-const kanbanCard: CardType = {/* ... */};
+const kanbanCard: CardType = {/* ... */};
 // ...
 const ongoingList: Array<CardType> = [];
 // ...
@@ -143,7 +148,7 @@ export type KanbanCardType = {
 最后我们再默认导出这个变量：
 
 ```typescript
-import { KanbanCardType } from './types/KanbanCard.types';
+import { KanbanCardType } from "./types/KanbanCard.types";
 // ...
 
 type KanbanColumnProps = {
@@ -169,7 +174,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   setDraggedItem,
   setIsDragSource = () => {},
   setIsDragTarget = () => {},
-  title
+  title,
 }) => {
   // ...
 };
@@ -190,12 +195,12 @@ interface IPet extends Cat | Dog {} // 不可以，会抛错
 
 ```typescript
 interface ICat {
-  age: number
+  age: number;
 }
 interface ICat {
-  color: string
+  color: string;
 } // 可以，会合并
-const cat: ICat = { age: 4, color: 'silver shaded' };
+const cat: ICat = { age: 4, color: "silver shaded" };
 
 type Cat = { age: number };
 type Cat = { color: string }; // 不可以，会抛错
@@ -250,19 +255,17 @@ const AdminContext = React.createContext<boolean>(false);
 后来从React v15.5版本开始，PropTypes被移到了一个独立的[NPM包](https://github.com/facebook/prop-types)，以下是来自React官网的样例代码：
 
 ```javascript
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 function HelloWorldComponent({ name }) {
-  return (
-    <div>Hello, {name}</div>
-  )
+  return <div>Hello, {name}</div>;
 }
 
 HelloWorldComponent.propTypes = {
-  name: PropTypes.string
-}
+  name: PropTypes.string,
+};
 
-export default HelloWorldComponent
+export default HelloWorldComponent;
 ```
 
 2. **Flow**（[官网](https://flow.org/)）
@@ -274,7 +277,7 @@ export default HelloWorldComponent
 ```javascript
 // @flow
 function square(n: number): number {
-  return n * n;
+  return n * n;
 }
 
 square("2"); // Error!
@@ -288,14 +291,14 @@ square("2"); // Error!
 /** @module color/mixer */
 
 /** The name of the module. */
-export const name = 'mixer';
+export const name = "mixer";
 
 /**
- * Blend two colors together.
- * @param {string} color1 - The first color, in hexadecimal format.
- * @param {string} color2 - The second color, in hexadecimal format.
- * @return {string} The blended color.
- */
+ * Blend two colors together.
+ * @param {string} color1 - The first color, in hexadecimal format.
+ * @param {string} color2 - The second color, in hexadecimal format.
+ * @return {string} The blended color.
+ */
 export function blend(color1, color2) {}
 ```
 

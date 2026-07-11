@@ -66,23 +66,23 @@
 
 ```typescript
 [
-    ['v11', 'v12', 'v13', 'v14', 'v15'],
-    ['v21', 'v22', 'v23', 'v24', 'v25'],
-    ['v31', 'v32', 'v33', 'v34', 'v35'],
-    ['v41', 'v42', 'v43', 'v44', 'v45'],
-    ['v51', 'v52', 'v53', 'v54', 'v55'],
-]
+  ["v11", "v12", "v13", "v14", "v15"],
+  ["v21", "v22", "v23", "v24", "v25"],
+  ["v31", "v32", "v33", "v34", "v35"],
+  ["v41", "v42", "v43", "v44", "v45"],
+  ["v51", "v52", "v53", "v54", "v55"],
+];
 ```
 
 另一种是二维表的变体，如果服务端用的是node.js实现的，很可能会返回这样的数据结构：
 
 ```typescript
 [
-    {f1: 'v11', f2: 'v12', f3: 'v13', f4: 'v14', f5: 'v15'},
-    {f1: 'v21', f2: 'v22', f3: 'v23', f4: 'v24', f5: 'v25'},
-    {f1: 'v31', f2: 'v32', f3: 'v33', f4: 'v34', f5: 'v35'},
-    {f1: 'v41', f2: 'v42', f3: 'v43', f4: 'v44', f5: 'v45'},
-]
+  { f1: "v11", f2: "v12", f3: "v13", f4: "v14", f5: "v15" },
+  { f1: "v21", f2: "v22", f3: "v23", f4: "v24", f5: "v25" },
+  { f1: "v31", f2: "v32", f3: "v33", f4: "v34", f5: "v35" },
+  { f1: "v41", f2: "v42", f3: "v43", f4: "v44", f5: "v45" },
+];
 ```
 
 当然，这里还需要有兜底方法，用于处理预设类型之外的其他情况。但在这个情况下，只能编写数据转换逻辑了。我们可以引入第10讲的方法，通过可视化编程方式来编排转换逻辑，也可以直接给一个编辑器，让应用开发填写转换逻辑。两种方式的流程都是一样的，都是给出一个原始数据，要求应用返回一个处理后的数据：
@@ -135,10 +135,10 @@ App在开发时，一个非常普遍的情况是，它的数据还没准备好�
 
 ```typescript
 const originSend = XMLHttpRequest.prototype.send;
-XMLHttpRequest.prototype.send = function(body) {
-    var info="send data\r\n"+body;
-    alert(info);
-    originSend.call(this, body);
+XMLHttpRequest.prototype.send = function (body) {
+  var info = "send data\r\n" + body;
+  alert(info);
+  originSend.call(this, body);
 };
 ```
 

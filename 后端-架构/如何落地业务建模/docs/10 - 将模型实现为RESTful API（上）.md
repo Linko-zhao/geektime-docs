@@ -25,14 +25,14 @@ API作为对外暴露的接口，也是需要保持高稳定性的组件。我�
 ```
 service GeekTime {
     rpc SendGift(SendGiftRequest) returns SendGiftReply {}
-  
+
     rpc SubscribeColumn(SubscribeColumnRequest) returns SubscribeColumnReply {}
-  
+
     rpc RegisterUser(RegisterUserRequest) returns RegisterUserReply {}
-    
+
     rpc ReadColumn(ReadColumnRequest) returns ReadColumnReply {}
-    
-    rpc RateColumn(RateColumnRequest) returns RateColumnReply {}     
+
+    rpc RateColumn(RateColumnRequest) returns RateColumnReply {}
 }
 
 message SendGiftRequest {
@@ -249,6 +249,6 @@ Column就像电商网站的商品， 计算机基础&#47;后端&#47;前端&#47;�
 思考题：
 使用GraphQL？</p>2021-07-16</li><br/><li><span>冯</span> 👍（0） 💬（3）<p>我有个疑问，像GET &#47;users&#47;{user_id}&#47;subscriptions，这个api只要我知道user id,是不是就可以看任意的用户的订阅了？安全性怎么保证呢</p>2021-07-15</li><br/><li><span>张建飞</span> 👍（1） 💬（0）<p>关于HTTP常用的方法就get put post delete patch，无法表达业务动作语义的问题。可以参考Google的自定义方法做法：https:&#47;&#47;cloud.google.com&#47;apis&#47;design&#47;custom_methods 。《程序员的底层思维》</p>2022-11-03</li><br/><li><span>KeepGoing</span> 👍（1） 💬（0）<p>有一种CASE是如果服务内部的多种资源是有关联关系的，比如其中一种资源的状态改变，业务上也要求其它关联资源跟着变，或者还有对多种资源统一管理操作的需要，比如有一个对多种资源统一管理状态的开关等类似这样的场景。请问这种情况下该怎么单纯从资源的角度进行API设计？</p>2022-02-23</li><br/><li><span>冯</span> 👍（1） 💬（0）<p>不同的格式是什么意思？json or xml？如果指的是这个的话，可以通过Content-Type协商</p>2021-07-15</li><br/><li><span>6点无痛早起学习的和尚</span> 👍（0） 💬（0）<p>2024年01月16日08:28:18
 完犊子了，我们团队所有请求都是用 post，因为为了避免用其他请求方式带来的隐患，那这样的确有点实现不了领域驱动 API 了，
-比如创建客户，restful 就是 post &#47;customer，我们post &#47;createCustomer 
+比如创建客户，restful 就是 post &#47;customer，我们post &#47;createCustomer
 查询客户信息 restful get &#47;customer&#47;{customerId}，我们 post &#47;getCustomerInfo</p>2024-01-16</li><br/>
 </ul>

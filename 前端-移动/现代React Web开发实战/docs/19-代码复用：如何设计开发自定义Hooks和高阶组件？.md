@@ -52,42 +52,46 @@
 以下代码是一个书籍列表组件，会从服务器端读取特定类别下的书籍列表数据（注意 `React.StrictMode` 会重复触发副作用回调函数，为了简化例子这里没有做处理）。数据是分页返回的，当还有下一页时，用户可以点击“读取更多”按钮，加载下一页数据拼到当前列表尾部：
 
 ```javascript
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 const BookList = ({ categoryId }) => {
-  const [books, setBooks] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const url = `/api/books?category=${categoryId}&page=${currentPage}`;
-      const res = await fetch(url);
-      const { items, totalPages } = await res.json();
-      setBooks(books => books.concat(items));
-      setTotalPages(totalPages);
-      setIsLoading(false);
-    };
-    setIsLoading(true);
-    fetchBooks();
-  }, [categoryId, currentPage]);
+  const [books, setBooks] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const url = `/api/books?category=${categoryId}&page=${currentPage}`;
+      const res = await fetch(url);
+      const { items, totalPages } = await res.json();
+      setBooks((books) => books.concat(items));
+      setTotalPages(totalPages);
+      setIsLoading(false);
+    };
+    setIsLoading(true);
+    fetchBooks();
+  }, [categoryId, currentPage]);
 
-  return (
-    <div>
-      <ul>
-        {books.map((book) => (
-          <li key={book.id}>{book.title}</li>
-        ))}
-        {isLoading && (<li>Loading...</li>)}
-      </ul>
-      <button
-        onClick={() => setCurrentPage(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        读取更多
-      </button>
-    </div>
-  );
+  return (
+    <div>
+           {" "}
+      <ul>
+               {" "}
+        {books.map((book) => (
+          <li key={book.id}>{book.title}</li>
+        ))}
+                {isLoading && <li>Loading...</li>}     {" "}
+      </ul>
+           {" "}
+      <button
+        onClick={() => setCurrentPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+                读取更多      {" "}
+      </button>
+         {" "}
+    </div>
+  );
 };
 
 export default BookList;
@@ -96,54 +100,54 @@ export default BookList;
 上面的代码中，分页读取书籍列表这部分逻辑，我们可以选择抽取成自定义Hook：`useFetchBooks`，它的参数只有`categoryId`，函数体调用了多个基础Hooks，返回值包括`books`列表、是否读取中`isLoading`。当前页和总页数做了额外处理，返回计算值`hasNextPage`和一个回调函数`onNextPage`。代码如下：
 
 ```javascript
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 function useFetchBooks(categoryId) {
-  const [books, setBooks] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const url = `/api/books?category=${categoryId}&page=${currentPage}`;
-      const res = await fetch(url);
-      const { items, totalPages } = await res.json();
-      setBooks(books => books.concat(items));
-      setTotalPages(totalPages);
-      setIsLoading(false);
-    };
-    setIsLoading(true);
-    fetchBooks();
-  }, [categoryId, currentPage]);
-  const hasNextPage = currentPage < totalPages;
-  const onNextPage = () => {
-    setCurrentPage(current => current + 1);
-  }
+  const [books, setBooks] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const url = `/api/books?category=${categoryId}&page=${currentPage}`;
+      const res = await fetch(url);
+      const { items, totalPages } = await res.json();
+      setBooks((books) => books.concat(items));
+      setTotalPages(totalPages);
+      setIsLoading(false);
+    };
+    setIsLoading(true);
+    fetchBooks();
+  }, [categoryId, currentPage]);
+  const hasNextPage = currentPage < totalPages;
+  const onNextPage = () => {
+    setCurrentPage((current) => current + 1);
+  };
 
-  return {books, isLoading, hasNextPage, onNextPage};
+  return { books, isLoading, hasNextPage, onNextPage };
 }
 
 const BookList = ({ categoryId }) => {
-  const {
-    books,
-    isLoading,
-    hasNextPage,
-    onNextPage
-  } = useFetchBooks(categoryId);
+  const { books, isLoading, hasNextPage, onNextPage } =
+    useFetchBooks(categoryId);
 
-  return (
-    <div>
-      <ul>
-        {books.map((book) => (
-          <li key={book.id}>{book.title}</li>
-        ))}
-        {isLoading && (<li>Loading...</li>)}
-      </ul>
-      <button onClick={onNextPage} disabled={!hasNextPage}>
-        读取更多
-      </button>
-    </div>
-  );
+  return (
+    <div>
+           {" "}
+      <ul>
+               {" "}
+        {books.map((book) => (
+          <li key={book.id}>{book.title}</li>
+        ))}
+                {isLoading && <li>Loading...</li>}     {" "}
+      </ul>
+           {" "}
+      <button onClick={onNextPage} disabled={!hasNextPage}>
+                读取更多      {" "}
+      </button>
+         {" "}
+    </div>
+  );
 };
 
 export default BookList;
@@ -257,18 +261,15 @@ const EnhancedMovieList = withLoading(MovieList);
 
 ```javascript
 function withRouter(WrappedComponent) {
-  function ComponentWithRouterProp(props) {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const params = useParams();
-    return (
-      <WrappedComponent
-        {...props}
-        router={{ location, navigate, params }}
-      />
-    );
-  }
-  return ComponentWithRouterProp;
+  function ComponentWithRouterProp(props) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const params = useParams();
+    return (
+      <WrappedComponent {...props} router={{ location, navigate, params }} />
+    );
+  }
+  return ComponentWithRouterProp;
 }
 ```
 
@@ -283,10 +284,7 @@ const EnhancedMovieList = withRouter(withLoading(MovieList));
 这时推荐使用Redux的 `compose` 函数来改善代码的可读性：
 
 ```javascript
-const enhance = compose(
-  withRouter,
-  withLoading
-);
+const enhance = compose(withRouter, withLoading);
 const EnhancedMovieList = enhance(MovieList);
 ```
 
@@ -296,34 +294,34 @@ const EnhancedMovieList = enhance(MovieList);
 export const LoggedInUserContext = React.createContext();
 
 function withLoggedInUserContext(WrappedComponent) {
-  const LoggedInUserContainer = (props) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [currentUserData, setCurrentUserData] = useState(null);
-    useEffect(() => {
-      async function fetchCurrentUserData() {
-        const res = await fetch('/api/user');
-        const data = await res.json();
-        setCurrentUserData(data);
-        setIsLoading(false);
-      }
+  const LoggedInUserContainer = (props) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentUserData, setCurrentUserData] = useState(null);
+    useEffect(() => {
+      async function fetchCurrentUserData() {
+        const res = await fetch("/api/user");
+        const data = await res.json();
+        setCurrentUserData(data);
+        setIsLoading(false);
+      }
 
-      if (isLoggedIn) {
-        setIsLoading(true);
-        fetchCurrentUserData();
-      }
-    }, [isLoggedIn]);
+      if (isLoggedIn) {
+        setIsLoading(true);
+        fetchCurrentUserData();
+      }
+    }, [isLoggedIn]);
 
-    return !isLoggedIn ? (
-      <LoginDialog onLogin={setIsLoggedIn} />
-    ) : isLoading ? (
-      <div>读取中</div>
-    ) : (
-      <LoggedInUserContext.Provider value={currentUserData}>
-        <WrappedComponent {...props} />
-      </LoggedInUserContext.Provider>
-    )
-  }
+    return !isLoggedIn ? (
+      <LoginDialog onLogin={setIsLoggedIn} />
+    ) : isLoading ? (
+      <div>读取中</div>
+    ) : (
+      <LoggedInUserContext.Provider value={currentUserData}>
+                <WrappedComponent {...props} />     {" "}
+      </LoggedInUserContext.Provider>
+    );
+  };
 }
 ```
 
@@ -362,4 +360,5 @@ const [name, setName] = useState()
 一般来说超过三个用对象形式比较好。
 
 2. 暂时实现不出~贴下 React.memo 源码链接: https:&#47;&#47;github.com&#47;facebook&#47;react&#47;blob&#47;main&#47;packages&#47;react&#47;src&#47;ReactMemo.js</p>2022-10-16</li><br/>
+
 </ul>

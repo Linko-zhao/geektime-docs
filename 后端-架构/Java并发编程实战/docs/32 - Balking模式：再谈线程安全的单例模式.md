@@ -7,13 +7,13 @@ class AutoSaveEditor{
   //文件是否被修改过
   boolean changed=false;
   //定时任务线程池
-  ScheduledExecutorService ses = 
+  ScheduledExecutorService ses =
     Executors.newSingleThreadScheduledExecutor();
   //定时执行自动保存
   void startAutoSave(){
     ses.scheduleWithFixedDelay(()->{
       autoSave();
-    }, 5, 5, TimeUnit.SECONDS);  
+    }, 5, 5, TimeUnit.SECONDS);
   }
   //自动存盘操作
   void autoSave(){
@@ -56,7 +56,7 @@ void edit(){
   synchronized(this){
     changed = true;
   }
-}  
+}
 ```
 
 如果你深入地分析一下这个示例程序，你会发现，示例中的共享变量是一个状态变量，业务逻辑依赖于这个状态变量的状态：当状态满足某个条件时，执行某个业务逻辑，其本质其实不过就是一个if而已，放到多线程场景里，就是一种“多线程版本的if”。这种“多线程版本的if”的应用场景还是很多的，所以也有人把它总结成了一种设计模式，叫做**Balking模式**。
@@ -106,8 +106,8 @@ void change(){
 public class RouterTable {
   //Key:接口名
   //Value:路由集合
-  ConcurrentHashMap<String, CopyOnWriteArraySet<Router>> 
-    rt = new ConcurrentHashMap<>();    
+  ConcurrentHashMap<String, CopyOnWriteArraySet<Router>>
+    rt = new ConcurrentHashMap<>();
   //路由表是否发生变化
   volatile boolean changed;
   //将路由表写入本地文件的线程池
@@ -142,7 +142,7 @@ public class RouterTable {
   //增加路由
   public void add(Router router) {
     Set<Router> set = rt.computeIfAbsent(
-      route.iface, r -> 
+      route.iface, r ->
         new CopyOnWriteArraySet<>());
     set.add(router);
     //路由表已发生变化
@@ -173,10 +173,10 @@ class InitTest{
 class Singleton{
   private static
     Singleton singleton;
-  //构造方法私有化  
+  //构造方法私有化
   private Singleton(){}
   //获取实例（单例）
-  public synchronized static 
+  public synchronized static
   Singleton getInstance(){
     if(singleton == null){
       singleton=new Singleton();
@@ -190,12 +190,12 @@ class Singleton{
 
 ```
 class Singleton{
-  private static volatile 
+  private static volatile
     Singleton singleton;
-  //构造方法私有化  
+  //构造方法私有化
   private Singleton() {}
   //获取实例（单例）
-  public static Singleton 
+  public static Singleton
   getInstance() {
     //第一次检查
     if(singleton==null){
@@ -235,7 +235,7 @@ class Test{
     //计算count的值
     count = calc();
   }
-}  
+}
 ```
 
 欢迎在留言区与我分享你的想法，也欢迎你在留言区记录你的思考过程。感谢阅读，如果你觉得这篇文章对你有帮助的话，也欢迎把它分享给更多的朋友。
@@ -255,8 +255,7 @@ if（intied == false） {  &#47;&#47; 1
 
 疑问：
 public class RouterTable 类中AutoSave方法同一时刻只有一个线程调用，而Remove和Add方法也是要求使用方单线程访问吗？在实际开发中一般采用什么方式达成这种约定呢？</p>2019-05-11</li><br/><li><span>热台</span> 👍（3） 💬（1）<p>回答问题
-1，cal（）可能被执行多次
-2.  也可能cal（）执行结束前，count就被使用
+1，cal（）可能被执行多次2. 也可能cal（）执行结束前，count就被使用
 
 解决方法
 inited 赋值和cal（）执行放在一个同步块中，并增加双重check</p>2019-05-11</li><br/><li><span>J.M.Liu</span> 👍（3） 💬（1）<p>有问题，存在竞态条件</p>2019-05-11</li><br/><li><span>geoxs</span> 👍（0） 💬（1）<p>我有个问题，如果需求不要求只执行一次呢，比如计算很简单，耗费资源不大，多计算几次是可以接受的，可不可以这样写，有没有并发问题呢，甚至我把volitale关键字去掉可不可以呢？</p>2020-09-11</li><br/><li><span>晓杰</span> 👍（0） 💬（2）<p>在微服务的场景下，synchornize应该不适用了吧</p>2019-05-12</li><br/><li><span>拒绝</span> 👍（0） 💬（1）<p>老师，volatile只能保证变量的可见性，在多线程下，发生线程切换会都读取到变量为false，则计算count方法被调用多次，对吗？</p>2019-05-11</li><br/><li><span>郑晨Cc</span> 👍（10） 💬（1）<p>第8行 inited = true；改成cas操作

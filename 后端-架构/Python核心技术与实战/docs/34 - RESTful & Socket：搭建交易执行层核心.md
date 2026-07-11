@@ -26,7 +26,7 @@ REST的全称是表征层状态转移（REpresentational State Transfer），本
 可是小明同学不够聪明，很难理解这个定语很多的句子。于是，他妈妈为了让他更简单明白需要做的事情，把这个指令设计成了更简洁的样子：
 
 > 泡厨房的茶，要求如下：
-> 
+>
 > 1. 类型=普洱；
 > 2. 杯子=红色；
 > 3. 放糖=True；
@@ -266,23 +266,25 @@ print(int(time.mktime(current_time.timetuple())*1000))
 
 另外，作为taker第二次运行该代码就报出下面的错：
 {
-    &quot;result&quot;: &quot;error&quot;,
-    &quot;reason&quot;: &quot;InsufficientFunds&quot;,
-    &quot;message&quot;: &quot;Failed to place buy order on symbol &#39;BTCUSD&#39; for price $3,633.00 and quantity 5 BTC due to insufficient funds&quot;
+&quot;result&quot;: &quot;error&quot;,
+&quot;reason&quot;: &quot;InsufficientFunds&quot;,
+&quot;message&quot;: &quot;Failed to place buy order on symbol &#39;BTCUSD&#39; for price $3,633.00 and quantity 5 BTC due to insufficient funds&quot;
 }</p>2019-07-27</li><br/><li><span>瞳梦</span> 👍（3） 💬（4）<p>请问gemini sandbox账号怎么注册呢？我在官网只找到了Open a Personal Account和I Represent an Institution</p>2019-07-26</li><br/><li><span>Xg huang</span> 👍（1） 💬（1）<p>哈哈，深入浅出，赞一个
 
 不过有个地方是否写错？&quot;而小宝在某一天中午 11:59:00，告诉交易所，我要挂一个单子，数量为 0.1 比特币，价格为 10000 美元，低于这个价格不卖。&quot;
 
 是不是1000才对？</p>2019-07-26</li><br/><li><span>王帅帅</span> 👍（0） 💬（1）<p>我跑了一遍，提示gemini 交易所正在维护，怎么回事。</p>2020-01-13</li><br/><li><span>SCAR</span> 👍（13） 💬（0）<p>思考题：
+
 1. 纯粹使用timestamp应该不行，虽然timestamp也是递增的，但是在python里timestamp是float而不是int。
-2.但如果基于timestamp抽取出部分应该是可以，比如老师例子中的：
+   2.但如果基于timestamp抽取出部分应该是可以，比如老师例子中的：
    payload_nonce = str(int(time.mktime(t.timetuple())*1000))
    改成：
    payload_nonce = str(int(t.timestamp())*1000)
-   结果应该是一致的。</p>2019-07-26</li><br/><li><span>Monroe  He</span> 👍（7） 💬（2）<p>我想问一下老师，有针对国内股票的虚拟交易平台吗
-可以提供一下相关方面的书籍资料吗</p>2019-07-26</li><br/><li><span>devna</span> 👍（6） 💬（0）<p>前段时间刚看完《计算机网络：自顶自下方法》，确实不错，能很快提升对网络的认识，强烈推荐</p>2020-01-19</li><br/><li><span>karofsky</span> 👍（4） 💬（0）<p>今天再看这篇文章的感受就是，BTC真的涨了好多啊...</p>2021-01-12</li><br/><li><span>kang</span> 👍（3） 💬（6）<p>請問大家都是怎麼註冊Genimi 的? 我的註冊國家都被阻擋</p>2019-08-23</li><br/><li><span>马建华</span> 👍（2） 💬（3）<p>我是报错：
-{&#39;result&#39;: &#39;error&#39;, &#39;reason&#39;: &#39;MissingAccounts&#39;, &#39;message&#39;: &#39;Expected a JSON payload with accounts&#39;}
-有谁碰到吗？</p>2020-07-20</li><br/><li><span>及時行樂</span> 👍（2） 💬（0）<p>现在程序跑起来都报错了，这是交易所把API地址改了吗？
-{&#39;result&#39;: &#39;error&#39;, &#39;reason&#39;: &#39;EndpointMismatch&#39;, &#39;message&#39;: &#39;EndpointMismatch&#39;}</p>2020-05-13</li><br/><li><span>知止。</span> 👍（1） 💬（2）<p>老师，是不是该针对运行可能出现的一些问题给出解答呢？如果网站变更过信息，那么课件相应也得更新一下吧，不然后来订阅学习的人没办法完整学习啊。比如我按照课件内容运行，提示{&#39;result&#39;: &#39;error&#39;, &#39;reason&#39;: &#39;InvalidSignature&#39;, &#39;message&#39;: &#39;InvalidSignature&#39;}，网上都找不到原因，想自己排查错误都不懂如何着手
+   结果应该是一致的。</p>2019-07-26</li><br/><li><span>Monroe He</span> 👍（7） 💬（2）<p>我想问一下老师，有针对国内股票的虚拟交易平台吗
+   可以提供一下相关方面的书籍资料吗</p>2019-07-26</li><br/><li><span>devna</span> 👍（6） 💬（0）<p>前段时间刚看完《计算机网络：自顶自下方法》，确实不错，能很快提升对网络的认识，强烈推荐</p>2020-01-19</li><br/><li><span>karofsky</span> 👍（4） 💬（0）<p>今天再看这篇文章的感受就是，BTC真的涨了好多啊...</p>2021-01-12</li><br/><li><span>kang</span> 👍（3） 💬（6）<p>請問大家都是怎麼註冊Genimi 的? 我的註冊國家都被阻擋</p>2019-08-23</li><br/><li><span>马建华</span> 👍（2） 💬（3）<p>我是报错：
+   {&#39;result&#39;: &#39;error&#39;, &#39;reason&#39;: &#39;MissingAccounts&#39;, &#39;message&#39;: &#39;Expected a JSON payload with accounts&#39;}
+   有谁碰到吗？</p>2020-07-20</li><br/><li><span>及時行樂</span> 👍（2） 💬（0）<p>现在程序跑起来都报错了，这是交易所把API地址改了吗？
+   {&#39;result&#39;: &#39;error&#39;, &#39;reason&#39;: &#39;EndpointMismatch&#39;, &#39;message&#39;: &#39;EndpointMismatch&#39;}</p>2020-05-13</li><br/><li><span>知止。</span> 👍（1） 💬（2）<p>老师，是不是该针对运行可能出现的一些问题给出解答呢？如果网站变更过信息，那么课件相应也得更新一下吧，不然后来订阅学习的人没办法完整学习啊。比如我按照课件内容运行，提示{&#39;result&#39;: &#39;error&#39;, &#39;reason&#39;: &#39;InvalidSignature&#39;, &#39;message&#39;: &#39;InvalidSignature&#39;}，网上都找不到原因，想自己排查错误都不懂如何着手
+
 </p>2020-09-05</li><br/><li><span>SuperXiong</span> 👍（1） 💬（7）<p>第一部：注册sandbox没有成功，选了中国区，提交注册表之后，返回一个未知问题。</p>2020-01-12</li><br/>
 </ul>

@@ -56,6 +56,7 @@ GoogleNet不仅和VGG一样在把架构做“深”上下文章，而且在模�
 
 1. K. Simonyan, A. Zisserman. **Very Deep Convolutional Networks for Large-Scale Image Recognition**. International Conference on Learning Representations, 2015.
 2. C. Szegedy et al. **Going deeper with convolutions**. IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Boston, MA, pp. 1-9, 2015.
+
 <div><strong>精选留言（5）</strong></div><ul>
 <li><span>sky</span> 👍（4） 💬（0）<p>第一是如何让网络越来越深，参数越来越多，第二是如何优化网络结构，优化网络结构需要对深度神经网络有更基础的理论性理解</p>2018-09-11</li><br/><li><span>吴文敏</span> 👍（1） 💬（0）<p>更深的模型更少的参数</p>2018-09-26</li><br/><li><span>皮特尔</span> 👍（0） 💬（0）<p>VGG：第一个真正意义上达到“深层”的网络架构；
 GoogleNet：优化网络架构。</p>2020-06-05</li><br/><li><span>sky</span> 👍（0） 💬（0）<p>第一是如何让网络越来越深，参数越来越多，第二是如何优化网络结构，优化网络结构需要对深度神经网络有更基础的理论性理解</p>2018-09-11</li><br/><li><span>Andy</span> 👍（0） 💬（0）<p>请问老师计算机视觉会被这些复杂的模型统治吗？</p>2018-09-10</li><br/>

@@ -105,38 +105,38 @@ min(oldest work of A, low watermark of C:C outputs to A)
 
 ```java
 // Upon receipt of a record, update the running
-// total for its timestamp bucket, and set a 
-// timer to fire when we have received all 
-// of the data for that bucket. 
-void Windower::ProcessRecord(Record input) { 
-  WindowState state(MutablePersistentState()); 
-  state.UpdateBucketCount(input.timestamp()); 
-  string id = WindowID(input.timestamp()) 
+// total for its timestamp bucket, and set a
+// timer to fire when we have received all
+// of the data for that bucket.
+void Windower::ProcessRecord(Record input) {
+  WindowState state(MutablePersistentState());
+  state.UpdateBucketCount(input.timestamp());
+  string id = WindowID(input.timestamp())
   SetTimer(id, WindowBoundary(input.timestamp()));
 }
 
-// Once we have all of the data for a given 
-// window, produce the window. 
-void Windower::ProcessTimer(Timer timer) { 
+// Once we have all of the data for a given
+// window, produce the window.
+void Windower::ProcessTimer(Timer timer) {
   Record record =
     WindowCount(timer.tag(), MutablePersistentState());
-  record.SetTimestamp(timer.timestamp()); 
-  // DipDetector subscribes to this stream. 
+  record.SetTimestamp(timer.timestamp());
+  // DipDetector subscribes to this stream.
   ProduceRecord(record, "windows");
 }
-// Given a bucket count, compare it to the 
-// expected traffic, and emit a Dip event 
-// if we have high enough confidence. 
-void DipDetector::ProcessRecord(Record input) { 
-  DipState state(MutablePersistentState()); 
+// Given a bucket count, compare it to the
+// expected traffic, and emit a Dip event
+// if we have high enough confidence.
+void DipDetector::ProcessRecord(Record input) {
+  DipState state(MutablePersistentState());
   int prediction = state.GetPrediction(input.timestamp());
-  int actual = GetBucketCount(input.data()); 
-  state.UpdateConfidence(prediction, actual); 
-  if (state.confidence() > kConfidenceThreshold) {  
-    Record record = Dip(key(), state.confidence()); 
-    record.SetTimestamp(input.timestamp()); 
+  int actual = GetBucketCount(input.data());
+  state.UpdateConfidence(prediction, actual);
+  if (state.confidence() > kConfidenceThreshold) {
+    Record record = Dip(key(), state.confidence());
+    record.SetTimestamp(input.timestamp());
     ProduceRecord(record, "dip-stream");
-  } 
+  }
 }
 ```
 
@@ -150,38 +150,38 @@ void DipDetector::ProcessRecord(Record input) {
 
 ```java
 // Upon receipt of a record, update the running
-// total for its timestamp bucket, and set a 
-// timer to fire when we have received all 
-// of the data for that bucket. 
-void Windower::ProcessRecord(Record input) { 
-  WindowState state(MutablePersistentState()); 
-  state.UpdateBucketCount(input.timestamp()); 
-  string id = WindowID(input.timestamp()) 
+// total for its timestamp bucket, and set a
+// timer to fire when we have received all
+// of the data for that bucket.
+void Windower::ProcessRecord(Record input) {
+  WindowState state(MutablePersistentState());
+  state.UpdateBucketCount(input.timestamp());
+  string id = WindowID(input.timestamp())
   SetTimer(id, WindowBoundary(input.timestamp()));
 }
 
-// Once we have all of the data for a given 
-// window, produce the window. 
-void Windower::ProcessTimer(Timer timer) { 
+// Once we have all of the data for a given
+// window, produce the window.
+void Windower::ProcessTimer(Timer timer) {
   Record record =
     WindowCount(timer.tag(), MutablePersistentState());
-  record.SetTimestamp(timer.timestamp()); 
-  // DipDetector subscribes to this stream. 
+  record.SetTimestamp(timer.timestamp());
+  // DipDetector subscribes to this stream.
   ProduceRecord(record, "windows");
 }
-// Given a bucket count, compare it to the 
-// expected traffic, and emit a Dip event 
-// if we have high enough confidence. 
-void DipDetector::ProcessRecord(Record input) { 
-  DipState state(MutablePersistentState()); 
+// Given a bucket count, compare it to the
+// expected traffic, and emit a Dip event
+// if we have high enough confidence.
+void DipDetector::ProcessRecord(Record input) {
+  DipState state(MutablePersistentState());
   int prediction = state.GetPrediction(input.timestamp());
-  int actual = GetBucketCount(input.data()); 
-  state.UpdateConfidence(prediction, actual); 
-  if (state.confidence() > kConfidenceThreshold) {  
-    Record record = Dip(key(), state.confidence()); 
-    record.SetTimestamp(input.timestamp()); 
+  int actual = GetBucketCount(input.data());
+  state.UpdateConfidence(prediction, actual);
+  if (state.confidence() > kConfidenceThreshold) {
+    Record record = Dip(key(), state.confidence());
+    record.SetTimestamp(input.timestamp());
     ProduceRecord(record, "dip-stream");
-  } 
+  }
 }
 ```
 

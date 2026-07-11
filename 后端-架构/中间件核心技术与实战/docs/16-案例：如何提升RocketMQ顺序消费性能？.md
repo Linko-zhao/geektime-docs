@@ -23,14 +23,14 @@
 RebalanceService线程启动后，会以20s的频率计算每一个消费组的队列负载、当前消费者的消费队列集合（用newAssignQueueSet表），然后与上一次分配结果（用oldAssignQueueSet表示）进行对比。这时候会出现两种情况。
 
 - 如果一个队列在newAssignQueueSet中，但并不在oldAssignQueueSet中，表示这是新分配的队列。这时候我们可以尝试向**Broker申请锁**：
-  
+
   - 如果成功获取锁，则为该队列创建拉取任务并放入到PullMessageService的pullRequestQueue中，以此唤醒Pull线程，触发消息拉取流程；
   - 如果未获取锁，说明该队列当前被其他消费者锁定，放弃本次拉取，等下次重平衡时再尝试申请锁。
 
 **这种情况下，消费者能够拉取消息的前提条件是，在Broker上加锁成功。**
 
 - 如果一个队列在newAssignQueueSet中不存在，但存在于oldAssignQueueSet中，表示该队列应该分配给其他消费者，需要将该队列丢弃。但在丢弃之前，要**尝试申请ProceeQueue的锁**：
-  
+
   - 如果成功锁定ProceeQueue，说明ProceeQueue中的消息已消费，可以将该ProceeQueue丢弃，并释放锁；
   - 如果未能成功锁定ProceeQueue，说明该队列中的消息还在消费，暂时不丢弃ProceeQueue，这时消费者并不会释放Broker中申请的锁，其他消费者也就暂时无法消费该队列中的消息。
 
@@ -361,9 +361,9 @@ RocketMQ在消息拉取中使用了长轮询机制，你知道这样设计目的
 1，开头增加机器到64台，是单机处理不过来了吗？如果处理不过来后面改造增加线程处理也应该处理不过来吧
 2，为什么不增加队列数量？集群队列是64，那么增加到128，256，是不是也可以达到相同的目的</p>2023-10-07</li><br/><li><span>Geek_460f3a</span> 👍（0） 💬（0）<p>老师您好，为啥每次拉去完消息都要先暂停，再恢复，是为了啥
 while (isRunning) {
-                    List&lt;MessageExt&gt; records = consumer.poll(consumerPollTimeoutMs);
-                    submitRecords(records);
-                    consumerLimitController.pause();
-                    consumerLimitController.resume();
-                }</p>2023-03-10</li><br/><li><span>Geek_460f3a</span> 👍（0） 💬（0）<p>代码有bug，DefaultMQLitePushConsumer的isRunning永远是false，永远不会拉数据</p>2023-03-07</li><br/>
+List&lt;MessageExt&gt; records = consumer.poll(consumerPollTimeoutMs);
+submitRecords(records);
+consumerLimitController.pause();
+consumerLimitController.resume();
+}</p>2023-03-10</li><br/><li><span>Geek_460f3a</span> 👍（0） 💬（0）<p>代码有bug，DefaultMQLitePushConsumer的isRunning永远是false，永远不会拉数据</p>2023-03-07</li><br/>
 </ul>

@@ -62,7 +62,7 @@ global:
     colld: cprobe
 
 writers:
-- url: http://127.0.0.1:8428/api/v1/write
+  - url: http://127.0.0.1:8428/api/v1/write
 ```
 
 `writers` 是个数组，可以配置多个后端时序库地址，extra\_labels 是附加标签，会附加到所有采集的数据上，一般不用配置。当然，还支持 metric\_relabel\_configs 等 relabel 配置，查看配置样例即可，这里就不赘述了。
@@ -91,32 +91,32 @@ systemctl start cprobe
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'mysql'
+    cplugin: "mysql"
 
 scrape_configs:
-- job_name: 'mysql_static'
-  static_configs:
-  - targets:
-    - '127.0.0.1:3306'
-  scrape_rule_files:
-  - 'rule_head.toml'
-  - 'rule_coll.toml'
+  - job_name: "mysql_static"
+    static_configs:
+      - targets:
+          - "127.0.0.1:3306"
+    scrape_rule_files:
+      - "rule_head.toml"
+      - "rule_coll.toml"
 
-- job_name: 'mysql_http_sd'
-  http_sd_configs:
-  - url: http://localhost:8080/get-targets
-  scrape_rule_files:
-  - 'rule_head.toml'
-  - 'rule_coll.toml'
+  - job_name: "mysql_http_sd"
+    http_sd_configs:
+      - url: http://localhost:8080/get-targets
+    scrape_rule_files:
+      - "rule_head.toml"
+      - "rule_coll.toml"
 
-- job_name: 'mysql_file_sd'
-  file_sd_configs:
-  - files:
-    - 'inst.yaml'
-  scrape_rule_files:
-  - 'rule_head.toml'
-  - 'rule_coll.toml'
-  - 'rule_cust.toml'
+  - job_name: "mysql_file_sd"
+    file_sd_configs:
+      - files:
+          - "inst.yaml"
+    scrape_rule_files:
+      - "rule_head.toml"
+      - "rule_coll.toml"
+      - "rule_cust.toml"
 ```
 
 整体配置和 Prometheus 的抓取配置特别像。global 部分配置全局抓取频率以及插件级别的全局附加标签（可以没有），scrape\_configs 是抓取目标，支持 static、http\_sd、file\_sd，暂不支持 Kubernetes SD，scrape\_rule\_files 是一个比较有意思的配置，定义详细的采集规则，这是个数组，程序处理时会把数组里的每个规则文件拼接成一个整体来使用，**通过这种方式可以实现配置文件拆分管理和复用**。
@@ -167,15 +167,15 @@ Redis 的插件配置在 conf.d/redis 下面，main.yaml 举例如下。
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'redis'
+    cplugin: "redis"
 
 scrape_configs:
-- job_name: 'redis'
-  static_configs:
-  - targets:
-    - '10.99.1.107:6379'
-  scrape_rule_files:
-  - 'rule.toml'
+  - job_name: "redis"
+    static_configs:
+      - targets:
+          - "10.99.1.107:6379"
+    scrape_rule_files:
+      - "rule.toml"
 ```
 
 通过如下命令可以测试是否采集成功。
@@ -196,15 +196,15 @@ MongoDB 的插件配置在 conf.d/mongodb 下面，main.yaml 举例如下。
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'mongodb'
+    cplugin: "mongodb"
 
 scrape_configs:
-- job_name: 'standalone'
-  static_configs:
-  - targets:
-    - 10.99.1.110:27017
-  scrape_rule_files:
-  - 'rule.toml'
+  - job_name: "standalone"
+    static_configs:
+      - targets:
+          - 10.99.1.110:27017
+    scrape_rule_files:
+      - "rule.toml"
 ```
 
 如果有认证信息，可以在 conf.d/mongodb/rule.toml 中配置，如果不同的 MongoDB 认证信息不同，可以类似 MySQL 那样拆分配置文件，通过如下命令可以测试采集是否成功。
@@ -225,16 +225,16 @@ Oracle 的插件配置在 conf.d/oracledb 下面，main.yaml 举例如下。
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'oracle'
+    cplugin: "oracle"
 
 scrape_configs:
-- job_name: 'oracle'
-  static_configs:
-  - targets:
-    - 10.99.1.107:1521/xe # ip:port/service
-  scrape_rule_files:
-  - 'link.toml'
-  - 'comm.toml'
+  - job_name: "oracle"
+    static_configs:
+      - targets:
+          - 10.99.1.107:1521/xe # ip:port/service
+    scrape_rule_files:
+      - "link.toml"
+      - "comm.toml"
 ```
 
 一般监控目标，即 target 的配置都是 IP + 端口，Oracle 的略有不同，需要配置成 IP + 端口 + service，上例中的 xe 就是 service。通过如下命令可以测试采集是否成功。
@@ -255,15 +255,15 @@ Postgres 的插件配置在 conf.d/postgres 下面，main.yaml 举例如下。
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'postgres'
+    cplugin: "postgres"
 
 scrape_configs:
-- job_name: 'postgres'
-  static_configs:
-  - targets:
-    - '10.99.1.107:15432'
-  scrape_rule_files:
-  - 'rule.toml'
+  - job_name: "postgres"
+    static_configs:
+      - targets:
+          - "10.99.1.107:15432"
+    scrape_rule_files:
+      - "rule.toml"
 ```
 
 通过如下面命令可以测试是否采集成功。
@@ -284,15 +284,15 @@ Tomcat 的插件配置在 conf.d/tomcat 下面，依旧是main.yaml 举例如下
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'tomcat'
+    cplugin: "tomcat"
 
 scrape_configs:
-- job_name: 'tomcat'
-  static_configs:
-  - targets:
-    - '10.211.55.3:8080'
-  scrape_rule_files:
-  - 'rule.toml'
+  - job_name: "tomcat"
+    static_configs:
+      - targets:
+          - "10.211.55.3:8080"
+    scrape_rule_files:
+      - "rule.toml"
 ```
 
 这里注意，Tomcat 监控需要修改 conf/tomcat-users.xml 配置，增加 role 和 user，比如下面这样。
@@ -339,15 +339,15 @@ Kafka 的众多指标是通过 jmx 的方式暴露的，所以，在 Kafka 启�
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'kafka'
+    cplugin: "kafka"
 
 scrape_configs:
-- job_name: 'kafka'
-  static_configs:
-  - targets:
-    - '10.99.1.105:9092'
-  scrape_rule_files:
-  - 'rule.toml'
+  - job_name: "kafka"
+    static_configs:
+      - targets:
+          - "10.99.1.105:9092"
+    scrape_rule_files:
+      - "rule.toml"
 ```
 
 如果是监控集群，想要写多个实例，Kafka 的 target 写法跟其他的 plugin 会有不同，如下。
@@ -356,15 +356,15 @@ scrape_configs:
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'kafka'
+    cplugin: "kafka"
 
 scrape_configs:
-  - job_name: 'kafka'
+  - job_name: "kafka"
     static_configs:
       - targets:
-          - '172.21.0.162:9092,172.21.0.163:9092,172.21.0.164:9092'
+          - "172.21.0.162:9092,172.21.0.163:9092,172.21.0.164:9092"
     scrape_rule_files:
-      - 'rule.toml'
+      - "rule.toml"
 ```
 
 和 mysql 插件对比一下，应该可以看出差别吧？你知道为啥会有这样的不同设计么？欢迎在评论区留言探讨 :-)
@@ -387,15 +387,15 @@ ElasticSearch 的监控插件配置在 conf.d/elasticsearch 目录下，main.y
 global:
   scrape_interval: 15s
   external_labels:
-    cplugin: 'elasticsearch'
+    cplugin: "elasticsearch"
 
 scrape_configs:
-- job_name: 'elasticsearch'
-  static_configs:
-  - targets:
-    - 10.99.1.105:9200
-  scrape_rule_files:
-  - 'rule.toml'
+  - job_name: "elasticsearch"
+    static_configs:
+      - targets:
+          - 10.99.1.105:9200
+    scrape_rule_files:
+      - "rule.toml"
 ```
 
 通过如下面命令可以测试是否采集成功。

@@ -174,7 +174,7 @@ public final class LaunchUnderTheHoodKt {
                 .println("Hello!");
               this.label = 1;
               if (DelayKt.delay(1000L, (Continuation)this) == object)
-                return object; 
+                return object;
               DelayKt.delay(1000L, (Continuation)this);
               System.out
                 .println("World!");
@@ -183,7 +183,7 @@ public final class LaunchUnderTheHoodKt {
               ResultKt.throwOnFailure(SYNTHETIC_LOCAL_VARIABLE_1);
               System.out.println("World!");
               return "Result";
-          } 
+          }
           throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
 
@@ -322,7 +322,7 @@ static final class LaunchUnderTheHoodKt$block$1 extends SuspendLambda implements
             .println("Hello!");
           this.label = 1;
           if (DelayKt.delay(1000L, (Continuation)this) == object)
-            return object; 
+            return object;
           DelayKt.delay(1000L, (Continuation)this);
           System.out
             .println("World!");
@@ -331,7 +331,7 @@ static final class LaunchUnderTheHoodKt$block$1 extends SuspendLambda implements
           ResultKt.throwOnFailure(SYNTHETIC_LOCAL_VARIABLE_1);
           System.out.println("World!");
           return "Result";
-      } 
+      }
       throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
     }
 
@@ -477,7 +477,7 @@ public final class LaunchUnderTheHoodKt {
             .println("Hello!");
           this.label = 1;
           if (DelayKt.delay(1000L, (Continuation)this) == object)
-            return object; 
+            return object;
           DelayKt.delay(1000L, (Continuation)this);
           System.out
             .println("World!");
@@ -486,7 +486,7 @@ public final class LaunchUnderTheHoodKt {
           ResultKt.throwOnFailure(SYNTHETIC_LOCAL_VARIABLE_1);
           System.out.println("World!");
           return Unit.INSTANCE;
-      } 
+      }
       throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
     }
 
@@ -656,19 +656,19 @@ private fun testStartCoroutineForSuspend() {
 <li><span>辉哥</span> 👍（5） 💬（1）<p>startCoroutine -&gt; createCoroutineUnintercepted -&gt; createCoroutineFromSuspendFunction,最终返回一个RestrictedContinuationImpl对象,然后调用其resume方法,从而调用block的invoke方法.最终调起协程.</p>2022-03-29</li><br/><li><span>杨小妞</span> 👍（1） 💬（1）<p>createCoroutineUnintercepted这个函数的JVM实现在哪个包，哪个类下呢？</p>2022-04-06</li><br/><li><span>Paul Shan</span> 👍（1） 💬（1）<p>思考题：调试了一下，结果是一样的。唯一的区别可能在于block原来被反编译成一个函数对象直接用实现状态机的Continuation对象赋值。加入函数赋值以后，block对象被实现为一个简单的内部类，这个内部类的invoke函数再去调用Continuation对象。</p>2022-03-28</li><br/><li><span>ACE_Killer09</span> 👍（0） 💬（1）<p>代码段16中，
 我理解resume 之后 会回到 LaunchUnderTheHoodKt$testLaunch$1 # invoke ，再进一步到invokeSuspend 进入状态机的流程。那么 Continuation#resume -&gt; invoke这个过程是怎么调用过来的？</p>2022-04-16</li><br/><li><span>L先生</span> 👍（0） 💬（1）<p>反编译了一下，block最终会转成function1。(this as Function1, Any?&gt;).invoke(it)中的invoke是指的这个Function1中的invoke吗</p>2022-03-28</li><br/><li><span>L先生</span> 👍（0） 💬（2）<p>打印没啥区别啊。应该是走这里了。createCoroutineFromSuspendFunction(probeCompletion) { (this as Function1, Any?&gt;).invoke(it) }。但是我看不太懂。this指什么，it又指什么参数</p>2022-03-28</li><br/><li><span>Allen</span> 👍（0） 💬（1）<p>关于思考题的思考：
 
-我认为执行流程及结果和代码段 3 中是完全一样的。因为 
-private suspend fun func(): String { 
-    println(&quot;Hello!&quot;) 
-    delay(1000L) 
-    println(&quot;World!&quot;) 
-    return &quot;Result&quot;
+我认为执行流程及结果和代码段 3 中是完全一样的。因为
+private suspend fun func(): String {
+println(&quot;Hello!&quot;)
+delay(1000L)
+println(&quot;World!&quot;)
+return &quot;Result&quot;
 } 和
 
 val block = suspend {
-    println(&quot;Hello!&quot;)
-    delay(1000L)
-    println(&quot;World!&quot;)
-    &quot;Result&quot;
+println(&quot;Hello!&quot;)
+delay(1000L)
+println(&quot;World!&quot;)
+&quot;Result&quot;
 }
 
 完全是等价的写法。

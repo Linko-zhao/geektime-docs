@@ -18,7 +18,7 @@
 
 好了，准备就绪，我们一起开始。
 
-* * *
+---
 
 我们学习Go语言时，要做的第一件事，都是根据自己电脑的计算架构（比如，是32位的计算机还是64位的计算机）以及操作系统（比如，是Windows还是Linux），从[Go语言官网](https://golang.google.cn)下载对应的二进制包，也就是可以拿来即用的安装包。
 
@@ -140,7 +140,7 @@ go install github.com/labstack/echo
 
 这两个问题之间其实是有一些关联的。答案并不复杂，你做几个试验几乎就可以找到它了。你也可以看一下Go语言标准库中`go build`包及其子包的源码。那里面的宝藏也很多，可以助你深刻理解Go程序的构建过程。
 
-* * *
+---
 
 ## 补充阅读
 
@@ -203,13 +203,12 @@ gopath是指：指向工作区的路径。
 
 归档文件： 相当于java的jar包。下载到本地私服
 
-
-不知道对不对。纯属个人观点。</p>2018-08-10</li><br/><li><span>第五季节</span> 👍（4） 💬（1）<p>gopath 的设计类似java  。
+不知道对不对。纯属个人观点。</p>2018-08-10</li><br/><li><span>第五季节</span> 👍（4） 💬（1）<p>gopath 的设计类似java 。
 具体的用途是执行命令要用 例如：go run、go install、go get等。
 允许设置多个路径。
 在idea里面的多个project或工具组建都并列放在gopath的src下面。
 例如：go install myProject1
-            go install myProject2 
+go install myProject2
 所以老师说的这个归档文件。可以理解成工作空间吗？
 至于老师说的两个问题。
 1:按照代码的执行顺序 从上往下 每个引入的初始化。
@@ -224,12 +223,12 @@ $ tree &#47;Users&#47;arno&#47;go
 │   └── hello_v2
 ├── pkg
 └── src
-    ├── github.com
-    │   └── opsarno
-    │       └── hello
-    │           └── hello.go
-    └── hello_v2
-        └── hello.go
+├── github.com
+│   └── opsarno
+│   └── hello
+│   └── hello.go
+└── hello_v2
+└── hello.go
 
 单纯的去读文字，确实不易理解，实际操作下就比较容易理解了。</p>2019-10-08</li><br/>
 </ul>

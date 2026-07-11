@@ -116,7 +116,7 @@ module gen_regs (
             for(ii=0; ii<32; ii=ii+1)
                 regs[ii] <= 32'b0;
         end
-        else if(wen & (|regWAddr)) 
+        else if(wen & (|regWAddr))
                 regs[regWAddr] <= regWData;
     end
 
@@ -153,7 +153,7 @@ module alu (
 );
 
   reg  [31:0] result;
-  
+
   wire [31:0] sum    = alu_data1_i + ((alu_op_i[3] | alu_op_i[1]) ? -alu_data2_i : alu_data2_i);
   wire        neq    = |sum;
   wire        cmp    = (alu_data1_i[31] == alu_data2_i[31]) ? sum[31]
@@ -182,8 +182,8 @@ module alu (
       `ALU_OP_NEQ:    result <= {31'b0, neq};
       `ALU_OP_GE:     result <= {31'b0, ~cmp};
       `ALU_OP_GEU:    result <= {31'b0, ~cmp};
-      default:        begin 
-                      result <= 32'b0; 
+      default:        begin
+                      result <= 32'b0;
         end
     endcase
   end
@@ -194,7 +194,7 @@ module alu (
     for(i=0; i<32; i=i+1) begin
       reverse[i] = in[31-i];
     end
-  endfunction  
+  endfunction
 
   assign alu_result_o = result;
 

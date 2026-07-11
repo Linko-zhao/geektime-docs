@@ -233,7 +233,7 @@ let data: Vec<Status> = reqwest::get(secret_api)?.json()?;
 ```rust
 pub trait FriendCircle {
 	  fn get_published(&self, user: &User) -> Result<Vec<Status>, FriendCircleError>;
-    ... 
+    ...
 }
 ```
 
@@ -444,6 +444,7 @@ packages/yew-agent/src/worker/mod.rs
 2. Message感觉有点像actor里面的message: op to change component state. 应该是用于定义交互的时候, dynamic change component的. Properties应该是DOM的property, 用于render view的…
 
 比如impl Component for List https:&#47;&#47;github.com&#47;yewstack&#47;yew&#47;blob&#47;master&#47;packages&#47;yew&#47;src&#47;virtual_dom&#47;vlist.rs#L495
+
 ```
     #[derive(Clone, Properties, PartialEq)]
     pub struct ListProps {
@@ -455,6 +456,7 @@ impl Component for List {
           html! { &lt;&gt;{ for ctx.props().children.iter() }&lt;&#47;&gt; }
       }
 ```
+
 3. https:&#47;&#47;docs.rs&#47;yew&#47;0.18.0&#47;yew&#47;#example; 重点是`Sized` `+ &#39;Static` bound`. 实现的类型必须是Sized. 同时如果有reference element, 其lifetime必须是static的.
 
 感觉virtual dom有必要了解了解...</p>2021-10-23</li><br/><li><span>核桃</span> 👍（0） 💬（2）<p>今天写了一段全局单例的代码，如下所示.
@@ -493,53 +495,53 @@ lazy_static! {
 这里使用lazy_static进行全局实现静态变量，但是因为初始化的时候并没有办法指向一个其他的变量，因此这里考虑使用了Arc处理，但是这段代码其实还是有点问题的，因为并没有考虑到竞争并发的情况，但是这里似乎更加适合使用once cell。rust在这部分的实现，感觉还是有点欠缺的。</p>2021-11-25</li><br/><li><span>0@1</span> 👍（0） 💬（1）<p>老师，想问下关于trait的一些问题, 下面是个代码例子，
 struct MyStruct;
 trait MyTrait{
-    fn test(&amp;self);
+fn test(&amp;self);
 }
 
 impl MyTrait for MyStruct{
-    fn test(&amp;self) {
-        println!(&quot;MyStruct&quot;)
-    }
+fn test(&amp;self) {
+println!(&quot;MyStruct&quot;)
+}
 }
 impl MyTrait for &amp;MyStruct{
-    fn test(&amp;self) {
-        println!(&quot;&amp;MyStruct&quot;)
-    }
+fn test(&amp;self) {
+println!(&quot;&amp;MyStruct&quot;)
+}
 }
 impl MyTrait for *const MyStruct{
-    fn test(&amp;self) {
-        println!(&quot;*const MyStruct&quot;)
-    }
+fn test(&amp;self) {
+println!(&quot;*const MyStruct&quot;)
+}
 }
 fn main() {
-   let my_struct = MyStruct;
-    my_struct.test();
-    &amp;my_struct.test();
-    let my_struct_ptr = &amp;my_struct as *const MyStruct;
-    my_struct_ptr.test();
+let my_struct = MyStruct;
+my_struct.test();
+&amp;my_struct.test();
+let my_struct_ptr = &amp;my_struct as *const MyStruct;
+my_struct_ptr.test();
 }
 
 1. impl MyTrait for &amp;MyStruct 和 impl MyTrait for MyStruct 这2个有什么区别，什么情况下适合
-为引用实现trait, impl MyTrait for &amp;MyStruct
+   为引用实现trait, impl MyTrait for &amp;MyStruct
 
-2. impl MyTrait for *const MyStruct 
-这种方式，给裸指针实现trait, 有什么使用场景么
-
-
+2. impl MyTrait for *const MyStruct
+   这种方式，给裸指针实现trait, 有什么使用场景么
 
 </p>2021-10-23</li><br/><li><span>罗杰</span> 👍（0） 💬（1）<p>接口的设计要注重用户体验，这太重要了。</p>2021-10-22</li><br/><li><span>David.Du</span> 👍（0） 💬（0）<p>Trait 对T的一些约束，同时也提醒了T的实现者，要按照这个去做，Fn的函数功能，同时也约束了自身，我感觉一套系统定义完一些列的Trait+数据结构后，剩下的就是实现了。</p>2023-11-06</li><br/><li><span>进击的Lancelot</span> 👍（0） 💬（0）<p>思考题：
 
 Component trait 可以做 trait object 么？
-做不了 trait object，因为其中的方法并不符合对象安全原则，要么返回  Self 对象，要么带有泛型参数
+做不了 trait object，因为其中的方法并不符合对象安全原则，要么返回 Self 对象，要么带有泛型参数
 
 关联类型 Message 和 Properties 的作用是什么？
 Message 的作用是用来和 Component 进行交互，使其获得动态能力的。 properties 则表达了 Component 的属性，当 Component 的父组件被重新渲染时，子组件要么重新生成，要么从传递给 changed 方法中的上下文接受新的 properties
 
 做为使用者，该如何用 Component trait？它的 lifecycle 是什么样子的？
 为自定义类型实现 Component trait 需要指定关联类型 Message 和 Properties，并提供 create 和 view 两个方法的自定义实现即可。它的 lifecycle 是静态生命周期，贯穿程序的始终</p>2022-09-16</li><br/><li><span>渡鸦10086</span> 👍（0） 💬（0）<p>思考题：
+
 1. Component trait 的 create 方法会返回 Self，所以不能做 trait Object
 2. 关联类型 Message 用于让 Components 类型动态化及可交互化，Component 可以使用 enum 或 () 来声明。 Properties 就是 Component 的属性，当 Component 的父组件被重新渲染时时，它将被重新创建，或者在传递给被改变的 life cycle 方法的上下文中接收新的属性。
 3. YEW的官方实例：https:&#47;&#47;docs.rs&#47;yew&#47;0.18.0&#47;yew&#47;#example。life cycle ： `&#39;static` 代表静态生命周期
 4. 没有前端经验。。
+
 </p>2022-01-17</li><br/>
 </ul>

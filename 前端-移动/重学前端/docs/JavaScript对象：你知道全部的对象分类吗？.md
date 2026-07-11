@@ -14,7 +14,7 @@
 
 - 宿主对象（host Objects）：由JavaScript宿主环境提供的对象，它们的行为完全由宿主环境决定。
 - 内置对象（Built-in Objects）：由JavaScript语言提供的对象。
-  
+
   - 固有对象（Intrinsic Objects ）：由标准规定，随着JavaScript运行时创建而自动创建的对象实例。
   - 原生对象（Native Objects）：可以由用户通过Array、RegExp等内置构造器或者特殊语法创建的对象。
   - 普通对象（Ordinary Objects）：由{}语法、Object构造器或者class关键字定义类创建的对象，它能够被原型继承。
@@ -96,7 +96,7 @@ JavaScript用对象模拟函数的设计代替了一般编程语言中的函数�
 而浏览器宿主环境中，提供的Image构造器，则根本不允许被作为函数调用。
 
 ```
-console.log(new Image); 
+console.log(new Image);
 console.log(Image());//抛出错误
 ```
 
@@ -274,6 +274,7 @@ for(var i = 0; i < objects.length; i++) {
     }
 }
 ```
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>XXX</span> 👍（8） 💬（2）<p>关于原生构造器无法用 class&#47;extend 语法来继承的观点，能否举例说明呢？我写个demo跑了一下，发现还是可以的呐
 
@@ -281,13 +282,12 @@ for(var i = 0; i < objects.length; i++) {
 对于用户使用 function 语法或者 Function 构造器创建的对象来说，[[call]] 和 [[construct]] 行为总是相似的，它们执行同一段代码。
 
 function f(){
- return 1;
+return 1;
 }
 &#47;&#47; 把 f 作为函数调用
 var v = f(); &#47;&#47; 1
 &#47;&#47; 把 f 作为构造器调用
 var o = new f(); &#47;&#47; {}
-
 
 代码执行的结果是不同，函数调用返回的是 1，构造器调用返回的一个对象。
 这里的行为是指什么呢，为什么又总是相似的呢。
@@ -295,7 +295,7 @@ var o = new f(); &#47;&#47; {}
 文中你有一句话“构造器对象的定义是：具有私有字段 [[construct]]”
 我的理解是带有constructor的对象就是构造器对象，所以我做了下面这个实验
 var obj = {constructor:function(){return {say:function(){alert(&#39;hello&#39;)}}}}
-var ins = new obj() 
+var ins = new obj()
 但是会报错obj不是一个construct，
 我想问老师是不是我理解错了？
 </p>2019-02-27</li><br/><li><span>Miss</span> 👍（0） 💬（1）<p>在讲到函数对象和构造器对象时[[call]]和[[construct]] 指的是？</p>2019-02-15</li><br/><li><span>大雄</span> 👍（0） 💬（1）<p>proxy模拟array怎样？</p>2019-02-13</li><br/><li><span>九</span> 👍（0） 💬（2）<p>当然了，用户用 function 关键字创建的函数必定同时是函数和构造器。不过，它们表现出来的行为效果却并不相同。

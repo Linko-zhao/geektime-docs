@@ -245,7 +245,7 @@ func NewClusterTool() *ClusterTool {
         Name:        "ClusterTool",
         Description: "用于列出集群列表",
     }
-} 
+}
 ```
 
 Run 方法就更简单了，直接 GET 一下 API 即可。

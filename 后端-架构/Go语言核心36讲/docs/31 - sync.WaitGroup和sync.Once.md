@@ -219,24 +219,25 @@ fatal error: all goroutines are asleep - deadlock!
 	done uint32
 	m    sync.Mutex
 
-	a bool
+    a bool
+
 }
 
 func (m *myOnce) Do(f func()) {
-	if atomic.CompareAndSwapUint32(&amp;m.done, 0, 1) {
-		f()
-		m.a = true
-	}
-
-	for {
-		if m.a {
-			break
-		}
-	}
-
-	return
+if atomic.CompareAndSwapUint32(&amp;m.done, 0, 1) {
+f()
+m.a = true
 }
 
+    for {
+    	if m.a {
+    		break
+    	}
+    }
+
+    return
+
+}
 
 for 循环阻塞和加锁阻塞有什么区别呢</p>2020-11-10</li><br/>
 </ul>

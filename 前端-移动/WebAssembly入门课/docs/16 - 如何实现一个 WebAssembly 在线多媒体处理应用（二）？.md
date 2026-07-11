@@ -32,20 +32,20 @@
     <canvas class="canvas"></canvas>
     <div class="operation">
       <h2>帧率：<span class="fps-num">NaN</span> FPS</h2>
-      <input name="options" value="0" type="radio" checked="checked"/> 
+      <input name="options" value="0" type="radio" checked="checked"/>
       <span class="radio-text">不开启渲染.</span> <br/>
-      <input name="options" value="1" type="radio"/> 
-      <span class="radio-text">使用 <b>[JavaScript]</b> 渲染.</span> 
+      <input name="options" value="1" type="radio"/>
+      <span class="radio-text">使用 <b>[JavaScript]</b> 渲染.</span>
       <br/>
-      <input name="options" value="2" type="radio"/> 
-      <span class="radio-text">使用 <b>[WebAssembly]</b> 渲染.</span> 
+      <input name="options" value="2" type="radio"/>
+      <span class="radio-text">使用 <b>[WebAssembly]</b> 渲染.</span>
       <br/>
       <button>确认</button>
     </div>
     <video class="video" type="video/mp4"
-      muted="muted" 
-      loop="true" 
-      autoplay="true" 
+      muted="muted"
+      loop="true"
+      autoplay="true"
       src="media/video.mp4">
   </body>
   <script src='./dip.js'></script>
@@ -89,7 +89,7 @@ let canvas = document.querySelector('.canvas');
 
 // 使用 getContext 方法获取 <canvas> 标签对应的一个 CanvasRenderingContext2D 接口；
 let context = canvas.getContext('2d');
- 
+
 // 自动播放 <video> 载入的视频；
 let promise = video.play();
 if (promise !== undefined) {
@@ -103,7 +103,7 @@ function draw() {
   context.drawImage(video, 0, 0);
   // 获得 <canvas> 上当前帧对应画面的像素数组；
   pixels = context.getImageData(0, 0, video.videoWidth, video.videoHeight);
-  // ...    
+  // ...
   // 更新下一帧画面；
   requestAnimationFrame(draw);
 }
@@ -173,14 +173,14 @@ document.querySelector("button").addEventListener('click', () => {
 ```
 function calcFPS (vector) {
   // 提取容器中的前 20 个元素来计算平均值；
-  const AVERAGE_RECORDS_COUNT = 20;  
+  const AVERAGE_RECORDS_COUNT = 20;
   if (vector.length > AVERAGE_RECORDS_COUNT) {
     vector.shift(-1);  // 维护容器大小；
   } else {
     return 'NaN';
   }
   // 计算平均每帧在绘制过程中所消耗的时间；
-  let averageTime = (vector.reduce((pre, item) => { 
+  let averageTime = (vector.reduce((pre, item) => {
     return pre + item;
   }, 0) / Math.abs(AVERAGE_RECORDS_COUNT));
   // 估算出 1s 内能够绘制的帧数；
@@ -224,14 +224,14 @@ function flipKernel(kernel) {
       let _t = kernel[half][j];
       kernel[half][j] = kernel[half][h - j - 1];
       kernel[half][h - j - 1] = _t;
-    } 
+    }
   }
   return kernel;
 }
 // 得到经过翻转 180 度后的卷积核矩阵；
 const kernel = flipKernel([
-  [-1, -1, 1], 
-  [-1, 14, -1], 
+  [-1, -1, 1],
+  [-1, 14, -1],
   [1, -1, -1]
 ]);
 ```
@@ -255,7 +255,7 @@ function jsConvFilter(data, width, height, kernel) {
   for (let y = half; y < height - half; ++y) {
     for (let x = half; x < width - half; ++x) {
       // 每个像素点在像素分量数组中的起始位置；
-      const px = (y * width + x) * 4;  
+      const px = (y * width + x) * 4;
       let r = 0, g = 0, b = 0;
       // 与卷积核矩阵数组进行运算；
       for (let cy = 0; cy < h; ++cy) {

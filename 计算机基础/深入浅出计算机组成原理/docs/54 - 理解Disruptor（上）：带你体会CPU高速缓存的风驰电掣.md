@@ -40,21 +40,21 @@ abstract class RingBufferPad
 {
     protected long p1, p2, p3, p4, p5, p6, p7;
 }
-	
+
 
 abstract class RingBufferFields<E> extends RingBufferPad
 {
-    ......    
+    ......
     private final long indexMask;
 	private final Object[] entries;
 	protected final int bufferSize;
 	protected final Sequencer sequencer;
-    ......    
+    ......
 }
 
 public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored, EventSequencer<E>, EventSink<E>
 {
-    ......    
+    ......
     protected long p1, p2, p3, p4, p5, p6, p7;
     ......
 }

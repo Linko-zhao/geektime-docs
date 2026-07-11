@@ -212,35 +212,34 @@ Ran all test suites.
 虽然上节课添加E2E测试时创建了一个test目录，但建议把单元测试文件放在与被测试的源码文件尽量近的位置（但也不用像CRA默认的 `src/App.test.js` 那么近）。Jest鼓励把测试文件放在源码文件同级的 `__tests__` 目录下，后缀插入 `.test` ，那我们创建一个 `src/__tests__/KanbanNewCard.test.js` 文件，内容如下：
 
 ```javascript
-import { act, fireEvent, render } from '@testing-library/react';
-import KanbanNewCard from '../KanbanNewCard';
+import { act, fireEvent, render } from "@testing-library/react";
+import KanbanNewCard from "../KanbanNewCard";
 
-describe('KanbanNewCard', () => {
-  it('添加新卡片', async () => {
-    // Arrange 准备
-    const onSubmit = jest.fn();
-    // Act 动作
-    const { findByText, findByRole } = render(
-      <KanbanNewCard onSubmit={onSubmit} />
-    );
+describe("KanbanNewCard", () => {
+  it("添加新卡片", async () => {
+    // Arrange 准备
+    const onSubmit = jest.fn(); // Act 动作
+    const { findByText, findByRole } = render(
+      <KanbanNewCard onSubmit={onSubmit} />,
+    ); // Assert 断言
 
-    // Assert 断言
-    const titleElem = await findByText('添加新卡片');
-    expect(titleElem).toBeInTheDocument();
+    const titleElem = await findByText("添加新卡片");
+    expect(titleElem).toBeInTheDocument();
 
-    const inputElem = await findByRole('textbox');
-    expect(inputElem).toHaveFocus();
+    const inputElem = await findByRole("textbox");
+    expect(inputElem).toHaveFocus(); // Act 动作
 
-    // Act 动作
-    act(() => {
-      fireEvent.change(inputElem, { target: { value: '单元测试新卡片-1' } });
-      fireEvent.keyDown(inputElem, { key: 'Enter' });
-    });
+    act(() => {
+      fireEvent.change(inputElem, { target: { value: "单元测试新卡片-1" } });
+      fireEvent.keyDown(inputElem, { key: "Enter" });
+    }); // Assert 断言
 
-    // Assert 断言
-    expect(onSubmit).toHaveBeenCalledTimes(1);
-    expect(onSubmit.mock.lastCall[0]).toHaveProperty('title', '单元测试新卡片-1');
-  });
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(onSubmit.mock.lastCall[0]).toHaveProperty(
+      "title",
+      "单元测试新卡片-1",
+    );
+  });
 });
 ```
 
@@ -303,30 +302,27 @@ const MagazineList = ({ categoryId }) => {
 为它开发一个单元测试，下面是部分代码：
 
 ```javascript
-describe('useFetchBooks', () => {
-  it('获取书籍列表', async () => {
-    jest.spyOn(global, 'fetch').mockImplementation(() =>
-      Promise.resolve({
-        json: () => Promise.resolve({
-          items: [
-            { id: 1, title: '百年孤独' },
-            { id: 2, title: '嫌疑人X的献身' },
-          ], totalPages: 5
-        })
-      })
-    );
+describe("useFetchBooks", () => {
+  it("获取书籍列表", async () => {
+    jest.spyOn(global, "fetch").mockImplementation(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            items: [
+              { id: 1, title: "百年孤独" },
+              { id: 2, title: "嫌疑人X的献身" },
+            ],
+            totalPages: 5,
+          }),
+      }),
+    );
 
-    const { result, rerender } = renderHook(() => useFetchBooks(categoryId));
-    const {
-      books,
-      isLoading,
-      hasNextPage,
-      onNextPage
-    } = result.current;
-    expect(/*...*/);
+    const { result, rerender } = renderHook(() => useFetchBooks(categoryId));
+    const { books, isLoading, hasNextPage, onNextPage } = result.current;
+    expect(/*...*/);
 
-    global.fetch.mockRestore();
-  });
+    global.fetch.mockRestore();
+  });
 });
 ```
 

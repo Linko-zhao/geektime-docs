@@ -108,10 +108,10 @@ spec:
   containers:
   - image: nginx:1.16
     name: web-server
-    volumeMounts:    # 挂载 PVC
+    volumeMounts: # 挂载 PVC
       - mountPath: "/usr/share/nginx/html"
         name: pvc-volume
-  volumes:    # 注意 volumes 层级
+  volumes: # 注意 volumes 层级
     - name: pvc-volume
       persistentVolumeClaim:
         claimName: pv-volume
@@ -207,7 +207,7 @@ kubectl get pod 11-factor-app -o yaml > tmp-pod.yaml
 ```yaml
 vi tmp-pod.yaml  # 通过 vi 编辑器编辑 YAML 文件
 
-# tmp-pod.yaml 
+# tmp-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -289,8 +289,8 @@ kubectl cordon master01
 kubectl drain master01 --ignore-daemonsets
 
 # 3、ssh 到 master01 节点，并切换到 root 下
-ssh master01 
-sudo -i 
+ssh master01
+sudo -i
 
 # 4、由于操作系统是 Ubuntu，所以安装管理软件使用 apt-get 而不是 yum
 # 更新软件库
@@ -299,7 +299,7 @@ apt-get update
 # 5、获取具体的版本号，会返回 Version: 1.29.6-1.1
 apt-cache show kubeadm | grep 1.29.6
 
-# 6、升级 kubeadm 
+# 6、升级 kubeadm
 apt-get install kubeadm=1.29.6-1.1 –y
 
 # 7、验证升级计划
@@ -309,16 +309,16 @@ kubeadm upgrade plan
 # 题目要求不升级 etcd，使用"--etcd-upgrade=false" 参数
 kubeadm upgrade apply v1.29.6 --etcd-upgrade=false
 
-# 9、升级 kubelet 和 kubectl 
+# 9、升级 kubelet 和 kubectl
 apt-get install kubelet=1.29.6-1.1 kubectl=1.29.6-1.1 -y
 
 # 10、重启 kubelet
-systemctl restart kubelet 
+systemctl restart kubelet
 
 # 11、返回到初始节点
 exit
 
-# 12、设置 Master 节点为可调度 
+# 12、设置 Master 节点为可调度
 kubectl uncordon master01
 ```
 
@@ -419,9 +419,9 @@ sudo -i
 
 ```bash
 # 1、ssh 到 node02 节点，并切换到 root 下
-ssh node02 
+ssh node02
 sudo -i
- 
+
 # 2、启动 kubelet 组件
 systemctl start kubelet
 

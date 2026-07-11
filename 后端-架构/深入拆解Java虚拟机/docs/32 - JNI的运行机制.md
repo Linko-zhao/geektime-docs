@@ -326,7 +326,7 @@ JNI提供了一系列API来允许C代码使用Java语言特性。这些API不仅
 
 JNI中的引用可分为局部引用和全局引用。这两者都可以阻止垃圾回收器回收被引用的Java对象。不同的是，局部引用在native方法调用返回之后便会失效。传入参数以及大部分JNI API函数的返回值都属于局部引用。
 
-* * *
+---
 
 今天的实践环节，请阅读[该文档](https://www.ibm.com/developerworks/java/library/j-jni/index.html)中的Performance pitfalls以及Correctness pitfalls两节。
 <div><strong>精选留言（14）</strong></div><ul>
@@ -357,25 +357,34 @@ Hello, World
     4. JNI 的额外性能开销
         1、进入 C 函数时，对引用类型参数的句柄化，和调整参数位置（C 调用和 Java 调用传参的方式不一样）
         2、从 C 函数返回时，清理线程私有句柄块</p>2020-07-29</li><br/><li><span>libbylg</span> 👍（7） 💬（0）<p>据说JNI的性能很差，请问这个是否是事实，如果有这个问题，那么是否有提高性能的方法</p>2018-10-03</li><br/><li><span>随心而至</span> 👍（4） 💬（0）<p> linux下生成文中对应libfoo.so命令如下：
- gcc -I$JAVA_HOME&#47;include -I$JAVA_HOME&#47;include&#47;linux -fPIC -o libfoo.so -shared foo.c
+
+gcc -I$JAVA_HOME&#47;include -I$JAVA_HOME&#47;include&#47;linux -fPIC -o libfoo.so -shared foo.c
 另外：System.load和System.loadLibrary 可以互换。
 动手做一下，就明白了。</p>2019-10-31</li><br/><li><span>德惠先生</span> 👍（2） 💬（0）<p>老师好像没有提到GC_LOCKER机制，并不是所有引用都会被gc直接略过</p>2020-03-03</li><br/><li><span>小陈</span> 👍（1） 💬（0）<p>不错，之前不懂的懂了</p>2020-03-29</li><br/><li><span>饭粒</span> 👍（1） 💬（0）<p>Linux:
+
 # javac -h . org&#47;example&#47;Foo.java
-# 
+
+#
+
 # gcc -I$JAVA_HOME&#47;include -I$JAVA_HOME&#47;include&#47;linux -fPIC -o libfoo.so -shared foo.c
-# 
+
+#
+
 # tree .&#47;
+
 .&#47;
 ├── foo.c
 ├── libfoo.so
 ├── org
 │   └── example
-│       ├── Foo.class
-│       └── Foo.java
+│   ├── Foo.class
+│   └── Foo.java
 └── org_example_Foo.h
 
 2 directories, 5 files
+
 # java -Djava.library.path=. org.example.Foo
+
 Hello, World</p>2019-12-28</li><br/><li><span>未知</span> 👍（1） 💬（0）<p>在《深入理解jvm》第二版一书中，2.3.3章节讲述对象访问定位时提到，Hotspot是使用直接指针而不是句柄去访问对象的。是否是Java内部访问时使用的直接指针而native时使用的句柄？？</p>2018-12-28</li><br/><li><span>javaadu</span> 👍（1） 💬（0）<p>（1）JNI中也需要考虑对异常的处理
 （2）JNI中通过句柄引用java对象，
 （3）垃圾回收器会忽略jni中的局部引用和全局引用</p>2018-10-23</li><br/><li><span>Jerry银银</span> 👍（0） 💬（0）<p>两种链接方法分别适用于什么场景？</p>2022-07-26</li><br/><li><span>neohope</span> 👍（0） 💬（0）<p>老师，请问一下，使用JNI的时候，要考虑JDK版本与编译器版本的问题吗？我曾经在Windows下用JNI写过一些库，都是静态编译的，但实际测试时，发现不同版本的JDK，有时候要用不同版本的编译器。没法做到一个lib完全通用，感觉很奇怪。（不是32或64，而是vs2010，vs2015，vs2017这些。）</p>2019-09-07</li><br/><li><span>东方</span> 👍（0） 💬（1）<p>老师: A类的方法a()调用C++ ，fork一个进程后，在子进程回调A#a()。a()打印了类的id，前后两个进程打印id是一样的。我的问题是，fork进程后，JVM还是同一个实例？

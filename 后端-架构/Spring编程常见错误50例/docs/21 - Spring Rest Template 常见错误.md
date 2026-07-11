@@ -245,7 +245,7 @@ System.out.println(response.getBody());
 private static final Pattern URI_PATTERN = Pattern.compile(
       "^(" + SCHEME_PATTERN + ")?" + "(//(" + USERINFO_PATTERN + "@)?" + HOST_PATTERN + "(:" + PORT_PATTERN +
             ")?" + ")?" + PATH_PATTERN + "(\\?" + QUERY_PATTERN + ")?" + "(#" + LAST_PATTERN + ")?");
-            
+
 public static UriComponentsBuilder fromUriString(String uri) {
    Matcher matcher = URI_PATTERN.matcher(uri);
    if (matcher.matches()) {
@@ -319,7 +319,7 @@ System.out.println(response.getBody());
 private static final Pattern HTTP_URL_PATTERN = Pattern.compile(
       "^" + HTTP_PATTERN + "(//(" + USERINFO_PATTERN + "@)?" + HOST_PATTERN + "(:" + PORT_PATTERN + ")?" + ")?" +
             PATH_PATTERN + "(\\?" + LAST_PATTERN + ")?")
-            
+
 public static UriComponentsBuilder fromHttpUrl(String httpUrl) {
    Assert.notNull(httpUrl, "HTTP URL must not be null");
    Matcher matcher = HTTP_URL_PATTERN.matcher(httpUrl);

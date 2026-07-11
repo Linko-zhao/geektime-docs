@@ -73,7 +73,7 @@ public class AnnotationConfigWebApplicationContext 
 	private ServletContext servletContext;
 	DefaultListableBeanFactory beanFactory;
 	private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors =
-			new ArrayList<BeanFactoryPostProcessor>();	
+			new ArrayList<BeanFactoryPostProcessor>();
 
 	public AnnotationConfigWebApplicationContext(String fileName) {
 		this(fileName, null);
@@ -202,7 +202,7 @@ import com.minis.context.ClassPathXmlApplicationContext;
 public class XmlWebApplicationContext 
 					extends ClassPathXmlApplicationContext implements WebApplicationContext{
 	private ServletContext servletContext;
-	
+
 	public XmlWebApplicationContext(String fileName) {
 		super(fileName);
 	}
@@ -219,7 +219,7 @@ public class XmlWebApplicationContext 
 到这里，我们就进一步拆解了DispatcherServlet，拆分出两级ApplicationContext，当然启动过程还是由Listener来负责。所以最后ContextLoaderListener初始化时是创建XmlWebApplicationContext对象。
 
 ```java
-WebApplicationContext wac = new XmlWebApplicationContext(sContextLocation); 
+WebApplicationContext wac = new XmlWebApplicationContext(sContextLocation);
 ```
 
 到这里，Web环境下的两个ApplicationContext都构建完毕了，WebApplicationContext持有对parentApplicationContext的单向引用。当调用getBean()获取Bean时，先从WebApplicationContext中获取，若为空则通过parentApplicationContext获取，你可以看一下代码。
@@ -287,10 +287,10 @@ public class HandlerMethod {
 	private  String description;
 	private  String className;
 	private  String methodName;
-	
+
 	public HandlerMethod(Method method, Object obj) {
 		this.setMethod(method);
-		this.setBean(obj);	
+		this.setBean(obj);
 	}
 	public Method getMethod() {
 		return method;
@@ -455,7 +455,7 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
 			objResult = method.invoke(obj);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
 		try {
 			response.getWriter().append(objResult.toString());
 		} catch (IOException e) {
@@ -474,7 +474,7 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
 ```plain
 refresh()	{
     	initController();
-    	
+   
 		initHandlerMappings(this.webApplicationContext);
 		initHandlerAdapters(this.webApplicationContext);
 }
@@ -559,20 +559,24 @@ this.beanFactory = bf;
 除了这个原因,Spring搞2个容器还有其他原因吗?</p>2023-04-08</li><br/><li><span>赵欣</span> 👍（1） 💬（1）<p>有几个文件跟原来版本相比也有些变化了，大家注意下，一个是AbstractBeanFactory.java一个是DefaultListableBeanFactory.java文件。</p>2024-03-15</li><br/><li><span>睿智的仓鼠</span> 👍（0） 💬（1）<p>不可多得的好课，跟到现在学到很多</p>2023-06-07</li><br/><li><span>梦某人</span> 👍（0） 💬（1）<p>首先以个人理解回答课后题，目前的请求并不分 get 或者 post，主要是以请求的路径进行区分，如果想要处理 post 请求，
 需要构建新的 HandlerAdapter，对 Request 中的 post body 内容进行额外的解析和处理，然后操作方法。当然可能还需要构建 HandlerMapping 来处理请求路径，但是个人没想到什么 get 和 post 区别很大的地方。
 第二和第三点是个人跟写的时候遇到的一些问题，给其他同学一点参考。
-第二个， 
+第二个，
+
 ```
 &#47;&#47; getBeanDefinitionNames 方法中
-return (String[]) this.beanNames.toArray(); 
+return (String[]) this.beanNames.toArray();
 &#47;&#47;替换成
- return this.beanNames.toArray(new String[0]); 
+ return this.beanNames.toArray(new String[0]);
 ```
+
 可以减少一些类型转换异常，特别是当 ArrayList 里面只有一个 String 元素的时候。
 第三个，BeanDefinition 中的部分 get 方法应该增加运算符 防止返回 Null 而不是 empty，导致空指针异常。例如：
+
 ```
   public ArgumentValues getArgumentValues() {
         return argumentValues == null? new ArgumentValues(): argumentValues;
     }
 ```
+
 第四点是课程个人理解了：两级的 WebApplicationContext 第一级在 Listener 的时候加载，加载了 beans.xml (或者 Application.xml ) 中的 bean， 然后作为 第二级 AnnotationConfigWebApplicationContext 的父级， 第二级别通过 mvc.xml 提供的扫包路径进行扫包加载 bean，同时注册带有注解的方法。 当路由请求来的时候，先从第二级的 WebApplicationContext 获取 bean 和其方法进行处理，所以这个两级在最后的时候以 Controller 和 Service 来进行讲解，不是真的 Controller 和 Service， 而是说 第二级处理事物的触发逻辑比第一级更早，加载的逻辑则比他更晚，就好像 请求先到 Controller 后到 Service 一样。
 
 最后的最后，，，看着老师文稿给的代码来吵，已经是和 GitHub 中的代码差别越来越大了， Debug 起来更加费时，但是好处是理解加深了。</p>2023-04-05</li><br/><li><span>C.</span> 👍（0） 💬（1）<p>出去玩了两天，今天把这章也结束掉了。代码运行一切正常。</p>2023-04-03</li><br/><li><span>Geek_320730</span> 👍（0） 💬（2）<p>1. 课后题：重写service后不是Get 和Post都能处理吗？

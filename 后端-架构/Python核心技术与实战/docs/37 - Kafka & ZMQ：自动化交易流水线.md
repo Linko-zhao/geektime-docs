@@ -168,7 +168,7 @@ send 5
 对于订阅者，我们要做的是创建一个 zmq Context，连接 socket 到指定端口。其中，setsockopt\_string() 函数用来过滤特定的消息，而下面这行代码：
 
 ```
-socket.setsockopt_string(zmq.SUBSCRIBE, '') 
+socket.setsockopt_string(zmq.SUBSCRIBE, '')
 ```
 
 则表示不过滤任何消息。最后，我们调用 socket.recv() 来接受消息就行了，这条语句会阻塞在这里，直到有新消息来临。

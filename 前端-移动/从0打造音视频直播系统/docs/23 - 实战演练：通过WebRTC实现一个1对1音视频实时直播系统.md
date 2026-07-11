@@ -32,7 +32,7 @@ var express = require('express');
 var serveIndex = require('serve-index');
 ...
 //使用express实现WEB服务
-var app = express(); 
+var app = express();
 app.use(serveIndex('./public'));
 app.use(express.static('./public'));
 
@@ -149,7 +149,7 @@ coturn的编译安装与部署还是比较简单的。首先我们来看看如�
 var pcConfig = {
   'iceServers': [{ //指定 ICE 服务器信令
     'urls': 'turn:stun.al.learningrtc.cn:3478', //turn服务器地址
-    'credential': "passwd", //turn服务器密码，你要用自己的 
+    'credential': "passwd", //turn服务器密码，你要用自己的
     'username': "username"  //turn服务器用户名，你要用自己的
   }]
 };
@@ -157,7 +157,7 @@ var pcConfig = {
 ...
 
 function createPeerConnection(){
- 
+
   if(!pc){
     pc = new RTCPeerConnection(pcConfig); //创建peerconnection对象
     ...

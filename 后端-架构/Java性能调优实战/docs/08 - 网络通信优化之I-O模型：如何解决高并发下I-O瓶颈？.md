@@ -89,7 +89,7 @@ DirectBuffer则是直接将步骤简化为数据直接保存到非堆内存，�
         int pos = src.position();
         int lim = src.limit();
         assert (pos <= lim);
-        int rem = (pos <= lim ? lim - pos : 0); 
+        int rem = (pos <= lim ? lim - pos : 0);
         ByteBuffer bb = Util.getTemporaryDirectBuffer(rem);
         try {
             bb.put(src);
@@ -186,9 +186,6 @@ ARP下C直接调用
 1.图2的directbuffer是不是临时直接内存，和文中提到的DirectBuffer应该不是一回事吧。
 2.Chanel有自己的处理器，这个何解？
 3.传统I&#47;O使用buffer后，是不是处理单位也变成块了，怎么可以优化阻塞的问题呢，不太明白？</p>2019-11-24</li><br/><li><span>昨夜的柠檬</span> 👍（4） 💬（2）<p>文中说，多线程阻塞时，会占用大量CPU资源。线程阻塞应该会让出CPU吧？</p>2020-03-08</li><br/><li><span>天星之主</span> 👍（3） 💬（3）<p>“DirectBuffe直接将步骤简化为从内核空间复制到外部设备，减少了数据拷贝”，direct buffer申请的非堆内存，只是不受JVM管控，不应该还是用户态的内存吗</p>2019-11-07</li><br/><li><span>张三丰</span> 👍（2） 💬（1）<p>如果单纯使用 Java 堆内存进行数据拷贝，当拷贝的数据量比较大的情况下，Java 堆的 GC 压力会比较大，而使用非堆内存可以减低 GC 的压力。
-
-
-
 
 为何GC压力会比较大呢？只能说是没法回收导致内存泄漏吧。</p>2020-04-07</li><br/><li><span>al-byte</span> 👍（2） 💬（1）<p>我们可以在注册 Channel 时设置该通道为非阻塞，当 Channel 上没有 I&#47;O 操作时，该线程就不会一直等待了，而是会不断轮询所有 Channel，从而避免发生阻塞。
 如果一个Channel上I&#47;O耗时很长是不是后续的Channel就被阻塞了？</p>2019-06-17</li><br/><li><span>Better me</span> 👍（1） 💬（1）<p>老师在评论中的下面这段话

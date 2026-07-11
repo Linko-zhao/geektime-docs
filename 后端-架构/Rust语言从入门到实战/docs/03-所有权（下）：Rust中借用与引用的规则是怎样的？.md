@@ -38,7 +38,7 @@ fn main() {
     let c = &&&&&a;    // c是变量a的多级引用
     let d = &b;        // d是变量a的间接引用
     let e = b;         // 引用b再赋值给e
-    
+
     println!("{a}");
     println!("{b}");
     println!("{c}");
@@ -66,14 +66,14 @@ fn main() {
     let s3 = &&&&&s1;
     let s4 = &s2;
     let s5 = s2;
-    
+
     println!("{s1}");
     println!("{s2}");
     println!("{s3}");
     println!("{s4}");
     println!("{s5}");
 }
-// 输出 
+// 输出
 I am a superman.
 I am a superman.
 I am a superman.
@@ -144,7 +144,7 @@ fn main() {
 
     println!("{b}");
 }
-// 输出 
+// 输出
 20
 ```
 
@@ -159,7 +159,7 @@ fn main() {
     println!("{b}");
     println!("{a}");    // 这里多打印了一行a
 }
-// 输出 
+// 输出
 20
 20
 ```
@@ -225,7 +225,7 @@ fn main() {
     let b = &mut a;
     *b = 20;
     let c = &a;       // 在利用b更新了a的值后，c再次借用a
-    
+
     println!("{b}");  // 加了一句打印语句
 }
 ```
@@ -245,7 +245,7 @@ error[E0502]: cannot borrow `a` as immutable because it is also borrowed as muta
 5 |     let c = &a;
   |             ^^ immutable borrow occurs here
 // 不可变借用发生在这里
-6 |     
+6 |
 7 |     println!("{b}");  // 加了一句打印语句
   |               --- mutable borrow later used here
 // 可变借用在这里使用了
@@ -261,7 +261,7 @@ fn main() {
     let b = &mut a;
     *b = 20;
     let c = &a;
-    
+
     println!("{c}");  // 不打印b了，换成打印c
 }
 // 输出
@@ -278,7 +278,7 @@ fn main() {
     let c = &a;        // c的定义移到这里来了
     let b = &mut a;
     *b = 20;
-  
+
     println!("{c}");
 }
 ```
@@ -316,22 +316,22 @@ fn main() {
 
 到这里为止，我们已经积累了不少素材了，从这些素材中你有没有发现什么规律？**引用的最后一次调用时机很关键**。
 
-前面我们讲过，一个所有权型变量的作用域是从它定义时开始到花括号结束。而引用型变量的作用域不是这样，**引用型变量的作用域是从它定义起到它最后一次使用时结束。**比如上面的示例中，所有权型变量a的作用域是2~8行；不可变引用c的作用域只有第3行，它定义了，但并没有被使用，所以它的作用域就只有那一行；可变引用b的作用域是4~7行。
+前面我们讲过，一个所有权型变量的作用域是从它定义时开始到花括号结束。而引用型变量的作用域不是这样，**引用型变量的作用域是从它定义起到它最后一次使用时结束。**比如上面的示例中，所有权型变量a的作用域是2~~8行；不可变引用c的作用域只有第3行，它定义了，但并没有被使用，所以它的作用域就只有那一行；可变引用b的作用域是4~~7行。
 
 同时，我们发现还存在一条规则：**一个所有权型变量的可变引用与不可变引用的作用域不能交叠**，也可以说不能同时存在。我们用这条规则分析前面的示例。
 
 ```plain
 fn main() {
     let mut a = 10u32;
-    let c = &a;        
+    let c = &a;
     let b = &mut a;
     *b = 20;
-  
+
     println!("{c}");
 }
 ```
 
-所有权型变量a的作用域是2~8行，不可变引用c的作用域是3~7行，可变引用b的作用域是4~5行。b和c的作用域交叠了，因此无法编译通过。
+所有权型变量a的作用域是2~~8行，不可变引用c的作用域是3~~7行，可变引用b的作用域是4~5行。b和c的作用域交叠了，因此无法编译通过。
 
 后面你可以采用我的这种分析方法来分析每一个例子。
 
@@ -343,7 +343,7 @@ fn main() {
     let b = &mut a;
     *b = 20;
     let d = &mut a;
-    
+
     println!("{d}");      // 打印d
 }
 // 输出
@@ -358,7 +358,7 @@ fn main() {
     let b = &mut a;
     *b = 20;
     let d = &mut a;
-    
+
     println!("{b}");      // 打印b
 }
 ```
@@ -376,7 +376,7 @@ error[E0499]: cannot borrow `a` as mutable more than once at a time
 4 |     *b = 20;
 5 |     let d = &mut a;
   |             ^^^^^^ second mutable borrow occurs here
-6 |     
+6 |
 7 |     println!("{b}");
   |               --- first borrow later used here
 ```
@@ -407,7 +407,7 @@ error[E0506]: cannot assign to `a` because it is borrowed
   |              -- `a` is borrowed here
 4 |     a = 20;
   |     ^^^^^^ `a` is assigned to here but it was already borrowed
-5 |     
+5 |
 6 |     println!("{r1}");
   |               ---- borrow later used here
 ```
@@ -437,7 +437,7 @@ error[E0506]: cannot assign to `a` because it is borrowed
   |              ------ `a` is borrowed here
 4 |     a = 20;
   |     ^^^^^^ `a` is assigned to here but it was already borrowed
-5 |     
+5 |
 6 |     println!("{r1}");
   |               ---- borrow later used here
 ```
@@ -461,7 +461,7 @@ fn main() {
     let mut a = 10u32;
     let r1 = &mut a;
     let r2 = r1;
-    
+
     println!("{r1}")
 }
 ```
@@ -476,7 +476,7 @@ error[E0382]: borrow of moved value: `r1`
   |         -- move occurs because `r1` has type `&mut u32`, which does not implement the `Copy` trait
 4 |     let r2 = r1;
   |              -- value moved here
-5 |     
+5 |
 6 |     println!("{r1}")
   |                ^^ value borrowed here after move
 ```
@@ -490,7 +490,7 @@ fn main() {
     let mut a = 10u32;
     let r1 = &mut a;
     let r2 = r1;
-    
+
     println!("{r2}");    // 打印r2
 }
 // 输出
@@ -528,10 +528,10 @@ fn main() {
 
     let c = &mut b;
     **c = 30;          // 多级解引用操作
-    
+
     println!("{c}");
 }
-// 输出 
+// 输出
 30
 ```
 
@@ -545,7 +545,7 @@ fn main() {
 
     let c = &mut b;
     *c = 30;            // 这里对二级可变引用只使用一级解引用操作
-    
+
     println!("{c}");
 }
 ```
@@ -578,9 +578,9 @@ fn main() {
     let b = &mut a1;
     let mut c = &b;
     let d = &mut c;
-    
+
     ***d = 30;
-    
+
     println!("{d}");
 }
 ```
@@ -689,14 +689,15 @@ fn main() {
 跟唐老师学习我觉得我理解能力变强了，感谢唐老师的课程，扫清了很多基础的迷雾。</p>2023-10-26</li><br/><li><span>Geek_6fjt20</span> 👍（11） 💬（3）<p>rust完全模拟了现实世界中借的概念，a有一本书，b要用的时候向a借，b不能超出a的移动范围（作用域范围），因为怕借了不还跑路了。</p>2023-10-27</li><br/><li><span>Michael</span> 👍（8） 💬（2）<p>想请问下下面这段代码，为什么变量b之前的mut是必须的，变量c之前不需要：
 
 fn main() {
-    let mut a1 = 10u32;
-    let mut b = &amp;mut a1;
-    *b = 20;
+let mut a1 = 10u32;
+let mut b = &amp;mut a1;
+*b = 20;
 
     let c = &amp;mut b;
     **c = 30;          &#47;&#47; 多级解引用操作
 
     println!(&quot;{c}&quot;);
+
 }</p>2023-10-26</li><br/><li><span>一个人旅行</span> 👍（5） 💬（2）<p>问题1. 所有权型变量被借用时，不能对所有权型变量进行修改。
 问题2. 同一时刻，所有权型变量只能有一个可变引用或多个不可变引用。如果复制，则会有多个不可变引用，违反了借用规则。</p>2023-10-26</li><br/><li><span>RobinH</span> 👍（3） 💬（1）<p>所有权 感觉像是一种 栈范围 在控制</p>2024-01-22</li><br/><li><span>Geek_c01211</span> 👍（2） 💬（2）<p>感觉讲的比较细，给了很多 case 去分析，很喜欢，但是想请教一个问题，为啥可变引用和不可变引用或者多个不可变引用的作用域之间不能重叠？如果编译器不对这一块做检查，会有啥样子的问题了，基于目前的例子，好像没有办法合理的解释为什么不能重叠</p>2023-11-21</li><br/><li><span>-Hedon🍭</span> 👍（2） 💬（1）<p>1. 不可变引用的语义更像是“借一下这个值使用一下”，如果在不可变引用作用域结束之前，对所有权变量进行写入，那么这个借的“值”，就没有意义了，因为不确定是否跟想借的时候是一致的。
 
@@ -717,4 +718,5 @@ fn main() {
 由于不可变借用和可变借用的范围出现了重叠，因此编译出错。而 a = 20 和此处类似，都是修改了实际数据。
 
 2. 因为多个可变引用的作用范围不能存在交集，所以 Copy 的话没有意义，因此只能 Move</p>2023-11-01</li><br/><li><span>励研冰</span> 👍（1） 💬（1）<p>从语意上保证了安全性，不可变引用语意:从此刻开始到我的运用域结束，原始值请保持我开始的状态，不然就破坏了我的不可变引用的语;可变引用同样的道理;。类似于mysql中的可重复读事物，不过mysql的实现方式是通过mvcc ,为了提高并发度；而rust是限制修改，更像是排斥锁，不允许交叉；不过这样的话不知道后面的 无谓并发 在对同一个数据的修改上会不会有什么问题</p>2023-10-26</li><br/>
+
 </ul>

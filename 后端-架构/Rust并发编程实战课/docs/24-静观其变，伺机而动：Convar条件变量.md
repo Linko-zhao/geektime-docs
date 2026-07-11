@@ -105,7 +105,7 @@ pub fn wait<'a,T>(&self, guard: MutexGuard<'a, T>) -> LockResult<MutexGuard<'a, 
     while started.is_empty() {
         //释放started锁，休眠。
         // 如果被唤醒，会重新获取到started
-        started = cvar.wait(started).unwrap(); 
+        started = cvar.wait(started).unwrap();
     }
 ```
 
@@ -143,7 +143,7 @@ fn main() {
     // 等待线程启动
     let (lock, cvar) = &*pair;
     let mut started = lock.lock().unwrap();
-    
+
     loop {
         let result = cvar
             .wait_timeout(started, Duration::from_millis(100))
@@ -274,12 +274,12 @@ impl<T> Queue<T> {
     // 从队列头部移除并返回元素，如果队列为空则阻塞等待
     pub fn pop(&self) -> T {
         let mut queue = self.queue.lock().unwrap();
-        
+
         // 当队列为空时等待
         while queue.is_empty() {
             queue = self.condvar.wait(queue).unwrap();
         }
-        
+
         // 当队列不为空时，取出头部元素
         queue.pop_front().unwrap()
     }

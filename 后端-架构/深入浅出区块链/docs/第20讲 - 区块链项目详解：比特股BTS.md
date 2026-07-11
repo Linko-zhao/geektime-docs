@@ -118,6 +118,7 @@
 
 1. 【[http://bitshares.org/】](http://bitshares.org/%E3%80%91)
 2. 【[https://github.com/bitshares/how.bitshares.works/tree/master/developers#bitshares-documentation-for-developpers】](https://github.com/bitshares/how.bitshares.works/tree/master/developers#bitshares-documentation-for-developpers%E3%80%91)
+
 <div><strong>精选留言（11）</strong></div><ul>
 <li><span>smith</span> 👍（2） 💬（1）<p>27个服务器，理论上tps可以到10万，就是分布式架构，可以这样理解么？</p>2018-06-12</li><br/><li><span>奇雪人</span> 👍（0） 💬（1）<p>锚定机制有点儿难理解呀…</p>2018-05-10</li><br/><li><span>sam</span> 👍（0） 💬（1）<p>是不是可以通过学习比特股的金融合约代码来学习他的核心呢？也加强对金融概念的了解</p>2018-05-10</li><br/><li><span>漂泊的小飘</span> 👍（4） 💬（1）<p>要是bts没人买怎么办？也就是亏的时候一直卖不出去。。</p>2019-07-31</li><br/><li><span>shiziwen</span> 👍（2） 💬（1）<p>现在已经进入区块链行业了，重读这篇文章，又会有新的感受。</p>2020-03-22</li><br/><li><span>A君</span> 👍（1） 💬（2）<p>比特股是个去中心化的数字货币交易平台，人人都可以通过人民币买卖等比的bitCNY，旷工通过用bts来抵押生产bitCNY。换句话说，bitCNY挂钩人民币，人民币的汇率波动引发bitCNY。还是没明白比特股的意义何在呢？</p>2021-02-22</li><br/><li><span>杨家荣</span> 👍（0） 💬（0）<p>极客时间第二期
 21天打卡行动 18&#47;21

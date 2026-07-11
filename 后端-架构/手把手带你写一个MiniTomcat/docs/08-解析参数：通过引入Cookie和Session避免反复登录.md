@@ -884,12 +884,12 @@ public class HttpRequest implements HttpServletRequest {
         }
         return ((Cookie[]) cookieal.toArray (new Cookie [cookieal.size()]));
     }
-    
+
     @Override
     public Cookie[] getCookies() {
         return this.cookies;
     }
-    
+
     @Override
     public HttpSession getSession() {
         return this.sessionFacade;
@@ -1090,7 +1090,6 @@ Content-Length: 1234
 我问gpt为什么出现两次，gpt回答“常抱歉，我犯了一个错误。在HTTP响应中，Set-Cookie首部字段只能出现一次”，但给出的修正后的例子还是包含两个。
 请问：Http Response的Set-Cookie字段可以出现多次吗？
 
-
 Q3:本课代码，messaging包不存在
 HttpRequest.java文件中有如下导包语句：
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.InternetHeaders;
@@ -1105,27 +1104,27 @@ Content-Length: 9
 
 name=haha
 
-2、回传 jsessionid 到客户端其实文中也有提到了， 通过 cookie  或 URL 重写进行进行回传。</p>2023-12-25</li><br/><li><span>夙夜SEngineer</span> 👍（0） 💬（0）<p>我来完善一段代码逻辑，getParameter(String name)方法中，应只调用一次parseParameters，添加if (parameters.isEmpty())判断：
-    @Override
-    public String getParameter(String name) {
-        if (parameters.isEmpty()) {
-            parseParameters();
-        }
-        String values[] = parameters.get(name);
-        if (values != null)
-            return (values[0]);
-        else
-            return (null);
-    }
+2、回传 jsessionid 到客户端其实文中也有提到了， 通过 cookie 或 URL 重写进行进行回传。</p>2023-12-25</li><br/><li><span>夙夜SEngineer</span> 👍（0） 💬（0）<p>我来完善一段代码逻辑，getParameter(String name)方法中，应只调用一次parseParameters，添加if (parameters.isEmpty())判断：
+@Override
+public String getParameter(String name) {
+if (parameters.isEmpty()) {
+parseParameters();
+}
+String values[] = parameters.get(name);
+if (values != null)
+return (values[0]);
+else
+return (null);
+}
 否则遇到POST请求体多个参数解析的时候，由于SocketInputStream提前关闭导致fill函数中is引用空指针异常
-    protected void fill() throws IOException {
-        pos = 0;
-        count = 0;
-        int nRead = is.read(buf, 0, buf.length);
-        if (nRead &gt; 0) {
-            count = nRead;
-        }
-    }</p>2025-02-12</li><br/><li><span>偶来人间，风度翩翩</span> 👍（0） 💬（1）<p>代码示例中，对于SocketInputStream类，
-第53行代码【requestLine.uriEnd =  readCount - 1; 】是不正确的，
-应该是【requestLine.methodEnd = readCount - 1;】。   </p>2024-05-25</li><br/>
+protected void fill() throws IOException {
+pos = 0;
+count = 0;
+int nRead = is.read(buf, 0, buf.length);
+if (nRead &gt; 0) {
+count = nRead;
+}
+}</p>2025-02-12</li><br/><li><span>偶来人间，风度翩翩</span> 👍（0） 💬（1）<p>代码示例中，对于SocketInputStream类，
+第53行代码【requestLine.uriEnd = readCount - 1; 】是不正确的，
+应该是【requestLine.methodEnd = readCount - 1;】。 </p>2024-05-25</li><br/>
 </ul>

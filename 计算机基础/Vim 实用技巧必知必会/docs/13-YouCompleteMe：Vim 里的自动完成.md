@@ -12,7 +12,7 @@ YCM 对 C++ 程序员最为适合，它可以提供其他工具实现不了的�
 
 > YouCompleteMe 是一个快速、即输即查、模糊搜索的 Vim 代码完成引擎。它实际上有好几个完成引擎：  
 >  
-> 
+>
 > - 一个基于标识符的引擎，可以在任何编程语言中工作
 > - 一个强大的基于 clangd 的引擎，可以为 C/C++/Objective-C/Objective-C++/CUDA（C 家族语言）提供原生的语义代码完成
 > - 一个基于 Jedi 的完成引擎，可以支持 Python 2 和 3
@@ -251,7 +251,7 @@ let g:rtagsUseLocationList = 0
 这是因为 vim-rtags 默认使用位置列表（location list）而不是快速修复窗口。我们之前没有介绍过位置列表，我就快速引用一下文档：
 
 > 位置列表是一个窗口局部的快速修复列表。由 `:lvimgrep`、`:lgrep`、`:lhelpgrep`、`:lmake` 等命令产生，它们生成位置列表而不是对应的 `:vimgrep`、`:grep`、`:helpgrep`、`:make` 生成的快速修复列表。
-> 
+>
 > 位置列表和窗口相关联，而每个窗口都要单独的位置列表。一个位置列表只能和一个窗口相关联。位置列表和快速修复列表相互独立。
 
 我通常不怎么使用位置列表，主要是为了简单，可以使用固定的快捷键。
@@ -315,7 +315,7 @@ vim-addon-manager install youcompleteme两行代码之后，然后用vim打开�
 autoconf	cmake		fzf		gettext		icu4c		lua		node		pkg-config	python@3.9	ruby		universal-ctags
 automake	cscope		gdbm		go		libyaml		macvim		openssl@1.1	python@3.8	readline	sqlite		xz
 
-ycm 只加 clangd  选项以下报错 【我需要自己安装 clangd 吗，请问？】
+ycm 只加 clangd 选项以下报错 【我需要自己安装 clangd 吗，请问？】
 =======================
 
 Downloading Clangd from https:&#47;&#47;dl.bintray.com&#47;ycm-core&#47;clangd&#47;clangd-10.0.0-x86_64-apple-darwin.tar.bz2...
@@ -323,11 +323,11 @@ ERROR: downloaded Clangd archive does not match checksum.
 </p>2020-10-25</li><br/><li><span>gigglesun</span> 👍（0） 💬（1）<p>YouCompleteMe可以通过离线的方式安装吗？ 公司的服务器不能连接外网，我可以在自己的电脑通过
 
 git clone --recurse-submodules \
-          --shallow-submodules \
-    https:&#47;&#47;github.com&#47;ycm-core&#47;YouCompleteMe.git
+--shallow-submodules \
+https:&#47;&#47;github.com&#47;ycm-core&#47;YouCompleteMe.git
 装好后，把这个YouCompleteMe文件夹拷贝到公司服务器，然后我再额外的安装对应的语言引擎这样安装吗？</p>2020-10-18</li><br/><li><span>瀚海星尘</span> 👍（0） 💬（3）<p>老师我这里 ubuntu 使用 apt install vim-youcompleteme 后，提示找不到引擎，估计是还需要单独安装，最后还是用了编译安装的方式。我也安装了 vim-autopairs，确实带来了很多困扰，最头痛的就是需要只输入一对的第一个符号的情况，每次输入都会自动输出两个，然后删除第二个又会自动把第一个给删除...看了老师的留言，果断把它删除了。������</p>2020-10-11</li><br/><li><span>doge</span> 👍（0） 💬（1）<p>ubuntu环境按照老师的命令安装rtags失败，报错
 rtags&#47;src&#47;rct&#47;rct&#47;Apply.h:46:10: error: unknown
-      type name &#39;size_t&#39;; did you mean &#39;std::size_t&#39;?
+type name &#39;size_t&#39;; did you mean &#39;std::size_t&#39;?
 最后直接下载release 2.3.8的tarball编译成功。。</p>2020-08-31</li><br/><li><span>pyhhou</span> 👍（0） 💬（1）<p>安老师给的步骤安装了 YCM，试着编辑了 javascript 文件，感觉有几个地方不是太清楚：
 
 1. YCM 中的跳转(GoTo)貌似只能在单个文件中跳转，不能跳转到其它的文件中去？有些时候，如果需要跳转到函数，只能跳转到前面的定义和声明，无法跳转到后面的定义和声明。当无法跳转的时候，右下方会出现 `KeyError: &#39;file&#39;` 的错误，或者是提示你使用命令不恰当的错误

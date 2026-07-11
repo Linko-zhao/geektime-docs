@@ -122,15 +122,17 @@ etcd中的代码实践了CSP的编程模式，大量使用了协程与通道的�
 <li><span>Realm</span> 👍（4） 💬（0）<p>思考题：
 1. MVCC（Multi-Version Concurrency Control），即多版本并发控制。MVCC 是一种并发控制的方法，可以实现对数据库的并发访问。
 
-2. MySQL的MVCC工作在RC(读提交)和RR(重复读)的隔离级别。 
-表的行记录逻辑上是一个链表，既保留业务数据本身，还有两个隐藏字段：
+2. MySQL的MVCC工作在RC(读提交)和RR(重复读)的隔离级别。
+   表的行记录逻辑上是一个链表，既保留业务数据本身，还有两个隐藏字段：
+
 - trx_id（最近修改的事务ID）
 - roll_ptr(指向上一个版本数据的指针,通过undo log可以实现从高版本到低版本的迁跃)
 
 3. ETCD的MVCC同样可以维护一个数据(key对应的值)的多个历史版本，且使得读写操作没有冲突,不使用锁，增加系统吞吐。
 
 4. 窥探etcd对同一个key进行修改，内部版本的变化
-```
+
+````
 &gt; docker exec etcd-gcr-v3.5.5 &#47;bin&#47;sh -c &quot;&#47;usr&#47;local&#47;bin&#47;etcdctl put a 1 &quot;
 OK
 
@@ -151,3 +153,4 @@ OK
 {&quot;header&quot;:{&quot;cluster_id&quot;:18011104697467366872,&quot;member_id&quot;:6460912315094810421,&quot;revision&quot;:24,&quot;raft_term&quot;:3},&quot;kvs&quot;:[{&quot;key&quot;:&quot;YQ==&quot;,&quot;create_revision&quot;:22,&quot;mod_revision&quot;:24,&quot;version&quot;:3,&quot;value&quot;:&quot;Mw==&quot;}],&quot;count&quot;:1}
 ```</p>2023-01-14</li><br/>
 </ul>
+````

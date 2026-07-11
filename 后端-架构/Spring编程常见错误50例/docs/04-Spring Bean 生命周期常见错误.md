@@ -140,14 +140,14 @@ public class LightMgrService {
 
 ```
 protected Object initializeBean(final String beanName, final Object bean, @Nullable RootBeanDefinition mbd) {
-   //省略非关键代码 
+   //省略非关键代码
    if (mbd == null || !mbd.isSynthetic()) {
       wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
    }
    try {
       invokeInitMethods(beanName, wrappedBean, mbd);
    }
-   //省略非关键代码 
+   //省略非关键代码
 }
 ```
 
@@ -159,7 +159,7 @@ applyBeanPostProcessorsBeforeInitialization 方法最终执行到后置处理器
 
 ```
 private LifecycleMetadata buildLifecycleMetadata(final Class<?> clazz) {
-   //省略非关键代码 
+   //省略非关键代码
    do {
       //省略非关键代码
       final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
@@ -168,7 +168,7 @@ private LifecycleMetadata buildLifecycleMetadata(final Class<?> clazz) {
          if (this.initAnnotationType != null && method.isAnnotationPresent(this.initAnnotationType)) {
             LifecycleElement element = new LifecycleElement(method);
             currInitMethods.add(element);
-  //非关键代码          
+  //非关键代码
 }
 ```
 
@@ -183,12 +183,12 @@ protected void invokeInitMethods(String beanName, final Object bean, @Nullable R
       throws Throwable {
    boolean isInitializingBean = (bean instanceof InitializingBean);
    if (isInitializingBean && (mbd == null || !mbd.isExternallyManagedInitMethod("afterPropertiesSet"))) {
-      // 省略非关键代码 
+      // 省略非关键代码
       else {
          ((InitializingBean) bean).afterPropertiesSet();
       }
    }
-   // 省略非关键代码 
+   // 省略非关键代码
  }
 ```
 
@@ -203,7 +203,7 @@ import org.springframework.stereotype.Component;
 public class LightMgrService {
   @Autowired
   private LightService lightService;
-  
+
   @PostConstruct
   public void init() {
        lightService.check();
@@ -221,7 +221,7 @@ import org.springframework.stereotype.Component;
 public class LightMgrService implements InitializingBean {
     @Autowired
     private LightService lightService;
-  
+
     @Override
     public void afterPropertiesSet() throws Exception {
         lightService.check();
@@ -326,7 +326,7 @@ private String inferDestroyMethodIfNecessary(Object bean, RootBeanDefinition bea
 ```
 protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, final @Nullable Object[] args)
       throws BeanCreationException {
-   //省略非关键代码 
+   //省略非关键代码
    if (instanceWrapper == null) {
       instanceWrapper = createBeanInstance(beanName, mbd, args);
    }
@@ -337,7 +337,7 @@ protected Object doCreateBean(final String beanName, final RootBeanDefinition mb
       populateBean(beanName, mbd, instanceWrapper);
       exposedObject = initializeBean(beanName, exposedObject, mbd);
    }
-   //省略非关键代码 
+   //省略非关键代码
    // Register bean as disposable.
    try {
       registerDisposableBeanIfNecessary(beanName, bean, mbd);

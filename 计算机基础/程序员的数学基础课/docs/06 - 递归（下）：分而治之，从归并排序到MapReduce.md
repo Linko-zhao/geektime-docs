@@ -73,36 +73,36 @@
 import java.util.Arrays;
 
 public class Lesson6_1 {
-	
+
 	/**
     * @Description:	使用函数的递归（嵌套）调用，实现归并排序（从小到大）
     * @param to_sort-等待排序的数组
     * @return int[]-排序后的数组
     */
-	
+
 	public static int[] merge_sort(int[] to_sort) {
-		
+
 		if (to_sort == null) return new int[0];
-		
+
 		// 如果分解到只剩一个数，返回该数
 		if (to_sort.length == 1) return to_sort;
-		
+
 		// 将数组分解成左右两半
 		int mid = to_sort.length / 2;
 		int[] left = Arrays.copyOfRange(to_sort, 0, mid);
 		int[] right = Arrays.copyOfRange(to_sort, mid, to_sort.length);
-		
+
 		// 嵌套调用，对两半分别进行排序
 		left = merge_sort(left);
 		right = merge_sort(right);
-		
+
 		// 合并排序后的两半
 		int[] merged = merge(left, right);
-		
+
 		return merged;
-		
+
 	}
-   
+
 
 }
 ```
@@ -117,19 +117,19 @@ public class Lesson6_1 {
     * @param a-第一个数组，b-第二个数组
     * @return int[]-合并后的数组
     */
-    
+
     public static int[] merge(int[] a, int[] b) {
-     
+
      if (a == null)  a = new int[0];
      if (b == null) b = new int[0];
-     
+
      int[] merged_one = new int[a.length + b.length];
-     
+
      int mi = 0, ai = 0, bi = 0;
-     
+
      // 轮流从两个数组中取出较小的值，放入合并后的数组中
      while (ai < a.length && bi < b.length) {
-      
+
       if (a[ai] <= b[bi]) {
        merged_one[mi] = a[ai];
        ai ++;
@@ -137,11 +137,11 @@ public class Lesson6_1 {
        merged_one[mi] = b[bi];
        bi ++;
       }
-      
+
       mi ++;
-      
+
      }
-     
+
      // 将某个数组内剩余的数字放入合并后的数组中
      if (ai < a.length) {
       for (int i = ai; i < a.length; i++) {
@@ -154,9 +154,9 @@ public class Lesson6_1 {
        mi ++;
       }
      }
-     
+
      return merged_one;
-     
+
     }
 ```
 
@@ -164,10 +164,10 @@ public class Lesson6_1 {
 
 ```
 public static void main(String[] args) {
-  
+
   int[] to_sort = {3434, 3356, 67, 12334, 878667, 387};
   int[] sorted = Lesson6_1.merge_sort(to_sort);
-  
+
   for (int i = 0; i < sorted.length; i++) {
    System.out.println(sorted[i]);
   }
@@ -246,35 +246,35 @@ def mergeSort(list):
         return data
 
 def merge(left,right):
-    mid=[]
-    ai=0
-    bi=0
-    if(isinstance(left,int)):
-        leftLen=1
-        left=[left]
-    else:
-        leftLen=len(left)
-    if(isinstance(right,int)):
-        rightLen=1
-        right=[right]
-    else:
-        rightLen = len(right)
-    while(ai &lt; leftLen and bi &lt; rightLen):
-        if(left[ai]&lt;right[bi]):
-            mid.append(left[ai])
-            ai+=1
-        else:
-            mid.append(right[bi])
-            bi+=1
-    if(ai&lt; leftLen):
-        newleft=left[ai:]
-        for i in newleft:
-            mid.append(i)
-    else:
-        newright = right[bi:]
-        for i in newright:
-            mid.append(i)
-    return mid
+mid=[]
+ai=0
+bi=0
+if(isinstance(left,int)):
+leftLen=1
+left=[left]
+else:
+leftLen=len(left)
+if(isinstance(right,int)):
+rightLen=1
+right=[right]
+else:
+rightLen = len(right)
+while(ai &lt; leftLen and bi &lt; rightLen):
+if(left[ai]&lt;right[bi]):
+mid.append(left[ai])
+ai+=1
+else:
+mid.append(right[bi])
+bi+=1
+if(ai&lt; leftLen):
+newleft=left[ai:]
+for i in newleft:
+mid.append(i)
+else:
+newright = right[bi:]
+for i in newright:
+mid.append(i)
+return mid
 list=[3,8,5,9,7,1,10]
 mergeSort(list)
 刚学python，希望大家多多指教</p>2018-12-28</li><br/><li><span>叶嘉祺</span> 👍（6） 💬（1）<p>可以用数学方法证明二分归并排序是最优的应该。二分查找是可以证明的。
@@ -285,21 +285,15 @@ mergeSort(list)
 
 老师可以一起看下怎么证？</p>2019-06-01</li><br/><li><span>有品味的混球</span> 👍（6） 💬（2）<p>MapReduce 分割，映射，洗牌，归约这几个步骤没有具体的例子，就感觉不是很明白，希望这几个步骤还是用文章前半部分的排序的例子来分别举例</p>2019-02-19</li><br/><li><span>子非</span> 👍（6） 💬（1）<p>递归层次太多了，堆栈会溢出</p>2019-01-06</li><br/><li><span>刘明</span> 👍（5） 💬（2）<p>和快排对比，虽然时间复杂度都是nlogN，但是归并排序的空间复杂度是O(n)，快排则是原地排序。不过归并排序是稳定排序，快排则不是，两种各有优势。</p>2019-06-21</li><br/><li><span>罗耀龙@坐忘</span> 👍（4） 💬（1）<p>茶艺师学编程
 
-
 递归的“分而治之”的思想，其实在社会中能找到相应的例子。
-
 
 往古老的说，在工业革命之前，西方世界的社会结构就符合递归的“分而治之”：最顶端是国王，下一层是各个贵族，贵族下面是骑士（日本是武士）。国王只管他下面的贵族，贵族的骑士他是不管的；同样的，贵族只管他下面的骑士，骑士下面的人他是不管的。就是所谓“仆人的仆人不是自己的仆人。”
 
-
 就今天而言，很多单位的组织结构，其实也是这样“分而治之”。一个国家的总理管着各个省长，省长管着市长，市长管着县长——每一级组织都是上一级组织的缩小版，而且在管理上，不提倡越级管理。
-
 
 当然，能把递归玩的炉火纯青的，还得属于各位程序员大神。
 
-
 关于思考题，在归并排序的时候为什么每次都将原有的数组分解成两组，而不是更多组？如果分为更多组，是否可行？
-
 
 那是因为，“两两比较”才是排序的最小步骤，如果分更多的组，会增加运算过程中的不确定性，甚至无法使用递归思想来实现。
 
@@ -311,17 +305,17 @@ mergeSort(list)
 using namespace std;
 
 void merge(int *array, int low, int mid, int high) {
-    &#47;&#47; left: low ~ mid, right: mid+1 ~ high
-    int size = high - low + 1;
-    int *tmp = new int[size];
-    int i = low, j = mid+1, k = 0;
-    while (i &lt;= mid &amp;&amp; j &lt;= high) {
-        if (array[i] &lt;= array[j]) {
-            tmp[k++] = array[i++];
-        } else {
-            tmp[k++] = array[j++];
-        }
-    }
+&#47;&#47; left: low ~ mid, right: mid+1 ~ high
+int size = high - low + 1;
+int *tmp = new int[size];
+int i = low, j = mid+1, k = 0;
+while (i &lt;= mid &amp;&amp; j &lt;= high) {
+if (array[i] &lt;= array[j]) {
+tmp[k++] = array[i++];
+} else {
+tmp[k++] = array[j++];
+}
+}
 
     &#47;&#47; the rest elements
     while (i &lt;= mid) {
@@ -335,28 +329,29 @@ void merge(int *array, int low, int mid, int high) {
     for (k = 0; k &lt; size; ++k) {
         array[k+low] = tmp[k];
     }
+
 }
 
 void _mergeSort(int *array, int low, int high) {
-    if (low &gt;= high) return;
-    int mid = low + ((high-low) &gt;&gt; 1);
-    _mergeSort(array, low, mid);
-    _mergeSort(array, mid+1, high);
-    merge(array, low, mid, high);
+if (low &gt;= high) return;
+int mid = low + ((high-low) &gt;&gt; 1);
+_mergeSort(array, low, mid);
+_mergeSort(array, mid+1, high);
+merge(array, low, mid, high);
 }
 
 void mergeSort(int *array, int size) {
-    cout &lt;&lt; &quot;*****************before**************&quot; &lt;&lt; endl;
-    for (int i = 0; i &lt; size; ++i) {
-        cout &lt;&lt; array[i] &lt;&lt; &quot; &quot;;
-    }
-    cout &lt;&lt; endl;
-    _mergeSort(array, 0, size-1);
-    cout &lt;&lt; &quot;*****************after**************&quot; &lt;&lt; endl;
-    for (int i = 0; i &lt; size; ++i) {
-        cout &lt;&lt; array[i] &lt;&lt; &quot; &quot;;
-    }
-    cout &lt;&lt; endl;
+cout &lt;&lt; &quot;*****************before**************&quot; &lt;&lt; endl;
+for (int i = 0; i &lt; size; ++i) {
+cout &lt;&lt; array[i] &lt;&lt; &quot; &quot;;
+}
+cout &lt;&lt; endl;
+_mergeSort(array, 0, size-1);
+cout &lt;&lt; &quot;*****************after**************&quot; &lt;&lt; endl;
+for (int i = 0; i &lt; size; ++i) {
+cout &lt;&lt; array[i] &lt;&lt; &quot; &quot;;
+}
+cout &lt;&lt; endl;
 }
 
 int main() {
@@ -365,6 +360,7 @@ int main() {
     mergeSort(array, 9);
 
     return 0;
+
 }
 *****************before**************
 2 3 5 1 4 9 7 6 10

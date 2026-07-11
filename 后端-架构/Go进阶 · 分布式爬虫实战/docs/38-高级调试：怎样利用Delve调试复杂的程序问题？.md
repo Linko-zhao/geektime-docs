@@ -94,7 +94,7 @@ Breakpoint 1 set at 0x2089e86 for main.main() ./main.go:8
      4:         "github.com/dreamerjackson/crawler/cmd"
      5:         _ "net/http/pprof"
      6: )
-     7: 
+     7:
 =>   8: func main() {
      9:         cmd.Execute()
     10: }
@@ -108,7 +108,7 @@ Breakpoint 1 set at 0x2089e86 for main.main() ./main.go:8
      4:         "github.com/dreamerjackson/crawler/cmd"
      5:         _ "net/http/pprof"
      6: )
-     7: 
+     7:
      8: func main() {
 =>   9:         cmd.Execute()
     10: }
@@ -123,7 +123,7 @@ Breakpoint 1 set at 0x2089e86 for main.main() ./main.go:8
     16:                 version.Printer()
     17:         },
     18: }
-    19: 
+    19:
 =>  20: func Execute() {
     21:         var rootCmd = &cobra.Command{Use: "crawler"}
     22:         rootCmd.AddCommand(master.MasterCmd, worker.WorkerCmd, versionCmd)
@@ -146,7 +146,7 @@ Breakpoint 2 set at 0x2071659 for github.com/dreamerjackson/crawler/cmd/worker.R
    133:                 logger.Error("init seed tasks", zap.Error(err))
    134:         }
 => 135:         seeds := ParseTaskConfig(logger, f, storage, tcfg)
-   136: 
+   136:
    137:         _ = engine.NewEngine(
    138:                 engine.WithFetcher(f),
    139:                 engine.WithLogger(logger),
@@ -164,7 +164,7 @@ Breakpoint 2 set at 0x2071659 for github.com/dreamerjackson/crawler/cmd/worker.R
    133:                 logger.Error("init seed tasks", zap.Error(err))
    134:         }
 => 135:         seeds := ParseTaskConfig(logger, f, storage, tcfg)
-   136: 
+   136:
    137:         _ = engine.NewEngine(
    138:                 engine.WithFetcher(f),
    139:                 engine.WithLogger(logger),
@@ -237,7 +237,7 @@ Frame 1: ./cmd/worker/worker.go:44 (PC: 20702cb)
 =>  44:                 Run()
     45:         },
     46: }
-    47: 
+    47:
     48: func init() {
     49:         WorkerCmd.Flags().StringVar(
 ```

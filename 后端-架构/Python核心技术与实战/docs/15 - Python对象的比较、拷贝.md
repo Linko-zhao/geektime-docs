@@ -239,7 +239,7 @@ l1[0].append(3)
 l1
 [[1, 2, 3], (30, 40), 100]
 
-l2 
+l2
 [[1, 2], (30, 40)]
 ```
 
@@ -267,17 +267,17 @@ y
 ```
 def deepcopy(x, memo=None, _nil=[]):
     """Deep copy operation on arbitrary Python objects.
-    	
+
 	See the module's __doc__ string for more info.
 	"""
-	
+
     if memo is None:
         memo = {}
     d = id(x) # 查询被拷贝对象x的id
 	y = memo.get(d, _nil) # 查询字典里是否已经存储了该对象
 	if y is not _nil:
 	    return y # 如果字典里已经存储了将要拷贝的对象，则直接返回
-        ...    
+        ...
 ```
 
 ## 总结
@@ -313,12 +313,11 @@ SCAR说的很对，程序会报错：&#39;RecursionError: maximum recursion dept
 2.  对与整数型，范围在（-5 ~ 256 ）之间的整形数，‘==’ 与 ‘is’ 结果相同，原因在于python建立了一个数组缓存，创建对象时直接引用缓存
 
 3.  浅拷贝：定义：重新分配一片内存，生成新的对象，里面的元素是原对象中子对象的引用。
-                  生成方法： 可以通过数据构造器（list、set）完成浅拷贝，对于可变序列可以使用切片完成浅拷贝，对于元组而言，tupletuple()和切片不创建浅拷贝，指向相同元组的引用，还可以使用import copy, 使用copy.copy()来进行浅拷贝。
-                浅拷贝是对元素的引用，所以对于子对象，如果子对象是不可变，没有影响，如果是可变的序列，会带来一些影响
+    生成方法： 可以通过数据构造器（list、set）完成浅拷贝，对于可变序列可以使用切片完成浅拷贝，对于元组而言，tupletuple()和切片不创建浅拷贝，指向相同元组的引用，还可以使用import copy, 使用copy.copy()来进行浅拷贝。
+    浅拷贝是对元素的引用，所以对于子对象，如果子对象是不可变，没有影响，如果是可变的序列，会带来一些影响
 
 4.  深拷贝，重新分配一块内存，创建一个新的对象，将原对象中的元素以递归的方式全部拷贝。深拷贝中会维持一个字典，记录已经拷贝的对象以及对象的ID，防止出现无限递归。</p>2019-06-20</li><br/><li><span>酸葡萄</span> 👍（0） 💬（3）<p>老师 你好 浅拷贝指向的应该也不是同一块内存吧，如果是的话为什么 is 在浅拷贝中会返回False呢？
-is比较的不是地址吗？比如下面的例子
-
+    is比较的不是地址吗？比如下面的例子
 
 l1 = [1, 2, 3]
 l2 = l1[:]
@@ -330,7 +329,7 @@ l1 is l2
 False</p>2019-12-16</li><br/><li><span>SCAR</span> 👍（171） 💬（4）<p>应该会出错，因为x是一个无限嵌套的列表，y深拷贝于x，按道理来讲 x == y应该是True的，但进行比较操作符“==”的时候，&#39;==&#39;操作符则会递归地遍历对象的所有值，并逐一比较。而python为了防止栈崩溃，递归的层数是要限定的，不会无休下去，所以到了限定的层数，python解释器会跳出错误。执行了一下代码，也的确是跳出了 RecursionError: maximum recursion depth exceeded in comparison。
 之前课中做阶乘的例子，如果大于一定的整数，也是会出现递归错误，究其原因也是python的递归层数是有限定的。
 def factorial(n):
-    return 1 if n &lt;=1 else n*factorial(n-1)
+return 1 if n &lt;=1 else n*factorial(n-1)
 factorial(5000)
 RecursionError: maximum recursion depth exceeded in comparison
 在sys模块中有个方法可以得到递归的层数:
@@ -345,23 +344,15 @@ sys.setrecursionlimit(10000)
 
 在 Python 中，对象的赋值就是简单的对象引用，这点和 C++不同
 
- 
-
 二、浅拷贝(shallow copy):
 
- 
-
 浅拷贝会创建新对象，其内容非原对象本身的引用，而是原对象内第一层对象的引用。浅拷贝有三种形式:切片操作、工厂函数、copy 模块中的 copy 函数。
-
 
 三、深拷贝(deep copy):
 
 深拷贝只有一种形式，copy 模块中的 deepcopy()函数。深拷贝和浅拷贝对应，深拷贝拷贝了对象的所有元素，包括多层嵌套的元素。因此，它的时间和空间开销要高。
 
-
 四、拷贝的注意点:
-
- 
 
 1、对于非容器类型，如数字、字符，以及其他的“原子”类型，没有拷贝一说，产生的都是原对象的引用。
 2、如果元组变量值包含原子类型对象，即使采用了深拷贝，也只能得到浅拷贝。</p>2019-07-08</li><br/><li><span>yshan</span> 👍（71） 💬（0）<p>浅拷贝，不可变的不可变，可变的依旧可变
@@ -371,18 +362,19 @@ print(id(a))
 print(id(b))
 在pycharm中运行结果中一致</p>2019-06-12</li><br/><li><span>hlz-123</span> 👍（12） 💬（1）<p># 以下命令的输出是？
 x == y
+
 1. 出现如下错误信息，推测原因是x与y的列表进行一项一项比较，因无限嵌套，导致递归深度失败。
    RecursionError: maximum recursion depth exceeded in comparison
 2. 两个问题，需要老师解答
-    既然是无限嵌套，为什么x.append(x)没有报错？
-    运行len(x),结果为2,更是不可理解
-  
+   既然是无限嵌套，为什么x.append(x)没有报错？
+   运行len(x),结果为2,更是不可理解
+
 </p>2019-06-12</li><br/><li><span>随风の</span> 👍（7） 💬（0）<p>看到文章中对于元组的拷贝, 这里进行一下补充~.  某些情况浅&#47;深拷贝会失效: 
 import copy
 
 x = 1
 y = copy.deepcopy(x)
-x is y  # failed
+x is y # failed
 True
 
 x = &#39;1&#39;
@@ -392,35 +384,36 @@ True
 
 x = (1)
 y = copy.deepcopy(x)
-x is y  # failed
+x is y # failed
 True
 
 x = (1,[])
 y = copy.deepcopy(x)
-x is y  # succeed
+x is y # succeed
 False
 
-当对数值、字符串、仅包含数值&#47;字符串的元组进行浅&#47;深拷贝会失效。 也就是文中所提到的,  会返回一个指向相同数值、字符串、元组的引用~</p>2019-06-12</li><br/><li><span>明月</span> 👍（4） 💬（1）<p>我的x超过256的还是is或者==为true 不知道是不是版本和机器的原因 我的是python3.5.3</p>2019-06-12</li><br/><li><span>Dynasterran</span> 👍（3） 💬（0）<p>没看源码，猜的：
+当对数值、字符串、仅包含数值&#47;字符串的元组进行浅&#47;深拷贝会失效。 也就是文中所提到的, 会返回一个指向相同数值、字符串、元组的引用~</p>2019-06-12</li><br/><li><span>明月</span> 👍（4） 💬（1）<p>我的x超过256的还是is或者==为true 不知道是不是版本和机器的原因 我的是python3.5.3</p>2019-06-12</li><br/><li><span>Dynasterran</span> 👍（3） 💬（0）<p>没看源码，猜的：
+
 1. 为什么 len(x) 是 2。
-&gt;&gt; x = [1]
-&gt;&gt; id(x)
-4378931848
-&gt;&gt; x.append(x)
-&gt;&gt; id(x)
-4378931848
-&gt;&gt; id(x[0])
-4304870656
-&gt;&gt; id(x[1])
-4378931848
-&gt;&gt; x[1] is x
-True
-&gt;&gt; len(x)
-2
+   &gt;&gt; x = [1]
+   &gt;&gt; id(x)
+   4378931848
+   &gt;&gt; x.append(x)
+   &gt;&gt; id(x)
+   4378931848
+   &gt;&gt; id(x[0])
+   4304870656
+   &gt;&gt; id(x[1])
+   4378931848
+   &gt;&gt; x[1] is x
+   True
+   &gt;&gt; len(x)
+   2
 
 2. 为什么 x == y 会报错。
-‘==’ 搜到 x[1] 时发现 x[1] 指向一个列表 x&#39;，又去遍历这个列表 x&#39; 的每个值，然后发现这个列表里的 x&#39;[1] 又指向一个列表 x&#39;&#39;, ... 实际上 x, x&#39;, x&#39;&#39; 都是同一个，无限循环。</p>2019-06-18</li><br/><li><span>Jon徐</span> 👍（3） 💬（1）<p>a = 258
-b = 258
-在python解释器中使用id查看确实内存地址不同，但是使用vs code同样也是python解释器，内存地址是相同的。
+   ‘==’ 搜到 x[1] 时发现 x[1] 指向一个列表 x&#39;，又去遍历这个列表 x&#39; 的每个值，然后发现这个列表里的 x&#39;[1] 又指向一个列表 x&#39;&#39;, ... 实际上 x, x&#39;, x&#39;&#39; 都是同一个，无限循环。</p>2019-06-18</li><br/><li><span>Jon徐</span> 👍（3） 💬（1）<p>a = 258
+   b = 258
+   在python解释器中使用id查看确实内存地址不同，但是使用vs code同样也是python解释器，内存地址是相同的。
 
 思考题中 x 是循环嵌套的列表，比较时超过了递归限制报错
 </p>2019-06-12</li><br/><li><span>小池</span> 👍（2） 💬（1）<p>x.append(x)会产生递归是因为list对象的append方法本质上是在list末尾追加x的引用，而不是直接添加x指向的实例。但为什么这样不会报栈溢出呢？请问老师，python支持[1, [...]]这种写法的机制是什么？</p>2019-06-28</li><br/><li><span>路伴友行</span> 👍（2） 💬（0）<p>这样看就明白了：

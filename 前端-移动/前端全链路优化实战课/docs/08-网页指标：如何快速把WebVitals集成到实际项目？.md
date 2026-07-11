@@ -19,10 +19,10 @@ Web Vitals网页指标是由Google提出的。Google还开发了一套前端SDK�
 如果前端项目是通过NPM安装依赖，比如Vue或React项目，就可以直接使用npm、yarn或pnpm安装命令来安装Web Vitals。
 
 ```shell
-// 使用npm 
-npm install web-vitals 
-// 使用yarn 
-yarn add web-vitals 
+// 使用npm
+npm install web-vitals
+// 使用yarn
+yarn add web-vitals
 // 使用pnpm
 pnpm add web-vitals
 ```
@@ -34,16 +34,16 @@ pnpm add web-vitals
 下面是引入外部链接web-vitals.iife.js的代码。
 
 ```xml
-<script> 
-  (function () { 
+<script>
+  (function () {
     var script = document.createElement('script');
     script.src = 'https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js';
     script.onload = function () {
       window.webVitals.onCLS(console.log);
       window.webVitals.onFID(console.log);
-      window.webVitals.onLCP(console.log); 
+      window.webVitals.onLCP(console.log);
     };
-    document.head.appendChild(script); 
+    document.head.appendChild(script);
   })();
 </script>
 ```
@@ -89,23 +89,19 @@ export default {
 ```javascript
 // React Project
 // app.js
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { onFCP } from "web-vitals";
 
 function App() {
+  const onVital = (vital) => {
+    console.log(vital);
+  };
 
-  const onVital = (vital) => {
-    console.log(vital);
-  }
-
-  useEffect(() => {
+  useEffect(() => {
     onFCP(onVital);
-  }, [])
+  }, []);
 
-  return (
-    <div className="App">
-    </div>
-  );
+  return <div className="App">    </div>;
 }
 
 export default App;
@@ -160,38 +156,36 @@ type onTTFB = (callback: TTFBReportCallback, opts?: ReportOpts) => void;
 
 ```typescript
 // src/typings/typing.d.ts
-type TracePerfRating = 'good' | 'needs improvement' | 'poor'
+type TracePerfRating = "good" | "needs improvement" | "poor";
 
 type TracePerf = {
-    id: string
-    LCP?: number
-    LCPRating?: TracePerfRating
-    FID?: number
-    FIDRating?: TracePerfRating
-    FCP?: number
-    FCPRating?: TracePerfRating
-    TTFB?: number
-    TTFBRating?: TracePerfRating
-    CLS?: number
-    CLSRating?: TracePerfRating
-    INP?: number
-    INPRating?: TracePerfRating
-}
+  id: string;
+  LCP?: number;
+  LCPRating?: TracePerfRating;
+  FID?: number;
+  FIDRating?: TracePerfRating;
+  FCP?: number;
+  FCPRating?: TracePerfRating;
+  TTFB?: number;
+  TTFBRating?: TracePerfRating;
+  CLS?: number;
+  CLSRating?: TracePerfRating;
+  INP?: number;
+  INPRating?: TracePerfRating;
+};
 
 // src/baseTrace.ts
 export class BaseTrace implements BaseTraceInterface {
-
-	// 性能日志数据
-  public perfData: TracePerf = {
-    id: ''
-  }
-  
-	createPerfReport() {
-	  const report = (metric) => {
-	    this.perfData = { ...this.perfData, ...mapMetric(metric) };
-	  };
-	  return report
-	}
+  // 性能日志数据
+  public perfData: TracePerf = {
+    id: "",
+  };
+  createPerfReport() {
+    const report = (metric) => {
+      this.perfData = { ...this.perfData, ...mapMetric(metric) };
+    };
+    return report;
+  }
 }
 ```
 
@@ -207,12 +201,15 @@ export class BaseTrace implements BaseTraceInterface {
 // src/core/webvitals.ts
 
 export function mapMetric(metric) {
-  const isWebVital = ['FCP', 'TTFB', 'LCP', 'CLS', 'FID'].indexOf(metric.name) !== -1;
-  return {
-    [metric.name]: isWebVital ? round(metric.value, metric.name === 'CLS' ? 4 : 0) : metric.value,
-    [`${metric.name}Rating`]: metric.rating
-  }
-};
+  const isWebVital =
+    ["FCP", "TTFB", "LCP", "CLS", "FID"].indexOf(metric.name) !== -1;
+  return {
+    [metric.name]: isWebVital
+      ? round(metric.value, metric.name === "CLS" ? 4 : 0)
+      : metric.value,
+    [`${metric.name}Rating`]: metric.rating,
+  };
+}
 ```
 
 一切准备就绪后，我们就可以在初始化时自动监听网页指标的计算结果了。
@@ -222,32 +219,31 @@ export function mapMetric(metric) {
 ```typescript
 // src/core/webvitals.ts
 export const onVitals = (saveMetric) => {
-  onLCP(saveMetric)
-  onFID(saveMetric)
-  onCLS(saveMetric)
-  onTTFB(saveMetric)
-  onINP(saveMetric)
-  onFCP(saveMetric)
-}
+  onLCP(saveMetric);
+  onFID(saveMetric);
+  onCLS(saveMetric);
+  onTTFB(saveMetric);
+  onINP(saveMetric);
+  onFCP(saveMetric);
+};
 ```
 
 第二部分是增加链路SDK的初始化以及执行onVitals，代码如下。
 
 ```typescript
 // src/baseTrace.ts
-import { onVitals } from './core/webvitals';
+import { onVitals } from "./core/webvitals";
 
 export class BaseTrace implements BaseTraceInterface {
-	// 初始化实例
-  public static init(options: TraceOptions): BaseTrace {
-    const traceSdk = new BaseTrace(options)
+  // 初始化实例
+  public static init(options: TraceOptions): BaseTrace {
+    const traceSdk = new BaseTrace(options); // 监听页面性能
 
-    // 监听页面性能
-    onVitals(traceSdk.createPerfReport())
+    onVitals(traceSdk.createPerfReport());
 
-    window.traceSdk = traceSdk
-    return traceSdk
-  }
+    window.traceSdk = traceSdk;
+    return traceSdk;
+  }
 }
 ```
 

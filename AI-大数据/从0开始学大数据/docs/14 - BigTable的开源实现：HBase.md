@@ -89,7 +89,7 @@ Google三驾马车之BigTable的开源实现，配合HDFS，实现了数据的�
 3，HBASE设计特点？
 a，可伸缩
 HBASE以key的区域进行分片形成HRegion（HBASE数据管理的基本单位），一个HRegion中数据量超过阈值，会一分为二，并在集群中进行负载均衡。
-数据读写：application Zookeeper  HMaster HRegionServer HRegion HFile
+数据读写：application Zookeeper HMaster HRegionServer HRegion HFile
 b，可扩展数据模型
 列族设计，具体字段（column）在写入时指定，轻松支持百万字段的扩展
 c，高性能存储

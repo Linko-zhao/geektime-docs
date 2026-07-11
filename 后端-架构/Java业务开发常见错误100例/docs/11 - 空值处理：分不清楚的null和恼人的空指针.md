@@ -236,7 +236,7 @@ public class UserDto {
     private Long id;
     private Optional<String> name;
     private Optional<Integer> age;
-; 
+;
 
 @Data
 @Entity
@@ -371,7 +371,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 得到的结果，分别是null、0和空List：
 
 ```
-[11:38:50.137] [http-nio-45678-exec-1] [INFO ] [t.c.nullvalue.demo3.DbNullController:26  ] - result: null 0 [] 
+[11:38:50.137] [http-nio-45678-exec-1] [INFO ] [t.c.nullvalue.demo3.DbNullController:26  ] - result: null 0 []
 ```
 
 显然，这三条SQL语句的执行结果和我们的期望不同：
@@ -400,7 +400,7 @@ List<User> right3();
 可以得到三个正确结果，分别为0、1、\[User(id=1, score=null)] ：
 
 ```
-[14:50:35.768] [http-nio-45678-exec-1] [INFO ] [t.c.nullvalue.demo3.DbNullController:31  ] - result: 0 1 [User(id=1, score=null)] 
+[14:50:35.768] [http-nio-45678-exec-1] [INFO ] [t.c.nullvalue.demo3.DbNullController:31  ] - result: 0 1 [User(id=1, score=null)]
 ```
 
 ## 重点回顾

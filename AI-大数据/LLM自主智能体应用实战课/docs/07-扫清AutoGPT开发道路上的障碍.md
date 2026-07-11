@@ -45,7 +45,7 @@ poetry source add --priority=primary mirrors https://mirror.sjtu.edu.cn/pypi/web
 然后安装一些常用的 Python 库：
 
 ```plain
-poetry add pysocks socksio 
+poetry add pysocks socksio
 ```
 
 接下来我们需要思考一下在应用项目中包括哪些代码。我们先简单阅读一下如何开发自定义 Block 的[官方文档](https://docs.agpt.co/platform/new_blocks/)。这个文档很长，而且写得有些乱，条理性不大好。好在我们没有必要从头到尾仔细读完，大致读一下前面 1/3 的部分就好了。其余内容等我们在下节课亲自实现自定义的 Block 时再来查阅。

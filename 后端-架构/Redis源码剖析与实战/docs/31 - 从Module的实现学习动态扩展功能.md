@@ -115,7 +115,7 @@ onload = (int (*)(void *, void **, int))(unsigned long) dlsym(handle,"RedisModul
 ...
 //执行RedisModule_OnLoad函数
 if (onload((void*)&ctx,module_argv,module_argc) == REDISMODULE_ERR) {...}
- 
+
 ...
 dictAdd(modules,ctx.module->name,ctx.module); //把加载的模块添加到全局哈希表modules
 }
@@ -224,7 +224,7 @@ REDISMODULE_GET_API(CreateString);
 //检查是否有同名的模块
 if (RedisModule_IsModuleNameBusy && RedisModule_IsModuleNameBusy(name)) return REDISMODULE_ERR;
 RedisModule_SetModuleAttribs(ctx,name,ver,apiver); //没有同名模块，则初始化模块的数据结构
-return REDISMODULE_OK; 
+return REDISMODULE_OK;
 ```
 
 其实，从代码中你可以发现，RedisModule\_Init函数在初始化新增模块时，会从框架中获得很多键值对常规操作的API函数，比如List的Push和Pop操作、创建String操作等等。你可以进一步阅读RedisModule\_Init函数，来了解新增模块能获得的API。
@@ -297,11 +297,11 @@ int RedisModule_OnLoad(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) 
   //初始化模块
   if (RedisModule_Init(ctx,"helloredis",1,REDISMODULE_APIVER_1)
    == REDISMODULE_ERR) return REDISMODULE_ERR;
-   
+
   //注册命令
   if (RedisModule_CreateCommand(ctx,"hello", Hello_NewCommand, "fast",0, 0, 0) == REDISMODULE_ERR)
 return REDISMODULE_ERR;
-  
+
    return REDISMODULE_OK;
 }
 ```

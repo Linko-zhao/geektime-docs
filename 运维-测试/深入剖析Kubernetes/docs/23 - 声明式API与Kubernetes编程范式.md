@@ -298,7 +298,7 @@ func doSomething(pod) {
 ```
 func doSomething(pod) {
   cm := client.Get(ConfigMap, "envoy-initializer")
-  
+
   newPod := Pod{}
   newPod.Spec.Containers = cm.Containers
   newPod.Spec.Volumes = cm.Volumes

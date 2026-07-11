@@ -70,7 +70,7 @@ N half(N n)
 - Random Access Iterator
 - …
 
-这些概念出现在了 STL 的文档中，有详细的定义；但它们只是落在纸面上，而没有在 C++ 语言中有真正的体现。后来，他还进一步把很多概念的形式描述写进了他于 2009 年（和 Paul McJones 一起）出版的“神作” *Elements of Programming* \[2] 中，并给出了假想的实现代码——其中就有关键字 `requires`——即使那时没有任何编译器能够编译这样的代码。
+这些概念出现在了 STL 的文档中，有详细的定义；但它们只是落在纸面上，而没有在 C++ 语言中有真正的体现。后来，他还进一步把很多概念的形式描述写进了他于 2009 年（和 Paul McJones 一起）出版的“神作” _Elements of Programming_ \[2] 中，并给出了假想的实现代码——其中就有关键字 `requires`——即使那时没有任何编译器能够编译这样的代码。
 
 在 C++ 第一次标准化（1998）之后，Bjarne 多次试图把“概念”引入 C++（根据我看到的文献，他在 03 到 09 年直接有至少九篇单独或合著的论文跟“概念”有关），但一直没有成功——魔鬼在细节，一旦进入细节，人们对一个看起来很美的点子的分歧就非常大了。一直到 C++11 标准化，“概念” 还是因为草案复杂、争议多、无成熟实现而没有进入 C++ 标准。
 
@@ -454,7 +454,7 @@ auto fmap(F&& f, R&& inputs);
 
 \[1] Bjarne Stroustrup, “Concepts: the future of generic programming, or how to design good concepts and use them well”. [http://www.stroustrup.com/good\_concepts.pdf](http://www.stroustrup.com/good_concepts.pdf)
 
-\[2] Alexander Stepanov and Paul McJones, *Elements of Programming*. Addison-Wesley, 2009. 有中文版（裘宗燕译《编程原本》，人民邮电出版社，2019 年）
+\[2] Alexander Stepanov and Paul McJones, _Elements of Programming_. Addison-Wesley, 2009. 有中文版（裘宗燕译《编程原本》，人民邮电出版社，2019 年）
 
 \[3] ISO/IEC JTC1 SC22 WG21, N4549, “Programming languages — C++ extensions for concepts”. [http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4549.pdf](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4549.pdf)
 
@@ -495,10 +495,10 @@ auto fmap(F&amp;&amp; f, R&amp;&amp; inputs)
 1.从当前的标准库里可以抽取更多近似概念的操作（类似于itrerator），直接调用即可。
 2.在class的设计上直接标记概念相关关键字就可以检查class的设计是不是符合原则
 
-缺点:理解起来比较困难</p>2020-04-07</li><br/><li><span>李亮亮</span> 👍（0） 💬（2）<p>vs2019  c++17
+缺点:理解起来比较困难</p>2020-04-07</li><br/><li><span>李亮亮</span> 👍（0） 💬（2）<p>vs2019 c++17
 template &lt;typename, typename&gt;
-    class OutContainer = vector,
-这里提示错误：	C2065	“vector”: 未声明的标识符	
+class OutContainer = vector,
+这里提示错误： C2065 “vector”: 未声明的标识符
 </p>2020-03-05</li><br/><li><span>始之源稳于心</span> 👍（0） 💬（2）<p>吴老师，你好，我问一个与此文章无关的，一个GDB调试的问题：
 一个网络多线程服务，一个socket一个线程。有一个共享变量用boost的unordered_map，同步也用boost的unique_lock
 程序在运行时基本正常，但在gdb调试时只要打印共享变量(即使里面没有数据)，就会收到SIGSEG，调试其它变量或用下面的步骤就没事

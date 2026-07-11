@@ -50,7 +50,7 @@ func main() {
 	defer client.Close()
 
     // 使用client做各种操作
-	
+
 	session, err := client.NewSession()
 	if err != nil {
 		log.Fatal("Failed to create session: ", err)
@@ -109,17 +109,17 @@ type SSHConfig struct {
 timeout: 1s
 network: tcp
 web-01:
-    host: 118.190.3.55 # ip地址
-    port: 22 # 端口
-    username: yejianfeng # 用户名
-    password: "123456" # 密码
+  host: 118.190.3.55 # ip地址
+  port: 22 # 端口
+  username: yejianfeng # 用户名
+  password: "123456" # 密码
 web-02:
-    network: tcp
-    host: localhost # ip地址
-    port: 3306 # 端口
-    username: jianfengye # 用户名
-    rsa_key: "/Users/user/.ssh/id_rsa"
-    known_hosts: "/Users/user/.ssh/known_hosts"
+  network: tcp
+  host: localhost # ip地址
+  port: 3306 # 端口
+  username: jianfengye # 用户名
+  rsa_key: "/Users/user/.ssh/id_rsa"
+  known_hosts: "/Users/user/.ssh/known_hosts"
 ```
 
 这里注意下，SSH的连接方式有两种，一种是直接使用用户名密码来连接远程服务器，还有一种是使用rsa key文件来连接远端服务器，所以这里的配置需要同时支持两种配置。**对于使用rsa key文件的方式，需要设置rsk\_key的私钥地址和负责安全验证的known\_hosts**。
@@ -165,24 +165,24 @@ GOOS=linux GOARCH=amd64 go build ./
 
 ```yaml
 connections: # 要自动化部署的连接
-    - ssh.web-01
+  - ssh.web-01
 
-remote_folder: "/home/yejianfeng/coredemo/"  # 远端的部署文件夹
+remote_folder: "/home/yejianfeng/coredemo/" # 远端的部署文件夹
 
 frontend: # 前端部署配置
-    pre_action: # 部署前置命令
-        - "pwd"
-    post_action: # 部署后置命令
-        - "pwd"
+  pre_action: # 部署前置命令
+    - "pwd"
+  post_action: # 部署后置命令
+    - "pwd"
 
 backend: # 后端部署配置
-    goos: linux # 部署目标操作系统
-    goarch: amd64 # 部署目标cpu架构
-    pre_action: # 部署前置命令
-        - "pwd"
-    post_action: # 部署后置命令
-        - "chmod 777 /home/yejianfeng/coredemo/hade"
-        - "/home/yejianfeng/coredemo/hade app restart"
+  goos: linux # 部署目标操作系统
+  goarch: amd64 # 部署目标cpu架构
+  pre_action: # 部署前置命令
+    - "pwd"
+  post_action: # 部署后置命令
+    - "chmod 777 /home/yejianfeng/coredemo/hade"
+    - "/home/yejianfeng/coredemo/hade app restart"
 ```
 
 好，配置文件设计好了，下面我们开始实现对应的命令。
@@ -318,7 +318,7 @@ for _, action := range preActions {
       return err
    }
    session.Close()
-   
+
    // 执行前置命令成功
    logger.Info(context.Background(), "execute pre action", map[string]interface{}{
       "cmd":        action,
@@ -436,7 +436,7 @@ rf, err := os.Open(filepath.Join(localFolder, relPath))
 f, err := client.Create(filepath.Join(remoteFolder, relPath))
 
 // 将本地文件并发读取到远端文件
-if _, err := f.ReadFromWithConcurrency(rf, 10); err != nil 
+if _, err := f.ReadFromWithConcurrency(rf, 10); err != nil
 ```
 
 SFTP提供了并发读取到远端文件ReadFromWithConcurrency的方法，我们可以使用这个并发读的方法提高上传效率。
@@ -620,34 +620,34 @@ var deployRollbackCommand = &cobra.Command{
 timeout: 3s
 network: tcp
 web-01:
-    host: 111.222.333.444 # ip地址
-    port: 22 # 端口
-    username: yejianfeng # 用户名
-    password: "123456" # 密码
+  host: 111.222.333.444 # ip地址
+  port: 22 # 端口
+  username: yejianfeng # 用户名
+  password: "123456" # 密码
 ```
 
 而在config/development/deploy.yaml中我的配置如下：
 
 ```yaml
 connections: # 要自动化部署的连接
-    - ssh.web-01
+  - ssh.web-01
 
-remote_folder: "/home/yejianfeng/coredemo/"  # 远端的部署文件夹
+remote_folder: "/home/yejianfeng/coredemo/" # 远端的部署文件夹
 
 frontend: # 前端部署配置
-    pre_action: # 部署前置命令
-        - "pwd"
-    post_action: # 部署后置命令
-        - "pwd"
+  pre_action: # 部署前置命令
+    - "pwd"
+  post_action: # 部署后置命令
+    - "pwd"
 
 backend: # 后端部署配置
-    goos: linux # 部署目标操作系统
-    goarch: amd64 # 部署目标cpu架构
-    pre_action: # 部署前置命令
-        - "rm /home/yejianfeng/coredemo/hade"
-    post_action: # 部署后置命令
-        - "chmod 777 /home/yejianfeng/coredemo/hade"
-        - "/home/yejianfeng/coredemo/hade app restart"
+  goos: linux # 部署目标操作系统
+  goarch: amd64 # 部署目标cpu架构
+  pre_action: # 部署前置命令
+    - "rm /home/yejianfeng/coredemo/hade"
+  post_action: # 部署后置命令
+    - "chmod 777 /home/yejianfeng/coredemo/hade"
+    - "/home/yejianfeng/coredemo/hade app restart"
 ```
 
 重点看后端部署配置。在部署后端之前，我们先运行一个rm 命令来将旧的hade二进制进程删除，然后部署后端文件，其中包括这个二进制进程。最后执行了两个命令，一个是chmod命令，保证上传上去的二进制进程命令可以执行；第二个就是./hade app restart命令，能将远端的命令启动。

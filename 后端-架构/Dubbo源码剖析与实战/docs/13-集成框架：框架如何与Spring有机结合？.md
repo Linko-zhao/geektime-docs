@@ -30,15 +30,15 @@ public class SamplesFacadeClientImpl implements SamplesFacadeClient {
     public QueryOrderResponse queryRemoteOrder(QueryOrderRequest req){
         // 构建下游系统需要的请求入参对象
         QueryOrderReq integrationReq = buildIntegrationReq(req);
-        
+
         // 调用 Dubbo 接口访问下游提供方系统
         QueryOrderRes resp = samplesFacade.queryOrder(integrationReq);
-        
+
         // 判断返回的错误码是否成功
         if(!"000000".equals(resp.getRespCode())){
             throw new RuntimeException("下游系统 XXX 错误信息");
         }
-        
+
         // 将下游的对象转换为当前系统的对象
         return convert2Response(resp);
     }
@@ -324,7 +324,7 @@ public class DubboClientFactoryBean<T> implements FactoryBean<T>, ApplicationCon
     public DubboClientFactoryBean(Class<T> dubboClientInterface) {
         this.dubboClientInterface = dubboClientInterface;
     }
-    
+
     // Spring框架实例化FactoryBean类型的对象时的必经之路
     @Override
     public T getObject() throws Exception {
@@ -363,7 +363,7 @@ public class DubboClientProxy<T> implements InvocationHandler, Serializable {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 省略前面的一些代码
-        
+
         // 读取接口（例：SamplesFacadeClient）上对应的注解信息
         DubboFeignClient dubboClientAnno = declaringClass.getAnnotation(DubboFeignClient.class);
         // 读取方法（例：queryRemoteOrderInfo）上对应的注解信息
@@ -373,10 +373,10 @@ public class DubboClientProxy<T> implements InvocationHandler, Serializable {
         String mtdName = getMethodName(method.getName(), methodAnno);
         Method remoteMethod = MethodCache.cachedMethod(remoteClass, mtdName, methodAnno);
         Class<?> returnType = method.getReturnType();
-        
+
         // 发起真正远程调用
         Object resultObject = doInvoke(remoteClass, remoteMethod, args, methodAnno);
-        
+
         // 判断返回码，并解析返回结果
         return doParse(dubboClientAnno, returnType, resultObject);
     }
@@ -417,11 +417,11 @@ public class DubboClassPathBeanDefinitionScanner extends ClassPathBeanDefinition
     public boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws IllegalStateException {
         return super.checkCandidate(beanName, beanDefinition);
     }
-    
+
     // 当然，这里还有一个被public修饰的父类addIncludeFilter方法，
     // 调用方会将需要关注的注解一律都通过addIncludeFilter添加进来，
     // 源码调用的示例代码如下：
-    
+
     // private final static List<Class<? extends Annotation>> serviceAnnotationTypes = asList(
     //         // @since 2.7.7 Add the @DubboService , the issue : https://github.com/apache/dubbo/issues/6007
     //         DubboService.class,
@@ -429,8 +429,8 @@ public class DubboClassPathBeanDefinitionScanner extends ClassPathBeanDefinition
     //         Service.class,
     //         // @since 2.7.3 Add the compatibility for legacy Dubbo's @Service , the issue : https://github.com/apache/dubbo/issues/4330
     //         com.alibaba.dubbo.config.annotation.Service.class
-    //     );    
-    
+    //     );
+
     // for (Class<? extends Annotation> annotationType : serviceAnnotationTypes) {
     //   scanner.addIncludeFilter(new AnnotationTypeFilter(annotationType));
     // }
@@ -487,10 +487,10 @@ public class Dubbo12ArchConsumerApplication {
                 SpringApplication.run(Dubbo12ArchConsumerApplication.class, args);
         // 打印消费方启动成功的日志
         System.out.println("【【【【【【 Dubbo12ArchConsumerApplication 】】】】】】已启动.");
-        
+
         // 消费方启动成功后，就可以去将提供方关闭掉了，10 秒钟的缓冲期就是去关闭提供方的时间
         TimeUtils.sleep(10 * 1000);
-        
+
         // 发起远程调用
         DemoFacade demoFacade = ctx.getBean(DemoFacade.class);
         System.out.println(demoFacade.sayHello("Geek"));

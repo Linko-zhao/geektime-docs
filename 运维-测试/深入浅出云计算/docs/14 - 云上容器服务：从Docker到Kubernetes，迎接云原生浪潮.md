@@ -107,7 +107,7 @@ docker build --rm -f dockerfile -t fiboapp:1.0.0 .
 接着我们就可以用标准Docker命令登录，并且将镜像上传到这个私有的镜像仓库：
 
 ```
-docker login geektimehellocloud.azurecr.io        
+docker login geektimehellocloud.azurecr.io
 docker tag fiboapp:1.0.0 geektimehellocloud.azurecr.io/fiboapp:1.0.0
 docker push geektimehellocloud.azurecr.io/fiboapp:1.0.0
 ```
@@ -120,7 +120,7 @@ docker push geektimehellocloud.azurecr.io/fiboapp:1.0.0
 
 ![](https://static001.geekbang.org/resource/image/5e/d6/5ecabce9b61f7c914d1a95fec6296ad6.jpg?wh=759%2A603)
 
-随后通过一些特别简单的配置，我们就可以让容器在云上跑起来了。它还贴心地“赠送”给我们一个域名：*fiboapp.japaneast.azurecontainer.io*。
+随后通过一些特别简单的配置，我们就可以让容器在云上跑起来了。它还贴心地“赠送”给我们一个域名：_fiboapp.japaneast.azurecontainer.io_。
 
 ![](https://static001.geekbang.org/resource/image/f1/81/f154f6c540df1d8c40788150b3207081.jpg?wh=924%2A256)
 
@@ -174,8 +174,10 @@ K8s还在快速地发展，云上各种IaaS/PaaS服务也是实力雄厚，两�
 第二个问题，随着k8s的越来越成熟，以后所有的PAAS都能跑在k8s上，就像现在都是跑在操作系统上一样，我对云原生吞噬一切持有乐观态度，但是k8s还有很多问题要解决，比如现在还不支持强多租户。
 
 还有几个问题，请教老师。
+
 - 为什么云端的多租户特性，就能免去Master节点的开销的，这是说master节点是随便用的么，master节点消耗的资源不用自己买单是用的云厂商的资源么？
 - 一个云厂商的容器实例服务是跑在一个大的k8s集群中么，容器实例服务之间的互相调用只能通过创建时候返回的域名么？
+
 </p>2020-04-03</li><br/><li><span>艾利特-G</span> 👍（0） 💬（0）<p>我觉得公有云应该也有通过CRD, Operator等方式集成自身容器服务到自身k8s服务中的例子吧。
 有一些公有云资源对象在原版k8s型中就通过Cloud Provider以及Cloud Driver等形式集成了，说白了就是注册一个自定义资源，再写个自定义控制器来扩展API嘛。</p>2020-05-15</li><br/><li><span>Michael Yang</span> 👍（0） 💬（0）<p>K8S只会是云服务的一种！</p>2020-04-03</li><br/><li><span>Bora.Don</span> 👍（0） 💬（0）<p>所以这就是serverless的实现方式？</p>2020-04-03</li><br/><li><span>八哥</span> 👍（0） 💬（0）<p>大多数云计算公司容器镜像服务是拿开源得Habor改的。感觉未来serverless服务可能是未来主流模式，期待。</p>2020-04-03</li><br/>
 </ul>

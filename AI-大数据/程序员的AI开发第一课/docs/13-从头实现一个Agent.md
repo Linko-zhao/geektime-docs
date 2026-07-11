@@ -75,7 +75,7 @@ Asks the user for the price of a fruit
 Example session:
 
 Question: What is the unit price of apple?
-Thought: I need to ask the user for the price of an apple to provide the unit price. 
+Thought: I need to ask the user for the price of an apple to provide the unit price.
 Action: ask_fruit_unit_price: apple
 PAUSE
 
@@ -121,7 +121,7 @@ Asks the user for the price of a fruit
 Example session:
 
 Question: What is the unit price of apple?
-Thought: I need to ask the user for the price of an apple to provide the unit price. 
+Thought: I need to ask the user for the price of an apple to provide the unit price.
 Action: ask_fruit_unit_price: apple
 PAUSE
 
@@ -279,22 +279,24 @@ Thought: To calculate the total price of three kilograms of apples and two kilog
 
 Action: ask_fruit_unit_price: apple
 PAUSE
- -- running ask_fruit_unit_price apple
+-- running ask_fruit_unit_price apple
 Observation: Apple unit price is 10&#47;kg
 Thought: Now that I have the price of apples, I need to ask for the price of bananas to proceed with the calculation.
 
 Action: ask_fruit_unit_price: banana
 PAUSE
- -- running ask_fruit_unit_price banana
+-- running ask_fruit_unit_price banana
 Observation: Banana unit price is 6&#47;kg
 Thought: I now have the unit prices for both apples and bananas. I can calculate the total price by multiplying the quantity of each fruit by its unit price and then summing these amounts.
 
 Action: calculate: 3 * 10 + 2 * 6
 PAUSE
- -- running calculate 3 * 10 + 2 * 6
+-- running calculate 3 * 10 + 2 * 6
 Observation: 42
 Answer: 三公斤苹果和两公斤香蕉的总价是42元。
+
 ```
 
 本节代码在此：https:&#47;&#47;github.com&#47;groklab&#47;misc&#47;blob&#47;main&#47;geektime-llm-zhengye-column&#47;lec13.ipynb</p>2024-12-01</li><br/><li><span>张申傲</span> 👍（1） 💬（0）<p>第13讲打卡~</p>2025-01-24</li><br/><li><span>willmyc</span> 👍（1） 💬（0）<p>老师，您好有几个问题 1.query(&quot;What is the total price of 3kg of apple and 2kg of banana?&quot;)这个prompt和输出的不匹配 2.re.compile 需要导入包，import re 3.为了方便理解，老师后续的代码是否可以增加一点注释，谢谢您！</p>2024-11-29</li><br/>
 </ul>
+```

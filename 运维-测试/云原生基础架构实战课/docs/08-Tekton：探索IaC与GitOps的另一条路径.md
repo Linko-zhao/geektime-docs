@@ -123,7 +123,7 @@ Webhook的配置分为两个部分，第一部分是Trigger的配置，第二部
 这样就生成了EventListener的访问地址。当Service生成之后，我们还要将tk.github.51.cafe的DNS解析到Service的IP上，方便接下来的配置。
 
 ```yaml
-> kubectl get svc -n terraform-tekton el-github-listener              
+> kubectl get svc -n terraform-tekton el-github-listener             
 NAME                 TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)                         AGE
 el-github-listener   LoadBalancer   10.0.138.249   4.189.196.54   8080:31669/TCP,9000:32216/TCP   2d13h
 ```

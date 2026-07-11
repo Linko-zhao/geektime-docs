@@ -48,30 +48,30 @@ SAB是一个共享的ArrayBuffer内存块。在说到SAB前，我们先看看Arr
 
 ```javascript
 // main.js
-var worker = new Worker('worker.js');
+var worker = new Worker("worker.js");
 
 // 创建一个1KB大小的ArrayBuffer
-var buffer = new SharedArrayBuffer(1024); 
+var buffer = new SharedArrayBuffer(1024);
 
 // 创建一个TypedArray的DataView
-var view = new Uint8Array(buffer); 
+var view = new Uint8Array(buffer);
 
 // 传递信息
 worker.postMessage(buffer);
 
 setTimeout(() => {
   // buffer中的第1个字节
-  console.log('later', view[0]); // later 5
+  console.log("later", view[0]); // later 5
   // buffer中foo的属性值
-  console.log('prop', buffer.foo); // prop 32
+  console.log("prop", buffer.foo); // prop 32
 }, 1000);
 
 // worker.js
-self.onmessage = ({data: buffer}) => {
+self.onmessage = ({ data: buffer }) => {
   buffer.foo = 32;
   var view = new Uint8Array(buffer);
   view[0] = 5;
-}
+};
 ```
 
 其实一个ArrayBuffer或SAB在初始化的时候，也是要用到postMessage和结构化拷贝算法的。但是和信息传递不同的是，这里在请求端发起请求时传入的数据，被拷贝后，如果在接收端做了修改，这个修改后的数据的指向和之前的数据是一致的。我们可以对比下普通的postMessage和ArrayBuffer以及SAB的区别。
@@ -159,7 +159,7 @@ self.onmessage = ({data: buffer}) => {
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>郭慧娟</span> 👍（1） 💬（1）<p>waitAsync 和 热路径 这里不太了解，有没有什么资料可以推荐一下</p>2022-12-04</li><br/><li><span>郭慧娟</span> 👍（1） 💬（1）<p>https:&#47;&#47;static001.geekbang.org&#47;resource&#47;image&#47;f8&#47;6c&#47;f81f3b9e0d9347ffc9d1a23e0758ae6c.jpeg?wh=1920x1080  这个图片感觉表意不太明白
 
-参考链接 
+参考链接
 https:&#47;&#47;juejin.cn&#47;post&#47;7016962394479919118
 https:&#47;&#47;github.com&#47;mdn&#47;dom-examples&#47;tree&#47;main&#47;web-workers&#47;simple-web-worker
 https:&#47;&#47;developer.chrome.com&#47;blog&#47;enabling-shared-array-buffer&#47;</p>2022-12-04</li><br/>

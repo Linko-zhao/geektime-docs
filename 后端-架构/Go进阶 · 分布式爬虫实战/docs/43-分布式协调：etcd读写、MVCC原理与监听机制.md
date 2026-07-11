@@ -141,6 +141,7 @@ etcd将watch对象分为了unsynced watcher 与synced watcher，其中synced wat
 4. hash表不支持key的前缀索引,prefix=xxx,想必是用不了;
 
 不使用【二叉树】的原因:
+
 1. 二叉树造成树的层次太高,查找的时候，可能造成磁盘IO的次数较多,性能不好.
 
 二 如果这个时候节点崩溃了，如何保证数据不丢失呢？

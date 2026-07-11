@@ -42,7 +42,7 @@
 
 ```
 import numpy as np #导入NumPy
-import pandas as pd #导入Pandas 
+import pandas as pd #导入Pandas
 df_app = pd.read_csv('app.csv', index_col='Date', parse_dates=['Date']) #导入数据
 df_app #显示数据
 ```
@@ -182,7 +182,7 @@ Train = Scaler.fit_transform(Train) #拟合缩放器并对训练集进行归一�
 # 创建具有 60 个时间步长和 1 个输出的数据结构 - 训练集
 X_train = [] #初始化
 y_train = [] #初始化
-for i in range(60,Train.size): 
+for i in range(60,Train.size):
     X_train.append(Train[i-60:i,0]) #构建特征
     y_train.append(Train[i,0]) #构建标签
 X_train, y_train = np.array(X_train), np.array(y_train) #转换为NumPy数组
@@ -215,7 +215,7 @@ inputs  = Scaler.transform(inputs) #归一化
 # 创建具有 60 个时间步长和 1 个输出的数据结构 - 测试集
 X_test = [] #初始化
 y_test = [] #初始化
-for i in range(60,inputs.size): 
+for i in range(60,inputs.size):
     X_test.append(inputs[i-60:i,0]) #构建特征
     y_test.append(inputs[i,0]) #构建标签
 X_test = np.array(X_test) #转换为NumPy数组

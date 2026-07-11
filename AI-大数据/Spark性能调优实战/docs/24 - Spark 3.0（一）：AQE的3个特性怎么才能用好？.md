@@ -155,15 +155,16 @@ group by user.id
 这段代码中，catalyst会做谓词下推处理，将过滤条件放到贴近数据源扫描的地方，这里过滤之后user表的大小已经属于小表变成广播变量的阈值了吧，为什么还会有AQE呢</p>2021-08-16</li><br/><li><span>Fendora范东_</span> 👍（8） 💬（3）<p>磊哥，请教下
 Join策略调整里面，为啥只有SMJ能降级，而其他Join比如SHJ不能降级</p>2021-05-09</li><br/><li><span>sparkjoy</span> 👍（5） 💬（1）<p>老师，为什么不在join之前统计两个表的大小，从而决定是否用BHJ，而是map结束之后才根据shuffle文件总大小去判断呢？</p>2021-08-27</li><br/><li><span>zxk</span> 👍（4） 💬（1）<p>问题一：个人认为 AQE 可以在加载读取文件的时候获取一些运行时信息，或者做 cache 的时候。这里也有个疑问，就是 AQE 会不会根据这些信息也进行一些优化？
 问题二想到两种方法，不知道是否可行：
-1.  Spark 有一个动态分配调整 executor 的功能，在 Shuffle Map 阶段由 Driver 端汇聚信息决定好倾斜数据的切割方式，之后部分数据发送到原有的 executor 上，切割出来的数据发送到新的 executor 上，同时也需要注意对应做关联的数据也需要复制一份传输到新的 executor 上，但这样会带来 driver 端决策的开销、新的 executor 调度开销以及关联数据额外复制并通过网络传输的开销。
-2. 仍按照原来的方式进行，但在 Reduce 阶段切割数据后，起一个新的 executor 来分担切割后的数据，并通知 driver 端。如果能够在同节点上新起 executor，还可以消除网络之间的传输，只做进程间的数据传输即可。
 
-这里想向老师请教一个关于 Join 策略调整的问题，如果 a、b 为事实表，c 为维度表，a、c 做关联后 c 从原来的 SMJ 被 AQE 优化为了 BHJ 后，如果紧接着 b 又跟 c 做关联，那么 Spark 是否会直接使用 
- BHJ，还是仍需要将 b、c 做 SHuffle Map 之后才能优化为 BHJ？</p>2021-05-07</li><br/><li><span>sparkjoy</span> 👍（2） 💬（1）<p>老师，cbo的信息是存在表的元信息里吗？</p>2021-08-26</li><br/><li><span>A</span> 👍（2） 💬（2）<p>spark.sql.adaptive.advisoryPartitionSizeInBytes，由开发者指定分区合并后的推荐尺寸。分区合并的最终尺寸这个配置应该是个建议值吧？min(maxTargetSize,advisoryTargetSize)会通过这行代码来取advisoryTargetSize</p>2021-07-21</li><br/><li><span>wayne</span> 👍（1） 💬（1）<p>老师，请问 aqe可以强制指定输出文件的大小吗？比如强制设置 设置分区文件大小为128m</p>2021-12-20</li><br/><li><span>To_Drill</span> 👍（1） 💬（1）<p>老师您好，关于文章中的图-两边倾斜中的关联箭头指向有点疑问，如果两张表的关联分区都发生了倾斜，然后都进行了拆分，那么拆分之后的子分区中的是局部数据，应该和对方的全量数据都关联下才能保证原来的关联逻辑，这样的话各个子分区的关联箭头指向是不是应该如下图所示呢？
-拆分-01-拷贝   -&gt;    拆分-01
-拆分-01        -&gt;    拆分-02 
-拆分-02        -&gt;    拆分-01-拷贝
-拆分-02-拷贝   -&gt;     拆分-02-拷贝
+1.  Spark 有一个动态分配调整 executor 的功能，在 Shuffle Map 阶段由 Driver 端汇聚信息决定好倾斜数据的切割方式，之后部分数据发送到原有的 executor 上，切割出来的数据发送到新的 executor 上，同时也需要注意对应做关联的数据也需要复制一份传输到新的 executor 上，但这样会带来 driver 端决策的开销、新的 executor 调度开销以及关联数据额外复制并通过网络传输的开销。
+2.  仍按照原来的方式进行，但在 Reduce 阶段切割数据后，起一个新的 executor 来分担切割后的数据，并通知 driver 端。如果能够在同节点上新起 executor，还可以消除网络之间的传输，只做进程间的数据传输即可。
+
+这里想向老师请教一个关于 Join 策略调整的问题，如果 a、b 为事实表，c 为维度表，a、c 做关联后 c 从原来的 SMJ 被 AQE 优化为了 BHJ 后，如果紧接着 b 又跟 c 做关联，那么 Spark 是否会直接使用
+BHJ，还是仍需要将 b、c 做 SHuffle Map 之后才能优化为 BHJ？</p>2021-05-07</li><br/><li><span>sparkjoy</span> 👍（2） 💬（1）<p>老师，cbo的信息是存在表的元信息里吗？</p>2021-08-26</li><br/><li><span>A</span> 👍（2） 💬（2）<p>spark.sql.adaptive.advisoryPartitionSizeInBytes，由开发者指定分区合并后的推荐尺寸。分区合并的最终尺寸这个配置应该是个建议值吧？min(maxTargetSize,advisoryTargetSize)会通过这行代码来取advisoryTargetSize</p>2021-07-21</li><br/><li><span>wayne</span> 👍（1） 💬（1）<p>老师，请问 aqe可以强制指定输出文件的大小吗？比如强制设置 设置分区文件大小为128m</p>2021-12-20</li><br/><li><span>To_Drill</span> 👍（1） 💬（1）<p>老师您好，关于文章中的图-两边倾斜中的关联箭头指向有点疑问，如果两张表的关联分区都发生了倾斜，然后都进行了拆分，那么拆分之后的子分区中的是局部数据，应该和对方的全量数据都关联下才能保证原来的关联逻辑，这样的话各个子分区的关联箭头指向是不是应该如下图所示呢？
+拆分-01-拷贝 -&gt; 拆分-01
+拆分-01 -&gt; 拆分-02
+拆分-02 -&gt; 拆分-01-拷贝
+拆分-02-拷贝 -&gt; 拆分-02-拷贝
 </p>2021-11-30</li><br/><li><span>wow_xiaodi</span> 👍（1） 💬（1）<p>老师，请教下：
 (1)尽管两个大分区被拆分，但横向来看，整个作业的主要负载还是落在了 Executor 0 的身上。Executor 0 的计算能力依然是整个作业的瓶颈，这一点并没有因为分区拆分而得到实质性的缓解。这里不是很明白为何分区拆分后都落到一个executor上呢？
 (2)aqe的分区拆分底层也是走两阶段shuffle聚合吗？</p>2021-08-13</li><br/><li><span>西南偏北</span> 👍（1） 💬（1）<p>1. 如果不用Map阶段的输出文件的话，那应该就是实时统计了吧，比如&quot;ANALYZE TABLE COMPUTE STATISTICS&quot;

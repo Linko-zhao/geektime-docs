@@ -181,7 +181,7 @@ func (rw *RWMutex) Lock() {
 func (rw *RWMutex) Unlock() {
     // 告诉reader没有活跃的writer了
     r := atomic.AddInt32(&rw.readerCount, rwmutexMaxReaders)
-    
+
     // 唤醒阻塞的reader们
     for i := 0; i < int(r); i++ {
         runtime_Semrelease(&rw.readerSem, false, 0)
@@ -272,13 +272,13 @@ func main() {
     go func() {
         factorial(&mu, 10) // 计算10的阶乘, 10!
     }()
-    
+
     select {}
 }
 
 // 递归调用计算阶乘
 func factorial(m *sync.RWMutex, n int) int {
-    if n < 1 { // 阶乘退出条件 
+    if n < 1 { // 阶乘退出条件
         return 0
     }
     fmt.Println("RLock")
@@ -349,18 +349,18 @@ factoria方法是一个递归计算阶乘的方法，我们用它来模拟reader
 <li><span>DigDeeply</span> 👍（31） 💬（1）<p>这门课的质量真高啊，看的酣畅淋漓👍</p>2020-12-04</li><br/><li><span>那时刻</span> 👍（9） 💬（1）<p>请问老师一个关于select{}问题，
 
 func foo() {
-	fmt.Println(&quot;in foo&quot;)
+fmt.Println(&quot;in foo&quot;)
 }
 
 func goo() {
-	var i int
-	fmt.Println(&quot;in goo&quot;, i)
+var i int
+fmt.Println(&quot;in goo&quot;, i)
 }
 
 func main() {
-	go goo()
-	go foo()
-	select {}
+go goo()
+go foo()
+select {}
 }
 
 这个代码会报all goroutines are asleep - deadlock，是不是select{}这种写法不推荐么？
@@ -369,37 +369,36 @@ func main() {
 这句老师看我理解的对么。首先前一步反转操作是用原子操作实现的，此时其他的reader可能会改变readerCount字段的状态。虽然看起来加减同一个rwmutexMaxReaders看似结果相等，但在并发的场景下，其他reader读到的readerCount的状态为负值，表示有写锁的情况存在。</p>2020-11-07</li><br/><li><span>Varphp</span> 👍（2） 💬（1）<p>原谅我的小白 请教个问题
 
 RWMutex是读写锁，Mutex就是锁吗？区别在于一个精确到读写 一个只能精确到协程对吗</p>2021-01-16</li><br/><li><span>David</span> 👍（1） 💬（6）<p>func (rw *RWMutex) RLock() {
-    if atomic.AddInt32(&amp;rw.readerCount, 1) &lt; 0 {
-            &#47;&#47; rw.readerCount是负值的时候，意味着此时有writer等待请求锁，因为writer优先级高，所以把后来的reader阻塞休眠
-        runtime_SemacquireMutex(&amp;rw.readerSem, false, 0)
-    }
+if atomic.AddInt32(&amp;rw.readerCount, 1) &lt; 0 {
+&#47;&#47; rw.readerCount是负值的时候，意味着此时有writer等待请求锁，因为writer优先级高，所以把后来的reader阻塞休眠
+runtime_SemacquireMutex(&amp;rw.readerSem, false, 0)
+}
 }
 这个代码， rw.readerCount 为负数，表示有writer，正在等待，则reader要进行休眠。
 
-
 func (rw *RWMutex) Lock() {
-    &#47;&#47; 首先解决其他writer竞争问题
-    rw.w.Lock()
-    &#47;&#47; 反转readerCount，告诉reader有writer竞争锁
-    r := atomic.AddInt32(&amp;rw.readerCount, -rwmutexMaxReaders) + rwmutexMaxReaders
-    &#47;&#47; 如果当前有reader持有锁，那么需要等待
-    if r != 0 &amp;&amp; atomic.AddInt32(&amp;rw.readerWait, r) != 0 {
-        runtime_SemacquireMutex(&amp;rw.writerSem, false, 0)
-    }
+&#47;&#47; 首先解决其他writer竞争问题
+rw.w.Lock()
+&#47;&#47; 反转readerCount，告诉reader有writer竞争锁
+r := atomic.AddInt32(&amp;rw.readerCount, -rwmutexMaxReaders) + rwmutexMaxReaders
+&#47;&#47; 如果当前有reader持有锁，那么需要等待
+if r != 0 &amp;&amp; atomic.AddInt32(&amp;rw.readerWait, r) != 0 {
+runtime_SemacquireMutex(&amp;rw.writerSem, false, 0)
+}
 }
 这里是先获取到了锁，才去修改 rw.readerCount 的值，也就是说 每个writer 只有在获取到锁的情况下，才去把 rw.readerCount改成负数，而读锁是否休眠，也是根据这个值来判断。
 
-
 func (rw *RWMutex) Unlock() {
-    &#47;&#47; 告诉reader没有活跃的writer了
-    r := atomic.AddInt32(&amp;rw.readerCount, rwmutexMaxReaders)
-    
+&#47;&#47; 告诉reader没有活跃的writer了
+r := atomic.AddInt32(&amp;rw.readerCount, rwmutexMaxReaders)
+
     &#47;&#47; 唤醒阻塞的reader们
     for i := 0; i &lt; int(r); i++ {
         runtime_Semrelease(&amp;rw.readerSem, false, 0)
     }
     &#47;&#47; 释放内部的互斥锁
     rw.w.Unlock()
+
 }
 
 而这个地方 先去释放了 reader，再去释放阻塞的writer
@@ -409,52 +408,53 @@ func (rw *RWMutex) Unlock() {
 按照以上逻辑，多个writer的情况下，并没有造成reader出现饥饿状态，反而在释放写锁的那一刹那，新的reader 占了先机，这种情况怎么叫 Write-preferring 方案。我理解的Write-preferring 方案：是只有在没有writer的情况下，才轮到reader执行，多个writer的情况，是一个writer一个writer执行完，才会执行reader。我从代码中看出了不明白的地方，希望老师 帮忙解答一下</p>2021-01-04</li><br/><li><span>香芋地瓜粽</span> 👍（0） 💬（1）<p>读尝试锁RTryLock的实现:
 思路:直接找到RWMutex中Mutex字段,调用TryLock方法尝试获取内部互斥锁,如果失败直接返回false,成功则只会阻塞写锁,不影响读锁(因为事实上获取读锁并不进行内部互斥锁的判断而是判断readCount是否为负)进而调用RLock直接获取读锁就好.记得获取之后务必调用Mutex字段的Unlock方法释放内部互斥锁
 func (m *RWMutex) RTryLock() bool {
-	if (*sync.RWMutex)(unsafe.Pointer(&amp;m.RWMutex)).TryLock() {
-		defer (*sync.RWMutex)(unsafe.Pointer(&amp;m.RWMutex)).Unlock()
-		m.RLock()
-		return true
-	} else {
-		return false
-	}
-}</p>2024-09-09</li><br/><li><span>john-jy</span> 👍（0） 💬（1）<p>没人发现factorial退出条件是错误的吗？</p>2023-06-07</li><br/><li><span>Traveller</span> 👍（0） 💬（1）<p>第二种死锁的场景有点隐蔽。我们知道，有活跃 reader 的时候，writer 会等待，如果我们在 reader 的读操作时调用 writer 的写操作（它会调用 Lock 方法），那么，这个 reader 和 writer 就会形成互相依赖的死锁状态。Reader 想等待 writer 完成后再释放锁，而 writer 需要这个 reader 释放锁之后，才能不阻塞地继续执行。这是一个读写锁常见的死锁场景。 
+if (*sync.RWMutex)(unsafe.Pointer(&amp;m.RWMutex)).TryLock() {
+defer (*sync.RWMutex)(unsafe.Pointer(&amp;m.RWMutex)).Unlock()
+m.RLock()
+return true
+} else {
+return false
+}
+}</p>2024-09-09</li><br/><li><span>john-jy</span> 👍（0） 💬（1）<p>没人发现factorial退出条件是错误的吗？</p>2023-06-07</li><br/><li><span>Traveller</span> 👍（0） 💬（1）<p>第二种死锁的场景有点隐蔽。我们知道，有活跃 reader 的时候，writer 会等待，如果我们在 reader 的读操作时调用 writer 的写操作（它会调用 Lock 方法），那么，这个 reader 和 writer 就会形成互相依赖的死锁状态。Reader 想等待 writer 完成后再释放锁，而 writer 需要这个 reader 释放锁之后，才能不阻塞地继续执行。这是一个读写锁常见的死锁场景。
 这是什么意思？完全看不懂</p>2023-04-27</li><br/><li><span>极客酱酱</span> 👍（0） 💬（1）<p>鸟窝老师，麻烦问一下您这边使用的脑图工具是哪个，我正在学习这种用脑图梳理知识点的方法，手头的工具不太友好，手动狗头。</p>2022-04-19</li><br/><li><span>8.13.3.27.30</span> 👍（0） 💬（1）<p>有一个问题、写错unlock逻辑中、解锁之前会唤醒所有等待读的锁、但是再锁的过程当中并可能会继续来读和写的操作、这些操作这里貌似并不能保证写锁的优先，因为写锁解锁的过程会把后来的读锁也唤醒、而这个时候后来的写锁（但是它先于后来的读锁操作锁）没有办法优先后来的读锁获取到锁，不知道理解是否正确，另外读写锁的实现看上去在极限情况下会导致写饥饿、当然也可能是读饥饿（理论上这种情况不应该使用读写锁）、请教老师我的理解是否正确，如果正确怎么解决写饥饿的问题</p>2021-11-27</li><br/><li><span>🐭</span> 👍（0） 💬（1）<p>第一个例子中，写操作在主携程里，为什么还要加锁</p>2021-08-06</li><br/><li><span>GoGoGo</span> 👍（0） 💬（1）<p>
 func main() {
-    var counter Counter
-    for i := 0; i &lt; 10; i++ { &#47;&#47; 10个reader
-        go func() {
-            for {
-                counter.Count() &#47;&#47; 计数器读操作
-                time.Sleep(time.Millisecond)
-            }
-        }()
-    }
+var counter Counter
+for i := 0; i &lt; 10; i++ { &#47;&#47; 10个reader
+go func() {
+for {
+counter.Count() &#47;&#47; 计数器读操作
+time.Sleep(time.Millisecond)
+}
+}()
+}
 
     for { &#47;&#47; 一个writer
         counter.Incr() &#47;&#47; 计数器写操作
         time.Sleep(time.Second)
     }
+
 }
 &#47;&#47; 一个线程安全的计数器
 type Counter struct {
-    mu    sync.RWMutex
-    count uint64
+mu sync.RWMutex
+count uint64
 }
 
 &#47;&#47; 使用写锁保护
 func (c *Counter) Incr() {
-    c.mu.Lock()
-    c.count++
-    c.mu.Unlock()
+c.mu.Lock()
+c.count++
+c.mu.Unlock()
 }
 
 &#47;&#47; 使用读锁保护
 func (c *Counter) Count() uint64 {
-    c.mu.RLock()
-    defer c.mu.RUnlock()
-    return c.count
+c.mu.RLock()
+defer c.mu.RUnlock()
+return c.count
 }
 
-当能明确的区分 读写操作时  为什么读还要加锁 这段代码里 加读锁和不加读锁有什么区别吗？</p>2021-07-29</li><br/><li><span>小虾米</span> 👍（0） 💬（1）<p>rwmutexMaxReaders 为何不能用满32位呢</p>2021-05-18</li><br/><li><span>Terence孫</span> 👍（0） 💬（1）<p>读写锁中读写锁Lock的总结：
+当能明确的区分 读写操作时 为什么读还要加锁 这段代码里 加读锁和不加读锁有什么区别吗？</p>2021-07-29</li><br/><li><span>小虾米</span> 👍（0） 💬（1）<p>rwmutexMaxReaders 为何不能用满32位呢</p>2021-05-18</li><br/><li><span>Terence孫</span> 👍（0） 💬（1）<p>读写锁中读写锁Lock的总结：
 当前锁和新锁类型不同，新锁阻塞等待
 当前锁和新锁类型相同，读锁不阻塞，写锁阻塞</p>2021-03-21</li><br/><li><span>Yimmy</span> 👍（0） 💬（1）<p>老师好，“同时，它还会调用 GetCPUSet 或 GetDefaultCPUSet 方法。当这两个方法都请求写锁时，是获取不到的，因为 GetCPUSetOrDefault 方法还没有执行完，不会释放读锁，这就形成了死锁。”
 
@@ -462,14 +462,14 @@ func (c *Counter) Count() uint64 {
 
 补充源码（https:&#47;&#47;github.com&#47;kubernetes&#47;kubernetes&#47;pull&#47;62464&#47;files ）
 func (s *stateMemory) GetCPUSet(containerID string) (cpuset.CPUSet, bool) {
-	s.RLock()
-	defer s.RUnlock()
-	res, ok := s.assignments[containerID]
-	return res.Clone(), ok
+s.RLock()
+defer s.RUnlock()
+res, ok := s.assignments[containerID]
+return res.Clone(), ok
 }
 func (s *stateMemory) GetDefaultCPUSet() cpuset.CPUSet {
-	s.RLock()
-	defer s.RUnlock()
-	return s.defaultCPUSet.Clone()
+s.RLock()
+defer s.RUnlock()
+return s.defaultCPUSet.Clone()
 }</p>2020-11-06</li><br/>
 </ul>

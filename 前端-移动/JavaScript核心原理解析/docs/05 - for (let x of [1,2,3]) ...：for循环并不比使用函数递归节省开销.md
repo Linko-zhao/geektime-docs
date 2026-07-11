@@ -19,7 +19,7 @@
 ```
 var x = 100, c = 'a';
 switch (c) {
-  case 'a': 
+  case 'a':
     console.log(x); // ReferenceError
     break;
   case 'b':
@@ -78,13 +78,13 @@ else {
 
 并不是所有的循环语句都有自己的块级作用域，例如while和do..while语句就没有。而且，也不是所有for语句都有块级作用域。在JavaScript中，有且仅有：
 
-> for (*&lt;let/const&gt;* ...) ...
+> for (_&lt;let/const&gt;_ ...) ...
 
 这个语法有自己的块级作用域。当然，这也包括相同设计的`for await`和`for .. of/in ..`。例如：
 
-> for await (*&lt;let/const&gt;* x of ...) ...  
-> for (*&lt;let/const&gt;* x ... in ...) ...  
-> for (*&lt;let/const&gt;* x ... of ...) ...
+> for await (_&lt;let/const&gt;_ x of ...) ...  
+> for (_&lt;let/const&gt;_ x ... in ...) ...  
+> for (_&lt;let/const&gt;_ x ... of ...) ...
 
 等等。你应该已经注意到了，这里并没有按照惯例那样列出“var”关键字。关于这一点，后面写到的时候我也会再次提及到。就现在来说，你可能需要关心的问题是：**为什么这是个特例？**以及，**如果它是拥有自己的块级作用域的特例，那么它有多少个块级作用域呢？**
 
@@ -132,7 +132,7 @@ ECMAScript 6开始的JavaScript在添加块级作用域特性时充分考虑了�
 - 所有“var声明”和函数声明的标识符都登记为varNames，使用“**变量作用域**”管理；
 - 其它情况下的标识符/变量声明，都作为lexicalNames登记，使用“**词法作用域**”管理。
 
-> NOTE: 考虑到对传统JavaScript的兼容，函数内部的顶层函数名是提升到变量作用域中来管理的。 &gt; &gt; NOTE: 我通常会将“在变量声明语句前使用该变量”也称为一种提升效果（*Hoisting effect*)，但这种说法不见于ECMAScript规范。ES规范将这种“提前使用”称为“访问一个未初始化的绑定（*uninitialized mutable/immutable binding*）”。而所谓“var声明能被提前使用”的效果，事实上是“var变量总是被引擎预先初始化为undefined”的一种后果。
+> NOTE: 考虑到对传统JavaScript的兼容，函数内部的顶层函数名是提升到变量作用域中来管理的。 &gt; &gt; NOTE: 我通常会将“在变量声明语句前使用该变量”也称为一种提升效果（_Hoisting effect_)，但这种说法不见于ECMAScript规范。ES规范将这种“提前使用”称为“访问一个未初始化的绑定（_uninitialized mutable/immutable binding_）”。而所谓“var声明能被提前使用”的效果，事实上是“var变量总是被引擎预先初始化为undefined”的一种后果。
 
 所以，语句`for (<const/let> x ...) ...`语法中的标识符`x`是一个**词法名字**，应该由`for`语句为它创建一个（块级的）词法作用域来管理之。
 
@@ -160,7 +160,7 @@ for (let x = 102; x < 105; x++)
 
 也就是说，如果循环体（单个语句）允许支持新的变量声明，那么为了避免它影响到循环变量，就必须为它再提供另一个块级作用域。很有趣的是，**在这里，JavaScript是不允许声明新的变量的**。上述的示例会抛出一个异常，提示你“单语句不支持词法声明”：
 
-> *SyntaxError: Lexical declaration cannot appear in a single-statement context*
+> _SyntaxError: Lexical declaration cannot appear in a single-statement context_
 
 这个语法错误并不常见，因为很少有人会尝试构建这样的特殊代码。然而事实上，它是一个普遍存在的语法禁例，例如以下语句语法：
 
@@ -175,7 +175,7 @@ while (false) let x = 200;
 with (0) let x = 300
 ```
 
-所以，现在可以确定：循环语句（对于支持“*let/const*”的for语句来说）“通常情况下”只支持一个块级作用域。更进一步地说，在上面的代码中，我们并没有机会覆盖for语句中的“let/const”声明。
+所以，现在可以确定：循环语句（对于支持“_let/const_”的for语句来说）“通常情况下”只支持一个块级作用域。更进一步地说，在上面的代码中，我们并没有机会覆盖for语句中的“let/const”声明。
 
 但是如果在for语句支持了let/const的情况下，仅仅只有一个块级作用域是不方便的。例如：
 
@@ -265,7 +265,7 @@ for (let i in x)
     }
     console.log(ccc)
     console.timeEnd(&#39;b&#39;)
-    
+
     &#47;&#47; 案例三
     console.time(&#39;c&#39;)
     const cccv = []
@@ -278,9 +278,9 @@ for (let i in x)
 2.编译引擎的debug版本然后track内核，或者你可以尝试一个prepack-core这个项目，这两个东西是啥 我百度也没查到
 3.老师你讲的都是概念的，我就想看到一个肉眼的案例然后根据概念消化，要不现在根本就是这个for循环到底应该咋写我都懵了</p>2020-01-12</li><br/><li><span>Geek_8d73e3</span> 👍（9） 💬（5）<p>老师我发现运行以下代码会报错
 for(let x = 0;x&lt;1;x++){
-      var x = 100;
-    }
-    &#47;&#47;Uncaught SyntaxError: Identifier &#39;x&#39; has already been declared
+var x = 100;
+}
+&#47;&#47;Uncaught SyntaxError: Identifier &#39;x&#39; has already been declared
 在我理解中，let声明的x是在forEnv中，而我使用var声明的x因为javaScript早期设计，会在全局中声明一个x。这两个作用域是不会冲突的呀，为什么报错了？</p>2020-06-08</li><br/><li><span>Geek_8d73e3</span> 👍（7） 💬（1）<p>老师，我发现，我运行这段代码的时候，并没有报错。
 for(let i = 0;i&lt;10;i++){
 
@@ -288,40 +288,41 @@ for(let i = 0;i&lt;10;i++){
 
         console.log(i);
       }</p>2020-05-26</li><br/><li><span>Wiggle Wiggle</span> 👍（7） 💬（2）<p>词法、词法作用域、语法元素……等等，这些概念特别模糊，老师有什么推荐的书吗？</p>2019-11-22</li><br/><li><span>zcdll</span> 👍（7） 💬（5）<p>看不懂。。。第一个 switch 那个例子都看不懂。。</p>2019-11-20</li><br/><li><span>Y</span> 👍（6） 💬（1）<p>既然是单语句就说明只有一句话，如果就一句话，还是词法声明，那就会创建一个块级作用域，但是因为是单语句，那一定就没有地方会用到这个声明了。那这个声明就是没有意义的。所以js为了避免这种没有意义的声明，就会直接报错。是这样嘛</p>2019-11-20</li><br/><li><span>Marvin</span> 👍（5） 💬（3）<p>如果使用let &#47;const 声明for循环语句，会迭代创建作用域副本。那么不是和文中的：
+
 对于支持“let&#47;const”的 for 语句来说）“通常情况下”只支持一个块级作用域这句话相矛盾么？</p>2019-11-26</li><br/><li><span>海绵薇薇</span> 👍（4） 💬（1）<p>hello，老师好，一如既往有许多问题等待解答：）
 
 for(let&#47;const ...) ... 这个语句有两个词法作用域，分别是 forEnv 和 loopEnv。还有一个概念是iterationEnv，这个是迭代时生成的loopEnv的副本。
 
 对于forEnv和loopEnv的范围我不是很清楚，请老师指点。
 
-for(let i = 0; i &lt; 10; i++) 
+for(let i = 0; i &lt; 10; i++)
 
-​	setTimeout(() =&gt; console.log(i))
+​ setTimeout(() =&gt; console.log(i))
 
 1 如上代码，let i 声明的 i 在forEnv还是在loopEnv &#47; iterationEnv里？
 
-	1.1 如果在loopEnv &#47; iterationEnv里那么forEnv看起来就没啥用了
-	
-	1.2 如果在forEnv（文章中说let只会执行一次，并且forEnv是lopEnv的上级），那么按理说console.log打印出来的都是11（参考于：晓小东）
+    1.1 如果在loopEnv &#47; iterationEnv里那么forEnv看起来就没啥用了
+
+    1.2 如果在forEnv（文章中说let只会执行一次，并且forEnv是lopEnv的上级），那么按理说console.log打印出来的都是11（参考于：晓小东）
 
 2 关于单语 let a = 1 报错问题
 
-	2.1 如果是单语句中词法声明被重复有问题，那么with({}) let b = 1 这个报错就解释不通了。上面是说with有自己的块作用域，这个词法声明是在自己块语句中做的，并不会和别人冲突 
+    2.1 如果是单语句中词法声明被重复有问题，那么with({}) let b = 1 这个报错就解释不通了。上面是说with有自己的块作用域，这个词法声明是在自己块语句中做的，并不会和别人冲突
 
-	2.2 同样的情况存在于for(let a...) ... 中，for也有自己的作用域，并且每次循环都会生成新的副本，也不应该存在重复问题
+    2.2 同样的情况存在于for(let a...) ... 中，for也有自己的作用域，并且每次循环都会生成新的副本，也不应该存在重复问题
 
 3 关于上面提到的eval
-	eval(&#39;let a = 1&#39;); console.log(a) &#47;&#47; 报错
-	eval是不是自己也有一个作用域？
+eval(&#39;let a = 1&#39;); console.log(a) &#47;&#47; 报错
+eval是不是自己也有一个作用域？
 
 期待：）</p>2019-11-23</li><br/><li><span>晓小东</span> 👍（4） 💬（1）<p>
 老师您看下这段代码， 我在Chrome 打印有点不符合直觉， Second 最终打印的应该是2， 为什么还是1，2， 3；
 
 for (let i = 0; i &lt; 3; i ++, setTimeout(() =&gt; console.log(&quot;Second&quot; + i), 20))
-    console.log(i), setTimeout(() =&gt; console.log(&#39;Last:&#39; + i), 30);
+console.log(i), setTimeout(() =&gt; console.log(&#39;Last:&#39; + i), 30);
 
-0, 1, 2 
-Second: 0, 1,  2
+0, 1, 2
+Second: 0, 1, 2
 Last: 0, 1, 2</p>2019-11-21</li><br/><li><span>桔右</span> 👍（4） 💬（2）<p>假设允许的话，没有块语句创建的iterationEnv的子作用域，let声明就直接在iterationEnv作用域中，会每次循环重复声明。</p>2019-11-21</li><br/><li><span>二二</span> 👍（2） 💬（1）<p>你好老师，按照文章的解释，因为for循环中let会导致块级作用域，开销会变大，此处的开销可以粗略理解成时间。
 var a = new Array(10000).fill(0)
 console.time(&#39;var&#39;)

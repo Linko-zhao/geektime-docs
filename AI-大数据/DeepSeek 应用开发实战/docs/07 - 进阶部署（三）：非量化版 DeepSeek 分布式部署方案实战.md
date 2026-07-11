@@ -39,36 +39,36 @@ OK，理论部分就讲到这，你只要知道什么是 Ray，以及 Ray-Cluste
 机器准备好后，接下来就是模型文件的准备。对于不能科学上网的同学，模型文件可以在魔搭社区下载，链接：[https://www.modelscope.cn/models/deepseek-ai/DeepSeek-R1-Distill-Llama-70B/files](https://www.modelscope.cn/models/deepseek-ai/DeepSeek-R1-Distill-Llama-70B/files)。由于文件非常大，整个 repo 大概有 131G 左右，因此推荐你将模型下载到对象存储或者云硬盘，再通过 PV、PVC 的方式挂载。我采用的是对象存储的方式，PV、PVC 的 YAML 如下：
 
 ```python
-apiVersion: v1                                                                                                                                                           
-kind: PersistentVolume                                                                                                                                                   
-metadata:                                                                                                                                                                
-  name: deepseek                                                                                                                                                    
-spec:                                                                                                                                                                    
-  accessModes:                                                                                                                                                           
-  - ReadWriteMany                                                                                                                                                        
-  capacity:                                                                                                                                                              
-    storage: 200Gi                                                                                                                                                       
-  csi:                                                                                                                                                                   
-    driver: ossplugin.csi.cucloud.com                                                                                                                                    
-    volumeAttributes:                                                                                                                                                    
-      bucket: deepseek                                                                                                                                               
-      url: http://obs-sh-internal.cucloud.cn                                                                                                                             
-    volumeHandle: deepseek                                                                                                                                           
-  persistentVolumeReclaimPolicy: Retain                                                                                                                                  
-  volumeMode: Filesystem                                                                                                                                                 
----                                                                                                                                                                                                                                                                              
-apiVersion: v1                                                                                                                                                           
-kind: PersistentVolumeClaim                                                                                                                                              
-metadata:                                                                                                                                                                
-  name: deepseek                                                                                                                                                    
-  namespace: kuberay-operator                                                                                                                                              
-spec:                                                                                                                                                                    
-  accessModes:                                                                                                                                                           
-  - ReadWriteMany                                                                                                                                                        
-  resources:                                                                                                                                                             
-    requests:                                                                                                                                                            
-      storage: 200Gi                                                                                                                                                     
-  volumeMode: Filesystem                                                                                                                                                 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: deepseek
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 200Gi
+  csi:
+    driver: ossplugin.csi.cucloud.com
+    volumeAttributes:
+      bucket: deepseek
+      url: http://obs-sh-internal.cucloud.cn
+    volumeHandle: deepseek
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: deepseek
+  namespace: kuberay-operator
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi
+  volumeMode: Filesystem
   volumeName: deepseek
 ```
 
@@ -101,7 +101,7 @@ helm install kuberay-operator -n kuberay-operator kuberay/kuberay-operator
 ```plain
 kubectl get po -n kuberay-operator
 
-NAME                                          READY   STATUS    RESTARTS   AGE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+NAME                                          READY   STATUS    RESTARTS   AGE
 kuberay-operator-5c5cb548db-2q2br             1/1     Running   0          23h
 ```
 
@@ -116,110 +116,110 @@ helm install raycluster kuberay/ray-cluster -n kuberay-operator
 但由于 CUDA 版本原因，我们需要找一个合适版本的 Ray 集群，因此我是将 Helm 包 fetch 下来，将 CR yaml 提取出来，手动进行了更改。YAML 如下：
 
 ```plain
-apiVersion: ray.io/v1                                                                                                                                                                                                                                                                                                                                  
-kind: RayCluster                                                                                                                                                                                                                                                                                                                                       
-metadata:                                                                                                                                                                                                                                                                                                                                              
-  annotations:                                                                                                                                                                                                                                                                                                                                         
-    meta.helm.sh/release-name: raycluster                                                                                                                                                                                                                                                                                                              
-    meta.helm.sh/release-namespace: kuberay-operator                                                                                                                                                                                                                                                                                                   
-  generation: 3                                                                                                                                                                                                                                                                                                                                        
-  labels:                                                                                                                                                                                                                                                                                                                                              
-    app.kubernetes.io/instance: raycluster                                                                                                                                                                                                                                                                                                             
-    app.kubernetes.io/managed-by: Helm                                                                                                                                                                                                                                                                                                                 
-    helm.sh/chart: ray-cluster-1.2.2                                                                                                                                                                                                                                                                                                                   
-  name: raycluster-kuberay                                                                                                                                                                                                                                                                                                                             
-  namespace: kuberay-operator                                                                                                                                                                                                                                                                                                                          
-spec:                                                                                                                                                                                                                                                                                                                                                  
-  headGroupSpec:                                                                                                                                                                                                                                                                                                                                       
-    rayStartParams:                                                                                                                                                                                                                                                                                                                                    
-      dashboard-host: 0.0.0.0                                                                                                                                                                                                                                                                                                                          
-    serviceType: ClusterIP                                                                                                                                                                                                                                                                                                                             
-    template:                                                                                                                                                                                                                                                                                                                                          
-      metadata:                                                                                                                                                                                                                                                                                                                                        
-        annotations: {}                                                                                                                                                                                                                                                                                                                                
-        labels:                                                                                                                                                                                                                                                                                                                                        
-          app.kubernetes.io/instance: raycluster                                                                                                                                                                                                                                                                                                       
-          app.kubernetes.io/managed-by: Helm                                                                                                                                                                                                                                                                                                           
-          helm.sh/chart: ray-cluster-1.2.2                                                                                                                                                                                                                                                                                                             
-      spec:                                                                                                                                                                                                                                                                                                                                            
-        affinity: {}                                                                                                                                                                                                                                                                                                                                   
-        containers:                                                                                                                                                                                                                                                                                                                                    
-        - image: docker.1ms.run/rayproject/ray-ml:2.11.0.a464b6-py310-gpu                                                                                                                                                                                                                                                                              
-          imagePullPolicy: IfNotPresent                                                                                                                                                                                                                                                                                                                
-          name: ray-head                                                                                                                                                                                                                                                                                                                               
-          resources:                                                                                                                                                                                                                                                                                                                                   
-            limits:                                                                                                                                                                                                                                                                                                                                    
-              cpu: "4"                                                                                                                                                                                                                                                                                                                                 
-              memory: 16G                                                                                                                                                                                                                                                                                                                              
-            requests:                                                                                                                                                                                                                                                                                                                                  
-              cpu: "1"                                                                                                                                                                                                                                                                                                                                 
-              memory: 2G                                                                                                                                                                                                                                                                                                                               
-          securityContext: {}                                                                                                                                                                                                                                                                                                                          
-          volumeMounts:                                                                                                                                                                                                                                                                                                                                
-          - mountPath: /tmp/ray                                                                                                                                                                                                                                                                                                                        
-            name: log-volume                                                                                                                                                                                                                                                                                                                           
-          - mountPath: /mnt/deepseek                                                                                                                                                                                                                                                                                                                   
-            name: deepseek-r1                                                                                                                                                                                                                                                                                                                          
-        imagePullSecrets: []                                                                                                                                                                                                                                                                                                                           
-        nodeSelector: {}                                                                                                                                                                                                                                                                                                                               
-        tolerations: []                                                                                                                                                                                                                                                                                                                                
-        volumes:                                                                                                                                                                                                                                                                                                                                       
-        - emptyDir: {}                                                                                                                                                                                                                                                                                                                                 
-          name: log-volume                                                                                                                                                                                                                                                                                                                             
-        - name: deepseek-r1                                                                                                                                                                                                                                                                                                                            
-          persistentVolumeClaim:                                                                                                                                                                                                                                                                                                                       
-            claimName: deepseek                                                                                                                                                                                                                                                                                                                        
-  workerGroupSpecs:                                                                                                                                                                                                                                                                                                                                    
-  - groupName: workergroup                                                                                                                                                                                                                                                                                                                             
-    maxReplicas: 3                                                                                                                                                                                                                                                                                                                                     
-    minReplicas: 1                                                                                                                                                                                                                                                                                                                                     
-    numOfHosts: 1                                                                                                                                                                                                                                                                                                                                      
-    rayStartParams:                                                                                                                                                                                                                                                                                                                                    
-      num-gpus: "1"                                                                                                                                                                                                                                                                                                                                    
-    replicas: 1                                                                                                                                                                                                                                                                                                                                        
-    template:                                                                                                                                                                                                                                                                                                                                          
-      metadata:                                                                                                                                                                                                                                                                                                                                        
-        annotations: {}                                                                                                                                                                                                                                                                                                                                
-        labels:                                                                                                                                                                                                                                                                                                                                        
-          app.kubernetes.io/instance: raycluster                                                                                                                                                                                                                                                                                                       
-          app.kubernetes.io/managed-by: Helm                                                                                                                                                                                                                                                                                                           
-          helm.sh/chart: ray-cluster-1.2.2                                                                                                                                                                                                                                                                                                             
-      spec:                                                                                                                                                                                                                                                                                                                                            
-        affinity: {}                                                                                                                                                                                                                                                                                                                                   
-        containers:                                                                                                                                                                                                                                                                                                                                    
-        - image: docker.1ms.run/rayproject/ray-ml:2.11.0.a464b6-py310-gpu                                                                                                                                                                                                                                                                              
-          imagePullPolicy: IfNotPresent                                                                                                                                                                                                                                                                                                                
-          name: ray-worker                                                                                                                                                                                                                                                                                                                             
-          resources:                                                                                                                                                                                                                                                                                                                                   
-            limits:                                                                                                                                                                                                                                                                                                                                    
-              cpu: "14"                                                                                                                                                                                                                                                                                                                                
-              memory: 60G                                                                                                                                                                                                                                                                                                                              
-            requests:                                                                                                                                                                                                                                                                                                                                  
-              cpu: "1"                                                                                                                                                                                                                                                                                                                                 
-              memory: 1G                                                                                                                                                                                                                                                                                                                               
-          securityContext: {}                                                                                                                                                                                                                                                                                                                          
-          volumeMounts:                                                                                                                                                                                                                                                                                                                                
-          - mountPath: /tmp/ray                                                                                                                                                                                                                                                                                                                        
-            name: log-volume                                                                                                                                                                                                                                                                                                                           
-          - mountPath: /mnt/deepseek                                                                                                                                                                                                                                                                                                                   
-            name: deepseek-r1                                                                                                                                                                                                                                                                                                                          
-        imagePullSecrets: []                                                                                                                                                                                                                                                                                                                           
-        nodeSelector: {}                                                                                                                                                                                                                                                                                                                               
-        tolerations: []                                                                                                                                                                                                                                                                                                                                
-        volumes:                                                                                                                                                                                                                                                                                                                                       
-        - emptyDir: {}                                                                                                                                                                                                                                                                                                                                 
-          name: log-volume                                                                                                                                                                                                                                                                                                                             
-        - name: deepseek-r1                                                                                                                                                                                                                                                                                                                            
-          persistentVolumeClaim:                                                                                                                                                                                                                                                                                                                       
+apiVersion: ray.io/v1
+kind: RayCluster
+metadata:
+  annotations:
+    meta.helm.sh/release-name: raycluster
+    meta.helm.sh/release-namespace: kuberay-operator
+  generation: 3
+  labels:
+    app.kubernetes.io/instance: raycluster
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: ray-cluster-1.2.2
+  name: raycluster-kuberay
+  namespace: kuberay-operator
+spec:
+  headGroupSpec:
+    rayStartParams:
+      dashboard-host: 0.0.0.0
+    serviceType: ClusterIP
+    template:
+      metadata:
+        annotations: {}
+        labels:
+          app.kubernetes.io/instance: raycluster
+          app.kubernetes.io/managed-by: Helm
+          helm.sh/chart: ray-cluster-1.2.2
+      spec:
+        affinity: {}
+        containers:
+        - image: docker.1ms.run/rayproject/ray-ml:2.11.0.a464b6-py310-gpu
+          imagePullPolicy: IfNotPresent
+          name: ray-head
+          resources:
+            limits:
+              cpu: "4"
+              memory: 16G
+            requests:
+              cpu: "1"
+              memory: 2G
+          securityContext: {}
+          volumeMounts:
+          - mountPath: /tmp/ray
+            name: log-volume
+          - mountPath: /mnt/deepseek
+            name: deepseek-r1
+        imagePullSecrets: []
+        nodeSelector: {}
+        tolerations: []
+        volumes:
+        - emptyDir: {}
+          name: log-volume
+        - name: deepseek-r1
+          persistentVolumeClaim:
+            claimName: deepseek
+  workerGroupSpecs:
+  - groupName: workergroup
+    maxReplicas: 3
+    minReplicas: 1
+    numOfHosts: 1
+    rayStartParams:
+      num-gpus: "1"
+    replicas: 1
+    template:
+      metadata:
+        annotations: {}
+        labels:
+          app.kubernetes.io/instance: raycluster
+          app.kubernetes.io/managed-by: Helm
+          helm.sh/chart: ray-cluster-1.2.2
+      spec:
+        affinity: {}
+        containers:
+        - image: docker.1ms.run/rayproject/ray-ml:2.11.0.a464b6-py310-gpu
+          imagePullPolicy: IfNotPresent
+          name: ray-worker
+          resources:
+            limits:
+              cpu: "14"
+              memory: 60G
+            requests:
+              cpu: "1"
+              memory: 1G
+          securityContext: {}
+          volumeMounts:
+          - mountPath: /tmp/ray
+            name: log-volume
+          - mountPath: /mnt/deepseek
+            name: deepseek-r1
+        imagePullSecrets: []
+        nodeSelector: {}
+        tolerations: []
+        volumes:
+        - emptyDir: {}
+          name: log-volume
+        - name: deepseek-r1
+          persistentVolumeClaim:
             claimName: deepseek
 ```
 
 首先是镜像，使用 rayproject/ray-ml:2.11.0.a464b6-py310-gpu，也就是 2.11.0 版本的 Ray 集群。之后是 Head 节点和 Worker 节点的配置。Head 节点很简单，就是将对象存储 PVC 挂载上即可。Worker 节点除了挂载 PVC 之后，还需要配置两个参数，即：
 
 ```plain
-numOfHosts: 1                                                                                                                                                                                                                                                                                                                                      
-rayStartParams:                                                                                                                                                                                                                                                                                                                                    
-  num-gpus: "1"  
+numOfHosts: 1
+rayStartParams:
+  num-gpus: "1"
 ```
 
 numOfHosts 代表在一个节点上部署 worker，num-gpus 代表每个节点上有一张卡。这里是个坑，很多网上的教程在只有两个 GPU 节点的情况下会把 numOfHosts 设置成 2，这是没有理解 Ray 集群的组成。实际上，Head 本身会占用一个节点，因此 **Worker 创建一个即可**。
@@ -229,9 +229,9 @@ numOfHosts 代表在一个节点上部署 worker，num-gpus 代表每个节点�
 ```plain
 kubectl get po -n kuberay-operator -owide
 
-NAME                                          READY   STATUS    RESTARTS   AGE    IP             NODE           NOMINATED NODE   READINESS GATES                                                                                                                                                                                                                                                                                                                                                                                                                                    
-raycluster-kuberay-head-zphgs                 1/1     Running   0          171m   10.43.0.35     192.168.0.34                                                                                                                                                                                                                              
-raycluster-kuberay-workergroup-worker-kbsvr   1/1     Running   0          171m   10.43.140.28   192.168.0.68              
+NAME                                          READY   STATUS    RESTARTS   AGE    IP             NODE           NOMINATED NODE   READINESS GATES
+raycluster-kuberay-head-zphgs                 1/1     Running   0          171m   10.43.0.35     192.168.0.34
+raycluster-kuberay-workergroup-worker-kbsvr   1/1     Running   0          171m   10.43.140.28   192.168.0.68
 ```
 
 状态如上所示，就说明成功了。你可以直接拿我的 YAML，针对你的集群环境做相应的修改。
@@ -239,29 +239,29 @@ raycluster-kuberay-workergroup-worker-kbsvr   1/1     Running   0          171m 
 此时可以进入 raycluster-kuberay-head-zphgs 内，查看 ray 集群的状态。
 
 ```plain
-(base) ray@raycluster-kuberay-head-zphgs:~$ ray status                                                                                                                                                                                                                                                                                                 
-2025-02-13 00:54:12,571 - INFO - Note: NumExpr detected 16 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.                                                                                                                                                                                                                      
-2025-02-13 00:54:12,571 - INFO - NumExpr defaulting to 8 threads.                                                                                                                                                                                                                                                                                      
-======== Autoscaler status: 2025-02-13 00:54:12.737576 ========                                                                                                                                                                                                                                                                                        
-Node status                                                                                                                                                                                                                                                                                                                                            
----------------------------------------------------------------                                                                                                                                                                                                                                                                                        
-Active:                                                                                                                                                                                                                                                                                                                                                
- 1 node_a0dcf7b6cdb9c28191d6db6a44ba774ed04fb0bbda704a498112674f                                                                                                                                                                                                                                                                                       
- 1 node_3804fd0732e483a2240e9f608d15362f415411fca7c69b58232a1174                                                                                                                                                                                                                                                                                       
-Pending:                                                                                                                                                                                                                                                                                                                                               
- (no pending nodes)                                                                                                                                                                                                                                                                                                                                    
-Recent failures:                                                                                                                                                                                                                                                                                                                                       
- (no failures)                                                                                                                                                                                                                                                                                                                                         
-                                                                                                                                                                                                                                                                                                                                                       
-Resources                                                                                                                                                                                                                                                                                                                                              
----------------------------------------------------------------                                                                                                                                                                                                                                                                                        
-Usage:                                                                                                                                                                                                                                                                                                                                                 
- 0.0/18.0 CPU                                                                                                                                                                                                                                                                                                                                          
- 0.0/2.0 GPU                                                                                                                                                                                                                                                                                                                                           
- 0B/70.78GiB memory                                                                                                                                                                                                                                                                                                                                    
- 0B/20.90GiB object_store_memory                                                                                                                                                                                                                                                                                                                       
-                                                                                                                                                                                                                                                                                                                                                       
-Demands:                                                                                                                                                                                                                                                                                                                                               
+(base) ray@raycluster-kuberay-head-zphgs:~$ ray status
+2025-02-13 00:54:12,571 - INFO - Note: NumExpr detected 16 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2025-02-13 00:54:12,571 - INFO - NumExpr defaulting to 8 threads.
+======== Autoscaler status: 2025-02-13 00:54:12.737576 ========
+Node status
+---------------------------------------------------------------
+Active:
+ 1 node_a0dcf7b6cdb9c28191d6db6a44ba774ed04fb0bbda704a498112674f
+ 1 node_3804fd0732e483a2240e9f608d15362f415411fca7c69b58232a1174
+Pending:
+ (no pending nodes)
+Recent failures:
+ (no failures)
+
+Resources
+---------------------------------------------------------------
+Usage:
+ 0.0/18.0 CPU
+ 0.0/2.0 GPU
+ 0B/70.78GiB memory
+ 0B/20.90GiB object_store_memory
+
+Demands:
  (no resource demands)
 ```
 

@@ -155,7 +155,7 @@ func (s *Weighted) Acquire(ctx context.Context, n int64) error {
 			s.mu.Unlock()
 			return nil
 		}
-	
+
         // 如果是不可能完成的任务，请求的资源数大于能提供的最大的资源数
 		if n > s.size {
 			s.mu.Unlock()
@@ -163,14 +163,14 @@ func (s *Weighted) Acquire(ctx context.Context, n int64) error {
 			<-ctx.Done()
 			return ctx.Err()
 		}
-	
+
         // 否则就需要把调用者加入到等待队列中
         // 创建了一个ready chan,以便被通知唤醒
 		ready := make(chan struct{})
 		w := waiter{n: n, ready: ready}
 		elem := s.waiters.PushBack(w)
 		s.mu.Unlock()
-	
+
 
         // 等待
 		select {
@@ -222,7 +222,7 @@ func (s *Weighted) notifyWaiters() {
 			if next == nil {
 				break // No more waiters blocked.
 			}
-	
+
 
 			w := next.Value.(waiter)
 			if s.size-s.cur < w.n {
@@ -272,7 +272,7 @@ notifyWaiters方法是按照先入先出的方式唤醒调用者。当释放100�
 		sync.Locker
 		ch chan struct{}
 	}
-	
+
 	// 创建一个新的信号量
 	func NewSemaphore(capacity int) sync.Locker {
 		if capacity <= 0 {
@@ -280,12 +280,12 @@ notifyWaiters方法是按照先入先出的方式唤醒调用者。当释放100�
 		}
 		return &semaphore{ch: make(chan struct{}, capacity)}
 	}
-	
+
 	// 请求一个资源
 	func (s *semaphore) Lock() {
 		s.ch <- struct{}{}
 	}
-	
+
 	// 释放资源
 	func (s *semaphore) Unlock() {
 		<-s.ch
@@ -323,112 +323,114 @@ import (
 )
 
 type ChannelSemaphore struct {
-	ch chan struct{}
+ch chan struct{}
 }
 
 func NewChannelSemaphore(size int) *ChannelSemaphore {
-	return &amp;ChannelSemaphore{
-		ch: make(chan struct{}, size),
-	}
+return &amp;ChannelSemaphore{
+ch: make(chan struct{}, size),
+}
 }
 
 func (s *ChannelSemaphore) Acquire(ctx context.Context, n int64) error {
-	&#47;&#47; 判断申请数量大于容量
-	if n &gt; int64(cap(s.ch)) {
-		return errors.New(&quot;acquire too many&quot;)
-	}
+&#47;&#47; 判断申请数量大于容量
+if n &gt; int64(cap(s.ch)) {
+return errors.New(&quot;acquire too many&quot;)
+}
 
-	for i := int64(0); i &lt; n; i++ {
-		select {
-		case s.ch &lt;- struct{}{}:
-		case &lt;-ctx.Done():
-			return ctx.Err()
-		}
-	}
-	return nil
+    for i := int64(0); i &lt; n; i++ {
+    	select {
+    	case s.ch &lt;- struct{}{}:
+    	case &lt;-ctx.Done():
+    		return ctx.Err()
+    	}
+    }
+    return nil
+
 }
 
 func (s *ChannelSemaphore) Release(ctx context.Context, n int64) error {
-	&#47;&#47; 判断释放数量大于容量
-	if n &gt; int64(cap(s.ch)) {
-		return errors.New(&quot;release too many&quot;)
-	}
+&#47;&#47; 判断释放数量大于容量
+if n &gt; int64(cap(s.ch)) {
+return errors.New(&quot;release too many&quot;)
+}
 
-	for i := int64(0); i &lt; n; i++ {
-		select {
-		case &lt;-s.ch:
-		case &lt;-ctx.Done():
-			return ctx.Err()
-		}
-	}
-	return nil
+    for i := int64(0); i &lt; n; i++ {
+    	select {
+    	case &lt;-s.ch:
+    	case &lt;-ctx.Done():
+    		return ctx.Err()
+    	}
+    }
+    return nil
+
 }
 </p>2024-12-25</li><br/><li><span>Geek_2c2c44</span> 👍（0） 💬（1）<p>基于channel的lock实现这里， Lock和UnLock的实现互换一下顺序是不是也是可以的呢？如果寻Accquire（P）是减去信号量的规范的话， 是不是lock那里把channel写在右边会更好（从channel中拿出一个信号量）？PS：前面一节的Lock顺序和这里就是不同的</p>2024-01-24</li><br/><li><span>白开d水</span> 👍（0） 💬（1）<p>打卡</p>2023-03-23</li><br/><li><span>Geek_a6104e</span> 👍（0） 💬（1）<p>return &amp;semaphore{ch: make(chan struct{}, capacity)} 请问一下最后一个例子semaphore结构初始化为啥会多个capacity</p>2022-07-31</li><br/><li><span>8.13.3.27.30</span> 👍（0） 💬（1）<p>打卡完成</p>2022-01-06</li><br/><li><span>伟伟</span> 👍（0） 💬（6）<p>type Semaphore chan struct{}
 
 func NewSemaphore(cap int) Semaphore {
-	return make(chan struct{}, cap)
+return make(chan struct{}, cap)
 }
 
 func (s Semaphore) Acquire(n int) {
-	for i := 0; i &lt; n; i++ {
-		s &lt;- struct{}{}
-	}
+for i := 0; i &lt; n; i++ {
+s &lt;- struct{}{}
+}
 }
 
 func (s Semaphore) Release(n int) {
-	for i := 0; i &lt; n; i++ {
-		&lt;-s
-	}
+for i := 0; i &lt; n; i++ {
+&lt;-s
+}
 }
 
 func NewSemaphore2(cap int) Semaphore {
-	sem := make(chan struct{}, cap)
-	for i := 0; i &lt; cap; i++ {
-		sem &lt;- struct{}{}
-	}
-	return sem
+sem := make(chan struct{}, cap)
+for i := 0; i &lt; cap; i++ {
+sem &lt;- struct{}{}
+}
+return sem
 }
 
 func (s Semaphore) Acquire2(n int) {
-	for i := 0; i &lt; n; i++ {
-		&lt;-s
-	}
+for i := 0; i &lt; n; i++ {
+&lt;-s
+}
 }
 
 func (s Semaphore) Release2(n int) {
-	for i := 0; i &lt; n; i++ {
-		s &lt;- struct{}{}
-	}
+for i := 0; i &lt; n; i++ {
+s &lt;- struct{}{}
+}
 }</p>2020-11-23</li><br/><li><span>虫子樱桃</span> 👍（0） 💬（1）<p>老师的例子里面，是通过 计算机的协程 runtime.GOMAXPROCS(0) 来模拟有限的资源（比喻例子里面的书），那么这个semaphore的场景是不是就是比较适用于请求有流量或者调用次数限制的场景呢？</p>2020-11-19</li><br/><li><span>Ethan Liu</span> 👍（0） 💬（3）<p>老师，Acquire函数为什么还会有第二个select语句？这部分逻辑是什么啊？</p>2020-11-17</li><br/><li><span>thomas</span> 👍（20） 💬（1）<p>补充说明下 信号量 p&#47;v的含义：
 P—— passeren，中文译为&quot;通过&quot;，V—— vrijgeven，中文译为&quot;释放&quot; （因为作者是荷兰人，上面单词为荷兰语）</p>2021-01-01</li><br/><li><span>myrfy</span> 👍（7） 💬（1）<p>第一个问题:
 至少两种，写入ch算获取，自己读取ch算获取
 
 第二个问题应该是防止错误获取或者释放信号量时，出现负数溢出到无穷大的问题。如果溢出到无穷大，就会让信号量失效，从而导致1被保护资源更大规模的破坏</p>2020-11-16</li><br/><li><span>大漠胡萝卜</span> 👍（4） 💬（0）<p>在日常开发中，没怎么使用信号量semaphore，一般使用channel来解决这种问题。
 另外，并发的时候使用池化技术感觉更加通用吧。</p>2020-11-21</li><br/><li><span>米琴香光</span> 👍（0） 💬（0）<p>type Semaphore struct {
-	c        chan struct{}
-	acq, rel chan []struct{}
+c chan struct{}
+acq, rel chan []struct{}
 }
 
 func NewSemaphore(cap int) Semaphore {
-	return Semaphore{
-		c:   make(chan struct{}, cap),
-		acq: make(chan []struct{}, 1),
-		rel: make(chan []struct{}, 1),
-	}
+return Semaphore{
+c: make(chan struct{}, cap),
+acq: make(chan []struct{}, 1),
+rel: make(chan []struct{}, 1),
+}
 }
 
 func (s Semaphore) Acquire(n int) {
-	s.acq &lt;- make([]struct{}, n)
-	for range &lt;-s.acq {
-		s.c &lt;- struct{}{}
-	}
+s.acq &lt;- make([]struct{}, n)
+for range &lt;-s.acq {
+s.c &lt;- struct{}{}
+}
 }
 
 func (s Semaphore) Release(n int) {
-	s.rel &lt;- make([]struct{}, n)
-	for range &lt;-s.rel {
-		&lt;-s.c
-	}
+s.rel &lt;- make([]struct{}, n)
+for range &lt;-s.rel {
+&lt;-s.c
+}
 }</p>2024-01-15</li><br/><li><span>友</span> 👍（0） 💬（0）<p>https:&#47;&#47;github.com&#47;zzm996-zzm&#47;go-concurrent&#47;blob&#47;main&#47;semaphore&#47;semaphore.go
 基于chan实现的信号量 其实和文章中的思路是一样的 不过全都是自己实现的</p>2021-08-21</li><br/>
 </ul>

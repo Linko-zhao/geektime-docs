@@ -129,7 +129,7 @@ Redis对运行参数的设置实际上会经过三轮赋值，分别是默认配
 首先，Redis在main函数中会**先调用initServerConfig函数，为各种参数设置默认值**。参数的默认值统一定义在server.h文件中，都是以CONFIG\_DEFAULT开头的宏定义变量。下面的代码显示的是部分参数的默认值，你可以看下。
 
 ```
-#define CONFIG_DEFAULT_HZ        10   //server后台任务的默认运行频率         
+#define CONFIG_DEFAULT_HZ        10   //server后台任务的默认运行频率
 #define CONFIG_MIN_HZ            1    // server后台任务的最小运行频率
 #define CONFIG_MAX_HZ            500 // server后台任务的最大运行频率
 #define CONFIG_DEFAULT_SERVER_PORT  6379  //server监听的默认TCP端口
@@ -363,62 +363,66 @@ if (background) daemonize();
 课后题：Redis 源码的 main 函数在调用 initServer 函数之前，会执行如下的代码片段，你知道这个代码片段的作用是什么吗？
 
 int main(int argc, char **argv) {
-	...
-	server.supervised = redisIsSupervised(server.supervised_mode);
-	int background = server.daemonize &amp;&amp; !server.supervised;
-	if (background) daemonize();
-	...
+...
+server.supervised = redisIsSupervised(server.supervised_mode);
+int background = server.daemonize &amp;&amp; !server.supervised;
+if (background) daemonize();
+...
 }
 
 Redis 可以配置以守护进程的方式启动（配置文件 daemonize = yes），也可以把 Redis 托管给 upstart 或 systemd 来启动 &#47; 停止（supervised = upstart|systemd|auto）。</p>2021-08-12</li><br/><li><span>曾轼麟</span> 👍（11） 💬（2）<p>感谢老师的文章，先回答老师提出的问题：文章中代码片段的作用是？根据关键词我找到代码位于，main函数中loadServerConfig之后执行的，那么这块代码主要任务和顺序如下所示：
-    1、此时redis的config是已经初始化完成的
-    2、执行redisIsSupervised其目底主要是判断当redis进程是否运行中
-    3、判断daemonize是否开启（如果启动设置了daemonize参数那么这里参数已经被填充）
-    4、之前并没有存活的redis实例，并且开启了daemonize配置，那么执行daemonize函数挂起后台运行
+1、此时redis的config是已经初始化完成的
+2、执行redisIsSupervised其目底主要是判断当redis进程是否运行中
+3、判断daemonize是否开启（如果启动设置了daemonize参数那么这里参数已经被填充）
+4、之前并没有存活的redis实例，并且开启了daemonize配置，那么执行daemonize函数挂起后台运行
 
 这里需要解释一下，执行daemonize()函数的时候本质是fork()进程，并不是大多文章说的那样是守护线程，父亲fork成功后是直接退出（在前端的效果就是，启动命令任务完成但是ps是有一个redis的进程），剩余的任务是交给fork出的子进程完成的（可以参考《深入理解操作系统》 第8章-异常控制流-进程中的内容）
 
 读完这篇文章后，我个人尝试画出整个redis启动的时序图，发现整个思路就很清晰了，建议同样阅读文章的同学可以尝试画一下，我总结一下我读完文章后的理解：
-    1、redis的整体启动流程是按照 【初始化默认配置】-&gt;【解析启动命令】-&gt;【初始化server】-&gt;【初始化并启动事件驱动框架】 进行
-    2、整个运行中的redis，其实就是一个永不停歇的while循环，位于aeMain中（运行中的事件驱动框架）
-    3、在事件驱动框架中有两个钩子函数 beforeSleep 和 aftersleep，在每次while循环中都会触发这两个函数，后面用来实现事件触发的效果
+1、redis的整体启动流程是按照 【初始化默认配置】-&gt;【解析启动命令】-&gt;【初始化server】-&gt;【初始化并启动事件驱动框架】 进行
+2、整个运行中的redis，其实就是一个永不停歇的while循环，位于aeMain中（运行中的事件驱动框架）
+3、在事件驱动框架中有两个钩子函数 beforeSleep 和 aftersleep，在每次while循环中都会触发这两个函数，后面用来实现事件触发的效果
 
 此外我发现了一个细节点：我在近期版本的redis6的分支上，发现在启动事件驱动框架之前（执行aeMain之前）会执行一个redisSetCpuAffinity函数，其效果有点类似于绑核的效果，那么是否可以认为从redis6开始其实不需要运维帮忙绑核redis自身就能做到绑核的效果呢？</p>2021-08-13</li><br/><li><span>木几丶</span> 👍（3） 💬（1）<p>简易版启动流程：
 初始化默认配置-&gt;解析启动参数和配置文件覆盖默认配置-&gt;初始化server-&gt;启动事件驱动框架</p>2021-08-29</li><br/><li><span>零点999</span> 👍（1） 💬（0）<p>mac环境下使用clion软件debug redis源码的配置过程：
 https:&#47;&#47;www.toutiao.com&#47;article&#47;7214017532637004346&#47;?log_from=bc6912dd0e87f_1679699758013</p>2023-03-25</li><br/><li><span>lzh2nix</span> 👍（1） 💬（0）<p>在这一讲中大部分逻辑都是在initSerer中完成，所以对initSerer函数的理解也是重中之重。
 initSerer(void initServer(void))
- \
-  1.  server 结构体的初始化
-  2.  sharedObject 创建(createSharedObjects())
-  3.  创建事件驱动框架(aeCreateEventLoop())
-  4.  监听tcp端口(listenToPort())
-  5.  监听unix socket(anetUixServer())
-  6.  redis DB 初始化
-  7.  系统状态设置(staat&#47;cron&#47;aof&#47;rdb 等状态)
-  8.  将timer事件添加到eventLoop中(aeCreateTimeEvent(...serverCron))
-  9.  接受tcp连接事件添加到eventLoop中(aeCreateFileEvent(...acceptTcpEVent))
-  10. 接受到unix socket连接的事件添加到eventLoop中(aeCreateFileEvent(acceptUnixHandler))	
-  11. server中cluster 相关配置的初始化
-  12. replicationScriptCacheInit()&#47;scriptingInit()&#47;scriptingInit()&#47;latencyMonitorInit()
+\
+
+1.  server 结构体的初始化
+2.  sharedObject 创建(createSharedObjects())
+3.  创建事件驱动框架(aeCreateEventLoop())
+4.  监听tcp端口(listenToPort())
+5.  监听unix socket(anetUixServer())
+6.  redis DB 初始化
+7.  系统状态设置(staat&#47;cron&#47;aof&#47;rdb 等状态)
+8.  将timer事件添加到eventLoop中(aeCreateTimeEvent(...serverCron))
+9.  接受tcp连接事件添加到eventLoop中(aeCreateFileEvent(...acceptTcpEVent))
+10. 接受到unix socket连接的事件添加到eventLoop中(aeCreateFileEvent(acceptUnixHandler))
+11. server中cluster 相关配置的初始化
+12. replicationScriptCacheInit()&#47;scriptingInit()&#47;scriptingInit()&#47;latencyMonitorInit()
+
 </p>2021-08-23</li><br/><li><span>零点999</span> 👍（0） 💬（0）<p>server.supervised = redisIsSupervised(server.supervised_mode);int background = server.daemonize &amp;&amp; !server.supervised;if (background) daemonize();...}
 Redis 可以配置以守护进程的方式启动（配置文件 daemonize = yes）</p>2023-03-25</li><br/><li><span>瞭望站在风口的猪</span> 👍（0） 💬（1）<p>老师好，我发现有一处逻辑错了，是先检查RBD再检查AOF吧
 
 if (strstr(argv[0],&quot;redis-check-rdb&quot;) != NULL)
-        redis_check_rdb_main(argc,argv,NULL);
-    else if (strstr(argv[0],&quot;redis-check-aof&quot;) != NULL)
-        redis_check_aof_main(argc,argv);</p>2022-09-27</li><br/><li><span>lzh2nix</span> 👍（0） 💬（0）<p>在这一讲中大部分逻辑都是在initSerer中完成，所以对initSerer函数的理解也是重中之重。
+redis_check_rdb_main(argc,argv,NULL);
+else if (strstr(argv[0],&quot;redis-check-aof&quot;) != NULL)
+redis_check_aof_main(argc,argv);</p>2022-09-27</li><br/><li><span>lzh2nix</span> 👍（0） 💬（0）<p>在这一讲中大部分逻辑都是在initSerer中完成，所以对initSerer函数的理解也是重中之重。
 initSerer(void initServer(void))
- \
-  1.  server 结构体的初始化
-  2.  sharedObject 创建(createSharedObjects())
-  3.  创建事件驱动框架(aeCreateEventLoop())
-  4.  监听tcp端口(listenToPort())
-  5.  监听unix socket(anetUixServer())
-  6.  redis DB 初始化
-  7.  系统状态设置(staat&#47;cron&#47;aof&#47;rdb 等状态)
-  8.  将timer事件添加到eventLoop中(aeCreateTimeEvent(...serverCron))
-  9.  接受tcp连接事件添加到eventLoop中(aeCreateFileEvent(...acceptTcpEVent))
-  10. 接受到unix socket连接的事件添加到eventLoop中(aeCreateFileEvent(acceptUnixHandler))	
-  11. server中cluster 相关配置的初始化
-  12. replicationScriptCacheInit()&#47;scriptingInit()&#47;scriptingInit()&#47;latencyMonitorInit()</p>2021-08-23</li><br/><li><span>haha</span> 👍（0） 💬（1）<p>老师的这些图是用什么软件画的啊</p>2021-08-21</li><br/><li><span>末日，成欢</span> 👍（0） 💬（3）<p>起始处设置随机种子是为了做什么？</p>2021-08-12</li><br/><li><span>那时刻</span> 👍（0） 💬（6）<p>请问老师，Redis server 会先读取 AOF；而如果没有 AOF，则再读取 RDB。为什么不先读rdb，再读aof呢？</p>2021-08-12</li><br/><li><span>可怜大灰狼</span> 👍（0） 💬（0）<p>先判断是否upstart或者systemd托管。再判断是否需要守护进程，内部还是fork+setsid</p>2021-08-12</li><br/>
+\
+
+1.  server 结构体的初始化
+2.  sharedObject 创建(createSharedObjects())
+3.  创建事件驱动框架(aeCreateEventLoop())
+4.  监听tcp端口(listenToPort())
+5.  监听unix socket(anetUixServer())
+6.  redis DB 初始化
+7.  系统状态设置(staat&#47;cron&#47;aof&#47;rdb 等状态)
+8.  将timer事件添加到eventLoop中(aeCreateTimeEvent(...serverCron))
+9.  接受tcp连接事件添加到eventLoop中(aeCreateFileEvent(...acceptTcpEVent))
+10. 接受到unix socket连接的事件添加到eventLoop中(aeCreateFileEvent(acceptUnixHandler))
+11. server中cluster 相关配置的初始化
+12. replicationScriptCacheInit()&#47;scriptingInit()&#47;scriptingInit()&#47;latencyMonitorInit()</p>2021-08-23</li><br/><li><span>haha</span> 👍（0） 💬（1）<p>老师的这些图是用什么软件画的啊</p>2021-08-21</li><br/><li><span>末日，成欢</span> 👍（0） 💬（3）<p>起始处设置随机种子是为了做什么？</p>2021-08-12</li><br/><li><span>那时刻</span> 👍（0） 💬（6）<p>请问老师，Redis server 会先读取 AOF；而如果没有 AOF，则再读取 RDB。为什么不先读rdb，再读aof呢？</p>2021-08-12</li><br/><li><span>可怜大灰狼</span> 👍（0） 💬（0）<p>先判断是否upstart或者systemd托管。再判断是否需要守护进程，内部还是fork+setsid</p>2021-08-12</li><br/>
+
 </ul>

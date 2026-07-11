@@ -96,7 +96,7 @@ npm run dev //这是启动命令，在对应的项目路径下执行就可以
 ```javascript
 var vm = new Vue({
   // 选项
-})
+});
 ```
 
 下面我们来看一个实例化Vue的例子。
@@ -140,7 +140,7 @@ Vue的单文件组件分为三块：template标签中是模版，用来写HTML�
   <h1>{{title}}</h1>
   <p>我有{{count}}个苹果</p>
 </div>
-</template>    
+</template>
 <script>
 export default {
     name: 'MyComponent',
@@ -205,30 +205,30 @@ export default {
 ```javascript
 export default {
   beforeCreate() {
-    console.log(`the vue is beforeCreate.`)
+    console.log(`the vue is beforeCreate.`);
   },
   created() {
-    console.log(`the vue is created.`)
+    console.log(`the vue is created.`);
   },
   beforeMount() {
-    console.log(`the vue is beforeMount.`)
+    console.log(`the vue is beforeMount.`);
   },
   mounted() {
-    console.log(`the vue is mounted.`)
+    console.log(`the vue is mounted.`);
   },
   beforeUpdate() {
-    console.log(`the vue is beforeUpdate.`)
+    console.log(`the vue is beforeUpdate.`);
   },
   updated() {
-    console.log(`the vue is updated.`)
+    console.log(`the vue is updated.`);
   },
   beforeDestroy() {
-    console.log(`the vue is beforeDestroy.`)
+    console.log(`the vue is beforeDestroy.`);
   },
   destroyed() {
-    console.log(`the vue is destroyed.`)
-  }
-}
+    console.log(`the vue is destroyed.`);
+  },
+};
 ```
 
 ### 3. 指令
@@ -269,7 +269,7 @@ v-if 指令具体又包括 v-if ，v-else-if , v-else。我们通过一个简单
       Not A/B/C
     </div>
 </div>
-    
+
 <script>
 new Vue({
   el: '#app',
@@ -294,7 +294,7 @@ new Vue({
       lalalalala
     </div>
 </div>
-    
+
 <script>
 new Vue({
   el: '#app',
@@ -317,7 +317,7 @@ new Vue({
     </li>
   </ol>
 </div>
- 
+
 <script>
 new Vue({
   el: '#app',
@@ -340,7 +340,7 @@ new Vue({
 <div id="app">
   div v-bind:class="{ isActive?'active':'default' }"></div>
 </div>
- 
+
 <script>
 new Vue({
   el: '#app',
@@ -364,7 +364,7 @@ v-on的指令呢，主要用于给元素绑定事件监听器。最常见的应�
   <button v-on:click="counter += 1">增加 1</button>
   <p>这个按钮被点击了 {{ counter }} 次。</p>
 </div>
- 
+
 <script>
 new Vue({
   el: '#app',
@@ -395,12 +395,12 @@ v-model 指令可以在表单控件元素上创建双向数据绑定。
   <p>input 元素：</p>
   <input v-model="message" placeholder="编辑我……">
   <p>消息是: {{ message }}</p>
-    
+
   <p>textarea 元素：</p>
   <p style="white-space: pre">{{ message2 }}</p>
   <textarea v-model="message2" placeholder="多行文本输入……"></textarea>
 </div>
- 
+
 <script>
 new Vue({
   el: '#app',
@@ -551,7 +551,8 @@ vue 版本 2.9.6
 2. vue init webpack my_project 失败，直接拉取最新的 webpack 包到本地，然后把 webpack 替换成 本地路径
 3. 安装 chromedriver 失败，直接下载跟本地 chrome 匹配的版本，然后配置到环境变量 path 中
 4. npm run dev 启动失败：安照提示安装即可(npm 安装失败可用 cnpm 替代)</p>2023-06-26</li><br/><li><span>浩仔是程序员</span> 👍（1） 💬（1）<p>老师你好，index.html是一定要的吗？里面有个div id = &#39;app&#39;, 跟 app.vue里面的 div Id = &#39;app&#39;有什么区别，我们new Vue实例#app绑定的是哪个？</p>2023-06-17</li><br/><li><span>Geek_come</span> 👍（0） 💬（1）<p>老师，您这里应该用编译器带大家走一遍，只是建议</p>2023-11-02</li><br/><li><span>Geek_in7j5o</span> 👍（0） 💬（3）<p>老师，我的node.js和npm版本和你的一样，然后我安装了vue-cli2.5.1，在初始化项目时出现了版本不兼容的情况，于是我把vue-cli2.5.1更新到了2.9.6版本，初始化项目成功，但是之后的初始化中又出现安装 chromedriver 失败，于是我又用了npm cache clean --force  
- npm install chromedriver@2.46.0这两命令，成功了，我想知道我明明是想安装您教的来的，后面不知道为什么偏了，那我的又正不正确呢？
+   npm install chromedriver@2.46.0这两命令，成功了，我想知道我明明是想安装您教的来的，后面不知道为什么偏了，那我的又正不正确呢？
+
 </p>2023-11-01</li><br/><li><span>Geek_in7j5o</span> 👍（0） 💬（1）<p>老师，咱们node.js有版本要求吗，我是在阿里云云服务器上使用宝塔面板来安装node.js的
 </p>2023-10-28</li><br/><li><span>明仔的阳光午后</span> 👍（0） 💬（1）<p>计算属性部分
 ```

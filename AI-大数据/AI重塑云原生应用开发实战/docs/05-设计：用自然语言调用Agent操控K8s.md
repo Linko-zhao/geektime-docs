@@ -13,8 +13,8 @@
 Kubectl 是官方提供的命令行工具，用于与 Kubernetes 集群进行交互。比如要获取 default 命名空间下的 Pods 信息，命令如下：
 
 ```powershell
-root@hi-test:~# kubectl get po                                                                                                                                           
-NAME                       READY   STATUS    RESTARTS   AGE                                                                                                              
+root@hi-test:~# kubectl get po
+NAME                       READY   STATUS    RESTARTS   AGE
 ng-test-7bdff759b9-r49jj   1/1     Running   0          13d
 ```
 
@@ -91,7 +91,7 @@ Namespace: default, Nmae: ng-test-7bdff759b9-r49jj
 无论使用哪种方式，核心都是通过访问 Kubernetes 的 API server 来实现的。举个例子，我们可以用 curl 命令直接与 Kubernetes API 交互：
 
 ```go
-curl -k -H "Authorization: Bearer xxxxxxxxxxxxxxxxxx" \                                                                                    
+curl -k -H "Authorization: Bearer xxxxxxxxxxxxxxxxxx" \
 >      https://<your k8s server ip>:<your k8s server port>/api/v1/namespaces/default/pods
 
 
@@ -178,7 +178,7 @@ HUMAN
 #key point
 - 必须为 pod 设置名称和端口，如 80。
 - pod 必须有资源，其中必须设置限制和请求。如果未指定，则设置为 512M。
-- 必须根据业务系统设置 pod 名称。例如，订单系统的 pod 名称为 order-pod。如果未指定，默认名称为 unkown-pod。 
+- 必须根据业务系统设置 pod 名称。例如，订单系统的 pod 名称为 order-pod。如果未指定，默认名称为 unkown-pod。
 ```
 
 我们再来测试一次：

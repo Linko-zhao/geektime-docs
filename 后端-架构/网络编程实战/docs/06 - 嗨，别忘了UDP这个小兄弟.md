@@ -34,11 +34,11 @@ recvfrom和sendto是UDP用来接收和发送报文的两个主要函数：
 ```
 #include <sys/socket.h>
 
-ssize_t recvfrom(int sockfd, void *buff, size_t nbytes, int flags, 
-　　　　　　　　　　struct sockaddr *from, socklen_t *addrlen); 
+ssize_t recvfrom(int sockfd, void *buff, size_t nbytes, int flags,
+　　　　　　　　　　struct sockaddr *from, socklen_t *addrlen);
 
 ssize_t sendto(int sockfd, const void *buff, size_t nbytes, int flags,
-                const struct sockaddr *to, socklen_t addrlen); 
+                const struct sockaddr *to, socklen_t addrlen);
 ```
 
 我们先来看一下recvfrom函数。
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     if (argc != 2) {
         error(1, 0, "usage: udpclient <IPaddress>");
     }
-    
+
     int socket_fd;
     socket_fd = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -354,24 +354,24 @@ Hi, g6
 -------------------------
 这个地方不太理解。请问老师,对TCP来说，收到“Connection refused”报错信息，表明收到了服务端的RST包，如果服务端不开启，谁负责发送RST包呢?</p>2019-08-14</li><br/><li><span>江永枫</span> 👍（3） 💬（1）<p>关于阻塞io，可以考虑使用多线程模型去提升性能，或者结合io多路复用来处理能力。
 
-
 https:&#47;&#47;m.php.cn&#47;article&#47;410029.html</p>2019-08-14</li><br/><li><span>null</span> 👍（2） 💬（1）<p>老师好，有 3 个问题请教一下：
+
 1. TCP 有序传输的意思是：需要等到当前发送的包 ACK 之后，才发下一个包么？还是说可以一直发消息，收到 ACK 之后再确认对应的包发送成功？
 
 2. 关于 TCP 和 UDP 连接，我可以这么理解么？
-TCP 连接之后直到关闭，这期间发的消息，比如 client 发给(send 函数) server，
-然后 server 回复(不知道用啥函数写回，也是 send 函数么？) client；
-client 又继续发给 server，继续重复刚才的步骤....，
-走的都是同一个连接。
+   TCP 连接之后直到关闭，这期间发的消息，比如 client 发给(send 函数) server，
+   然后 server 回复(不知道用啥函数写回，也是 send 函数么？) client；
+   client 又继续发给 server，继续重复刚才的步骤....，
+   走的都是同一个连接。
 
 而 UDP，client 发给（sendto 函数） server 是一个连接。而 server 回复（sendto 函数） client，又是另一个连接。
 
 3. 下面的循环发送，我甚至是可以动态更改对端 client_addr 地址和端口信息的吧？
-for (;;) {
-  sendto(socket_fd, send_line, strlen(send_line), 0, (struct sockaddr *) &amp;client_addr, client_len);
-}</p>2021-03-16</li><br/><li><span>流浪在寂寞古城</span> 👍（2） 💬（3）<p>https:&#47;&#47;github.com&#47;worsun&#47;study&#47;tree&#47;master&#47;hack_time&#47;socket_code&#47;6</p>2019-10-31</li><br/><li><span>马留</span> 👍（2） 💬（5）<p>如果对udp套接字调用了listen函数，会怎么样呢？</p>2019-08-29</li><br/><li><span>胜辉（大V）</span> 👍（1） 💬（1）<p>示例程序在我的测试机(ubuntu 20.04）上有几个报错。除了include需要添加多个库，还有就是sprintf不分需要改为如下：
-        char send_line[MAXLINE+4];
-        sprintf(send_line, &quot;Hi, %s&quot;, message);
+   for (;;) {
+   sendto(socket_fd, send_line, strlen(send_line), 0, (struct sockaddr *) &amp;client_addr, client_len);
+   }</p>2021-03-16</li><br/><li><span>流浪在寂寞古城</span> 👍（2） 💬（3）<p>https:&#47;&#47;github.com&#47;worsun&#47;study&#47;tree&#47;master&#47;hack_time&#47;socket_code&#47;6</p>2019-10-31</li><br/><li><span>马留</span> 👍（2） 💬（5）<p>如果对udp套接字调用了listen函数，会怎么样呢？</p>2019-08-29</li><br/><li><span>胜辉（大V）</span> 👍（1） 💬（1）<p>示例程序在我的测试机(ubuntu 20.04）上有几个报错。除了include需要添加多个库，还有就是sprintf不分需要改为如下：
+   char send_line[MAXLINE+4];
+   sprintf(send_line, &quot;Hi, %s&quot;, message);
 
 因为&quot;Hi, &quot;本身占用了额外的4个字节，所以导致send_line跟&quot;Hi, &quot;+message的长度不匹配，需要修改send_line为message长度加4。不知道其他同学的测试环境那里如何？</p>2021-10-25</li><br/><li><span>null</span> 👍（1） 💬（1）<p>如果不开启服务端，而在 UDP 程序里，则会一直阻塞在这里（sendto）。
 

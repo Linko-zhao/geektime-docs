@@ -63,6 +63,7 @@ AdaBoost提出后不久，机器学习学者和统计学家杰罗姆⋅弗赖德
 - [A general boosting method and its application to learning ranking functions for web search](https://corescholar.libraries.wright.edu/cgi/viewcontent.cgi?referer=https%3A%2F%2Fwww.google.com.hk%2F&httpsredir=1&article=1314&context=knoesis)
 - [A regression framework for learning ranking functions using relative relevance judgments](https://www.cc.gatech.edu/~zha/papers/fp086-zheng.pdf)
 - [Practical Lessons from Predicting Clicks on Ads at Facebook](http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=A54CCA7D4A8F05B6636C9D64316BCF96?doi=10.1.1.718.9050&rep=rep1&type=pdf)
+
 <div><strong>精选留言（2）</strong></div><ul>
 <li><span>黄德平</span> 👍（0） 💬（0）<p>残差网络估计是受到GBDT的启发</p>2018-12-13</li><br/><li><span>范深</span> 👍（0） 💬（0）<p>神经网络与增强梯度最简单的结合，就是把多个神经网络作为弱分类器串联起来？我相信还有更妙的结合点：）</p>2018-01-17</li><br/>
 </ul>

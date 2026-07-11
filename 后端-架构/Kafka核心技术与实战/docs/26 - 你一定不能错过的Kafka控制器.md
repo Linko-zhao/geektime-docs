@@ -118,12 +118,13 @@ Preferred领导者选举主要是Kafka为了避免部分Broker负载过重而提
 此外，老师说的多个线程之间共享Broker缓内存区域，可否举个例子，在什么情况下他们需要共享内存区域呢？
 
 谢谢老师！</p>2019-08-01</li><br/><li><span>thomas</span> 👍（8） 💬（2）<p>老师，请问：
+
 1. 当控制器发生故障时，其他broker是如何感知到的？是ZK watch controller没有节点，然后广播通知其他的broker, 来争抢新建一个控制器节点吗？ 还是其他broker没定时收到控制器发送的元数据同步请求？
 2. ZK不是可以确保节点的唯一性，为什么还会出现控制器大于1的情况？</p>2020-05-02</li><br/><li><span>谢特</span> 👍（7） 💬（1）<p>多个节点之间内存一般怎么共享</p>2019-10-10</li><br/><li><span>电光火石</span> 👍（6） 💬（3）<p>老师好，想问一下：
-1.如何看出重分区被hang住了，是长时间没有响应就被hang住，还是有一些jmx的参数可以观察？
-2.当我们删除&#47;controller的时候，是否会有数据丢失的可能，比如重分区的请求，是否会先存储在zk，然后controler从中读取请求进行处理，这个时候发生重failover，是否新的controller会重新读到这个请求？
-谢谢了</p>2019-09-07</li><br/><li><span>林肯</span> 👍（5） 💬（2）<p>各个broker之间怎样保证元数据的一致性？controller挂了后重新选举的机制是怎样的？</p>2019-10-11</li><br/><li><span>thomas</span> 👍（4） 💬（1）<p>老师，若给kafka-server配置文件中的zookeeper.connect参数写了3个zk的节点，他们是如何交换？kafka-server先尝试和第一个zk节点开始建立tcp socket连接，若成功，那么后面两个就不用建立连接, 待异常情况下，做备用吗？</p>2020-05-09</li><br/><li><span>信信</span> 👍（4） 💬（1）<p>修改主题分区的broker_host是随便指定一个吗？最后由zk通知到控制器？
-作者: 其实如果指定的是broker host，后面是不走ZooKeeper的
+   1.如何看出重分区被hang住了，是长时间没有响应就被hang住，还是有一些jmx的参数可以观察？
+   2.当我们删除&#47;controller的时候，是否会有数据丢失的可能，比如重分区的请求，是否会先存储在zk，然后controler从中读取请求进行处理，这个时候发生重failover，是否新的controller会重新读到这个请求？
+   谢谢了</p>2019-09-07</li><br/><li><span>林肯</span> 👍（5） 💬（2）<p>各个broker之间怎样保证元数据的一致性？controller挂了后重新选举的机制是怎样的？</p>2019-10-11</li><br/><li><span>thomas</span> 👍（4） 💬（1）<p>老师，若给kafka-server配置文件中的zookeeper.connect参数写了3个zk的节点，他们是如何交换？kafka-server先尝试和第一个zk节点开始建立tcp socket连接，若成功，那么后面两个就不用建立连接, 待异常情况下，做备用吗？</p>2020-05-09</li><br/><li><span>信信</span> 👍（4） 💬（1）<p>修改主题分区的broker_host是随便指定一个吗？最后由zk通知到控制器？
+   作者: 其实如果指定的是broker host，后面是不走ZooKeeper的
 
 追问：
 前面文章提到增加分区是控制器完成的。  

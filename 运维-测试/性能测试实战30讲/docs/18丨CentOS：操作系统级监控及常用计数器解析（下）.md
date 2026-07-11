@@ -23,10 +23,10 @@ I/O有很多原理细节，那我们如何能快速地做出相应的判断呢�
 在这张图中，我们取出一条数据来做详细看下：
 
 ```
-Device:   rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s  avgrq-sz 
+Device:   rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s  avgrq-sz
 vda        0.00     0.67   18.33  114.33   540.00 54073.33   823.32
 avgqu-sz   await r_await w_await  svctm  %util
-127.01  776.75    1.76  901.01   7.54 100.00 
+127.01  776.75    1.76  901.01   7.54 100.00
 ```
 
 我解释一下其中几个关键计数器的含义。
@@ -69,7 +69,7 @@ Actual DISK READ:       3.86 M/s | Actual DISK WRITE:      34.13 M/s
 在操作系统中，分析业务应用的时候，我们会关注的内存内容如下面的命令所示：
 
 ```
-[root@7dgroup ~]# free -m             
+[root@7dgroup ~]# free -m
  	     total        used        free      shared  buff/cache   available
 Mem:           3791        1873         421         174        1495        1512
 Swap:             0           0           0
@@ -157,7 +157,7 @@ Swap:             0           0           0
 查看半连接全连接溢出的手段也很简单，像下面这种情况就是半连接没建立起来，半连接队列满了，`syn`包都被扔掉了。
 
 ```
-[root@7dgroup ~]# netstat -s |grep -i listen    
+[root@7dgroup ~]# netstat -s |grep -i listen
 8866 SYNs to LISTEN sockets dropped
 ```
 
@@ -169,7 +169,7 @@ Swap:             0           0           0
 而像下面这样的情况呢，就是全连接队列已经满了，但是还有连接要进来，已经超过负荷了。
 
 ```
-[root@7dgroup2 ~]# netstat -s |grep overflow    
+[root@7dgroup2 ~]# netstat -s |grep overflow
 154864 times the listen queue of a socket overflowed
 ```
 
@@ -280,6 +280,7 @@ Swap的逻辑是什么呢？它是在磁盘上创建的一个空间，当物理�
 
 高老师，文中对swappiness参数设置值描述跟倪鹏飞老师在专栏讲解有不一样的地方。个人还是认同swappiness不是内存的百分比。下面这段是摘自是倪鹏飞老师《Linux性能分析实战》第19讲。
 ---------------------------
+
 &#47;proc&#47;sys&#47;vm&#47;swappiness 选项，用来调整使用 Swap 的积极程度。
 swappiness 的范围是 0-100，数值越大，越积极使用 Swap，也就是更倾向于回收匿名页；数值越小，越消极使用 Swap，也就是更倾向于回收文件页。
 虽然 swappiness 的范围是 0-100，不过要注意，这并不是内存的百分比，而是调整 Swap 积极程度的权重，即使你把它设置成 0，当剩余内存 + 文件页小于页高阈值时，还是会发生 Swap。</p>2020-04-05</li><br/><li><span>木剑温华</span> 👍（9） 💬（1）<p>一个 TCP 连接大概占 3KB，创建 10 万个连接，才100000x3KB≈300M左右，何况最多才 65535 呢？服务器有那么穷吗？

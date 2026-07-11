@@ -287,7 +287,7 @@ final class ApplicationFilterChain implements FilterChain {
     private ArrayList<ApplicationFilterConfig> filters = new ArrayList<>();
     private Iterator<ApplicationFilterConfig> iterator = null;
     private Servlet servlet = null;
-    
+
     //核心方法，启动过滤
     public void doFilter(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
@@ -468,7 +468,7 @@ public class StandardContext extends ContainerBase implements Context{
     private Map<String,ApplicationFilterConfig> filterConfigs = new ConcurrentHashMap<>();
     private Map<String,FilterDef> filterDefs = new ConcurrentHashMap<>();
     private FilterMap filterMaps[] = new FilterMap[0];
-    
+
     public void addFilterDef(FilterDef filterDef) {
         filterDefs.put(filterDef.getFilterName(), filterDef);
     }
@@ -510,7 +510,7 @@ public class StandardContext extends ContainerBase implements Context{
     public void removeFilterDef(FilterDef filterDef) {
         filterDefs.remove(filterDef.getFilterName());
     }
-    
+
     public void removeFilterMap(FilterMap filterMap) {
         synchronized (filterMaps) {
             // 确保当前存在这个过滤器映射
@@ -615,7 +615,7 @@ public class StandardWrapperValve extends ValveBase {
         }
         //要匹配的servlet名
         String servletName = wrapper.getName();
-        
+
         //下面遍历filter Map，找到匹配URL模式的filter，加入到filterChain中
         int n = 0;
         for (int i = 0; i < filterMaps.length; i++) {
@@ -954,7 +954,7 @@ package com.minit.core;
 public class StandardContext extends ContainerBase implements Context{
     private ArrayList<ContainerListenerDef> listenerDefs = new ArrayList<>();
     private ArrayList<ContainerListener> listeners = new ArrayList<>();
-    
+
     public void start(){
         // 触发一个容器启动事件  
         fireContainerEvent("Container Started",this);
@@ -989,7 +989,7 @@ public class StandardContext extends ContainerBase implements Context{
             listenerDefs.add(listenererDef);
         }
     }
-    
+
     public boolean listenerStart() {
         System.out.println("Listener Start..........");
         boolean ok = true;
@@ -1100,7 +1100,7 @@ public class StandardSession implements HttpSession, Session {
         for (int i = 0; i < list.length; i++)
             ((SessionListener) list[i]).sessionEvent(event);
     }
-    
+
     public void setId(String sessionId) {
         this.sessionid = sessionId;
         fireSessionEvent(Session.SESSION_CREATED_EVENT, null);

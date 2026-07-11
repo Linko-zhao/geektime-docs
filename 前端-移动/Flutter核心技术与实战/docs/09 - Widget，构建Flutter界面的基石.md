@@ -107,7 +107,7 @@ abstract class RenderObjectElement extends Element {
     attachRenderObject(newSlot);
     _dirty = false;
   }
-   
+
   @override
   void update(covariant RenderObjectWidget newWidget) {
     super.update(newWidget);
@@ -126,7 +126,7 @@ abstract class RenderObjectElement extends Element {
 abstract class RenderObject extends AbstractNode with DiagnosticableTreeMixin implements HitTestTarget {
   ...
   void layout(Constraints constraints, { bool parentUsesSize = false }) {...}
-  
+
   void paint(PaintingContext context, Offset offset) { }
 }
 ```

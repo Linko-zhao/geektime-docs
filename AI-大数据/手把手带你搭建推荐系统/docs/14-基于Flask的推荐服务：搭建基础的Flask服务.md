@@ -214,12 +214,12 @@ if __name__ == '__main__':
 
 @app.route(&#39;&#47;sum&#39;, methods=[&quot;POST&quot;])
 def sum():
-    try:
-        if request.method == &quot;POST&quot;:
-            req_json = request.get_json()
-            a = req_json[&#39;a&#39;]
-            b = req_json[&#39;b&#39;]
-            return jsonify({&#39;code&#39;: 200, &#39;msg&#39;: &#39;请求成功&#39;, &#39;data&#39;: a+b})
-    except:
-        return jsonify({&#39;code&#39;: &#39;500&#39;, &#39;msg&#39;: &#39;error&#39;})</p>2023-05-17</li><br/><li><span>欢少の不忘初心</span> 👍（0） 💬（1）<p>最近刚学了Go，拿Go来练练手。老师Go语言  Gin框架也可以吧</p>2023-06-03</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>python适合用来开发中型、大型网站吗？ Python是不是难以处理高并发？</p>2023-05-18</li><br/><li><span>海欧</span> 👍（0） 💬（1）<p>这个flask结合docker可以做到多大的并发，有什么实现技巧吗</p>2023-05-17</li><br/><li><span>一叶浮萍</span> 👍（0） 💬（1）<p>老师, 一般公司高并发的请求都是后端统一来处理的, 他们调用推荐系统的话一般是grpc吗, 还是其他什么方式?</p>2023-05-17</li><br/><li><span>GAC·DU</span> 👍（2） 💬（0）<p>Github作业地址：https:&#47;&#47;github.com&#47;gacdu&#47;recommendation-service</p>2023-05-17</li><br/>
+try:
+if request.method == &quot;POST&quot;:
+req_json = request.get_json()
+a = req_json[&#39;a&#39;]
+b = req_json[&#39;b&#39;]
+return jsonify({&#39;code&#39;: 200, &#39;msg&#39;: &#39;请求成功&#39;, &#39;data&#39;: a+b})
+except:
+return jsonify({&#39;code&#39;: &#39;500&#39;, &#39;msg&#39;: &#39;error&#39;})</p>2023-05-17</li><br/><li><span>欢少の不忘初心</span> 👍（0） 💬（1）<p>最近刚学了Go，拿Go来练练手。老师Go语言 Gin框架也可以吧</p>2023-06-03</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>python适合用来开发中型、大型网站吗？ Python是不是难以处理高并发？</p>2023-05-18</li><br/><li><span>海欧</span> 👍（0） 💬（1）<p>这个flask结合docker可以做到多大的并发，有什么实现技巧吗</p>2023-05-17</li><br/><li><span>一叶浮萍</span> 👍（0） 💬（1）<p>老师, 一般公司高并发的请求都是后端统一来处理的, 他们调用推荐系统的话一般是grpc吗, 还是其他什么方式?</p>2023-05-17</li><br/><li><span>GAC·DU</span> 👍（2） 💬（0）<p>Github作业地址：https:&#47;&#47;github.com&#47;gacdu&#47;recommendation-service</p>2023-05-17</li><br/>
 </ul>

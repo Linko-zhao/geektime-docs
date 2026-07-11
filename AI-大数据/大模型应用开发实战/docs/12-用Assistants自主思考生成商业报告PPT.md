@@ -280,7 +280,7 @@ def submit_message_wait_completion(assistant_id, thread, user_message, file_ids=
 
     # 创建Run
     run = client.beta.threads.runs.create(thread_id=thread.id, assistant_id=assistant_id)
-    return run 
+    return run
 
 # 使用submit_message函数, 来发送请求，让助手生成洞察
 submit_message_wait_completion(assistant.id, thread, "请根据你刚才创建的图表，给我两个约20字的句子，描述最重要的洞察。这将用于幻灯片展示，揭示出数据背后的'秘密'。")
@@ -320,7 +320,7 @@ print(bullet_points)
 下面，我们根据上面的见解，也就是基于对数据的洞察，让AI顺着思考，为PPT生成一个标题。
 
 ```plain
-# 根据见解生成标题 
+# 根据见解生成标题
 submit_message_wait_completion(assistant.id, thread, "根据你创建的情节和要
 点，为幻灯片想一个非常简短的标题。它应该只反映你得出的主要见解。")
 ```

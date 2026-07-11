@@ -302,25 +302,25 @@ v.Visit(LoadFile)
 type VisitorDecorator func(VisitorFunc) VisitorFunc
 
 type DecoratedVisitor struct {
-	visitor    Visitor
-	decorators []VisitorDecorator
+visitor Visitor
+decorators []VisitorDecorator
 }
 
 func NewDecoratedVisitor(v Visitor, fn ...VisitorDecorator) Visitor {
-	if len(fn) == 0 {
-		return v
-	}
-	return DecoratedVisitor{v, fn}
+if len(fn) == 0 {
+return v
+}
+return DecoratedVisitor{v, fn}
 }
 
 &#47;&#47; Visit implements Visitor
 func (v DecoratedVisitor) Visit(fn VisitorFunc) error {
-	decoratorLen := len(v.decorators)
-	for i := range v.decorators {
-		d := v.decorators[decoratorLen-i-1]
-		fn = d(fn)
-	}
-	return fn(v.visitor.(*Info), nil)
+decoratorLen := len(v.decorators)
+for i := range v.decorators {
+d := v.decorators[decoratorLen-i-1]
+fn = d(fn)
+}
+return fn(v.visitor.(*Info), nil)
 }</p>2021-02-25</li><br/><li><span>hunknownz</span> 👍（0） 💬（0）<p>耗子哥，看最后「装饰器重构」这块，我的理解可能出了问题，你确认下。
 
 k8s 中对于 Visitor 这块有两种结构：
@@ -330,9 +330,9 @@ k8s 中对于 Visitor 这块有两种结构：
 另一个是 DecoratedVisitor ，它的 Visit 方法负责纵向聚合多个 VisitorFunc 到一个 visitor 上，使 Visit 方法的逻辑更丰富，没有任何父子嵌套关系，它的 Visit 方法执行时先执行自己聚合的 decorators 方法们，然后再执行传入的 VisitorFunc。
 
 我理解文章中「装饰器重构」是要完成 VisitorList 功能，但是使用了 DecoratedVisitor 这个结构，所以末尾的代码有一些执行不通。</p>2022-05-10</li><br/><li><span>黑白灰</span> 👍（0） 💬（4）<p>var v Visitor = &amp;info
-  v = LogVisitor{v}
-  v = NameVisitor{v}
-  v = OtherThingsVisitor{v}
+v = LogVisitor{v}
+v = NameVisitor{v}
+v = OtherThingsVisitor{v}
 
 请教一下go的，那个特性可以支持这种嵌套赋值</p>2021-11-28</li><br/><li><span>shangyu</span> 👍（0） 💬（0）<p>耗子叔，最后那个NewDecoratedVisitor调用的传餐不对哦？</p>2021-02-05</li><br/>
 </ul>

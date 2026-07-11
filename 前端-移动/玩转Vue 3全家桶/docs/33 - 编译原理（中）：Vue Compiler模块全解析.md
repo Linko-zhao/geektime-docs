@@ -154,7 +154,7 @@ function parseChildren(
 
     const s = context.source
     let node: TemplateChildNode | TemplateChildNode[] | undefined = undefined
-    
+
     if (mode === TextModes.DATA || mode === TextModes.RCDATA) {
       if (!context.inVPre && startsWith(s, context.options.delimiters[0])) {
         // 处理vue的变量标识符，两个大括号 '{{'
@@ -169,7 +169,7 @@ function parseChildren(
           if (startsWith(s, '<!--')) {
             node = parseComment(context)
           } else if (startsWith(s, '<!DOCTYPE')) {
-              
+
             // DOCTYPE
             node = parseBogusComment(context)
           }
@@ -180,7 +180,7 @@ function parseChildren(
             emitError(context, ErrorCodes.X_INVALID_END_TAG)
             parseTag(context, TagType.End, parent)
             continue
-          } 
+          }
         } else if (/[a-z]/i.test(s[1])) {
           // 解析节点
           node = parseElement(context, ancestors)
@@ -285,7 +285,7 @@ function parseTag(
   parent: ElementNode | undefined
 ): ElementNode | undefined {
 
-  // Tag open. 
+  // Tag open.
   const start = getCursor(context)
   //匹配标签结束的位置
   const match = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(context.source)!
@@ -299,7 +299,7 @@ function parseTag(
   const cursor = getCursor(context)
   const currentSource = context.source
 
-  // check <pre> tag 
+  // check <pre> tag
   if (context.options.isPreTag(tag)) {
     context.inPre = true
   }
@@ -601,7 +601,7 @@ export function generate(
 我们来看下关键的步骤，genModulePreamble函数生成import风格的代码，这也是我们迷你版本中的功能：通过遍历helpers，生成import字符串，这对应了代码的第二行。
 
 ```javascript
-// 生成这个 
+// 生成这个
 // import { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue"
 
 function genModulePreamble(

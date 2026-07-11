@@ -199,14 +199,14 @@ app.config_from_object("tasks.config")
 from celery.schedules import crontab
 
 # 指定Redis数据库的地址和端口
-broker_url = "redis://127.0.0.1:6379/1"  
+broker_url = "redis://127.0.0.1:6379/1"
 
 # 时区
-timezone = "Asia/Shanghai"  
+timezone = "Asia/Shanghai"
 
 # 导入任务所在文件
 imports = [
-    "tasks.jobs.test1", 
+    "tasks.jobs.test1",
     "tasks.jobs.test2",
 ]
 
@@ -216,12 +216,12 @@ beat_schedule = {
         "task": "tasks.jobs.test1.run1",  #执行的函数
         "schedule": crontab(minute=1, hour=22, day_of_week=6),
         "args": ()
-    }, 
+    },
    "test2": {
         "task": "tasks.jobs.test2.run1",  #执行的函数
         "schedule": crontab(minute="*"),
         "args": ()
-    }, 
+    },
 
 }
 
@@ -277,22 +277,22 @@ Configuration ->
 发布任务后，需要运行定时任务的计算机可以执行对应的Worker组件，执行的命令和结果如下：
 
 ```
-SHELL$ celery -A tasks worker 
- 
+SHELL$ celery -A tasks worker
+
  -------------- celery@edzdeMacBook-Pro-2.local v5.0.5 (singularity)
---- ***** ----- 
+--- ***** -----
 -- ******* ---- Darwin-20.3.0-x86_64-i386-64bit 2021-04-13 01:41:47
-- *** --- * --- 
+- *** --- * ---
 - ** ---------- [config]
 - ** ---------- .> app:         tasks:0x7ff03c9549d0
 - ** ---------- .> transport:   redis://127.0.0.1:6379/1
 - ** ---------- .> results:     disabled://
 - *** --- * --- .> concurrency: 4 (prefork)
 -- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
---- ***** ----- 
+--- ***** -----
  -------------- [queues]
                 .> celery           exchange=celery(direct) key=celery
-                
+
 
 [2021-04-13 01:42:00,046: WARNING/ForkPoolWorker-2] 开始备份data2文件夹
 [2021-04-13 01:43:00,004: WARNING/ForkPoolWorker-2] 开始备份data2文件夹

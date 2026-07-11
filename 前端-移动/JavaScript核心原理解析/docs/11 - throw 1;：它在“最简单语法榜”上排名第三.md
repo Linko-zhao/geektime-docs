@@ -14,32 +14,32 @@
 
 `throw`语句在ECMAScript规范描述中，它的执行实现逻辑只有三行：
 
-> *ThrowStatement* : **throw** *Expression*;  
+> _ThrowStatement_ : **throw** _Expression_;  
 > 1.**Let** exprRef be the result of evaluating Expression.  
 > 2.**Let** exprValue be ? GetValue(exprRef).  
-> 3.**Return** ThrowCompletion(***exprValue***).
+> 3.**Return** ThrowCompletion(_**exprValue**_).
 
 这三行代码描述包括两个`Let`语句，以及最后一个`Return`返回值。当然，这里的Let/Return是自然语言的语法描述，是ECMAScript规范中的写法，而不是某种语言的代码。
 
 将这三行代码倒过来看，最后一行的ThrowCompletion()调用其实是一个简写，完整的表示法是一行用于返回完成记录的代码。这里的“记录”，也是一种在ECMAScript规范中的“规范类型”，与之前一直在讲的“引用规范类型”类似，都是ECMAScript特有的。
 
-> **Return** Completion { \[Type]: ***exprValue***, \[\[Target]]: empty }
+> **Return** Completion { \[Type]: _**exprValue**_, \[\[Target]]: empty }
 
 在ECMAScript规范的书写格式中，一对大括号“{ }”是记录的字面量（Record Literals）表示。也就是说，执行`throw`语句，在引擎层面的效果就是：**返回一个类型为"throw"的一般记录。**
 
-> NOTE：在之前的课程中讲到标签化语句的时候，提及过上述记录中的`[[target]]`字段的作用，也就是仅仅用作“**break** *labelName*”和“**continue** *labelName*”中的标签名。
+> NOTE：在之前的课程中讲到标签化语句的时候，提及过上述记录中的`[[target]]`字段的作用，也就是仅仅用作“**break** _labelName_”和“**continue** _labelName_”中的标签名。
 
 这行代码也反映了“**JavaScript语句执行是有值（Result）的**”这一事实。也就是说，任何JavaScript语句执行时总是会“返回”一个值，包括空语句。
 
 空语句其实也是上述“最简单榜”的Top 1，因为它在ECMAScript的实现代码有且仅有一行：
 
-> 1.**Return** NormalCompletion(***empty***).
+> 1.**Return** NormalCompletion(_**empty**_).
 
 其中的`NormalCompletion()`也是一个简写，完整的表示法与上面的`ThrowCompletion()`也类似，不过其中的传入参数argument在这里是empty。
 
-> **Return** Completion { \[Type]: ***argument***, \[\[Target]]: empty }
+> **Return** Completion { \[Type]: _**argument**_, \[\[Target]]: empty }
 
-而传入参数argument在这里是empty，这是ECMAScript规范类型中的一个特殊值，理解为规范层面可以识别的Null值就可以了（例如它也用来指没有`[[Target]]`）。也就是说，所谓“空语句（*Empty statement*）”，就是返回结果为“空值（*Empty*）”的一般语句。类似于此的，这一讲标题中的语句`throw 1`，就是一个返回"throw"类型结果的语句。
+而传入参数argument在这里是empty，这是ECMAScript规范类型中的一个特殊值，理解为规范层面可以识别的Null值就可以了（例如它也用来指没有`[[Target]]`）。也就是说，所谓“空语句（_Empty statement_）”，就是返回结果为“空值（_Empty_）”的一般语句。类似于此的，这一讲标题中的语句`throw 1`，就是一个返回"throw"类型结果的语句。
 
 > NOTE：这样的返回结果（Result）在ECMAScript中称为完成记录，这在之前的课程中已经讲述过了。
 
@@ -53,7 +53,7 @@
 
 因为“求值”就意味着去除了“执行结果（Result）”中的状态信息。
 
-ECMAScript为JavaScript提供语言规范，出于ECMAScript规范书写的特殊性，它也同时是引擎实现的一个规范。在ECMAScript中，所有语句都被解析成待处理的结点，最顶层的位置总是被称为\_Script\_或\_Module\_的一个块（块语句），其他的语句将作为它的一级或更深层级的、嵌套的子级结点，这些结点称为“*Parse Node*”，它们构成的整个结构称为“*Parse Tree*”。
+ECMAScript为JavaScript提供语言规范，出于ECMAScript规范书写的特殊性，它也同时是引擎实现的一个规范。在ECMAScript中，所有语句都被解析成待处理的结点，最顶层的位置总是被称为\_Script\_或\_Module\_的一个块（块语句），其他的语句将作为它的一级或更深层级的、嵌套的子级结点，这些结点称为“_Parse Node_”，它们构成的整个结构称为“_Parse Tree_”。
 
 无论如何，语句总是一个树或子树，而表达式可以是一个子树或一个叶子结点。
 
@@ -131,7 +131,7 @@ ECMAScript语言约定，在块中的多个语句顺序执行时，遵从两条�
 
 在这个例子中第1行代码执行结果返回`empty`，于是第2行的结果`1`覆盖了它；而第3行的结果仍然是`empty`所以不导致覆盖，因此整个语句的返回值将是1。
 
-> *NOTE: 参见13.2.13 Block -&gt; RS: Evaluation*, 以及15.2.1.23 Module -&gt; RS: Evaluation中，对**UpdateEmpty**(s, sl)的使用。
+> _NOTE: 参见13.2.13 Block -&gt; RS: Evaluation_, 以及15.2.1.23 Module -&gt; RS: Evaluation中，对**UpdateEmpty**(s, sl)的使用。
 
 而上述的规则2，就比较复杂一些了。这出现在if、do…while、while、for/for…in/for…of、with、switch和try语句块中。在ECMAScript 6之后，这些语句约定不会返回empty，因此它的执行结果“至少会返回一个undefined值”，而在此之前，它们的执行结果是不确定的，既可能返回undefined值，也可能返回empty，并导致上一行语句值不覆盖。举例来说：
 
@@ -158,7 +158,7 @@ undefined
 
 > 2.**Let** exprValue be ? GetValue(exprRef).
 
-事实上在这里的符号“? *opName*()”语法也是一个简写，在ECMAScript中它表示一个ReturnIfAbrupt(x)的语义：如果设一个“处理（*opName()*）”的结果是x，那么，
+事实上在这里的符号“? _opName_()”语法也是一个简写，在ECMAScript中它表示一个ReturnIfAbrupt(x)的语义：如果设一个“处理（_opName()_）”的结果是x，那么，
 
 > 如果x是特殊的（非normal类型的）完成记录，则返回x；否则返回一个以x.\[\[value]]为值的、normal类型的完成记录。
 
@@ -170,13 +170,13 @@ throw 1/0;
 
 那么exprRef作为表达式的计算结果，其本身就将是一个异常，于是`? GetValue(exprRef)`就可以返回这个异常对象（而不是异常的值）本身了。类似地，所谓“表达式语句”（这是排在“最简单语句榜”的第二名的语句）就直接返回这个值：
 
-> *ExpressionStatement*: *Expression*;  
+> _ExpressionStatement_: _Expression_;  
 > 1.**Let** exprRef be the result of evaluating Expression.  
 > 2.**Return** ? GetValue(exprRef).
 
 ## 还有一行代码
 
-现在还有一行代码，也就是第一行的“***let*** *… result of evaluating …*”。其中的“result of evaluating…”基本上算是ECMAScript中一个约定俗成的写法。不管是执行语句还是表达式，都是如此。这意味着引擎需要按之前我讲述过的那些执行逻辑来处理对应的代码块、表达式或值（操作数），然后将结果作为Result返回。
+现在还有一行代码，也就是第一行的“_**let**_ _… result of evaluating …_”。其中的“result of evaluating…”基本上算是ECMAScript中一个约定俗成的写法。不管是执行语句还是表达式，都是如此。这意味着引擎需要按之前我讲述过的那些执行逻辑来处理对应的代码块、表达式或值（操作数），然后将结果作为Result返回。
 
 ECMAScript所描述的引擎，能够理解“执行一行语句”与“执行一个表达式”的不同，并且由此决定它们返回的是一个“引用记录”还是“完成记录”（规范类型）。当外层的处理逻辑发现是一个引用时，会再根据当前逻辑的需要将“引用”理解为左操作数（取引用）或右操作数（取值）；否则当它是一个完成记录时，就尝试检测它的类型，也就是语句的完成状态（throw、return、normal或其他）。
 

@@ -59,8 +59,8 @@ tools = load_tools(tool_names, llm=llm)
 
 ```plain
 # 设置OpenAI API的密钥
-import os 
-os.environ["OPENAI_API_KEY"] = 'Your Key' 
+import os
+os.environ["OPENAI_API_KEY"] = 'Your Key'
 
 # 导入库
 from langchain.chat_models import ChatOpenAI
@@ -279,7 +279,7 @@ if __name__ == '__main__':
 
 ```plain
 # 设置OpenAI API的密钥
-import os 
+import os
 os.environ["OPENAI_API_KEY"] = 'Your Key' 
 
 # 导入与Gmail交互所需的工具包
@@ -325,7 +325,7 @@ result = agent.run(
 )
 
 # 打印结果
-print(result)  
+print(result) 
 ```
 
 代码的核心部分主要是连接到Gmail API，获取用户的邮件数据，并通过特定的 Agent 查询这些数据。
@@ -383,6 +383,7 @@ print(result) 
 2. 文档：LangChain中集成的所有[工具箱](https://python.langchain.com/docs/integrations/toolkits/)
 3. 文档：Google Cloud [API](https://cloud.google.com/compute/docs/apis?hl=zh-cn)
 4. 文档：Github REST [API](https://support.github.com/features/rest-api)
+
 <div><strong>精选留言（10）</strong></div><ul>
 <li><span>Geek_995b81</span> 👍（3） 💬（1）<p>老师好，那我们可以自定义工具吗？比如某个实际场景，我需要调用到某个内部系统的API，通过API返回的信息我再做提取，然后将提取到的信息重新给LLM推理</p>2023-10-31</li><br/><li><span>抽象派</span> 👍（2） 💬（1）<p>老师，文中“甚至尝试让大模型自动回答 Issues 中的问题——反正大模型解决代码问题的能力本来就更强。”是怎样实现让大模型理解项目系统代码的？例如：一个web项目，我给出一个接口，大模型能从给定的接口出发自顶向下，分析出每一层的调用关系和依赖关系。</p>2023-10-10</li><br/><li><span>阿斯蒂芬</span> 👍（2） 💬（1）<p>怎么理解Tool和Toolkits 的异同呢？</p>2023-10-09</li><br/><li><span>liyinda0000</span> 👍（0） 💬（2）<p>老师，你有遇到过这个问题吗？
 不使用openai封装agent，使用的是私有模型比如qwen-1.8b时封装的agent不能调用tools，不知道什么原因？</p>2024-05-11</li><br/><li><span>enbool</span> 👍（0） 💬（1）<p>老师，怎么进群啊？</p>2023-10-10</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p>不使用openai封装agent，使用的是私有模型比如qwen-1.8b时封装的agent是可以很好调用tools。
@@ -392,18 +393,19 @@ print(result) 
 llm = ChatOpenAI(temperature=0.0)
 新代码：
 llm = ChatOpenAI(
-    api_key= &quot;DASHSCOPE_API_KEY&quot;,  #换为你的 key
-    base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;,  # 填写 DashScope base_url
-    model=&quot;qwen-1.8b-chat&quot;     # 其他通义模型也可以 &quot;qwen-long&quot; 、&quot;qwen-max&quot; 
+api_key= &quot;DASHSCOPE_API_KEY&quot;, #换为你的 key
+base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;, # 填写 DashScope base_url
+model=&quot;qwen-1.8b-chat&quot; # 其他通义模型也可以 &quot;qwen-long&quot; 、&quot;qwen-max&quot;
 )
 
-####  运行结果
+#### 运行结果
+
 &gt;&gt; from langchain.agents import load_tools
 with new imports of:
 &gt;&gt; from langchain_community.agent_toolkits.load_tools import load_tools
 （略）
 &gt; Entering new AgentExecutor chain...
- 我应该使用arxiv来查找相关信息。
+我应该使用arxiv来查找相关信息。
 Action: arxiv
 Action Input: &quot;2005.14165&quot;
 Observation: Published: 2020-07-22
@@ -421,7 +423,7 @@ Authors: Tom B. Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan,
 Summary: Recent work has demonstrated substantial gains on many NLP tasks and
 benchmarks by pre-training on a large corpus of text followed by fine-tuning on
 a specific task. While typically task-agnostic in architecture, this method
-still requires task-specific fine-tuning datasets of thousands or tens 
+still requires task-specific fine-tuning datasets of thousands or tens
 
 为何我执行了搜到的论文和文中的不一样，开始胡说八道了。</p>2024-03-14</li><br/>
 </ul>

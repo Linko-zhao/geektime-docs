@@ -74,45 +74,45 @@ export const nodeOps: Omit<RendererOptions<Node, Element>, 'patchProp'> = {
 ```javascript
 export default function createRenderer(options) {
   const {
-	    insert: hostInsert,
-	    remove: hostRemove,
-	    patchProp: hostPatchProp,
-	    createElement: hostCreateElement,
-	    createText: hostCreateText,
-	    createComment: hostCreateComment,
-	    setText: hostSetText,
-	    setElementText: hostSetElementText,
-	    parentNode: hostParentNode,
-	    nextSibling: hostNextSibling,
-	    setScopeId: hostSetScopeId = NOOP,
-	    cloneNode: hostCloneNode,
-	    insertStaticContent: hostInsertStaticContent
-   } = options
+    insert: hostInsert,
+    remove: hostRemove,
+    patchProp: hostPatchProp,
+    createElement: hostCreateElement,
+    createText: hostCreateText,
+    createComment: hostCreateComment,
+    setText: hostSetText,
+    setElementText: hostSetElementText,
+    parentNode: hostParentNode,
+    nextSibling: hostNextSibling,
+    setScopeId: hostSetScopeId = NOOP,
+    cloneNode: hostCloneNode,
+    insertStaticContent: hostInsertStaticContent,
+  } = options;
 
-  function render(vnode, container) {  }
+  function render(vnode, container) {}
 
-  function mount(vnode, container, isSVG, refNode) {  }
+  function mount(vnode, container, isSVG, refNode) {}
 
-  function mountElement(vnode, container, isSVG, refNode) {  }
+  function mountElement(vnode, container, isSVG, refNode) {}
 
-  function mountText(vnode, container) {  }
+  function mountText(vnode, container) {}
 
-  function patch(prevVNode, nextVNode, container) {  }
+  function patch(prevVNode, nextVNode, container) {}
 
-  function replaceVNode(prevVNode, nextVNode, container) {  }
-  function patchElement(prevVNode, nextVNode, container) {  }
-  function patchChildren(
-    prevChildFlags,
-    nextChildFlags,
-    prevChildren,
-    nextChildren,
-    container
-  ) {  }
+  function replaceVNode(prevVNode, nextVNode, container) {}
+  function patchElement(prevVNode, nextVNode, container) {}
+  function patchChildren(
+    prevChildFlags,
+    nextChildFlags,
+    prevChildren,
+    nextChildren,
+    container,
+  ) {}
 
-  function patchText(prevVNode, nextVNode) {  }
-  function patchComponent(prevVNode, nextVNode, container) {  }
+  function patchText(prevVNode, nextVNode) {}
+  function patchComponent(prevVNode, nextVNode, container) {}
 
-  return { render }
+  return { render };
 }
 ```
 
@@ -131,7 +131,7 @@ function mountElement(vnode, container, isSVG, refNode) {
 
 ```javascript
 function mountElement(vnode, container, isSVG, refNode) {
-  const el = hostCreateElement(vnode.tag, isSVG)
+  const el = hostCreateElement(vnode.tag, isSVG);
 }
 ```
 
@@ -139,14 +139,12 @@ function mountElement(vnode, container, isSVG, refNode) {
 
 ```javascript
 const { render } = createRenderer({
-  nodeOps: {
-    createElement() {   },
-    createText() {   }
-    // more...
-  },
-  patchData
-})
-
+  nodeOps: {
+    createElement() {},
+    createText() {}, // more...
+  },
+  patchData,
+});
 ```
 
 ## 自定义渲染
@@ -158,41 +156,37 @@ const { render } = createRenderer({
 接下来，我们一起尝试实现一个Canvas的渲染器。具体操作是这样的，我们在项目的src目录下新建renderer.js，通过这个文件实现一个简易的Canvas渲染逻辑。Canvas平台中操作的方式相对简单，没有太多节点的概念，我们可以把整个Canvas维护成一个对象，每次操作的时候直接把Canvas重绘一下就可以了。
 
 ```javascript
-import { createRenderer } from '@vue/runtime-core'
+import { createRenderer } from "@vue/runtime-core";
 const { createApp: originCa } = createRenderer({
-  insert: (child, parent, anchor) => {
-  },
-  createElement(type, isSVG, isCustom) {
-  },
-  setElementText(node, text) {
-  },
-  patchProp(el, key, prev, next) {
-  },
+  insert: (child, parent, anchor) => {},
+  createElement(type, isSVG, isCustom) {},
+  setElementText(node, text) {},
+  patchProp(el, key, prev, next) {},
 });
 ```
 
 下面的代码中我们实现了draw函数，这里我们就使用了Canvas的操作方法，**递归**地把Canvas对象渲染到了Canvas标签内部。
 
 ```javascript
-let ctx
+let ctx;
 function draw(ele, isChild) {
   if (!isChild) {
-    ctx.clearRect(0, 0, 500, 500)
+    ctx.clearRect(0, 0, 500, 500);
   }
 
-  ctx.fillStyle = ele.fill || 'white'
-  ctx.fillRect(...ele.pos)
+  ctx.fillStyle = ele.fill || "white";
+  ctx.fillRect(...ele.pos);
   if (ele.text) {
-    ctx.fillStyle = ele.color || 'white'
-    ele.fontSize = ele.type == "h1" ? 20 : 12
-    ctx.font = (ele.fontSize || 18) + 'px serif'
-    ctx.fillText(ele.text, ele.pos[0] + 10, ele.pos[1] + ele.fontSize)
+    ctx.fillStyle = ele.color || "white";
+    ele.fontSize = ele.type == "h1" ? 20 : 12;
+    ctx.font = (ele.fontSize || 18) + "px serif";
+    ctx.fillText(ele.text, ele.pos[0] + 10, ele.pos[1] + ele.fontSize);
   }
-  ele.child && ele.child.forEach(c => {
-    console.log('child:::', c)
-    draw(c, true)
-  })
-
+  ele.child &&
+    ele.child.forEach((c) => {
+      console.log("child:::", c);
+      draw(c, true);
+    });
 }
 ```
 
@@ -201,40 +195,43 @@ function draw(ele, isChild) {
 ```javascript
 const { createApp: originCa } = createRenderer({
   insert: (child, parent, anchor) => {
-    if (typeof child == 'string') {
-      parent.text = child
+    if (typeof child == "string") {
+      parent.text = child;
     } else {
-      child.parent = parent
+      child.parent = parent;
       if (!parent.child) {
-        parent.child = [child]
+        parent.child = [child];
       } else {
-        parent.child.push(child)
+        parent.child.push(child);
       }
     }
     if (parent.nodeName) {
-      draw(child)
+      draw(child);
       if (child.onClick) {
-        ctx.canvas.addEventListener('click', () => {
-          child.onClick()
-          setTimeout(() => {
-            draw(child)
-          })
-        }, false)
+        ctx.canvas.addEventListener(
+          "click",
+          () => {
+            child.onClick();
+            setTimeout(() => {
+              draw(child);
+            });
+          },
+          false,
+        );
       }
     }
   },
   createElement(type, isSVG, isCustom) {
     return {
-      type
-    }
+      type,
+    };
   },
   setElementText(node, text) {
-    node.text = text
+    node.text = text;
   },
   patchProp(el, key, prev, next) {
-    el[key] = next
+    el[key] = next;
   },
-
 });
 ```
 
@@ -306,7 +303,7 @@ let renderer
 function draw(obj) {
     const {camera,cameraPos, scene, geometry,geometryArg,material,mesh,meshY,meshX} = obj
     if([camera,cameraPos, scene, geometry,geometryArg,material,mesh,meshY,meshX].filter(v=>v).length<9){
-        return 
+        return
     }
     let cameraObj = new THREE[camera]( 40, window.innerWidth / window.innerHeight, 0.1, 10 )
     Object.assign(cameraObj.position,cameraPos)

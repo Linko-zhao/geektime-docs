@@ -106,7 +106,7 @@ a + b * c
 加法表达式有加号和减号两种运算符。
 
 ```
-+ 
++
 -
 ```
 
@@ -143,7 +143,7 @@ a + b * c
 >=
 <
 >
-instanceof 
+instanceof
 in
 ```
 
@@ -330,9 +330,11 @@ https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;uvcQHJi6AXhPDJL-6JWUkw
 不过MDN上的一份整理是这样的：https:&#47;&#47;developer.mozilla.org&#47;zh-CN&#47;docs&#47;Web&#47;JavaScript&#47;Reference&#47;Operators&#47;Operator_Precedence
 
 主要不同的地方集中在：
+
 1. 函数调用与New Expression的优先级顺序（上一课文中有一句不是很理解：而 Call Expression 就失去了比 New Expression优先级高的特性，这是一个主要的区分）
 2. ++&#47;-- 前置和后置的优先级顺序（MDN上前置后置优先级是不同的）
 3. 缺少了 yield&#47;yield*&#47;...这三个运算符
+
 </p>2019-04-08</li><br/><li><span>Geeker</span> 👍（7） 💬（0）<p>标准里有些东西还是看不太懂，如果可以的话，希望老师在答疑的时候稍微讲解一下如何看懂标准</p>2019-04-09</li><br/><li><span>Geeker</span> 👍（4） 💬（0）<p>评论不能发图片，我把不太明白的地方截图发到了语雀：
 https:&#47;&#47;cdn.nlark.com&#47;yuque&#47;0&#47;2019&#47;jpeg&#47;119718&#47;1554814331032-assets&#47;web-upload&#47;a51218b6-cd8a-4ac8-b71f-f8f6dbfeab36.jpeg
 麻烦老师移步看一下，谢谢。</p>2019-04-09</li><br/><li><span>依韵</span> 👍（3） 💬（2）<p>false &amp;&amp; undefined 值为false</p>2019-07-19</li><br/><li><span>白嗣</span> 👍（3） 💬（0）<p>false &amp;&amp; undefined; &#47;&#47; false</p>2019-05-20</li><br/><li><span>Geeker</span> 👍（3） 💬（0）<p>老师是在带我们过 ECMAScript标准，讲解很详细，基本能读懂标准了🌝</p>2019-04-06</li><br/><li><span>梧桐</span> 👍（2） 💬（0）<p>“逻辑与表达式和逻辑或表达式”一节中，第二个例子 false &amp;&amp; undefined; 的结果为 false</p>2019-09-25</li><br/><li><span>晴天</span> 👍（2） 💬（0）<p>左移 n 位相当于乘以 2 的 n 次方，右移 n 位相当于除以 2 取整 n 次。

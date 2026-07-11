@@ -58,7 +58,7 @@ req <http-method> <url>
 header <key1> <val11> <val12>
 header <key2> <val21> <val22>
 auth <authorization>
-body <content-type> <body-data> 
+body <content-type> <body-data>
 ```
 
 第一句是 req 指令，带两个参数： 一个是 http method，即 HTTP 请求的方法，如 GET、POST 等。另一个是要请求的 URL。
@@ -113,7 +113,7 @@ json '{
 ret <expected-status-code>
 header <key1> <expected-val11><expected-val12>
 header <key2> <expected-val21><expected-val22>
-body <expected-content-type><expected-body-data> 
+body <expected-content-type><expected-body-data>
 ```
 
 我们先看 ret 指令。实际上，请求发出去的时间是在 ret 指令执行的时候。前面 req、header、auth、body 指令仅仅表达了 HTTP 请求。如果没有调用 ret 指令，那么系统什么也不会发生。
@@ -232,7 +232,7 @@ QiniuTestEnv=product qiniutest ./testfoo.qtf
 https:&#47;&#47;github.com&#47;httprunner&#47;httprunner
 
 对于DSL，有个痛点就是没法像代码那样进行单步调试。所以我也在HttpRunner中探索了语法提示和自动补全功能，以及和 python代码的互转</p>2019-10-04</li><br/><li><span>Aaron Cheung</span> 👍（4） 💬（2）<p>测试先行在目前的开发环境下有无必要 开发人员的边界条件之类有可能没有覆盖业务条件</p>2019-10-08</li><br/><li><span>Charles</span> 👍（1） 💬（2）<p>加餐加的太好了，谢谢！请问下许老师，后端对应的数据库产生的测试数据如何处理的？测试环境还好，生产环境呢？如果是代码处理的话，处理逻辑是放在后端吗？</p>2019-10-08</li><br/><li><span>mickey</span> 👍（0） 💬（1）<p>如果后端是连接数据库的，怎样做动态的自动化测试呢？</p>2019-10-05</li><br/><li><span>丁丁历险记</span> 👍（4） 💬（0）<p>笔记
-1  准备上班后下载使用，做中学
+1 准备上班后下载使用，做中学
 2 去关注开发人员日常工作过程中的不爽和低效率是非常有必要的。任何开发效率提升相关的工作，其收益都是指数级的。</p>2019-11-04</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2023-09-17</li><br/><li><span>alswl</span> 👍（0） 💬（0）<p>跟之前设计的基于 pyresttest 集成测试（e2e）方案思路挺一致的
 https:&#47;&#47;testerhome.com&#47;topics&#47;6134
 

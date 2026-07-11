@@ -49,7 +49,7 @@
 
 ```
 # put同一个key，执行1000次
-for i in {1..1000}; do dd if=/dev/urandom bs=1024 
+for i in {1..1000}; do dd if=/dev/urandom bs=1024
 count=1024  | ETCDCTL_API=3 etcdctl put key  || break; done
 
 # 获取最新revision，并压缩
@@ -215,8 +215,8 @@ kv := mvccpb.KeyValue{
 - c3表示每个watcher耗费的内存。
 
 ```
-memory = c1 * number_of_conn + c2 * 
-avg_number_of_stream_per_conn + c3 * 
+memory = c1 * number_of_conn + c2 *
+avg_number_of_stream_per_conn + c3 *
 avg_number_of_watch_stream
 ```
 
@@ -247,7 +247,7 @@ for i， revpair := range revpairs[:len(kvs)] {
    revToBytes(revpair， revBytes)
    _， vs := tr.tx.UnsafeRange(keyBucketName， revBytes， nil， 0)
    if len(vs) != 1 {
-        ......    
+        ......
    }
    if err := kvs[i].Unmarshal(vs[0]); err != nil {
         .......

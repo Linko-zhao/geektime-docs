@@ -219,21 +219,22 @@ MySQL为了让组提交的效果更好，把redo log做fsync的时间拖到了�
 > 在设计模型里面设计一层，专门负责管理请求和数据库服务资源，对于比较重要和大流量的业务，是一个好的设计方向。
 
 > @Vincent 同学提了一个好问题，用文中提到的DDL方案，会导致binlog里面少了这个DDL语句，后续影响备份恢复的功能。由于需要另一个知识点（主备同步协议），我放在后面的文章中说明。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>锅子</span> 👍（190） 💬（16）<p>老师好，有一个疑问：当设置sync_binlog=0时，每次commit都只时write到page cache，并不会fsync。但是做实验时binlog文件中还是会有记录，这是什么原因呢？是不是后台线程每秒一次的轮询也会将binlog cache持久化到磁盘？还是有其他的参数控制呢？</p>2019-01-04</li><br/><li><span>WilliamX</span> 👍（162） 💬（8）<p>为什么 binlog cache 是每个线程自己维护的，而 redo log buffer 是全局共用的？
 这个问题，感觉还有一点，binlog存储是以statement或者row格式存储的，而redo log是以page页格式存储的。page格式，天生就是共有的，而row格式，只跟当前事务相关</p>2019-01-04</li><br/><li><span>alias cd=rm -rf</span> 👍（138） 💬（17）<p>事务A是当前事务，这时候事务B提交了。事务B的redolog持久化时候，会顺道把A产生的redolog也持久化，这时候A的redolog状态是prepare状态么？
 </p>2019-01-28</li><br/><li><span>倪大人</span> 👍（88） 💬（10）<p>老师求解sync_binlog和binlog_group_commit_sync_no_delay_count这两个参数区别
 
 如果
-       sync_binlog = N
-       binlog_group_commit_sync_no_delay_count = M
-       binlog_group_commit_sync_delay = 很大值
+sync_binlog = N
+binlog_group_commit_sync_no_delay_count = M
+binlog_group_commit_sync_delay = 很大值
 这种情况fsync什么时候发生呀，min(N,M)吗？
 感觉sync_binlog搭配binlog_group_commit_sync_delay也可以实现组提交？
 
 如果
-        sync_binlog = 0
-         binlog_group_commit_sync_no_delay_count = 10
+sync_binlog = 0
+binlog_group_commit_sync_no_delay_count = 10
 这种情况下是累计10个事务fsync一次？</p>2019-01-04</li><br/><li><span>Komine</span> 👍（83） 💬（4）<p>为什么binlog 是不能“被打断的”的呢？主要出于什么考虑？</p>2019-01-22</li><br/><li><span>猪哥哥</span> 👍（46） 💬（4）<p>老师 我想问下文件系统的page cache还是不是内存, 是不是文件系统向内核申请的一块的内存?</p>2019-01-10</li><br/><li><span>某、人</span> 👍（42） 💬（19）<p>有调到非双1的时候,在大促时非核心库和从库延迟较多的情况。
 设置的是sync_binlog=0和innodb_flush_log_at_trx_commit=2
 针对0和2,在mysql crash时不会出现异常,在主机挂了时，会有几种风险:
@@ -250,8 +251,7 @@ MySQL为了让组提交的效果更好，把redo log做fsync的时间拖到了�
 1.因为binlog不能被打断,那么binlog做fsync是单线程吧?
 如果是的话,那么binlog的write到fsync的时间,就应该是redo log fsync+上一个事务的binlog fsync时间。
 但是测试到的现象,一个超大事务做fsync时,对其它事务的提交影响也不大。
-如果是多线程做fsync,怎么保证的一个事务binlog在磁盘上的连续性？
-2.  5.7的并行复制是基于binlog组成员并行的,为什么很多文章说是表级别的并行复制？</p>2019-01-06</li><br/><li><span>xiaoyou</span> 👍（27） 💬（18）<p>老师，请教一个问题，文章说innodb的 redo log 在commit的时候不进行fsync，只会write 到page cache中。当sync_binlog&gt;1,如果redo log 完成了prepare持久化落盘，binlog只是write page cache，此时commit标识完成write 但没有落盘，而client收到commit成功，这个时候主机掉电，启动的时候做崩溃恢复，没有commit标识和binglog，事务会回滚。我看文章说sync_binlog设置为大于1的值，会丢binlog日志,此时数据也会丢失吧？</p>2019-01-09</li><br/><li><span>Mr.Strive.Z.H.L</span> 👍（25） 💬（12）<p>老师你好，看了@倪大人的问题，个人认为：
+如果是多线程做fsync,怎么保证的一个事务binlog在磁盘上的连续性？2. 5.7的并行复制是基于binlog组成员并行的,为什么很多文章说是表级别的并行复制？</p>2019-01-06</li><br/><li><span>xiaoyou</span> 👍（27） 💬（18）<p>老师，请教一个问题，文章说innodb的 redo log 在commit的时候不进行fsync，只会write 到page cache中。当sync_binlog&gt;1,如果redo log 完成了prepare持久化落盘，binlog只是write page cache，此时commit标识完成write 但没有落盘，而client收到commit成功，这个时候主机掉电，启动的时候做崩溃恢复，没有commit标识和binglog，事务会回滚。我看文章说sync_binlog设置为大于1的值，会丢binlog日志,此时数据也会丢失吧？</p>2019-01-09</li><br/><li><span>Mr.Strive.Z.H.L</span> 👍（25） 💬（12）<p>老师你好，看了@倪大人的问题，个人认为：
 sync_binlog和binlog_group_commit_sync_no_delay_count的最大区别主要在于，数据的丢失与否吧？
 
 sync_binlog = N：每个事务write后就响应客户端了。刷盘是N次事务后刷盘。N次事务之间宕机，数据丢失。
@@ -271,12 +271,13 @@ binlog write 阶段
 
 binlog fsync 阶段
 IF ( NOW - sart_time ) &gt;= binlog_group_commit_sync_delay || group_write &gt;= binlog_group_commit_sync_no_delay_count
-    IF sync_binlog &gt;0 &amp;&amp; global_write &gt;= sync_binlog
-        fsync
+IF sync_binlog &gt;0 &amp;&amp; global_write &gt;= sync_binlog
+fsync
 
     设置 binlog 组提交信号，让其它等待的事务继续
+
 ELSE
-    等待 binlog 组提交信号
+等待 binlog 组提交信号
 
 另外 binlog_group_commit_sync_no_delay_count 这个参数是不是不应该设置的比并发线程数大，因为一个组里的事务应该不会比并发线程数多吧，设置大了也就没什么意义了，可以这么理解吧老师。</p>2019-02-28</li><br/><li><span>Geek_527020</span> 👍（10） 💬（7）<p>事务还未结束，binlog和redo log就写到磁盘中了，如果出现了事务回滚，写到磁盘的数据要删除吗，如果不删除，MYSQL奔溃重启，岂不是多了操作，请老师解答下疑惑</p>2019-01-08</li><br/><li><span>Justin</span> 👍（10） 💬（1）<p>您说的Lsn 确保不会二次执行 意思是持久化在磁盘中的页也有和redo log record相关的lsn吗 然后根据lsn的大小在recovery阶段确定redo log需不需要执行？</p>2019-01-05</li><br/>
 </ul>

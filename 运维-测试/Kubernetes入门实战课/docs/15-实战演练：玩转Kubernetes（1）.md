@@ -79,10 +79,10 @@ metadata:
   name: maria-cm
 
 data:
-  DATABASE: 'db'
-  USER: 'wp'
-  PASSWORD: '123'
-  ROOT_PASSWORD: '123'
+  DATABASE: "db"
+  USER: "wp"
+  PASSWORD: "123"
+  ROOT_PASSWORD: "123"
 ```
 
 然后我们定义Pod对象 `maria-pod`，把配置信息注入Pod，让MariaDB运行时从环境变量读取这些信息：
@@ -105,7 +105,7 @@ spec:
     - containerPort: 3306
 
     envFrom:
-    - prefix: 'MARIADB_'
+    - prefix: "MARIADB_"
       configMapRef:
         name: maria-cm
 ```
@@ -132,10 +132,10 @@ metadata:
   name: wp-cm
 
 data:
-  HOST: '172.17.0.2'
-  USER: 'wp'
-  PASSWORD: '123'
-  NAME: 'db'
+  HOST: "172.17.0.2"
+  USER: "wp"
+  PASSWORD: "123"
+  NAME: "db"
 ```
 
 在这个ConfigMap里要注意的是“HOST”字段，它必须是MariaDB Pod的IP地址，如果不写正确WordPress会无法正常连接数据库。
@@ -160,7 +160,7 @@ spec:
     - containerPort: 80
 
     envFrom:
-    - prefix: 'WORDPRESS_DB_'
+    - prefix: "WORDPRESS_DB_"
       configMapRef:
         name: wp-cm
 ```
@@ -290,13 +290,13 @@ https:&#47;&#47;juejin.cn&#47;post&#47;7127679053242302477</p>2022-08-04</li><br
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ngx-cm
+name: ngx-cm
 
 data:
-  default.conf: |-
-    server {
-      listen 80;
-      default_type text&#47;html;
+default.conf: |-
+server {
+listen 80;
+default_type text&#47;html;
 
       location &#47; {
         proxy_http_version 1.1;
@@ -310,27 +310,27 @@ data:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ngx-pod
-  labels:
-    app: nginx-alpine
-    role: website
+name: ngx-pod
+labels:
+app: nginx-alpine
+role: website
 
 spec:
-  volumes:
-    - name: conf
-      configMap:
-        name: ngx-cm
+volumes: - name: conf
+configMap:
+name: ngx-cm
 
-  containers:
-  - volumeMounts:
-    - mountPath: &#47;etc&#47;nginx&#47;conf.d&#47;
-      name: conf
+containers:
 
-    image: nginx:alpine
-    name: ngx-pod
-    imagePullPolicy: IfNotPresent
-    ports:
-    - containerPort: 80
+- volumeMounts:
+  - mountPath: &#47;etc&#47;nginx&#47;conf.d&#47;
+    name: conf
+
+  image: nginx:alpine
+  name: ngx-pod
+  imagePullPolicy: IfNotPresent
+  ports:
+  - containerPort: 80
 
 可以成功创建 Pod，nginx 的配置文件也被挂载到指定的位置，但是浏览器还是无法访问 wordpress，不知道是不是我的 YAML 文件中少了什么🤔，还望老师指点</p>2022-07-25</li><br/><li><span>朱雯</span> 👍（11） 💬（1）<p>学了这一节，没感觉到容器编排的好用，反而遇到了一个问题，在配置中，我把wordpress链接数据库的host给小写了，结果一直告诉我链接数据库失败，我也没有排查手段，一直失败，我想的是，这个k8s的部署步骤实在是太复杂了，复杂到配置需要一个yaml，容器需要一个yaml，port-forward也需要一个yaml，我想如果是docker直接部署，其实就需要两条命令，所有参数都放到env中，或者放到配置文件中，也比检查yaml文件强，在入门篇中没感受到k8s的好用，只感觉到琐碎，是因为服务太小，还是因为没用好的原因呢
 </p>2022-07-28</li><br/><li><span>马以</span> 👍（9） 💬（7）<p>写一下第2题吧解题步骤：
@@ -347,12 +347,12 @@ yml文件如下：
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ngx-cm
+name: ngx-cm
 data:
-  nginx.conf: |
-    server {
-      listen 8080;
-      #default_type text&#47;html;
+nginx.conf: |
+server {
+listen 8080;
+#default_type text&#47;html;
 
       location &#47; {
         proxy_http_version 1.1;
@@ -366,39 +366,38 @@ nginx.yml:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ngx-pod
-  labels:
-    env: demo
-    owner: ant
+name: ngx-pod
+labels:
+env: demo
+owner: ant
 
 spec:
-  volumes:
-    - name: nginx-conf
-      configMap:
-        name: ngx-cm
-        items:
-        - key: nginx.conf
-          path: default.conf
-  containers:
-  - image: nginx:alpine
-    name: ngx
-    volumeMounts:
-      - name: nginx-conf
-        mountPath: &#47;etc&#47;nginx&#47;conf.d
+volumes: - name: nginx-conf
+configMap:
+name: ngx-cm
+items: - key: nginx.conf
+path: default.conf
+containers:
+
+- image: nginx:alpine
+  name: ngx
+  volumeMounts:
+  - name: nginx-conf
+    mountPath: &#47;etc&#47;nginx&#47;conf.d
     ports:
-    - containerPort: 8080
+  - containerPort: 8080
 
 然后使用 kubectl apply -f nginx.yml 创建pod，但是这个时候由于k8s节点还是一个隔离环境，所以我们还是无法访问，
 所以我们要在网页观察到具体的网页内容，还是要再用docker创建一层nginx代理，server 内容如下：
 server {
-  listen 80;
-  default_type text&#47;html;
+listen 80;
+default_type text&#47;html;
 
-  location &#47; {
-      proxy_http_version 1.1;
-      proxy_set_header Host $host;
-      proxy_pass http:&#47;&#47;127.0.0.1:8888;
-  }
+location &#47; {
+proxy_http_version 1.1;
+proxy_set_header Host $host;
+proxy_pass http:&#47;&#47;127.0.0.1:8888;
+}
 }
 
 使用 docker run -d --rm --net=host -v &#47;home&#47;ant&#47;kubernetes&#47;pod&#47;nginx-conf&#47;nginx.conf:&#47;etc&#47;nginx&#47;conf.d&#47;default.conf nginx:alpine
@@ -411,13 +410,11 @@ nginx cm:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ngx-cm
+name: ngx-cm
 data:
-  nginx.conf: |
-    server {
-    #  listen 80;
-       listen 8080;
-    #   default_type text&#47;html;
+nginx.conf: |
+server { # listen 80;
+listen 8080; # default_type text&#47;html;
 
        location &#47; {
            proxy_http_version 1.1;
@@ -430,27 +427,30 @@ nginx pod配置：
 apiVersion: v1
 kind: Pod
 metadata:
-  name: wp-ngx-pod
-  labels:
-    env: test
+name: wp-ngx-pod
+labels:
+env: test
 
 spec:
-  containers:
-  - image: nginx:alpine
-    name: wp-ngx
-    ports:
-    - containerPort: 8080
-    volumeMounts:
-    - mountPath: &#47;etc&#47;nginx&#47;conf.d&#47;
-      name: myngxconf
+containers:
 
-  volumes:
-  - name: myngxconf
-    configMap:
-      name: ngx-cm
-      items:
-      - key: nginx.conf
-        path: default.conf
+- image: nginx:alpine
+  name: wp-ngx
+  ports:
+  - containerPort: 8080
+    volumeMounts:
+  - mountPath: &#47;etc&#47;nginx&#47;conf.d&#47;
+    name: myngxconf
+
+volumes:
+
+- name: myngxconf
+  configMap:
+  name: ngx-cm
+  items:
+  - key: nginx.conf
+    path: default.conf
+
 </p>2022-08-04</li><br/><li><span>edward</span> 👍（3） 💬（2）<p>kubectl port-forward 老师请教下 这个命令设置端口转发后，怎么查看和取消？</p>2022-11-08</li><br/><li><span>peter</span> 👍（3） 💬（2）<p>请教老师几个问题：
 Q1：MariaDB和WP可以跑在一个POD里面吗？
 
@@ -475,9 +475,9 @@ Error: no DISPLAY environment variable specified
 
 1. port-forward 实际在生产用的多么？应该都是 ingress 吧
 2. 老师后面能讲讲 helm 和 Istio 吗，他们和 k8s 关系是什么，我看不明白</p>2022-07-27</li><br/><li><span>牙小木</span> 👍（1） 💬（1）<p>注意wp-pod.yaml中的HOST值，需要按照自己机器上的来。
-tb@tb-laptop:~$ k get pod maria-pod -o wide
-NAME        READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
-maria-pod   1&#47;1     Running   0          26m   10.244.0.76   minikube   &lt;none&gt;           &lt;none&gt;
+   tb@tb-laptop:~$ k get pod maria-pod -o wide
+   NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES
+   maria-pod 1&#47;1 Running 0 26m 10.244.0.76 minikube &lt;none&gt; &lt;none&gt;
 
 </p>2023-07-26</li><br/>
 </ul>

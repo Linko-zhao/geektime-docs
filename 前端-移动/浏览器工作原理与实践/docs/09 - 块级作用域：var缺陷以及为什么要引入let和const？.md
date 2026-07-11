@@ -28,7 +28,7 @@ while(1){}
 
 //函数块
 function foo(){}
- 
+
 //for循环块
 for(let i = 0; i<100; i++){}
 
@@ -105,7 +105,7 @@ console.log(myname);
 function foo(){
   for (var i = 0; i < 7; i++) {
   }
-  console.log(i); 
+  console.log(i);
 }
 foo()
 ```
@@ -192,10 +192,10 @@ function foo(){
       console.log(a)
       console.log(b)
     }
-    console.log(b) 
+    console.log(b)
     console.log(c)
     console.log(d)
-}   
+}
 foo()
 ```
 
@@ -264,7 +264,7 @@ foo()
 ```
 let myname= '极客时间'
 {
-  console.log(myname) 
+  console.log(myname)
   let myname= '极客邦'
 }
 ```
@@ -296,7 +296,7 @@ function的创建、初始化和赋值均会被提升。</p>2019-08-24</li><br/>
 执行过程：
 词法环境中myname=极客时间
 新开一个 myname =undefined 压入词法环境栈
-查找myname并输出undefined 
+查找myname并输出undefined
 赋值当前栈头上myname=极客邦
 pop栈头
 
@@ -310,7 +310,7 @@ let a;
 console.log(a);    &#47;&#47; undefined
 
 如果声明在运行之后就会报错：
-console.log(a);  &#47;&#47; 报错
+console.log(a); &#47;&#47; 报错
 let a;
 
 想请教老师的一点细节方面的问题，就是平时写 JavaScript 代码每行结束后需要带上分号吗？看老师您这里写的代码有很多结束都没有带分号，但是之前看到过一篇文章说 JavaScript 里面是通过分号去判断一个语句的结束，不知道这一点在实际的开发中是否有影响？

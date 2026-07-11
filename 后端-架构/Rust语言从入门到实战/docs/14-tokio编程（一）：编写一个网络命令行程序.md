@@ -44,7 +44,7 @@ fn main() {
   let addr = env::args()
     .nth(1)
     .unwrap_or("127.0.0.1:8888".to_string());
-    
+
   println!("{}", addr);
 }
 ```
@@ -543,24 +543,23 @@ stream.read_to_end(buf) =&gt; 把这个 stream 里接收到的所有数据都丢
 
 不过感觉如果用 read_to_end 的话当前 stream 就没办法往里写数据了， 这咋整啊， 难道是 clone 一份 stream 然后在其他进程 &#47; 线程来写吗， 还是设计的时候就不考虑往 `用了 read_to_end 的 stream`里继续写数据了？</p>2023-12-21</li><br/><li><span>superggn</span> 👍（0） 💬（1）<p>啊？ 有源码的啊， star 一下先</p>2023-12-21</li><br/><li><span>-Hedon🍭</span> 👍（0） 💬（1）<p>思考题1：EOF
 
-	EOF 是 &quot;End of File&quot; 的缩写，意为“文件结束”。它是一个用于表示文件或数据流末尾的控制信号或字符。当读取文件或数据流时，EOF用于指示没有更多的数据可读取。
-	
-	EOF 通常出现在以下几种情况：
+    EOF 是 &quot;End of File&quot; 的缩写，意为“文件结束”。它是一个用于表示文件或数据流末尾的控制信号或字符。当读取文件或数据流时，EOF用于指示没有更多的数据可读取。
 
-	1. 文件读取：在读取文件内容时，到达文件末尾后，会遇到 EOF。这告诉程序没有更多的数据可读取。
+    EOF 通常出现在以下几种情况：
 
-	2. 标准输入：在某些编程语言或环境中，如 Unix&#47;Linux 的命令行，可以使用特定的键盘组合（如 Ctrl+D ）来生成 EOF 信号，表示标准输入结束。
+    1. 文件读取：在读取文件内容时，到达文件末尾后，会遇到 EOF。这告诉程序没有更多的数据可读取。
 
-	3. 数据流结束：在处理数据流（如网络传输中的数据）时，EOF 可以用来指示数据传输已经完成。
+    2. 标准输入：在某些编程语言或环境中，如 Unix&#47;Linux 的命令行，可以使用特定的键盘组合（如 Ctrl+D ）来生成 EOF 信号，表示标准输入结束。
 
+    3. 数据流结束：在处理数据流（如网络传输中的数据）时，EOF 可以用来指示数据传输已经完成。
 
 思考题2：stream.read_to_end()
 
-	首先我觉得核心点在 “读完” 这个概念上，即意味着连接中的数据是有限的，才有读完，如果是无限的流数据，那么 stream.read_to_end() 会一直阻塞等待数据的到来。如果明确数据的有限的，那么在数据源发出 EOF 后，stream.read_to_end() 就会返回，那这个时候是可以 “读完” 的。当前，前提是你的内存得够。
-
+    首先我觉得核心点在 “读完” 这个概念上，即意味着连接中的数据是有限的，才有读完，如果是无限的流数据，那么 stream.read_to_end() 会一直阻塞等待数据的到来。如果明确数据的有限的，那么在数据源发出 EOF 后，stream.read_to_end() 就会返回，那这个时候是可以 “读完” 的。当前，前提是你的内存得够。
 
 (连续2周搬砖赶需求，终于能抽点时间续上 rust 的学习了 T_T)</p>2023-12-20</li><br/><li><span>A0.何文祥</span> 👍（0） 💬（1）<p>cargo new --bin getinf应为cargo new --bin getinfo</p>2023-11-20</li><br/><li><span>Andylinge</span> 👍（0） 💬（2）<p>Windows 11 报如下错误，大家可以把process里面的获取时间命令自己用Rust重写一下。
-```Listening on: 127.0.0.1:8880
+
+````Listening on: 127.0.0.1:8880
 Accepted a connection from: 127.0.0.1:9354
 gettime
 thread &#39;tokio-runtime-worker&#39; panicked at src&#47;server.rs:80:58:
@@ -581,3 +580,4 @@ server 跑起来了之后可以用 nc 命令来简单跑一下测试（不用 cl
 
 ps: 前段时间撸 https:&#47;&#47;github.com&#47;jonhoo&#47;rust-tcp 快撸哭了... 看到 tokio 这么简单的代码真舒服</p>2023-12-21</li><br/>
 </ul>
+````

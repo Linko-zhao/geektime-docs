@@ -278,9 +278,9 @@ func isSingleCharC(c rune) bool {
 }
 ```
 
-+ isrunesingle_test.go
+- isrunesingle_test.go
 
-```go
+````go
 package show_rune_length
 
 import (
@@ -309,7 +309,8 @@ func TestIsSingleChar(t *testing.T) {
 您在文章里举的这个例子在Go后面多加了空格，会让人误解成遍历字符串可以跳过空格，github代码里没问题。
 
 </p>2019-09-05</li><br/><li><span>文武木子</span> 👍（1） 💬（2）<p>十六进制四个数字不是一共占用32位吗，一个字节不是8位嘛，这样不是占用4个字节吗？求大神解答</p>2019-10-10</li><br/><li><span>党</span> 👍（1） 💬（1）<p>一个unicode字符点都是由两个字节存储，为什么在go语言中 type rune = int32 四个字节 而不是 type rune=16 两个字节啊</p>2019-07-30</li><br/><li><span>Geek_479239</span> 👍（0） 💬（1）<p>谢谢老师，这篇很有收获</p>2022-04-20</li><br/><li><span>William Ning</span> 👍（0） 💬（1）<p>打卡，一直不明白字符集unicode与字符编码utf-8以及其他的编码实现方式的区别，现在有些理解，但是还是需要理一理。</p>2022-02-18</li><br/><li><span>杨锦</span> 👍（0） 💬（1）<p>郝老师，请教一个问题，对于一个6字节的utf8编码，怎么判断是要解码成6个宽度为1字节宽度的的还是2个3字节宽度的呢？</p>2020-01-04</li><br/><li><span>张岳文</span> 👍（0） 💬（1）<p>我认为string的底层是Unicode, 而非UTF-8。只是string转成[]byte时，string转成了utf-8的序列。。。内存中的应该统一用unicode处理，而UTF-8是为了存储和传输才进行字节转换的。</p>2019-07-23</li><br/><li><span>jacke</span> 👍（0） 💬（1）<p>string 底层是[]byte数组，我的疑问是：例子里面看出来，string转化为tune的时候，tune里面保存的是utf-8的代码点数据，string转化为[]byte的时候保存的是utf-8代码点对应的字节序。
-上面这些转化逻辑在哪里实现的？fmt.print里面？看了fmt.print找不到,string转为[]byte的实现函数stringtoslicebyte也没看到这部分逻辑</p>2019-05-12</li><br/><li><span>Geek_1ed70f</span> 👍（0） 💬（1）<p>您是说 一个汉字的rune值 在计算机底层会被转成utf-8编码来 给计算机读取是吗?  
+上面这些转化逻辑在哪里实现的？fmt.print里面？看了fmt.print找不到,string转为[]byte的实现函数stringtoslicebyte也没看到这部分逻辑</p>2019-05-12</li><br/><li><span>Geek_1ed70f</span> 👍（0） 💬（1）<p>您是说 一个汉字的rune值 在计算机底层会被转成utf-8编码来 给计算机读取是吗?
 
 比如  一个&quot;严&quot;字  unicode为20005(十进制),  utf-8编码是11100100 10111000 10100101(二进制),十进制就是14989477 ,     我们平时打印只能看到 20005  它是什么时候转成14989477的啊</p>2019-03-14</li><br/><li><span>melody_future</span> 👍（0） 💬（1）<p>有点小晕，想请问下 rune 类型在内存的表现形式是 unicde 编码值，还是utf-8 编码值，你所说的底层指的是？</p>2019-03-06</li><br/>
 </ul>
+````

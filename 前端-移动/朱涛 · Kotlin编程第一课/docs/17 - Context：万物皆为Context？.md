@@ -584,7 +584,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
 //                        挂起函数能可以访问协程上下文吗？
-//                                 ↓                              
+//                                 ↓
 suspend fun testContext() = coroutineContext
 
 fun main() = runBlocking {
@@ -597,37 +597,36 @@ fun main() = runBlocking {
 <li><span>神秘嘉Bin</span> 👍（16） 💬（1）<p>suspend方法需要在协程中执行，协程又一定有上下文，所以可以访问的到哈~ 也就是在suspend方法中可以访问当前协程上下文，并且拿到一些有用的信息</p>2022-03-02</li><br/><li><span>夜班同志</span> 👍（11） 💬（1）<p>挂起函数的Continuation就有CoroutineContext</p>2022-02-22</li><br/><li><span>白泽丶</span> 👍（6） 💬（4）<p>如果为协程作用域创建时传入多个CoroutineContext，比如 Job() + Dispatcher.IO + Dispatcher.Main ，那么携程最终会在哪个线程池中执行呢</p>2022-03-12</li><br/><li><span>白乾涛</span> 👍（5） 💬（3）<p>1、思考题中的方法为什么要加 suspend，加不加有什么区别吗？
 2、为什么代码打印的都是 EmptyCoroutineContext，且没有 name？
 
-
 import kotlinx.coroutines.*
 import kotlinx.coroutines.GlobalScope.coroutineContext
 
 fun main() = runBlocking {
-    printInfo(1) &#47;&#47; 1 - EmptyCoroutineContext - null
-    CoroutineScope(Dispatchers.IO + Job() + CoroutineName(&quot;bqt&quot;)).launch {
-        printInfo(2) &#47;&#47; 2 - EmptyCoroutineContext - null
-    }
-    delay(100L)
+printInfo(1) &#47;&#47; 1 - EmptyCoroutineContext - null
+CoroutineScope(Dispatchers.IO + Job() + CoroutineName(&quot;bqt&quot;)).launch {
+printInfo(2) &#47;&#47; 2 - EmptyCoroutineContext - null
+}
+delay(100L)
 }
 
 suspend fun printInfo(text: Any) = println(&quot;$text - $coroutineContext - ${coroutineContext[CoroutineName]?.name}&quot;)</p>2022-02-26</li><br/><li><span>神秘嘉Bin</span> 👍（4） 💬（2）<p>如果你理解了第 14 讲的内容，那你一定能分析出它们的运行顺序应该是：1、4、2、3。
 
-也有可能是1、2、4、3吧？  这个得看CPU的调度了，也有可能子协程的2线运行吧？</p>2022-03-02</li><br/><li><span>7Promise</span> 👍（3） 💬（1）<p>思考题代码可以运行。coroutineContext方法是返回当前的CoroutineContext，因为runBlocking是CorouScope，CorouScope具有成员CoroutineContext，所以coroutineContext方法可以返回runBlocking的CoroutineContext。</p>2022-02-21</li><br/><li><span>面无表情的生鱼片</span> 👍（3） 💬（2）<p>请教老师，经常看到 Job() + Dispatcher ，这么做是什么原因呢</p>2022-02-21</li><br/><li><span>WWWarmFly</span> 👍（2） 💬（1）<p>请教老师，
+也有可能是1、2、4、3吧？ 这个得看CPU的调度了，也有可能子协程的2线运行吧？</p>2022-03-02</li><br/><li><span>7Promise</span> 👍（3） 💬（1）<p>思考题代码可以运行。coroutineContext方法是返回当前的CoroutineContext，因为runBlocking是CorouScope，CorouScope具有成员CoroutineContext，所以coroutineContext方法可以返回runBlocking的CoroutineContext。</p>2022-02-21</li><br/><li><span>面无表情的生鱼片</span> 👍（3） 💬（2）<p>请教老师，经常看到 Job() + Dispatcher ，这么做是什么原因呢</p>2022-02-21</li><br/><li><span>WWWarmFly</span> 👍（2） 💬（1）<p>请教老师，
 Dispatcher 内部成员的类型是CoroutineContext，这里怎么推出
 
-Dispatcher 确实就是 CoroutineContext</p>2022-03-20</li><br/><li><span>Shanks-王冲</span> 👍（1） 💬（1）<p>Kotlin1.6源码package kotlin.coroutines中找到了这个，public suspend inline val coroutineContext: CoroutineContext，成员定义成suspend了，我不知道该怎么解释，贴出试试</p>2022-03-17</li><br/><li><span>Renext</span> 👍（0） 💬（1）<p>代码段6报错：  Cannot access &#39;ExecutorCoroutineDispatcherImpl&#39;: it is private in file</p>2022-03-08</li><br/><li><span>Allen</span> 👍（0） 💬（5）<p>代码是可以运行的，coroutineContext 的作用是获取当前运行作用域所对应协程的上下文信息。
+Dispatcher 确实就是 CoroutineContext</p>2022-03-20</li><br/><li><span>Shanks-王冲</span> 👍（1） 💬（1）<p>Kotlin1.6源码package kotlin.coroutines中找到了这个，public suspend inline val coroutineContext: CoroutineContext，成员定义成suspend了，我不知道该怎么解释，贴出试试</p>2022-03-17</li><br/><li><span>Renext</span> 👍（0） 💬（1）<p>代码段6报错： Cannot access &#39;ExecutorCoroutineDispatcherImpl&#39;: it is private in file</p>2022-03-08</li><br/><li><span>Allen</span> 👍（0） 💬（5）<p>代码是可以运行的，coroutineContext 的作用是获取当前运行作用域所对应协程的上下文信息。
 
 这里打印出来的信息就是 runBlocking 所运行的协程所对应上下文的信息。
 
 [CoroutineId(1), &quot;coroutine#1&quot;:BlockingCoroutine{Active}@759ebb3d, BlockingEventLoop@484b61fc]</p>2022-02-21</li><br/><li><span>Geek_48edaa</span> 👍（1） 💬（0）<p>&#47;&#47; 代码段7
 
 fun main() = runBlocking {
-    logX(&quot;Before launch.&quot;) &#47;&#47; 1
-    launch {
-        logX(&quot;In launch.&quot;) &#47;&#47; 2
-        delay(1000L)
-        logX(&quot;End launch.&quot;) &#47;&#47; 3
-    }
-    logX(&quot;After launch&quot;)   &#47;&#47; 4
+logX(&quot;Before launch.&quot;) &#47;&#47; 1
+launch {
+logX(&quot;In launch.&quot;) &#47;&#47; 2
+delay(1000L)
+logX(&quot;End launch.&quot;) &#47;&#47; 3
+}
+logX(&quot;After launch&quot;) &#47;&#47; 4
 }
 “如果你理解了第 14 讲的内容，那你一定能分析出它们的运行顺序应该是：1、4、2、3。”
 这段代码的执行顺序是不可控的，可能是1243、也可能是1423.因为2 4 分别运行在不同线程

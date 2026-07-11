@@ -109,7 +109,7 @@ object UserManager {
 ```java
 public final class UserManager {
 
-   public static final UserManager INSTANCE; 
+   public static final UserManager INSTANCE;
 
    static {
       UserManager var0 = new UserManager();
@@ -395,8 +395,8 @@ class PersonManager private constructor(name: String) {
 这两种思路都是可以实现的，我们先来试试**抽象类**的方式，将单例当中通用的“INSTANCE实例”和“getInstance()函数”，抽象到BaseSingleton当中来。
 
 ```plain
-//  ①                          ②                      
-//  ↓                           ↓                       
+//  ①                          ②
+//  ↓                           ↓
 abstract class BaseSingleton<in P, out T> {
     @Volatile
     private var instance: T? = null
@@ -431,7 +431,7 @@ class PersonManager private constructor(name: String) {
     //               ↓                   ↓
     companion object : BaseSingleton<String, PersonManager>() {
     //                  ③
-    //                  ↓ 
+    //                  ↓
         override fun creator(param: String): PersonManager = PersonManager(param)
     }
 }
@@ -538,6 +538,7 @@ Kotlin的匿名内部类和Java的类似，只不过它多了一个功能：匿�
         @JvmStatic
         val instance by lazy { DatabaseManager() }
     }
+
 }
 
 这样写也行</p>2022-01-07</li><br/><li><span>白乾涛</span> 👍（6） 💬（3）<p>1、文章中说&quot;Kotlin 还是为我们提供了伴生对象，来帮助实现静态方法和变量&quot; --- 请问伴生对象(companion object)和静态有关系吗？我感觉只是 @JvmStatic 和静态有关系。
@@ -545,10 +546,10 @@ Kotlin的匿名内部类和Java的类似，只不过它多了一个功能：匿�
 3、文章中说&quot;@JvmStatic修饰的方法或属性会被挪到伴生对象外部的类当中&quot; --- 这里不应该称为【挪到】吧，因为内部类中的 foo 方法还在那里，说【拷贝】更合适
 4、请问【伴生对象 + @JvmStatic】有什么意义？单纯拷贝一个成员到外部类中并没有什么意义吧？</p>2022-02-10</li><br/><li><span>louc</span> 👍（2） 💬（1）<p>BaseSingleton 的提取之前，getInstance 在子类的companion object中可以加 @JvmStatic，但是提取后就无法加这个注解了，造成java代码调用不友好了，这个算个缺点吧</p>2022-04-14</li><br/><li><span>白乾涛</span> 👍（2） 💬（1）<p>使用 object 定义匿名内部类的时候，可以在继承一个抽象类的同时，来实现多个接口，但是反编译后为啥语法不正确？
 
-   public static final void main() {
-      &lt;undefinedtype&gt; item = new A() {
-         public void funA() {
-         }
+public static final void main() {
+&lt;undefinedtype&gt; item = new A() {
+public void funA() {
+}
 
          public void funB() {
          }
@@ -557,43 +558,45 @@ Kotlin的匿名内部类和Java的类似，只不过它多了一个功能：匿�
          }
       };
       item.findMan();
-   }</p>2022-02-09</li><br/><li><span>郑峰</span> 👍（2） 💬（1）<p>creator 是唯一一个需要实现的方法，我们可以使用 SAM 转换，最终使用 Lambda 表达式来简化它的写法。 
+
+}</p>2022-02-09</li><br/><li><span>郑峰</span> 👍（2） 💬（1）<p>creator 是唯一一个需要实现的方法，我们可以使用 SAM 转换，最终使用 Lambda 表达式来简化它的写法。
 
 open class BaseSingleton&lt;in P, out T : Any&gt;(private val creator: (P) -&gt; T) {
-  @Volatile private var instance: T? = null
+@Volatile private var instance: T? = null
 
-  fun getInstance(param: P): T =
-    instance ?: synchronized(this) {
-      instance ?: creator(param).also { instance = it }
-    }
+fun getInstance(param: P): T =
+instance ?: synchronized(this) {
+instance ?: creator(param).also { instance = it }
+}
 }</p>2022-01-16</li><br/><li><span>荷兰小猪8813</span> 👍（1） 💬（1）<p>companion 只是为了将 @jvmstatic 修饰的方法，挪到外面么？？</p>2022-04-04</li><br/><li><span>木易杨</span> 👍（1） 💬（3）<p>class Utils{
-    @JvmStatic
-    fun foo(){
-        println(&quot;foo&quot;)
-    }
+@JvmStatic
+fun foo(){
+println(&quot;foo&quot;)
+}
 }
 为啥@JvmStatic不能再class中写了？只能在object中。</p>2022-01-13</li><br/><li><span>zeki</span> 👍（1） 💬（4）<p>在伴生对象的内部，如果存在“@JvmStatic”修饰的方法或属性，它会被挪到伴生对象外部的类当中，变成静态成员。 这句话是不是有问题呢？我通过查看java代码，发现，属性无论有没有被修饰，都会在外部类中变成静态成员</p>2022-01-08</li><br/><li><span>neo</span> 👍（0） 💬（1）<p>class Person {
-    companion object {
-        fun foo(): String {
-            return &quot;ZCL&quot;
-        }
-        
+companion object {
+fun foo(): String {
+return &quot;ZCL&quot;
+}
+
         @JvmStatic
         fun staticMethod(): String {
             return &quot;staticMethod&quot;
         }
     }
+
 }
 fun main(){
-    println(Person.foo())
-    println(Person.staticMethod())
+println(Person.foo())
+println(Person.staticMethod())
 }
 如果单单的是在写法上的话，不加@JvmStatic也是可以从最外层调用的。
 但是反编译之后foo()方法就没有出现在最外层的函数内。</p>2022-04-25</li><br/><li><span>neo</span> 👍（0） 💬（1）<p>为什么工具类中的静态的无参静态函数会被转换成属性，这样子不是会多一个静态对象的开销么</p>2022-03-23</li><br/><li><span>neo</span> 👍（0） 💬（1）<p>我将我们日常项目中的utils类直接转换成kotlin的时候，转换出来的是如下格式的。直接使用object+@JvmStatic，而没有出现companion。这是什么原因呢，是建议用这种写法写静态方法么
 object Utils {
-      @JvmStatic
-      fun dp2px(){
-      }
+@JvmStatic
+fun dp2px(){
+}
 }
 </p>2022-03-23</li><br/><li><span>neo</span> 👍（0） 💬（1）<p>&#47;&#47; Kotlin当中这样调用Person.InnerSingleton.foo(）
 &#47;&#47; 等价&#47;&#47; 

@@ -86,7 +86,7 @@ data:
     url = "http://10.206.0.16:19000/prometheus/v1/write"
     timeout = 5000
     dial_timeout = 2500
-    max_idle_conns_per_host = 100    
+    max_idle_conns_per_host = 100
 ---
 kind: ConfigMap
 metadata:
@@ -96,7 +96,7 @@ data:
   prometheus.toml: |
     [[instances]]
     urls = ["http://127.0.0.1:10249/metrics"]
-    labels = { job="kube-proxy" }    
+    labels = { job="kube-proxy" }
 ```
 
 上例中的 `http://10.206.0.16:19000/prometheus/v1/write` 是一个支持 Prometheus Remote Write 协议的数据接收地址，可以使用你的 n9e-server，也可以使用 vminsert、prometheus 等其他支持 RemoteWrite 协议的地址。`hostname = "$HOSTNAME"` 这个配置用了 `$` 符号，后面创建 Daemonset 的时候会注入 HOSTNAME 这个环境变量，让 Categraf 自动拿到。
@@ -142,39 +142,39 @@ spec:
         app: categraf-daemonset
     spec:
       containers:
-      - env:
-        - name: TZ
-          value: Asia/Shanghai
-        - name: HOSTNAME
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: spec.nodeName
-        - name: HOSTIP
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: status.hostIP
-        image: flashcatcloud/categraf:v0.2.18
-        imagePullPolicy: IfNotPresent
-        name: categraf
-        volumeMounts:
-        - mountPath: /etc/categraf/conf
-          name: categraf-config
-        - mountPath: /etc/categraf/conf/input.prometheus
-          name: categraf-input-prometheus
+        - env:
+            - name: TZ
+              value: Asia/Shanghai
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: HOSTIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+          image: flashcatcloud/categraf:v0.2.18
+          imagePullPolicy: IfNotPresent
+          name: categraf
+          volumeMounts:
+            - mountPath: /etc/categraf/conf
+              name: categraf-config
+            - mountPath: /etc/categraf/conf/input.prometheus
+              name: categraf-input-prometheus
       hostNetwork: true
       restartPolicy: Always
       tolerations:
-      - effect: NoSchedule
-        operator: Exists
+        - effect: NoSchedule
+          operator: Exists
       volumes:
-      - configMap:
+        - configMap:
+            name: categraf-config
           name: categraf-config
-        name: categraf-config
-      - configMap:
+        - configMap:
+            name: categraf-input-prometheus
           name: categraf-input-prometheus
-        name: categraf-input-prometheus
 ```
 
 最后一步，apply 一下这个 Daemonset 的 YAML 文件。
@@ -270,14 +270,14 @@ kind: ClusterRole
 metadata:
   name: categraf-daemonset
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - nodes/metrics
-  - nodes/stats
-  - nodes/proxy
-  verbs:
-  - get
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/metrics
+      - nodes/stats
+      - nodes/proxy
+    verbs:
+      - get
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -294,9 +294,9 @@ roleRef:
   kind: ClusterRole
   name: categraf-daemonset
 subjects:
-- kind: ServiceAccount
-  name: categraf-daemonset
-  namespace: flashcat
+  - kind: ServiceAccount
+    name: categraf-daemonset
+    namespace: flashcat
 ```
 
 把上面的内容保存为 auth.yaml，apply 一下，然后我们从 ServiceAccount 中提取 Token，做一下 metrics 接口的请求测试。
@@ -365,7 +365,7 @@ data:
     url = "http://10.206.0.16:19000/prometheus/v1/write"
     timeout = 5000
     dial_timeout = 2500
-    max_idle_conns_per_host = 100    
+    max_idle_conns_per_host = 100
 ---
 kind: ConfigMap
 metadata:
@@ -387,7 +387,7 @@ data:
     bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
     use_tls = true
     insecure_skip_verify = true
-    labels = { job="cadvisor" }  
+    labels = { job="cadvisor" }
 ```
 
 Kubelet 在 10250 端口暴露了两类 metrics 数据，一个是 `/metrics`，暴露的是 Kubelet 自身的监控数据，另一个是 `/metrics/cadvisor`，暴露的是容器的监控数据。

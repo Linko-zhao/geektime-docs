@@ -71,12 +71,13 @@ JavaScript正是依靠语句的 Completion Record类型，方才可以在语句�
 在JavaScript中，我们把不带控制能力的语句称为普通语句。普通语句有下面几种。
 
 - 声明类语句
-  
+
   - var声明
   - const声明
   - let声明
   - 函数声明
   - 类声明
+
 - 表达式语句
 - 空语句
 - debugger语句
@@ -125,7 +126,7 @@ return语句可能产生return或者throw类型的Completion Record。我们来�
 {
   var i = 1; // normal, empty, empty
   return i; // return, 1, empty
-  i ++; 
+  i ++;
   console.log(i)
 } // return, 1, empty
 ```
@@ -209,7 +210,8 @@ function test(){
 }
 
 test(); &#47;&#47; SyntaxError: Illegal break statement
-```
+
+````
 
 我们可以这么分析：
 
@@ -235,7 +237,7 @@ function test() {
 test();
 &#47;&#47; 111
 &#47;&#47; 222
-```
+````
 
 我们可以这么分析：
 

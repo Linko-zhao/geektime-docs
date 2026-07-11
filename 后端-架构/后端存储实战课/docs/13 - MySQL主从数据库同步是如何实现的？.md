@@ -92,8 +92,8 @@ Linux： install plugin rpl_semi_sync_master soname &#39;semisync_master_so&#39;
 从库使用的是 semisync_slave.so 文件
 
 这时候MySQL 会自动去 安装目录的 lib&#47;plugin 文件夹下去找</p>2020-03-26</li><br/><li><span>Wiggins</span> 👍（9） 💬（2）<p>读完mysql实战45讲再读老师的文章感觉又复习了一遍 老师的文章很清晰 更加偏向实战中的配置了</p>2020-03-27</li><br/><li><span>渔夫</span> 👍（8） 💬（0）<p>目前主流前端技术的状态管理也是这个状态机机制：state + action = next state</p>2020-03-31</li><br/><li><span>image</span> 👍（4） 💬（0）<p>fork and write，典型有docker镜像，linux fork都和复制状态机有关系，这也是一种基本的构建模式</p>2020-03-26</li><br/><li><span>苗</span> 👍（3） 💬（0）<p>基于事件朔源的应用程序，就是用snapshot + 事件来快速恢复对象的状态。</p>2020-05-03</li><br/><li><span>Ling</span> 👍（2） 💬（0）<p>- rpl_semi_sync_master_timeout
-  为了防止半同步复制在没有收到确认的情况下发生堵塞，如果主库在`rpl_semi_sync_master_timeout`毫秒超时之前没有收到确认，将恢复到异步复制
-  以毫秒为单位，默认值是10000(10秒)。
+为了防止半同步复制在没有收到确认的情况下发生堵塞，如果主库在`rpl_semi_sync_master_timeout`毫秒超时之前没有收到确认，将恢复到异步复制
+以毫秒为单位，默认值是10000(10秒)。
 
 - rpl_semi_sync_master_wait_for_slave_count
   在继续处理事务之前，必须接收的副本确认的数量；
@@ -106,7 +106,7 @@ Linux： install plugin rpl_semi_sync_master soname &#39;semisync_master_so&#39;
   如果配置为`ON`：主库还是会等待`rpl_semi_sync_master_timeout`秒后超时，然后切换为`异步复制`
   如果配置为`OFF`：立刻变为`异步复制`
   MySQL默认该值为`ON`，阿里云的一主一备高可用版RDS，配置该值为`OFF`</p>2021-05-27</li><br/><li><span>Sam Fu</span> 👍（1） 💬（0）<p>指出老师文章中的一个错误:文章中说半同步复制和同步复制的区别是同步复制在 commit 之前需要等待所有的从节点全部返回 ack，而半同步只需要等待部分从节点（ack 数量可配置）返回 ack。这里是有问题的。按照老师的说法，对于一主一从的架构，半同步和全同步岂不是没有区别了。
-半同步和全同步的区别在于：
+  半同步和全同步的区别在于：
 
 - 设置为半同步，从节点将 binlog 写入 relay log 返回 ack 给主节点
 - 设置为全同步，从节点将 relay log 执行完返回 ack 给主节点。

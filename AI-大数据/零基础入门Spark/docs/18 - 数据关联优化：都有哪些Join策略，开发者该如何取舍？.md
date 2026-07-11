@@ -137,19 +137,19 @@ val jointDF: DataFrame = salaries.join(bcEmployees, salaries("id") === employees
 
 temp_data = hospital_data_sheet1.groupby([&#39;hcp_id&#39;, &#39;hcp_name&#39;]).count().select(&#39;hcp_id&#39;, &#39;hcp_name&#39;)
 
-def get_data(data1): 
-    search_data = hospital_data_sheet1.select((hospital_data_sheet1[&#39;hcp_id&#39;] == data1))
-    total = data1
-    return total
-    
+def get_data(data1):
+search_data = hospital_data_sheet1.select((hospital_data_sheet1[&#39;hcp_id&#39;] == data1))
+total = data1
+return total
+
 get_number = F.udf(get_data, StringType())
 result_data = temp_data.withColumn(&#39;total&#39;, get_number(temp_data[&#39;hcp_id&#39;]))
 result_data.show()
 
-最后报错  _pickle.PicklingError: Could not serialize object: TypeError: cannot pickle &#39;_thread.RLock&#39; object   不知道为什么会这样，请老师看一下
+最后报错 _pickle.PicklingError: Could not serialize object: TypeError: cannot pickle &#39;_thread.RLock&#39; object 不知道为什么会这样，请老师看一下
 </p>2022-01-11</li><br/><li><span>LJK</span> 👍（1） 💬（1）<p>老师好，工作中碰到过ERROR BroadcastExchangeExec: Could not execute broadcast in 300 secs.的报错，请问这种报错的排查思路以及有哪些可能的原因导致的呢？</p>2021-11-05</li><br/><li><span>慢慢卢</span> 👍（0） 💬（1）<p>&quot;学习过 Shuffle 之后，我们知道，Shuffle 在 Map 阶段往往会对数据做排序，而这恰恰正中 SMJ 机制的下怀。对于已经排好序的两张表，SMJ 的复杂度是 O(M + N)，这样的执行效率与 HJ 的 O(M) 可以说是不相上下。再者，SMJ 在执行稳定性方面，远胜于 HJ，在内存受限的情况下，SMJ 可以充分利用磁盘来顺利地完成关联计算。因此，考虑到 Shuffle SMJ 的诸多优势，Shuffle HJ 就像是关公后面的周仓，Spark SQL 向来对之视而不见，所以对于 HJ 你大概知道它的作用就行。&quot;
 
-这段里面提到SMJ可以利用磁盘完成计算，结合前面提到内存管理，能使用磁盘的除了cache、shuffle write外，也就是说内存计算其他过程也会使用到磁盘(比如SMJ)，但我理解内存计算应该完全在内存中，不然就不会有OOM了。  所以这点我没有搞懂，辛苦老师指导解释下。</p>2021-12-09</li><br/><li><span>Geek_038655</span> 👍（0） 💬（1）<p>请问：大表join大表怎么优化？</p>2021-10-26</li><br/><li><span>思绪纷繁</span> 👍（1） 💬（0）<p>【由于左表与右表在并行度（分区数）上是一致的】
+这段里面提到SMJ可以利用磁盘完成计算，结合前面提到内存管理，能使用磁盘的除了cache、shuffle write外，也就是说内存计算其他过程也会使用到磁盘(比如SMJ)，但我理解内存计算应该完全在内存中，不然就不会有OOM了。 所以这点我没有搞懂，辛苦老师指导解释下。</p>2021-12-09</li><br/><li><span>Geek_038655</span> 👍（0） 💬（1）<p>请问：大表join大表怎么优化？</p>2021-10-26</li><br/><li><span>思绪纷繁</span> 👍（1） 💬（0）<p>【由于左表与右表在并行度（分区数）上是一致的】
 想问下，只要做shuffle join操作，左表和右表的的并行度一定是一样的吗？</p>2023-06-06</li><br/><li><span>InfoQ_11351e216def</span> 👍（0） 💬（0）<p>老师您好，想问一下，这里 shuffle 的时候会基于 hash 对两个表的数据分区，这只能保证等值关联的情况节点上有对应的数据，那如果不是等值关联呢？比如 a.id &lt; b.aid这种类似的情况，那岂不是驱动表的每条数据都需要扫描被驱动表的每条数据吗？spark 如何做到呢？</p>2024-12-09</li><br/><li><span>嬴梦川</span> 👍（0） 💬（0）<p>shuffle write 过程中对结构中的数据记录按（目标分区 ID，Key）排序， 排列后的结果应该不光对“目标分区 ID”有序，也应该对“Key”有序。这样在reduce阶段拉取数据时再做一次时间复杂度为O(N)归并排序就行了。不会改变复杂度O(M+N)的最终结果</p>2023-09-24</li><br/><li><span>嬴梦川</span> 👍（0） 💬（0）<p>第六章中, shuffle write 过程中对结构中的数据记录按（目标分区 ID，Key）排序， 排列后的结果应该不光对“目标分区 ID”有序，也应该对“Key”是有序的吧</p>2023-09-24</li><br/><li><span>18736416569</span> 👍（0） 💬（0）<p>老师好，前几天跑任务时遇到了关于join的一个问题，很是不解：逻辑是这样的：a表id去left join b表的id_1或者id_2，我用的是a.id = b.id_1 OR a.id = b.id_2，发现spark采用的是BroadCastNestedLoopJoin,难道这不算是等值连接吗？</p>2023-02-24</li><br/><li><span>小麦</span> 👍（0） 💬（1）<p>【由于左表与右表在并行度（分区数）上是一致的】
 想问下，如果是 Hadoop RDD，左表数据量很大，以 128M 划分成10个分区，而右表只有2个分区。如何进行后续的计算呢？</p>2022-11-19</li><br/><li><span>Spoon</span> 👍（0） 💬（0）<p>使用Boradcast SMJ需要前置排序，纯内存的排序最好也需要O(nlgn)的复杂度，更何况是Sorted Merge可能还会利用磁盘排序，这就得不偿失了</p>2022-04-10</li><br/>
 </ul>

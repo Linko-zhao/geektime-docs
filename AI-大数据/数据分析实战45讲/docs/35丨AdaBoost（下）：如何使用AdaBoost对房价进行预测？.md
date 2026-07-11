@@ -177,7 +177,7 @@ ada_err = np.zeros((n_estimators,))
 for i,pred_y in enumerate(ada.staged_predict(test_x)):
      # 统计错误率
     ada_err[i]=zero_one_loss(pred_y, test_y)
-# 绘制每次迭代的AdaBoost错误率 
+# 绘制每次迭代的AdaBoost错误率
 ax.plot(np.arange(n_estimators)+1, ada_err, label='AdaBoost Test 错误率', color='orange')
 ax.set_xlabel('迭代次数')
 ax.set_ylabel('错误率')
@@ -233,104 +233,131 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.feature_extraction import DictVectorizer
 
 # 1.数据加载
+
 train_data=pd.read_csv(&#39;.&#47;Titanic_Data&#47;train.csv&#39;)
 test_data=pd.read_csv(&#39;.&#47;Titanic_Data&#47;test.csv&#39;)
 
 # 2.数据清洗
+
 # 使用平均年龄来填充年龄中的 NaN 值
+
 train_data[&#39;Age&#39;].fillna(train_data[&#39;Age&#39;].mean(),inplace=True)
 test_data[&#39;Age&#39;].fillna(test_data[&#39;Age&#39;].mean(),inplace=True)
+
 # 均价填充
+
 train_data[&#39;Fare&#39;].fillna(train_data[&#39;Fare&#39;].mean(),inplace=True)
 test_data[&#39;Fare&#39;].fillna(test_data[&#39;Fare&#39;].mean(),inplace=True)
+
 # 使用登陆最多的港口来填充
+
 train_data[&#39;Embarked&#39;].fillna(&#39;S&#39;,inplace=True)
 test_data[&#39;Embarked&#39;].fillna(&#39;S&#39;,inplace=True)
 
 # 特征选择
+
 features=[&#39;Pclass&#39;,&#39;Sex&#39;,&#39;Age&#39;,&#39;SibSp&#39;,&#39;Parch&#39;,&#39;Fare&#39;,&#39;Embarked&#39;]
 train_features=train_data[features]
 train_labels=train_data[&#39;Survived&#39;]
 test_features=test_data[features]
 
 # 将符号化的Embarked对象抽象处理成0&#47;1进行表示
+
 dvec=DictVectorizer(sparse=False)
 train_features=dvec.fit_transform(train_features.to_dict(orient=&#39;record&#39;))
 test_features=dvec.transform(test_features.to_dict(orient=&#39;record&#39;))
 
 # 决策树弱分类器
+
 dt_stump = DecisionTreeClassifier(max_depth=1,min_samples_leaf=1)
 dt_stump.fit(train_features, train_labels)
 
 print(u&#39;决策树弱分类器准确率为 %.4lf&#39; % np.mean(cross_val_score(dt_stump, train_features, train_labels, cv=10)))
 
 # 决策树分类器
+
 dt = DecisionTreeClassifier()
 dt.fit(train_features, train_labels)
 
 print(u&#39;决策树分类器准确率为 %.4lf&#39; % np.mean(cross_val_score(dt, train_features, train_labels, cv=10)))
 
 # AdaBoost 分类器
+
 ada = AdaBoostClassifier(base_estimator=dt_stump,n_estimators=200)
 ada.fit(train_features, train_labels)
 
 print(u&#39;AdaBoost 分类器准确率为 %.4lf&#39; % np.mean(cross_val_score(ada, train_features, train_labels, cv=10)))</p>2019-03-04</li><br/><li><span>Geek_hve78z</span> 👍（6） 💬（1）<p>由于乘客测试集缺失真实值，采用 K 折交叉验证准确率
 --------------------
+
 运行结果：
 决策树弱分类器准确率为 0.7867
 决策树分类器准确率为 0.7813
 AdaBoost 分类器准确率为 0.8138
 -------------------------
+
 代码：
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import  AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier
 import pandas as pd
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.model_selection import cross_val_score
 
 # 设置 AdaBoost 迭代次数
+
 n_estimators=200
 
 # 数据加载
+
 train_data=pd.read_csv(&#39;.&#47;Titanic_Data&#47;train.csv&#39;)
 test_data=pd.read_csv(&#39;.&#47;Titanic_Data&#47;test.csv&#39;)
 
 # 模块 2：数据清洗
+
 # 使用平均年龄来填充年龄中的 NaN 值
+
 train_data[&#39;Age&#39;].fillna(train_data[&#39;Age&#39;].mean(),inplace=True)
 test_data[&#39;Age&#39;].fillna(test_data[&#39;Age&#39;].mean(),inplace=True)
+
 # 使用票价的均值填充票价中的 nan 值
+
 train_data[&#39;Fare&#39;].fillna(train_data[&#39;Fare&#39;].mean(),inplace=True)
 test_data[&#39;Fare&#39;].fillna(test_data[&#39;Fare&#39;].mean(),inplace=True)
+
 # 使用登录最多的港口来填充登录港口Embarked的 nan 值
+
 train_data[&#39;Embarked&#39;].fillna(&#39;S&#39;,inplace=True)
 test_data[&#39;Embarked&#39;].fillna(&#39;S&#39;,inplace=True)
 
 # 特征选择
+
 features=[&#39;Pclass&#39;,&#39;Sex&#39;,&#39;Age&#39;,&#39;SibSp&#39;,&#39;Parch&#39;,&#39;Fare&#39;,&#39;Embarked&#39;]
 train_features=train_data[features]
 train_labels=train_data[&#39;Survived&#39;]
 test_features=test_data[features]
 
 # 将符号化的Embarked对象处理成0&#47;1进行表示
+
 dvec=DictVectorizer(sparse=False)
 train_features=dvec.fit_transform(train_features.to_dict(orient=&#39;record&#39;))
 test_features=dvec.transform(test_features.to_dict(orient=&#39;record&#39;))
 
 # 决策树弱分类器
+
 dt_stump = DecisionTreeClassifier(max_depth=1,min_samples_leaf=1)
 dt_stump.fit(train_features, train_labels)
 
 print(u&#39;决策树弱分类器准确率为 %.4lf&#39; % np.mean(cross_val_score(dt_stump, train_features, train_labels, cv=10)))
 
 # 决策树分类器
+
 dt = DecisionTreeClassifier()
 dt.fit(train_features, train_labels)
 
 print(u&#39;决策树分类器准确率为 %.4lf&#39; % np.mean(cross_val_score(dt, train_features, train_labels, cv=10)))
 
 # AdaBoost 分类器
+
 ada = AdaBoostClassifier(base_estimator=dt_stump,n_estimators=n_estimators)
 ada.fit(train_features, train_labels)
 
@@ -386,7 +413,9 @@ print(&#39;AdaBoostK折交叉验证准确率:&#39;,np.mean(cross_val_predict(ada
 AdaBoost分类器准确率为:0.8115
 
 #!&#47;usr&#47;bin&#47;env python
-# -*- coding:utf-8 -*-
+
+# -_- coding:utf-8 -_-
+
 # Author:Peter
 
 import numpy as np
@@ -397,43 +426,53 @@ from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
 # 迭代次数
+
 n_estimators = 200
 train_data = pd.read_csv(r&#39;data&#47;Titanic_Data_train.csv&#39;)
 test_data = pd.read_csv(r&#39;data&#47;Titanic_Data_Test.csv&#39;)
 
 # 用平均年龄将缺失的年龄补齐
+
 train_data[&#39;Age&#39;].fillna(train_data[&#39;Age&#39;].mean(), inplace=True)
 test_data[&#39;Age&#39;].fillna(test_data[&#39;Age&#39;].mean(), inplace=True)
 
 # 用平均票价将缺失的票价补齐
+
 train_data[&#39;Fare&#39;].fillna(train_data[&#39;Fare&#39;].mean(), inplace=True)
 test_data[&#39;Fare&#39;].fillna(test_data[&#39;Fare&#39;].mean(), inplace=True)
 
 # 用登船港口最多的S补齐缺失
+
 train_data[&#39;Embarked&#39;].fillna(&#39;S&#39;, inplace=True)
 test_data[&#39;Embarked&#39;].fillna(&#39;S&#39;, inplace=True)
 
 # 将可用来分类的数据放到训练集中
+
 features = [&#39;Pclass&#39;, &#39;Sex&#39;, &#39;Age&#39;, &#39;SibSp&#39;, &#39;Parch&#39;, &#39;Fare&#39;, &#39;Embarked&#39;]
 train_features = train_data[features]
 train_labels = train_data[&#39;Survived&#39;]
 test_features = test_data[features]
 
 # 字符串数据规范化，转为int型
+
 dvec = DictVectorizer(sparse=False)
 train_features = dvec.fit_transform(train_features.to_dict(orient=&#39;record&#39;))
 test_features = dvec.transform(test_features.to_dict(orient=&#39;record&#39;))
 
 # 弱分类器
+
 dt_stump = DecisionTreeClassifier(max_depth=1, min_samples_leaf=1)
 dt_stump.fit(train_features, train_labels)
 print(u&#39;弱分类器准确率为 %.4lf&#39; % dt_stump.score(train_features, train_labels))
+
 # 决策树分类器
+
 dt = DecisionTreeClassifier()
 dt.fit(train_features, train_labels)
 print(u&#39;决策树分类器准确率为 %.4lf&#39; % np.mean(cross_val_score(dt, train_features, train_labels, cv=10)))
 
 # AdaBoost分类器
+
 ada = AdaBoostClassifier(base_estimator=dt_stump, n_estimators=n_estimators)
 ada.fit(train_features, train_labels)
 ada_score = np.mean(cross_val_score(ada, train_features, train_labels, cv=10))
@@ -457,6 +496,7 @@ KNN算法无随机种子影响。</p>2020-07-05</li><br/><li><span>§mc²ompleXW
 from sklearn.ensemble import AdaBoostClassifier
 
 # 使用 Adaboost 分类模型
+
 ada = AdaBoostClassifier()
 ada.fit(train_features, train_labels)
 
@@ -468,5 +508,5 @@ print(u&#39;Adaboost cross_val_score 准确率为 %.4lf&#39; % np.mean(cross_val
 
 运行
 Adaboost score 准确率为 0.8339
-Adaboost cross_val_score 准确率为 0.8104</p>2019-03-05</li><br/><li><span>FORWARD―MOUNT</span> 👍（0） 💬（1）<p>老师，房价预测这个算法，50个弱分类器是怎么来的？</p>2019-03-05</li><br/><li><span>佳佳的爸</span> 👍（0） 💬（1）<p>你好老师，完整的源代码在哪里可以下载到?  我说的是每节课里边的源代码。</p>2019-03-04</li><br/>
+Adaboost cross_val_score 准确率为 0.8104</p>2019-03-05</li><br/><li><span>FORWARD―MOUNT</span> 👍（0） 💬（1）<p>老师，房价预测这个算法，50个弱分类器是怎么来的？</p>2019-03-05</li><br/><li><span>佳佳的爸</span> 👍（0） 💬（1）<p>你好老师，完整的源代码在哪里可以下载到? 我说的是每节课里边的源代码。</p>2019-03-04</li><br/>
 </ul>

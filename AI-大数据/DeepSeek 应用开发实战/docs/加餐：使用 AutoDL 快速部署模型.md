@@ -115,13 +115,12 @@ export OLLAMA_HOST="0.0.0.0:6006"
 1. 如果租用autodl，是不是还得考虑魔法和科学上网之类的事情
 
 2. 如果租用海外的gpu平台，您有什么推荐的？我之前用过每月10刀的colab，不知道其他还有啥靠谱的？</p>2025-03-15</li><br/><li><span>Geek_c2089d</span> 👍（2） 💬（2）<p>curl -fsSL https:&#47;&#47;ollama.com&#47;install.sh | sh 大佬想问下，autodl 服务器遇到下载 ollama 包访问 github 地址超时，怎么解决可以离线下载部署问题</p>2025-03-21</li><br/><li><span>完美坚持</span> 👍（2） 💬（1）<p>我记得之前留言里老师说推荐用autodl是为什么呢？有很多竞品</p>2025-03-16</li><br/><li><span>完美坚持</span> 👍（2） 💬（1）<p>感谢老师，我看到这个加餐标题是很感动
-老师最近压力也很大，还花时间更新了一讲帮一些不太熟悉平台的同学跟上进</p>2025-03-16</li><br/><li><span>ifelse</span> 👍（1） 💬（1）<p>学习打卡</p>2025-04-07</li><br/><li><span>Geek_20d6cf</span> 👍（1） 💬（5）<p>老师  我的这个转半小时了没出来。
-root@autodl-container-dd3947817d-195c4490:~# ollama run deepseek-r1:7b
-&gt;&gt;&gt; 你好
-⠴ 
+   老师最近压力也很大，还花时间更新了一讲帮一些不太熟悉平台的同学跟上进</p>2025-03-16</li><br/><li><span>ifelse</span> 👍（1） 💬（1）<p>学习打卡</p>2025-04-07</li><br/><li><span>Geek_20d6cf</span> 👍（1） 💬（5）<p>老师 我的这个转半小时了没出来。
+   root@autodl-container-dd3947817d-195c4490:~# ollama run deepseek-r1:7b
+   &gt;&gt;&gt; 你好
+   ⠴
 
-
-910B2x鲲鹏920  是我的这个算力服务器不对吗？</p>2025-03-24</li><br/><li><span>完美坚持</span> 👍（1） 💬（2）<p>云阳老师，我还是之前的问题，就是在autodl上部署环境， ollama ps 显示100%GPU，但是实际调用的只是cpu，我前后花了10多个小时了，就是搞不定
+910B2x鲲鹏920 是我的这个算力服务器不对吗？</p>2025-03-24</li><br/><li><span>完美坚持</span> 👍（1） 💬（2）<p>云阳老师，我还是之前的问题，就是在autodl上部署环境， ollama ps 显示100%GPU，但是实际调用的只是cpu，我前后花了10多个小时了，就是搞不定
 我看有些人也有类似的问题：
 https:&#47;&#47;github.com&#47;ollama&#47;ollama&#47;issues&#47;9068
 https:&#47;&#47;github.com&#47;ollama&#47;ollama&#47;issues&#47;7323

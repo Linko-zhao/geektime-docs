@@ -114,12 +114,12 @@ readToken的逻辑变成伪代码是这样的：
   case A-Za-z$_
     调用scanIden()识别标识符和关键字，并结束循环
   case 0之后是X或x，或者1-9
-    调用scanNumber()识别数字，并结束循环   
+    调用scanNumber()识别数字，并结束循环
   case , ; ( ) [ ]等字符
     返回代表这些符号的Token，并结束循环
   case isSpectial()，也就是% * + - | 等特殊字符
     调用scanOperator()识别操作符
-  ...    
+  ...
 ```
 
 如果画成有限自动机，大致是这样的：
@@ -339,36 +339,36 @@ step2: a,b  >  *     //用逗号分隔栈里的多个元素
 
 那么好了,自举有实际的好处吗? 并没有,因为对于一个语言关键得是解决某一类领域的问题具有优势, 不管这个优势是开发效率高\性能表现好\还是上手简单招工容易等等. 人们关注得是否有杀手级应用和大公司的背书,而不是它是否完成了自举.
 
-最后, 个人认为自举在国外流行主要是来源于早期部分黑客&quot;非我不用&quot;的这种有宗教狂热色彩的值得商榷的风格的演化,如果一门语言本身就是用系统原生语言比如C或者其他系统级编程语言比如C++&#47;Rust写的,那我不认为有自举的必要.</p>2021-06-15</li><br/><li><span>易昊</span> 👍（2） 💬（1）<p>老师请教一个问题，最近在看Javac的源码中的词法分析部分，其中Tokens.java中，enum Tag定义有一个是NAMED，我不理解这个NAMED Tag是做什么用的，并且看enum TokenKind的定义，似乎仅有assert, 
-boolean, byte, char,  double, enum, float, int, long, short, super, this, void, true, false, null, _  是对应的NAMED tag，想弄明白为什么会这样设计。</p>2021-02-07</li><br/><li><span>wusiration</span> 👍（2） 💬（1）<p>补交作业，没有看下一讲的答案....
-​			odStack     opStack      后续运算符
+最后, 个人认为自举在国外流行主要是来源于早期部分黑客&quot;非我不用&quot;的这种有宗教狂热色彩的值得商榷的风格的演化,如果一门语言本身就是用系统原生语言比如C或者其他系统级编程语言比如C++&#47;Rust写的,那我不认为有自举的必要.</p>2021-06-15</li><br/><li><span>易昊</span> 👍（2） 💬（1）<p>老师请教一个问题，最近在看Javac的源码中的词法分析部分，其中Tokens.java中，enum Tag定义有一个是NAMED，我不理解这个NAMED Tag是做什么用的，并且看enum TokenKind的定义，似乎仅有assert,
+boolean, byte, char, double, enum, float, int, long, short, super, this, void, true, false, null, _ 是对应的NAMED tag，想弄明白为什么会这样设计。</p>2021-02-07</li><br/><li><span>wusiration</span> 👍（2） 💬（1）<p>补交作业，没有看下一讲的答案....
+​ odStack opStack 后续运算符
 
 step1: a
 
-step2: a,b              &gt;                  *
+step2: a,b &gt; *
 
-step3: a,b,2           &gt;,*               +
+step3: a,b,2 &gt;,* +
 
-step4: a,b*2          &gt;                  +
+step4: a,b*2 &gt; +
 
-step5: a&gt;b*2,3      +                  
+step5: a&gt;b*2,3 +
 
 step6: a&gt;b*2+7 </p>2020-07-01</li><br/><li><span>lion_fly</span> 👍（1） 💬（1）<p>老师，我在debugJava编译器的代码：
 在源码的注释里面出现了这样的内容
 Qualident = Ident { DOT [Annotations] Ident }
 Java编译器的这种文法是什么文法，感觉不是上下文无关文法</p>2021-01-21</li><br/><li><span>Apsaras</span> 👍（1） 💬（1）<p>step1: a
-step2: a,b  &gt;   *
-step3: a,b,2  &gt;,*  +
-step4: a,b*2  &gt;,+
-step5: a,b*2,3  &gt;,+
+step2: a,b &gt; *
+step3: a,b,2 &gt;,* +
+step4: a,b*2 &gt;,+
+step5: a,b*2,3 &gt;,+
 step6: a,b*2+3
 step7: a&gt;b*2+3</p>2020-06-23</li><br/><li><span>冬天里的懒猫</span> 👍（0） 💬（1）<p>原来竟然是这样。。。
 用了这么多年的java，从来没有想过编译器是如何实现的。这篇课程非常有用。</p>2020-10-28</li><br/><li><span>chris</span> 👍（0） 💬（2）<p>老师能否介绍一下如何建一个ide工程阅读源码？</p>2020-06-23</li><br/><li><span>Geek_71d4ac</span> 👍（0） 💬（1）<p>交作业
 step1: a
-step2: a,b           &gt;     *
-step3: a,b,2        &gt;,*   +
-step4: a,b*2       &gt;      +
-step5:a, b*2,3     &gt;,+  
-step6:a, b*2+3   &gt;
+step2: a,b &gt; *
+step3: a,b,2 &gt;,* +
+step4: a,b*2 &gt; +
+step5:a, b*2,3 &gt;,+  
+step6:a, b*2+3 &gt;
 step7: a &gt;b *2+3</p>2020-06-22</li><br/><li><span>mikewt</span> 👍（1） 💬（0）<p>老师 javacc编译器跟这个有啥关系 为啥java不用javacc编译</p>2023-08-04</li><br/>
 </ul>

@@ -154,7 +154,7 @@ PlayBook是Ansible的脚本文件，使用YAML语言编写，包含需要远程�
 具体的命令如下：
 
 ```
-- name: Copy a war file to the remote machine 
+- name: Copy a war file to the remote machine
   copy:
     src: /tmp/waimai-service.war
     dest: /opt/Tomcat/webapps/waimai-service.war

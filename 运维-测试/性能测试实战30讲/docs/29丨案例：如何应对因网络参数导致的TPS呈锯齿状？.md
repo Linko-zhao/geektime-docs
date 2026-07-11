@@ -204,7 +204,7 @@ struct nf_conn {
         spinlock_t  lock;
         /* Connection tracking(链接跟踪)用来跟踪、记录每个链接的信息(目前仅支持IP协议的连接跟踪)。每个链接由“tuple”来唯一标识，这里的“tuple”对不同的协议会有不同的含义，例如对TCP,UDP来说就是五元组: (源IP，源端口，目的IP, 目的端口，协议号)，对ICMP协议来说是: (源IP, 目的IP, id, type, code), 其中id,type与code都是icmp协议的信息。链接跟踪是防火墙实现状态检测的基础，很多功能都需要借助链接跟踪才能实现，例如NAT、快速转发、等等。*/
         struct  nf_conntrack_tuple_hash  tuplehash[IP_CT_DIR_MAX];
-        
+
         unsigned long  status;  / 可以设置由enum ip_conntrack_status中描述的状态 /
 
 
@@ -269,10 +269,10 @@ net.netfilter.nf_conntrack_max=655350
 ### 关闭防火墙
 
 ```
-chkconfig iptables off 
-chkconfig ip6tables off 
-service iptables stop 
-service ip6tables stop 
+chkconfig iptables off
+chkconfig ip6tables off
+service iptables stop
+service ip6tables stop
 ```
 
 ### 禁用在这个端口上跟踪（也称为使用裸表）
@@ -280,7 +280,7 @@ service ip6tables stop
 在防火墙规则中这样配置：
 
 ```
--A PREROUTING -p tcp -m tcp --dport 80 -j NOTRACK 
+-A PREROUTING -p tcp -m tcp --dport 80 -j NOTRACK
 ```
 
 你也可以直接对TCP禁用跟踪，至于规则配置，就看你的想像力了（这也是我比较不喜欢弄防火墙的原因，配置也太灵活了，容易乱）。
@@ -346,35 +346,13 @@ lsmod | grep nf_conntrack
 
 2.为什么 timewait 的 TCP 链接只是问题的现象？
 因为能引起链接处于 timewait 状态的原因还是有很多的，这就需要不断透过现象看本质，根据不断地排查锁定最根本的原因</p>2020-03-22</li><br/><li><span>蔡森冉</span> 👍（9） 💬（1）<p>感觉学到了什么，又感觉好像都不懂，看完估计前面的也忘了差不多了。这真是要不断时间和经验的积累，总结方法。但是一点记住的就是全局--定向</p>2020-03-26</li><br/><li><span>Geek_6a9aeb</span> 👍（4） 💬（1）<p>
-既然跟加入的nginx没有关系，那么第一次性能测的时候为啥没有发现有这种性能问题呢？</p>2021-01-14</li><br/><li><span>Geek6198</span> 👍（3） 💬（1）<p>现象：
-	* 测试环境压测曲线正常，线上环境曲线杂乱
-	* “TPS 在上升到一个量级的时候就会掉下来，然后再上到同样的量级再掉下来，非常规律”
-	* “响应时间，在第一次 TPS 掉下来之后，就变得乱七八糟了。响应时间不仅上升了，而且抖动也很明显”
-检查过程：
-	1. 问题检查
-		* 看操作系统CPU&#47;io&#47;memory&#47;net
-	 	* 看数据库、tomcat&#47;nginx
-	2. 第1阶段结论： 网络连接有问题
-		* 发现了大量timewait
-	3. 尝试优化
-		* timewait是发起断开后的一个状态，修改服务端TCP相关配置
-			1. timewait资源允许重用+快速回收 等
-		* 修改nginx，只做转发，去除其它逻辑
-		* 将nginx部署到另一台服务器上
-		* 上述都没发现问题===》防火墙还没看
-	 	* 关闭防火墙，服务TPS正常
-	4.  第2阶段结论：瓶颈在防火墙
-	5. 问题分析
-		* dmesg 查下系统日志
-		* 发现 nf_conntrack 数据满了
-		* 查文档，知道其是干什么的；怎么改
-		* 修改配置，重新打开防火墙==》服务正常
-	6.  结束：瓶颈处理完成</p>2021-11-30</li><br/><li><span>Geek_6a9aeb</span> 👍（2） 💬（1）<p>老师，linux  tcp连接的限制(最大不能超过65535) ，对吗？ 既然nf-conntrack默认也是65535 对最大tcp连接对应的？  这边没有看到 系统究竟建立了多少tcp连接，如果是超过65535个，那么丢包是合理的吧？</p>2021-01-17</li><br/><li><span>浩祥</span> 👍（2） 💬（2）<p>如果用1.5个月做性能测试，那就不要做了，1.5个月一个全新的产品可以上线了，预期线下费时，从投入产出比看，不如灰度放量，让实际场景暴露问题</p>2020-10-20</li><br/><li><span>凌空飞起的剪刀腿</span> 👍（2） 💬（1）<p>想起了自己以前处理iptables限制tcp  syn次数的性能调优，</p>2020-04-04</li><br/><li><span>tt</span> 👍（2） 💬（1）<p>说TIME_WAIT是现象，是因为它只是“果”，导致它的“因”有很多可能，就是本课里老师采取的多种尝试。
+既然跟加入的nginx没有关系，那么第一次性能测的时候为啥没有发现有这种性能问题呢？</p>2021-01-14</li><br/><li><span>Geek6198</span> 👍（3） 💬（1）<p>现象：* 测试环境压测曲线正常，线上环境曲线杂乱 * “TPS 在上升到一个量级的时候就会掉下来，然后再上到同样的量级再掉下来，非常规律” * “响应时间，在第一次 TPS 掉下来之后，就变得乱七八糟了。响应时间不仅上升了，而且抖动也很明显”
+检查过程：1. 问题检查 * 看操作系统CPU&#47;io&#47;memory&#47;net * 看数据库、tomcat&#47;nginx 2. 第1阶段结论： 网络连接有问题 * 发现了大量timewait 3. 尝试优化 * timewait是发起断开后的一个状态，修改服务端TCP相关配置 1. timewait资源允许重用+快速回收 等 * 修改nginx，只做转发，去除其它逻辑 * 将nginx部署到另一台服务器上 * 上述都没发现问题===》防火墙还没看 * 关闭防火墙，服务TPS正常 4. 第2阶段结论：瓶颈在防火墙 5. 问题分析 * dmesg 查下系统日志 * 发现 nf_conntrack 数据满了 * 查文档，知道其是干什么的；怎么改 * 修改配置，重新打开防火墙==》服务正常 6. 结束：瓶颈处理完成</p>2021-11-30</li><br/><li><span>Geek_6a9aeb</span> 👍（2） 💬（1）<p>老师，linux tcp连接的限制(最大不能超过65535) ，对吗？ 既然nf-conntrack默认也是65535 对最大tcp连接对应的？ 这边没有看到 系统究竟建立了多少tcp连接，如果是超过65535个，那么丢包是合理的吧？</p>2021-01-17</li><br/><li><span>浩祥</span> 👍（2） 💬（2）<p>如果用1.5个月做性能测试，那就不要做了，1.5个月一个全新的产品可以上线了，预期线下费时，从投入产出比看，不如灰度放量，让实际场景暴露问题</p>2020-10-20</li><br/><li><span>凌空飞起的剪刀腿</span> 👍（2） 💬（1）<p>想起了自己以前处理iptables限制tcp syn次数的性能调优，</p>2020-04-04</li><br/><li><span>tt</span> 👍（2） 💬（1）<p>说TIME_WAIT是现象，是因为它只是“果”，导致它的“因”有很多可能，就是本课里老师采取的多种尝试。
 
 当然，从分析链路的角度来说，它是TPS不稳的一个中间“因”，但还不能作为全局——定向分析的最终定位，所以是“现象。”</p>2020-02-26</li><br/><li><span>奕</span> 👍（1） 💬（1）<p>分析思路很重要，还有分析问题的时候不要着急</p>2021-01-24</li><br/><li><span>zwm</span> 👍（1） 💬（1）<p>看不大明白只感觉nb，要学习的太多了</p>2020-03-06</li><br/><li><span>kubxy</span> 👍（1） 💬（1）<p>老师，请教您一个问题：
 按照TCP四次挥手的过程，timewait应该出现在主动断开连接的一方。而您在第二次尝试中说“考虑到当客户端主动断开时，服务器上也会出现大量的timewait”。这句描述是否不准确，如果是客户端主动断开连接，那么timewait应该出现在客户端上，而不是服务器上。</p>2020-02-27</li><br/><li><span>枫林听雪落</span> 👍（0） 💬（2）<p>向各位请教一下，tps出现规律性的突然降低，对应的响应时间出现突然的升高，整体资源没有怎么使用，但是网络连接出现很多wait_timeout。这种情况应该从什么地方进行分析和调整呢？</p>2023-04-11</li><br/><li><span>学员141</span> 👍（0） 💬（1）<p>老师，我们也是ngnix cpu迅速增长100%，添加的实例网关主机都比应用的多了，我看了我们服务器防火墙是关闭的，是不是就不是防火墙影响导致的？
-   Loaded: loaded (&#47;usr&#47;lib&#47;systemd&#47;system&#47;firewalld.service; disabled; vendor preset: enabled)
-   Active: inactive (dead)
-     Docs: man:firewalld(1)
+Loaded: loaded (&#47;usr&#47;lib&#47;systemd&#47;system&#47;firewalld.service; disabled; vendor preset: enabled)
+Active: inactive (dead)
+Docs: man:firewalld(1)
 </p>2021-08-02</li><br/><li><span>学员141</span> 👍（0） 💬（1）<p>停了这个，感觉我们最近遇到的问题有点像，也是nginx也是单纯转发，CPU一下子就接近100了，加的服务器比应用还要多，太奇怪了，当时没有往防火墙上考虑，毕竟是全公司都一样的防火墙</p>2021-07-31</li><br/><li><span>努力努力再努力</span> 👍（0） 💬（1）<p>压测机器怎么看有没有出现网络瓶颈？导致发的请求有限，测不出服务最大性能水平</p>2020-08-06</li><br/>
 </ul>

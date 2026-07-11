@@ -19,8 +19,10 @@
 ```javascript
 <KanbanColumn className="column-todo">
   <KanbanColumn.Title>
-    待处理<button onClick={handleAdd}
-      disabled={showAdd}>&#8853; 添加新卡片</button>
+    待处理
+    <button onClick={handleAdd} disabled={showAdd}>
+      &#8853; 添加新卡片
+    </button>
   </KanbanColumn.Title>
   {/* ...省略 */}
 </KanbanColumn>
@@ -56,7 +58,9 @@
 这就轮到真·子组件上场了，通过简单的梳理，我们为 `Dialog` 设计了如下几个真·子组件：
 
 ```javascript
-const Dialog = (props) => {/* 待实现 */};
+const Dialog = (props) => {
+  /* 待实现 */
+};
 Dialog.Title = () => null;
 Dialog.Content = () => null;
 Dialog.Action = () => null;
@@ -66,15 +70,19 @@ Dialog.Action = () => null;
 
 ```javascript
 <Dialog modal onClose={() => {}}>
-  <Dialog.Title className="dialog-title" style={{ color: 'blue' }}>
+  <Dialog.Title className="dialog-title" style={{ color: "blue" }}>
     这是标题
   </Dialog.Title>
   <Dialog.Content>
     <p>这是正文。</p>
     <p>这是正文第二段。</p>
   </Dialog.Content>
-  <Dialog.Action type="confirm" onClick={() => {}}>确认</Dialog.Action>
-  <Dialog.Action type="cancel" onClick={() => {}}>取消</Dialog.Action>
+  <Dialog.Action type="confirm" onClick={() => {}}>
+    确认
+  </Dialog.Action>
+  <Dialog.Action type="cancel" onClick={() => {}}>
+    取消
+  </Dialog.Action>
 </Dialog>
 ```
 
@@ -86,11 +94,11 @@ Dialog.Action = () => null;
 
 ```javascript
 function findByType(children, type) {
-  return React.Children.toArray(children).find(c => c.type === type);
+  return React.Children.toArray(children).find((c) => c.type === type);
 }
 
 function findAllByType(children, type) {
-  return React.Children.toArray(children).filter(c => c.type === type);
+  return React.Children.toArray(children).filter((c) => c.type === type);
 }
 ```
 
@@ -98,31 +106,32 @@ function findAllByType(children, type) {
 
 ```javascript
 const Dialog = ({ modal, onClose, children }) => {
-  const renderTitle = () => {
-    const subElement = findByType(children, Dialog.Title);
-    if (subElement) {
-      const { className, style, children } = subElement.props;
-      return (<h1 {...{ className, style }}>{children}</h1>);
-    }
-    return null;
-  };
-  const renderContent = () => {
-    const subElement = findByType(children, Dialog.Content);
-    return subElement?.props?.children;
-  };
-  const renderButtons = () => {
-    const subElements = findAllByType(children, Dialog.Action);
-    return subElements.map(({ props: { onClick, children } }) => (
-      <button onClick={onClick} key={children}>{children}</button>
-    ));
-  };
-  return (
-    <dialog open>
-      <header>{renderTitle()}</header>
-      <main>{renderContent()}</main>
-      <footer>{renderButtons()}</footer>
-    </dialog>
-  );
+  const renderTitle = () => {
+    const subElement = findByType(children, Dialog.Title);
+    if (subElement) {
+      const { className, style, children } = subElement.props;
+      return <h1 {...{ className, style }}>{children}</h1>;
+    }
+    return null;
+  };
+  const renderContent = () => {
+    const subElement = findByType(children, Dialog.Content);
+    return subElement?.props?.children;
+  };
+  const renderButtons = () => {
+    const subElements = findAllByType(children, Dialog.Action);
+    return subElements.map(({ props: { onClick, children } }) => (
+      <button onClick={onClick} key={children}>
+        {children}
+      </button>
+    ));
+  };
+  return (
+    <dialog open>
+            <header>{renderTitle()}</header>      <main>{renderContent()}</main>
+            <footer>{renderButtons()}</footer>   {" "}
+    </dialog>
+  );
 };
 Dialog.Title = () => null;
 Dialog.Content = () => null;
@@ -146,7 +155,7 @@ Dialog.Action = () => null;
 
 ## React 17/18中的react/jsx-runtime
 
-在第4节课我们提到过JSX是 `React.createElement` 的语法糖。如果你对React底层实现感兴趣，那你也需要了解这个语法糖在React新版中的变化：React从17版本开始已经启用全新的JSX运行时来替代 `React.createElement` 。这要感谢留言区“*Geek\_fcdf7b* ”同学的提醒。
+在第4节课我们提到过JSX是 `React.createElement` 的语法糖。如果你对React底层实现感兴趣，那你也需要了解这个语法糖在React新版中的变化：React从17版本开始已经启用全新的JSX运行时来替代 `React.createElement` 。这要感谢留言区“_Geek\_fcdf7b_ ”同学的提醒。
 
 在启用新JSX运行时的状态下，用代码编译器编译JSX：
 
@@ -187,21 +196,21 @@ React 17版本加入的新JSX运行时就是这第一步。与`React.createEleme
 
 ```javascript
 var KanbanCard = function KanbanCard(_ref) {
-  var title = _ref.title,
-    status = _ref.status;
-  return /*#__PURE__*/ (0, jsx_runtime.jsxs)("li", {
-    className: "kanban-card",
-    children: [
-      /*#__PURE__*/ (0, jsx_runtime.jsx)("div", {
-        className: "card-title",
-        children: title,
-      }),
-      /*#__PURE__*/ (0, jsx_runtime.jsx)("div", {
-        className: "card-status",
-        children: status,
-      }),
-    ],
-  });
+  var title = _ref.title,
+    status = _ref.status;
+  return /*#__PURE__*/ (0, jsx_runtime.jsxs)("li", {
+    className: "kanban-card",
+    children: [
+      /*#__PURE__*/ (0, jsx_runtime.jsx)("div", {
+        className: "card-title",
+        children: title,
+      }),
+      /*#__PURE__*/ (0, jsx_runtime.jsx)("div", {
+        className: "card-status",
+        children: status,
+      }),
+    ],
+  });
 };
 ```
 

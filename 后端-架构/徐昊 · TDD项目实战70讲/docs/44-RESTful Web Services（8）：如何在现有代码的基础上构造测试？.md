@@ -10,9 +10,9 @@
 任务列表为：
 
 - ResourceServlet
-  
+
   - 将请求派分给对应的资源（Resource），并根据返回的状态、超媒体类型、内容，响应Http请求
-    
+
     - 使用OutboundResponse的status作为Http Response的状态
     - 使用OutboundResponse的headers作为Http Response的Http Headers
     - 通过MessageBodyWriter将OutboundResponse的GenericEntity写回为Body
@@ -20,20 +20,23 @@
     - 如果找不到对应的HeaderDelegate，则返回500族错误
     - 如果找不到对应的ExceptionMapper，则返回500族错误
     - 如果entity为空，则忽略body
+
   - 当资源方法抛出异常时，根据异常响应Http请求
-    
+
     - 如果抛出WebApplicationException，且response不为null，则使用response响应Http
     - 如果抛出的不是WebApplicationException，则通过异常的具体类型查找ExceptionMapper，生产response响应Http请求
+
   - 当其他组件抛出异常时，根据异常响应Http请求
-    
+
     - 调用ExceptionMapper时
     - 调用HeaderDelegate时
     - 调用MessageBodyWriter时
     - 通过Providers查找ExceptionMapper时
     - 通过Providers查找MessageBodyWriter时
     - 通过RuntimeDelegate查找HeaderDelegate时
+
 - RuntimeDelegate
-  
+
   - 为MediaType提供HeaderDelegate
   - 为CacheControl提供HeaderDelegate
   - 为Cookie提供HeaderDelegates
@@ -42,6 +45,7 @@
   - 为NewCookie提供HeaderDelegate
   - 为Date提供HeaderDelegate
   - 提供OutboundResponseBuilder
+
 - OutboundResponseBuilder
 - OutboundResponse
 
@@ -67,18 +71,18 @@ import java.util.function.Supplier;
 public class ResourceServlet extends HttpServlet {
     private Runtime runtime;
     private Providers providers;
-    
+
     public ResourceServlet(Runtime runtime) {
         this.runtime = runtime;
         this.providers = runtime.getProviders();
     }
-    
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ResourceRouter router = runtime.getResourceRouter();
         respond(resp, () -> router.dispatch(req, runtime.createResourceContext(req, resp)));
     }
-    
+
     private void respond(HttpServletResponse resp, Supplier<OutboundResponse> supplier) {
         try {
             respond(resp, supplier.get());
@@ -88,7 +92,7 @@ public class ResourceServlet extends HttpServlet {
             respond(resp, () -> from(throwable));
         }
     }
-    
+
     private void respond(HttpServletResponse resp, OutboundResponse response) throws IOException {
         resp.setStatus(response.getStatus());
         MultivaluedMap<String, Object> headers = response.getHeaders();
@@ -104,7 +108,7 @@ public class ResourceServlet extends HttpServlet {
                     response.getHeaders(), resp.getOutputStream());
         }
     }
-    
+
     private OutboundResponse from(Throwable throwable) {
         ExceptionMapper mapper = providers.getExceptionMapper(throwable.getClass());
         return (OutboundResponse) mapper.toResponse(throwable);

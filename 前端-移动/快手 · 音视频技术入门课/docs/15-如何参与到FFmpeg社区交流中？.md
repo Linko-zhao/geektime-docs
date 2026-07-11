@@ -165,7 +165,7 @@ SUMMARY: AddressSanitizer: bad-free (libclang_rt.asan_osx_dynamic.dylib:x86_64h+
 因为每一个patch贡献者都有可能忽略了自己代码风格的问题，如果合并到FFmpeg代码库里，其他人在阅读代码的时候看到各种各样的代码风格会感觉很混乱，所以在合并patch之前需要检测一下代码风格是否符合FFmpeg本身的风格，通过patcheck就可以搞定。
 
 ```plain
-[root@onvideo-liuqi05-01 ffmpeg]# ./tools/patcheck 0001-avfilter-vsrc_ddagrab-add-options-for-more-control-o.patch 
+[root@onvideo-liuqi05-01 ffmpeg]# ./tools/patcheck 0001-avfilter-vsrc_ddagrab-add-options-for-more-control-o.patch
 patCHeck 1e10.0
 This tool is intended to help a human check/review patches. It is very far from
 being free of false positives and negatives, and its output are just hints of what
@@ -180,7 +180,7 @@ possibly never written:force_fmt
 possibly constant     :force_fmt
 
 Missing changelog entry (ignore if minor change)
-[root@onvideo-liuqi05-01 ffmpeg]# 
+[root@onvideo-liuqi05-01 ffmpeg]#
 ```
 
 这些准备工作都完成之后，你就可以根据我们上面说的两个关键指标去努力了。

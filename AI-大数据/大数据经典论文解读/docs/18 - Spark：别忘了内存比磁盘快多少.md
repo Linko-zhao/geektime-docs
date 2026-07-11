@@ -96,16 +96,16 @@ for (i <- 1 to ITERATIONS) {
 ![图片](https://static001.geekbang.org/resource/image/05/5d/05194e7605c386536043ec4042a8215d.jpg?wh=1920x1080)
 
 ```scala
-lines = spark.textFile("hdfs://...") 
-errors = lines.filter(_.startsWith("ERROR")) 
+lines = spark.textFile("hdfs://...")
+errors = lines.filter(_.startsWith("ERROR"))
 errors.persist()
 
-// Count errors mentioning MySQL: 
-errors.filter(_.contains("MySQL")).count() 
+// Count errors mentioning MySQL:
+errors.filter(_.contains("MySQL")).count()
 
-// Return the time fields of errors mentioning 
-// HDFS as an array (assuming time is field 
-// number 3 in a tab-separated format): 
+// Return the time fields of errors mentioning
+// HDFS as an array (assuming time is field
+// number 3 in a tab-separated format):
 errors.filter(_.contains("HDFS")).map(_.split(’\t’)(3)).collect()
 ```
 

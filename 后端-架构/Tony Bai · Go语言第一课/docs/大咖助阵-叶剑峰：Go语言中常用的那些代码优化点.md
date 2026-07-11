@@ -156,7 +156,7 @@ func (f *fundamental) Format(s fmt.State, verb rune){
         case 's':
                 io.WriteString(s, f.msg)
         case 'q':
-                fmt.Fprintf(s, "%q", f.msg)    
+                fmt.Fprintf(s, "%q", f.msg)
         }
 }
 ```

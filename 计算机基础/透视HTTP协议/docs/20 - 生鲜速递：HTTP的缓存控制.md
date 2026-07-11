@@ -173,16 +173,18 @@ Etag在服务器上生成后,客户端通过If-Match或者说If-None-Match这个
 同一个用户第二次这个文件的请求
 客户端在一次发起HTTP GET请求一个文件,注意这个时候客户端同时发送一个If-None-Match头,这个头中会包括上次这个文件的Etag(例如&quot;2e681a- 6-5d044840&quot;),这时服务器判断发送过来的Etag和自己计算出来的Etag,因此If-None-Match为False,不返回200,返 回304,客户端继续使用本地缓存；
 
-注意.服务器又设置了Cache-Control:max-age和Expires时,会同时使用,也就是说在完全匹配If-Modified-Since和If-None-Match即检查完修改时间和Etag之后,服务器才能返回304.</p>2019-08-07</li><br/><li><span>院长。</span> 👍（20） 💬（4）<p>老师我有几个问题想问一下： 
+注意.服务器又设置了Cache-Control:max-age和Expires时,会同时使用,也就是说在完全匹配If-Modified-Since和If-None-Match即检查完修改时间和Etag之后,服务器才能返回304.</p>2019-08-07</li><br/><li><span>院长。</span> 👍（20） 💬（4）<p>老师我有几个问题想问一下：
+
 1. F5刷新的时候，请求头加上&quot;Cache-Control: max-age=0&quot;，您文章里说，服务器用一个最新生成的报文回应浏览器，那这时候响应返回的应该是&quot;200 OK&quot;吗？为什么我在极客网页版的这个页面刷新后，有个叫&quot;106804&quot;的资源返回的是&quot;304&quot;，但是强制刷新是&quot;200 ok&quot;，产生的效果好像不同呀。这里是不是应该换一种方式说？感觉强制刷新说的有些简单了。
 2. F5刷新发送的请求头是固定的吗？还是会根据浏览器不同而产生变化？
 3. 200（from memory cache）和200(from disk cache)是针对内存和硬盘的，他们出现的场景分别是什么呢？
 4. HTTP缓存有标准性的流程吗？比如说从我输入URL开始，到后续刷新或者强制刷新等？
-5.对于&quot;must-revalidate&quot;我有疑问，本身存储机制不就是如果不过期的话可以继续使用，过期的话去请求服务器吗？那这个属性还有什么意义呢？
-6. no-cache,no-store,max-age等属性可以共存吗？
-问题有点多，因为网上资料质量参差不齐，解释有些也不全相同，所以在这里咨询下老师，希望老师可以解答一下，或者有推荐的讲述HTTP缓存的文章也可以，谢谢老师</p>2019-07-15</li><br/><li><span>啦啦啦</span> 👍（15） 💬（1）<p>老师，nocache，每次使用前都需要去浏览器问一下有没有过期，这不也是一次请求吗？那不和没有缓存一个意思吗</p>2019-07-12</li><br/><li><span>Marvin</span> 👍（12） 💬（2）<p>我有一个问题，就拿咱们极客时间的网页来说，会请求一个Id-00001.ts的文件，响应头中指示了cache-control: max-age= 7200， 要一个小时才过期，那么为什么每次刷新都是304, 像这种情况不应该直接200 cacahe from disk才对么？为什么明明没有过期还要去服务器协商呢？</p>2019-08-04</li><br/><li><span>Khirye</span> 👍（8） 💬（1）<p>Hi, 我对缓存控制策略这张流程图有一些疑惑，must-revalidate是指缓存过期之后，必须要向服务器验证缓存，这一步应该是在图中”缓存最多x秒“这个判断之前的吧？
-因为只有缓存超过了max-age的期限，才会进入”must-revalidate的判断“这一步吧？
-烦请解惑，谢谢！</p>2019-11-25</li><br/><li><span>风宇殇</span> 👍（7） 💬（2）<p>这篇文章将缓存讲的比较容易理解。https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;cUqkG3NETmJbglDXfSf0tg</p>2021-03-10</li><br/><li><span>geraltlaush</span> 👍（6） 💬（1）<p>小贴士的nginx计算etag我贴下测试logngx_sprintf(etag-&gt;value.data, &quot;&quot;%xT-%xO&quot;&quot;, r-&gt;headers_out.last_modified_time,
-r-&gt;headers_out.content_length_n)相信大家看到这里更清晰明了</p>2019-07-21</li><br/><li><span>walle</span> 👍（4） 💬（1）<p>cache-control 中的 private 是如何识别的呢？是根据session吗还是什么方式开识别是私有缓存呢</p>2019-11-15</li><br/><li><span>WL</span> 👍（4） 💬（1）<p>请问老师弱ETag是服务器更新时自己判断本次的更新有没有语义的变化，如果语义有变化就重新生成一个ETag，如果没有变化不重新生成直接使用原来的，请问是这样的流程吗？</p>2019-07-12</li><br/><li><span>路漫漫</span> 👍（3） 💬（0）<p>老师，根据服务器的缓存控制那个图，如果cache-control 设置了 no-cache 或 must-revalidate 那就 必须设置 max-age喽？</p>2021-11-16</li><br/><li><span>Maske</span> 👍（3） 💬（1）<p>1.cache的作用为定义浏览器对静态文件如何进行缓存控制，目的是为了有效利用可复用的资源，尽可能减少客户端的请求，优化用户体验减轻服务器响应压力。常用字段值就那么一些，并有各自的含义。cookie的作用是增加了http请求的状态性，让服务器‘认识’当前访问的用户是谁，字段key,value值都可以自定义，比较灵活。
-2.看了下天猫首页的css., js文件，普通的刷新（F5）操作中，不会在请求头中包含cache-control、if-none-match，if-Modified-Since,刷新会命中缓存文件，属于强缓存。强制刷新（ctrl + f5）在请求头中附加了cache-control: no-cache，为协商缓存，相当于设置max-age=0;所以此时不会使用本地缓存，当前页面所有的请求均是如此</p>2020-06-16</li><br/><li><span>Larry</span> 👍（3） 💬（1）<p>如果响应报文什么字段都不设置，单纯的返回数据，是不是也不会缓存？</p>2020-05-30</li><br/>
+   5.对于&quot;must-revalidate&quot;我有疑问，本身存储机制不就是如果不过期的话可以继续使用，过期的话去请求服务器吗？那这个属性还有什么意义呢？
+5. no-cache,no-store,max-age等属性可以共存吗？
+   问题有点多，因为网上资料质量参差不齐，解释有些也不全相同，所以在这里咨询下老师，希望老师可以解答一下，或者有推荐的讲述HTTP缓存的文章也可以，谢谢老师</p>2019-07-15</li><br/><li><span>啦啦啦</span> 👍（15） 💬（1）<p>老师，nocache，每次使用前都需要去浏览器问一下有没有过期，这不也是一次请求吗？那不和没有缓存一个意思吗</p>2019-07-12</li><br/><li><span>Marvin</span> 👍（12） 💬（2）<p>我有一个问题，就拿咱们极客时间的网页来说，会请求一个Id-00001.ts的文件，响应头中指示了cache-control: max-age= 7200， 要一个小时才过期，那么为什么每次刷新都是304, 像这种情况不应该直接200 cacahe from disk才对么？为什么明明没有过期还要去服务器协商呢？</p>2019-08-04</li><br/><li><span>Khirye</span> 👍（8） 💬（1）<p>Hi, 我对缓存控制策略这张流程图有一些疑惑，must-revalidate是指缓存过期之后，必须要向服务器验证缓存，这一步应该是在图中”缓存最多x秒“这个判断之前的吧？
+   因为只有缓存超过了max-age的期限，才会进入”must-revalidate的判断“这一步吧？
+   烦请解惑，谢谢！</p>2019-11-25</li><br/><li><span>风宇殇</span> 👍（7） 💬（2）<p>这篇文章将缓存讲的比较容易理解。https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;cUqkG3NETmJbglDXfSf0tg</p>2021-03-10</li><br/><li><span>geraltlaush</span> 👍（6） 💬（1）<p>小贴士的nginx计算etag我贴下测试logngx_sprintf(etag-&gt;value.data, &quot;&quot;%xT-%xO&quot;&quot;, r-&gt;headers_out.last_modified_time,
+   r-&gt;headers_out.content_length_n)相信大家看到这里更清晰明了</p>2019-07-21</li><br/><li><span>walle</span> 👍（4） 💬（1）<p>cache-control 中的 private 是如何识别的呢？是根据session吗还是什么方式开识别是私有缓存呢</p>2019-11-15</li><br/><li><span>WL</span> 👍（4） 💬（1）<p>请问老师弱ETag是服务器更新时自己判断本次的更新有没有语义的变化，如果语义有变化就重新生成一个ETag，如果没有变化不重新生成直接使用原来的，请问是这样的流程吗？</p>2019-07-12</li><br/><li><span>路漫漫</span> 👍（3） 💬（0）<p>老师，根据服务器的缓存控制那个图，如果cache-control 设置了 no-cache 或 must-revalidate 那就 必须设置 max-age喽？</p>2021-11-16</li><br/><li><span>Maske</span> 👍（3） 💬（1）<p>1.cache的作用为定义浏览器对静态文件如何进行缓存控制，目的是为了有效利用可复用的资源，尽可能减少客户端的请求，优化用户体验减轻服务器响应压力。常用字段值就那么一些，并有各自的含义。cookie的作用是增加了http请求的状态性，让服务器‘认识’当前访问的用户是谁，字段key,value值都可以自定义，比较灵活。
+   2.看了下天猫首页的css., js文件，普通的刷新（F5）操作中，不会在请求头中包含cache-control、if-none-match，if-Modified-Since,刷新会命中缓存文件，属于强缓存。强制刷新（ctrl + f5）在请求头中附加了cache-control: no-cache，为协商缓存，相当于设置max-age=0;所以此时不会使用本地缓存，当前页面所有的请求均是如此</p>2020-06-16</li><br/><li><span>Larry</span> 👍（3） 💬（1）<p>如果响应报文什么字段都不设置，单纯的返回数据，是不是也不会缓存？</p>2020-05-30</li><br/>
+
 </ul>

@@ -23,19 +23,19 @@ public class DemoApplication {
    private ExecutorService executor = Executors.newFixedThreadPool(4096);
    //全局变量，访问它需要加锁。
    private int count;
-   
+
    //以固定的速率向线程池中加入任务
    @Scheduled(fixedRate = 10)
    public void lockContention() {
       IntStream.range(0, 1000000)
             .forEach(i -> executor.submit(this::incrementSync));
    }
-   
+
    //具体任务，就是将count数加一
    private synchronized void incrementSync() {
       count = (count + 1) % 10000000;
    }
-   
+
    public static void main(String[] args) {
       SpringApplication.run(DemoApplication.class, args);
    }
@@ -134,17 +134,16 @@ jstack 4361 > 4361.log
 
 老师 Blocking状态只有synchronized阻塞的时候才会有这个状态。我试了一下ReentrantLock锁是WAITING
 &quot;222&quot; #14 prio=5 os_prio=31 tid=0x00007f852d20a800 nid=0x9503 waiting on condition [0x0000000306dc1000]
-   java.lang.Thread.State: WAITING (parking)
-	at sun.misc.Unsafe.park(Native Method)
-	- parking to wait for  &lt;0x000000076cb6eb48&gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)
+java.lang.Thread.State: WAITING (parking)
+at sun.misc.Unsafe.park(Native Method) - parking to wait for &lt;0x000000076cb6eb48&gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)
 	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:836)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireQueued(AbstractQueuedSynchronizer.java:870)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:1199)
 	at java.util.concurrent.locks.ReentrantLock$NonfairSync.lock(ReentrantLock.java:209)
-	at java.util.concurrent.locks.ReentrantLock.lock(ReentrantLock.java:285)
-	at cn.labnetwork.service.order.requisition.RequisitionController$1.run(RequisitionController.java:123)
-	at java.lang.Thread.run(Thread.java:750)</p>2023-03-03</li><br/><li><span>DY</span> 👍（0） 💬（0）<p>老师真牛</p>2021-05-17</li><br/><li><span>James</span> 👍（0） 💬（0）<p>top -H -p 4361 最后一个指标全部显示java。。。而不是具体的线程名字。。</p>2021-03-31</li><br/><li><span>惘 闻</span> 👍（0） 💬（0）<p>waiting是线程拿到过锁进入过临界区后因为等待条件而释放锁,blocking是从未拿到过锁从未进入过临界区.两个状态都是不占有锁的状态.老师我理解的对吗?</p>2021-01-27</li><br/><li><span>maybe</span> 👍（0） 💬（0）<p>1、cpu使用过高定位思路：先看看有没有占用高得线程，如果没有择可以考虑线程数太多导致上下文切换带来的开销大
+at java.util.concurrent.locks.ReentrantLock.lock(ReentrantLock.java:285)
+at cn.labnetwork.service.order.requisition.RequisitionController$1.run(RequisitionController.java:123)
+at java.lang.Thread.run(Thread.java:750)</p>2023-03-03</li><br/><li><span>DY</span> 👍（0） 💬（0）<p>老师真牛</p>2021-05-17</li><br/><li><span>James</span> 👍（0） 💬（0）<p>top -H -p 4361 最后一个指标全部显示java。。。而不是具体的线程名字。。</p>2021-03-31</li><br/><li><span>惘 闻</span> 👍（0） 💬（0）<p>waiting是线程拿到过锁进入过临界区后因为等待条件而释放锁,blocking是从未拿到过锁从未进入过临界区.两个状态都是不占有锁的状态.老师我理解的对吗?</p>2021-01-27</li><br/><li><span>maybe</span> 👍（0） 💬（0）<p>1、cpu使用过高定位思路：先看看有没有占用高得线程，如果没有择可以考虑线程数太多导致上下文切换带来的开销大
 2、思考题：使用newcachedthreadpool，因为最大线程数为int最大值相当于无限制，会无限制创建线程。使用自定义线程池，设置和newcachedthreadpool差不多。</p>2020-08-18</li><br/><li><span>Chris</span> 👍（0） 💬（1）<p>老师，线程栈那么多信息，怎么直接定位到了submit的问题呢</p>2020-07-22</li><br/><li><span>许童童</span> 👍（0） 💬（0）<p>哪些情况可能导致程序中的线程数失控，产生大量线程呢？
 创建线程池时参数是计算出来的，而计算的过程是有bug的，导致结果有问题，从而创建了大量线程。
 这种需要对程序进行测试，线上持续进行性能监控，发现并解决问题。</p>2019-08-10</li><br/>

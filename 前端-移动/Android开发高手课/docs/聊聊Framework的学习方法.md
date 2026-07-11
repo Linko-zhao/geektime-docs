@@ -77,7 +77,7 @@ odex是Android系统对于dex的进一步优化，目的是为了提升执行效
 以上我们验证了系统服务AMS服务代码的调试，其他服务调试方法也是一样，具体的线程信息，可以使用下面的命令查看。
 
 ```
-ps -T 353 
+ps -T 353
 这里353是使用ps -A |grep SystemServer查出 SystemServer的进程号
 ```
 

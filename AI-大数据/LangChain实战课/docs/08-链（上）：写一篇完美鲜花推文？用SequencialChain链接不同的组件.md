@@ -38,13 +38,13 @@ from langchain import PromptTemplate
 # 原始字符串模板
 template = "{flower}的花语是?"
 # 创建LangChain模板
-prompt_temp = PromptTemplate.from_template(template) 
+prompt_temp = PromptTemplate.from_template(template)
 # 根据模板创建提示
 prompt = prompt_temp.format(flower='玫瑰')
 # 打印提示的内容
 print(prompt)
 
-#----第二步 创建并调用模型 
+#----第二步 创建并调用模型
 # 导入LangChain中的OpenAI模型接口
 from langchain import OpenAI
 # 创建模型实例
@@ -161,7 +161,7 @@ print(result)
 输出：
 
 ```plain
-'''[{'text': '\n\n玫瑰在夏季的花语是“恋爱”、“热情”和“浪漫”。'}, 
+'''[{'text': '\n\n玫瑰在夏季的花语是“恋爱”、“热情”和“浪漫”。'},
 {'text': '\n\n百合在春季的花语是“爱情”和“友谊”。'},
  {'text': '\n\n郁金香在秋季的花语表达的是“热情”、“思念”、“爱恋”、“回忆”和“持久的爱”。'}]'''
 ```
@@ -178,15 +178,15 @@ print(result)
 输出：
 
 ```plain
-generations=[[Generation(text='\n\n玫瑰在夏季的花语是“热情”、“爱情”和“幸福”。', 
-generation_info={'finish_reason': 'stop', 'logprobs': None})], 
-[Generation(text='\n\n春季的花语是爱情、幸福、美满、坚贞不渝。', 
-generation_info={'finish_reason': 'stop', 'logprobs': None})], 
-[Generation(text='\n\n秋季的花语是“思念”。银色的百合象征着“真爱”，而淡紫色的郁金香则象征着“思念”，因为它们在秋天里绽放的时候，犹如在思念着夏天的温暖。', 
-generation_info={'finish_reason': 'stop', 'logprobs': None})]] 
-llm_output={'token_usage': {'completion_tokens': 243, 'total_tokens': 301, 'prompt_tokens': 58}, 'model_name': 'gpt-3.5-turbo-instruct'} 
-run=[RunInfo(run_id=UUID('13058cca-881d-4b76-b0cf-0f9c831af6c4')), 
-RunInfo(run_id=UUID('7f38e33e-bab5-4d03-b77c-f50cd195affb')), 
+generations=[[Generation(text='\n\n玫瑰在夏季的花语是“热情”、“爱情”和“幸福”。',
+generation_info={'finish_reason': 'stop', 'logprobs': None})],
+[Generation(text='\n\n春季的花语是爱情、幸福、美满、坚贞不渝。',
+generation_info={'finish_reason': 'stop', 'logprobs': None})],
+[Generation(text='\n\n秋季的花语是“思念”。银色的百合象征着“真爱”，而淡紫色的郁金香则象征着“思念”，因为它们在秋天里绽放的时候，犹如在思念着夏天的温暖。',
+generation_info={'finish_reason': 'stop', 'logprobs': None})]]
+llm_output={'token_usage': {'completion_tokens': 243, 'total_tokens': 301, 'prompt_tokens': 58}, 'model_name': 'gpt-3.5-turbo-instruct'}
+run=[RunInfo(run_id=UUID('13058cca-881d-4b76-b0cf-0f9c831af6c4')),
+RunInfo(run_id=UUID('7f38e33e-bab5-4d03-b77c-f50cd195affb')),
 RunInfo(run_id=UUID('7a1e45fd-77ee-4133-aab0-431147186db8'))]
 ```
 
@@ -286,9 +286,9 @@ print(result)
 > Entering new  chain...
 
 > Finished chain.
-{'name': '玫瑰', 'color': '黑色', 
-'introduction': '\n\n黑色玫瑰，这是一种对传统玫瑰花的独特颠覆，它的出现挑战了我们对玫瑰颜色的固有认知。它的花瓣如煤炭般黑亮，反射出独特的微光，而花蕊则是金黄色的，宛如夜空中的一颗星，强烈的颜色对比营造出一种前所未有的视觉效果。在植物学中，黑色玫瑰的出现无疑提供了一种新的研究方向，对于我们理解花朵色彩形成的机制有着重要的科学价值。', 
-'review': '\n\n黑色玫瑰，这不仅仅是一种花朵，更是一种完全颠覆传统的艺术表现形式。黑色的花瓣仿佛在诉说一种不可言喻的悲伤与神秘，而黄色的蕊瓣犹如漆黑夜空中的一抹亮色，给人带来无尽的想象。它将悲伤与欢乐，神秘与明亮完美地结合在一起，这是一种全新的视觉享受，也是一种对生活理解的深度表达。', 
+{'name': '玫瑰', 'color': '黑色',
+'introduction': '\n\n黑色玫瑰，这是一种对传统玫瑰花的独特颠覆，它的出现挑战了我们对玫瑰颜色的固有认知。它的花瓣如煤炭般黑亮，反射出独特的微光，而花蕊则是金黄色的，宛如夜空中的一颗星，强烈的颜色对比营造出一种前所未有的视觉效果。在植物学中，黑色玫瑰的出现无疑提供了一种新的研究方向，对于我们理解花朵色彩形成的机制有着重要的科学价值。',
+'review': '\n\n黑色玫瑰，这不仅仅是一种花朵，更是一种完全颠覆传统的艺术表现形式。黑色的花瓣仿佛在诉说一种不可言喻的悲伤与神秘，而黄色的蕊瓣犹如漆黑夜空中的一抹亮色，给人带来无尽的想象。它将悲伤与欢乐，神秘与明亮完美地结合在一起，这是一种全新的视觉享受，也是一种对生活理解的深度表达。',
 'social_post_text': '\n欢迎来到我们的自媒体平台，今天，我们要向您展示的是我们的全新产品——黑色玫瑰。这不仅仅是一种花，这是一种对传统观念的挑战，一种视觉艺术的革新，更是一种生活态度的象征。
 这种别样的玫瑰花，其黑色花瓣宛如漆黑夜空中闪烁的繁星，富有神秘的深度感，给人一种前所未有的视觉冲击力。这种黑色，它不是冷酷、不是绝望，而是充满着独特的魅力和力量。而位于黑色花瓣之中的金黄色花蕊，则犹如星星中的灵魂，默默闪烁，给人带来无尽的遐想，充满活力与生机。
 黑色玫瑰的存在，不仅挑战了我们对于玫瑰传统颜色的认知，它更是一种生动的生命象征，象征着那些坚韧、独特、勇敢面对生活的人们。黑色的花瓣中透露出一种坚韧的力量，而金黄的花蕊则是生活中的希望，二者的结合恰好象征了生活中的喜怒哀乐，体现了人生的百态。'}
@@ -317,7 +317,7 @@ for flower, price in zip(flowers, prices):
     # 根据提示准备模型的输入
     input = prompt.format(flower_name=flower, price=price)
     # 获取模型的输出
-    output = model(input)    
+    output = model(input)   
     # 解析模型的输出
     parsed_output = output_parser.parse(output)
 ```
@@ -351,6 +351,7 @@ for flower, price in zip(flowers, prices):
 
 1. GitHub上各种各样的[链](https://github.com/langchain-ai/langchain/tree/master/libs/langchain/langchain/chains)
 2. 代码，[LLMChain](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/chains/llm.py) 的实现细节
+
 <div><strong>精选留言（13）</strong></div><ul>
 <li><span>在路上</span> 👍（9） 💬（1）<p>Chain有三个能力，有状态，可观测，可组合。
 有状态：Chain类定义了memory: Optional[BaseMemory]成员变量，记录了chain执行过程的状态。调用chain._call(inputs)可得到输出对象outputs，之后会调用chain.prep_outputs(inputs, outputs)加输入和输出对象成对放入memory对象。
@@ -360,10 +361,12 @@ for flower, price in zip(flowers, prices):
 import os
 
 # 设置网络代理
+
 os.environ[&quot;http_proxy&quot;] = &quot;http:&#47;&#47;127.0.0.1:7890&quot;
 os.environ[&quot;https_proxy&quot;] = &quot;http:&#47;&#47;127.0.0.1:7890&quot;
 
 # 通过.env管理api_token
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -374,17 +377,23 @@ from langchain.prompts import PromptTemplate
 llm = OpenAI(temperature=.7, verbose=True)
 
 # 导入结构化输出解析器和ResponseSchema
+
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
+
 # 定义我们想要接收的响应模式
+
 response_schemas = [
-    ResponseSchema(name=&quot;description&quot;, description=&quot;鲜花的描述文案&quot;),
-    ResponseSchema(name=&quot;reason&quot;, description=&quot;问什么要这样写这个文案&quot;)
+ResponseSchema(name=&quot;description&quot;, description=&quot;鲜花的描述文案&quot;),
+ResponseSchema(name=&quot;reason&quot;, description=&quot;问什么要这样写这个文案&quot;)
 ]
+
 # 创建输出解析器
+
 output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
 print(output_parser.get_format_instructions())
 
 # 创建原始提示模板
+
 prompt_template = &quot;&quot;&quot;
 您是一位专业的鲜花店文案撰写员。
 对于售价为 {price} 元的 {flower} ，您能提供一个吸引人的简短描述吗？
@@ -392,23 +401,24 @@ prompt_template = &quot;&quot;&quot;
 {format_instructions}
 &quot;&quot;&quot;
 prompt = PromptTemplate(
-    template=prompt_template,
-    input_variables=[&quot;flower&quot;, &quot;price&quot;],
-    partial_variables={&quot;format_instructions&quot;: output_parser.get_format_instructions()},
-    output_parser=output_parser)
+template=prompt_template,
+input_variables=[&quot;flower&quot;, &quot;price&quot;],
+partial_variables={&quot;format_instructions&quot;: output_parser.get_format_instructions()},
+output_parser=output_parser)
 
 chain = LLMChain(llm=llm, prompt=prompt)
 
 # 数据准备
+
 flowers = [&quot;玫瑰&quot;, &quot;百合&quot;, &quot;康乃馨&quot;]
 prices = [&quot;50&quot;, &quot;30&quot;, &quot;20&quot;]
 
 for flower, price in zip(flowers, prices):
-    result = chain.run({
-        &quot;flower&quot;: flower,
-        &quot;price&quot;: price
-    })
-    print(result)
+result = chain.run({
+&quot;flower&quot;: flower,
+&quot;price&quot;: price
+})
+print(result)
 </p>2023-09-21</li><br/><li><span>悟尘</span> 👍（0） 💬（2）<p>from langchain import PromptTemplate, OpenAI, LLMChain 
 这行代码，为什么会有warning呢？
 换成下面的import后，就没有告警了
@@ -422,47 +432,54 @@ from langchain import PromptTemplate
 # 创建原始模板
 template = &quot;&quot;&quot;您是一位专业的鲜花店文案撰写员。\n
 对于售价为 {price} 元的 {flower} ，您能提供一个吸引人的简短描述吗？\n
-            
+
 请以JSON格式返回，包含以下字段：\n
+
 - flower_type: 鲜花的种类
 - price: 鲜花的价格
 - description: 鲜花的描述文案
 - reason: 为什么要这样写这个文案
-&quot;&quot;&quot;
+  &quot;&quot;&quot;
+
 # 根据原始模板创建LangChain提示模板
+
 prompt = PromptTemplate.from_template(template)
 
 # 定义我们想要接收的数据格式
-from pydantic import BaseModel, Field
-class FlowerDescription(BaseModel):    
-    flower_type: str = Field(description=&quot;鲜花的种类&quot;)    
-    price: int = Field(description=&quot;鲜花的价格&quot;)    
-    description: str = Field(description=&quot;鲜花的描述文案&quot;)    
-    reason: str = Field(description=&quot;为什么要这样写这个文案&quot;)
 
+from pydantic import BaseModel, Field
+class FlowerDescription(BaseModel):  
+flower_type: str = Field(description=&quot;鲜花的种类&quot;)  
+price: int = Field(description=&quot;鲜花的价格&quot;)  
+description: str = Field(description=&quot;鲜花的描述文案&quot;)  
+reason: str = Field(description=&quot;为什么要这样写这个文案&quot;)
 
 # 创建输出解析器
+
 from langchain.output_parsers import PydanticOutputParser
 output_parser = PydanticOutputParser(pydantic_object=FlowerDescription)
 
-
 # 用阿里云的大语言模型
+
 from langchain_community.llms import Tongyi
+
 # 直接在代码中设置API密钥
+
 DASHSCOPE_API_KEY = &quot;XXX&quot; # 请替换为您的阿里云通义千问模型API密钥
 llm = Tongyi(dashscope_api_key=DASHSCOPE_API_KEY)
 
 # apply允许您针对输入列表运行链
+
 input_list = [
-    {&quot;flower&quot;: &quot;玫瑰&quot;,&#39;price&#39;: &quot;50&quot;},
-    {&quot;flower&quot;: &quot;百合&quot;,&#39;price&#39;: &quot;30&quot;},
-    {&quot;flower&quot;: &quot;郁金香&quot;,&#39;price&#39;: &quot;20&quot;}
+{&quot;flower&quot;: &quot;玫瑰&quot;,&#39;price&#39;: &quot;50&quot;},
+{&quot;flower&quot;: &quot;百合&quot;,&#39;price&#39;: &quot;30&quot;},
+{&quot;flower&quot;: &quot;郁金香&quot;,&#39;price&#39;: &quot;20&quot;}
 ]
 llm_chain = LLMChain( # 创建链
-    llm=llm, 
-    prompt=prompt,
-    output_parser=output_parser) 
-result = llm_chain.apply(input_list)      # 运行链
+llm=llm,
+prompt=prompt,
+output_parser=output_parser)
+result = llm_chain.apply(input_list) # 运行链
 print(result)</p>2024-07-27</li><br/><li><span>eagle</span> 👍（1） 💬（1）<p>LangChainDeprecationWarning: The class `LLMChain` was deprecated in LangChain 0.1.17 and will be removed in 0.3.0. Use RunnableSequence, e.g., `prompt | llm` instead.</p>2024-07-13</li><br/><li><span>刘双荣</span> 👍（0） 💬（0）<p>多个提示链完成完整的业务生成</p>2024-09-18</li><br/><li><span>张申傲</span> 👍（0） 💬（0）<p>第8讲打卡~</p>2024-07-13</li><br/><li><span>黎楚萱</span> 👍（0） 💬（0）<p>为什么我的result会把所有的prompt都拼接在一起？有谁遇到同样的情况吗
 我的输出是这样的：
 introduction：\n你是一个植物学家，给定花的名称和类型，你需要为这种花写一个100字左右的介绍。\n花名：玫瑰\n颜色：red\n植物学家：这是关于上述花的介绍：\n玫瑰是一种美丽的花卉，通常被种植在花园或庭院中。它们通常有红色的花朵，通常有五到六片花瓣。玫瑰花的花瓣通常有五到六片，它们通常有红色的花粉，这使得它们成为一种非常受欢迎的花卉。玫瑰花通常需要充足的阳光和水分，以保持其健康和美丽。

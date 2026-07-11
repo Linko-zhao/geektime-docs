@@ -10,9 +10,9 @@
 任务列表如下：
 
 - ResourceRouter
-  
+
   - 将Resource Method的返回值包装为Response对象
-    
+
     - 根据与Path匹配结果，降序排列RootResource，选择第一个的RootResource
     - 如果没有匹配的RootResource，则构造404的Response
     - 如果返回的RootResource中无法匹配剩余Path，则构造404的Response

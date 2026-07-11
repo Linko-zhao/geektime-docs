@@ -192,6 +192,7 @@ Redis从4.0版本开始，能够支持后台异步执行任务，比如异步删
 <li><span>lison</span> 👍（1） 💬（1）<p>老师，有幸听了您的集训班，想咨询下 后续章节是否有具体版本和编译工具的介绍，后续好和您保持同步</p>2021-07-26</li><br/><li><span>Leven</span> 👍（0） 💬（1）<p>请问老师，没有c语言基础适合吗</p>2021-07-26</li><br/><li><span>Kaito</span> 👍（158） 💬（11）<p>重新看了一下源码目录，结合这篇文章的内容，整理了一下代码分类（忽略.h头文件），这也更清晰一些：
 
 数据类型：
+
 - String（t_string.c、sds.c、bitops.c）
 - List（t_list.c、ziplist.c）
 - Hash（t_hash.c、ziplist.c、dict.c）
@@ -202,6 +203,7 @@ Redis从4.0版本开始，能够支持后台异步执行任务，比如异步删
 - Stream（t_stream.c、rax.c、listpack.c）
 
 全局：
+
 - Server（server.c、anet.c）
 - Object（object.c）
 - 键值对（db.c）
@@ -215,12 +217,14 @@ Redis从4.0版本开始，能够支持后台异步执行任务，比如异步删
 - 双向链表（adlist.c）
 
 高可用&amp;集群：
+
 - 持久化：RDB（rdb.c、redis-check-rdb.c)、AOF（aof.c、redis-check-aof.c）
 - 主从复制（replication.c）
 - 哨兵（sentinel.c）
 - 集群（cluster.c）
 
 辅助功能：
+
 - 延迟统计（latency.c）
 - 慢日志（slowlog.c）
 - 通知（notify.c）
@@ -234,9 +238,9 @@ Redis 从 4.0 版本开始，能够支持后台异步执行任务，比如异步
 
 Redis Server 在启动时，会在 server.c 中调用 bioInit 函数，这个函数会创建 3 类后台任务（类型定义在 bio.h 中）：
 
-#define BIO_CLOSE_FILE    0 &#47;&#47; 后台线程关闭 fd
-#define BIO_AOF_FSYNC     1 &#47;&#47; AOF 配置为 everysec，后台线程刷盘
-#define BIO_LAZY_FREE     2 &#47;&#47; 后台线程释放 key 内存
+#define BIO_CLOSE_FILE 0 &#47;&#47; 后台线程关闭 fd
+#define BIO_AOF_FSYNC 1 &#47;&#47; AOF 配置为 everysec，后台线程刷盘
+#define BIO_LAZY_FREE 2 &#47;&#47; 后台线程释放 key 内存
 
 这 3 类后台任务，已经注册好了执行固定的函数（消费者）：
 
@@ -272,39 +276,39 @@ bioProcessBackgroundJobs，支持两种后台任务：关闭文件和 AOF 文件
 
 http:&#47;&#47;www.passjava.cn&#47;#&#47;12.Redis&#47;00.DownloadRedis</p>2021-07-27</li><br/><li><span>Ethan New</span> 👍（10） 💬（0）<p>评论区也太强了吧，瑟瑟发抖</p>2021-07-28</li><br/><li><span>陌</span> 👍（9） 💬（1）<p>关于作业，如果一开始对 Redis 源码不熟悉的话，我们可以借用 GDB 工具来回答 Redis 有哪些后台任务:
 
-1) 添加 -g 的编码参数，向编译文件中添加调试信息，以便使用 GDB：
+1. 添加 -g 的编码参数，向编译文件中添加调试信息，以便使用 GDB：
 
 make CFLAGS=&quot;-g -O0&quot;
 
-2) cd src &amp;&amp; gdb redis-server
+2. cd src &amp;&amp; gdb redis-server
 
-3) 在 aeMain 函数处打一个断点，然后再使得程序运行至此处:
-break aeMain
-run
+3. 在 aeMain 函数处打一个断点，然后再使得程序运行至此处:
+   break aeMain
+   run
 
-4) 查看线程信息:
-info threads
+4. 查看线程信息:
+   info threads
 
 这时候我们就能够看到 4 个线程的相关信息，分别是 redis-server、bio_close_file、bio_aof_fsync、bio_lazy_free，然后就可以按线程名称再去源码中查找了。</p>2021-07-29</li><br/><li><span>可怜大灰狼</span> 👍（5） 💬（0）<p>我的第一反应应该是从unlink命令入手查找。首先肯定是server.c中redisCommandTable[]中的unlinkCommand，找到了lazyfree.c中dbAsyncDelete方法，然后找到了bio.c中bioCreateBackgroundJob方法，很显然bio.h中加了一种后台IO任务类型：BIO_LAZY_FREE=2。我记得我看3.0代码还只有BIO_CLOSE_FILE和BIO_AOF_FSYNC</p>2021-07-26</li><br/><li><span>Darren</span> 👍（5） 💬（0）<p>bio.c
 在5.x的源码中，后台异步执行又3个子线程
-#define BIO_NUM_OPS       3
-#define BIO_CLOSE_FILE    0 &#47;* Deferred close(2) syscall. *&#47;
-#define BIO_AOF_FSYNC     1 &#47;* Deferred AOF fsync. *&#47;
-#define BIO_LAZY_FREE     2 &#47;* Deferred objects freeing. *&#47;
+#define BIO_NUM_OPS 3
+#define BIO_CLOSE_FILE 0 &#47;* Deferred close(2) syscall. _&#47;
+#define BIO_AOF_FSYNC 1 &#47;_ Deferred AOF fsync. _&#47;
+#define BIO_LAZY_FREE 2 &#47;_ Deferred objects freeing. *&#47;
 
-bioInit方法中通过pthread_create创建BIO_NUM_OPS子线程，不同线程的任务在static list *bio_jobs[BIO_NUM_OPS]中存储。</p>2021-07-26</li><br/><li><span>小五</span> 👍（3） 💬（0）<p>1 Redis 支持 3 大类型的后台任务，它们定义在 bio.h 文件中：
-&#47;* Background job opcodes 后台作业操作码
- * 1 处理关闭文件
- * 2 AOF 异步刷盘
- * 3 lazyfree
- *&#47;
-#define BIO_CLOSE_FILE    0 &#47;* Deferred close(2) syscall. *&#47;
-#define BIO_AOF_FSYNC     1 &#47;* Deferred AOF fsync. *&#47;
-#define BIO_LAZY_FREE     2 &#47;* Deferred objects freeing. *&#47;
+bioInit方法中通过pthread_create创建BIO_NUM_OPS子线程，不同线程的任务在static list _bio_jobs[BIO_NUM_OPS]中存储。</p>2021-07-26</li><br/><li><span>小五</span> 👍（3） 💬（0）<p>1 Redis 支持 3 大类型的后台任务，它们定义在 bio.h 文件中：
+&#47;_ Background job opcodes 后台作业操作码
+
+- 1 处理关闭文件
+- 2 AOF 异步刷盘
+- 3 lazyfree
+  _&#47;
+  #define BIO_CLOSE_FILE 0 &#47;_ Deferred close(2) syscall. _&#47;
+  #define BIO_AOF_FSYNC 1 &#47;_ Deferred AOF fsync. _&#47;
+  #define BIO_LAZY_FREE 2 &#47;_ Deferred objects freeing. *&#47;
 
 在 Redis 服务器启动时，会创建以上三类后台线程，然后阻塞等待任务的到来。处理关闭文件和 AOF 异步刷盘异步任务比较好理解，lazyfree 类型的异步任务场景就比较多了，比如下面几种情况：
-1）删除数据：配置 lazyfree_lazy_user_del ，使用 unlink , 都可能将删除封装成任务放到 bio_jobs 任务队列中
-2) 定期删除时，如果配置 lazyfree_lazy_expire ，那么可能将删除封装成任务放到 bio_jobs 任务队列中
+1）删除数据：配置 lazyfree_lazy_user_del ，使用 unlink , 都可能将删除封装成任务放到 bio_jobs 任务队列中 2) 定期删除时，如果配置 lazyfree_lazy_expire ，那么可能将删除封装成任务放到 bio_jobs 任务队列中
 
 2 后台创建的以上三种 bio 后台线程会不断轮询 bio_jobs 任务队列中的任务，并分门别类的处理对应的任务。逻辑操作定义在 bio.c 文件中
 

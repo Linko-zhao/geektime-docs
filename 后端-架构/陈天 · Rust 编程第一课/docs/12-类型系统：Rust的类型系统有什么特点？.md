@@ -509,7 +509,7 @@ fn main() {
 
 PS：第2种解法还可以对不同具体类型实现多个new方法：
 
-```rust
+````rust
 impl MyWriter&lt;BufWriter&lt;TcpStream&gt;&gt; {
     pub fn new(addr: &amp;str) -&gt; Self {
         let stream = TcpStream::connect(addr).unwrap();
@@ -564,7 +564,7 @@ num is : [143, 52, 155, 135, 50, 50, 133, 105, 143, 62, 120, 125, 88, 58, 99, 19
 data is: [0x7ff6ec000bc0, 0x7ff6ec000bc0, 0x7ff6ec000bc0, 0x7ff6ec000bc0, 0x7ff6ec000bc0]
 
 搞不明白的是，这里为什么new了之后，还是会导致地址不变，有没有办法强制让变量num每次new之后就是会改变的？多谢了</p>2021-09-22</li><br/><li><span>荒野林克</span> 👍（11） 💬（1）<p>老师，这里有一个疑惑：
-```impl&lt;W: Write&gt; MyWriter&lt;W&gt;``` 
+```impl&lt;W: Write&gt; MyWriter&lt;W&gt;```
 里，impl 后面以及指明约束，为什么 MyWriter 后面还要单独写一次呢？</p>2021-09-28</li><br/><li><span>罗杰</span> 👍（3） 💬（3）<p>追老师的更新比追剧有趣多了，配合张老师的视频课，还有陈老师 B 站的 Rust 培训视频，真的很舒服。</p>2021-09-20</li><br/><li><span>核桃</span> 👍（2） 💬（1）<p>fn main() {
     let numbers = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let even_numbers = numbers
@@ -577,38 +577,41 @@ data is: [0x7ff6ec000bc0, 0x7ff6ec000bc0, 0x7ff6ec000bc0, 0x7ff6ec000bc0, 0x7ff6
 
 请教一下这段代码为什么就无法推导类型呢？对于编译器来说，应该是知道number是vec的呀。不太懂，这里可能是我对编译原理理解不够扎实。</p>2021-11-17</li><br/><li><span>Marvichov</span> 👍（2） 💬（1）<p>W会被resolve成一个实际类型, 也就是`BufferWriter::new(stream)`的类型. 而rust要求W是一个泛型. 我的下面的改动有点多...
 
-有一点我就有点不明白了, 声明的时候都说了W: Write, 为啥impl的时候还要说一遍呢 (不说不让编译)? 
+有一点我就有点不明白了, 声明的时候都说了W: Write, 为啥impl的时候还要说一遍呢 (不说不让编译)?
 
-```
+````
+
 use std::io::{BufWriter, Write};
 use std::net::TcpStream;
 
 #[derive(Debug)]
 struct MyWriter&lt;W&gt;
 where
-    W: Write,
+W: Write,
 {
-    writer: BufWriter&lt;W&gt;,
+writer: BufWriter&lt;W&gt;,
 }
 
 impl&lt;W: Write&gt; MyWriter&lt;W&gt; {
-    pub fn new(stream: W) -&gt; Self {
-        Self {
-            writer: BufWriter::new(stream),
-        }
-    }
+pub fn new(stream: W) -&gt; Self {
+Self {
+writer: BufWriter::new(stream),
+}
+}
 
     pub fn write(&amp;mut self, buf: &amp;str) -&gt; std::io::Result&lt;()&gt; {
         self.writer.write_all(buf.as_bytes())
     }
+
 }
 
 fn main() {
-    let addr = &quot;127.0.0.1:8080&quot;;
-    let stream = TcpStream::connect(addr).unwrap();
-    let mut writer = MyWriter::new(stream);
-    writer.write(&quot;hello world!&quot;).unwrap();
+let addr = &quot;127.0.0.1:8080&quot;;
+let stream = TcpStream::connect(addr).unwrap();
+let mut writer = MyWriter::new(stream);
+writer.write(&quot;hello world!&quot;).unwrap();
 }
+
 ```</p>2021-09-20</li><br/><li><span>qinsi</span> 👍（1） 💬（1）<p>不确定最后的代码里为什么要用泛型，改了几个不同的版本：
 
 https:&#47;&#47;play.rust-lang.org&#47;?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=f21447a10eac4e3b77d39aefbd93ab6b
@@ -625,44 +628,47 @@ use std::net::TcpStream;
 
 #[derive(Debug)]
 struct MyWriter&lt;W&gt; {
-    writer: W,
+writer: W,
 }
 
 impl&lt;W&gt; MyWriter&lt;W&gt; {
-    pub fn new(writer: W) -&gt; Self {
-        Self {
-            writer
-        }
-    }
+pub fn new(writer: W) -&gt; Self {
+Self {
+writer
+}
+}
 }
 
 impl&lt;W: Write&gt; MyWriter&lt;W&gt; {
-    pub fn write(&amp;mut self, buf: &amp;str) -&gt; std::io::Result&lt;()&gt; {
-        self.writer.write_all(buf.as_bytes())
-    }
+pub fn write(&amp;mut self, buf: &amp;str) -&gt; std::io::Result&lt;()&gt; {
+self.writer.write_all(buf.as_bytes())
+}
 }
 
 fn main() {
-    let mut writer = MyWriter::new(
-        BufWriter::new(TcpStream::connect(&quot;127.0.0.1:8080&quot;).unwrap())
-    );
-    writer.write(&quot;hello world!&quot;).unwrap();
+let mut writer = MyWriter::new(
+BufWriter::new(TcpStream::connect(&quot;127.0.0.1:8080&quot;).unwrap())
+);
+writer.write(&quot;hello world!&quot;).unwrap();
 }
+
 ```
 
 另外还有一个问题想请教老师：通过在冒号后面对范型进行限制和使用 where 对范型进行限制是否是等价的。比如下面的例子
 
 ```
+
 impl&lt;W: Write&gt; MyWriter&lt;W&gt; {
-    ...
+...
 }
 
 impl&lt;W&gt; MyWriter&lt;W&gt;
 where
-    W: Write
+W: Write
 {
-    ...
+...
 }
+
 ```
 </p>2021-09-20</li><br/><li><span>随风wli</span> 👍（0） 💬（1）<p>老师，因为单态化，代码以二进制分发会损失泛型的信息，这里以二进制分发是指库代码编译成了类似可执行文件，然后rust直接调用吗</p>2021-12-30</li><br/><li><span>Geek_2b06a7</span> 👍（0） 💬（1）<p>文中说 Rust 是显式静态类型，支持作用域内的类型推导，而 ML 和 Haskell 是隐式类型。
 这其中的差异提现在什么地方？我没有明白他们类型系统的差异。</p>2021-12-22</li><br/><li><span>阿成</span> 👍（0） 💬（2）<p>老师你在对“核桃”的解答中说：
@@ -709,13 +715,13 @@ struct MyWriter&lt;W:Write&gt;{
 
 impl &lt;W:Write&gt;  MyWriter&lt;W&gt; {
     pub fn new(stram:W) -&gt;Self {
-        Self { 
+        Self {
             writer: BufWriter::new(stram)
         }
     }
 
     pub fn write(&amp;mut self,s:&amp;str) -&gt;std::io::Result&lt;()&gt; {
-        self.writer.write_all(s.as_bytes())   
+        self.writer.write_all(s.as_bytes())
     }
 }
 fn main() {
@@ -728,3 +734,4 @@ fn main() {
 }
 </p>2021-09-21</li><br/><li><span>Fenix</span> 👍（0） 💬（1）<p>想问下，看到各种文章都说python是强类型的语言呀</p>2021-09-21</li><br/>
 </ul>
+```

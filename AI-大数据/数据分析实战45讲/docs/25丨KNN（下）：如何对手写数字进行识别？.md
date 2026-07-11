@@ -112,9 +112,9 @@ test_ss_x = ss.transform(test_x)
 
 ```
 # 创建KNN分类器
-knn = KNeighborsClassifier() 
-knn.fit(train_ss_x, train_y) 
-predict_y = knn.predict(test_ss_x) 
+knn = KNeighborsClassifier()
+knn.fit(train_ss_x, train_y)
+predict_y = knn.predict(test_ss_x)
 print("KNN准确率: %.4lf" % accuracy_score(test_y, predict_y))
 ```
 
@@ -138,13 +138,13 @@ train_mm_x = mm.fit_transform(train_x)
 test_mm_x = mm.transform(test_x)
 # 创建Naive Bayes分类器
 mnb = MultinomialNB()
-mnb.fit(train_mm_x, train_y) 
-predict_y = mnb.predict(test_mm_x) 
+mnb.fit(train_mm_x, train_y)
+predict_y = mnb.predict(test_mm_x)
 print("多项式朴素贝叶斯准确率: %.4lf" % accuracy_score(test_y, predict_y))
 # 创建CART决策树分类器
 dtc = DecisionTreeClassifier()
-dtc.fit(train_mm_x, train_y) 
-predict_y = dtc.predict(test_mm_x) 
+dtc.fit(train_mm_x, train_y)
+predict_y = dtc.predict(test_mm_x)
 print("CART决策树准确率: %.4lf" % accuracy_score(test_y, predict_y))
 ```
 
@@ -201,7 +201,7 @@ SVM分类准确率:0.9867
 多项式朴素贝叶斯分类器准确率:0.8844
 CART决策树准确率:0.8400
 
-K值的选取如果过大，正确率降低。 
+K值的选取如果过大，正确率降低。
 算法效率排行 SVM &gt; KNN(k值在合适范围内) &gt;多项式朴素贝叶斯 &gt; CART &gt; 高斯朴素贝叶斯
 </p>2019-04-18</li><br/><li><span>Lee</span> 👍（3） 💬（1）<p>KNN 中的 K 值设置为 200，KNN 准确率: 0.8489，k值过大，导致部分未知物体没有分类出来，所以准确率下降了</p>2019-02-14</li><br/><li><span>FORWARD―MOUNT</span> 👍（2） 💬（2）<p>train_x与train_y都是训练集？
 </p>2019-02-16</li><br/><li><span>JingZ</span> 👍（2） 💬（1）<p>#knn 将K值调为200，准确率变为0.8489了，相比较默认K=5的准确率 0.9756，下降13%
@@ -252,7 +252,7 @@ print(&#39;KNN 准确率：%.4lf&#39; % accuracy_score(predict_y, test_y))</p>20
 KNN准确率：0.9778
 SVM准确率：0.9733
 多项式朴素贝叶斯准确率：0.9067
-CART决策树准确率：0.8489</p>2019-11-14</li><br/><li><span>从未在此</span> 👍（1） 💬（1）<p>那个标准化函数已经在训练集上拟合并产生了平均值和标准差。所以测试集用同样的标准直接拿来用就行了</p>2019-02-12</li><br/><li><span>斯盖丸</span> 👍（0） 💬（1）<p>老师，这个z-score规范化，把数据变成标准正态分布，在这个例子里的作用是什么？也就是说数据变化前是什么样的，变化后又是什么样的……如果不这么变化会带来什么结果？</p>2020-11-01</li><br/><li><span>§mc²ompleXWr</span> 👍（0） 💬（1）<p>为什么每次计算KNN和SVM分类器的准确率都是一样的？而朴素贝叶斯和决策树分类器每次计算的准确率都不一样呢？</p>2020-06-27</li><br/><li><span>LiLi</span> 👍（0） 💬（1）<p>“因为 KNN 算法和距离定义相关，我们需要对数据进行规范化处理，采用 Z-Score 规范化” 
+CART决策树准确率：0.8489</p>2019-11-14</li><br/><li><span>从未在此</span> 👍（1） 💬（1）<p>那个标准化函数已经在训练集上拟合并产生了平均值和标准差。所以测试集用同样的标准直接拿来用就行了</p>2019-02-12</li><br/><li><span>斯盖丸</span> 👍（0） 💬（1）<p>老师，这个z-score规范化，把数据变成标准正态分布，在这个例子里的作用是什么？也就是说数据变化前是什么样的，变化后又是什么样的……如果不这么变化会带来什么结果？</p>2020-11-01</li><br/><li><span>§mc²ompleXWr</span> 👍（0） 💬（1）<p>为什么每次计算KNN和SVM分类器的准确率都是一样的？而朴素贝叶斯和决策树分类器每次计算的准确率都不一样呢？</p>2020-06-27</li><br/><li><span>LiLi</span> 👍（0） 💬（1）<p>“因为 KNN 算法和距离定义相关，我们需要对数据进行规范化处理，采用 Z-Score 规范化”
 --这里不是很明白，为何跟距离相关就选择Z-Score规范化？距离符合高斯分布？希望老师和同学们指点一下，谢谢！</p>2020-05-06</li><br/><li><span>Ricky</span> 👍（0） 💬（1）<p>问个问题：digits数据集中描述图像的格式什么？如果有一张外部的图片需要用这个模型来判断，应该怎么转化？
 谢谢！</p>2020-04-15</li><br/><li><span>鱼非子</span> 👍（0） 💬（1）<p>import numpy as np
 import pandas as pd
@@ -265,7 +265,6 @@ from sklearn import preprocessing
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 
-
 digits = load_digits()
 data = digits.data
 print(data.shape)
@@ -274,10 +273,12 @@ plt.gray()
 plt.imshow(digits.images[0])
 plt.show()
 
-
 # 分割数据，将25%的数据作为测试集，其余作为训练集（你也可以指定其他比例的数据作为训练集）
+
 train_x, test_x, train_y, test_y = train_test_split(data, digits.target, test_size=0.25, random_state=33)
+
 # 采用Z-Score规范化
+
 ss = preprocessing.StandardScaler()
 train_ss_x = ss.fit_transform(train_x)
 test_ss_x = ss.transform(test_x)

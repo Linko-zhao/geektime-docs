@@ -885,7 +885,7 @@ Node.js 的处理和 Python 非常类似，但接口不太一样，就作为今�
 （4）要避免复杂业务逻辑占用IO线程资源，就要引入工作者线程池，把服务端对消息的处理放到另一个线程中执行，并做好IO线程和工作者线程的同步
 （5）如果服务端要访问远程资源，就要引入配置，在服务启动时装配好各种mysql或者redis的handle，甚至自己实现一个connector访问其他的服务
 
-这些都是属于Control范畴要考虑的东西。Logic决定了程序复杂度的下限，Control决定了上限。把Logic和Control混在一起，往往是写出来的代码难以维护的原因。</p>2021-09-20</li><br/><li><span>葡萄</span> 👍（20） 💬（2）<p>老师的课程消除了对解决这类问题(自己实现一个解析器的扩展)的恐惧，或者说以前一直在使用高级封装的语言，对这些偏低层一点的东西总是不敢触碰，一点点分析下来，完全没有想象中的那么难。哈哈，这就是get hands dirty的精要吧。学习rust很好，听老师讲课更好，感谢老师。</p>2021-09-03</li><br/><li><span>pedro</span> 👍（7） 💬（1）<p>In [1]:  import queryer_py
+这些都是属于Control范畴要考虑的东西。Logic决定了程序复杂度的下限，Control决定了上限。把Logic和Control混在一起，往往是写出来的代码难以维护的原因。</p>2021-09-20</li><br/><li><span>葡萄</span> 👍（20） 💬（2）<p>老师的课程消除了对解决这类问题(自己实现一个解析器的扩展)的恐惧，或者说以前一直在使用高级封装的语言，对这些偏低层一点的东西总是不敢触碰，一点点分析下来，完全没有想象中的那么难。哈哈，这就是get hands dirty的精要吧。学习rust很好，听老师讲课更好，感谢老师。</p>2021-09-03</li><br/><li><span>pedro</span> 👍（7） 💬（1）<p>In [1]: import queryer_py
 
 In [2]: sql = queryer_py.example_sql()
 
@@ -900,7 +900,7 @@ Brazil,20804215.0,27345.0,581150.0,737.0
 
 本周最骄傲、最爽的demo：
 
-```shell
+````shell
 $ tree .
 
 .
@@ -922,14 +922,14 @@ https:&#47;&#47;rust-unofficial.github.io&#47;patterns&#47;anti_patterns&#47;der
 有好处也有坏处，我们该如何权衡以至于防止滥用呢。</p>2021-09-05</li><br/><li><span>yyxxccc</span> 👍（3） 💬（1）<p>陈老师再来几个白金，王者级难度的👍，这一讲看得我地铁坐过站了😂。</p>2021-09-09</li><br/><li><span>pedro</span> 👍（3） 💬（1）<p>Node 来了：
 
 ```js
-node 
+node
 Welcome to Node.js v14.17.5.
 Type &quot;.help&quot; for more information.
 &gt; const rs = require(&#39;.&#39;)
 undefined
 &gt; rs.example_sql()
 &#39;SELECT location name, total_cases, new_cases, total_deaths, new_deaths FROM https:&#47;&#47;raw.githubusercontent.com&#47;owid&#47;covid-19-data&#47;master&#47;public&#47;data&#47;latest&#47;owid-covid-latest.csv where new_deaths &gt;= 500 ORDER BY new_cases DESC LIMIT 6 OFFSET 5&#39;
-```
+````
 
 爽～</p>2021-09-03</li><br/><li><span>茶底</span> 👍（3） 💬（1）<p>今天这个雀食帅</p>2021-09-03</li><br/><li><span>施泰博</span> 👍（2） 💬（1）<p>reqwest 请求，broken pipe怎么破？</p>2021-11-26</li><br/><li><span>null</span> 👍（2） 💬（1）<p>理论时长：24:58，实际时常：24小时</p>2021-10-11</li><br/>
 </ul>

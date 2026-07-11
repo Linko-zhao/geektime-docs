@@ -380,63 +380,79 @@ LangChain 利用了记录管理器（RecordManager）来跟踪哪些文档已经
 
 1. Github：[doctran](https://github.com/psychic-api/doctran/tree/main)，辅助LangChain进行文本转换
 2. 文档：LangChain中 [Indexing](https://python.langchain.com/docs/modules/data_connection/indexing) 的说明
+
 <div><strong>精选留言（14）</strong></div><ul>
 <li><span>Geek_f55576</span> 👍（3） 💬（1）<p>老师如果对文件切片时候，文件中的的问题和回答被切成2个不同的chunck那么经常会无法检索到答案，这种场景有什么优化方法吗？</p>2023-10-17</li><br/><li><span>万万没想到</span> 👍（2） 💬（3）<p>还是不能明白gpt这样的语言模型在RAG中的作用、不是直接在向量数据库中就查出来了么、最后一步为什么要丢给gpt输出、而不是直接输出</p>2024-04-21</li><br/><li><span>Lominnave</span> 👍（2） 💬（1）<p>老师可以介绍下稀疏向量么，另外稀疏-密集向量结合如何提高召回效果？</p>2023-10-12</li><br/><li><span>阿斯蒂芬</span> 👍（2） 💬（3）<p>【第二种是 embed_query 方法，为查询创建嵌入】一直有个疑问，如果query是需要“复杂理解”的，那么是怎么通过“相似度”去match到文档内容的呢。比如文档是一片小说，而query是：请解读文中描写主人翁心理活动的部分？这里面 LangChain 是否做了特殊处理？</p>2023-10-11</li><br/><li><span>zjl</span> 👍（1） 💬（2）<p>langchain有没有调用本地检索的tool呢？或许可以尝试用本地检索去做reAct</p>2023-10-25</li><br/><li><span>感性即自然的理性</span> 👍（1） 💬（1）<p>希望老师可以最后的内容里面涉及到相关交互页面的内容，就是图形页面的内容</p>2023-10-11</li><br/><li><span>日暮途远</span> 👍（0） 💬（1）<p>embed_documents和embed_query这一块的文档是不是写错了？出现了2次「embed_documents 方法的示例代码如下：」</p>2023-11-26</li><br/><li><span>qkyong</span> 👍（0） 💬（1）<p>检索时为啥要指定text-splitter？理论上直接计算向量距离呀</p>2023-10-30</li><br/><li><span>yanyu-xin</span> 👍（2） 💬（0）<p>用百川智能嵌入模型改写文本嵌入、存储嵌入
 
 ## 旧代码1：
+
 from langchain.embeddings import OpenAIEmbeddings
 embeddings_model = OpenAIEmbeddings()
+
 ## 新代码1：
-from langchain_community.embeddings import BaichuanTextEmbeddings  # 导入百川模型
+
+from langchain_community.embeddings import BaichuanTextEmbeddings # 导入百川模型
 embeddings_model = BaichuanTextEmbeddings(baichuan_api_key=&quot;key&quot;) # 初始化百川模型。KEY 用你的key代替
 
 ## 旧代码2：
+
 underlying_embeddings = OpenAIEmbeddings()
-namespace=underlying_embeddings.model 
+namespace=underlying_embeddings.model
+
 ## 新代码2：
+
 underlying_embeddings=embeddings_model
-namespace=&quot;baichuan_embeddings&quot;   # 用自定义命名嵌入缓存的命名空间
+namespace=&quot;baichuan_embeddings&quot; # 用自定义命名嵌入缓存的命名空间
 
 ### 新代码3：采用其他文本分割器、向量数据库、检索器的的代码
 
 # 导入文档
+
 from langchain_community.document_loaders import Docx2txtLoader
 loader = Docx2txtLoader(&#39;.&#47;建筑垃圾处理技术标准.docx&#39;)
 
 # 导入初始化百川模型
+
 from langchain_community.embeddings import BaichuanTextEmbeddings
 embeddings_model = BaichuanTextEmbeddings(baichuan_api_key=&quot;KEY&quot;) #此处用你的key代替
 
 # 从加载器创建索引
+
 from langchain.indexes import VectorstoreIndexCreator
 index = VectorstoreIndexCreator(embedding=embeddings_model).from_loaders([loader])
 
 # llm用阿里千问大模型替换
+
 from langchain_openai import ChatOpenAI
 llm = ChatOpenAI(
-    api_key=&quot;key&quot;, # 用您的KEY替换
-    base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;, 
-    model=&#39;qwen-long&#39; 
-    )
+api_key=&quot;key&quot;, # 用您的KEY替换
+base_url=&quot;https:&#47;&#47;dashscope.aliyuncs.com&#47;compatible-mode&#47;v1&quot;,
+model=&#39;qwen-long&#39;
+)
 
-# 替换文本分割器 
+# 替换文本分割器
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 
-# 替换向量存储 
+# 替换向量存储
+
 from langchain_community.vectorstores import LanceDB
 embeddings = embeddings_model
 
-# 从加载器创建索引 
+# 从加载器创建索引
+
 index_creator = VectorstoreIndexCreator(
-    vectorstore_cls= LanceDB, # 使用LanceDB向量存储替换
-    embedding=embeddings, # 使用百川智能嵌入模型替换
-    text_splitter=text_splitter # 使用RecursiveCharacterTextSplitter文本分割器
+vectorstore_cls= LanceDB, # 使用LanceDB向量存储替换
+embedding=embeddings, # 使用百川智能嵌入模型替换
+text_splitter=text_splitter # 使用RecursiveCharacterTextSplitter文本分割器
 )
 
 query = &quot;各类建筑垃圾如何处理？&quot;
 index = index_creator.from_loaders([loader])
+
 # 在query需要增加大语言模型llm
+
 result = index.query(llm = llm, question = query)
 print(result)</p>2024-08-17</li><br/><li><span>yanyu-xin</span> 👍（1） 💬（0）<p># 文档加载器列表的图片表格中，示例代码的显示出现一些小错误。应该分隔的代码没有用空格分隔，单词连接在一起。如加载文本文档的代码：
 from langchain.document_loaders import TextLoaderloader =
@@ -444,10 +460,11 @@ Textloader(&quot;example_data&#47;index.md&quot;)data = loader.load()
 
 代码显示错误，应该在其中增加空格的，和增加换行：
 from langchain.document_loaders import TextLoader
-loader = Textloader(&quot;example_data&#47;index.md&quot;) 
+loader = Textloader(&quot;example_data&#47;index.md&quot;)
 data= loader.load()
 
 # 文档加载和文本分割的示例代码都存在类似分隔、换行显示问题，建议修订。</p>2024-10-16</li><br/><li><span>张申傲</span> 👍（1） 💬（0）<p>第15讲打卡~
+
 一个典型的RAG系统的核心处理流程：Loading -&gt; Transform(Splitting) -&gt; Embedding -&gt; Store -&gt; Retrieving</p>2024-07-18</li><br/><li><span>ManerFan</span> 👍（1） 💬（0）<p>相比 langchain的Retrival和llama index，应该如何选择呢？</p>2024-02-28</li><br/><li><span>吴小智</span> 👍（0） 💬（0）<p>想问下老师，RAG 如何与 Agent 结合呢？比如要做一个较通用的 Agent，对于用户的一些请求，可能并不需要查询数据，直接请求大模型即可，这种怎么处理？</p>2025-01-21</li><br/><li><span>Geek_2d85f8</span> 👍（0） 💬（0）<p>由于langchain的更新，课程里的VectorstoreIndexCreator使用时需要增加embedding，如：
 index = VectorstoreIndexCreator(embedding=OpenAIEmbeddings()).from_loaders([loader])
 同时在index.query中，也需要增加大语言模型llm（需提前创建），如：

@@ -264,7 +264,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                     public String getUsername() {
                         return "admin2";
                     }
- 
+
                 });
     }
 
@@ -308,7 +308,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
-    } 
+    }
     @Override
     public String getUsername() {
         return "admin2";
@@ -420,7 +420,7 @@ private static String getRoleWithDefaultPrefix(String defaultRolePrefix, String 
 ```
 public int vote(Authentication authentication, FilterInvocation fi,
       Collection<ConfigAttribute> attributes) {
-   //省略非关键代码 
+   //省略非关键代码
    return ExpressionUtils.evaluateAsBoolean(weca.getAuthorizeExpression(), ctx) ? ACCESS_GRANTED
          : ACCESS_DENIED;
 }
@@ -438,7 +438,7 @@ public int vote(Authentication authentication, FilterInvocation fi,
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    } 
+    }
     @Override
     public String getUsername() {
         return "admin2";

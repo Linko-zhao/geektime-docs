@@ -28,14 +28,14 @@ cubic
 75
 # cat /proc/sys/net/ipv4/tcp_keepalive_probes
 9
- 
+
 # # To update the value:
 # echo bbr > /proc/sys/net/ipv4/tcp_congestion_control
 # echo 600 > /proc/sys/net/ipv4/tcp_keepalive_time
 # echo 10 > /proc/sys/net/ipv4/tcp_keepalive_intvl
 # echo 6 > /proc/sys/net/ipv4/tcp_keepalive_probes
 #
- 
+
 # # Double check the value after update:
 # cat /proc/sys/net/ipv4/tcp_congestion_control
 bbr
@@ -113,27 +113,27 @@ int new_netns(void *para)
             printf("New Namespace Devices:\n");
             system("ip link");
             printf("\n\n");
- 
+
             sleep(100);
             return 0;
 }
- 
+
 int main(void)
 {
             pid_t pid;
- 
+
             printf("Host Namespace Devices:\n");
             system("ip link");
             printf("\n\n");
- 
+
             pid =
                 clone(new_netns, stack + STACK_SIZE, CLONE_NEWNET | SIGCHLD, NULL);
             if (pid == -1)
                         errExit("clone");
- 
+
             if (waitpid(pid, NULL, 0) == -1)
                         errExit("waitpid");
- 
+
             return 0;
 }
 ```
@@ -144,18 +144,18 @@ int main(void)
 int main(void)
 {
             pid_t pid;
- 
+
             printf("Host Namespace Devices:\n");
             system("ip link");
             printf("\n\n");
- 
+
             if (unshare(CLONE_NEWNET) == -1)
                         errExit("unshare");
- 
+
             printf("New Namespace Devices:\n");
             system("ip link");
             printf("\n\n");
- 
+
             return 0;
 }
 ```
@@ -186,12 +186,12 @@ int main(void)
     link/ether 74:db:d1:80:54:14 brd ff:ff:ff:ff:ff:ff
 3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default
     link/ether 02:42:0c:ff:2b:77 brd ff:ff:ff:ff:ff:ff
- 
- 
+
+
 New Namespace Devices:
 1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
- 
+
 # lsns -t net
         NS TYPE NPROCS   PID USER    NETNSID NSFS COMMAND
 4026531992 net     283     1 root unassigned      /usr/lib/systemd/systemd --switched-root --system --deserialize 16
@@ -220,7 +220,7 @@ static int __net_init tcp_sk_init(struct net *net)
         net->ipv4.sysctl_tcp_keepalive_time = TCP_KEEPALIVE_TIME;
         net->ipv4.sysctl_tcp_keepalive_probes = TCP_KEEPALIVE_PROBES;
         net->ipv4.sysctl_tcp_keepalive_intvl = TCP_KEEPALIVE_INTVL;
- 
+
 …
         /* Reno is always built in */
         if (!net_eq(net, &init_net) &&
@@ -228,9 +228,9 @@ static int __net_init tcp_sk_init(struct net *net)
                 net->ipv4.tcp_congestion_control = init_net.ipv4.tcp_congestion_control;
         else
                 net->ipv4.tcp_congestion_control = &tcp_reno;
- 
+
 …
- 
+
 }
 
 ```

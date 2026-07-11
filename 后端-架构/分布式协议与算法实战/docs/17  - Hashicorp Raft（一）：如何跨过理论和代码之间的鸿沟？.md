@@ -83,7 +83,7 @@ type raftState struct {
         // 最新被应用到状态机的日志项的索引值
         lastApplied uint64
 
-        // 存储中最新的日志项的索引值和任期编号  
+        // 存储中最新的日志项的索引值和任期编号
         lastLogIndex uint64
         lastLogTerm  uint64
 

@@ -280,7 +280,7 @@ foo.bind({}, 1, 2, 3)();
 
 最后，留给你一个问题，你在日常开发中用过哪些函数类型呢？欢迎给我留言，我们一起讨论。
 
-* * *
+---
 
 ## 补充阅读：new与this
 
@@ -302,9 +302,9 @@ foo.bind({}, 1, 2, 3)();
 好像写错了，应该是C的实例o吧。
 
 class C {
-    showThis() {
-        console.log(this);
-    }
+showThis() {
+console.log(this);
+}
 }
 var o = new C();
 var showThis = o.showThis;
@@ -318,15 +318,15 @@ showThis();               &#47;&#47; Reference中的对象是global
 </p>2019-10-11</li><br/><li><span>dennisleung</span> 👍（0） 💬（1）<p>&gt; 我们可以看到，仅普通函数和类能够跟 new 搭配使用，这倒是给我们省去了不少麻烦。
 
 老师请问这里是省去了什么麻烦呢？</p>2019-08-06</li><br/><li><span>lsy</span> 👍（0） 💬（1）<p>[[ThisMode]] 是 global （普通函数）的时候，是从哪里取的 this 值呢</p>2019-07-09</li><br/><li><span>东</span> 👍（0） 💬（1）<p>var o = {
-     foo: function() {console.log(11111)}
+foo: function() {console.log(11111)}
 }
 new o.foo() &#47;&#47;11111
 对象方法用new 调用不会报错呢？</p>2019-07-08</li><br/><li><span>咲夜</span> 👍（0） 💬（2）<p>不太能理解为何下面这段代码中 showThis 为 undefined
 
 class C {
-    showThis() {
-        console.log(this);
-    }
+showThis() {
+console.log(this);
+}
 }
 var o = new C();
 var showThis = o.showThis;
@@ -339,16 +339,18 @@ foo();
 
 var b = 2;
 function foo(){
-    console.log(b); &#47;&#47; 2
-    console.log(a); &#47;&#47; error
+console.log(b); &#47;&#47; 2
+console.log(a); &#47;&#47; error
 }
 为什么我执行出来是undefined ，1</p>2019-02-28</li><br/><li><span>Geek_gfnho0</span> 👍（89） 💬（2）<p>关于this，Kyle Simpson有四条总结：
+
 1. 由new调用? 绑定到新创建的对象。
 2. 由call或者apply(或者bind)调用? 绑定到指定的对象。
 3. 由上下文对象调用? 绑定到那个上下文对象。
 4. 默认:在严格模式下绑定到undefined，否则绑定到全局对象。
-例外：箭头函数不适用以上四条规则，它会继承外层函数调用的 this 绑定(无论 this 绑定到什么)。</p>2019-02-28</li><br/><li><span>Rushan-Chen</span> 👍（30） 💬（4）<p>老师写的 &quot;在别处定义了foo&quot; 的意思是，这句话上下两部分的代码，不在同一个文件哒~
-已经有同学贴了代码，是这样的：
+   例外：箭头函数不适用以上四条规则，它会继承外层函数调用的 this 绑定(无论 this 绑定到什么)。</p>2019-02-28</li><br/><li><span>Rushan-Chen</span> 👍（30） 💬（4）<p>老师写的 &quot;在别处定义了foo&quot; 的意思是，这句话上下两部分的代码，不在同一个文件哒~
+   已经有同学贴了代码，是这样的：
+
 ```js
 &#47;&#47; 这是 foo.js 文件里的代码
 var b = 2;
@@ -357,7 +359,8 @@ module.exports = function() { &#47;&#47; 导出function
   console.log(a);
 };
 ```
-```js
+
+````js
 &#47;&#47; 这是test.js 文件里的代码
 var foo = require(&quot;.&#47;foo.js&quot;); &#47;&#47; 引入function 为foo
 var a = 1;
@@ -396,3 +399,4 @@ void function () {
 	foo()
 }()</p>2019-03-16</li><br/><li><span>TY</span> 👍（17） 💬（3）<p>晕得一塌糊涂... 结合上一章的 let var 来看, js 这门语言居然还能火成这样, 世界实在是太奇妙了😥</p>2019-03-04</li><br/><li><span>Thomas Cho</span> 👍（14） 💬（1）<p>我发现啊，不能只看文中代码结果，还是得自己跑一下，我看了文章后很是疑惑，跑了一下[[Environment]]下方那段代码后，打印出来的是 undefined和1。而不是2和error，不知为何</p>2019-02-28</li><br/><li><span>DXYF2E</span> 👍（11） 💬（8）<p>觉得没看懂的同学，我觉得可以结合李兵老师的「浏览器工作原理与实践」中的第10、11节课一起阅读，可能理解程度会好一些</p>2019-12-27</li><br/>
 </ul>
+````

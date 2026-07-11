@@ -90,7 +90,7 @@ print(words4)
 
 ```
 # words5 基于词性移除标点符号
-import jieba.posseg as psg  
+import jieba.posseg as psg
 words5 = [ (w.word, w.flag) for w in psg.cut(words1) ]
 # 保留形容词
 saved = ['a',]
@@ -121,7 +121,7 @@ from snownlp import SnowNLP
 words6 = [ x[0] for x in words5 ]
 s1 = SnowNLP(" ".join(words3))
 print(s1.sentiments)
-# 0.99583439264303 
+# 0.99583439264303
 ```
 
 这段代码通过snownlp的Bayes（贝叶斯）模型训练方法，将模块自带的正样本和负样本读入内存之后，再使用Bayes模型中的classify()函数进行分类，这样就得到了sentiments属性的值，sentiments的值表示情感倾向的方向。在snownlp中：

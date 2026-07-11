@@ -71,15 +71,15 @@ full avg10=40.87 avg60=9.05 avg300=4.29 total=58141082
 $ echo 1 >
 /sys/kernel/debug/tracing/events/compaction/mm_compaction_begin/enable
 $ echo 1 >
-/sys/kernel/debug/tracing/events/compaction/mm_compaction_end/enable 
+/sys/kernel/debug/tracing/events/compaction/mm_compaction_end/enable
 
 #然后来读取信息，当compaction事件触发后就会有信息输出
 $ cat /sys/kernel/debug/tracing/trace_pipe
-           <...>-49355 [037] .... 1578020.975159: mm_compaction_begin: 
-zone_start=0x2080000 migrate_pfn=0x2080000 free_pfn=0x3fe5800 
+           <...>-49355 [037] .... 1578020.975159: mm_compaction_begin:
+zone_start=0x2080000 migrate_pfn=0x2080000 free_pfn=0x3fe5800
 zone_end=0x4080000, mode=async
-           <...>-49355 [037] .N.. 1578020.992136: mm_compaction_end: 
-zone_start=0x2080000 migrate_pfn=0x208f420 free_pfn=0x3f4b720 
+           <...>-49355 [037] .N.. 1578020.992136: mm_compaction_end:
+zone_start=0x2080000 migrate_pfn=0x208f420 free_pfn=0x3f4b720
 zone_end=0x4080000, mode=async status=contended
 ```
 

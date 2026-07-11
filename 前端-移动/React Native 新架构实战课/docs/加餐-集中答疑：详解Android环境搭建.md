@@ -96,9 +96,9 @@ $ brew install --cask zulu11
 
 ```bash
 $ java --version
-java 16.0.2 2021-07-20 
+java 16.0.2 2021-07-20
 $ javac --version
-javac 16.0.2  
+javac 16.0.2
 ```
 
 ## 安装 Android Studio
@@ -308,20 +308,20 @@ Execution failed for task &#39;:app:buildCMakeDebug[arm64-v8a]&#39;.
 &gt; com.android.ide.common.process.ProcessException: ninja: Entering directory `D:\RN_Project\study4\react-native-classroom-main\android\app\.cxx\Debug\3d212c3w\arm64-v8a&#39;
   [0&#47;2] Re-checking globbed directories...
 
-  C++ build system [build] failed while executing:
-      @echo off
-      &quot;C:\\Users\\PC\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe&quot; ^
-        -C ^
-        &quot;D:\\RN_Project\\study4\\react-native-classroom-main\\android\\app\\.cxx\\Debug\\3d212c3w\\arm64-v8a&quot; ^
-        appmodules ^
-        react_codegen_RNCViewPager ^
-        react_codegen_RTNCalculatorSpec ^
-        react_codegen_RTNCenteredTextSpecs ^
-        react_codegen_RTNCustomViewSpecs ^
-        react_codegen_reactnativemmkv ^
-        react_codegen_rngesturehandler_codegen ^
-        react_codegen_rnscreens ^
-        react_codegen_safeareacontext
-    from D:\RN_Project\study4\react-native-classroom-main\android\app
-  ninja: error: Stat(C:&#47;Users&#47;PC&#47;.gradle&#47;caches&#47;transforms-3&#47;b65107381eb04de4935992b7f9f75be6&#47;transformed&#47;jetified-react-android-0.72.0-debug&#47;prefab&#47;modules&#47;rrc_legacyviewmanagerinterop&#47;include&#47;react&#47;renderer&#47;components&#47;legacyviewmanagerinterop&#47;UnstableLegacyViewManagerInteropComponentDescriptor.h): Filename longer than 260 characters</p>2024-03-24</li><br/><li><span>Print JQK°</span> 👍（0） 💬（0）<p>在使用tcp与服务端连接时，应用切到后台后与服务端的网络连接就断开了，如何才能实现网络保持连接</p>2023-12-07</li><br/><li><span>mike</span> 👍（0） 💬（0）<p>讲打包发布了吗？</p>2023-11-24</li><br/><li><span>请务必优秀</span> 👍（0） 💬（0）<p>为啥我连Homebrew都安装失败</p>2023-11-06</li><br/><li><span>侗家人ᯤ⁶ᴳ</span> 👍（0） 💬（0）<p>花了59块买了7天有效期，真是牛逼了！</p>2023-10-12</li><br/><li><span>五十米深蓝，</span> 👍（0） 💬（1）<p>老师 有windows环境的搭建教程吗</p>2023-07-06</li><br/>
+C++ build system [build] failed while executing:
+@echo off
+&quot;C:\\Users\\PC\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe&quot; ^
+-C ^
+&quot;D:\\RN_Project\\study4\\react-native-classroom-main\\android\\app\\.cxx\\Debug\\3d212c3w\\arm64-v8a&quot; ^
+appmodules ^
+react_codegen_RNCViewPager ^
+react_codegen_RTNCalculatorSpec ^
+react_codegen_RTNCenteredTextSpecs ^
+react_codegen_RTNCustomViewSpecs ^
+react_codegen_reactnativemmkv ^
+react_codegen_rngesturehandler_codegen ^
+react_codegen_rnscreens ^
+react_codegen_safeareacontext
+from D:\RN_Project\study4\react-native-classroom-main\android\app
+ninja: error: Stat(C:&#47;Users&#47;PC&#47;.gradle&#47;caches&#47;transforms-3&#47;b65107381eb04de4935992b7f9f75be6&#47;transformed&#47;jetified-react-android-0.72.0-debug&#47;prefab&#47;modules&#47;rrc_legacyviewmanagerinterop&#47;include&#47;react&#47;renderer&#47;components&#47;legacyviewmanagerinterop&#47;UnstableLegacyViewManagerInteropComponentDescriptor.h): Filename longer than 260 characters</p>2024-03-24</li><br/><li><span>Print JQK°</span> 👍（0） 💬（0）<p>在使用tcp与服务端连接时，应用切到后台后与服务端的网络连接就断开了，如何才能实现网络保持连接</p>2023-12-07</li><br/><li><span>mike</span> 👍（0） 💬（0）<p>讲打包发布了吗？</p>2023-11-24</li><br/><li><span>请务必优秀</span> 👍（0） 💬（0）<p>为啥我连Homebrew都安装失败</p>2023-11-06</li><br/><li><span>侗家人ᯤ⁶ᴳ</span> 👍（0） 💬（0）<p>花了59块买了7天有效期，真是牛逼了！</p>2023-10-12</li><br/><li><span>五十米深蓝，</span> 👍（0） 💬（1）<p>老师 有windows环境的搭建教程吗</p>2023-07-06</li><br/>
 </ul>

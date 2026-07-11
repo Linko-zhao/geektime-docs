@@ -31,7 +31,7 @@
 我们可以基于TypeScript来设计页面布局数据格式。
 
 ```typescript
- // 列布局
+// 列布局
 interface LayoutColumn {
   name?: string;
 }
@@ -59,7 +59,7 @@ interface LayoutColumn {
 }
 
 // 行布局
-interface LayoutRow { 
+interface LayoutRow {
   columns: LayoutColumn[];
 }
 
@@ -276,11 +276,11 @@ async function initAMDEnv(params: {
   materialName: string;
   materialVersion: string;
 }) {
-  const { materialName, materialVersion } = params; 
+  const { materialName, materialVersion } = params;
   if (!window.requirejs) {
     await loadScript('/public/cdn/pkg/requirejs/2.3.6/require.js');
   }
-  const paths: Record<string, string> = {}; 
+  const paths: Record<string, string> = {};
   // 注册Vue的AMD模块，AMD和当前应用共用同一个Vue.js运行时
   window.define('vue', [], () => Vue);
   paths[materialName] = `/public/cdn/material/${materialName}/${materialVersion}/index.amd`;
@@ -300,7 +300,7 @@ function createEditModule(params: {
   // 物料挂载的 "外壳组件"
   const EditModule: DefineComponent = defineComponent({
     setup() {
-      const container = ref<HTMLElement>(); 
+      const container = ref<HTMLElement>();
 
       onMounted(async () => {
         if (!(materialName && materialVersion)) {
@@ -312,9 +312,9 @@ function createEditModule(params: {
         };
         // 初始化 AMD 运行时环境
         await initAMDEnv({ materialName, materialVersion });
-        // 加载物料样式  
+        // 加载物料样式
         await loadMaterialStyle(params);
-        window.require( ['vue', materialName], 
+        window.require( ['vue', materialName],
           (Vue: any, MaterialComponent: any) => {
             // 这里拿到的Vue是跟当前应用是同一个Vue.js运行时
             // 动态加载物料组件的AMD模块
@@ -325,8 +325,8 @@ function createEditModule(params: {
           }
         );
       });
-      // 中间省略其它代码 ....  
-         
+      // 中间省略其它代码 ....
+
       return () => {
         return (
           <div style={{ width }} class="module-page-edit-module">
@@ -371,6 +371,7 @@ function createEditModule(params: {
 期待能在留言区看到你的想法。通过今天的学习，希望你能掌握页面搭建的实现要点，举一反三，不管之后遇到什么样的搭建场景，都能游刃有余地按照套路进行功能实现和技术思考。下节课见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/25)
+
 <div><strong>精选留言（4）</strong></div><ul>
 <li><span>cyw0220</span> 👍（1） 💬（1）<p>AMD动态加载比较方便吧</p>2023-02-13</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-09-27</li><br/><li><span>Geek_12e8fd</span> 👍（0） 💬（0）<p>在页面搭建技术方案设计中，选择使用AMD模块格式而不是ESM模块格式来渲染物料组件，主要是基于以下几个方面的考虑：
 

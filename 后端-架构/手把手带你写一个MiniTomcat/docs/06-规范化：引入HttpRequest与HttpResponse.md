@@ -184,7 +184,7 @@ public class HttpRequestLine {
     public static final int MAX_METHOD_SIZE = 32;
     public static final int MAX_URI_SIZE = 2048;
     public static final int MAX_PROTOCOL_SIZE = 32;
-    
+
     //下面的属性对应于Http Request规范，即头行格式method uri protocol
     //如：GET /hello.txt HTTP/1.1
     //char[] 存储每段的字符串，对应的int值存储的是每段的结束位置
@@ -395,7 +395,7 @@ public class SocketInputStream extends InputStream {
             pos++;
         }
         requestLine.methodEnd = readCount - 1; //method段的结束位置
-        
+
         maxRead = requestLine.uri.length;
         readStart = pos;
         readCount = 0;
@@ -418,7 +418,7 @@ public class SocketInputStream extends InputStream {
             pos++;
         }
         requestLine.uriEnd = readCount - 1; //uri结束位置
-        
+
         maxRead = requestLine.protocol.length;
         readStart = pos;
         readCount = 0;

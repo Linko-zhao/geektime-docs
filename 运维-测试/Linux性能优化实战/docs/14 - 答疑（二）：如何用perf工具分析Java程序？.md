@@ -63,14 +63,14 @@ $ umount /tmp/foo/
 然后，把生成的 perf.data 文件，拷贝到容器里面来分析：
 
 ```
-$ docker cp perf.data phpfpm:/tmp 
+$ docker cp perf.data phpfpm:/tmp
 $ docker exec -i -t phpfpm bash
 ```
 
 接下来，在容器的 bash 中继续运行下面的命令，安装 perf 并使用 perf report 查看报告：
 
 ```
-$ cd /tmp/ 
+$ cd /tmp/
 $ apt-get update && apt-get install -y linux-tools linux-perf procps
 $ perf_4.9 report
 ```
@@ -130,44 +130,44 @@ perf report 是一个可视化展示 perf.data 的工具。在第 08 讲的案�
 这种情况我们以前也遇到过，当你发现性能工具的输出无法理解时，应该怎么办呢？当然还是查工具的手册。比如，你可以执行 man perf-report 命令，找到 -g 参数的说明：
 
 ```
--g, --call-graph=<print_type,threshold[,print_limit],order,sort_key[,branch],value> 
-           Display call chains using type, min percent threshold, print limit, call order, sort key, optional branch and value. Note that 
-           ordering is not fixed so any parameter can be given in an arbitrary order. One exception is the print_limit which should be 
-           preceded by threshold. 
+-g, --call-graph=<print_type,threshold[,print_limit],order,sort_key[,branch],value>
+           Display call chains using type, min percent threshold, print limit, call order, sort key, optional branch and value. Note that
+           ordering is not fixed so any parameter can be given in an arbitrary order. One exception is the print_limit which should be
+           preceded by threshold.
 
-               print_type can be either: 
-               - flat: single column, linear exposure of call chains. 
-               - graph: use a graph tree, displaying absolute overhead rates. (default) 
-               - fractal: like graph, but displays relative rates. Each branch of 
-                        the tree is considered as a new profiled object. 
-               - folded: call chains are displayed in a line, separated by semicolons 
-               - none: disable call chain display. 
+               print_type can be either:
+               - flat: single column, linear exposure of call chains.
+               - graph: use a graph tree, displaying absolute overhead rates. (default)
+               - fractal: like graph, but displays relative rates. Each branch of
+                        the tree is considered as a new profiled object.
+               - folded: call chains are displayed in a line, separated by semicolons
+               - none: disable call chain display.
 
-               threshold is a percentage value which specifies a minimum percent to be 
-               included in the output call graph.  Default is 0.5 (%). 
+               threshold is a percentage value which specifies a minimum percent to be
+               included in the output call graph.  Default is 0.5 (%).
 
-               print_limit is only applied when stdio interface is used.  It's to limit 
-               number of call graph entries in a single hist entry.  Note that it needs 
-               to be given after threshold (but not necessarily consecutive). 
-               Default is 0 (unlimited). 
+               print_limit is only applied when stdio interface is used.  It's to limit
+               number of call graph entries in a single hist entry.  Note that it needs
+               to be given after threshold (but not necessarily consecutive).
+               Default is 0 (unlimited).
 
-               order can be either: 
-               - callee: callee based call graph. 
-               - caller: inverted caller based call graph. 
-               Default is 'caller' when --children is used, otherwise 'callee'. 
+               order can be either:
+               - callee: callee based call graph.
+               - caller: inverted caller based call graph.
+               Default is 'caller' when --children is used, otherwise 'callee'.
 
-               sort_key can be: 
-               - function: compare on functions (default) 
-               - address: compare on individual code addresses 
-               - srcline: compare on source filename and line number 
+               sort_key can be:
+               - function: compare on functions (default)
+               - address: compare on individual code addresses
+               - srcline: compare on source filename and line number
 
-               branch can be: 
-               - branch: include last branch information in callgraph when available. 
-                         Usually more convenient to use --branch-history for this. 
+               branch can be:
+               - branch: include last branch information in callgraph when available.
+                         Usually more convenient to use --branch-history for this.
 
-               value can be: 
-               - percent: diplay overhead percent (default) 
-               - period: display event period 
+               value can be:
+               - percent: diplay overhead percent (default)
+               - period: display event period
                - count: display event count
 ```
 
@@ -267,17 +267,19 @@ Check &#47;proc&#47;sys&#47;kernel&#47;kptr_restrict before running &#39;perf re
 As no suitable kallsyms nor vmlinux was found, kernel samples     
 can&#39;t be resolved.                                             
 Samples in kernel modules can&#39;t be resolved as well.              
-  xPress any key...  
+  xPress any key...
 
 我本身的机器是centos7.2. 请老师提示一下解决的思路，谢谢！
 
                                                 </p>2019-01-07</li><br/><li><span>子轩Zixuan</span> 👍（1） 💬（1）<p>感谢老师耐心回复，接着线上定位问题想问下，如果要事先做好监控系统，一般需要做到什么程度？目前只有阿里云的监控感觉不够用</p>2018-12-25</li><br/><li><span>无名老卒</span> 👍（1） 💬（1）<p>全部刷完了，把各个CPU容易出现问题的情况基本上都写清楚了，而且都有详细的测试用例，除了软中断那个需要SYN攻击之外，其他的测试用例都一五一十的都做过了，受益良多。我有以下疑问，希望老师可以解答下：
+
 1、软中断老师是用SYN攻击的方式来讲解这部分的实例的，那还有没有其他典型的软中断的案例呢？
 2、硬中断的实例老师没有讲，可以补一篇吗？
 3、老师所讲的实例，都是单一模式的，在实际的生产环境下，情况要复杂很多，老师能再讲一下印象最深刻的实际情况吗？
 
 另外，我有一个小建议，老师的案例都是用docker来搭建环境的，在一个用例要多次下载不同的image，但其实这些image只是里面的测试用例变了，所以可以先下载file文件，使用docker -v挂载的方式进行测试。这样可以大大减少下载镜像的时间。如下，就是使用docker run -v &#47;usr&#47;local&#47;src&#47;app-fix2:&#47;app --privileged --name app-fix -d feisky&#47;app:iowait 来运行的镜像。
-```
+
+````
 [root@linjx src]# docker ps -a
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                        PORTS               NAMES
 0ecb229f87e4        feisky&#47;app:iowait   &quot;&#47;app&quot;              3 minutes ago       Up 3 minutes                                      app-fix
@@ -293,3 +295,4 @@ $ apt-get install -y linux-tools-common linux-tools-generic linux-tools-$(uname 
 把编译生成的perf拷贝到&#47;usr&#47;bin下
 注意：如果使用的时候不显示调用函数名，需要回到编译脚本那一步，仔细看报警信息缺哪些依赖的包，都下载下来重新编译。</p>2019-01-23</li><br/>
 </ul>
+````

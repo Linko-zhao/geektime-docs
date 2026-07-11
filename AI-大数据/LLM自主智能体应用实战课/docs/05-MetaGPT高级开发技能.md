@@ -128,14 +128,14 @@ def extract_numbers_from_di(llm_resp: str) -> list:
         rsp = []
     else:
         rsp = eval(result)
-        
+
     return rsp
 
 async def get_random_number_with_di(old_arrays: list[int] = []) -> list:
     PROMPT_TEMPLATE: str = """
     Generate 4 random natural numbers between 1 and 13, include 1 and 13. Just return 4 numbers in an array, don't include other content. The returned array should not be repeated with the following arrays:
     {old_arrays}
-    """    
+    """
     requirement = PROMPT_TEMPLATE.format(old_arrays=old_arrays)
 
     _print_level = "ERROR"
@@ -151,7 +151,7 @@ def extract_check_result_from_di(llm_resp: str) -> str:
         rsp = False
     else:
         rsp = eval(result)
-        
+
     if rsp:
         return "Correct"
 
@@ -168,7 +168,7 @@ async def check_expression_with_di(expression: str):
     di = DataInterpreter()
     result = await di.run(requirement)
     return result.content
-    
+
 class DealCards(Action):
     name: str = "DealCards"
 
@@ -186,7 +186,7 @@ class CheckExpression(Action):
         if expression == "expression not found":
             return "Correct"
 
-        rsp = await check_expression_with_di(expression)        
+        rsp = await check_expression_with_di(expression)
         check_result = extract_check_result_from_di(rsp)
         return check_result
 ```
@@ -286,7 +286,7 @@ tar zxvf ~/Downloads/initial_rounds.tar.gz
 
 ```plain
 cd ~/work/learn_metagpt
-poetry run python -m examples.aflow.optimize --dataset MATH --opt_model_name gpt-4o --exec_model_name gpt-4o 
+poetry run python -m examples.aflow.optimize --dataset MATH --opt_model_name gpt-4o --exec_model_name gpt-4o
 ```
 
 上面的 bash 脚本中：

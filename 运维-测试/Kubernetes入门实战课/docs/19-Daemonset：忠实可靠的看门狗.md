@@ -244,14 +244,16 @@ DaemonSet是在Kubernetes里运行节点专属Pod最常用的方式，但它不�
 Q2: taint和tolerence是和调度相关的概念，调度器调度pod是会考虑</p>2022-08-08</li><br/><li><span>dao</span> 👍（5） 💬（1）<p>老师，kubectl get ds -n kube-system 找不到 Flannel ds ，查看了 kube-flannel.yml ，发现名空间已经改到 kube-flannel 。所以要使用 kubectl get ds -n kube-flannel 查看网络插件 Flannel 。</p>2022-08-13</li><br/><li><span>Sports</span> 👍（4） 💬（3）<p>controller-plane是不是为了向openshift看齐</p>2022-08-03</li><br/><li><span>Layne</span> 👍（3） 💬（1）<p>已实操
 1.重新添加master污点信息后，master节点上的pod应用不会自动删除；
 2.污点容忍配置路径位置：kubectl explain ds.spec.template.spec.tolerations</p>2023-01-06</li><br/><li><span>戒贪嗔痴</span> 👍（3） 💬（2）<p>老师，是这样的，由于本人使用的k8s版本是v1.24.0，使用kubectl describe node master得到的结果是
-Taints:             node-role.kubernetes.io&#47;control-plane:NoSchedule
-                    node-role.kubernetes.io&#47;master:NoSchedule
+Taints: node-role.kubernetes.io&#47;control-plane:NoSchedule
+node-role.kubernetes.io&#47;master:NoSchedule
 因为刚开始不知道你最后那张图里说的新版本已经改为control-plane的这种写法了，导致按照教程操作下来2种方法都不能实现把pod调度到master上运行，所以请教下老师是不是taint和toleration都要改为control-plane的写法？</p>2022-08-03</li><br/><li><span>极客酱酱</span> 👍（2） 💬（1）<p>如果未被忽略的污点中存在至少一个 effect 值为 NoExecute 的污点， 则 Kubernetes 不会将 Pod 调度到该节点（如果 Pod 还未在节点上运行）， 或者将 Pod 从该节点驱逐（如果 Pod 已经在节点上运行）。</p>2023-02-03</li><br/><li><span>朱雯</span> 👍（2） 💬（4）<p>请问老师，调度是在什么时候发生的呢，我想到一个问题，一个pod的node加上污点，正常运转的情况你在回答里说，不会跑到其他机器上，那假如pod死亡，会重新根据污点情况进行调度吗，还是按照原先的策略进行调度呢</p>2022-08-17</li><br/><li><span>Yangjing</span> 👍（2） 💬（1）<p>类似 Mysql 的适合部署到“静态 Pod”上吗？ </p>2022-08-03</li><br/><li><span>潜光隐耀</span> 👍（2） 💬（1）<p>请问下，DaemonSet的Pod如果被删除，是否能被自动重建，保持高可用呢？</p>2022-08-03</li><br/><li><span>InfoQ_15df24517cff</span> 👍（1） 💬（2）<p>minikube创建的集群有两个节点，一个master、一个worker。但部署DaemonSet的时候，确实两个node都部署了pod，但发现一个问题，就是pod的ip都一样，这是为什么</p>2023-08-02</li><br/><li><span>So what?</span> 👍（1） 💬（1）<p>因为 Deployment 所管理的 Pod 数量是固定的，而且可能会在集群里“漂移”，但，实际的需求却是要在集群里的每个节点上都运行 Pod，也就是说 Pod 的数量与节点数量保持同步。
 
 老师，这里的“漂移”是什么意思呢，不是很明白</p>2023-05-19</li><br/><li><span>So what?</span> 👍（1） 💬（2）<p>老师，下面这个写在哪个文件里？
 
 tolerations:
+
 - key: node-role.kubernetes.io&#47;master
   effect: NoSchedule
   operator: Exists</p>2023-05-17</li><br/><li><span>Geek_02ce66</span> 👍（1） 💬（2）<p>老师请教一下使用DaemonSet启动的应用如何关闭呢</p>2023-02-27</li><br/>
+
 </ul>

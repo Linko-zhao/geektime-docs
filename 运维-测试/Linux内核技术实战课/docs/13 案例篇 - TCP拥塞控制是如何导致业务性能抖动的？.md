@@ -77,8 +77,8 @@ RTO一般发生在网络链路有拥塞的情况下，如果某一个连接数�
 
 ```
 $ ss -nipt
-State       Recv-Q Send-Q                        Local Address:Port                                       Peer Address:Port         
-ESTAB       0      36                             172.23.245.7:22                                        172.30.16.162:60490      
+State       Recv-Q Send-Q                        Local Address:Port                                       Peer Address:Port
+ESTAB       0      36                             172.23.245.7:22                                        172.30.16.162:60490
 users:(("sshd",pid=19256,fd=3))
 	 cubic wscale:5,7 rto:272 rtt:71.53/1.068 ato:40 mss:1248 rcvmss:1248 advmss:1448 cwnd:10 bytes_acked:19591 bytes_received:2817 segs_out:64 segs_in:80 data_segs_out:57 data_segs_in:28 send 1.4Mbps lastsnd:6 lastrcv:6 lastack:6 pacing_rate 2.8Mbps delivery_rate 1.5Mbps app_limited busy:2016ms unacked:1 rcv_space:14600 minrtt:69.402
 ```
@@ -137,12 +137,13 @@ ssh使用的TCP协议，也就是它是有连接的，这个连接对内核而�
 
 以前也测试过，只要在网络断开期间不主动发送数据，就会晚一点探测到连接已断开。
 如果不主动发数据，可能网络恢复时，连接就自动恢复了。</p>2020-09-18</li><br/><li><span>solar</span> 👍（6） 💬（3）<p>cwnd和rwnd使用的单位是什么呢？</p>2020-10-10</li><br/><li><span>webmin</span> 👍（5） 💬（2）<p>要分情况：
+
 1. 如果关闭网络是发生在Client端或Server端的机器上，那么网络恢复后连接不会正常；
 2. 如果关闭网络是发生在Client端与Server端之间链路中的某个路由节点上；
-    2.1 Client端到Server端之间有多条路可用，只要不是和CS直连这个设备有问题，那么设备可以选择其它路走，这时连接还是正常的；
-    2.2 Client端与Server端之间链路有NAT，且网络关闭发生与NAT端相关的设备上，那么连接就不正常； 
-    2.3 Client端与Server端之间只有一条路，只要不是和CS直连这个设备有问题，那么如果网络在发生tcp_keepalive之前恢复，那么连接还是正常的； 
- 3. 以上讨论的都是在TCP&#47;IP协议情况下，网上查了一下SSH有居于UDP的方案（http:&#47;&#47;publications.lib.chalmers.se&#47;records&#47;fulltext&#47;123799.pdf），如果走UDP的话这个要看SSH应用层的保活或SESSION有效期是否超过网络关闭时间，大小则可以连接，小于则关闭。</p>2020-09-18</li><br/><li><span>Ilovek8s</span> 👍（4） 💬（1）<p>keepalive心跳的时间里如果不发送ssh命令操作，断开网络之后再重新打开，由于TCP有重试机制，是可以恢复的，但如果keepalive开始检查了，服务端发现客户端是死的之后就会关闭连接</p>2021-03-14</li><br/><li><span>jssfy</span> 👍（3） 💬（1）<p>引用：对此，我们使用 tcpdump 在 server 上抓包后发现，Client 响应的 ack 里经常出现 win 为 0 的情况，也就是 Client 的接收窗口为 0。于是我们就去 Client 上排查，最终发现是 Client 代码存在 bug，从而导致无法及时读取收到的数据包。
+   2.1 Client端到Server端之间有多条路可用，只要不是和CS直连这个设备有问题，那么设备可以选择其它路走，这时连接还是正常的；
+   2.2 Client端与Server端之间链路有NAT，且网络关闭发生与NAT端相关的设备上，那么连接就不正常；
+   2.3 Client端与Server端之间只有一条路，只要不是和CS直连这个设备有问题，那么如果网络在发生tcp_keepalive之前恢复，那么连接还是正常的；
+3. 以上讨论的都是在TCP&#47;IP协议情况下，网上查了一下SSH有居于UDP的方案（http:&#47;&#47;publications.lib.chalmers.se&#47;records&#47;fulltext&#47;123799.pdf），如果走UDP的话这个要看SSH应用层的保活或SESSION有效期是否超过网络关闭时间，大小则可以连接，小于则关闭。</p>2020-09-18</li><br/><li><span>Ilovek8s</span> 👍（4） 💬（1）<p>keepalive心跳的时间里如果不发送ssh命令操作，断开网络之后再重新打开，由于TCP有重试机制，是可以恢复的，但如果keepalive开始检查了，服务端发现客户端是死的之后就会关闭连接</p>2021-03-14</li><br/><li><span>jssfy</span> 👍（3） 💬（1）<p>引用：对此，我们使用 tcpdump 在 server 上抓包后发现，Client 响应的 ack 里经常出现 win 为 0 的情况，也就是 Client 的接收窗口为 0。于是我们就去 Client 上排查，最终发现是 Client 代码存在 bug，从而导致无法及时读取收到的数据包。
 
 请问这里的前一句的接收窗口为0和后一句的代码bug是有什么逻辑关系吗？这里没太看懂</p>2020-09-19</li><br/><li><span>我能走多远</span> 👍（2） 💬（2）<p>感谢老师分享，学习了拥塞控制的原理，慢启动，拥塞避免，快速重传和快速恢复。cwnd和rwnd使用的单位是什么呢？ TCP segment个数。每个segment的长度就是mss的大小吗？</p>2020-11-09</li><br/><li><span>董泽润</span> 👍（2） 💬（1）<p>连接是否正常，要看是否开启了 tcp_keepalive, 并且探测持续失败，连接才失效</p>2020-09-17</li><br/><li><span>redseed</span> 👍（5） 💬（1）<p>老师你好，去年公司接入了跨境专线，使用默认对 CUBIC 算法时 TCP 的流量极不稳定，根据网上的优化建议增大了 TCP 的 sendbuf 适应这类高延迟网络，但是 TCP 的传输带宽反而下降了，想请教一下可能的原因出现在哪里？（PS. 后面我们使用了 BBR 算法并增大 sendbuf，这个对长肥管道有奇效...）</p>2020-10-09</li><br/><li><span>团团-BB</span> 👍（1） 💬（0）<p>老师我遇到一个有一系列pod运行的应用，其中有1-2个pod的响应时间抖动比其他pod严重很多，流量相对是均衡的，抖动的pod我们看有出现丢包的情况。
 出现这种情况的pod所在的宿主机节点网卡的流量比较高，节点网卡eth0有drop包，和应用的延时徒增时间大致吻合，查看网卡rx有drop包的情况。因为是使用的公有云的基础设施，这种情况下，怎么能排除是否是基础设施网络存在的问题呢</p>2022-04-02</li><br/><li><span>上杉夏香</span> 👍（0） 💬（0）<p>老师，有个问题。「我们再回到上面这张图，因为接收端没有接收到第 2 个 segment，因此接收端每次收到一个新的 segment 后都会去 ack 第 2 个 segment，即 ack 17。紧接着，发送端就会接收到三个相同的 ack（ack 17）。连续出现了 3 个响应的 ack 后，发送端会据此判断数据包出现了丢失，于是就进入了下一个阶段：快速重传。」我的理解，应该是连续出现 3 个 Dup Ack 才会导致快速重传，进而进入快速恢复阶段吧。</p>2023-04-03</li><br/><li><span>上杉夏香</span> 👍（0） 💬（0）<p>老师，有个问题。原文为「我们再回到上面这张图，因为接收端没有接收到第 2 个 segment，因此接收端每次收到一个新的 segment 后都会去 ack 第 2 个 segment，即 ack 17。紧接着，发送端就会接收到三个相同的 ack（ack 17）。连续出现了 3 个响应的 ack 后，发送端会据此判断数据包出现了丢失，于是就进入了下一个阶段：快速重传。」</p>2023-04-03</li><br/><li><span>明翼</span> 👍（0） 💬（0）<p>&quot;如上图所示，接收方在收到数据包后，会给发送方回一个 ack，然后把自己的 rwnd 大小写入到 TCP 头部的 win 这个字段，这样发送方就能根据这个字段来知道接收方的 rwnd 了。接下来，发送方在发送下一个 TCP segment 的时候，会先对比发送方的 cwnd 和接收方的 rwnd，得出这二者之间的较小值，然后控制发送的 TCP segment 个数不能超过这个较小值。&quot;

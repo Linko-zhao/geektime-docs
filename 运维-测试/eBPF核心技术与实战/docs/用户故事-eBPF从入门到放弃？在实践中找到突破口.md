@@ -45,6 +45,6 @@
 
 B机现在这个 网卡没有什么流量（因为业务访问流量都转到A机去了）。
 
-想问：有没有什么方法  排查 B机，或是这个方面的问题？
-主机负载空， teamdctl team0 stat ,ethtools -S 网卡 ｜grep error  也都没有错。。</p>2022-06-09</li><br/>
+想问：有没有什么方法 排查 B机，或是这个方面的问题？
+主机负载空， teamdctl team0 stat ,ethtools -S 网卡 ｜grep error 也都没有错。。</p>2022-06-09</li><br/>
 </ul>

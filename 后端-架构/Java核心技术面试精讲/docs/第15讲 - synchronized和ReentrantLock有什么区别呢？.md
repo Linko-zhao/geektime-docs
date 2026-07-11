@@ -166,7 +166,7 @@ private final Condition notEmpty;
 
 /** Condition for waiting puts */
 private final Condition notFull;
- 
+
 public ArrayBlockingQueue(int capacity, boolean fair) {
 	if (capacity <= 0)
     	throw new IllegalArgumentException();
@@ -230,9 +230,11 @@ private void enqueue(E e) {
 再说说这篇专栏：
 这篇专栏，在知识扩展部分，我觉得结构不是太清晰。我读了很多遍之后，还是有这种感觉：文章讲了很多东西，但是我却很难说出文章的主题。
 为此，我自己总结了一下知识扩展部分的主线：
+
 1. 进入并发领域，首先需要理解什么是线程安全，为什么会存在线程不安全，又为什么需要线程安全。这个知识点可参考《Java并发编程实践》，并且我也认为对于线程安全的讲解，这本书堪称权威；
 2. 老师在讲解线程安全这个点的时候，顺其自然地使用了synchronized和ReentrantLock来保证线程安全（即：Java提供的锁机制）同时，老师也稍微讲解了一下synchronized和ReentrantLock的使用和区别；
 3. 最后，老师举了一个ReentrantLock的典型使用场景：ArrayBlockingQueue。ArrayBlockingQueue使用ReentrantLock来实现加锁机制，保证队列的安全读取，并且使用Condition来实现队列阻塞的条件判断和读写端唤醒，特别提一句：具体的实现代码是相当的优雅！
+
 </p>2019-02-01</li><br/><li><span>BY</span> 👍（31） 💬（4）<p>要是早看到这篇文章，我上次面试就过了。。</p>2018-06-07</li><br/><li><span>灰飞灰猪不会灰飞.烟灭</span> 👍（20） 💬（1）<p>ReentrantLock 加锁的时候通过cas算法，将线程对象放到一个双向链表中，然后每次取出链表中的头节点，看这个节点是否和当前线程相等。是否相等比较的是线程的ID。
 老师我理解的对不对啊？</p>2018-06-07</li><br/><li><span>Kyle</span> 👍（16） 💬（1）<p>最近刚看完《Java 并发编程实战》，所以今天看这篇文章觉得丝毫不费力气。开始觉得，极客时间上老师讲的内容毕竟篇幅有限，更多的还是需要我们课后去深入钻研。希望老师以后讲完课也能够适当提供些参考书目，谢谢。</p>2018-06-07</li><br/><li><span>Miaozhe</span> 👍（15） 💬（2）<p>杨老师，问个问题，看网上有说Condition的await和signal方法，等同于Object的wait和notify，看了一下源码，没有直接的关系。
 ReentractLock是基于双向链表的对接和CAS实现的，感觉比Object增加了很多逻辑，怎么会比Synchronized效率高？有疑惑。</p>2018-06-12</li><br/><li><span>木瓜芒果</span> 👍（14） 💬（3）<p>杨老师，您好，synchronized在低竞争场景下可能优于retrantlock，这里的什么程度算是低竞争场景呢？</p>2018-06-19</li><br/><li><span>Daydayup</span> 👍（9） 💬（1）<p>我用过读写分离锁，读锁保证速度，写锁保证安全问题。再入锁还是挺好用的。老师写的很棒，学到不少知识。感谢</p>2018-06-13</li><br/><li><span>xinfangke</span> 👍（6） 💬（3）<p>老师 问你个问题 在spring中 如果标注一个方法的事务隔离级别为序列化 而数据库的隔离级别是默认的隔离级别 此时此方法中的更新 插入语句是如何执行的？能保证并发不出错吗</p>2018-06-08</li><br/><li><span>Neil</span> 👍（4） 💬（2）<p>可以理解为synchronized是悲观锁 另一个是乐观锁</p>2019-01-07</li><br/><li><span>sunlight001</span> 👍（4） 💬（1）<p>老师这里说的低并发和高并发的场景，大致什么数量级的算低并发？我们做管理系统中用到锁的情况基本都算低并发吧</p>2018-06-07</li><br/><li><span>时间总漫不经心</span> 👍（3） 💬（1）<p>老师，jmm什么时候将工作内存的值写入到主内存中呢？</p>2018-08-10</li><br/><li><span>风吹过wu</span> 👍（1） 💬（1）<p>希望能够通过借此为契机，深入了解java并发。由于以前自学的java，不系统，借此风水宝地，好好的理理脉络，形成系统</p>2019-01-13</li><br/><li><span>飞鱼</span> 👍（1） 💬（1）<p>之前有被问到synchronize和ReetrantLock底层实现上的区别，笼统的答了下前者是基于JVM实现的，后者依赖于CPU底层指令的实现，关于这个，请问有更详细的解答吗？</p>2018-06-17</li><br/><li><span>云学</span> 👍（1） 💬（1）<p>看完还是觉得c++11的Lockguard比较优雅，难怪耗子哥说学习java是为了更好的用c++</p>2018-06-14</li><br/>

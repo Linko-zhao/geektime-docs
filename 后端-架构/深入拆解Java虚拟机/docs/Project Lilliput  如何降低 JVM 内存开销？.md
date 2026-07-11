@@ -53,7 +53,7 @@ PPPPPPPP PPPPPPPP PPPPPPPP PPPPPPPP PPPPPPPP PPPPPPPP PPPPPPPP PPPPPLLL
 
 1. **指针对齐要求**。由于指针的低三位被锁状态位占用，因此指针所指向的内存地址必须是 8 字节对齐，即对齐到 2³ 字节边界。这也与 Java 对象需要按 8 字节对齐的要求相吻合（可通过 -XX:ObjectAlignmentInBytes=8 参数调整，取值范围为\[8, 256]）。
 2. **替代标记字段（Displaced Mark Word）**。当标记字段的高位已经存储了非零值时，将其覆盖为指针会丢失原本携带的信息。例如已缓存的本地哈希码，如果对象的内存地址发生变化，直接重新计算哈希码将返回不同的值。
-   
+
    为了避免这种情况，JVM 会将原始的标记字段复制到指针所指向的内存区域，称为替代标记字段。每当需要读取或写入原标记字段的内容时，JVM 必须先通过指针访问替代标记字段。这一额外的内存读取操作在某些应用场景下可能会影响到 Java 应用的性能。
 
 可以看到，标记字段中有 25+1+1（偏向锁标记位）共 27 位未使用。Lilliput 的核心思路是将类指针整合到标记字段中，从而将对象头的大小从 12 字节压缩至 8 字节。
@@ -124,7 +124,7 @@ def lightweight_lock(obj):
   if 0<= _top < 8 and CAS(obj._mark, LOCKED):
     _base[_top++] = obj
   else: inflate to heavy monitor
-  
+
 def lightweight_unlock(obj):
   _top--
   CAS(obj._mark, UNLOCKED)
@@ -220,7 +220,7 @@ synchronized (obj） {  // moniter_exter obj
 2. **映射表的增删操作需要同步。**为了确保同一个 Java 对象始终映射到同一个重量级锁，任何对全局哈希表的插入或删除操作都必须是线程安全的，因此需要同步机制。  
    不过，这一缺点的影响相对较小，主要原因是锁膨胀和 GC 回收曾经加锁的对象这两种场景本身就很少出现，且操作过程本身也较为耗时，因此同步开销不算显著。
 3. **查询映射时的内存访问成本更高。**在旧机制中，获取重量级锁的引用仅需一次内存访问，而且访问的内存通常已经缓存在当前 CPU 中。这种方式在性能上非常高效。
-   
+
    而新机制需要在全局哈希表中查找目标对象的映射项，这个过程涉及多次内存访问。最坏情况下，可能需要遍历整个哈希表。如果在查找过程中其他线程对哈希表进行了插入或删除操作，当前 CPU 的缓存会失效，这将进一步增加了内存访问的延迟。
 
 考虑到查询操作在应用程序运行时可能并不罕见，新的映射机制引入的额外内存访问和缓存失效会严重拖慢加锁效率。
@@ -366,7 +366,7 @@ OFF  SZ      TYPE DESCRIPTION               VALUE
  12   4       int String.hash               0
  16   1      byte String.coder              0
  17   1   boolean String.hashIsZero         false
- 18   2           (alignment/padding gap)   
+ 18   2           (alignment/padding gap)
  20   4    byte[] String.value              []
 Instance size: 24 bytes
 Space losses: 2 bytes internal + 0 bytes external = 2 bytes total
@@ -405,9 +405,9 @@ OFF  SZ      TYPE DESCRIPTION               VALUE
   8   4       int String.hash               0
  12   1      byte String.coder              0
  13   1   boolean String.hashIsZero         false
- 14   2           (alignment/padding gap)   
+ 14   2           (alignment/padding gap)
  16   4    byte[] String.value              []
- 20   4           (object alignment gap)    
+ 20   4           (object alignment gap)
 Instance size: 24 bytes
 Space losses: 2 bytes internal + 4 bytes external = 6 bytes total
 ```

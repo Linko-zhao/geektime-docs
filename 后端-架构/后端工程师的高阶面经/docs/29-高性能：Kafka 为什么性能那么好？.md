@@ -268,9 +268,9 @@ Kafka 是彻底地端到端，就是生产者压缩之后发送到 broker，brok
 <div><strong>精选留言（12）</strong></div><ul>
 <li><span>陈斌</span> 👍（5） 💬（1）<p>老师这节课讲的很好，之前也看过其他人讲过Kafka为什么性能高，但是都讲的不全面，学习到了。
 
-page cache 技术，MySQL、 Redis、Elasticsearch  也用到了。
-顺序写  Hive、Spark、ClickHouse 都使用到了。
-零拷贝 技术  Netty, RocketMQ肯定使用到了。
+page cache 技术，MySQL、 Redis、Elasticsearch 也用到了。
+顺序写 Hive、Spark、ClickHouse 都使用到了。
+零拷贝 技术 Netty, RocketMQ肯定使用到了。
 
 分区可以用来缩小并发粒度，减轻并发竞争:
 JDK1.8 之前实现的 ConcurrentHashMap 版本。HashTable 是基于一个数组 + 链表实现的，所以在并发读写操作集合时，存在激烈的锁资源竞争，也因此性能会存在瓶颈。而 ConcurrentHashMap 就很很巧妙地使用了分段锁 Segment 来降低锁资源竞争</p>2023-08-23</li><br/><li><span>KK</span> 👍（1） 💬（3）<p>“可以确定 20000 这条消息应该放在 010031.log 这个文件里面。”，这里的20000是不是写错了，应该是2000？

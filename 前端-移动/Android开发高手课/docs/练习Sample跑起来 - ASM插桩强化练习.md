@@ -169,7 +169,8 @@ GMTC门票还有剩余，给自己一个进阶的机会，从现在开始一切�
 
 [![](https://static001.geekbang.org/resource/image/e6/68/e65943bb1d18357a19b7121678b78b68.png?wh=1110%2A549)](http://gmtc2019.geekbang.org/?utm_source=wechat&utm_medium=geektime&utm_campaign=yuedu&utm_term=0223)
 
-* * *
+---
+
 <div><strong>精选留言（10）</strong></div><ul>
 <li><span>唯鹿</span> 👍（31） 💬（1）<p>感谢老师的认可与鼓励，我会继续坚持学习与分享！🙏</p>2019-02-23</li><br/><li><span>Neil</span> 👍（2） 💬（4）<p>这个插件是不是在AS3.3上失效了啊</p>2019-03-11</li><br/><li><span>Geek_p7uia1</span> 👍（1） 💬（2）<p>请问在写Transform的过程中，如何debug代码呢？初期对ASM不熟悉，在写的过程中如果能debug最好了</p>2019-03-01</li><br/><li><span>blithe</span> 👍（0） 💬（1）<p>为什么是使用发射的方式，替换了transformClassesWithDexBuilderForDebug，而不是直接在plugin中直接加入进去一个</p>2019-12-12</li><br/><li><span>王大大</span> 👍（0） 💬（1）<p>@splm 我的方法是在本地建repo，然后在项目中classpath引进去，然后在apply进去，但是修改了代码调试需要重新uploadArchives，就很麻烦，有什么好的调试办法吗</p>2019-03-28</li><br/><li><span>splm</span> 👍（0） 💬（1）<p>如果不上传maven的话，本地工程使用，提示找不到插件类，这个是什么问题？</p>2019-03-26</li><br/><li><span>杨泉</span> 👍（3） 💬（0）<p>如何运行Demo
 ASMSample项目先注释掉

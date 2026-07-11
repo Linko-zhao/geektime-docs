@@ -15,15 +15,16 @@
 这个架构愿景改变的直接影响，就是让我们**分解任务的方式**发生了变化。体现在任务列表上为：
 
 - 方法注入（改变前）
-  
+
   - 通过Inject标注的方法，其参数为依赖组件
   - 通过Inject标注的无参数方法，会被调用
   - 按照子类中的规则，覆盖父类中的Inject方法
   - 如果组件需要的依赖不存在，则抛出异常
   - 如果方法定义类型参数，则抛出异常
   - 如果组件间存在循环依赖，则抛出异常
+
 - 方法注入（改变后）
-  
+
   - 通过Inject标注的方法，其参数为依赖组件
   - 通过Inject标注的无参数方法，会被调用
   - 按照子类中的规则，覆盖父类中的Inject方法
@@ -45,7 +46,7 @@
 
     public interface ComponentProvider<T> {
         T get(Context context);
-        
+
         default List<Class<?>> getDependencies() {
             return List.of();
         }
@@ -55,7 +56,7 @@
 
     public interface ComponentProvider<T> {
         T get(Context context);
-        
+
         default List<Type> getDependencies() {
             return List.of();
         }
@@ -67,7 +68,7 @@
 ```
 public interface ComponentProvider<T> {
     T get(Context context);
-    
+
     default List<ComponentRef<?>> getDependencies() {
         return List.of();
     }
@@ -82,36 +83,41 @@ public interface ComponentProvider<T> {
 带来的结果是，任务列表发生了更为剧烈的改变：
 
 - 自定义Qualifier的依赖（最开始的任务）
-  
+
   - 注册组件时，可额外指定Qualifier
   - 注册组件时，可从类对象上提取Qualifier
   - 寻找依赖时，需同时满足类型与自定义Qualifier标注
   - 支持默认Qualifier——Named
+
 - 自定义Qualifier的依赖（实际完成的任务）
-  
+
   - 注册组件时，可额外指定Qualifier
-    
+
     - 针对instance指定一个Qualifieri（新增任务）
     - 针对组件指定一个Qualiifer（新增任务）
     - 针对instance指定多个Qualifieri（新增任务）
     - 针对组件指定多个Qualiifer（新增任务）
+
   - 注册组件时，如果不是合法的Qualifier，则不接受组件注册（新增任务）
   - 寻找依赖时，需同时满足类型与自定义Qualifier标注
-    
+
     - 在检查依赖时使用Qualifier（新增任务）
     - 在检查循环依赖时使用Qualifier（新增任务）
     - 构造函数注入可以使用Qualifier声明依赖（新增任务）
-      
+
       - 依赖中包含Qualifier（新增任务）
       - 如果不是合法的Qualifier，则组件非法
+
     - 字段注入可以使用Qualifier声明依赖（新增任务）
-      
+
       - 依赖中包含Qualifier（新增任务）
       - 如果不是合法的Qualifier，则组件非法
+
     - 函数注入可以使用Qualifier声明依赖（新增任务）
-      
+
       - 依赖中包含Qualifier（新增任务）
       - 如果不是合法的Qualifier，则组件非法
+
   - 支持默认Qualifier——Named（不需要）
   - 注册组件时，可从类对象上提取Qualifier（不需要）
 
@@ -192,9 +198,9 @@ public class ComponentRef<ComponentType> {
         return Objects.hash(container, component);
     }
 }
-    
+
 Config.java
- 
+
 package geektime.tdd.di;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -209,17 +215,17 @@ public interface Config {
         Class<?> value();
     }
 }
-    
+
 Context.java
-    
+
 package geektime.tdd.di;
 import java.util.Optional;
 public interface Context {
     <ComponentType> Optional<ComponentType> get(ComponentRef<ComponentType> ref);
 }
-    
+
 ContextConfig.java
-    
+
 package geektime.tdd.di;
 import geektime.tdd.di.ContextConfig.Component;
 import jakarta.inject.Provider;
@@ -395,7 +401,7 @@ public class ContextConfig {
         }
     }
 }
-    
+
 class ContextConfigError extends Error {
     public static ContextConfigError unsatisfiedResolution(Component component, Component dependency) {
         return new ContextConfigError(MessageFormat.format("Unsatisfied resolution: {1} for {0} ", component, dependency));
@@ -423,9 +429,9 @@ class ContextConfigException extends RuntimeException {
         super(message);
     }
 }
-    
+
 InjectionProvider.java
-    
+
 package geektime.tdd.di;
 import jakarta.inject.Inject;
 import jakarta.inject.Qualifier;
@@ -604,16 +610,16 @@ class ComponentError extends Error {
         super(message);
     }
 }
-    
+
 ScopeProvider.java
-    
+
 package geektime.tdd.di;
 public interface ScopeProvider {
     ComponentProvider<?> create(ComponentProvider<?> provider);
 }
-   
+
 SingletonProvider.java
-    
+
 package geektime.tdd.di;
 import java.util.List;
 class SingletonProvider<T> implements ComponentProvider<T> {

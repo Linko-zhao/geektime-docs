@@ -69,10 +69,10 @@ public final synchronized void init() throws LifecycleException {
     try {
         //2.触发INITIALIZING事件的监听器
         setStateInternal(LifecycleState.INITIALIZING, null, false);
-        
+
         //3.调用具体子类的初始化方法
         initInternal();
-        
+
         //4. 触发INITIALIZED事件的监听器
         setStateInternal(LifecycleState.INITIALIZED, null, false);
     } catch (Throwable t) {
@@ -139,57 +139,60 @@ Tomcat为了实现一键式启停以及优雅的生命周期管理，并考虑�
 2) 提供管理状态数据的通用方法
 
 容器的关键状态信息和方法有:
-1) 父容器, 子容器列表
-getParent, setParent, getParentClassLoader, setParentClassLoader;
-getStartChildren, setStartChildren, addChild, findChild, findChildren, removeChild.
 
-2) 容器事件和属性监听者列表
-findContainerListeners, addContainerListener, removeContainerListener, fireContainerEvent;
-addPropertyChangeListener, removePropertyChangeListener.
+1. 父容器, 子容器列表
+   getParent, setParent, getParentClassLoader, setParentClassLoader;
+   getStartChildren, setStartChildren, addChild, findChild, findChildren, removeChild.
 
-3) 当前容器对应的pipeline
-getPipeline, addValve.
+2. 容器事件和属性监听者列表
+   findContainerListeners, addContainerListener, removeContainerListener, fireContainerEvent;
+   addPropertyChangeListener, removePropertyChangeListener.
+
+3. 当前容器对应的pipeline
+   getPipeline, addValve.
 
 除了以上三类状态数据和对应的接口，ContainerBase还提供了两类通用功能:
-1) 容器的生命周期实现，从LifecycleBase继承而来，完成状态数据的初始化和销毁
-startInternal, stopInternal, destroyInternal
 
-2) 后台任务线程管理，比如容器周期性reload任务
-threadStart, threadStop，backgroundProcess.
+1. 容器的生命周期实现，从LifecycleBase继承而来，完成状态数据的初始化和销毁
+   startInternal, stopInternal, destroyInternal
+
+2. 后台任务线程管理，比如容器周期性reload任务
+   threadStart, threadStop，backgroundProcess.
 
 想了解更多技术细节，可以参考源码org.apache.catalina.core.ContainerBase，有源码有真相。</p>2019-05-26</li><br/><li><span>allean</span> 👍（51） 💬（5）<p>原理理解之后特别想看看源码是怎么写的，不看源码总感觉不踏实🤣，老师在介绍组件原理之后可不可以指明怎么启动Tomcat源码，并debug啊，多谢</p>2019-05-25</li><br/><li><span>why</span> 👍（20） 💬（1）<p>- 系统启动时会创建，组装，启动组件，服务停止时释放资源销毁组件。
+
 - 组件间由两层关系
-    - 组件有大有小, 大组件管理小组件( Server 管 Service )
-    - 组件有内有外, 外层控制内层( 连接器控制容器 )
+  - 组件有大有小, 大组件管理小组件( Server 管 Service )
+  - 组件有内有外, 外层控制内层( 连接器控制容器 )
 - 关系决定创建应有的顺序
-    - 先创建子组件, 再创建父组件, 子组件注入父组件
-    - 先创建内层组件, 再创建外层, 内层注入外层组件
+  - 先创建子组件, 再创建父组件, 子组件注入父组件
+  - 先创建内层组件, 再创建外层, 内层注入外层组件
 - 以上方法存在的问题: 代码混乱&#47;组件遗漏&#47;不利扩展
 - 解决方法: 通用, 统一的组件管理
 - LifeCycle 接口 ( 通用性 → 组合模式 )
-    - 不变: 组件创建, 初始化, 启动等状态
-    - 变化: 具体启动方法
-    - 将不变抽象为接口 LifeCycle, 包括四个方法 init start stop destroy; 以下为组合模式:
-        - 父组件 init 方法创建子组件并调用其 init 方法
-        - 父组件 start 调用 子组件 start 方法
-        - 只要调用最顶层 init start 就可以启动应用
+  - 不变: 组件创建, 初始化, 启动等状态
+  - 变化: 具体启动方法
+  - 将不变抽象为接口 LifeCycle, 包括四个方法 init start stop destroy; 以下为组合模式:
+    - 父组件 init 方法创建子组件并调用其 init 方法
+    - 父组件 start 调用 子组件 start 方法
+    - 只要调用最顶层 init start 就可以启动应用
 - LifeCycle 事件 ( 扩展性 → 观察者模式 )
-    - 系统可扩展性, 应遵循开闭原则: 不能修改已有的类, 可以定义新的类
-    - 上层 init 等方法触发下层 init 等方法, 把状态当做事件, 事件有对应Listener; Listener可方便添加和删除, 此为观察者模式
-    - 在 LifeCycle 中加入两个方法: 添加&#47;删除Listener, 并用 Enum 定义状态及其对应触发事件
+  - 系统可扩展性, 应遵循开闭原则: 不能修改已有的类, 可以定义新的类
+  - 上层 init 等方法触发下层 init 等方法, 把状态当做事件, 事件有对应Listener; Listener可方便添加和删除, 此为观察者模式
+  - 在 LifeCycle 中加入两个方法: 添加&#47;删除Listener, 并用 Enum 定义状态及其对应触发事件
 - LifeCycleBase 抽象基类 ( 重用性 → 模板设计模式 )
-    - 接口实现类有一些相同的逻辑, 定义一个基类实现共同的逻辑
-    - 基类会定义一些抽象方法, 调用这些方法实现子类逻辑
-    - LifeCycleBase 实现 LifeCycle 接口, 实现通用逻辑: 状态转变&#47;维护, 事件触发, 监控器添加&#47;删除, 调用子类逻辑
-    - LifeCycleBase 抽象基类抽象方法改名, initInternal 等, 避免与 init 重名; initInternal 会调用子组件的 init 方法
+  - 接口实现类有一些相同的逻辑, 定义一个基类实现共同的逻辑
+  - 基类会定义一些抽象方法, 调用这些方法实现子类逻辑
+  - LifeCycleBase 实现 LifeCycle 接口, 实现通用逻辑: 状态转变&#47;维护, 事件触发, 监控器添加&#47;删除, 调用子类逻辑
+  - LifeCycleBase 抽象基类抽象方法改名, initInternal 等, 避免与 init 重名; initInternal 会调用子组件的 init 方法
 - Listener注册, 分为两种情况
-    - Tomcat 自定义的Listener, 父组件创建子组件是注册到子组件中
-    - 可在 server.xml 中定义自己的Listener, 由 Tomcat 解析, 创建Listener并注册到组件中
-- 容器类生命周期管理接口与功能接口分开 → 接口分离原则</p>2019-05-30</li><br/><li><span>尔东橙</span> 👍（16） 💬（2）<p>老师，会不会考虑出一门课：深入拆解spring?我特别想听老师讲Spring架构的的设计，和里面用到的设计模式</p>2019-06-02</li><br/><li><span>WL</span> 👍（15） 💬（2）<p>请问一下老师Tomcat为什么要在LifeCycleBase中定义一系列的***internal()让子类取调用,  为什么不是子类实现接口的init()方法呢, 这一点我不是很理解, 希望老师指点一下.</p>2019-05-26</li><br/><li><span>nsn_huang</span> 👍（11） 💬（1）<p>这是Tomcat8.5版本的源码，基于Maven和IDEA，希望大家一起学习，一起进步。https:&#47;&#47;blog.csdn.net&#47;sougou_1323&#47;article&#47;details&#47;90597079</p>2019-05-27</li><br/><li><span>Monday</span> 👍（10） 💬（2）<p>思考题
-1，容器的创建&#47;初始化&#47;销毁
-2，容器添加&#47;删除子容器
-3，如果还要监听容器状态变化的话还需要有添加&#47;移除事件的方法。
-请指正。
+  - Tomcat 自定义的Listener, 父组件创建子组件是注册到子组件中
+  - 可在 server.xml 中定义自己的Listener, 由 Tomcat 解析, 创建Listener并注册到组件中
+- 容器类生命周期管理接口与功能接口分开 → 接口分离原则</p>2019-05-30</li><br/><li><span>尔东橙</span> 👍（16） 💬（2）<p>老师，会不会考虑出一门课：深入拆解spring?我特别想听老师讲Spring架构的的设计，和里面用到的设计模式</p>2019-06-02</li><br/><li><span>WL</span> 👍（15） 💬（2）<p>请问一下老师Tomcat为什么要在LifeCycleBase中定义一系列的***internal()让子类取调用, 为什么不是子类实现接口的init()方法呢, 这一点我不是很理解, 希望老师指点一下.</p>2019-05-26</li><br/><li><span>nsn_huang</span> 👍（11） 💬（1）<p>这是Tomcat8.5版本的源码，基于Maven和IDEA，希望大家一起学习，一起进步。https:&#47;&#47;blog.csdn.net&#47;sougou_1323&#47;article&#47;details&#47;90597079</p>2019-05-27</li><br/><li><span>Monday</span> 👍（10） 💬（2）<p>思考题
+  1，容器的创建&#47;初始化&#47;销毁
+  2，容器添加&#47;删除子容器
+  3，如果还要监听容器状态变化的话还需要有添加&#47;移除事件的方法。
+  请指正。
 
 本节收获，干货干货。
 多种设计模式还带Tomcat设计的应用场景，面试设计模式绝对加分项（我还没消化）
@@ -198,10 +201,10 @@ threadStart, threadStop，backgroundProcess.
 1，觉得老师讲得很有道理
 2，被动的吸收着知识点，没有自己的思路
 3，一看文档就感觉自己似乎是懂了，因为提不出好问题，一合上文档就感觉本节我没来过
-老师有没有好的建议，谢谢！</p>2019-05-25</li><br/><li><span>飞翔</span> 👍（8） 💬（1）<p>老师 我从 tomcat class 里边的main方法找，跟踪到 catalina里边的load方法，在这个方法里边有digester.parse(inputSource);  我觉得这个应该是具体读serverxml的，但是在往下跟踪始终找不到哪里读server.xml 实例化server等，求指导</p>2019-07-15</li><br/><li><span>-W.LI-</span> 👍（8） 💬（1）<p>老师好!之前设计模式看过好几遍，总感觉用不上，虽然知道是自己对设计思想的理解不够深入导致的。又苦于找不到方法，看了老师的分析对设计模式，和设计原则又有了进一步的了解。问题1:对于变于不变的界定标准，哪些方法需要抽象为接口。老师有啥好的建议么。问题2:spring的event，发布一个事件时会把事件放入map.然后轮训所有的所有的观察者。观察者和event很多的时候，内存等开销，会成为性能瓶颈么?比如处理事件的逻辑比较复杂或者需要IO操作。会有处理速度跟不上事件发生的速度这样的情况导致OOM的么?</p>2019-05-25</li><br/><li><span>Geek_ebda96</span> 👍（7） 💬（1）<p>老师，你的意思是配置在server.xml里的connector的线程池是tomcat对于一个应用的全局线程池，用于接受请求的socketprocessor会放到这个线程池里，假如这个应用里面有后台一些定时job或或其他需要异步线程处理的业务，也会从这个大的线程池里取线程处理，不会再单独做新建线程？</p>2019-06-06</li><br/><li><span>刘冬</span> 👍（7） 💬（2）<p>强烈呼吁老师能够讲解一下，怎么启动Tomcat的源码、调试。怎么读源码。
+老师有没有好的建议，谢谢！</p>2019-05-25</li><br/><li><span>飞翔</span> 👍（8） 💬（1）<p>老师 我从 tomcat class 里边的main方法找，跟踪到 catalina里边的load方法，在这个方法里边有digester.parse(inputSource); 我觉得这个应该是具体读serverxml的，但是在往下跟踪始终找不到哪里读server.xml 实例化server等，求指导</p>2019-07-15</li><br/><li><span>-W.LI-</span> 👍（8） 💬（1）<p>老师好!之前设计模式看过好几遍，总感觉用不上，虽然知道是自己对设计思想的理解不够深入导致的。又苦于找不到方法，看了老师的分析对设计模式，和设计原则又有了进一步的了解。问题1:对于变于不变的界定标准，哪些方法需要抽象为接口。老师有啥好的建议么。问题2:spring的event，发布一个事件时会把事件放入map.然后轮训所有的所有的观察者。观察者和event很多的时候，内存等开销，会成为性能瓶颈么?比如处理事件的逻辑比较复杂或者需要IO操作。会有处理速度跟不上事件发生的速度这样的情况导致OOM的么?</p>2019-05-25</li><br/><li><span>Geek_ebda96</span> 👍（7） 💬（1）<p>老师，你的意思是配置在server.xml里的connector的线程池是tomcat对于一个应用的全局线程池，用于接受请求的socketprocessor会放到这个线程池里，假如这个应用里面有后台一些定时job或或其他需要异步线程处理的业务，也会从这个大的线程池里取线程处理，不会再单独做新建线程？</p>2019-06-06</li><br/><li><span>刘冬</span> 👍（7） 💬（2）<p>强烈呼吁老师能够讲解一下，怎么启动Tomcat的源码、调试。怎么读源码。
 另外，有些Interface的实现是在单独的Jar中，用Intellij无法直接看到Implementation，请问有什么好的办法看到这部分的源码吗？</p>2019-05-26</li><br/><li><span>锟铻</span> 👍（6） 💬（1）<p>弱弱的问题问题，
 上面有提到：
 如果想让一个系统能够对外提供服务，我们需要创建、组装并启动这些组件；在服务停止的时候，我们还需要释放资源，销毁这些组件
-服务已经停止了，进程以及不在了，为什么还需要释放资源，销毁这些组件，不释放资源，不销毁这些组件，有什么影响？</p>2019-06-21</li><br/><li><span>dingdongfm</span> 👍（6） 💬（1）<p>请问tomcat什么时候会reload?</p>2019-06-11</li><br/><li><span>QQ怪</span> 👍（4） 💬（1）<p>还好订阅老师专栏之前看完大话设计模式，正好根据tomcat原理来体会设计模式的精髓，不然都会看不懂啊，哈哈哈</p>2019-05-26</li><br/><li><span>空知</span> 👍（4） 💬（1）<p>老师，请教下 
+服务已经停止了，进程以及不在了，为什么还需要释放资源，销毁这些组件，不释放资源，不销毁这些组件，有什么影响？</p>2019-06-21</li><br/><li><span>dingdongfm</span> 👍（6） 💬（1）<p>请问tomcat什么时候会reload?</p>2019-06-11</li><br/><li><span>QQ怪</span> 👍（4） 💬（1）<p>还好订阅老师专栏之前看完大话设计模式，正好根据tomcat原理来体会设计模式的精髓，不然都会看不懂啊，哈哈哈</p>2019-05-26</li><br/><li><span>空知</span> 👍（4） 💬（1）<p>老师，请教下
 两层关系决定了 组件由内到外 有小到大的加载顺序，这个地方为啥不是先外再内 先大再小，上层加载好了之后根据配置去加载子(内)组件？</p>2019-05-25</li><br/>
 </ul>

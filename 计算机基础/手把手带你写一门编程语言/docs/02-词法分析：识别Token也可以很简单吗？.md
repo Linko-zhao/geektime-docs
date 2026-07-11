@@ -51,9 +51,9 @@ Identifier: [a-zA-Z_][a-zA-Z0-9_]* ;
 我们再写一下前面讨论过的浮点数字面量的词法规则，这里同样是精简的版本，省略了指数部分、二进制、八进制以及十六进制的内容：
 
 ```plain
-DecimalLiteral: IntegerLiteral '.' [0-9]* 
+DecimalLiteral: IntegerLiteral '.' [0-9]*
               | '.' [0-9]+
-              | IntegerLiteral 
+              | IntegerLiteral
               ;
 IntegerLiteral: '0' | [1-9] [0-9]* ;
 ```
@@ -204,7 +204,7 @@ private getAToken():Token{
         else if (ch == '"'){
             return this.parseStringLiteral();
         }
-        else if (ch == '(' || ch == ')' || ch == '{' || ch == '}' || ch == '[' || ch == ']' || 
+        else if (ch == '(' || ch == ')' || ch == '{' || ch == '}' || ch == '[' || ch == ']' ||
                  ch == ',' || ch == ';' || ch == ':' || ch == '?' || ch == '@'){
             this.stream.next();
             return {kind:TokenKind.Seperator,text:ch};
@@ -245,7 +245,7 @@ private getAToken():Token{
             }
         }
         //省略了更多的情况……
-        else{ 
+        else{
             //暂时去掉不能识别的字符
             console.log("Unrecognized pattern meeting ': " +ch+"', at" + this.stream.line + " col: " + this.stream.col);
             this.stream.next();
@@ -273,15 +273,15 @@ private getAToken():Token{
 
 ```plain
 //加法表达式，可以是一个乘法表达式，或者是一个乘法表达式+另一个加法表达式
-add : mul 
+add : mul
     | mul '+' add
     ;
-//乘法表达式，可以是一个基础表达式，或者是一个基本表达式*另一个乘法表达式    
-mul : pri 
-    | pri '*' mul 
+//乘法表达式，可以是一个基础表达式，或者是一个基本表达式*另一个乘法表达式
+mul : pri
+    | pri '*' mul
     ;
 //基础表达式，可以是一个整形字面量，或者是括号括起来的一个加法表达式
-pri : IntLiteral 
+pri : IntLiteral
     | '(' add ')'
     ;
 ```
@@ -307,7 +307,7 @@ pri : IntLiteral
     ->匹配一个'+'，成功
     ->匹配一个add
     接下来，又回遇到一开头使用add规则的那种回溯的情形
-    ...        
+    ...
 ```
 
 在这个例子中，我们还只是采用了3级嵌套的语法，如果语法的层次更多的话，由回溯造成的无用功就更多。从这里，你应该能体会到回溯的危害了。
@@ -323,8 +323,8 @@ pri : IntLiteral
 ```plain
 ++i;   //第一个Token是++
 foo(); //第一个Token是一个标识符
-"Hello World"; //第一个Token是一个字面量 
-(2+3); //第一个Token是括号       
+"Hello World"; //第一个Token是一个字面量
+(2+3); //第一个Token是括号
 ```
 
 这怎么办呢？也好办。我们把表达式语句所有可能出现的第一个Token的集合，叫做First集合。
@@ -383,12 +383,12 @@ if (this.stream.eof()) {
 
 var TokenKind;
 (function (TokenKind) {
-    TokenKind[TokenKind[&quot;Keyword&quot;] = 0] = &quot;Keyword&quot;;
-    TokenKind[TokenKind[&quot;Identifier&quot;] = 1] = &quot;Identifier&quot;;
-    TokenKind[TokenKind[&quot;StringLiteral&quot;] = 2] = &quot;StringLiteral&quot;;
-    TokenKind[TokenKind[&quot;Seperator&quot;] = 3] = &quot;Seperator&quot;;
-    TokenKind[TokenKind[&quot;Operator&quot;] = 4] = &quot;Operator&quot;;
-    TokenKind[TokenKind[&quot;EOF&quot;] = 5] = &quot;EOF&quot;;
+TokenKind[TokenKind[&quot;Keyword&quot;] = 0] = &quot;Keyword&quot;;
+TokenKind[TokenKind[&quot;Identifier&quot;] = 1] = &quot;Identifier&quot;;
+TokenKind[TokenKind[&quot;StringLiteral&quot;] = 2] = &quot;StringLiteral&quot;;
+TokenKind[TokenKind[&quot;Seperator&quot;] = 3] = &quot;Seperator&quot;;
+TokenKind[TokenKind[&quot;Operator&quot;] = 4] = &quot;Operator&quot;;
+TokenKind[TokenKind[&quot;EOF&quot;] = 5] = &quot;EOF&quot;;
 })(TokenKind || (TokenKind = {}));
 ;</p>2021-08-14</li><br/>
 </ul>

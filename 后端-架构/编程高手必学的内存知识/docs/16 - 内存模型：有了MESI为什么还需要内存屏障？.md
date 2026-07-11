@@ -258,19 +258,19 @@ void bar() {
 
 &#47;&#47; CPU0
 void foo() {
-    a = 1;
-    unsafe.storeFence();
-    b = 1;
+a = 1;
+unsafe.storeFence();
+b = 1;
 }
 
 &#47;&#47; CPU1
 void bar() {
-    while (b == 0) continue;
-    unsafe.loadFence();
-    assert(a == 1);
+while (b == 0) continue;
+unsafe.loadFence();
+assert(a == 1);
 }
 可以改成这样？因为由于store buffer的存在，foo()函数要a的新值写入缓存之后，b的新值才能写入，所以要使用storeFence屏障； bar()函数要读取b和a的新值，且由于invalid_queue的存在，要加入loadFence保证读取到a的新值前invalid_queue的消息已经被处理完成，即将CPU1的缓存中的a值更新。这样即保证了正确性，又兼顾了性能，不知道这样理解对不对？</p>2021-12-03</li><br/><li><span>一塌糊涂</span> 👍（5） 💬（1）<p>必须赞，看过很多资料，唯一能讲明白的！大神推荐点资料吧。</p>2021-12-03</li><br/><li><span>Vvin</span> 👍（3） 💬（1）<p>你好！请问:如果在有store buffer的情况！cup0 and cpu1都写同一个状态为shared的a变量，怎么处理？</p>2021-12-12</li><br/><li><span>一个工匠</span> 👍（1） 💬（2）<p>在正常的程序中，多个 CPU 一起操作同一个变量的情况是比较少的，所以 store buffer 可以大大提升程序的运行性能。
 
-这一块不是很理解，单个cpu操作同一个变量不就不需要mesi了么？所以mesi就是处理多核数据读写不一致问题而存在的，并且可以解决。但是优化之后，又不可以解决了，并且要让开发人员添加屏障进一步解决。那是不是可以理解mesi最后还是没完成“多核缓存一致性”工作？</p>2022-02-14</li><br/><li><span>陈狄</span> 👍（1） 💬（1）<p>请问老师，「内存屏障的作用是屏障前面的读写未完成，不会进行屏障后面的读写」，怎么判断store buffer，尤其是invalid queue里的数据是屏障前面未完成的读写？</p>2022-01-09</li><br/><li><span>BlockQuant</span> 👍（0） 💬（1）<p>“CPU0 在得到这个确认消息以后，就可以独占该缓存了，直接将这块缓存变为 Modified 状态，然后把 a 写入。在 a 写入以后，foo 函数中的内存屏障就可以顺利通过了，接下来就可以写入变量 b 的新值。由于 b 是 Exclusive 的”  这个 b 为啥是 E 状态，CPU1也在用，不应该是 S 吗？</p>2021-12-07</li><br/><li><span>那时刻</span> 👍（0） 💬（1）<p>请问老师，内存屏障对于其它语言，比如go，是否是一致的呢？ 对于其它语言，读写屏障可以保证代码的执行顺序是一致的</p>2021-12-07</li><br/><li><span>dog_brother</span> 👍（0） 💬（1）<p>老师，这里说的内存屏障跟c++11的memory order是一回事么？</p>2021-12-06</li><br/><li><span>Stormouble</span> 👍（0） 💬（1）<p>有个问题想请问一下，在乱序执行下，不是会保证按原有顺序提交吗（ROB）？那么为什么还会导致赋值顺序被打乱呢？</p>2021-12-06</li><br/><li><span>.</span> 👍（0） 💬（1）<p>思考题：
+这一块不是很理解，单个cpu操作同一个变量不就不需要mesi了么？所以mesi就是处理多核数据读写不一致问题而存在的，并且可以解决。但是优化之后，又不可以解决了，并且要让开发人员添加屏障进一步解决。那是不是可以理解mesi最后还是没完成“多核缓存一致性”工作？</p>2022-02-14</li><br/><li><span>陈狄</span> 👍（1） 💬（1）<p>请问老师，「内存屏障的作用是屏障前面的读写未完成，不会进行屏障后面的读写」，怎么判断store buffer，尤其是invalid queue里的数据是屏障前面未完成的读写？</p>2022-01-09</li><br/><li><span>BlockQuant</span> 👍（0） 💬（1）<p>“CPU0 在得到这个确认消息以后，就可以独占该缓存了，直接将这块缓存变为 Modified 状态，然后把 a 写入。在 a 写入以后，foo 函数中的内存屏障就可以顺利通过了，接下来就可以写入变量 b 的新值。由于 b 是 Exclusive 的” 这个 b 为啥是 E 状态，CPU1也在用，不应该是 S 吗？</p>2021-12-07</li><br/><li><span>那时刻</span> 👍（0） 💬（1）<p>请问老师，内存屏障对于其它语言，比如go，是否是一致的呢？ 对于其它语言，读写屏障可以保证代码的执行顺序是一致的</p>2021-12-07</li><br/><li><span>dog_brother</span> 👍（0） 💬（1）<p>老师，这里说的内存屏障跟c++11的memory order是一回事么？</p>2021-12-06</li><br/><li><span>Stormouble</span> 👍（0） 💬（1）<p>有个问题想请问一下，在乱序执行下，不是会保证按原有顺序提交吗（ROB）？那么为什么还会导致赋值顺序被打乱呢？</p>2021-12-06</li><br/><li><span>.</span> 👍（0） 💬（1）<p>思考题：
 给b加上volatile修饰，从而触发java的happen before 原则，这个原则我记得没错也有靠内存屏障实现</p>2021-12-06</li><br/><li><span>shenglin</span> 👍（0） 💬（1）<p>请问一下， StoreStore barrier, LoadStore barrier, LoadLoad barrier, StoreLoad barrier具体含义是什么</p>2021-12-03</li><br/><li><span>费城的二鹏</span> 👍（0） 💬（1）<p>思考题第一瞬间想到的就是 volatile 结果它不是答案。</p>2021-12-03</li><br/><li><span>蝉沐风</span> 👍（2） 💬（1）<p>作者写得太棒了！推荐一下https:&#47;&#47;www.chanmufeng.com&#47;posts&#47;concurrency&#47;%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%B8%8E%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C.html，希望能帮到大家</p>2022-09-01</li><br/>
 </ul>

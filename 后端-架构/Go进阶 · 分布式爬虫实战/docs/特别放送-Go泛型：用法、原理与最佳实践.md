@@ -62,9 +62,9 @@ template <typename T> T myMax(T x, T y)
 
 int main()
 {
-	cout << myMax<int>(3, 7) << endl; 
-	cout << myMax<double>(3.0, 7.0) << endl; 
-	cout << myMax<char>('g', 'e') << endl; 
+	cout << myMax<int>(3, 7) << endl;
+	cout << myMax<double>(3.0, 7.0) << endl;
+	cout << myMax<char>('g', 'e') << endl;
 
 	return 0;
 }
@@ -290,7 +290,7 @@ func NoDiff[V comparable](vs ...V) bool {
 	if len(vs) == 0 {
 		return true
 	}
-	
+
 	v := vs[0]
 	for _, x := range vs[1:] {
 		if v != x {
@@ -472,7 +472,7 @@ func NoDiff[V comparable](vs ...V) bool {
 	if len(vs) == 0 {
 		return true
 	}
-	
+
 	v := vs[0]
 	for _, x := range vs[1:] {
 		if v != x {
@@ -484,7 +484,7 @@ func NoDiff[V comparable](vs ...V) bool {
 
 func main() {
 	var NoDiffString = NoDiff[string]
-	println(NoDiffString("Go", "go")) // false	
+	println(NoDiffString("Go", "go")) // false
 	println(NoDiff[int](123, 123, 789)) // false
 }
 // 函数实例化，例子2
@@ -498,7 +498,7 @@ func Max[S ~[]E, E Ordered](vs S) E {
 	if len(vs) == 0 {
 		panic("no elements")
 	}
-	
+
 	var r = vs[0]
 	for i := range vs[1:] {
 		if vs[i] > r {
@@ -516,7 +516,7 @@ var langs = []string {"C", "Go", "C++"}
 func main() {
 	var maxAge = Max[[]Age, Age]
 	println(maxAge(ages)) // 99
-	
+
 	var maxStr = Max[[]string, string]
 	println(maxStr(langs)) // Go
 }
@@ -545,17 +545,17 @@ func main() {
 	n.Do(func(v *uint32) {
 		*v++
 	})
-	
+
 	var f Lockable[float64]
 	f.Do(func(v *float64) {
 		*v += 1.23
 	})
-	
+
 	var b Lockable[bool]
 	b.Do(func(v *bool) {
 		*v = !*v
 	})
-	
+
 	var bs Lockable[[]byte]
 	bs.Do(func(v *[]byte) {
 		*v = append(*v, "Go"...)
@@ -564,7 +564,7 @@ func main() {
 
 // 方法实例化，例子2
 type Number interface{
-  int | int32 | int64 | float64 | float32 
+  int | int32 | int64 | float64 | float32
 }
 
 //定义一个泛型结构体，表示堆栈
@@ -642,7 +642,7 @@ func NoDiff[V comparable](vs ...V) bool {
 	if len(vs) == 0 {
 		return true
 	}
-	
+
 	v := vs[0]
 	for _, x := range vs[1:] {
 		if v != x {
@@ -655,14 +655,14 @@ func NoDiff[V comparable](vs ...V) bool {
 func main() {
 	println(NoDiff("Go", "Go", "Go")) // true,自动推断
 	println(NoDiff[string]("Go", "go")) // false
-	
+
 	println(NoDiff(123, 123, 123, 123)) // true， 自动推断
 	println(NoDiff[int](123, 123, 789)) // false
-	
+
 	type A = [2]int
 	println(NoDiff(A{}, A{}, A{}))     // true, 自动推断
 	println(NoDiff(A{}, A{}, A{1, 2})) // false,自动推断
-	
+
 	println(NoDiff(new(int)))           // true,自动推断
 	println(NoDiff(new(int), new(int))) // false,自动推断
 }

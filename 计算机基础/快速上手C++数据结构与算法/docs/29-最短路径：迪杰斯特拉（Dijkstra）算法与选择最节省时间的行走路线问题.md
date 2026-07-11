@@ -235,13 +235,13 @@ gm.InsertEdge('B', 'E', 100);
 gm.InsertEdge('C', 'B', 50);
 gm.InsertEdge('C', 'E', 40);
 gm.InsertEdge('C', 'F', 10);
-gm.InsertEdge('D', 'B', 10);	
-gm.InsertEdge('D', 'C', 20);	
+gm.InsertEdge('D', 'B', 10);
+gm.InsertEdge('D', 'C', 20);
 gm.InsertEdge('F', 'D', 65);
-gm.InsertEdge('F', 'E', 35);	
+gm.InsertEdge('F', 'E', 35);
 
 //显示图形
-gm.DispGraph();		
+gm.DispGraph();
 gm.ShortestPath_Dijkstra('A');
 ```
 

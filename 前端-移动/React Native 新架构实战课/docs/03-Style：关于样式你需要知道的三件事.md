@@ -23,8 +23,8 @@
 ```plain
 // 文字颜色
 <Text style={{color:'red'}}>
-// 圆角边框 
-<Text style={{borderColor:'green', borderWidth: 1, borderRadius: 5}}>  
+// 圆角边框
+<Text style={{borderColor:'green', borderWidth: 1, borderRadius: 5}}>
 ```
 
 不过，不同组件的支持的样式可能会有些不同。比如，上面这段代码中，文字颜色 color 只有 Text 和 TextInput 组件有，图片组件 Image 没有文字也不需要 color 样式。而边框样式 border\*（比如 borderColor、borderWidth、boderRadius 等等），容器组件 View、文字组件 Text、图片组件 Image 都有。
@@ -303,3 +303,4 @@ Text.defaultProps.style = { fontFamily: &#39;Arial&#39;, fontSize: 16 };</p>2023
 在自己的text组件中自己枚举所有的规格参数.
 使用时直接根据ui的规格引用自己的规格参数即可.</p>2022-06-26</li><br/><li><span>浩明啦</span> 👍（0） 💬（0）<p>老师，使用tailwind 来写会不会更好维护呢</p>2022-06-23</li><br/><li><span>小天儿</span> 👍（0） 💬（1）<p>老师，我是初学者，抱歉，这个作业想了很久还是没想出来如何实现，`Image`组件在使用的时候好像必须指定固定宽高，否则图片就不显示了，这个到底是怎么做到的呀</p>2022-05-07</li><br/>
 </ul>
+```

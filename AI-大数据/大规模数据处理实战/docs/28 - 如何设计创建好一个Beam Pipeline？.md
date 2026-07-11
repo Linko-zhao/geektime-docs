@@ -210,6 +210,5 @@ PCollection notifiedUserCollection = userCollection.apply(&quot;notifyUserTransf
           }
         })
 
-
 </p>2019-07-03</li><br/>
 </ul>

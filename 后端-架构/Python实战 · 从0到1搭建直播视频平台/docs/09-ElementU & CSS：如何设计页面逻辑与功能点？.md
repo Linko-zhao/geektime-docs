@@ -117,25 +117,25 @@ display在HTML中的作用是控制元素的显示方式，HTML元素分成块�
 当我们需要把元素变成块级元素，就要设置display的属性值为block。
 
 ```css
-display:block;
+display: block;
 ```
 
 如果我们想把多个块级元素放在一行展示（注意，这个比较常用），就可以将display的属性值设置为inline-block。
 
 ```css
-display:inline-block;
+display: inline-block;
 ```
 
 想把元素变成行内元素，就可以这样操作。
 
 ```css
-display:inline;
+display: inline;
 ```
 
 还有一个比较常用的设置，就是元素隐藏，代码是后面这样。
 
 ```css
-display:none;
+display: none;
 ```
 
 我们经常通过这一设置控制一些在某种条件下才出现的元素。比如网页弹出的广告，一开始是隐藏的，当页面滚动到了一个特定位置就会显示出来。
@@ -152,7 +152,7 @@ display:none;
 position: relative;
 width: 400px;
 height: 200px;
-border: 3px solid #73AD21;
+border: 3px solid #73ad21;
 ```
 
 接下来是子元素的设置，我们结合后面的例子来看下格式。第一行是position: absolute，用来把子元素设置为绝对定位。然后通过top、bottom、left、right这些参数设置，来确定显示在父元素的什么位置。
@@ -165,7 +165,7 @@ top: 80px;
 right: 0;
 width: 200px;
 height: 100px;
-border: 3px solid #73AD21;
+border: 3px solid #73ad21;
 ```
 
 ### 8.悬浮
@@ -173,13 +173,13 @@ border: 3px solid #73AD21;
 有时我们鼠标经过一个元素，它的样式会发生变化，其实就用到了 :hover选择器。举个例子，我们希望鼠标悬停时，一个div从原先白色的背景色变成黑色，我们就可以按后面的样式代码来设置。
 
 ```css
-div{
-  width:200px;
-  height:200px;
-  background-color:#fff;
+div {
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
 }
-div:hover{
-  background-color:#000;
+div:hover {
+  background-color: #000;
 }
 ```
 
@@ -215,11 +215,11 @@ Element 采用了模块化的设计理念，非常灵活，可以轻松地集成
     line-height: 200px;
     margin: 0;
   }
-  
+
   .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
   }
-  
+
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
   }
@@ -341,12 +341,12 @@ Element 采用了模块化的设计理念，非常灵活，可以轻松地集成
 是不是熟悉的味道？刚刚讲过Element-UI的轮播图，在这里就派上了用场。只不过中间替换成了图片。我们事先用数组bannerList在data里定义好图片的地址，就会呈现前面截图的效果了。
 
 ```css
- bannerList: [
-        "./static/banner1.png",
-        "./static/banner2.png",
-        "./static/banner3.png",
-        "./static/banner4.png",
-      ],
+bannerlist:
+  [ "./static/banner1.png",
+  "./static/banner2.png",
+  "./static/banner3.png",
+  "./static/banner4.png",
+  ];
 ```
 
 接着再来看第二层——特别推荐。
@@ -403,35 +403,35 @@ main_recommend: {
 为了让视频的名字显示在每个视频图片的最下方，就要用到定位，整个区块设置成相对定位，CSS类video-cover 是 position:relative，视频的名字使用绝对定位，类video-name是position:absolute。
 
 ```css
-    .video-cover {
-      width: 520px;
-      height: 248px;
-      display: inline-block;
-      margin-right: 10px;
-      position: relative;
-      overflow: hidden;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-    .video-name {
-      width: 100%;
-      font-size: 14px;
-      position: absolute;
-      bottom: 0;
-    }
-    ul {
-      width: 650px;
-      display: inline-block;
-    } 
-    li {
-      display: inline-block;
-      width: 210px;
-      height: 120px;
-      margin-right: 10px;
-      margin-bottom: 5px;
-      border-radius: 2px;
-      cursor: pointer;
-    }
+.video-cover {
+  width: 520px;
+  height: 248px;
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.video-name {
+  width: 100%;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0;
+}
+ul {
+  width: 650px;
+  display: inline-block;
+}
+li {
+  display: inline-block;
+  width: 210px;
+  height: 120px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+}
 ```
 
 接下来我们看一下第三层——热点和排行榜。它们分别是一个ul，放在一排。左边是热点的ul，右边是排行榜的ul。这时，它们的位置关系我们该用什么方法来实现呢？
@@ -582,12 +582,13 @@ npm ERR!
 npm ERR! See &#47;Users&#47;kindyli&#47;.npm&#47;eresolve-report.txt for a full report.
 
 npm ERR! A complete log of this run can be found in:
-npm ERR!     &#47;Users&#47;kindyli&#47;.npm&#47;_logs&#47;2023-06-17T12_56_24_738Z-debug-0.log</p>2023-06-17</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（4）<p>老师，求助
-Module build failed: 
+npm ERR! &#47;Users&#47;kindyli&#47;.npm&#47;_logs&#47;2023-06-17T12_56_24_738Z-debug-0.log</p>2023-06-17</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（4）<p>老师，求助
+Module build failed:
 
     .icon-fire {
         .icon(&quot;&#47;Users&#47;kindyli&#47;zz&#47;vue-test-1&#47;src&#47;assets&#47;image&#47;Index&#47;icon_fire.png&quot;);
       ^
+
 .icon is undefined
 
 这个.icon是需要在哪里定义的</p>2023-06-17</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（2）<p>老师上传的代码好像只有对应的文件，没有完整的项目结构，会缺少部分文件依赖，比如这节这个组件BulletListLoader</p>2023-06-17</li><br/><li><span>浩仔是程序员</span> 👍（0） 💬（1）<p>老师，你好，点击事件 goDetail(main_recommend) 这个main_recommend这个参数是如何传递的，或者说，一个点击事件，处理点击函数可以传递哪些参数</p>2023-06-17</li><br/><li><span>Geek_d671c1</span> 👍（0） 💬（2）<p>index文件报错：Cannot find module &#39;vue-content-loader&#39; or its corresponding type declarations.ts(2307)

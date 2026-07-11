@@ -250,7 +250,7 @@ $ kubectl get po -n nginx-deploy
 No resources found in default namespace.
 $ kubectl get deploy                  
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
-nginx-deployment   0&#47;0     0            0  
+nginx-deployment   0&#47;0     0            0
 
 意义：关闭服务的同时，又可以保留服务的配置，下次想要重新部署的时候只需要修改deployment就可以快速上线。
 
@@ -262,45 +262,47 @@ nginx-deployment   0&#47;0     0            0
 疑问：Deployment变更副本数时，是先删除pod，然后再重建pod，如果服务启停时间比较长，会出现什么问题不？</p>2022-08-01</li><br/><li><span>岁月长</span> 👍（37） 💬（1）<p>回答问题1:
 之前在公司的时候，有时候会把服务下线，这个时候就会把 replicas 字段改为 0，观察一段时间没问题后在把配置删除，如果有报错也方便马上恢复</p>2022-09-15</li><br/><li><span>YueShi</span> 👍（30） 💬（1）<p>懂后恍然大悟，不懂时举步维艰，学习的快乐大抵如此</p>2022-08-02</li><br/><li><span>dst</span> 👍（9） 💬（2）<p>回答一下问题2，deploy是只能用在应用是无状态的场景下，对于有状态的应用它就无能为力了，需要使用其他的api</p>2022-08-01</li><br/><li><span>朱雯</span> 👍（8） 💬（2）<p>老师，我想线创建一个pod，然后直接使用ngx-aadep来管理老的pod，这样的方式不行吗，你课程里说，pod不属于deployment。那我就单独创建，但是显示我语法错误。
 
-cat ngx-aadep.yaml 
+cat ngx-aadep.yaml
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    app: ngx-aa
-  name: ngx-aa
+creationTimestamp: null
+labels:
+app: ngx-aa
+name: ngx-aa
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: ngx-aa
+replicas: 1
+selector:
+matchLabels:
+app: ngx-aa
 cat ngx-aapod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  creationTimestamp: null
-  labels:
-    run: ngx-aa
-    app: ngx-aa
-  name: ngx-aa
+creationTimestamp: null
+labels:
+run: ngx-aa
+app: ngx-aa
+name: ngx-aa
 spec:
-  containers:
-  - image: nginx:alpine
-    name: ngx-aa
-</p>2022-08-02</li><br/><li><span>一只鱼</span> 👍（7） 💬（1）<p>按照文章中的说法，一层一层嵌套：deployment 管理 pod , pod 管理 containers 
+containers:
+
+- image: nginx:alpine
+  name: ngx-aa
+
+</p>2022-08-02</li><br/><li><span>一只鱼</span> 👍（7） 💬（1）<p>按照文章中的说法，一层一层嵌套：deployment 管理 pod , pod 管理 containers
 
 那谁来管理 deployment 呢，如果 deployment 出错了怎么办？</p>2023-07-11</li><br/><li><span>nc_ops</span> 👍（6） 💬（1）<p>对这句话有个疑问，“kubectl scale 是命令式操作，扩容和缩容只是临时的措施，如果应用需要长时间保持一个确定的 Pod 数量，最好还是编辑 Deployment 的 YAML 文件”
-我刚实验通过kubectl scale去扩容pod数量，然后通过kubectl delete去删除一个pod，立马又会新生成一个pod，所以通过kubectl scale也是能保持一个确定的pod数量的吧？通过yaml文件去改变副本的好处准确来说应该是让整个生产环境里只有一份配置的描述，避免当kubectl scale执行后，实际deployment规格与yaml文件里不一致，避免让运维引发混淆</p>2022-09-28</li><br/><li><span>摊牌</span> 👍（6） 💬（1）<p>我有个疑惑，如果像部署redis, etcd等集群模式，比如3个pod, 对应的集群里应该会有个master，像这种有状态的服务，如果采用deployment模式部署会有影响吗，还是单独部署3个pod, 望大家指点</p>2022-08-18</li><br/><li><span>朱雯</span> 👍（4） 💬（1）<p>1. 设置为0，就是pod没了，deployment还有，看同学们回答是保留配置，这个不错。
-2. 管理无状态服务，什么叫有状态，什么叫无状态，我不太理解。
+我刚实验通过kubectl scale去扩容pod数量，然后通过kubectl delete去删除一个pod，立马又会新生成一个pod，所以通过kubectl scale也是能保持一个确定的pod数量的吧？通过yaml文件去改变副本的好处准确来说应该是让整个生产环境里只有一份配置的描述，避免当kubectl scale执行后，实际deployment规格与yaml文件里不一致，避免让运维引发混淆</p>2022-09-28</li><br/><li><span>摊牌</span> 👍（6） 💬（1）<p>我有个疑惑，如果像部署redis, etcd等集群模式，比如3个pod, 对应的集群里应该会有个master，像这种有状态的服务，如果采用deployment模式部署会有影响吗，还是单独部署3个pod, 望大家指点</p>2022-08-18</li><br/><li><span>朱雯</span> 👍（4） 💬（1）<p>1. 设置为0，就是pod没了，deployment还有，看同学们回答是保留配置，这个不错。2. 管理无状态服务，什么叫有状态，什么叫无状态，我不太理解。
 
 另外，我刚刚突发奇想，deployment只留一个头加上select配置，然后里面的pod对象单独取出来，建立一个文件，pod可以建立，但是deloyment无法建立，但是提示我是语法错误，其实我不太理解。既然这两服务是独立了，我为啥不能这么做呢</p>2022-08-02</li><br/><li><span>mango</span> 👍（3） 💬（2）<p>这里开始人就少了，看来很多人倒在上一节安装那</p>2023-06-18</li><br/><li><span>郑小鹿</span> 👍（3） 💬（3）<p>「 下属字段“matchLabels”定义了 Pod 对象应该携带的 label，它必须和“template”里 Pod 定义的“labels”完全相同 」
 
 老师这个应该是指某个标签的内容完全一样吧。selector.matchLabels”是“template.matadata”中“labels”的子集。</p>2022-08-01</li><br/><li><span>明月夜</span> 👍（2） 💬（1）<p>老师好，我有一些疑问：
+
 1. 既然Deployment 只是帮助 Pod 对象能够有足够的副本数量运行，我尝试着在这个deployment之外，单独起一个pod，设置一样label，明面上pod数量增加了，不符合deployment里replicas的预期，多出来的pod应该被销毁才对，但实际并不是这样，这个独立的pod并没有影响到这个deployment，为什么？
 2. 我看了service那一章，service里也是在selector字段下指明要代理的pod的标签，我也做了同样的试验，在deployment之外，单独起一个pod，设置一样的标签，service除了能代理deployment的pod外，这个独立的pod也能被代理，为什么会有这种不一致性？</p>2023-03-30</li><br/><li><span>李泽文</span> 👍（2） 💬（2）<p>老师，我还是不太理解Job和Deployment的区别，什么是在线业务，什么是离线业务？通过对Job和Deployment的对别，感觉都差不多。Job里可以通过配置实现pod的总数量，并发数量，这个跟Deployment的replicas有什么区别？在Job里我们可以配置pod运行失败的重启策略，这个跟Deployment的动态扩缩容又有什么区别？</p>2023-01-05</li><br/><li><span>美妙的代码</span> 👍（2） 💬（1）<p>deployment 提供的多实例，在对外提供服务的时候是只有一个应用，还是多个应用同时提供服务呢？ 它是支持负债均衡吗？ 如果是，那与service提供的负债均衡有什么区别？</p>2022-10-21</li><br/><li><span>peter</span> 👍（2） 💬（2）<p>请教老师两个问题：
-Q1：有状态的应用怎么发布？
-既然Deplayment是用来发布无状态的应用，那有状态的应用怎么发布？
-k83不能发布有状态的应用吗？
+   Q1：有状态的应用怎么发布？
+   既然Deplayment是用来发布无状态的应用，那有状态的应用怎么发布？
+   k83不能发布有状态的应用吗？
 
 Q2：怎么访问用Deployment创建的Nginx？
 我用Deployment成功创建了两个nginx，一个IP是172.17.0.11,请问怎么访问该Nginx？（最好能给出具体的操作方法）。</p>2022-08-01</li><br/>

@@ -310,7 +310,7 @@ You:> 作者还写过哪些专栏？
 这一讲我们实现的 RAG 应用采用了我的开篇词作为原始信息，你可以尝试改造一下，把你的业务资料索引到向量数据库里。欢迎在留言区分享你的改造心得。
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>高并发</span> 👍（2） 💬（1）<p>关于embeddings的替换,可以参考这个文章: https:&#47;&#47;www.langchain.com.cn&#47;docs&#47;integrations&#47;vectorstores&#47;chroma&#47;</p>2024-12-08</li><br/><li><span>晴天了</span> 👍（2） 💬（2）<p>不需要先安装Chroma数据库吗? </p>2024-11-26</li><br/><li><span>MClink</span> 👍（0） 💬（1）<p>跑例子总是遇到库不存的报错，用pip 安装库后还是不行，大家有遇到类似的问题吗，Macbook Pro M4芯片 。  from langchain_chroma import Chroma
-ModuleNotFoundError: No module named &#39;langchain_chroma&#39; 
+ModuleNotFoundError: No module named &#39;langchain_chroma&#39;
 
 执行 pip3 install chromadb安装后仍然报错。
 
@@ -333,9 +333,9 @@ embeddings=OpenAIEmbeddings(
 )
 
 vector_store = Chroma(
-    collection_name=&quot;example_collection&quot;,
-    embedding_function=embeddings,
-    persist_directory=&quot;.&#47;chroma_langchain_db&quot;,  # Where to save data locally, remove if not necessary
+collection_name=&quot;example_collection&quot;,
+embedding_function=embeddings,
+persist_directory=&quot;.&#47;chroma_langchain_db&quot;, # Where to save data locally, remove if not necessary
 )
 </p>2024-12-28</li><br/><li><span>CPF</span> 👍（0） 💬（1）<p>经过Retriever加持的prompt，是否会容易超长？</p>2024-12-24</li><br/><li><span>grok</span> 👍（5） 💬（0）<p>本节代码在此：https:&#47;&#47;github.com&#47;groklab&#47;misc&#47;blob&#47;main&#47;geektime-llm-zhengye-column&#47;lec11.ipynb</p>2024-11-26</li><br/><li><span>张申傲</span> 👍（1） 💬（0）<p>第11讲打卡~
 实现了一个增强版的RAG应用，主要功能包括:
@@ -349,9 +349,9 @@ https:&#47;&#47;gitee.com&#47;zhangshenao&#47;happy-rag&#47;tree&#47;master&#47;
 from langchain.vectorstores import Chroma
 
 # 使用 Chroma 初始化存储
+
 client = chromadb.Client()
 vector_store = Chroma(client=client)
-
 
 这个才是对的</p>2025-01-18</li><br/><li><span>Demon.Lee</span> 👍（0） 💬（0）<p>LangChain 的声明式编程体现了软件设计是一门艺术，很美～</p>2025-01-10</li><br/>
 </ul>

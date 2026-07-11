@@ -299,6 +299,7 @@ merge的执行流程是这样的：
 > @某、人 把02篇的redo log更新细节和change buffer的更新串了起来；  
 > @Ivan 回复了其他同学的问题，并联系到Checkpoint机制；  
 > @约书亚 问到了merge和redolog的关系。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>路过</span> 👍（37） 💬（7）<p>老师，关于本章中的“基数”（cardinality）问题。既然已经为列a创建了索引，即有专门的数据页存放索引。遍历索引是很快的，从而得到“基数”的值应该很快呀。为何要到原始的数据页中，找N页，统计上面不同的值呢？有点多此一举啊。如果这样操作，会导致信息不准确，比如本来一个页中有50条数据，后来其中20条数据被删除了，空间没有被释放，这导致统计的信息就发生偏差。基数信息就更不准确了。
 从原始页中计算“基数”，是不是考虑到索引页中的数据具有滞后性，即更新了表中数据，要过一会才更新索引页？
@@ -317,12 +318,12 @@ select * from t force index(a) where (a between 1 and 1000) and (b between 50000
 由于这里选取的是a索引,排序不能用到索引,只能用优化排序.选取的是b值最大,id值最小那一行
 这就是典型的两条相同的sql,但是索引选择的不同,出现的数据不一致。
 所以如果是order by b,a就可以避免这种情况的引起的不一致,也可以避免堆排序造成的不一致
-但是如果是asc没有出现这种情况。这里出现不一致,应该还不是由于堆排序造成的。这是什么原因造成的？</p>2018-12-05</li><br/><li><span>bowenz</span> 👍（15） 💬（7）<p>在5.7.21 percona 版本实验，未出现案例1的情况 。 
+但是如果是asc没有出现这种情况。这里出现不一致,应该还不是由于堆排序造成的。这是什么原因造成的？</p>2018-12-05</li><br/><li><span>bowenz</span> 👍（15） 💬（7）<p>在5.7.21 percona 版本实验，未出现案例1的情况 。
 dev02&gt; select @@global.tx_isolation,@@tx_isolation,version(),&quot;session A&quot;;
 +-----------------------+-----------------+---------------+-----------+
-| @@global.tx_isolation | @@tx_isolation  | version()     | session A |
+| @@global.tx_isolation | @@tx_isolation | version() | session A |
 +-----------------------+-----------------+---------------+-----------+
-| REPEATABLE-READ       | REPEATABLE-READ | 5.7.21-20-log | session A |
+| REPEATABLE-READ | REPEATABLE-READ | 5.7.21-20-log | session A |
 +-----------------------+-----------------+---------------+-----------+
 dev02&gt; start transaction with consistent snapshot;
 Query OK, 0 rows affected (0.00 sec)
@@ -330,16 +331,16 @@ dev02&gt; commit;
 Query OK, 0 rows affected (0.00 sec)
 dev02&gt; select now() ;
 +---------------------+
-| now()               |
+| now() |
 +---------------------+
 | 2018-12-04 22:03:48 |
 +---------------------+
 1 row in set (0.00 sec)
 dev02&gt; select @@global.tx_isolation,@@tx_isolation,version(),&quot;session B&quot;;
 +-----------------------+-----------------+---------------+-----------+
-| @@global.tx_isolation | @@tx_isolation  | version()     | session B |
+| @@global.tx_isolation | @@tx_isolation | version() | session B |
 +-----------------------+-----------------+---------------+-----------+
-| REPEATABLE-READ       | REPEATABLE-READ | 5.7.21-20-log | session B |
+| REPEATABLE-READ | REPEATABLE-READ | 5.7.21-20-log | session B |
 +-----------------------+-----------------+---------------+-----------+
 1 row in set, 2 warnings (0.00 sec)
 
@@ -351,15 +352,15 @@ Query OK, 1 row affected (2 min 38.34 sec)
 
 dev02&gt; select now();
 +---------------------+
-| now()               |
+| now() |
 +---------------------+
 | 2018-12-04 22:03:58 |
 +---------------------+
 1 row in set (0.00 sec)
 
 dev02&gt; explain select * from t where a between 10000 and 20000;
-| id | select_type | table | partitions | type  | possible_keys | key  | key_len | ref  | rows  | filtered | Extra                 |
-|  1 | SIMPLE      | t     | NULL       | range | a             | a    | 5       | NULL | 10001 |   100.00 | Using index condition |</p>2018-12-05</li><br/><li><span>某、人</span> 👍（369） 💬（21）<p>趁着答案公布之前的最后时间,再来尝试性答一下这个题
+| id | select_type | table | partitions | type | possible_keys | key | key_len | ref | rows | filtered | Extra |
+| 1 | SIMPLE | t | NULL | range | a | a | 5 | NULL | 10001 | 100.00 | Using index condition |</p>2018-12-05</li><br/><li><span>某、人</span> 👍（369） 💬（21）<p>趁着答案公布之前的最后时间,再来尝试性答一下这个题
 1.为什么没有session A,session B扫描的行数是1W
 由于mysql是使用标记删除来删除记录的,并不从索引和数据文件中真正的删除。
 如果delete和insert中间的间隔相对较小,purge线程还没有来得及清理该记录。
@@ -369,9 +370,9 @@ dev02&gt; explain select * from t where a between 10000 and 20000;
 由于session A开启了一致性读,目的为了保证session A的可重复读,insert只能
 另起炉灶,不能占用delete的空间。所以出现的情况就是delete虽然删除了,但是
 未释放空间,insert又增加了空间。导致统计信息有误</p>2018-12-06</li><br/><li><span>Ying</span> 👍（71） 💬（13）<p>现学现用 今天有个500万的表 分页查询特别慢。
-select * from table where create_time and create_time&gt;=时间戳 and  create_time&lt;=时间戳 
+select * from table where create_time and create_time&gt;=时间戳 and create_time&lt;=时间戳
 and subtype=&#39;xx&#39; and type=&#39;xx&#39; and company_id =x order by create_time limited 90,30 ;
-已经建立了组合索引 union_index包括字段 create_time subtype  type company_id
+已经建立了组合索引 union_index包括字段 create_time subtype type company_id
 但是 explain 发现竟然走了create_time 的索引
 语句里加了一个use index(union_index) ，立马好了
 真正的解决了客户的实际问题啊。 感谢老师</p>2018-12-05</li><br/><li><span>梁中华</span> 👍（52） 💬（17）<p>假如要查 A in () AND B in (), 怎么建索引?</p>2019-02-01</li><br/><li><span>斜面镜子 Bill</span> 👍（51） 💬（4）<p>问题的思考：

@@ -204,7 +204,7 @@ $ swapoff -a
 实际上，关闭Swap后再重新打开，也是一种常用的Swap空间清理方法，比如：
 
 ```
-$ swapoff -a && swapon -a 
+$ swapoff -a && swapon -a
 ```
 
 ## 小结

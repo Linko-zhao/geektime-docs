@@ -4,7 +4,7 @@
 
 因为用到了`return`这个子句，所以它显然应该是一个函数中的退出代码，是不能在函数外单独使用的。
 
-这个函数呢，必须是一个构造器。更准确地说，标题中的代码必须工作在构造过程之中。因为除了`return`，它还用到了一个称为元属性（*meta property*）的东西，也就是`new.target`。
+这个函数呢，必须是一个构造器。更准确地说，标题中的代码必须工作在构造过程之中。因为除了`return`，它还用到了一个称为元属性（_meta property_）的东西，也就是`new.target`。
 
 迄今为止，`new.target`是JavaScript中唯一的一个元属性。
 
@@ -53,7 +53,7 @@ class MyClass extends Object {}
 
 无论是哪种情况，总之**你就是没有写“constructor()”方法**。有趣的是，事实上JavaScript初始化出来的这个MyClass类，（它作为一个函数）就是指向那个“constructor()”方法的，两者是同一个东西。
 
-不过，这一点不太容易证实。因为在“constructor()”方法内部无法访问它自身，不能写出类似“*constructor===MyClass*”这样的检测条件来。所以，你只能在ECMAScript的规范文档中去确认这一点。
+不过，这一点不太容易证实。因为在“constructor()”方法内部无法访问它自身，不能写出类似“_constructor===MyClass_”这样的检测条件来。所以，你只能在ECMAScript的规范文档中去确认这一点。
 
 那么，既然MyClass就是constructor()方法，而用户代码又没有声明这个方法。那么该怎么办呢？
 
@@ -68,7 +68,7 @@ class MyClass extends XXX {
   }
   ...
 }
- 
+
 // 如果在class声明中没有声明extends
 class MyClass {
   // 自动插入的缺省构造方法
@@ -217,18 +217,19 @@ console.log('foo' in x); // fals
 ```
 
 class MyClass {
-  constructor() { return new Date };
+constructor() { return new Date };
 }
 
 class MyClassEx extends MyClass {
-  constructor() { super() }; &#47;&#47; or default
-  foo() {
-    console.log(&#39;check only&#39;);
-  }
+constructor() { super() }; &#47;&#47; or default
+foo() {
+console.log(&#39;check only&#39;);
+}
 }
 
 var x = new MyClassEx;
 console.log(&#39;foo&#39; in x); &#47;&#47; false
+
 ```
 因为`foo`并不在`x`实例上，那假如我要访问`foo`，那得通过什么方式？或者说，那我这个类中定义的`foo`定义到哪里去了？</p>2020-01-15</li><br/><li><span>Astrogladiator-埃蒂纳度斯</span> 👍（3） 💬（1）<p>new.target为什么称为元属性，它与a.b（例如 super.xxx，或者’a’.toString）有什么不同？
 个人理解是new.target是用来描述构造器本身的属性，指代是当前这个构造器函数this， 它不属于实例对象的一部分，它可以由super函数传递至根类，并最终由根类创建带有子类实例的对象。</p>2019-12-19</li><br/><li><span>行问</span> 👍（3） 💬（2）<p>这里的代码在 Chrome 或 Node 是报错的
@@ -318,3 +319,4 @@ function _Date() {
   ...
 }</p>2020-05-25</li><br/><li><span>qqq</span> 👍（0） 💬（0）<p>因为可以改变默认的原型继承行为</p>2019-12-18</li><br/>
 </ul>
+```

@@ -37,9 +37,9 @@
 所以我们也来看一下数组上的二分查找算法在维基百科上的严格定义：
 
 > 二分查找是一种在有序数组中查找某一特定元素的搜索算法。
-> 
+>
 > 搜索过程从数组的中间元素开始，如果中间元素正好是要查找的元素，则搜索过程结束；如果某一特定元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半中查找，而且跟开始一样从中间元素开始比较。如果在某一步骤数组为空，则代表找不到。
-> 
+>
 > 这种搜索算法每一次比较都使搜索范围缩小一半。
 
 **核心就是查找元素需要可比较且有序的排列**。
@@ -106,7 +106,7 @@ public:
         if (guess[i] == 0) return i;
       }
       return -1;
-for        
+for
     }
 };
 ```
@@ -186,7 +186,7 @@ Kafka的做法是基于mmap技术，将硬盘上的文件和内存进行映射�
 	    // 检查index是否为空
 	    if(_entries == 0)
 	      return (-1, -1)
-	
+
         // 二分搜索
 	    def binarySearch(begin: Int, end: Int) : (Int, Int) = {
 	      var lo = begin
@@ -204,17 +204,17 @@ Kafka的做法是基于mmap技术，将硬盘上的文件和内存进行映射�
 	      }
 	      (lo, if (lo == _entries - 1) -1 else lo + 1)
 	    }
-	
+
 	    val firstHotEntry = Math.max(0, _entries - 1 - _warmEntries)
 	    // 查询的目标offset是否在热区
 	    if(compareIndexEntry(parseEntry(idx, firstHotEntry), target, searchEntity) < 0) {
 	      return binarySearch(firstHotEntry, _entries - 1)
 	    }
-	
+
 	    // 查询的目标offset是否小于最小的offset
 	    if(compareIndexEntry(parseEntry(idx, 0), target, searchEntity) > 0)
 	      return (-1, 0)
-	
+
 	    return binarySearch(0, firstHotEntry)
 	  }
 ```

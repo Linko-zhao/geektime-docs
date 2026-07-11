@@ -168,7 +168,7 @@ plugins: [
       filename: 'index.html',
       template: 'index.html',
       inject: true
-    }),    
+    }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
@@ -198,8 +198,8 @@ Webpack中的mode是一个配置选项，主要用于指定 Webpack 的工作模
 在 Webpack 的配置中，我们可以根据需求去选择不同模式去构建应用程序，具体可以通过设置 mode 属性来实现。你可以参考后面这个例子。
 
 ```plain
-module.exports = {  
-  mode: 'development'  
+module.exports = {
+  mode: 'development'
 };
 ```
 

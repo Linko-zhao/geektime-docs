@@ -7,7 +7,7 @@
 ```
 class Horse {
   public void race() {
-    System.out.println("Horse.race()"); 
+    System.out.println("Horse.race()");
   }
 }
 
@@ -324,12 +324,14 @@ public class Foo {
             mh.invokeExact(foo, o);
         }
     }
+
 }</p>2020-11-25</li><br/><li><span>Yoph</span> 👍（5） 💬（0）<p>方法句柄VS反射VS代理：
 从访问控制层面来讲，反射需要调用setAccesible()，可能会受到安全管理器的禁止警告；代理有些情况下通过内部类实现，但是内部类只能访问受限的函数或字段；而方法句柄则在上下文中对所有方法都有完整的访问权限，并且不会受到安全管理器的限制，这是方法句柄的优势之一。
 从执行速度层面来讲，在上一篇中老师也讲到了反射的性能会受到参数方法、类型的自动装箱和拆箱、方法内联的影响，相对来讲反射算是执行较慢的了（当然并没有和方法句柄通过执行具体操作示例作对比，可能在不同的JVM配置情况下执行情况不一样，比如解释器模式或编译模式下等）；通过代理的方式因调用JAVA函数实现，速度与其它调用函数的速度是一样的，相对较快；而方法句柄可能不会有代理方式那样的执行速度快，但同样会受到JVM等不同的配置导致速度不同，但从JVM设计者的角度来说，应该是力求达到像调用函数一样快的速度，目前可能是达不到的。
-从类的开销层面来讲，代理通常声明多个类，需要占用方法区，而方法句柄并不需要像代理一样有多个类的开销，不需要方法区的开销。</p>2018-11-13</li><br/><li><span>Yoph</span> 👍（4） 💬（1）<p>方法句柄其实就是可以取得与反射相同的效果，不过方法句柄使用的代码更简洁。使用方法句柄，可以去掉反射中很多套路化的代码，提高代码的可读性。</p>2018-11-13</li><br/><li><span>小阳</span> 👍（2） 💬（0）<p>思考题： 
-   1. 启动时配置参数 -Djava.lang.invoke.MethodHandle.CUSTOMIZE_THRESHOLD=1
-   2. 将new Foo（）和 new Object（） 提到到循环外， 具体代码如下 
+从类的开销层面来讲，代理通常声明多个类，需要占用方法区，而方法句柄并不需要像代理一样有多个类的开销，不需要方法区的开销。</p>2018-11-13</li><br/><li><span>Yoph</span> 👍（4） 💬（1）<p>方法句柄其实就是可以取得与反射相同的效果，不过方法句柄使用的代码更简洁。使用方法句柄，可以去掉反射中很多套路化的代码，提高代码的可读性。</p>2018-11-13</li><br/><li><span>小阳</span> 👍（2） 💬（0）<p>思考题：
+
+1.  启动时配置参数 -Djava.lang.invoke.MethodHandle.CUSTOMIZE_THRESHOLD=1
+2.  将new Foo（）和 new Object（） 提到到循环外， 具体代码如下
 
 MethodHandles.Lookup l = MethodHandles.lookup();
 MethodType t = MethodType.methodType(void.class, Object.class);
@@ -346,17 +348,18 @@ MethodHandle mh = l.findVirtual(Foo.class, &quot;bar&quot;, t);
             }
             mh.invokeExact(foo, param);
         }</p>2020-05-11</li><br/><li><span>lmtoo</span> 👍（2） 💬（0）<p>invokedynamic和MethodHandle有啥关系？</p>2019-06-23</li><br/><li><span>ゞ﹏雨天____゛</span> 👍（2） 💬（0）<p>有些内容，第一遍读总是看不懂，听不明白，当你多次读了之后，并查阅相关内容后，你会发现雨迪老师讲的内容，真的很到位，值得学习。</p>2019-03-16</li><br/><li><span>　素丶　　</span> 👍（2） 💬（1）<p>暂时只能想到把他绑定到一个固定的 “Foo” 实例上。。。。
+
 import java.lang.invoke.*;
 
 public class Foo {
-  public void bar(Object o) {
-  }
+public void bar(Object o) {
+}
 
-  public static void main(String[] args) throws Throwable {
-    MethodHandles.Lookup l = MethodHandles.lookup();
-    MethodType t = MethodType.methodType(void.class, Object.class);
-	Foo foo = new Foo();
-    MethodHandle mh = l.findVirtual(Foo.class, &quot;bar&quot;, t).bindTo(foo);
+public static void main(String[] args) throws Throwable {
+MethodHandles.Lookup l = MethodHandles.lookup();
+MethodType t = MethodType.methodType(void.class, Object.class);
+Foo foo = new Foo();
+MethodHandle mh = l.findVirtual(Foo.class, &quot;bar&quot;, t).bindTo(foo);
 
     long current = System.currentTimeMillis();
     for (int i = 1; i &lt;= 2_000_000_000; i++) {
@@ -367,7 +370,8 @@ public class Foo {
        }
        mh.invokeExact(new Object());
     }
-  }
+
+}
 }
 </p>2018-11-12</li><br/><li><span>hresh</span> 👍（1） 💬（0）<p>关于方法句柄的权限，自己做了一点小总结，欢迎阅读：https:&#47;&#47;juejin.cn&#47;post&#47;7072735300761419783</p>2022-03-23</li><br/>
 </ul>

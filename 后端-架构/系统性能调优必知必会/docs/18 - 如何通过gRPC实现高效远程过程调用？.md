@@ -36,7 +36,7 @@ package demo;
 message Request {
     int64 client_id = 1;
     string request_data = 2;
-} 
+}
 
 message Response {
     int64 server_id = 1;
@@ -112,7 +112,7 @@ HTTP/2包体并不会直接存放Protobuf消息，而是先要添加5个字节�
 ```
 service GRPCDemo {
     rpc ClientStreamingMethod (stream Request) returns Response);
-    
+
     rpc ServerStreamingMethod (Request) returns (stream Response);
 
     rpc BidirectionalStreamingMethod (stream Request) returns (stream Response);

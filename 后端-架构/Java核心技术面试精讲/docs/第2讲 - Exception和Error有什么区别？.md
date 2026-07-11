@@ -40,7 +40,7 @@ try (BufferedReader br = new BufferedReader(…);
 // do something
 catch ( IOException | XEception e) {// Multiple catch
    // Handle it
-} 
+}
 ```
 
 ## 知识扩展
@@ -94,7 +94,7 @@ try {
 
 ```
 public void readPreferences(String fileName){
-	 //...perform operations... 
+	 //...perform operations...
 	InputStream in = new FileInputStream(fileName);
 	 //...read the preferences file...
 }
@@ -107,7 +107,7 @@ public void readPreferences(String fileName){
 ```
 public void readPreferences(String filename) {
 	Objects. requireNonNull(filename);
-	//...perform other operations... 
+	//...perform other operations...
 	InputStream in = new FileInputStream(filename);
 	 //...read the preferences file...
 }

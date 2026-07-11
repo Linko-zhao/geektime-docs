@@ -21,7 +21,7 @@
 
 ```
 import { useState, useCallback }from 'react';
- 
+
 function useCounter() {
   // 定义 count 这个 state 用于保存当前数值
   const [count, setCount] = useState(0);
@@ -31,7 +31,7 @@ function useCounter() {
   const decrement = useCallback(() => setCount(count - 1), [count]);
   // 重置计数器
   const reset = useCallback(() => setCount(0), []);
-  
+
   // 将业务逻辑的操作 export 出去供调用者使用
   return { count, increment, decrement, reset };
 }
@@ -106,7 +106,7 @@ export default function UserList() {
       <button onClick={fetchUsers} disabled={loading}>
         {loading ? "Loading..." : "Show Users"}
       </button>
-      {error && 
+      {error &&
         <div style={{ color: "red" }}>Failed: {String(error)}</div>
       }
       <br />
@@ -183,7 +183,7 @@ export default function UserList() {
     const json = await res.json();
     return json.data;
   });
-  
+
   return (
     // 根据状态渲染 UI...
   );
@@ -296,7 +296,7 @@ function BlogList() {
   // 获取分类列表...
   // 组合文章数据和分类数据...
   // 根据选择的分类过滤文章...
-  
+
   // 渲染 UI ...
 }
 ```
@@ -447,59 +447,59 @@ export default function BlogList() {
 <li><span>Bug般的存在</span> 👍（32） 💬（1）<p>《拆分复杂组件》 这个例子，有种醍醐灌顶的感觉，豁然开朗，感谢-</p>2021-06-06</li><br/><li><span>凡凡</span> 👍（17） 💬（1）<p>import { useState, useCallback } from &#39;react&#39;;
 
 const useCounter = (step) =&gt; {
-  const [counter, setCounter] = useState(0);
-  const increment = useCallback(() =&gt; setCounter(counter + step), [counter, step]);
-  const decrement = useCallback(() =&gt; setCounter(counter - step), [counter, step]);
-  const reset = useCallback(() =&gt; setCounter(0), []);
-  
-  return {counter, increment, decrement, reset};
+const [counter, setCounter] = useState(0);
+const increment = useCallback(() =&gt; setCounter(counter + step), [counter, step]);
+const decrement = useCallback(() =&gt; setCounter(counter - step), [counter, step]);
+const reset = useCallback(() =&gt; setCounter(0), []);
+
+return {counter, increment, decrement, reset};
 }
 
 export default useCounter;</p>2021-06-05</li><br/><li><span>Tristan</span> 👍（2） 💬（1）<p>醍醐灌顶啊，敢问如何保养头发？</p>2021-07-29</li><br/><li><span>江谢木</span> 👍（1） 💬（2）<p>老师，useMemo、useCallback对数据进行缓存时，依赖项是进行浅比较？ 如果存在依赖项是深层对象的数据发生变化会影响缓存计算结果？</p>2021-08-17</li><br/><li><span>Free fall</span> 👍（1） 💬（1）<p>const useCounter = (initCount = 0) =&gt; {
-  const [count, setCount] = useState(initCount)
+const [count, setCount] = useState(initCount)
 
-  const increase = useCallback((body) =&gt; {
-    setCount((count) =&gt; (count += body))
-  }, [])
+const increase = useCallback((body) =&gt; {
+setCount((count) =&gt; (count += body))
+}, [])
 
-  return [count, increase]
+return [count, increase]
 }</p>2021-06-05</li><br/><li><span>重生</span> 👍（0） 💬（1）<p>自定义hooks一般放在哪个文件夹下</p>2021-06-18</li><br/><li><span>Isaac</span> 👍（0） 💬（2）<p>老师，自定义 hooks 必须要以 usexxx开头吗？</p>2021-06-09</li><br/><li><span>小个子外星人：）</span> 👍（0） 💬（1）<p>这节课超级棒！谢谢老师。努力在实践中，使用这节课的内容</p>2021-06-08</li><br/><li><span>满月</span> 👍（0） 💬（1）<p>import React, { useState, useCallback } from &#39;react&#39;;
 
 function useCounter() {
-  const [count, setCount] = useState(0);
-  const increment = useCallback(
-    (delta = 1) =&gt; setCount(count + delta),
-    [count],
-  );
-  const decrement = useCallback(
-    (delta = 1) =&gt; setCount(count - delta),
-    [count],
-  );
-  const reset = useCallback(() =&gt; setCount(0), []);
-  return {
-    count,
-    increment,
-    decrement,
-    reset,
-  };
+const [count, setCount] = useState(0);
+const increment = useCallback(
+(delta = 1) =&gt; setCount(count + delta),
+[count],
+);
+const decrement = useCallback(
+(delta = 1) =&gt; setCount(count - delta),
+[count],
+);
+const reset = useCallback(() =&gt; setCount(0), []);
+return {
+count,
+increment,
+decrement,
+reset,
+};
 }
 
 export default function Counter() {
-  &#47;&#47; 调用自定义 Hook
-  const { count, increment, decrement, reset } = useCounter();
+&#47;&#47; 调用自定义 Hook
+const { count, increment, decrement, reset } = useCounter();
 
-  &#47;&#47; 渲染 UI
-  return (
-    &lt;div&gt;
-      &lt;button onClick={() =&gt; decrement()}&gt; - &lt;&#47;button&gt;
-      &lt;p&gt;{count}&lt;&#47;p&gt;
-      &lt;button onClick={() =&gt; increment(2)}&gt; + &lt;&#47;button&gt;
-      &lt;button onClick={reset}&gt; reset &lt;&#47;button&gt;
-    &lt;&#47;div&gt;
-  );
+&#47;&#47; 渲染 UI
+return (
+&lt;div&gt;
+&lt;button onClick={() =&gt; decrement()}&gt; - &lt;&#47;button&gt;
+&lt;p&gt;{count}&lt;&#47;p&gt;
+&lt;button onClick={() =&gt; increment(2)}&gt; + &lt;&#47;button&gt;
+&lt;button onClick={reset}&gt; reset &lt;&#47;button&gt;
+&lt;&#47;div&gt;
+);
 }</p>2021-06-06</li><br/><li><span>Geek_71adef</span> 👍（0） 💬（1）<p>请问如何区别 自定义hook是在usehook传参，还是在usehook里面的方法传参？</p>2021-06-06</li><br/><li><span>xgqfrms</span> 👍（0） 💬（7）<p>完全没有必要使用 await 处理 res 呀
 
-```js
+````js
 &#47;&#47; return await res.json();
 
  return res.json();
@@ -520,7 +520,7 @@ export default function UserList() {
     const json = await res.json();
     return json.data;
   });
-  
+
   return (
     &#47;&#47; 根据状态渲染 UI...
   );
@@ -528,3 +528,4 @@ export default function UserList() {
 
 我验证了这个案例必须执行副作用useEffect(() =&gt; fetchUsers(), []);才能发起异步数据请求，如果在依赖项数组中再传入useEffect(() =&gt; fetchUsers(), [fetchUsers]);会陷入异步数据请求死循环。</p>2021-06-09</li><br/>
 </ul>
+````

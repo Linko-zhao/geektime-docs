@@ -22,8 +22,8 @@ Excel是我们在工作中用到的最频繁的软件之一，它有着强大的
 支持Excel读取的扩展库叫做xlrd库，支持Excel写入的扩展库叫做xlwt库。我们可以使用下面的命令行进行安装：
 
 ```
-pip3 install xlrd 
-pip3 install xlwt 
+pip3 install xlrd
+pip3 install xlwt
 ```
 
 那么，如何使用Python读取Excel文件的内容呢？你可以使用这样的代码实现：
@@ -157,7 +157,7 @@ row = 0
 col = 0
 for cell_header in table_header:
     xlsheet.write(row, col, cell_header)
-    col += 1 
+    col += 1
 
 # 向下移动一行
 row += 1
@@ -203,7 +203,7 @@ workbook.save(dst_file)
 ```
 for line in range(1,employee_number):
     content = table.row_values(rowx=line, start_colx=0, end_colx=None)
-    # 将表头和员工数量重新组成一个新的文件 
+    # 将表头和员工数量重新组成一个新的文件
     new_content = []
     # 增加表头到要写入的内容中
     new_content.append(salary_header)
@@ -246,12 +246,12 @@ Python有着丰富的扩展库，**当你掌握了熟练操作Excel的方法之�
 或者通过网盘链接提取后下载，链接是: https:&#47;&#47;pan.baidu.com&#47;s&#47;1UvEKDCGnU6yb0a7gHLSE4Q?pwd=5wf1，提取码: 5wf1。</p>2022-03-30</li><br/><li><span>达文西</span> 👍（14） 💬（1）<p>上周刚碰到类似的需求,客户发过来的excle跟系统要求的模板跟数据格式都不对应,上万条数据,手动改肯定是搞不来了.就自己摸索着一天用python处理了一下做适配.不得不说python确实简单好学,很适合处理这些简单重复的业务场景.</p>2021-02-03</li><br/><li><span>李京斌</span> 👍（10） 💬（3）<p>能否共享讲课中提到的文件（EXCEL文件等）。</p>2021-02-07</li><br/><li><span>旧草</span> 👍（10） 💬（2）<p>例子保存的excel是xlsx，而官方文档写着：
 xlwt is a library for writing data and formatting information to older Excel files (ie: .xls) by https:&#47;&#47;xlwt.readthedocs.io&#47;en&#47;latest&#47;</p>2021-02-04</li><br/><li><span>Nick</span> 👍（9） 💬（2）<p>老师，我现在正好也碰到类似这样合并Excel文件的业务场景。大概有几十个拆分的Excel文件，要合并导入到数据库中，按照今天课程的思路，将所有的数据合并到一个Excel文件中来处理，但现在的问题是数据量比较大，超过了千万条记录。已经超出了Excel的最大范围，请问这种情况该怎么处理？我自己目前想到的是通过循环读所有的Excel文件，将数据一条条的插入到数据库中，请问老师还有什么高见？</p>2021-02-04</li><br/><li><span>唐超伟</span> 👍（8） 💬（6）<p>2.01版本的xlrd不支持xlsx文件，只支持xls文件
 亲测装旧版本的可用
- pip install xlrd==1.2.0</p>2021-03-01</li><br/><li><span>Fan</span> 👍（8） 💬（3）<p>哈哈哈，这个主题讲得好，比爬虫，Django 那些内容实用多了。</p>2021-02-03</li><br/><li><span>陈芳</span> 👍（6） 💬（1）<p>像我这样情况的，是不是应该学习【零基础学Python】，而不是这个课程。感觉十分吃力，连怎么开门都不知道</p>2021-03-11</li><br/><li><span>比国王</span> 👍（3） 💬（1）<p>老师，只论报表的拆分和合并，Python比VBA强在哪些方面？因为打开Excel就可以写VBA，非常方便，但如果知道Python比VBA更好的话，就可以说服自己学习Python而放弃使用VBA了。</p>2021-12-20</li><br/><li><span>巩春雨</span> 👍（3） 💬（2）<p>老师，您讲的都是对于一些简单格式的excel数据有效。实际工作中财务的一些表格都是包含大量的格式，如合并单元格，涂色，隐藏，筛选及单元格内存在大量的公式。如果我把10个文件合并到一个文件中的不同sheet，如何能把相应的格式及公式快速的复制过去</p>2021-02-08</li><br/><li><span>BBQ</span> 👍（3） 💬（1）<p>老婆总是让我批量处理文件，上次学用 PowerShell 写了一个小程序，非常难写。用Python 简单多了。 </p>2021-02-05</li><br/><li><span>老李书店</span> 👍（2） 💬（2）<p>请问下有案例文件吗</p>2021-04-22</li><br/><li><span>落曦</span> 👍（2） 💬（2）<p>老师您好，我试了一下您的代码，第一个有问题，运行出错：
+pip install xlrd==1.2.0</p>2021-03-01</li><br/><li><span>Fan</span> 👍（8） 💬（3）<p>哈哈哈，这个主题讲得好，比爬虫，Django 那些内容实用多了。</p>2021-02-03</li><br/><li><span>陈芳</span> 👍（6） 💬（1）<p>像我这样情况的，是不是应该学习【零基础学Python】，而不是这个课程。感觉十分吃力，连怎么开门都不知道</p>2021-03-11</li><br/><li><span>比国王</span> 👍（3） 💬（1）<p>老师，只论报表的拆分和合并，Python比VBA强在哪些方面？因为打开Excel就可以写VBA，非常方便，但如果知道Python比VBA更好的话，就可以说服自己学习Python而放弃使用VBA了。</p>2021-12-20</li><br/><li><span>巩春雨</span> 👍（3） 💬（2）<p>老师，您讲的都是对于一些简单格式的excel数据有效。实际工作中财务的一些表格都是包含大量的格式，如合并单元格，涂色，隐藏，筛选及单元格内存在大量的公式。如果我把10个文件合并到一个文件中的不同sheet，如何能把相应的格式及公式快速的复制过去</p>2021-02-08</li><br/><li><span>BBQ</span> 👍（3） 💬（1）<p>老婆总是让我批量处理文件，上次学用 PowerShell 写了一个小程序，非常难写。用Python 简单多了。 </p>2021-02-05</li><br/><li><span>老李书店</span> 👍（2） 💬（2）<p>请问下有案例文件吗</p>2021-04-22</li><br/><li><span>落曦</span> 👍（2） 💬（2）<p>老师您好，我试了一下您的代码，第一个有问题，运行出错：
 Traceback (most recent call last):
-  File &quot;D:&#47;pycharmproject&#47;Exceldemo.py&quot;, line 10, in &lt;module&gt;
-    value = table.cell_value(rowx=4, colx=4)
-  File &quot;D:\pycharmproject\venv\lib\site-packages\xlrd\sheet.py&quot;, line 420, in cell_value
-    return self._cell_values[rowx][colx]
+File &quot;D:&#47;pycharmproject&#47;Exceldemo.py&quot;, line 10, in &lt;module&gt;
+value = table.cell_value(rowx=4, colx=4)
+File &quot;D:\pycharmproject\venv\lib\site-packages\xlrd\sheet.py&quot;, line 420, in cell_value
+return self._cell_values[rowx][colx]
 IndexError: list index out of range
 
 后来当我调试您github上的代码时，没有错误，然后根据留言区@旧草的提示，打开了您工资单.xlsx的文件，发现命名错误，于是我重命名为工资单.xls后来就能直接在excel上读取内容了。
@@ -260,15 +260,15 @@ IndexError: list index out of range
 python 3.7.0
 xlrd 1.2.0
 xlwt 1.3.0
-pip  21.0.1
+pip 21.0.1
 </p>2021-02-07</li><br/><li><span>刘春富</span> 👍（1） 💬（1）<p># 调用自定义函数write_to_file()写入新的文件 
 write_to_file(filename = content[1], cnt = new_content)
 
 这个write_to_file()函数的代码是怎样的？谢谢</p>2022-01-11</li><br/><li><span>Geek_39bcb2</span> 👍（1） 💬（1）<p>初学者，老师帮忙解答一下找个是怎么回事
 H:\PycharmProjects\pythonProject1\venv\Scripts\python.exe H:&#47;PycharmProjects&#47;pythonProject1&#47;main.py
-  File &quot;H:\PycharmProjects\pythonProject1\main.py&quot;, line 2
-    pip3 install xlrd
-         ^
+File &quot;H:\PycharmProjects\pythonProject1\main.py&quot;, line 2
+pip3 install xlrd
+^
 SyntaxError: invalid syntax
 
 Process finished with exit code 1

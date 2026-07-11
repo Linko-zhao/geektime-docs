@@ -150,7 +150,7 @@ SELECT * FROM player_height_grades WHERE height >= 1.90 AND height <= 2.08
 我们经常需要输出某个格式的内容，比如我们想输出球员姓名和对应的球队，对应格式为player\_name(team\_name)，就可以使用视图来完成数据格式化的操作：
 
 ```
-CREATE VIEW player_team AS 
+CREATE VIEW player_team AS
 SELECT CONCAT(player_name, '(' , team.team_name , ')') AS player_team FROM player JOIN team WHERE player.team_id = team.team_id
 ```
 
@@ -219,10 +219,10 @@ SELECT * FROM game_player_score
 证明如下：
 mysql&gt; select * from team_score;
 +---------+-----------+-----------+--------------+--------------+------------+
-| game_id | h_team_id | v_team_id | h_team_score | v_team_score | game_date  |
+| game_id | h_team_id | v_team_id | h_team_score | v_team_score | game_date |
 +---------+-----------+-----------+--------------+--------------+------------+
-|   10001 |      1001 |      1002 |          102 |          111 | 2019-04-01 |
-|   10002 |      1002 |      1003 |          135 |          134 | 2019-04-10 |
+| 10001 | 1001 | 1002 | 102 | 111 | 2019-04-01 |
+| 10002 | 1002 | 1003 | 135 | 134 | 2019-04-10 |
 +---------+-----------+-----------+--------------+--------------+------------+
 2 rows in set (0.00 sec)
 
@@ -231,14 +231,14 @@ Query OK, 0 rows affected (0.01 sec)
 
 mysql&gt; update h_team_score set h_team_score=103 where game_id=10001;
 Query OK, 1 row affected (0.01 sec)
-Rows matched: 1  Changed: 1  Warnings: 0
+Rows matched: 1 Changed: 1 Warnings: 0
 
 mysql&gt; select * from team_score;
 +---------+-----------+-----------+--------------+--------------+------------+
-| game_id | h_team_id | v_team_id | h_team_score | v_team_score | game_date  |
+| game_id | h_team_id | v_team_id | h_team_score | v_team_score | game_date |
 +---------+-----------+-----------+--------------+--------------+------------+
-|   10001 |      1001 |      1002 |          103 |          111 | 2019-04-01 |
-|   10002 |      1002 |      1003 |          135 |          134 | 2019-04-10 |
+| 10001 | 1001 | 1002 | 103 | 111 | 2019-04-01 |
+| 10002 | 1002 | 1003 | 135 | 134 | 2019-04-10 |
 +---------+-----------+-----------+--------------+--------------+------------+
 2 rows in set (0.00 sec)
 </p>2019-07-08</li><br/><li><span>肥而不腻</span> 👍（8） 💬（1）<p>我理解，视图是一个查询结果集，随实体数据表数据变化而变化。</p>2019-08-09</li><br/><li><span>Geek_weizhi</span> 👍（8） 💬（1）<p>本文章对我帮助很大！</p>2019-07-13</li><br/><li><span>cricket1981</span> 👍（8） 💬（1）<p>视图都是只读的吗？</p>2019-07-08</li><br/><li><span>暮雨</span> 👍（5） 💬（1）<p>视图查询效率很低</p>2019-11-21</li><br/><li><span>醉红颜</span> 👍（4） 💬（2）<p>陈老师，您好！我这儿有个问题，当视图创建成功后，之后对相应表有更新，该视图会自动更新吗？</p>2019-09-20</li><br/><li><span>不才~</span> 👍（4） 💬（1）<p>视图创建之后会保留在数据库吗？以后可以调用吗？

@@ -98,7 +98,7 @@ Use "app [command] --help" for more information about a command.
 接下来，我们输入子命令echo，发现依然无法正确地执行并打印出新的帮助文档。帮助文档中提示，我们echo必须要传递一个启动参数。
 
 ```plain
-» ./app echo 
+» ./app echo
 Error: requires at least 1 arg(s), only received 0
 Usage:
   app echo [string to echo] [flags]
@@ -129,7 +129,7 @@ Echo: hello world
 因此，我们可以用下面的方式执行times子命令，-t 这个flag则可以控制打印文本的次数。
 
 ```plain
-» ./app echo times hello-world  -t=3 
+» ./app echo times hello-world  -t=3
 Echo: hello-world
 Echo: hello-world
 Echo: hello-world

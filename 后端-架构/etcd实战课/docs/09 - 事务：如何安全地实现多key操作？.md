@@ -50,7 +50,7 @@ put Bob 300 //Bob账号初始资金200加100
 
 
 failure requests (get, put, del): //对应Else语句
-get Alice  
+get Alice
 get Bob
 
 

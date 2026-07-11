@@ -12,10 +12,10 @@
 public class BlockedQueue<T>{
   final Lock lock =
     new ReentrantLock();
-  // 条件变量：队列不满  
+  // 条件变量：队列不满
   final Condition notFull =
     lock.newCondition();
-  // 条件变量：队列不空  
+  // 条件变量：队列不空
   final Condition notEmpty =
     lock.newCondition();
 
@@ -26,7 +26,7 @@ public class BlockedQueue<T>{
       while (队列已满){
         // 等待队列不满
         notFull.await();
-      }  
+      }
       // 省略入队操作...
       //入队后,通知可出队
       notEmpty.signal();
@@ -41,13 +41,13 @@ public class BlockedQueue<T>{
       while (队列已空){
         // 等待队列不空
         notEmpty.await();
-      }  
+      }
       // 省略出队操作...
       //出队后，通知可入队
       notFull.signal();
     }finally {
       lock.unlock();
-    }  
+    }
   }
 }
 ```
@@ -63,7 +63,7 @@ Java SDK并发包里的Lock和Condition不过就是管程的一种实现而已�
 比如在下面的代码里，有一个计算圆周率小数点后100万位的方法`pai1M()`，这个方法可能需要执行俩礼拜，如果调用`pai1M()`之后，线程一直等着计算结果，等俩礼拜之后结果返回，就可以执行 `printf("hello world")`了，这个属于同步；如果调用`pai1M()`之后，线程不用等待计算结果，立刻就可以执行 `printf("hello world")`，这个就属于异步。
 
 ```
-// 计算圆周率小说点后100万位 
+// 计算圆周率小说点后100万位
 String pai1M() {
   //省略代码无数
 }
@@ -87,7 +87,7 @@ printf("hello world")
 
 ```
 DemoService service = 初始化部分省略
-String message = 
+String message =
   service.sayHello("dubbo");
 System.out.println(message);
 ```
@@ -105,7 +105,7 @@ public class DubboInvoker{
   Result doInvoke(Invocation inv){
     // 下面这行就是源码中108行
     // 为了便于展示，做了修改
-    return currentClient 
+    return currentClient
       .request(inv, timeout)
       .get();
   }
@@ -116,9 +116,9 @@ DefaultFuture这个类是很关键，我把相关的代码精简之后，列到�
 
 ```
 // 创建锁与条件变量
-private final Lock lock 
+private final Lock lock
     = new ReentrantLock();
-private final Condition done 
+private final Condition done
     = lock.newCondition();
 
 // 调用方通过该方法等待结果
@@ -129,7 +129,7 @@ Object get(int timeout){
 	while (!isDone()) {
 	  done.await(timeout);
       long cur=System.nanoTime();
-	  if (isDone() || 
+	  if (isDone() ||
           cur-start > timeout){
 	    break;
 	  }
@@ -146,7 +146,7 @@ Object get(int timeout){
 boolean isDone() {
   return response != null;
 }
-// RPC结果返回时调用该方法   
+// RPC结果返回时调用该方法
 private void doReceived(Response res) {
   lock.lock();
   try {
@@ -204,18 +204,15 @@ Object get(int timeout){
 
     }
 
- 
-
-
-
 </p>2019-05-15</li><br/><li><span>木刻</span> 👍（18） 💬（1）<p>老师今天提到异步转同步，让我想到这两天看的zookeeper客户端源码，感觉应该也是这个机制，客户端同步模式下发送请求后会执行packet.wait，收到服务端响应后执行packet.notifyAll</p>2019-04-02</li><br/><li><span>苏格拉底23</span> 👍（14） 💬（2）<p>老师您好！
 
 有一个基本的问题不明白，如果每个request对应一个线程，似乎并没有用到共享的资源，那么为什么要加锁呢？</p>2019-06-23</li><br/><li><span>ban</span> 👍（8） 💬（2）<p>老师，求指教
 DefaultFuturewhile这个类为什么要加 while(!isDone()) 这个条件，我看代码while里面加了done.await(timeout);是支持超时的，就是说设置5秒超时， if (isDone() || cur-start &gt; timeout){，只要超过没有被signal()唤醒，那5秒就会自动唤醒，这时候就会在if (isDone() || cur-start &gt; timeout){ 被校验通过，从而break，退出。这时候在加个while条件是不是没必要。
 还是说加个while条件是因为时间到点的时候自动唤醒后，Response可能是空，而且时间cur-start &gt; timeout 不超时，所以才有必要进行while再一次判断isDone()是否有值。</p>2019-04-03</li><br/><li><span>水目沾</span> 👍（7） 💬（1）<p>这是一对一的关系，肯定只需要 signal。每个线程都是相互独立的，lock 和 condition 也是各自独享的。</p>2019-04-02</li><br/><li><span>ycfHH</span> 👍（5） 💬（3）<p>作为一个完全不懂dubbo的新人，我很好奇是什么bug能让signal改成signalAll,因为不管怎么看都感觉signal就已经可以了啊(虽然使用signalall也不错)</p>2019-05-06</li><br/><li><span>7</span> 👍（5） 💬（1）<p>老师，有个疑问
-为什么要判断done!=null呢？这个条件不是永远为true吗。</p>2019-04-03</li><br/><li><span>阿甘</span> 👍（3） 💬（2）<p>看了最新的DefaultFuture，已经去掉了lock，老师能分析下最新实现的原理吗</p>2020-01-08</li><br/><li><span>遇见阳光</span> 👍（3） 💬（1）<p>老师，我想问下locksupport与此处用lock来阻塞调用者线程有什么区别</p>2019-04-05</li><br/><li><span>sibyl</span> 👍（2） 💬（1）<p>动手实现阻塞队列时，一定注意synchronized&#47;wait&#47;notify ， Lock&#47;Condition&#47;await&#47;signal的组合！ 
+为什么要判断done!=null呢？这个条件不是永远为true吗。</p>2019-04-03</li><br/><li><span>阿甘</span> 👍（3） 💬（2）<p>看了最新的DefaultFuture，已经去掉了lock，老师能分析下最新实现的原理吗</p>2020-01-08</li><br/><li><span>遇见阳光</span> 👍（3） 💬（1）<p>老师，我想问下locksupport与此处用lock来阻塞调用者线程有什么区别</p>2019-04-05</li><br/><li><span>sibyl</span> 👍（2） 💬（1）<p>动手实现阻塞队列时，一定注意synchronized&#47;wait&#47;notify ， Lock&#47;Condition&#47;await&#47;signal的组合！
 
 我在实现时，同时用了Lock和notify，一直报错IllegalMonitorStateException，该异常表示没加锁，而norify要求的锁必须是synchronized的锁，的确notify必须在synchronized临界区中使用，这是才加synchronized锁的！！！</p>2020-07-09</li><br/><li><span>Demon.Lee</span> 👍（2） 💬（1）<p>TCP 协议本身就是异步的，我们工作中经常用到的 RPC 调用，在 TCP 协议层面，发送完 RPC 请求后，线程是不会等待 RPC 的响应结果的。
 -------------
+
 老师，我也有类似的疑问，如果说TCP都是异步的，那么我们平时用的各种httpClient的sdk开发，它们也做了异步转同步的事情？</p>2019-10-30</li><br/><li><span>yc</span> 👍（2） 💬（2）<p>请问老师，阻塞队列的实现，入队和出队都要先获取锁，如果有一个线程正在入队同时又有一个线程在出队，是不是只有一个线程能拿到锁从而成功操作，另一个需要灯unlock，那么入队和出队就是串行了；又或者有两个线程同时入队，也是只有一个线程能够拿到锁从而成功执行入队，另一个线程需要等unlock，也是变成串行了。这样不会影响效率吗？</p>2019-10-15</li><br/>
 </ul>

@@ -37,7 +37,7 @@ func (t *T) M2() <=> F2(t *T)
 
 ```plain
 package main
-  
+
 type T struct {
     a int
 }
@@ -81,15 +81,15 @@ func main() {
   type T struct {
       a int
   }
-  
+
   func (t T) M1() {
       t.a = 10
   }
- 
+
  func (t *T) M2() {
      t.a = 11
  }
- 
+
  func main() {
      var t1 T
      println(t1.a) // 0
@@ -97,7 +97,7 @@ func main() {
      println(t1.a) // 0
      t1.M2()
      println(t1.a) // 11
- 
+
      var t2 = &T{}
      println(t2.a) // 0
      t2.M1()
@@ -337,8 +337,8 @@ type S T
 但是如果用 type S = T 则S和*S类型都包含两个方法。</p>2023-01-29</li><br/><li><span>111</span> 👍（1） 💬（1）<p>测试一下
 
 import (
-	&quot;fmt&quot;
-	&quot;reflect&quot;
+&quot;fmt&quot;
+&quot;reflect&quot;
 )
 
 type T struct{}
@@ -349,28 +349,29 @@ func (T) M2() {}
 type S T
 
 func dumpMethodSet(i interface{}) {
-	dynTyp := reflect.TypeOf(i)
-	if dynTyp == nil {
-		fmt.Printf(&quot;there is no dynamic type\n&quot;)
-		return
-	}
-	n := dynTyp.NumMethod()
-	if n == 0 {
-		fmt.Printf(&quot;%s&#39;s method set is empty!\n&quot;, dynTyp)
-		return
-	}
-	fmt.Printf(&quot;%s&#39;s method set:\n&quot;, dynTyp)
-	for j := 0; j &lt; n; j++ {
-		fmt.Println(&quot;-&quot;, dynTyp.Method(j).Name)
-	}
-	fmt.Printf(&quot;\n&quot;)
+dynTyp := reflect.TypeOf(i)
+if dynTyp == nil {
+fmt.Printf(&quot;there is no dynamic type\n&quot;)
+return
+}
+n := dynTyp.NumMethod()
+if n == 0 {
+fmt.Printf(&quot;%s&#39;s method set is empty!\n&quot;, dynTyp)
+return
+}
+fmt.Printf(&quot;%s&#39;s method set:\n&quot;, dynTyp)
+for j := 0; j &lt; n; j++ {
+fmt.Println(&quot;-&quot;, dynTyp.Method(j).Name)
+}
+fmt.Printf(&quot;\n&quot;)
 }
 
 func main() {
-	var s S
-	dumpMethodSet(s)
+var s S
+dumpMethodSet(s)
 }
 ----------------------------------
+
 S&#39;s method set is empty!
 *S&#39;s method set is empty!
 
@@ -383,7 +384,7 @@ S 类型 和 *S 类型都没有包含方法
 2.如果接受者本身较为复杂，传指针 *T，避免拷贝
 3.*T 的方法集合是包含 T 的方法集合。*T 范围更大
 
-go 文档不推荐混合使用，一般还是用 T* 吧。除非明确需要不改动 T 本身</p>2022-11-21</li><br/><li><span>菠萝吹雪—Code</span> 👍（1） 💬（1）<p>思考题回答：type S T  相当于定义了一个新的类型，和T是完全不同的类型，测试结果，main.S&#39;s method set is empty!
+go 文档不推荐混合使用，一般还是用 T* 吧。除非明确需要不改动 T 本身</p>2022-11-21</li><br/><li><span>菠萝吹雪—Code</span> 👍（1） 💬（1）<p>思考题回答：type S T 相当于定义了一个新的类型，和T是完全不同的类型，测试结果，main.S&#39;s method set is empty!
 *main.S&#39;s method set is empty!
 
 </p>2022-08-19</li><br/><li><span>Return12321</span> 👍（1） 💬（1）<p>func main() {
@@ -392,20 +393,23 @@ go 文档不推荐混合使用，一般还是用 T* 吧。除非明确需要不�
 	tool.DumpMethodSet(s1)
 	tool.DumpMethodSet(&amp;s1)
 
-	type L = T
-	var l1 L
-	tool.DumpMethodSet(l1)
-	tool.DumpMethodSet(&amp;l1)
+    type L = T
+    var l1 L
+    tool.DumpMethodSet(l1)
+    tool.DumpMethodSet(&amp;l1)
+
 }
 
 output：
 main.S&#39;s method set is empty
 *main.S&#39;s method set is empty
 main.T&#39;s method set:
+
 - M1
 - M2
 
 *main.T&#39;s method set:
+
 - M1
 - M2
 - M3
@@ -416,6 +420,6 @@ type S T 定义了一个新类型</p>2022-07-16</li><br/><li><span>mikewoo</span
 我的理解是type S T是定义了一个新类型。</p>2022-04-28</li><br/><li><span>白辉</span> 👍（1） 💬（1）<p>老师，您好，根据本节课内容有如下两个结论，那么T类型的实例可以调用receiver 为 *T 类型的方法，不能说明T类型的方法集合包含*T类型的方法吗？
 
 1 通过这个实例，我们知道了这样一个结论：无论是 T 类型实例，还是 *T 类型实例，都既可以调用 receiver 为 T 类型的方法，也可以调用 receiver 为 *T 类型的方法。
-2  Go 语言规定，*T 类型的方法集合包含所有以 *T 为 receiver 参数类型的方法，以及所有以 T 为 receiver 参数类型的方法。</p>2022-02-09</li><br/><li><span>River</span> 👍（1） 💬（1）<p>&quot;同理，类型为 *T 的实例 t2，它不仅可以调用 receiver 参数类型为 *T 的方法 M2，还可以调用 receiver 参数类型为 T 的方法 M1，这同样是因为 Go 编译器在背后做了转换。也就是，Go 判断 t2 的类型为 *T，与方法 M1 的 receiver 参数类型 T 不一致，就会自动将t2.M1()转换为(*t2).M1()。&quot;
+2 Go 语言规定，*T 类型的方法集合包含所有以 *T 为 receiver 参数类型的方法，以及所有以 T 为 receiver 参数类型的方法。</p>2022-02-09</li><br/><li><span>River</span> 👍（1） 💬（1）<p>&quot;同理，类型为 *T 的实例 t2，它不仅可以调用 receiver 参数类型为 *T 的方法 M2，还可以调用 receiver 参数类型为 T 的方法 M1，这同样是因为 Go 编译器在背后做了转换。也就是，Go 判断 t2 的类型为 *T，与方法 M1 的 receiver 参数类型 T 不一致，就会自动将t2.M1()转换为(*t2).M1()。&quot;
 老师这一段最后，（*t2）等于T类型了吗？前面（&amp;t1）等于*T类型好理解，*号对于类型和类型实例用法不一样吗？这个确实懵</p>2021-12-28</li><br/>
 </ul>

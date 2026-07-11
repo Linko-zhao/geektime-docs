@@ -8,13 +8,13 @@ Java通过ThreadPoolExecutor提供的3个submit()方法和1个FutureTask工具�
 
 ```
 // 提交Runnable任务
-Future<?> 
+Future<?>
   submit(Runnable task);
 // 提交Callable任务
-<T> Future<T> 
+<T> Future<T>
   submit(Callable<T> task);
-// 提交Runnable任务及结果引用  
-<T> Future<T> 
+// 提交Runnable任务及结果引用
+<T> Future<T>
   submit(Runnable task, T result);
 ```
 
@@ -24,7 +24,7 @@ Future<?>
 // 取消任务
 boolean cancel(
   boolean mayInterruptIfRunning);
-// 判断任务是否已取消  
+// 判断任务是否已取消
 boolean isCancelled();
 // 判断任务是否已结束
 boolean isDone();
@@ -41,14 +41,14 @@ get(long timeout, TimeUnit unit);
 3. 提交Runnable任务及结果引用 `submit(Runnable task, T result)`：这个方法很有意思，假设这个方法返回的Future对象是f，f.get()的返回值就是传给submit()方法的参数result。这个方法该怎么用呢？下面这段示例代码展示了它的经典用法。需要你注意的是Runnable接口的实现类Task声明了一个有参构造函数 `Task(Result r)` ，创建Task对象的时候传入了result对象，这样就能在类Task的run()方法中对result进行各种操作了。result相当于主线程和子线程之间的桥梁，通过它主子线程可以共享数据。
 
 ```
-ExecutorService executor 
+ExecutorService executor
   = Executors.newFixedThreadPool(1);
 // 创建Result对象r
 Result r = new Result();
 r.setAAA(a);
 // 提交任务
-Future<Result> future = 
-  executor.submit(new Task(r), r);  
+Future<Result> future =
+  executor.submit(new Task(r), r);
 Result fr = future.get();
 // 下面等式成立
 fr === r;
@@ -83,9 +83,9 @@ FutureTask(Runnable runnable, V result);
 FutureTask<Integer> futureTask
   = new FutureTask<>(()-> 1+2);
 // 创建线程池
-ExecutorService es = 
+ExecutorService es =
   Executors.newCachedThreadPool();
-// 提交FutureTask 
+// 提交FutureTask
 es.submit(futureTask);
 // 获取计算结果
 Integer result = futureTask.get();
@@ -148,10 +148,10 @@ class T1Task implements Callable<String>{
   String call() throws Exception {
     System.out.println("T1:洗水壶...");
     TimeUnit.SECONDS.sleep(1);
-    
+
     System.out.println("T1:烧开水...");
     TimeUnit.SECONDS.sleep(15);
-    // 获取T2线程的茶叶  
+    // 获取T2线程的茶叶
     String tf = ft2.get();
     System.out.println("T1:拿到茶叶:"+tf);
 
@@ -210,7 +210,8 @@ save(r3);
 
 欢迎在留言区与我分享你的想法，也欢迎你在留言区记录你的思考过程。感谢阅读，如果你觉得这篇文章对你有帮助的话，也欢迎把它分享给更多的朋友。
 <div><strong>精选留言（15）</strong></div><ul>
-<li><span>aroll</span> 👍（107） 💬（14）<p>建议并发编程课程中的Demo代码，尽量少使用System.out.println, 因为其实现有使用隐式锁，一些情况还会有锁粗化产生</p>2019-04-20</li><br/><li><span>Joker</span> 👍（19） 💬（5）<p>```java
+<li><span>aroll</span> 👍（107） 💬（14）<p>建议并发编程课程中的Demo代码，尽量少使用System.out.println, 因为其实现有使用隐式锁，一些情况还会有锁粗化产生</p>2019-04-20</li><br/><li><span>Joker</span> 👍（19） 💬（5）<p>```
+java
 ExecutorService futuresPool = Executors.newFixedThreadPool(3);
         Future&lt;Price&gt; future1 = futuresPool.submit(this::getPriceByS1);
         Future&lt;Price&gt; future2 = futuresPool.submit(this::getPriceByS2);
@@ -249,14 +250,15 @@ ExecutorService futuresPool = Executors.newFixedThreadPool(3);
                 e.printStackTrace();
             }
         });
+
 ```
 
 用三个线程把这个并行执行，麻烦老师看看，谢谢</p>2019-11-06</li><br/><li><span>张天屹</span> 👍（10） 💬（4）<p>我不知道是不是理解错老师意思了，先分析依赖有向图，可以看到三条线，没有入度&gt;1的节点
 那么启动三个线程即可。
 图：
-s1询价 -&gt; s1保存  
+s1询价 -&gt; s1保存
 s2询价 -&gt; s2保存
-s3询价 -&gt; s3保存  
+s3询价 -&gt; s3保存
 代码：
         new Thread(() -&gt; {
         	r1 = getPriceByS1();
@@ -305,7 +307,7 @@ static class S1Task implements Callable&lt;String&gt; {
         &#47;&#47;save data to db
     }
     public static void main(String[] args) {
-        S1Task s1Task = new S1Task();FutureTask&lt;String&gt; st1 = new FutureTask&lt;&gt;(s1Task);S2Task s2Task = new S2Task();FutureTask&lt;String&gt; st2 = new FutureTask&lt;&gt;(s2Task);S3Task s3Task = new S3Task();FutureTask&lt;String&gt; st3 = new FutureTask&lt;&gt;(s3Task);List&lt;FutureTask&lt;String&gt;&gt; futureTasks = Lists.&lt;FutureTask&lt;String&gt;&gt;newArrayList(st1, st2, st3);FutureTask&lt;Boolean&gt; saveTask = new FutureTask&lt;&gt;(new SaveTask(futureTasks));executor.submit(st1);executor.submit(st2);executor.submit(st3);executor.submit(saveTask);}}</p>2019-04-22</li><br/><li><span>henry</span> 👍（3） 💬（1）<p>现在是在主线程串行完成3个询价的任务，执行第一个任务，其它2个任务只能等待执行，如果要提高效率，这个地方需要改进，可以用老师今天讲的futuretask，三个询价任务改成futuretask并行执行，效率会提高</p>2019-04-20</li><br/><li><span>张德</span> 👍（2） 💬（1）<p>我也同意张天屹同学的观点   这个询价操作如果之间没有联系的话  直接起三个线程就可以了 老师能不能讲一下 用线程池怎么就有关联了？</p>2019-04-21</li><br/><li><span>near</span> 👍（1） 💬（1）<p>老师，有问题问一下：1.在泡茶的例子中，如果使用线程池创建线程，假设有很多个泡茶任务都要反复调用线程池中的线程，那么在T2提前完成任务，T1获取T2的结果前，T2这个线程会不会被线程池回收？2.假设T1在T2前完成，当T1要获取T2结果时，T1中的代码是阻塞的状态吗？</p>2020-10-13</li><br/><li><span>QQ怪</span> 👍（1） 💬（1）<p>老师，在提交 Runnable 任务及结果引用的例子里面的x变量是什么?</p>2019-04-20</li><br/><li><span>Geek_31594d</span> 👍（0） 💬（1）<p>老师，有个一直比较疑虑的地方，future.get获取返回值是去阻塞，如果get使用太多，那么阻塞的地方就会感觉有问题</p>2021-09-08</li><br/><li><span>盛权_vinc</span> 👍（0） 💬（1）<p>老师，你这个泡茶例子，看你最终的执行结果，洗水壶和洗茶壶并行了，然后才开始烧水洗茶杯，这好像有点违背了最优分工方案的图和现实？</p>2020-10-20</li><br/><li><span>是我！</span> 👍（0） 💬（1）<p>老师您好：请问这样是否有问题？  
+        S1Task s1Task = new S1Task();FutureTask&lt;String&gt; st1 = new FutureTask&lt;&gt;(s1Task);S2Task s2Task = new S2Task();FutureTask&lt;String&gt; st2 = new FutureTask&lt;&gt;(s2Task);S3Task s3Task = new S3Task();FutureTask&lt;String&gt; st3 = new FutureTask&lt;&gt;(s3Task);List&lt;FutureTask&lt;String&gt;&gt; futureTasks = Lists.&lt;FutureTask&lt;String&gt;&gt;newArrayList(st1, st2, st3);FutureTask&lt;Boolean&gt; saveTask = new FutureTask&lt;&gt;(new SaveTask(futureTasks));executor.submit(st1);executor.submit(st2);executor.submit(st3);executor.submit(saveTask);}}</p>2019-04-22</li><br/><li><span>henry</span> 👍（3） 💬（1）<p>现在是在主线程串行完成3个询价的任务，执行第一个任务，其它2个任务只能等待执行，如果要提高效率，这个地方需要改进，可以用老师今天讲的futuretask，三个询价任务改成futuretask并行执行，效率会提高</p>2019-04-20</li><br/><li><span>张德</span> 👍（2） 💬（1）<p>我也同意张天屹同学的观点   这个询价操作如果之间没有联系的话  直接起三个线程就可以了 老师能不能讲一下 用线程池怎么就有关联了？</p>2019-04-21</li><br/><li><span>near</span> 👍（1） 💬（1）<p>老师，有问题问一下：1.在泡茶的例子中，如果使用线程池创建线程，假设有很多个泡茶任务都要反复调用线程池中的线程，那么在T2提前完成任务，T1获取T2的结果前，T2这个线程会不会被线程池回收？2.假设T1在T2前完成，当T1要获取T2结果时，T1中的代码是阻塞的状态吗？</p>2020-10-13</li><br/><li><span>QQ怪</span> 👍（1） 💬（1）<p>老师，在提交 Runnable 任务及结果引用的例子里面的x变量是什么?</p>2019-04-20</li><br/><li><span>Geek_31594d</span> 👍（0） 💬（1）<p>老师，有个一直比较疑虑的地方，future.get获取返回值是去阻塞，如果get使用太多，那么阻塞的地方就会感觉有问题</p>2021-09-08</li><br/><li><span>盛权_vinc</span> 👍（0） 💬（1）<p>老师，你这个泡茶例子，看你最终的执行结果，洗水壶和洗茶壶并行了，然后才开始烧水洗茶杯，这好像有点违背了最优分工方案的图和现实？</p>2020-10-20</li><br/><li><span>是我！</span> 👍（0） 💬（1）<p>老师您好：请问这样是否有问题？
 public static void main(String[] args) throws Exception {
         FutureTask t1 = new FutureTask(new Callable() {
             @Override
@@ -331,3 +333,4 @@ public static void main(String[] args) throws Exception {
         System.out.println(&quot;保存&quot; + ss);
     }</p>2019-11-30</li><br/><li><span>爱上丘比特</span> 👍（0） 💬（1）<p>老师，既然get是阻塞方法，那应该何时调用呢？或者说在哪种场景调用避免阻塞主线程？</p>2019-06-26</li><br/>
 </ul>
+```

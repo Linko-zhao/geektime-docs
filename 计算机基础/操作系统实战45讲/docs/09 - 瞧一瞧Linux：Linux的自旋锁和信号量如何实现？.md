@@ -78,11 +78,11 @@ Linux原子类型变量的操作函数有很多，这里我只是介绍了最基
 #define __WRITE_ONCE(x, val) \
 do {*(volatile typeof(x) *)&(x) = (val);} while (0)
 //__unqual_scalar_typeof表示声明一个非限定的标量类型，非标量类型保持不变。说人话就是返回x变量的类型，这是GCC的功能，typeof只是纯粹返回x的类型。
-//如果 x 是int类型则返回“int” 
+//如果 x 是int类型则返回“int”
 #define __READ_ONCE(x)	\
 (*(const volatile int *)&(x))
 #define __WRITE_ONCE(x, val) \
-do {*(volatile int *)&(x) = (val);} while (0) 
+do {*(volatile int *)&(x) = (val);} while (0)
 ```
 
 结合刚才的代码，我给你做个解读。Linux定义了\_\_READ\_ONCE，\_\_WRITE\_ONCE这两个宏，是对代码封装并利用GCC的特性对代码进行检查，把让错误显现在编译阶段。其中的“volatile int \*”是为了提醒编译器：**这是对内存地址读写，不要有优化动作，每次都必须强制写入内存或从内存读取。**
@@ -120,7 +120,7 @@ static __always_inline void arch_local_irq_disable(void){
     native_irq_disable();
 }
 //arch层开启中断
-static __always_inline void arch_local_irq_enable(void){ 
+static __always_inline void arch_local_irq_enable(void){
     native_irq_enable();
 }
 //arch层保存eflags寄存器
@@ -146,19 +146,19 @@ static __always_inline unsigned long arch_local_irq_save(void){
         typecheck(unsigned long, flags);    \
         flags = arch_local_irq_save();      \
     } while (0)
-    
+
 #define raw_local_irq_restore(flags)            \
     do {                        \
         typecheck(unsigned long, flags);    \
         arch_local_irq_restore(flags);      \
     } while (0)
-    
+
 #define raw_local_save_flags(flags)         \
     do {                        \
         typecheck(unsigned long, flags);    \
         flags = arch_local_save_flags();    \
     } while (0)
-//通用层接口宏 
+//通用层接口宏
 #define local_irq_enable()              \
     do { \
         raw_local_irq_enable();         \
@@ -214,20 +214,20 @@ volatile unsigned long lock;//真正的锁值变量，用volatile标识
 Linux原始自旋锁数据结构封装了一个unsigned long类型的变量。有了数据结构，我们再来看看操作这个数据结构的函数，即自旋锁接口，代码如下。
 
 ```
-#define spin_unlock_string \	
+#define spin_unlock_string \
     "movb $1,%0" \ //写入1表示解锁
     :"=m" (lock->lock) : : "memory"
 
 #define spin_lock_string \
-	"\n1:\t" \	
+	"\n1:\t" \
     "lock ; decb %0\n\t" \ //原子减1
 	"js 2f\n" \	  //当结果小于0则跳转到标号2处，表示加锁失败
     ".section .text.lock,\"ax\"\n" \ //重新定义一个代码段，这是优化技术，避免后面的代码填充cache，因为大部分情况会加锁成功，链接器会处理好这个代码段的
-	"2:\t" \	
+	"2:\t" \
     "cmpb $0,%0\n\t" \	//和0比较
     "rep;nop\n\t" \	//空指令
     "jle 2b\n\t" \	 //小于或等于0跳转到标号2
-    "jmp 1b\n" \   //跳转到标号1	
+    "jmp 1b\n" \   //跳转到标号1
     ".previous"
 //获取自旋锁
 static inline void spin_lock(spinlock_t*lock){
@@ -299,7 +299,7 @@ __asm__ __volatile__(
 "movzwl %w0, %2\n\t"//将inc的低16位做0扩展后送tmp tmp=(u16)inc
 "shrl $16, %0\n\t" //将inc右移16位 inc=inc>>16
 "1:\t"
-"cmpl %0, %2\n\t" //比较inc和tmp，即比较next和owner 
+"cmpl %0, %2\n\t" //比较inc和tmp，即比较next和owner
 "je 2f\n\t" //相等则跳转到标号2处返回
 "rep ; nop\n\t" //空指令
 "movzwl %1, %2\n\t" //将slock的低16位做0扩展后送tmp 即tmp=owner
@@ -335,9 +335,9 @@ static inline int __raw_spin_trylock(raw_spinlock_t*lock){
     "movl %0,%1\n\t"//new=tmp
     "roll $16, %0\n\t"//tmp循环左移16位，即next和owner交换了
     "cmpl %0,%1\n\t"//比较tmp和new即（owner、next）？=（next、owner）
-    "jne 1f\n\t" //不等则跳转到标号1处 
+    "jne 1f\n\t" //不等则跳转到标号1处
     "addl $0x00010000, %1\n\t"//相当于next+1
-    "lock ; cmpxchgl %1,%2\n\t"//new和slock交换比较    
+    "lock ; cmpxchgl %1,%2\n\t"//new和slock交换比较
     "1:"
     "sete %b1\n\t" //new = eflags.ZF位，ZF取决于前面的判断是否相等
     "movzbl %b1,%0\n\t" //tmp = new
@@ -345,7 +345,7 @@ static inline int __raw_spin_trylock(raw_spinlock_t*lock){
     ::"memory","cc");
     return tmp;
 }
-int __lockfunc _spin_trylock(spinlock_t*lock){ 
+int __lockfunc _spin_trylock(spinlock_t*lock){
     preempt_disable();
     if(_raw_spin_trylock(lock)){
         spin_acquire(&lock->dep_map,0,1,_RET_IP_);
@@ -405,7 +405,7 @@ void console_unlock(void)
     //……删除了很多代码
     up_console_sem();//释放信号量console_sem
     raw_spin_lock(&logbuf_lock);
-    //……删除了很多代码   
+    //……删除了很多代码
 }
 ```
 
@@ -463,7 +463,7 @@ void down(struct semaphore *sem)
         __down(sem);//否则让当前进程进入睡眠
     raw_spin_unlock_irqrestore(&sem->lock, flags);
 }
-//实际唤醒进程 
+//实际唤醒进程
 static noinline void __sched __up(struct semaphore *sem)
 {
     struct semaphore_waiter *waiter = list_first_entry(&sem->wait_list, struct semaphore_waiter, list);
@@ -523,8 +523,8 @@ void up(struct semaphore *sem)
 typedef struct{
     unsigned int lock;
 }arch_rwlock_t;
-//释放读锁 
-static inline void arch_read_unlock(arch_rwlock_t*rw){ 
+//释放读锁
+static inline void arch_read_unlock(arch_rwlock_t*rw){
     asm volatile(
         LOCK_PREFIX"incl %0" //原子对lock加1
         :"+m"(rw->lock)::"memory");
@@ -537,7 +537,7 @@ static inline void arch_write_unlock(arch_rwlock_t*rw){
 }
 //获取写锁失败时调用
 ENTRY(__write_lock_failed)
-    //(%eax)表示由eax指向的内存空间是调用者传进来的 
+    //(%eax)表示由eax指向的内存空间是调用者传进来的
     2:LOCK_PREFIX addl	$ RW_LOCK_BIAS,(%eax)
     1:rep;nop//空指令
     cmpl $RW_LOCK_BIAS,(%eax)
@@ -550,7 +550,7 @@ ENTRY(__write_lock_failed)
 ENDPROC(__write_lock_failed)
 //获取读锁失败时调用
 ENTRY(__read_lock_failed)
-    //(%eax)表示由eax指向的内存空间是调用者传进来的 
+    //(%eax)表示由eax指向的内存空间是调用者传进来的
     2:LOCK_PREFIX incl(%eax)//原子加1
     1:	rep; nop//空指令
     cmpl	$1,(%eax) //和1比较 小于0则
@@ -619,7 +619,7 @@ Linux读写锁的原理本质是基于计数器，初始值为0x01000000，获�
 2.中断控制是在执行时，防止中断信号突然来了把当前执行的过程打断了。 解决方法就是关闭中断。让中断信号等到可以通知时，才发起通知。
 3.自旋锁。在多核的cpu环境下，当前核心的cpu要访问的资源是有可能被其他核的cpu来访问的。如果产生这种情况，那就让其他核的cpu自己执行空转。一直到当前核心的cpu把访问资源让出后，其他核的cpu通过检测到了可以访问资源，不在空转执行相关操作恢复正常运行。而这个过程就是自旋锁。这里会有一点浪费cpu的运行效率。毕竟有个cpu在空转。当空转时间过长时，浪费的效能更大。我们需要更好的利用cpu核的方式来解决这个问题。那就是互斥。
 4.信号量
-对于单一资源的信号量也可以说是互斥锁。  互斥锁和自旋锁的区别就是原来那个空转的核不再空转，而是把当前运行的线程或者进程睡眠去执行其他的线程或者进程了。  当资源被适当后，去通知睡眠线程或者进程。这就是信号量。linux下新版本的信号量在被移除。</p>2021-05-30</li><br/><li><span>老男孩</span> 👍（34） 💬（4）<p>这个排队自旋锁的实现方式感觉很风骚啊。关于读锁最大支持进程数是0x01000000（学友们都已经解答了）关于写饥饿的问题，既然写锁和读锁在同时获取锁状态时候写锁优先，那么就应该对读锁做一个限制，不能让读锁朝着最大数奔去。比如，系统检测到有写锁在等待，那么就限制新的读锁加入，等已经存在的读锁都释放了，写锁马上加锁更新资源。然后等待的读锁再开始加锁读取。这个等待的队列要分为读锁队列和写锁队列。优先处理写锁队列，在没有写锁的时候才能继续加读锁，如果有写锁等待，那么新的读锁不管超没超出那个最大数，都要进入读锁队列等待写锁完成后再开始自己的表演。</p>2021-05-28</li><br/><li><span>pedro</span> 👍（29） 💬（2）<p>以后我就是第一东吹了😁！
+对于单一资源的信号量也可以说是互斥锁。 互斥锁和自旋锁的区别就是原来那个空转的核不再空转，而是把当前运行的线程或者进程睡眠去执行其他的线程或者进程了。 当资源被适当后，去通知睡眠线程或者进程。这就是信号量。linux下新版本的信号量在被移除。</p>2021-05-30</li><br/><li><span>老男孩</span> 👍（34） 💬（4）<p>这个排队自旋锁的实现方式感觉很风骚啊。关于读锁最大支持进程数是0x01000000（学友们都已经解答了）关于写饥饿的问题，既然写锁和读锁在同时获取锁状态时候写锁优先，那么就应该对读锁做一个限制，不能让读锁朝着最大数奔去。比如，系统检测到有写锁在等待，那么就限制新的读锁加入，等已经存在的读锁都释放了，写锁马上加锁更新资源。然后等待的读锁再开始加锁读取。这个等待的队列要分为读锁队列和写锁队列。优先处理写锁队列，在没有写锁的时候才能继续加读锁，如果有写锁等待，那么新的读锁不管超没超出那个最大数，都要进入读锁队列等待写锁完成后再开始自己的表演。</p>2021-05-28</li><br/><li><span>pedro</span> 👍（29） 💬（2）<p>以后我就是第一东吹了😁！
 像这样的清晰明了，言简意赅的Linux内核源码解读实在是太少了，这样的文章读起来实在是太爽了，强烈小编安排一下东哥的下一个专栏叫做 《纵览Linux源码，小白也能学透》。
 
 对于思考题答案，读并发进程的最大个数就是0x01000000，只要lock大于0都是可以共享数据的。
@@ -630,17 +630,17 @@ Linux读写锁的原理本质是基于计数器，初始值为0x01000000，获�
 2.读写锁造成写饥饿的情况是不是可以参考jdk的读写锁的实现，在条件等待队列中判断队列第一个元素是不是一个写进程，如果是写进程，让其直接优先获取锁.</p>2021-05-28</li><br/><li><span>GeekYanger</span> 👍（6） 💬（3）<p>文中：
 “&#47;&#47;Linux没有这样的结构，这只是为了描述方便
 typedef struct raw_spinlock
-{ 
-        union 
-                { 
-                        unsigned int slock;&#47;&#47;真正的锁值变量 
-                        u16 owner; 
-                        u16 next; 
-                }
+{
+union
+{
+unsigned int slock;&#47;&#47;真正的锁值变量
+u16 owner;
+u16 next;
+}
 }raw_spinlock_t;”
 这里老师为了帮助我们理解汇编代码构造了一个这样的结构体，我觉得，这个owner和next要被包在一个struct中才是老师想要表述的意思，不然owner和next的取值是一样的，都是低16位。</p>2021-12-13</li><br/><li><span>子青</span> 👍（4） 💬（2）<p>老师，我有两个问题想请教
 1 。Linux自旋锁，如果一个进程在获取锁之后挂了怎么办，没人给owner +1了，后面排队的进程岂不是永远等不到锁释放？
-2。信号量那里，down是在链表的头部插入，up是唤醒链表的头部，这样不会有饥饿问题吗，链表后面的可能永远拿不到资源？</p>2021-09-23</li><br/><li><span>3k</span> 👍（4） 💬（1）<p>为什么这节里实现自旋锁的时候都没有关中断了呢？</p>2021-06-09</li><br/><li><span>doos</span> 👍（3） 💬（1）<p>感觉不学习汇编和c很多都看不懂</p>2022-04-21</li><br/><li><span>疯码</span> 👍（3） 💬（1）<p>请问下为什么保存和恢复eflags那段代码用push pop而不是mov呢</p>2022-01-18</li><br/><li><span>kocgockohgoh王裒</span> 👍（3） 💬（1）<p>关于小弟问的那个关于排队自旋锁的问题，好像是因为gcc汇编的源 目的和intel手册上的顺序是反的。关于 xaddl，intel手册上说源是寄存器，目的是寄存器或内存。而slock是内存，不可能是源。所以小弟觉得源是%0  inc，目的是%1 slock, 所以xaddl相当于 temp = inc + slock,  inc = slock,  slock = slock + inc。 否则的话，每次调用slock都会被设成inc的初值0001000，不合理。不知道彭东大神觉得如何</p>2021-11-28</li><br/><li><span>Geek_4b6813</span> 👍（3） 💬（1）<p>最多支持同时有2^24个进程共享读锁(计算机常驻的进程基本上是不可能达到这个数的)
+2。信号量那里，down是在链表的头部插入，up是唤醒链表的头部，这样不会有饥饿问题吗，链表后面的可能永远拿不到资源？</p>2021-09-23</li><br/><li><span>3k</span> 👍（4） 💬（1）<p>为什么这节里实现自旋锁的时候都没有关中断了呢？</p>2021-06-09</li><br/><li><span>doos</span> 👍（3） 💬（1）<p>感觉不学习汇编和c很多都看不懂</p>2022-04-21</li><br/><li><span>疯码</span> 👍（3） 💬（1）<p>请问下为什么保存和恢复eflags那段代码用push pop而不是mov呢</p>2022-01-18</li><br/><li><span>kocgockohgoh王裒</span> 👍（3） 💬（1）<p>关于小弟问的那个关于排队自旋锁的问题，好像是因为gcc汇编的源 目的和intel手册上的顺序是反的。关于 xaddl，intel手册上说源是寄存器，目的是寄存器或内存。而slock是内存，不可能是源。所以小弟觉得源是%0 inc，目的是%1 slock, 所以xaddl相当于 temp = inc + slock, inc = slock, slock = slock + inc。 否则的话，每次调用slock都会被设成inc的初值0001000，不合理。不知道彭东大神觉得如何</p>2021-11-28</li><br/><li><span>Geek_4b6813</span> 👍（3） 💬（1）<p>最多支持同时有2^24个进程共享读锁(计算机常驻的进程基本上是不可能达到这个数的)
 存在的问题，写饥饿，只要有读进程存在，写进程就永远没机会获得锁。</p>2021-07-06</li><br/><li><span>K菌无惨</span> 👍（3） 💬（1）<p>请问“_cond_lock 只用代码静态检查工作”这句话时什么意思？</p>2021-06-13</li><br/><li><span>Feen</span> 👍（2） 💬（1）<p>到第9课的时候，发现留言的数量少了很多，感觉操作系统（或者计算机原理）的淘汰率真的很高，能出师的太少了。关于最后的问题，应该说读锁最大支持的进程数是0x01000000，写锁最大的进程数人为的设置为1。写锁也可以设置为0x01000000，因为对于计算机来说，到底有多少进程写对它来说无关，数据对计算机没有意义，数据只对于人能不能正确使用有关。所以才有上写锁的时候直接减去0x01000000这个初始值，目的是控制只有一个进程可以写，而不是为了1而设置1。不管是中断，信号量，各种锁，最后都要靠CPU硬件的集成指令支持才能完成，就是原子操作，计算机上的各种软件，应用，服务都是靠原子操作完成自己的事务，手段就是在操作的时候不受打断，目的是完成一件事。怎么样能玩好原子操作，就能出师了。哈哈</p>2021-06-17</li><br/><li><span>fhs</span> 👍（2） 💬（2）<p>读写锁部分中。假设t1时候1号写线程获取到了锁且不释放：lock=0，t2时刻2号写线程尝试获取：lock=-(0x0100 0000)，t3时刻1号读尝试获取：lock=-(0x0100 0001)。
 之后1号写即便释放了锁，此时lock = -1。但是2号写的比较成功的条件是：&quot;lock+0x01000000，直到结果的值等于 0x01000000&quot;。1号读的比较条件是&quot;循环测试 lock+1 的值，直到结果的值大于等于 1&quot;。
 即在1号写释放之后，2号写和1号读因为lock是-1永远达不到各自退出循环的条件，一直在自旋？</p>2021-05-30</li><br/>

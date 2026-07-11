@@ -123,6 +123,5 @@ crossed_feature = tf.feature_column.crossed_column([movie_feature, rated_movie_f
 还是说wide部分的输入是要控制特征维度的？</p>2021-02-13</li><br/><li><span>Jacky</span> 👍（4） 💬（8）<p>老师，您好！我想咨询一下，我在pycharm里运行py文件的时候，出现了cast string to int32 is not supported的问题，想咨询一下如何修改代码。谢谢您！感谢！</p>2021-01-21</li><br/><li><span>浣熊当家</span> 👍（4） 💬（1）<p> 图二模型中Relu层从下到上分别是1024， 512， 256， 很好奇这些数字的设定有什么讲究吗？ 比如1）是不是设置成这种2进制相关的数字比较有效率？ 2）神经网络的维度一般都是往上每层除2这种规则吗？</p>2020-11-25</li><br/><li><span>石忠会</span> 👍（2） 💬（1）<p>老师，我看代码里面的优化器只给出了Adam 但是在在tf单独给接口或者理论中不是宽度模型使用FTRL进行优化，深度模型用 adgrad 或者Adam进行优化 这其中有什么深意吗</p>2021-07-26</li><br/><li><span>hurun</span> 👍（2） 💬（1）<p>王老师好，你在代码注释详细，个人学完后收获良多，感谢你的付出。
 我参考代码和你的讲解文档，对crossed_feature特征的生成及其在训练集、测试集的使用，有一点小小的疑惑：在代码WideNDeep.py的72行，使用了userRatedMovie1特征，我查看trainingSamples.csv和testSamples.csv，发现训练集的userRatedMovie特征movie_id，出现在测试集movie_id列，这样会不会有future feature问题呢，比如训练集中(user_id, movie_id, userRatedMovie1) =(3033, 970, 969) 出现在训练集(user_id, movie_id, userRatedMovie1) =(3033, 969, 288) ，相当于在训练集中提前告诉模型，对于3033这个用户，969是高质量评价的电影
 
-
 </p>2021-02-02</li><br/><li><span>Sebastian</span> 👍（2） 💬（2）<p>可以在deep网络中加入attention机制，比如用户行为序列作为特征时，近期的行为一般比远期行为更加能反映user的兴趣，这种时候可以对行为序列做attention处理。</p>2020-11-20</li><br/><li><span>续费专用</span> 👍（1） 💬（3）<p>我就是想问问，25 岁的男性用户喜欢看电影 A，35 岁的女性用户也喜欢看电影 A，那么按照常识，这部电影A大概是部什么样的电影呢？🤔</p>2021-02-20</li><br/>
 </ul>

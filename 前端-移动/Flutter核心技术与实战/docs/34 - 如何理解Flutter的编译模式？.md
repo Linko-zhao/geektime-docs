@@ -48,7 +48,7 @@ assert(() {
 
 ```
 if(kReleaseMode){
-  //Do sth for release 
+  //Do sth for release
 } else {
   //Do sth for debug
 }
@@ -86,7 +86,7 @@ class AppConfig extends InheritedWidget {
   static AppConfig of(BuildContext context) {
     return context.inheritFromWidgetOfExactType(AppConfig);
   }
-  
+
   //判断是否需要子Widget更新。由于是应用入口，无需更新
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => false;
@@ -157,7 +157,7 @@ class MyHomePage extends StatelessWidget {
 
 ```
 //运行开发环境应用程序
-flutter run -t lib/main_dev.dart 
+flutter run -t lib/main_dev.dart
 
 //运行生产环境应用程序
 flutter run -t lib/main.dart
@@ -203,7 +203,7 @@ flutter run -t lib/main.dart
 
 ```
 //打包开发环境应用程序
-flutter build apk -t lib/main_dev.dart 
+flutter build apk -t lib/main_dev.dart
 flutter build ios -t lib/main_dev.dart
 
 //打包生产环境应用程序

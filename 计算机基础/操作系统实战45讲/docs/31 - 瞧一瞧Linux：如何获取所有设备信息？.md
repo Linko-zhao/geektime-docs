@@ -28,10 +28,10 @@ kobject和kset是构成/sys目录下的目录节点和文件节点的核心，�
 struct kobject {
     const char      *name;           //名称，反映在sysfs中
     struct list_head    entry;       //挂入kset结构的链表
-    struct kobject      *parent;     //指向父结构 
+    struct kobject      *parent;     //指向父结构
     struct kset     *kset;           //指向所属的kset
     struct kobj_type    *ktype;
-    struct kernfs_node  *sd;         //指向sysfs文件系统目录项 
+    struct kernfs_node  *sd;         //指向sysfs文件系统目录项
     struct kref     kref;            //引用计数器结构
     unsigned int state_initialized:1;//初始化状态
     unsigned int state_in_sysfs:1;   //是否在sysfs中
@@ -360,7 +360,7 @@ static ssize_t misc_read (struct file *pfile, char __user *buff, size_t size, lo
 //对应于设备文件的写操作函数
 static ssize_t misc_write(struct file *pfile, const char __user *buff, size_t size, loff_t *off)
 {
-    printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);    
+    printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);
     return 0;
 }
 //对应于设备文件的打开操作函数
@@ -368,7 +368,7 @@ static int  misc_open(struct inode *pinode, struct file *pfile)
 {
     printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);
     return 0;
-} 
+}
 //对应于设备文件的关闭操作函数
 static int misc_release(struct inode *pinode, struct file *pfile)
 {
@@ -600,7 +600,7 @@ static int  misc_open(struct inode *pinode, struct file *pfile)
     printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);//打印这个函数所在文件的行号和名称
     return 0;
 }
-//关闭 
+//关闭
 static int misc_release(struct inode *pinode, struct file *pfile)
 {
     printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);//打印这个函数所在文件的行号和名称
@@ -609,7 +609,7 @@ static int misc_release(struct inode *pinode, struct file *pfile)
 //写
 static ssize_t misc_write(struct file *pfile, const char __user *buff, size_t size, loff_t *off)
 {
-    printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);//打印这个函数所在文件的行号和名称    
+    printk(KERN_EMERG "line:%d,%s is call\n",__LINE__,__FUNCTION__);//打印这个函数所在文件的行号和名称
     return 0;
 }
 ```

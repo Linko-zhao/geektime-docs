@@ -160,7 +160,7 @@ int main() {
 
     // formatted_sizes
     // 获取生成文本的长度，参数与format完全一致。
-    // 
+    //
     auto resultSize = std::formatted_size("{} + {} = {}", 1, 2, 1 + 2);
     std::cout << resultSize << std::endl;
 
@@ -348,31 +348,33 @@ C++20的推出改变了这一局面，我们可以利用Formatting库和formatte
 
 &#47;&#47; 非模板类
 struct Box1 {
-	bool bool_value;
-	int int_value;
-	const char* str;
+bool bool_value;
+int int_value;
+const char* str;
 };
 template &lt;typename _CharT&gt;
 struct std::formatter&lt;Box1, _CharT&gt; : std::formatter&lt;bool, _CharT&gt;
-{	
-	template &lt;typename _FormatContext&gt;
-	typename _FormatContext::iterator format(const Box1&amp; v, _FormatContext&amp; format_context)
-	{	
-		typename _FormatContext::iterator Ite
-			= std::formatter&lt;bool, _CharT&gt;::format(v.bool_value, format_context);
-		
-		return Ite;
-	}
+{
+template &lt;typename _FormatContext&gt;
+typename _FormatContext::iterator format(const Box1&amp; v, _FormatContext&amp; format_context)
+{
+typename _FormatContext::iterator Ite
+= std::formatter&lt;bool, _CharT&gt;::format(v.bool_value, format_context);
+
+    	return Ite;
+    }
+
 };
 int main()
 {
-	Box1 box1{
-		.bool_value = false,
-		.int_value = 1,
-		.str = &quot;box1&quot;
-	};
-	std::cout &lt;&lt; std::format(&quot;box1 = {}&quot;, box1);
+Box1 box1{
+.bool_value = false,
+.int_value = 1,
+.str = &quot;box1&quot;
+};
+std::cout &lt;&lt; std::format(&quot;box1 = {}&quot;, box1);
 
-	return 0;
+    return 0;
+
 }</p>2024-01-15</li><br/><li><span>常振华</span> 👍（0） 💬（1）<p>说实话，越改约难用，C++越走越偏了。。。</p>2023-10-23</li><br/>
 </ul>

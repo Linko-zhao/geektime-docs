@@ -44,12 +44,12 @@ iostat 的输出界面如下。
 
 ```
 # -d -x表示显示所有磁盘I/O的指标
-$ iostat -d -x 1 
-Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util 
-loop0            0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00 
-loop1            0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00 
-sda              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00 
-sdb              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00 
+$ iostat -d -x 1
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+loop0            0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
+loop1            0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
+sda              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
+sdb              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     0.00     0.00   0.00   0.00
 ```
 
 从这里你可以看到，iostat 提供了非常丰富的性能指标。第一列的 Device 表示磁盘设备的名字，其他各列指标，虽然数量较多，但是每个指标的含义都很重要。为了方便你理解，我把它们总结成了一个表格。
@@ -76,8 +76,8 @@ sdb              0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.0
 pidstat 是我们的老朋友了，这里我就不再啰嗦它的功能了。给它加上 -d 参数，你就可以看到进程的I/O情况，如下所示：
 
 ```
-$ pidstat -d 1 
-13:39:51      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command 
+$ pidstat -d 1
+13:39:51      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command
 13:39:52      102       916      0.00      4.00      0.00       0  rsyslogd
 ```
 
@@ -95,10 +95,10 @@ iotop 的输出如下所示：
 
 ```
 $ iotop
-Total DISK READ :       0.00 B/s | Total DISK WRITE :       7.85 K/s 
-Actual DISK READ:       0.00 B/s | Actual DISK WRITE:       0.00 B/s 
-  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND 
-15055 be/3 root        0.00 B/s    7.85 K/s  0.00 %  0.00 % systemd-journald 
+Total DISK READ :       0.00 B/s | Total DISK WRITE :       7.85 K/s
+Actual DISK READ:       0.00 B/s | Actual DISK WRITE:       0.00 B/s
+  TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO>    COMMAND
+15055 be/3 root        0.00 B/s    7.85 K/s  0.00 %  0.00 % systemd-journald
 ```
 
 从这个输出，你可以看到，前两行分别表示，进程的磁盘读写大小总数和磁盘真实的读写大小总数。因为缓存、缓冲区、I/O合并等因素的影响，它们可能并不相等。
@@ -130,7 +130,7 @@ IOPS：Input&#47;Output Per Second 每秒的I&#47;O请求数
 
 不孤立比较某项指标，结合读写比例、I&#47;O类型（随机还是连续）以及I&#47;O大小综合分析
 例如：随机读写：多关注IOPS
-          连续读写：多关注吞吐量
+连续读写：多关注吞吐量
 
 服务器选型时，对磁盘I&#47;O性能进行基础测试，使用 fio
 磁盘I&#47;O观测：iostat
@@ -153,6 +153,7 @@ r_await、w_await分别是读、写请求的平均等待时间，二者相加什
 
 man手册解释await是平均等待时间，我理解意思是toal wait time &#47; total req number，跟间隔时间无关
 -----------------------------------------------
+
 &quot;r_await、w_await分别是读、写请求的平均等待时间&quot;基于读写的平均等待时间没错，但是结果也是基于一定的时间范围内的，比如说过去1s，过去5s，显然间隔时间无论设置成多少，都是一样的.
 即a&#47;t + b&#47;t = (a+b)&#47;t</p>2019-02-10</li><br/><li><span>Vincent</span> 👍（2） 💬（1）<p>随机io和顺序io就跟数据结构有关系了吧？比如数组和链表。除了通过代码判断是随机io还是顺序io 系统有什么工具可以判断吗？</p>2019-03-24</li><br/><li><span>挺直腰板</span> 👍（1） 💬（3）<p>老师，如何知道是随机IO还是顺序IO,两者性能差还是蛮大</p>2019-03-24</li><br/><li><span>fran712</span> 👍（1） 💬（2）<p>请问将&#47;dev&#47;sda直接挂载到某个目录和将磁盘只一个分区后，&#47;dev&#47;sda1挂载到某个目录，这两种挂载的区别是什么？</p>2019-01-17</li><br/><li><span>张挺</span> 👍（0） 💬（3）<p>使用率指标不太理解，请问这个值是怎么计算出来的呢？</p>2019-03-29</li><br/><li><span>苦行僧</span> 👍（0） 💬（1）<p>老师在使用网络挂载的共享存储io性能差，有什么优化方式吗</p>2019-03-04</li><br/><li><span>jssfy</span> 👍（0） 💬（1）<p>iotop可以看到在nfs上的流量不？</p>2019-01-24</li><br/><li><span>一生一世</span> 👍（0） 💬（1）<p>老师能否提供一些参数性能指标参考，有时候能看到指标却无法确定是否有问题</p>2019-01-17</li><br/><li><span>胡萝卜</span> 👍（0） 💬（2）<p>饱和度具体是怎么定义的呢？还是有的明白</p>2019-01-16</li><br/>
 </ul>

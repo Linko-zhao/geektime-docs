@@ -344,13 +344,13 @@ dp.pause()
 
 ```javascript
 this.$axios.get("/video/recommend").then((data) => {
-      console.log(data);
-      this.recommend_list = data.data.rows;
-    });
+  console.log(data);
+  this.recommend_list = data.data.rows;
+});
 this.$axios.get("/video/ranking").then((data) => {
-      console.log(data);
-      this.ranking_list = data.data.rows;
-    });
+  console.log(data);
+  this.ranking_list = data.data.rows;
+});
 ```
 
 列表这里我们用到的数据结构是数组，每个元素是列表上的一项。返回的数据结构如下。
@@ -487,19 +487,19 @@ this.$axios.get("/video/ranking").then((data) => {
 <li><span>宋小宋^_^!</span> 👍（0） 💬（2）<p>老师，我想先实现一个最简单播放器的例子，但是过程中一直报错，百度了一圈也没解决，现在是控制台报错 Uncaught TypeError: Cannot call a class as a function，下面是我的代码
 
 &lt;template&gt;
-  &lt;div&gt;
-    &lt;div id=&quot;dplayer&quot;&gt;&lt;&#47;div&gt;
-  &lt;&#47;div&gt;
+&lt;div&gt;
+&lt;div id=&quot;dplayer&quot;&gt;&lt;&#47;div&gt;
+&lt;&#47;div&gt;
 &lt;&#47;template&gt;
 &lt;script&gt;
-import DPlayer from &#39;dplayer&#39; 
+import DPlayer from &#39;dplayer&#39;
 export default {
-  name:&#39;PlayComponent&#39;, 
-  mounted(){
-    const dp = new DPlayer({
-      container:document.getElementById(&quot;dplayer&quot;),
-      video: {url: &#39;http:&#47;&#47;static.smartisanos.cn&#47;common&#47;video&#47;t1-ui.mp4&#39;}
-      })}}
+name:&#39;PlayComponent&#39;,
+mounted(){
+const dp = new DPlayer({
+container:document.getElementById(&quot;dplayer&quot;),
+video: {url: &#39;http:&#47;&#47;static.smartisanos.cn&#47;common&#47;video&#47;t1-ui.mp4&#39;}
+})}}
 &lt;&#47;script&gt;
 </p>2023-05-23</li><br/><li><span>佩慎斯予氪蕾沐</span> 👍（0） 💬（1）<p>我没有工作经验，如果是我，我会想办法通过监听点击的方式，或者watch监听某个和暂停相关变量，再使用v-if展示弹窗面板，或者直接写好弹窗面板，用点击来控制显示隐藏display为none等等。</p>2023-05-18</li><br/><li><span>peter</span> 👍（0） 💬（3）<p>请教老师几个问题：
 Q1: 用VSCode创建工程，创建vue文件。运行后浏览器能正常显示。此过程中，浏览器是直接解析vue文件吗？还是说vue文件先被编译成另外一种文件（比如html）然后被浏览器解析？

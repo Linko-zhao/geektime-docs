@@ -71,7 +71,7 @@ static void count(int32_t maxValue) {
         sum += i;
         std::cout << "Value: " << i << std::endl;
     }
- 
+
     std::cout << "Sum: " << sum << std::endl;
 }
 
@@ -96,9 +96,9 @@ int main() {
 #include <filesystem> // C++17文件系统库
 #include <iostream>   // 标准输出
 #include <thread> // 线程库
- 
+
 namespace fs = std::filesystem;
- 
+
 void createDirectoriesAsync(std::string directoryPath) {
     std::cout << "创建目录: " << directoryPath << std::endl;
     fs::create_directories(directoryPath);
@@ -106,18 +106,18 @@ void createDirectoriesAsync(std::string directoryPath) {
 
 int main() {
     std::cout << "开始任务" << std::endl;
- 
+
     // 创建三个线程对象
     std::thread makeDirTask1(createDirectoriesAsync, "dir1/a/b/c");
     std::thread makeDirTask2(createDirectoriesAsync, "dir2/1/2/3");
     std::thread makeDirTask3(createDirectoriesAsync, "dir3/A/B/C");
-    
+
     // 等待线程执行结束
     makeDirTask1.join();
     makeDirTask2.join();
     makeDirTask3.join();
     std::cout << "所有任务结束" << std::endl;
- 
+
     return 0;
 }
 ```
@@ -145,7 +145,7 @@ void createDirectoriesAsync(
     try {
         std::cout << "创建目录: " << directoryPath << std::endl;
         bool result = fs::create_directories(directoryPath);
-        
+       
         promise.set_value(result);
     } catch (...) {
         promise.set_exception(std::current_exception());
@@ -167,7 +167,7 @@ int main() {
     std::promise<bool> taskPromise3;
     std::future<bool> taskFuture3 = taskPromise3.get_future();
     std::thread makeDirTask3(createDirectoriesAsync, "dir3/A/B/C", std::move(taskPromise3));
-    
+   
     taskFuture1.wait();
     taskFuture2.wait();
     taskFuture3.wait();
@@ -231,7 +231,6 @@ int main() {
 欢迎把你的方案分享出来。我们一同交流。下一讲见！
 <div><strong>精选留言（6）</strong></div><ul>
 <li><span>Geek_7c0961</span> 👍（2） 💬（1）<p>同步, 异步, 阻塞, 非阻塞 这四个概念还是有必要区分清楚. 详见 https:&#47;&#47;www.cnblogs.com&#47;lixinjie&#47;p&#47;a-post-about-io-clearly.html</p>2023-02-07</li><br/><li><span>王子面</span> 👍（0） 💬（1）<p>&quot;static void count(int32_t maxValue)&quot;声明为静态的原因是什么？</p>2023-10-02</li><br/><li><span>王子面</span> 👍（0） 💬（1）<p>“绝大多数异步计算都跟 I&#47;O”的根本原因是什么？能不能举一两个跟I&#47;O无关的异步计算的例子？</p>2023-10-02</li><br/><li><span>Geek_6778f9</span> 👍（0） 💬（1）<p>“接着，我们在 main 函数中创建了三个异步任务，给每个任务分别创建对应的目录。这三个任务会同时启动并独立执行。我们在这些线程对象上调用 join，让主线程等待这三个线程结束。”
-
 
 老师，这里主线程需要等待子线程执行结束，我理解这是同步编程，为什么是异步？</p>2023-04-28</li><br/><li><span>peter</span> 👍（0） 💬（1）<p>请教老师两个问题：
 Q1：子线程之间可以用future和promise传递数据吗？

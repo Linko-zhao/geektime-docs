@@ -146,7 +146,7 @@ func main() {
 		defaultOnce.Do(initDefaultCache) // 初始化cache
 		return defaultCache
 	}
-	
+
     // 定义一个全局的cache变量，使用Once初始化，所以也定义了一个Once变量
 	var (
 		defaultOnce  sync.Once
@@ -187,7 +187,7 @@ func main() {
 		sync.Once
 		v *Float
 	}
-	
+
     // 返回此数据结构的值，如果还没有初始化为3.0，则初始化
 	func three() *Float {
 		threeOnce.Do(func() { // 使用Once初始化
@@ -548,26 +548,27 @@ func (o *Once) doSlow(f func()) {
 }
 ```
 
-在双检查整改地方，读取 o.done 的值并没有使用使用 atomic.LoadUint32(&amp;o.done) 的方式，按照我的理解，是因为已经处于 o.m.Lock() 的保护下的缘故；那是否 atomic.StoreUint32(&amp;o.done, 1) 也可以直接 o.done = 1 呢？毕竟这个代码也在 o.m.Lock() 的保护下</p>2020-10-29</li><br/><li><span>🍀柠檬鱼也是鱼</span> 👍（6） 💬（4）<p>once为什么不直接加锁，还需要加多一个 双重检测呢？这块不太懂，望老师解答，我的理解是，调用do()之后直接上锁，等执行完f()再解锁不就行了吗</p>2020-10-28</li><br/><li><span>Linuxer</span> 👍（4） 💬（1）<p>第一个思考题：Linux内核也有很多这种fast code path和slow  code path，我想这样划分是不是内聚性更好，实现更清晰呢,从linux性能分析来看，貌似更多关注点是在slow code path
+在双检查整改地方，读取 o.done 的值并没有使用使用 atomic.LoadUint32(&amp;o.done) 的方式，按照我的理解，是因为已经处于 o.m.Lock() 的保护下的缘故；那是否 atomic.StoreUint32(&amp;o.done, 1) 也可以直接 o.done = 1 呢？毕竟这个代码也在 o.m.Lock() 的保护下</p>2020-10-29</li><br/><li><span>🍀柠檬鱼也是鱼</span> 👍（6） 💬（4）<p>once为什么不直接加锁，还需要加多一个 双重检测呢？这块不太懂，望老师解答，我的理解是，调用do()之后直接上锁，等执行完f()再解锁不就行了吗</p>2020-10-28</li><br/><li><span>Linuxer</span> 👍（4） 💬（1）<p>第一个思考题：Linux内核也有很多这种fast code path和slow code path，我想这样划分是不是内聚性更好，实现更清晰呢,从linux性能分析来看，貌似更多关注点是在slow code path
 第二个思考题：应该不可以吧，Once的内部状态已经被改变了</p>2020-10-28</li><br/><li><span>Geek_fa7924</span> 👍（0） 💬（1）<p>老师您好。请问一下，这里slow单独提出来是为了让哪个函数可以内联，DO方法调用了 doslow，是不是也不会被内联到，求解惑</p>2024-06-24</li><br/><li><span>Geek_69bcfa</span> 👍（0） 💬（1）<p>&#47;&#47; 值是3.0或者0.0的一个数据结构
-   var threeOnce struct {
-    sync.Once
-    v *Float
-  }
-  
+var threeOnce struct {
+sync.Once
+v *Float
+}
+
     &#47;&#47; 返回此数据结构的值，如果还没有初始化为3.0，则初始化
-  func three() *Float {
-    threeOnce.Do(func() { &#47;&#47; 使用Once初始化
-      threeOnce.v = NewFloat(3.0)
-    })
-    return threeOnce.v
-  }
+
+func three() *Float {
+threeOnce.Do(func() { &#47;&#47; 使用Once初始化
+threeOnce.v = NewFloat(3.0)
+})
+return threeOnce.v
+}
 
 这个代码里 NewFloat(3.0)，那后面程序用完后怎么释放这个new出来的内存？是否建议在 程序退出前对这个做一下 delete 呢？</p>2023-03-22</li><br/><li><span>INFRA_1</span> 👍（0） 💬（1）<p>求分享第一题答案</p>2022-11-01</li><br/><li><span>i_chase</span> 👍（0） 💬（1）<p>还可以只内联函数在doSlow的前的部分吗，一直以为内联是将整个函数内联上去了</p>2022-07-23</li><br/><li><span>xl666</span> 👍（0） 💬（1）<p>‘’这确实是一种实现方式，但是，这个实现有一个很大的问题，就是如果参数 f 执行很慢的话，后续调用 Do 方法的 goroutine 虽然看到 done 已经设置为执行过了，但是获取某些初始化资源的时候可能会得到空的资源，因为 f 还没有执行完。‘’老师我们运行Do初始化的时候 一般加锁保证线程安全 那就就是说 抢到锁的gofunc在初始化fn()没有运行结束时不会释放锁 其他gofunc进不来 所以不会导致上面说的那种情况
 
 我是这样理解的
 
-要是初始化不加锁倒是会 </p>2022-02-09</li><br/><li><span>Bynow</span> 👍（0） 💬（1）<p>请问：(*uint32)(unsafe.Pointer(&amp;o.Once))  这个表达式为什么会是1？
+要是初始化不加锁倒是会 </p>2022-02-09</li><br/><li><span>Bynow</span> 👍（0） 💬（1）<p>请问：(*uint32)(unsafe.Pointer(&amp;o.Once)) 这个表达式为什么会是1？
 </p>2021-12-17</li><br/><li><span>斯蒂芬.赵</span> 👍（0） 💬（1）<p>既然有未初始化错误的问题，为啥官方不去修复它呢</p>2021-08-30</li><br/><li><span>Geek_c0a611</span> 👍（0） 💬（2）<p>func (a *AnimalStore) Init() {
         a.once.Do(func() { 
             longOperationSetupDbOpenFilesQueuesEtc() 
@@ -576,13 +577,13 @@ func (o *Once) doSlow(f func()) {
 }
 
 老师，感觉这里的atomic.StoreUint32是不没必要呀，因为Do在执行f()的时候是已经加了锁的</p>2021-06-26</li><br/><li><span>K菌无惨</span> 👍（0） 💬（1）<p>鸟窝老师,我之前单例模式的时候说double-checking机制可能会由于cpu对代码语句执行顺序的优化导致双检查机制失败,我想知道sync.Once里面的双检查机制会出现同样的情况吗</p>2021-01-09</li><br/><li><span>假期</span> 👍（0） 💬（3）<p>func (o *Once) doSlow(f func()) {
-    o.m.Lock()
-    defer o.m.Unlock()
-    &#47;&#47; 双检查
-    if o.done == 0 {
-        defer atomic.StoreUint32(&amp;o.done, 1)
-        f()
-    }
+o.m.Lock()
+defer o.m.Unlock()
+&#47;&#47; 双检查
+if o.done == 0 {
+defer atomic.StoreUint32(&amp;o.done, 1)
+f()
+}
 }
 
 老师你好，我看了一些内存模型资料之后想问，

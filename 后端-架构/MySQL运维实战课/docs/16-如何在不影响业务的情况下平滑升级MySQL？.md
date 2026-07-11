@@ -164,7 +164,7 @@ MySQL数据库启动时，怎么判断是否需要进行升级呢？首先在元
 
 ```go
 mysql> SET SESSION debug='+d,skip_dd_table_access_check';
-mysql> select  substring(convert(properties using utf8mb4),1,256) as prop 
+mysql> select  substring(convert(properties using utf8mb4),1,256) as prop
     from mysql.dd_properties\G
 *************************** 1. row ***************************
 prop: DD_VERSION=80023;IS_VERSION=80030;LCTN=0;MINOR_DOWNGRADE_THRESHOLD=80023;MYSQLD_VERSION=80032;MYSQLD_VERSION_HI=80032;MYSQLD_VERSION_LO=80032;MYSQLD_VERSION_UPGRADED=80032;PS_VERSION=80032;SDI_VERSION=80019;.......
@@ -191,9 +191,9 @@ MySQL软件的版本是在源代码中定义的，直接编译到了二进制中
 ```go
 mysql> SET SESSION debug='+d,skip_dd_table_access_check';
 Query OK, 0 rows affected (0.00 sec)
-mysql> select a.name, b.name 
-    from schemata a, tables b 
-    where a.id = b.schema_id 
+mysql> select a.name, b.name
+    from schemata a, tables b
+    where a.id = b.schema_id
     and b.hidden='System'
     and type='BASE TABLE';
 +--------------------+------------------------------+
@@ -385,7 +385,7 @@ MySQL 8.0在每个用户表空间中，存储了一份数据字典信息（SDI�
                 "type": 1,
                 "algorithm": 2,
                 "is_visible": true,
-                        
+
 ......
 ```
 

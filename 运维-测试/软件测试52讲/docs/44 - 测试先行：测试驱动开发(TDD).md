@@ -197,15 +197,15 @@ public static int caculate(String birthday) {
     if(birthday == null || birthday.isEmpty()) {
         throw new RuntimeException("Birthday should not be null or empty");
     }
-    
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     Calendar today = Calendar.getInstance();
-    
+
     //处理输入的日期恰好等于今年生日的情况
     if(birthday.equals(sdf.format(today.getTime()))) {
         return 0;
     }
-    
+
     //输入日期格式的有效性检查
     Calendar birthDate = Calendar.getInstance();
     try {
@@ -214,7 +214,7 @@ public static int caculate(String birthday) {
         throw new RuntimeException("Birthday format is invalid!");
     }
     birthDate.set(Calendar.YEAR, today.get(Calendar.YEAR));
-    
+
     //实际计算的逻辑
     int days;
     if (birthDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR)) {
@@ -264,6 +264,7 @@ TDD的核心思想便是在开发人员实现功能代码前，先设计好测�
 所有人员参与需求评审 -&gt; 测试人员编写测试用例 -&gt; 所有人员参与用例评审 -&gt; 开发人员按照测试用例进行编码 -&gt; 开发人员执行用例，进行自测，所有用例通过后 -&gt; 开发人员提测 -&gt; 测试人员进行测试。
 
 其中的好处个人觉得主要有两点：
+
 1. 在编码前完成测试用例，可减少开发中需求变更带来的风险。因为在写测试用例的时候，会对需求进行深度分析，思考需求是否合理，在我的经验中，测试组一定会发现不合理的需求，如果这些不合理的需求在编码前就被发现，后面返工的几率就小很多；
 2. 在自测环节，开发人员保证所有用例都通过，可以减少测试环节的轮次。因为如果提测质量太差，会增加测试人员和开发人员沟通成本，如果一些基本问题能在自测环节解决，那测试人员会有更多精力放在探索性测试、压力测试、整体功能回归等测试中。
 

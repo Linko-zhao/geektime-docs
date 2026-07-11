@@ -44,8 +44,8 @@ Spring Boot和Spring Cloud的版本匹配关系可以从[Spring社区网站](htt
             <type>pom</type>
             <scope>import</scope>
         </dependency>
-   </dependencies>   
-   <!-- 省略部分代码 -->  
+   </dependencies>
+   <!-- 省略部分代码 -->
 </dependencyManagement>
 ```
 
@@ -90,7 +90,7 @@ public class NacosDiscoveryAutoConfiguration {
    public NacosDiscoveryProperties nacosProperties() {
       return new NacosDiscoveryProperties();
    }
- 
+
    // 声明服务发现的功能类NacosServiceDiscovery
    @Bean
    @ConditionalOnMissingBean
@@ -253,12 +253,12 @@ Group的使用场景非常灵活，我来列举几个：
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>别拽我的红领巾</span> 👍（12） 💬（1）<p>为什么我会优先读取application的nacos配置文件而不是boostrap呢？是不是有什么配置需要修改？</p>2022-03-11</li><br/><li><span>so long</span> 👍（3） 💬（1）<p>老师你好，nacos服务注册顺藤摸瓜如下，主要靠实现 ApplicationListener&lt;WebServerInitializedEvent&gt;，服务启动初始化完成后进行服务注册。
 
-NacosServiceRegistryAutoConfiguration-&gt;NacosAutoServiceRegistration-&gt;AbstractAutoServiceRegistration.onApplicationEvent(WebServerInitializedEvent event)-&gt;NacosServiceRegistry.register(Registration registration)-&gt;NacosNamingService.registerInstance(String serviceName, String groupName, Instance instance)-&gt;NamingProxy.registerService(String serviceName, String groupName, Instance instance) </p>2022-01-05</li><br/><li><span>你的笑忘书</span> 👍（2） 💬（1）<p>Spring Cloud Alibaba 2021.1 适配的 Nacos 版本是 1.4.1</p>2022-03-20</li><br/><li><span>来来</span> 👍（2） 💬（3）<p>public class NacosDiscoveryAutoConfiguration {   &#47;&#47; 读取Nacos所有配置项并封装到NacosDiscoveryProperties中   @Bean   @ConditionalOnMissingBean   public NacosDiscoveryProperties nacosProperties() {      return new NacosDiscoveryProperties();   }
+NacosServiceRegistryAutoConfiguration-&gt;NacosAutoServiceRegistration-&gt;AbstractAutoServiceRegistration.onApplicationEvent(WebServerInitializedEvent event)-&gt;NacosServiceRegistry.register(Registration registration)-&gt;NacosNamingService.registerInstance(String serviceName, String groupName, Instance instance)-&gt;NamingProxy.registerService(String serviceName, String groupName, Instance instance) </p>2022-01-05</li><br/><li><span>你的笑忘书</span> 👍（2） 💬（1）<p>Spring Cloud Alibaba 2021.1 适配的 Nacos 版本是 1.4.1</p>2022-03-20</li><br/><li><span>来来</span> 👍（2） 💬（3）<p>public class NacosDiscoveryAutoConfiguration { &#47;&#47; 读取Nacos所有配置项并封装到NacosDiscoveryProperties中 @Bean @ConditionalOnMissingBean public NacosDiscoveryProperties nacosProperties() { return new NacosDiscoveryProperties(); }
 
 上面例子中的这个return new NacosDiscoveryProperties(); 直接new的写法有疑问，为什么不是spring的注入或者查找，直接new出来配置怎么加载的？</p>2022-01-04</li><br/><li><span>Geek_277281</span> 👍（1） 💬（3）<p>nacos在集群模式下,template可以注册,calculate注册失败;在-m standalone时,两个都可以成功```不明白为什么</p>2022-09-05</li><br/><li><span>大碗</span> 👍（1） 💬（1）<p>nacos具有环境隔离的功能，可以区分生产环境、预发环境和开发环境，请问老师正常生产环境中，只需要一套naocs注册中心就可以么？需不需要有一套测试的nacos注册中心，专门用于注册测试环境的服务</p>2021-12-31</li><br/><li><span>Geek_3100bd</span> 👍（0） 💬（1）<p>我本地配置的远程注册地址，但一直读取本地文件，currentServerAddr:http:&#47;&#47;localhost:8848， err : connect timed out</p>2023-07-03</li><br/><li><span>silent</span> 👍（0） 💬（1）<p>姚老师，我这边有个疑问啊，为什么我2个服务注册到nacos 会出现，IP1 下存在一个IP2 下存在一个，而不是每一个IP 下都展示2个服务那？</p>2023-03-01</li><br/><li><span>¯\_(ツ)_╱¯</span> 👍（0） 💬（1）<p>老师 pom,xml文件中&lt;relativePath&gt;的作用是什么 为什么有的pom文件中有配置为..&#47;pom.xml 有的文件中没有呀</p>2022-10-24</li><br/><li><span>Geek_277281</span> 👍（0） 💬（1）<p>老师你好,我试图在我的机器上运行您提供的源码,更改设置后,template-serv可以正常注册,但cauculation-serv不行,错误发生在cauculation-serv的启动过程中,
 com.alibaba.nacos.api.exception.NacosException: failed to req API:&#47;nacos&#47;v1&#47;ns&#47;instance after all servers([localhost:8948]) tried: ErrCode:400, ErrMsg:&lt;html&gt;&lt;body&gt;&lt;h1&gt;Whitelabel Error Page&lt;&#47;h1&gt;&lt;p&gt;This application has no explicit mapping for &#47;error, so you are seeing this as a fallback.&lt;&#47;p&gt;&lt;div id=&#39;created&#39;&gt;Mon Sep 05 10:13:11 UTC 2022&lt;&#47;div&gt;&lt;div&gt;There was an unexpected error (type=Bad Request, status=400).&lt;&#47;div&gt;&lt;&#47;body&gt;&lt;&#47;html&gt;</p>2022-09-05</li><br/><li><span>MrCh1ppy</span> 👍（0） 💬（2）<p>老师您好,系统是 win11,源码使用的是您的源码,Nacos的集群已经搭建起来了,可以在控制面板看到已经节点都已经上线,单个服务启动的时候,在日志里也显示已经注册完成,但是在nacos上的控制台提示:
 WARN There are no [com.alibaba.nacos.common.trace.event.naming.PushServiceTraceEvent] publishers for this event, please register
-然后在服务注册的页面上看不到注册好的服务,好怪喔</p>2022-08-17</li><br/><li><span>郭井阳</span> 👍（0） 💬（2）<p>服务没有注册到nacos,也没有注册的日志，也没有报错</p>2022-06-17</li><br/><li><span>Geek_0b93c0</span> 👍（0） 💬（1）<p>coupon-template-serv 日志显示注册成功 但是网页上没有显示 yml 命名空间dev  nacos也设置了
+然后在服务注册的页面上看不到注册好的服务,好怪喔</p>2022-08-17</li><br/><li><span>郭井阳</span> 👍（0） 💬（2）<p>服务没有注册到nacos,也没有注册的日志，也没有报错</p>2022-06-17</li><br/><li><span>Geek_0b93c0</span> 👍（0） 💬（1）<p>coupon-template-serv 日志显示注册成功 但是网页上没有显示 yml 命名空间dev nacos也设置了
 coupon-calculation-serv则是正常的 </p>2022-05-25</li><br/><li><span>无与伦比</span> 👍（0） 💬（1）<p>老师，Spring Cloud Alibaba 2021.1对应的Nacos Client版本为1.4.1，前面用的Nacos Server版本为2.0.3，这样能正常调用服务吗？</p>2022-05-04</li><br/><li><span>牛年榴莲</span> 👍（0） 💬（2）<p>spring-boot-starter-web
 
 不知道为什么引入这个才能注册到 nacos ，请大佬给下提示</p>2022-04-06</li><br/>

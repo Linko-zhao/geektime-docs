@@ -96,7 +96,7 @@ for(let defination of elementDefinations) {
   for(let category of categories) {
       console.log(category);
   }
-    
+
 
 /*
   let contentModel = defination.text.match(/Content model:\n([\s\S]+)\nTag omission in text\/html:/)[1].split("\n");
@@ -120,9 +120,9 @@ for(let defination of elementDefinations) {
     if(category.match(/^([^ ]+) content./))
       defination.categories.push(RegExp.$1);
     else
-      console.log(category)  
+      console.log(category)
   }
-    
+
 
 /*
   let contentModel = defination.text.match(/Content model:\n([\s\S]+)\nTag omission in text\/html:/)[1].split("\n");

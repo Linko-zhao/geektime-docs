@@ -139,7 +139,7 @@ train_data = [
 ```plain
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
-... 
+...
 
 # 加载预训练模型和分词器
 model_name = "facebook/llama-7b"
@@ -300,7 +300,7 @@ import pyaudio
 class Transcriber(object):
   self._model = WhisperModel(...)
   ## 实现语音转文字
- 
+
 class AudioRecorder(object):
   self.audio = pyaudio.PyAudio()
   ## 实现录音

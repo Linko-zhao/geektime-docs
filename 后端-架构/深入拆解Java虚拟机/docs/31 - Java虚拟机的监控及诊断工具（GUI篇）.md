@@ -51,9 +51,9 @@ MAT还将自动匹配内存泄漏中的常见模式，并汇报潜在的内存�
 ## Java Mission Control
 
 > 注意：自Java 11开始，本节介绍的JFR已经开源。但在之前的Java版本，JFR属于Commercial Feature，需要通过Java虚拟机参数`-XX:+UnlockCommercialFeatures`开启。
-> 
+>
 > 我个人不清楚也不能回答关于Java 11之前的版本是否仍需要商务许可（Commercial License）的问题。请另行咨询后再使用，或者直接使用Java 11。
-> 
+>
 > [Java Mission Control](http://jdk.java.net/jmc/)（JMC）是Java虚拟机平台上的性能监控工具。它包含一个GUI客户端，以及众多用来收集Java虚拟机性能数据的插件，如JMX Console（能够访问用来存放虚拟机各个子系统运行数据的[MXBeans](https://en.wikipedia.org/wiki/Java_Management_Extensions#Managed_beans)），以及虚拟机内置的高效profiling工具Java Flight Recorder（JFR）。
 
 JFR的性能开销很小，在默认配置下平均低于1%。与其他工具相比，JFR能够直接访问虚拟机内的数据，并且不会影响虚拟机的优化。因此，它非常适用于生产环境下满负荷运行的Java程序。
@@ -84,7 +84,7 @@ $ java -XX:StartFlightRecording=delay=5s,duration=20s,filename=myrecording.jfr,s
 ```
 
 > `settings=profile`指定了JFR所收集的事件类型。默认情况下，JFR将加载配置文件`$JDK/lib/jfr/default.jfc`，并识别其中所包含的事件类型。当使用了`settings=profile`配置时，JFR将加载配置文件`$JDK/lib/jfr/profile.jfc`。该配置文件所包含的事件类型要多于默认的`default.jfc`，因此性能开销也要大一些（约为2%）。
-> 
+>
 > `default.jfc`以及`profile.jfc`均为XML文件。后面我会介绍如何利用JMC来进行修改。
 
 - 在下面这条命令中，JFR将在Java虚拟机启动之后持续收集数据，直至进程退出。在进程退出时（对应`dumponexit=true`），JFR会将收集得到的数据保存至指定的文件中。
@@ -184,7 +184,7 @@ Java Mission Control是Java虚拟机平台上的性能监控工具。Java Flight
 
 JFR的启用方式有三种，分别为在命令行中使用`-XX:StartFlightRecording=`参数，使用`jcmd`的`JFR.*`子命令，以及JMC的JFR插件。JMC能够加载JFR的输出结果，并且生成各种信息丰富的图表。
 
-* * *
+---
 
 今天的实践环节，请你试用JMC中的MBean Server功能，并通过JMC的帮助文档（`Help->Java Mission Control Help`），以及[该教程](https://docs.oracle.com/javase/tutorial/jmx/mbeans/index.html)来了解该功能的具体含义。
 

@@ -330,7 +330,7 @@ export default App;
   padding: 0;
   overflow: auto;
 }
-    
+
 .kanban-card {
   margin-bottom: 1rem;
   padding: 0.6rem 1rem;
@@ -340,11 +340,11 @@ export default App;
   background-color: rgba(255, 255, 255, 0.4);
   text-align: left;
 }
-    
+
 .card-title {
   min-height: 3rem;
 }
-    
+
 .card-status {
   text-align: right;
   font-size: 0.8rem;
@@ -522,7 +522,7 @@ const KanbanNewCard = () => {
   line-height: 1rem;
   font-size: 1rem;
 }
-    
+
 .card-title > input[type="text"] {
   width: 80%;
 }
@@ -543,9 +543,9 @@ const KanbanNewCard = () => {
 
 ```
    +import React, { useState } from 'react';
-        
+
      //... (省略)
-      
+
      function App() {
     +  const [showAdd, setShowAdd] = useState(false);
     +  const handleAdd = (evt) => {
@@ -617,7 +617,7 @@ const KanbanNewCard = () => {
 +    todoList.unshift({ title, status: new Date().toDateString() });
 +    setShowAdd(false);
 +  };
-  
+
    return (
      <div className="App">
       <header className="App-header">
@@ -745,17 +745,17 @@ const KanbanNewCard = () => {
 
 🌟https:&#47;&#47;gitee.com&#47;evisong&#47;geektime-column-oh-my-kanban&#47;releases&#47;tag&#47;v0.3.0 这个是03的完整代码。</p>2022-08-25</li><br/><li><span>东方奇骥</span> 👍（11） 💬（2）<p>跟着老师一起写，Typescript版本：https:&#47;&#47;github.com&#47;worldluoji&#47;front-end&#47;blob&#47;main&#47;react&#47;my-app&#47;src&#47;components&#47;board&#47;board.tsx</p>2022-08-25</li><br/><li><span>船长</span> 👍（5） 💬（3）<p>老师好，问下这里 setTodoList 时为什么要用函数写？直接写有什么问题吗？
 （不能贴图，我上传了图床）
-![20220907QgBXtq](http:&#47;&#47;picbed.tanguangzhi.com&#47;uPic&#47;20220907QgBXtq)</p>2022-09-07</li><br/><li><span>学习前端-react</span> 👍（5） 💬（1）<p>请问：什么是受控组件？是不是指的是value值是传入的然后触发的事件去更新value？</p>2022-08-31</li><br/><li><span>ZENG</span> 👍（3） 💬（7）<p>做的时候加了一个input框自动焦点的功能：
+![20220907QgBXtq](http://picbed.tanguangzhi.com/uPic/20220907QgBXtq)</p>2022-09-07</li><br/><li><span>学习前端-react</span> 👍（5） 💬（1）<p>请问：什么是受控组件？是不是指的是value值是传入的然后触发的事件去更新value？</p>2022-08-31</li><br/><li><span>ZENG</span> 👍（3） 💬（7）<p>做的时候加了一个input框自动焦点的功能：
 const inputRef = useRef();
-  useEffect(() =&gt; {
-    inputRef.current.focus()
-  })</p>2022-08-26</li><br/><li><span>若川</span> 👍（3） 💬（10）<p>学到了新的node版本管理工具 fnm。
+useEffect(() =&gt; {
+inputRef.current.focus()
+})</p>2022-08-26</li><br/><li><span>若川</span> 👍（3） 💬（10）<p>学到了新的node版本管理工具 fnm。
 
 Windows 用户安装 VSCode 后，命令行终端默认就有 code 命令了~可以 code -h 查看帮助信息。</p>2022-08-23</li><br/><li><span>CondorHero</span> 👍（2） 💬（1）<p>以前只用过 nvm，这回了解了 fnm，借助它去调研了下 Node.js 管理器，然后一下子打开了 Node.js 管理器的大门，什么 nvm、n、fnm、Volta、nvs 等等，一圈看下来还是 fnm 香 ，速度快、更好的跨平台、像 nvm 一样的 API 简洁度，瞬间把 nvm 卸了装上 fnm😄</p>2022-08-25</li><br/><li><span>muzzy</span> 👍（1） 💬（1）<p>老师 现在还推荐使用cra去创建react的应用么 还是直接用vite去创建</p>2023-07-27</li><br/><li><span>阿阳</span> 👍（1） 💬（2）<p>老师你好，请问在更新组件状态时，这样使用：
-    setTodoList((currentTodoList) =&gt; [
-      { title, status: new Date().toDateString() },
-      ...currentTodoList,
-    ]);
+setTodoList((currentTodoList) =&gt; [
+{ title, status: new Date().toDateString() },
+...currentTodoList,
+]);
 这时候传入的是一个回调函数，这种使用方法能讲一下吗？</p>2022-09-01</li><br/><li><span>Ccccceilui</span> 👍（1） 💬（2）<p>执行完
 
 brew install fnm
@@ -768,13 +768,14 @@ npx
 yarn
 命令并不存在啊？</p>2022-08-24</li><br/><li><span>渣渣辉</span> 👍（0） 💬（1）<p>对于0经验react的新手来说很受用。这节课看了1个点。</p>2023-07-18</li><br/><li><span>童童</span> 👍（0） 💬（1）<p>源码怎么clone不下来？提示“The authenticity of host xxxx can&#39;t be established. Please make sure you have the correct access rights.”</p>2023-06-03</li><br/><li><span>大神博士</span> 👍（0） 💬（1）<p>复制出来代码都是加减号，不能从样式上去区分新旧代码吗；太难受了</p>2023-01-04</li><br/><li><span>simoom</span> 👍（0） 💬（1）<p>使用npx create-react-app@latest my-app才成功的, 建议更新</p>2022-11-06</li><br/><li><span>simoom</span> 👍（0） 💬（1）<p>现在好像变了, 建议修改文章
 
-cqy:react&#47; $ npx create-react-app oh-my-kanban                                                                                                                                                                                                                       [22:46:28]
+cqy:react&#47; $ npx create-react-app oh-my-kanban [22:46:28]
 
 You are running `create-react-app` 4.0.3, which is behind the latest release (5.0.1).
 
 We no longer support global installation of Create React App.
 
 Please remove any global installs with one of the following commands:
+
 - npm uninstall -g create-react-app
 - yarn global remove create-react-app
 

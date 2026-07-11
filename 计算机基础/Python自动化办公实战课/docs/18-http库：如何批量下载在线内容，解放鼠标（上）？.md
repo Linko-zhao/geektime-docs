@@ -192,9 +192,9 @@ with open("one.jpg", "wb") as f:
 ```
 print(result.html.xpath('//figure[@itemprop="image"]//a[@rel="nofollow"]/@href'))
 
-# ['https://unsplash.com/photos/NLzaiXOELFY/download?force=true', 
-#  'https://unsplash.com/photos/3JyEfhb8Zgo/download?force=true', 
-#  'https://unsplash.com/photos/4Y6UYds0cIo/download?force=true', 
+# ['https://unsplash.com/photos/NLzaiXOELFY/download?force=true',
+#  'https://unsplash.com/photos/3JyEfhb8Zgo/download?force=true',
+#  'https://unsplash.com/photos/4Y6UYds0cIo/download?force=true',
 #  ... ...
 # ]
 ```
@@ -210,8 +210,8 @@ print(result.html.xpath('//figure[@itemprop="image"]//a[@rel="nofollow"]/@href')
     <div num=1>
         <figure itemprop="image">
            ... ...
-           <div num=2> 
-              ... ...  
+           <div num=2>
+              ... ...
               <a rel="nofollow" href=http://...>
               ... ...
            </div>
@@ -263,10 +263,10 @@ def down_one_pic(url):
   filename = get_picID_from_url(url)
   with open(filename, "wb") as f:
     f.write(result.content)
- 
+
 for one_url in down_list:
     down_one_pic(one_url)
-    
+
 ```
 
 实现文件批量下载的主要思路，就是把下载地址列表使用for循环逐个进行处理。通过循环取得了每个下载地址的变量“one\_url”之后，再把“one\_url”作为下载函数的参数，并通过URL提取文件名后，把文件下载并保存。

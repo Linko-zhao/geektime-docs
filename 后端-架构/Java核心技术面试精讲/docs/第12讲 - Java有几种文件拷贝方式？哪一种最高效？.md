@@ -100,7 +100,7 @@ public static long copy(InputStream in, Path target, CopyOption... options)
 ```
 
 ```
-public static long copy(Path source, OutputStream out) 
+public static long copy(Path source, OutputStream out)
 throws IOException
 
 ```
@@ -211,7 +211,7 @@ Buffer有几个基本属性：
 
 ```
 // 打印NMT信息
-jcmd <pid> VM.native_memory detail 
+jcmd <pid> VM.native_memory detail
 
 // 进行baseline，以对比分配内存变化
 jcmd <pid> VM.native_memory baseline
@@ -252,5 +252,5 @@ channel.read(bufferArray);
 注意:该方法适用于请求头长度固定。</p>2018-05-31</li><br/><li><span>13576788017</span> 👍（128） 💬（20）<p>杨老师，想问一下，一般要几年java经验才能达到看懂你文章的地步？？我将近一年经验。。我发现我好几篇都看不懂。。底层完全不懂。。是我太菜了吗。。</p>2018-05-31</li><br/><li><span>乘风破浪</span> 👍（54） 💬（1）<p>零拷贝是不是可以理解为内核态空间与磁盘之间的数据传输，不需要再经过用户态空间？</p>2018-05-31</li><br/><li><span>夏洛克的救赎</span> 👍（21） 💬（1）<p>请问老师您有参与jdk的开发吗</p>2018-05-31</li><br/><li><span>CC</span> 👍（18） 💬（1）<p>我Nio从没接触过，很难受，两年开发的</p>2018-06-07</li><br/><li><span>vash_ace</span> 👍（17） 💬（3）<p>其实在初始化 DirectByteBuffer对象时，如果当前堆外内存的条件很苛刻时，会主动调用 System.gc()强制执行FGC。所以一般建议在使用netty时开启XX:+DisableExplicitGC</p>2018-06-01</li><br/><li><span>mongo</span> 👍（15） 💬（1）<p>杨老师，我也想请教，目前为止您的其他文章都理解的很好，到了上次专栏的NIO我理解的不是很好，今天的这篇可以说懵圈了。到了这一步想突破，应该往哪个方向？我自己感觉是因为基于这两个底层原理的上层应用使用的时候观察的不够深入，对原理反应的现象没有深刻感受，就是所谓还没有摸清楚人家长什么样。所以接下来我会认真在使用基于这些原理实现的上层应用过程中不断深挖和观察，比如认真学习dubbo框架（底层使用到了netty，netty的底层使用了NIO）来帮助我理解NIO。在这个过程中促进对dubbo的掌握，以此良性循环。不知道方向对不对？老师的学习方法是什么？请老师指点避坑。学习方法不对的话时间成本太可怕。</p>2018-05-31</li><br/><li><span>老陈板</span> 👍（9） 💬（1）<p>本篇文章有恍然大悟的感觉，前面段时间有一家面试问了个这样的问题，我们发现服务器内存使用得特别高，但是堆内存也比较稳定，这种场景是你你会怎么排查？这里就涉及到堆外内存相关的问题！以前不知道有NMT这个工具，然后当时没答好，导致工资少了好多，早点读这篇文章多好。另外注意，sysyem.gc不一定会立即触发fgc，有个权值</p>2019-02-17</li><br/><li><span>皮蛋</span> 👍（9） 💬（1）<p>杨老师，想问下如果想学操作系统的知识，阅读什么书比较适合，初学者</p>2018-11-02</li><br/><li><span>Len</span> 👍（9） 💬（1）<p>请教老师:
 1. 经常看到 Java 进程的 RES 大小远超过设置的 Xmx，可以认为这就是 Direct Memory 的原因吗？如果是的话，可以简单的用堆实际占用的大小减去 RES 就是 Direct Memory 的大小吗？
 
-2.可以认为 Direct Memory 不论在什么情况下都不会引起 Full GC，Direct Memory 的回收只是在 Full GC (或调用 System.gc())的时候顺带着回收下，是吗？</p>2018-05-31</li><br/><li><span>灰飞灰猪不会灰飞.烟灭</span> 👍（6） 💬（1）<p>老师，带缓冲区的io流比nio哪一个性能更好？</p>2018-05-31</li><br/><li><span>灰飞灰猪不会灰飞.烟灭</span> 👍（4） 💬（2）<p>杨老师 我刚刚做个项目，上传文件到文件服务器，文件大概10M，经常上传失败。假如我上传的文件改成1M，就没这问题了。不知道什么原因，能提供个思路吗？谢谢</p>2018-05-31</li><br/><li><span>Cui</span> 👍（4） 💬（1）<p>Direct Buffer 生命周期内内存地址都不会再发生更改，进而内核可以安全地对其进行访问—这里能提高性能的原因 是因为内存地址不变，没有锁争用吗？能否详细解答下？</p>2018-05-31</li><br/><li><span>罗飞</span> 👍（3） 💬（4）<p>零拷贝，是DMA 数据传输，完全由硬件实现的，内核只是起到控制设置作用，不要误人子弟好么</p>2019-01-10</li><br/><li><span>crazyone</span> 👍（2） 💬（1）<p>杨老师，Nio transfer 不一定快的场景是否有案例场景说明下？ 还有你说MappedByteBuffer本质上也是一个Direct  Buffer ,那它设计的目的和意义是什么？</p>2018-05-31</li><br/>
+2.可以认为 Direct Memory 不论在什么情况下都不会引起 Full GC，Direct Memory 的回收只是在 Full GC (或调用 System.gc())的时候顺带着回收下，是吗？</p>2018-05-31</li><br/><li><span>灰飞灰猪不会灰飞.烟灭</span> 👍（6） 💬（1）<p>老师，带缓冲区的io流比nio哪一个性能更好？</p>2018-05-31</li><br/><li><span>灰飞灰猪不会灰飞.烟灭</span> 👍（4） 💬（2）<p>杨老师 我刚刚做个项目，上传文件到文件服务器，文件大概10M，经常上传失败。假如我上传的文件改成1M，就没这问题了。不知道什么原因，能提供个思路吗？谢谢</p>2018-05-31</li><br/><li><span>Cui</span> 👍（4） 💬（1）<p>Direct Buffer 生命周期内内存地址都不会再发生更改，进而内核可以安全地对其进行访问—这里能提高性能的原因 是因为内存地址不变，没有锁争用吗？能否详细解答下？</p>2018-05-31</li><br/><li><span>罗飞</span> 👍（3） 💬（4）<p>零拷贝，是DMA 数据传输，完全由硬件实现的，内核只是起到控制设置作用，不要误人子弟好么</p>2019-01-10</li><br/><li><span>crazyone</span> 👍（2） 💬（1）<p>杨老师，Nio transfer 不一定快的场景是否有案例场景说明下？ 还有你说MappedByteBuffer本质上也是一个Direct Buffer ,那它设计的目的和意义是什么？</p>2018-05-31</li><br/>
 </ul>

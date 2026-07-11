@@ -27,8 +27,8 @@ var ch chan int
 如果channel类型变量在声明时没有被赋予初值，那么它的默认值为nil。并且，和其他复合数据类型支持使用复合类型字面值作为变量初始值不同，为channel类型变量赋初值的唯一方法就是使用 **make** 这个Go预定义的函数，比如下面代码：
 
 ```plain
-ch1 := make(chan int)   
-ch2 := make(chan int, 5) 
+ch1 := make(chan int)
+ch2 := make(chan int, 5)
 ```
 
 这里，我们声明了两个元素类型为int的channel类型变量ch1和ch2，并给这两个变量赋了初值。但我们看到，两个变量的赋初值操作使用的make调用的形式有所不同。
@@ -481,7 +481,7 @@ ok  	command-line-arguments	2.542s
 // 无缓冲channel
 // go-channel-operation-benchmark/unbuffered-chan
 
-$go test -bench .  multi_to_multi_test.go 
+$go test -bench .  multi_to_multi_test.go
 goos: darwin
 goarch: amd64
 cpu: Intel(R) Core(TM) i5-8257U CPU @ 1.40GHz
@@ -493,7 +493,7 @@ ok  	command-line-arguments	2.387s
 // 带缓冲channel
 // go-channel-operation-benchmark/buffered-chan
 
-$go test -bench . multi_to_multi_cap_10_test.go 
+$go test -bench . multi_to_multi_cap_10_test.go
 goos: darwin
 goarch: amd64
 cpu: Intel(R) Core(TM) i5-8257U CPU @ 1.40GHz
@@ -506,7 +506,7 @@ ok  	command-line-arguments	2.514s
 这里我们也将channel的缓存由10改为100后，看看带缓冲channel的多对多基准测试结果：
 
 ```plain
-$go test -bench . multi_to_multi_cap_100_test.go 
+$go test -bench . multi_to_multi_cap_100_test.go
 goos: darwin
 goarch: amd64
 cpu: Intel(R) Core(TM) i5-8257U CPU @ 1.40GHz
@@ -989,33 +989,34 @@ make(&lt;-chan int, 1) 这个代表只发送</p>2022-07-20</li><br/><li><span>�
 2. 文中的提到的“Goroutine 安全”，又该如何理解呢？
 
 3. 还有能不能通俗的解释一下“竞态” 这个概念呀？</p>2023-06-30</li><br/><li><span>Geek_640f2c</span> 👍（2） 💬（1）<p>白老师，请问您一个问题
-无缓冲的 channel 替代锁那一节，我在 main 的代码中最后输出了 cter.i，但输出结果有时是10，有时却是11，这是什么原因呢？
-main代码如下：
-func main() {
-	cter := NewCounter()
-	var wg sync.WaitGroup
-	for i := 0; i &lt; 10; i++ {
-		wg.Add(1)
-		go func(i int) {
-			cter.Increase()
-			fmt.Printf(&quot;goroutine-%d: current counter value is %d\n&quot;, i, v)
-			wg.Done()
-		}(i)
-	}
-	wg.Wait()
-	println(cter.i)
-}</p>2023-03-14</li><br/><li><span>Ppppppp</span> 👍（2） 💬（1）<p>for range对于channel会产生pop的效果吗？感觉好像跟对待slice和map不太一样。</p>2023-02-24</li><br/><li><span>怎么睡才能做这种梦</span> 👍（2） 💬（1）<p>满满的干货呀，感谢白老，希望老师能出进阶专栏，我一定买</p>2023-02-20</li><br/><li><span>knightjdq</span> 👍（2） 💬（1）<p>白老师好：请教下用于替代锁机制中的代码，十分感谢!
-func NewCounter() *counter {
-	cter := &amp;counter{
-		c: make(chan int),
-	}
-	go func() {
-		for {
-			cter.i++
-			cter.c &lt;- cter.i
-		}
-	}()
-	return cter
-}
-这里的死循环，i++写入channel后阻塞，Increase函数来读取，for循环到9后，不再读取，channel阻塞，那死循环的groutine呢？在counter对象销毁后就停止执行了是么？</p>2022-11-25</li><br/>
+   无缓冲的 channel 替代锁那一节，我在 main 的代码中最后输出了 cter.i，但输出结果有时是10，有时却是11，这是什么原因呢？
+   main代码如下：
+   func main() {
+   cter := NewCounter()
+   var wg sync.WaitGroup
+   for i := 0; i &lt; 10; i++ {
+   wg.Add(1)
+   go func(i int) {
+   cter.Increase()
+   fmt.Printf(&quot;goroutine-%d: current counter value is %d\n&quot;, i, v)
+   wg.Done()
+   }(i)
+   }
+   wg.Wait()
+   println(cter.i)
+   }</p>2023-03-14</li><br/><li><span>Ppppppp</span> 👍（2） 💬（1）<p>for range对于channel会产生pop的效果吗？感觉好像跟对待slice和map不太一样。</p>2023-02-24</li><br/><li><span>怎么睡才能做这种梦</span> 👍（2） 💬（1）<p>满满的干货呀，感谢白老，希望老师能出进阶专栏，我一定买</p>2023-02-20</li><br/><li><span>knightjdq</span> 👍（2） 💬（1）<p>白老师好：请教下用于替代锁机制中的代码，十分感谢!
+   func NewCounter() *counter {
+   cter := &amp;counter{
+   c: make(chan int),
+   }
+   go func() {
+   for {
+   cter.i++
+   cter.c &lt;- cter.i
+   }
+   }()
+   return cter
+   }
+   这里的死循环，i++写入channel后阻塞，Increase函数来读取，for循环到9后，不再读取，channel阻塞，那死循环的groutine呢？在counter对象销毁后就停止执行了是么？</p>2022-11-25</li><br/>
+
 </ul>

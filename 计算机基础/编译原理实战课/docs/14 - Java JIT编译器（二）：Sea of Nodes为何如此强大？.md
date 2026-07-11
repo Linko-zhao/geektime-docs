@@ -282,6 +282,7 @@ public int negneg(int a){
 1. 程序依赖图：[J. Ferrante, K. J. Ottenstein, and J. D. Warren. The program dependence graph and its use in optimization](https://www.cs.utexas.edu/users/less/reading/spring00/ferrante.pdf). July 1987。有关程序依赖图的概念在1987年就提出来了。
 2. Click的论文：[A Simple Graph-Based Intermediate Representation](https://www.oracle.com/technetwork/java/javase/tech/c2-ir95-150110.pdf)。这篇文章比较易读，属于必读文献。Click还发表了一些论文，讲述了基于图的IR上的优化算法。
 3. 介绍Graal IR的论文：[Graal IR: An Extensible Declarative Intermediate Representation](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.726.5496&rep=rep1&type=pdf)。这篇论文也很易读，建议你一定要读一下。
+
 <div><strong>精选留言（3）</strong></div><ul>
 <li><span>chris</span> 👍（1） 💬（1）<p>老师会讲一下从字节码到graal ir的生成过程吗？</p>2020-07-05</li><br/><li><span>fy</span> 👍（0） 💬（1）<p>太硬核了</p>2021-04-01</li><br/><li><span>wusiration</span> 👍（0） 💬（1）<p>指令排序以及缓存优化，这两种优化方法需要分析出代码控制依赖和数据依赖的关系。</p>2020-07-04</li><br/>
 </ul>

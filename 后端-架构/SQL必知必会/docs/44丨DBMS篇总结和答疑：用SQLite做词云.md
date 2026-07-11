@@ -19,7 +19,7 @@ Excel是我们常用的办公软件，使用SQL做数据分析的同学也可以
 使用executeSql函数即可，在executeSql函数后面有两个function，分别代表成功之后的调用，以及执行失败的调用。比如想要删除本地SQLite的heros数据表，可以写成下面这样：
 
 ```
-tx.executeSql("DROP TABLE heros",[], 
+tx.executeSql("DROP TABLE heros",[],
 function(tx, result) {alert('Drop 成功');},
 function(tx, error) {alert('Drop 失败' + error.message);});
 ```
@@ -49,14 +49,14 @@ import matplotlib.pyplot as plt
 import jieba
 import os
 import re
- 
+
 # 去掉停用词
 def remove_stop_words(f):
      stop_words = ['你好', '已添加', '现在', '可以', '开始', '聊天', '当前', '群聊', '人数', '过多', '显示', '群成员', '昵称', '信息页', '关闭', '参与人', '还有', '嗯']
      for stop_word in stop_words:
            f = f.replace(stop_word, '')
      return f
- 
+
 # 生成词云
 def create_word_cloud(f):
      print('根据微信聊天记录，生成词云!')
@@ -77,7 +77,7 @@ def create_word_cloud(f):
      plt.imshow(wordcloud)
      plt.axis("off")
      plt.show()
- 
+
 def get_content_from_weixin():
      # 创建数据库连接
      conn = sqlite3.connect("weixin.db")
@@ -96,7 +96,7 @@ def get_content_from_weixin():
          temp_result = cur.fetchall()
          for temp in temp_result:
               content = content + str(temp)
-     # 提交事务 
+     # 提交事务
      conn.commit()
      # 关闭游标
      cur.close()
@@ -176,7 +176,7 @@ def sell(i):
 
 if __name__ == "__main__":
     # 初始化5张票
-    r.set(KEY, 5)  
+    r.set(KEY, 5)
     # 设置8个人抢票
     for i in range(8):
         t = threading.Thread(target=sell, args=(i,))
@@ -203,9 +203,9 @@ if __name__ == "__main__":
 2、第二个问题是，我们使用 Redis 作为 MySQL 的缓存，假设 MySQL 存储了 1000 万的数据，Redis 只保存有限的数据，比如 10 万数据量，如何保证 Redis 存储的数据都是热点数据呢？
 ----把查询到的数据保存一份到redis，使用有序集合，每次如果从redis获取到，则score+1，超过10w条数据，则删除。（好像也有问题）</p>2019-09-20</li><br/><li><span>刘凯</span> 👍（1） 💬（0）<p>原来如此</p>2020-03-21</li><br/><li><span>wumin</span> 👍（1） 💬（0）<p>我生成词云的时候报这个错误。内存是20G的
 Traceback (most recent call last):
-  File &quot;d:&#47;scripts&#47;python&#47;Python-mysql&#47;python-sqlite-weixin.py&quot;, line 61, in &lt;module&gt;
-    content = get_content_from_weixin()
-  File &quot;d:&#47;scripts&#47;python&#47;Python-mysql&#47;python-sqlite-weixin.py&quot;, line 53, in get_content_from_weixin
-    content = content + str(temp)
+File &quot;d:&#47;scripts&#47;python&#47;Python-mysql&#47;python-sqlite-weixin.py&quot;, line 61, in &lt;module&gt;
+content = get_content_from_weixin()
+File &quot;d:&#47;scripts&#47;python&#47;Python-mysql&#47;python-sqlite-weixin.py&quot;, line 53, in get_content_from_weixin
+content = content + str(temp)
 MemoryError</p>2020-02-16</li><br/><li><span>越锋利</span> 👍（0） 💬（0）<p>如何保证热点数据？需要页面置换算法，比如 LRU 或者 LFU。</p>2021-11-24</li><br/><li><span>爱思考的仙人球</span> 👍（0） 💬（1）<p>热点数据就是访问率高的那些数据吧，我有一个笨方法，就是增加一个热点数据表，首先记录所有1000万数据的id，访问次数默认为0，然后每访问一次，次数+1，倒序排名，取前10万条。</p>2019-10-28</li><br/>
 </ul>

@@ -53,7 +53,7 @@ ArrayList属性主要由数组长度size、对象数组elementData、初始化�
   //默认初始化容量
     private static final int DEFAULT_CAPACITY = 10;
     //对象数组
-    transient Object[] elementData; 
+    transient Object[] elementData;
     //数组长度
     private int size;
 ```
@@ -368,7 +368,7 @@ public static void main(String[] args)
         list.add("c");
         remove(list);//删除指定的“b”元素
 
-        for(int i=0; i<list.size(); i++)("c")()()(s : list) 
+        for(int i=0; i<list.size(); i++)("c")()()(s : list)
         {
             System.out.println("element : " + s)list.get(i)
         }
@@ -380,13 +380,13 @@ public static void main(String[] args)
 写法1：
 
 ```
-public static void remove(ArrayList<String> list) 
+public static void remove(ArrayList<String> list)
     {
         Iterator<String> it = list.iterator();
-        
+
         while (it.hasNext()) {
             String str = it.next();
-            
+
             if (str.equals("b")) {
                 it.remove();
             }
@@ -398,11 +398,11 @@ public static void remove(ArrayList<String> list)
 写法2：
 
 ```
-public static void remove(ArrayList<String> list) 
+public static void remove(ArrayList<String> list)
     {
         for (String s : list)
         {
-            if (s.equals("b")) 
+            if (s.equals("b"))
             {
                 list.remove(s);
             }
@@ -421,25 +421,24 @@ public static void remove(ArrayList<String> list)
 &lt;!-- 规约第七条 --&gt;</p>2019-06-01</li><br/><li><span>脱缰的野马__</span> 👍（30） 💬（1）<p>老师您好，在我的认知里面，之所以数组遍历比链表要快，应该还有一个底层的原因，就是源于数组的实现是在内存当中是一块连续的内存空间，而链表所有元素可能分布在内存的不同位置，对于数组这种数据结构来说对CPU读是非常友好的，不管是CPU从内存读数据读到高速缓存还是线程从磁盘读数据到内存时，都不只是读取需要的那部分数据，而是读取相关联的某一块地址数据，这样的话对于在遍历数组的时候，在一定程度上提高了CPU高速缓存的命中率，减少了CPU访问内存的次数从而提高了效率，这是我结合计算机相关原理的角度考虑的一点。</p>2020-03-15</li><br/><li><span>皮皮</span> 👍（18） 💬（1）<p>第一种写法正确，第二种会报错，原因是上述两种写法都有用到list内部迭代器Iterator，而在迭代器内部有一个属性是exceptedmodcount，每次调用next和remove方法时会检查该值和list内部的modcount是否一致，不一致会报异常。问题中的第二种写法remove（e），会在每次调用时modcount++，虽然迭代器的remove方法也会调用list的这个remove（e）方法，但每次调用后还有一个exceptedmodcount=modcount操作，所以后续调用next时判断就不会报异常了。</p>2019-05-30</li><br/><li><span>TerryGoForIt</span> 👍（16） 💬（2）<p>老师您好，我比较好奇的是为什么 ArrayList 不像 HashMap 一样在扩容时需要一个负载因子呢？</p>2019-05-31</li><br/><li><span>JasonZ</span> 👍（12） 💬（8）<p>linkedlist使用iterator比普通for循环效率高，是由于遍历次数少，这是为什么？有什么文档可以参考么？</p>2019-06-09</li><br/><li><span>csyangchsh</span> 👍（10） 💬（1）<p>测试代码不严谨，建议使用JMH。</p>2019-05-30</li><br/><li><span>建国</span> 👍（6） 💬（4）<p>老师，您好，linkList查找元素通过分前后半段，每次查找都要遍历半个list，怎么就知道元素是出于前半段还是后半段的呢？</p>2019-06-10</li><br/><li><span>yang</span> 👍（5） 💬（1）<p>modCount属于ArrayList
 expectedModCount属于Iterator
 
-增强for循环  本质是iterator遍历
-iterator循环  iterator遍历
+增强for循环 本质是iterator遍历
+iterator循环 iterator遍历
 
-增强for循环  调用list.remove() 不会修改到iterator的expectedModCount, 从而导致 迭代器的expectedModCount != ArrayList的modCound; 迭代器会抛出 concurrentModifiedException
+增强for循环 调用list.remove() 不会修改到iterator的expectedModCount, 从而导致 迭代器的expectedModCount != ArrayList的modCound; 迭代器会抛出 concurrentModifiedException
 
 而iterator遍历 的时候 用iterator. remove(); modCount 会被同步到expectedModCount中去，ArrayList的modCount == Iterator的exceptedModCount，所以不会抛出异常。
 
-
 老师对其他同学的评论以及我的理解就是这样。</p>2019-12-24</li><br/><li><span>L.</span> 👍（5） 💬（2）<p>老师，随机访问到底是什么意思？怎么个随机法？谢谢～</p>2019-08-06</li><br/><li><span>Geek_9ius3m</span> 👍（3） 💬（1）<p>老师，什么场景会用到linkedlist呢？我好像只见过Arraylist的代码呢</p>2020-03-31</li><br/><li><span>业余草</span> 👍（3） 💬（1）<p>请问：List&lt;A&gt; list = new ArrayList&lt;&gt;();
 for(int i=0;i++;i&lt;1000){
- A a = new A();
- list.add(a);
+A a = new A();
+list.add(a);
 }
 和
-和  这个  List&lt;A&gt; list = new ArrayList&lt;&gt;();
+和 这个 List&lt;A&gt; list = new ArrayList&lt;&gt;();
 A a;
 for(int i=0;i++;i&lt;1000){
- a = new A();
- list.add(a);
+a = new A();
+list.add(a);
 }
 效率上有差别吗？不说new ArrayList&lt;&gt;(); 初始化问题。单纯说创建对象这一块。谢谢！</p>2019-05-31</li><br/><li><span>Aaron_涛</span> 👍（2） 💬（2）<p>arrayList，for循环访问快是因为内存连续，可以整个缓存行读取进cpu缓存中，遍历下个的时候无需去内存中获取。并不是实现什么随机获取接口</p>2019-07-17</li><br/><li><span>gavin</span> 👍（2） 💬（1）<p>老师好，怎么确定操作集合是从头部、中间、还是尾部操作的呢？</p>2019-06-11</li><br/>
 </ul>

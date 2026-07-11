@@ -58,7 +58,7 @@ Rust编译器套件安装好之后，会提供一些工具，这里我们选几�
 打开终端，输入：
 
 ```plain
-cargo new --bin helloworld 
+cargo new --bin helloworld
 ```
 
 显示：
@@ -192,7 +192,7 @@ Rust中的字符类型是 char，值用单引号括起来。
 ```plain
 fn main() {
     let c = 'z';
-    let z: char = 'ℤ'; 
+    let z: char = 'ℤ';
     let heart_eyed_cat = '😻';
     let t = '中';
 }
@@ -238,19 +238,19 @@ fn main() {
     // 将""号进行转义
     let byte_escape = "I'm saying \"Hello\"";
     println!("{}", byte_escape);
-    
+
     // 分两行打印
     let byte_escape = "I'm saying \n 你好";
     println!("{}", byte_escape);
-    
+
     // Windows下的换行符
     let byte_escape = "I'm saying \r\n 你好";
     println!("{}", byte_escape);
-    
+
     // 打印出 \ 本身
     let byte_escape = "I'm saying \\ Ok";
     println!("{}", byte_escape);
-    
+
     // 强行在字符串后面加个0，与C语言的字符串一致。
     let byte_escape = "I'm saying hello.\0";
     println!("{}", byte_escape);
@@ -264,7 +264,7 @@ fn main() {
     // 使用 \x 输入等值的ASCII字符（最高7位）
     let byte_escape = "I'm saying hello \x7f";
     println!("{}", byte_escape);
-    
+
     // 使用 \u{} 输入等值的Unicode字符（最高24位）
     let byte_escape = "I'm saying hello \u{0065}";
     println!("{}", byte_escape);
@@ -282,11 +282,11 @@ fn main() {
     // 字符串字面量前面加r，表示不转义
     let raw_str = r"Escapes don't work here: \x3F \u{211D}";
     println!("{}", raw_str);
-    
+
     // 这个字面量必须使用r##这种形式，因为我们希望在字符串字面量里面保留""
     let quotes = r#"And then I said: "There is no escape!""#;
     println!("{}", quotes);
-    
+
     // 如果遇到字面量里面有#号的情况，可以在r后面，加任意多的前后配对的#号，
     // 只要能帮助Rust编译器识别就行
     let longer_delimiter = r###"A string with "# in it. And even "##!"###;
@@ -307,7 +307,7 @@ fn main() {
     // 字节串的类型是字节的数组，而不是字符串了
     let bytestring: &[u8; 21] = b"this is a byte string";
     println!("A byte string: {:?}", bytestring);
-    
+
     // 可以看看下面这串打印出什么
     let escaped = b"\x52\x75\x73\x74 as bytes";
     println!("Some escaped bytes: {:?}", escaped);
@@ -352,7 +352,7 @@ fn main() {
     let b = a[0];
     println!("{}", b)
 }
-// 输出 
+// 输出
 1
 ```
 
@@ -389,7 +389,7 @@ Rust中的动态数组类型是Vec（Vector），也就是向量，中文翻译�
 fn main() {
     let v: Vec<i32> = Vec::new();
     let v = vec![1, 2, 3];
-    
+
     let mut v = Vec::new();
     v.push(5);
     v.push(6);
@@ -413,7 +413,7 @@ fn main() {
 
     println!("{:?}", v[0]);
 }
-// 输出 
+// 输出
 "superman 1"
 ```
 
@@ -453,7 +453,7 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```plain
 fn main() {
     use std::collections::HashMap;
-    
+
     let mut scores = HashMap::new();
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
@@ -481,7 +481,7 @@ fn main() {
 ```plain
 fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
-    
+
     // 元组使用.运算符访问其元素，下标从0开始，注意语法
     let five_hundred = x.0;
     let six_point_four = x.1;
@@ -597,7 +597,7 @@ Rust中有三种循环语句，分别是loop、while、for。
 ```plain
 fn main() {
     let mut counter = 0;
-    
+
     // 这里，接收从循环体中返回的值，对result进行初始化
     let result = loop {
         counter += 1;
@@ -905,9 +905,9 @@ Unicode 是一种字符集（Character Set），用于对世界上大多数语�
 老师可以解答一下吗</p>2023-10-24</li><br/><li><span>独钓寒江</span> 👍（1） 💬（2）<p>可以说说GNU 工具链的版本 和 MSVC 工具链的版本 有什么区别吗？ 应该怎么选择呢？</p>2024-02-29</li><br/><li><span>weineel</span> 👍（1） 💬（1）<p>老师好
 版次是什么？
 为什么要 3 年发布一次？
-和版本有什么区别？</p>2023-11-29</li><br/><li><span>J²</span> 👍（1） 💬（1）<p>工作之余，正在艰难抽空学习rust，希望这次能坚持学完并且入门。</p>2023-11-07</li><br/><li><span>uyplayer</span> 👍（1） 💬（2）<p> println!(&quot;Hello World! this is first commit in Rust&quot;)</p>2023-10-23</li><br/><li><span>Geek_5c44aa</span> 👍（0） 💬（1）<p>语音讲解是不是有问题？都在那段IDE介绍里循环播放</p>2024-08-15</li><br/><li><span>独钓寒江</span> 👍（0） 💬（2）<p>    &#47;&#47; 强行在字符串后面加个0，与C语言的字符串一致。 
-    let byte_escape = &quot;I&#39;m saying hello.\0&quot;; 
-    println!(&quot;{}&quot;, byte_escape); 
+和版本有什么区别？</p>2023-11-29</li><br/><li><span>J²</span> 👍（1） 💬（1）<p>工作之余，正在艰难抽空学习rust，希望这次能坚持学完并且入门。</p>2023-11-07</li><br/><li><span>uyplayer</span> 👍（1） 💬（2）<p> println!(&quot;Hello World! this is first commit in Rust&quot;)</p>2023-10-23</li><br/><li><span>Geek_5c44aa</span> 👍（0） 💬（1）<p>语音讲解是不是有问题？都在那段IDE介绍里循环播放</p>2024-08-15</li><br/><li><span>独钓寒江</span> 👍（0） 💬（2）<p> &#47;&#47; 强行在字符串后面加个0，与C语言的字符串一致。
+let byte_escape = &quot;I&#39;m saying hello.\0&quot;;
+println!(&quot;{}&quot;, byte_escape);
 
 以上的代码，按注释，我理解打印出来的结果是在字符串后显示一个0， 实际打印结果是“I&#39;m saying hello.”
 看了一下紧接着的参考文章 -- Tokens - The Rust Reference (rust-lang.org)， \0代表Null， 那输出结果是正常的

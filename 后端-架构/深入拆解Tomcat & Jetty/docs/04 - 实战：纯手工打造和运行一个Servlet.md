@@ -189,7 +189,7 @@ public class AnnotationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
    System.out.println("AnnotationServlet 在处理get请求...");
         PrintWriter out = response.getWriter();
         response.setContentType("text/html; charset=utf-8");
@@ -208,7 +208,7 @@ public class AnnotationServlet extends HttpServlet {
 
     }
 
-}  
+}
 ```
 
 这段代码里最关键的就是这个注解，它表明两层意思：第一层意思是AnnotationServlet这个Java类是一个Servlet，第二层意思是这个Servlet对应的URL路径是myAnnotationServlet。
@@ -247,20 +247,21 @@ Annotation Servlet!
 
 谢谢！</p>2019-05-18</li><br/><li><span>蓝士钦</span> 👍（11） 💬（1）<p>课后思考：
 访问doPost()方法有两种方式
+
 1. 使用postMan等工具发起post请求
 2. 在代码中doGet()方法去调用doPost()
 
 疑问：
 doGet和doPost其实在网络层没有任何区别，通过浏览器地址栏中发起的是get请求，get请求其实也能携带像post请求一样的请求体参数，具体区别其实是不同浏览器和服务器实现方式的区别。
-常见的面试题很喜欢考post和get的区别，之所以区分get和post是为了http协议更加解耦吗？就像业务拆分一样专职专工</p>2019-06-13</li><br/><li><span>今夜秋风和</span> 👍（9） 💬（1）<p>老师，验证的时候默认增加了 super.doGet(req, resp);在http1.1写一下不能工作，查看httpServlet 源码里面   对协议做了限制，http 1.1 协议默认不支持。这个为什么是这样设计的呢？
+常见的面试题很喜欢考post和get的区别，之所以区分get和post是为了http协议更加解耦吗？就像业务拆分一样专职专工</p>2019-06-13</li><br/><li><span>今夜秋风和</span> 👍（9） 💬（1）<p>老师，验证的时候默认增加了 super.doGet(req, resp);在http1.1写一下不能工作，查看httpServlet 源码里面 对协议做了限制，http 1.1 协议默认不支持。这个为什么是这样设计的呢？
 源代码:
-        String protocol = req.getProtocol();
-        String msg = lStrings.getString(&quot;http.method_get_not_supported&quot;);
-        if (protocol.endsWith(&quot;1.1&quot;)) {
-            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, msg);
-        } else {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
-        }
+String protocol = req.getProtocol();
+String msg = lStrings.getString(&quot;http.method_get_not_supported&quot;);
+if (protocol.endsWith(&quot;1.1&quot;)) {
+resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, msg);
+} else {
+resp.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
+}
 第二个是如果是那个注解访问的，可以不用删除web.xml，把web.xml里面的url-pattern 改成注解同样的路由，也可以支持；如果web.xml 路由自定义一个的话，测试发现自定义的会有404，是不是注解的路由优先级会更高呢？
 3.如果把web.xml删除，servlet容器启动的时候是不是会自动扫描注解类，将它注册到容器中?</p>2019-05-18</li><br/><li><span>桔子</span> 👍（6） 💬（1）<p>李老师，doGet方法的request和response的初始化代码在哪里呢，只知道是servlet容器创建的，但是去哪里可以看到容器初始化response的源码呢。</p>2019-05-31</li><br/><li><span>Geek_ebda96</span> 👍（6） 💬（1）<p>李老师，请教一个问题，你这里所说的servlet和spring mvc里面的controller是什么关系，servlet里面可以直接接收请求，处理请求业务，controller只是通过dispatch servlet再接入进来的？</p>2019-05-23</li><br/><li><span>清风</span> 👍（5） 💬（1）<p>注解是高版本的Servlet才支持的吧，好像是2.5以上</p>2019-05-22</li><br/><li><span>郑童文</span> 👍（5） 💬（1）<p>请问老师： 我们在servlet的实现类中import的是javax.servlet.http.HttpServlet 请问为什么需要Tomcat的servlet-api.jar呢？难道javax.servlet.http.HttpServlet这个类不是jdk中的吗？谢谢！</p>2019-05-20</li><br/><li><span>逆流的鱼</span> 👍（2） 💬（1）<p>用Tomcat实现servlet，总感觉哪里不对</p>2019-05-18</li><br/><li><span>WL</span> 👍（2） 💬（1）<p>请问一下老师我这边在logs的文件夹下没有看到catalina.out， 是哪里没配置吗？</p>2019-05-18</li><br/><li><span>cloud</span> 👍（2） 💬（1）<p>是怎么找到有写的注解类？遍历加载所有jar包中的类吗</p>2019-05-18</li><br/><li><span>Geek_1eaf13</span> 👍（1） 💬（1）<p>javac -cp .&#47;servlet-api.jar MyServlet.java
 这个不是很理解老师</p>2019-05-27</li><br/><li><span>小羊</span> 👍（1） 💬（1）<p>可以介绍一些 有哪些 不继承 HTTPServlet 的 GenericServlet 实现类。

@@ -379,6 +379,7 @@ SpinLock和 Mutex 最大的不同是，**使用 SpinLock，线程在忙等（bus
 1. Robe Pike的演讲 [concurrency is not parallelism](https://go.dev/blog/waza-talk)，如果你没有看过，建议去看看。
 2. 通过今天的例子，相信你对 atomic 以及其背后的 CAS 有个初步的了解，如果你还想更深入学习 Rust 下如何使用 atomic，可以看 Jon Gjengset 的视频：[Crust of Rust: Atomics and Memory Ordering](https://www.youtube.com/watch?v=rMGWeSjctlY)。
 3. Rust 的 [spin-rs crate](https://github.com/mvdnes/spin-rs) 提供了 Spinlock 的实现，感兴趣的可以看看它的实现。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Ethan Liu</span> 👍（8） 💬（1）<p>rust相比go在并发处理上 有什么优点和缺点？</p>2021-11-16</li><br/><li><span>D. D</span> 👍（3） 💬（1）<p>既然 Semaphore 是 Mutex 的推广，那么实现的思路应该有点类似。
 参考老师文章中所说的 Mutex 的实现方法，实现 Semaphore 的一个思路是：
@@ -391,27 +392,27 @@ use tokio::{sync::Semaphore, task::JoinHandle};
 
 #[tokio::main]
 async fn main() {
-    let library = Box::new(Library::new(3));
-    let mut tasks: Vec&lt;JoinHandle&lt;()&gt;&gt; = vec![];
-    for i in 0..10 {
-        tasks.push(library.enter(move || println!(&quot;no: {}, borrow book&quot;, i)));
-    }
-    for task in tasks {
-        task.await.unwrap();
-    }
-    println!(&quot;{:?}&quot;, library.semaphore.available_permits());
+let library = Box::new(Library::new(3));
+let mut tasks: Vec&lt;JoinHandle&lt;()&gt;&gt; = vec![];
+for i in 0..10 {
+tasks.push(library.enter(move || println!(&quot;no: {}, borrow book&quot;, i)));
+}
+for task in tasks {
+task.await.unwrap();
+}
+println!(&quot;{:?}&quot;, library.semaphore.available_permits());
 }
 
 struct Library {
-    semaphore: Arc&lt;Semaphore&gt;,
+semaphore: Arc&lt;Semaphore&gt;,
 }
 
 impl Library {
-    fn new(capacity: usize) -&gt; Self {
-        Self {
-            semaphore: Arc::new(Semaphore::new(capacity)),
-        }
-    }
+fn new(capacity: usize) -&gt; Self {
+Self {
+semaphore: Arc::new(Semaphore::new(capacity)),
+}
+}
 
     fn enter(&amp;self, chore: impl Fn() + Send + &#39;static) -&gt; JoinHandle&lt;()&gt; {
         let semaphore = self.semaphore.clone();
@@ -424,10 +425,10 @@ impl Library {
             drop(s);
         })
     }
+
 }</p>2021-12-17</li><br/><li><span>终生恻隐</span> 👍（1） 💬（1）<p>&#47;&#47; [dependencies]
 &#47;&#47; tokio = { version = &quot;1&quot;, features = [&quot;full&quot;] }
 &#47;&#47; chrono = &quot;*&quot;
-
 
 use tokio::sync::{Semaphore, TryAcquireError};
 use std::sync::Arc;
@@ -437,8 +438,8 @@ use chrono::prelude::*;
 
 #[tokio::main]
 async fn main() {
-    let semaphore = Arc::new(Semaphore::new(3));
-    let mut join_handles = Vec::new();
+let semaphore = Arc::new(Semaphore::new(3));
+let mut join_handles = Vec::new();
 
     for c in 0..5 {
         let permit = semaphore.clone().acquire_owned().await.unwrap();
@@ -453,6 +454,7 @@ async fn main() {
     for handle in join_handles {
         handle.await.unwrap();
     }
+
 }</p>2021-11-12</li><br/><li><span>Milittle</span> 👍（0） 💬（1）<p>cas是指令集指令提供的能力 一般语言封装的并发原语都是在这个基础上的</p>2022-01-13</li><br/><li><span>爱学习的小迪</span> 👍（0） 💬（1）<p>感觉和java对应的功能，原理一致</p>2022-01-10</li><br/><li><span>核桃</span> 👍（0） 💬（1）<p>另外关于Ordering那几个的区别，个人写代码的时候，绝大部分时候，要么最简单的Relaxed，要么最严格的SeqCst，剩下的，不一定考虑那么多，除非特殊需要才去查一下区别，平时记不住的。。。</p>2021-12-05</li><br/><li><span>核桃</span> 👍（0） 💬（1）<p>理解一下，对于所谓的指令原子操作，在计算机底层里面，没记错就是中断总线关闭吧。
 
 然后那段优化的代码，就是拿不到锁先while空转一下，这里就有点像java的自旋锁的概念那样。
@@ -467,23 +469,23 @@ use std::error::Error;
 
 &#47;&#47; item id
 struct Item {
-    id: usize,
+id: usize,
 }
 
 struct Semaphore {
-    count: AtomicUsize,
-    max: usize,
-    queue: Mutex&lt;Vec&lt;usize&gt;&gt;,
+count: AtomicUsize,
+max: usize,
+queue: Mutex&lt;Vec&lt;usize&gt;&gt;,
 }
 
 impl Semaphore {
-    fn new(max: usize) -&gt; Self {
-        Self {
-            count: AtomicUsize::new(0),
-            max,
-            queue: Mutex::new(Vec::new()),
-        }
-    }
+fn new(max: usize) -&gt; Self {
+Self {
+count: AtomicUsize::new(0),
+max,
+queue: Mutex::new(Vec::new()),
+}
+}
 
     fn add(&amp;self, item_id: usize) -&gt; Option&lt;usize&gt;{
         let mut count = self.count.fetch_add(1, Ordering::Acquire);
@@ -506,6 +508,7 @@ impl Semaphore {
         }
         Some(item_id)
     }
+
 }
 
 </p>2025-02-17</li><br/><li><span>Rex Wang</span> 👍（0） 💬（0）<p>按老师的推荐找到一个博客，用c++把ordering讲得很清楚。

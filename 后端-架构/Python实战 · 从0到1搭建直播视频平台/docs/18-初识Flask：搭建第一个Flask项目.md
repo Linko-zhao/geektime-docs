@@ -165,24 +165,20 @@ Hello_world.py为什么是main模块？标志是什么？是放在特定目录�
 另外，放在哪个目录下面就不会是main了？</p>2023-06-02</li><br/><li><span>长林啊</span> 👍（1） 💬（1）<p>老师，每次在新加一个路由后，就需要重新运行程序，否则就访问不到新加的路由，有什么方式可以实现热重载呢？</p>2023-06-02</li><br/><li><span>长林啊</span> 👍（1） 💬（1）<p>实现——用户输入不同 URL，页面显示不同内容
 ——————————————————————
 
-from flask import Flask  # 导入Flask模块
+from flask import Flask # 导入Flask模块
 
-app = Flask(__name__)  # 创建Flask实例，并指定模块名
+app = Flask(**name**) # 创建Flask实例，并指定模块名
 
-
-@app.route(&#39;&#47;&#39;)  # 定义路由，即当访问 根目录 时返回下面的函数结果
+@app.route(&#39;&#47;&#39;) # 定义路由，即当访问 根目录 时返回下面的函数结果
 def hello_world():
-    return &#39;Hello, World!&#39;  # 返回字符串Hello, World!
-
+return &#39;Hello, World!&#39; # 返回字符串Hello, World!
 
 @app.route(&#39;&#47;any&#47;&lt;content&gt;&#39;)
 def other(content):
-    return &#39;输入的内容是：{}&#39;.format(content)
+return &#39;输入的内容是：{}&#39;.format(content)
 
-
-if __name__ == &#39;__main__&#39;:
-    app.run()  # 运行Flask应用程序
-
+if **name** == &#39;**main**&#39;:
+app.run() # 运行Flask应用程序
 
 ————————————————
 浏览器或者postman 中访问：http:&#47;&#47;127.0.0.1:5000&#47;any&#47;flask
@@ -195,30 +191,28 @@ from flask import Flask, jsonify
 from flask import request
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(**name**)
 
-def handle_request():
-    # 根据请求的路由判断如何返回消息
-    if request.path == &#39;&#47;date&#39;:
-        current_date = datetime.now().strftime(&#39;%Y-%m-%d&#39;)
-        return f&#39;当前日期为{current_date}&#39;
-    elif request.path == &#39;&#47;url&#39;:
-        data = {
-            &#39;url&#39;: request.url,
-            &#39;addr&#39;: request.remote_addr
-        }
-        return jsonify(data)
-    else:
-        return &#39;404&#39;
-
+def handle_request(): # 根据请求的路由判断如何返回消息
+if request.path == &#39;&#47;date&#39;:
+current_date = datetime.now().strftime(&#39;%Y-%m-%d&#39;)
+return f&#39;当前日期为{current_date}&#39;
+elif request.path == &#39;&#47;url&#39;:
+data = {
+&#39;url&#39;: request.url,
+&#39;addr&#39;: request.remote_addr
+}
+return jsonify(data)
+else:
+return &#39;404&#39;
 
 @app.route(&#39;&#47;date&#39;)
 @app.route(&#39;&#47;url&#39;)
 def view():
-    return handle_request()
+return handle_request()
 
-if __name__ == &#39;__main__&#39;:
-    app.run()
+if **name** == &#39;**main**&#39;:
+app.run()
 
 </p>2024-02-21</li><br/>
 </ul>

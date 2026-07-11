@@ -352,16 +352,16 @@ df_user[&#39;三维价值&#39;] = KMeans(n_clusters=3).fit(df_user[[&#39;R值&#3
 
 ax = plt.subplot(111, projection=&#39;3d&#39;)
 ax.scatter(df_user.query(&quot;三维价值 == 0&quot;)[&#39;F值&#39;],
-           df_user.query(&quot;三维价值 == 0&quot;)[&#39;R值&#39;],
-           df_user.query(&quot;三维价值 == 0&quot;)[&#39;M值&#39;], c=&#39;y&#39;)
+df_user.query(&quot;三维价值 == 0&quot;)[&#39;R值&#39;],
+df_user.query(&quot;三维价值 == 0&quot;)[&#39;M值&#39;], c=&#39;y&#39;)
 ax.scatter(df_user.query(&quot;三维价值 == 1&quot;)[&#39;F值&#39;],
-           df_user.query(&quot;三维价值 == 1&quot;)[&#39;R值&#39;],
-           df_user.query(&quot;三维价值 == 1&quot;)[&#39;M值&#39;], c=&#39;r&#39;)
+df_user.query(&quot;三维价值 == 1&quot;)[&#39;R值&#39;],
+df_user.query(&quot;三维价值 == 1&quot;)[&#39;M值&#39;], c=&#39;r&#39;)
 ax.scatter(df_user.query(&quot;三维价值 == 2&quot;)[&#39;F值&#39;],
-           df_user.query(&quot;三维价值 == 2&quot;)[&#39;R值&#39;],
-           df_user.query(&quot;三维价值 == 2&quot;)[&#39;M值&#39;], c=&#39;g&#39;)
+df_user.query(&quot;三维价值 == 2&quot;)[&#39;R值&#39;],
+df_user.query(&quot;三维价值 == 2&quot;)[&#39;M值&#39;], c=&#39;g&#39;)
 
-ax.set_zlabel(&#39;F&#39;)  # 坐标轴
+ax.set_zlabel(&#39;F&#39;) # 坐标轴
 ax.set_ylabel(&#39;R&#39;)
 ax.set_xlabel(&#39;M&#39;)
 plt.show()
@@ -375,7 +375,9 @@ plt.show()
 最后说一下我发现这节课的文本和表格的部分数据有出入。文本：上次购物距今是0天到91天，表格：是94天。文本：0层级的用户平均新近度是295天，表格：是298天。文本：R值最高的用户组（2层级）平均新近度仅有31天，表格：是32天。</p>2021-09-10</li><br/><li><span>Geek_8629f4</span> 👍（2） 💬（1）<p>老师，请问， 当把 R、F、M 三个特征同时输入 K-Means 算法，为用户整体做聚类时， 发现 分为3 组， 但是 每组人数相差很大， A 组 7 人 B 组 60 , C 组913人，如果时这样，这种分组意思不大， 没有好的办法制定marketing 的策略。请问是我们必须要分别分类聚类才能得到更好的效果， 我的聚类方法有什么不对的地方。实际分析中，应该如何操作呢？</p>2022-11-17</li><br/><li><span>庞亮</span> 👍（1） 💬（1）<p>“最后，我们还讲到用 K- 均值算法来给 R 值做聚类，这也非常简单，就是创建模型、拟合模型、用模型进行聚类，这些过程加一块也就是几行代码的事儿，你不用有负担。”
 这句说了两遍</p>2022-06-13</li><br/><li><span>Yaohong</span> 👍（1） 💬（2）<p>请问 order_cluster函数中new_cluster_name = &#39;new_&#39; + cluster_name #新的聚类名称，这个有什么作用？后面分组中用mean()方法而不用max（）方法有什么考量？</p>2022-04-23</li><br/><li><span>Geek_7ba002</span> 👍（1） 💬（1）<p>这节课让我真正理解了什么是聚类</p>2022-03-02</li><br/><li><span>Geek_7ba002</span> 👍（1） 💬（1）<p>这堂课我真正理解了sklearn</p>2022-03-02</li><br/><li><span>小强</span> 👍（1） 💬（1）<p>这章的代码在哪可以看到</p>2021-10-14</li><br/><li><span>蝶舞清风寒</span> 👍（1） 💬（2）<p>R、F、M 三个特征同时输入 K-Means 算法，为用户整体做聚类程序代码如下，是否正确呢？
 train_x=df_user[[&quot;R值&quot;,&quot;F值&quot;,&quot;M值&quot;]]#将RFM数值转变为训练数据
+
 # 规范化到[0,1]空间
+
 min_max_scaler=preprocessing.MinMaxScaler()
 train_x=min_max_scaler.fit_transform(train_x)
 kmeans_RFM = KMeans(n_clusters=3) #设定K=3

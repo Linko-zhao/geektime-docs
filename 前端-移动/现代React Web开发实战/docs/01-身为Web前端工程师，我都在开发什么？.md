@@ -120,7 +120,7 @@ React也可以把逻辑和视图写在一个文件里。
 // main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-    
+
 const App = () => {
   const [count, setCount] = React.useState();
   React.useEffect(() => {
@@ -130,12 +130,12 @@ const App = () => {
       setCount(data);
     })();
   }, []);
-    
+
   return (
     <p>图书数量：{ count }</p>
   );
 };
-   
+
 ReactDOM.render(<App />, document.getElementById('app'));
 ```
 
@@ -170,7 +170,7 @@ JSP页面模版上有条件或者循环逻辑时，也是可以通过混写Java�
 <script>
 // ...
 </script>
-  
+
 <template>
   <ul>
     <li v-for="book in books">
@@ -196,8 +196,8 @@ public class BookBean {
 // BookController.java (Controller)
 public class ControllerServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)  
-            throws ServletException, IOException {    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String isbn = request.getParameter("isbn");
         BookBean book = new BookBean();
         // JDBC ...
@@ -206,7 +206,7 @@ public class ControllerServlet extends HttpServlet {
         rd.forward(request, response);
     }
 }
-   
+
 // book.jsp (View)
 <%@page import="BookBean"%>
 <html>
@@ -241,7 +241,7 @@ export class BookComponent implements OnInit {
     this.title = book.title;
   }
 }
-    
+
 // book.component.html (View)
 <p>书名：{{title}}</p>
 ```
@@ -265,7 +265,7 @@ Java的技术生态是极为丰富的，可以借助第三方开源库（或闭�
   <artifactId>bookProject</artifactId>
   <version>${project1Version}</version>
   <packaging>jar</packaging>
- 
+
   <dependencies>
     <dependency>
       <groupId>log4j</groupId>

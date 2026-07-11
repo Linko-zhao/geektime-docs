@@ -162,7 +162,7 @@ $ objdump -d inc
   400534:	8b 45 fc             	mov    -0x4(%rbp),%eax
   400537:	83 c0 01             	add    $0x1,%eax
   40053a:	5d                   	pop    %rbp
-  40053b:	c3                   	retq 
+  40053b:	c3                   	retq
 ```
 
 我们先来分析一个这块机器码，你可以看到，它首先会保存上一个栈帧的基址，并把当前的栈指针赋给栈基址寄存器（第1行），这是进入一个函数的常规操作。这个过程我们在[第4节课](https://time.geekbang.org/column/article/433530)有详细介绍，你可以去看一下。
@@ -180,20 +180,20 @@ $ objdump -d inc
 #include<memory.h>
 #include<sys/mman.h>
 
-typedef int (* inc_func)(int a); 
+typedef int (* inc_func)(int a);
 
 int main() {
-    char code[] = { 
+    char code[] = {
         0x55,             // push rbp
         0x48, 0x89, 0xe5, // mov rsp, rbp
         0x89, 0xf8,       // mov edi, eax
         0x83, 0xc0, 0x01, // add $1, eax
         0x5d,             // pop rbp
         0xc3              // ret
-    };  
+    };
 
     void * temp = mmap(NULL, sizeof(code), PROT_WRITE | PROT_EXEC,
-            MAP_ANONYMOUS | MAP_PRIVATE, -1, 0); 
+            MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 
     memcpy(temp, code, sizeof(code));
     inc_func p_inc = (inc_func)temp;
@@ -206,7 +206,7 @@ int main() {
 在这个例子中，我们使用了 mmap 来申请了一块有写权限和执行权限的内存，然后把我们手写的机器码拷进去，然后使用一个函数指针指向这块内存，并且调用它。通过这种方式我们就可以执行这一段手写的机器码了。我们来运行一下看看：
 
 ```
-$ gcc -o inc inc.c 
+$ gcc -o inc inc.c
 $ ./inc
 8
 ```
@@ -227,7 +227,7 @@ $ ./inc
 
 ```
 public static int test() {
-    int b = 3;  
+    int b = 3;
     int c = 4;
     return b + c;
 }

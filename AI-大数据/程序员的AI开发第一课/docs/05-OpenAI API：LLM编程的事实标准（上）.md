@@ -104,7 +104,7 @@ export OPENAI_API_KEY="your_api_key_here"
 - tool\_choice，选择怎样调用工具。参数值为 none 表示不调用工具，auto 表示模型自行选择是生成消息，还是调用工具，required 表示必须调用工具。这个参数值也可以是一个对象，比如，下面这行代码就告诉模型，要调用我指定的这个工具。
 
 ```json
-{"type": "function", "function": {"name": "my_function"}}
+{ "type": "function", "function": { "name": "my_function" } }
 ```
 
 #### 模型参数

@@ -86,7 +86,7 @@ Trie树，也称为前缀树或者字典树，是一种常用的维护字符串�
     struct trie_node
     {
         bool isKey;   // 标记该节点是否代表一个关键字
-        trie_node *children[26]; // 各个子节点 
+        trie_node *children[26]; // 各个子节点
     };
 
 ```
@@ -106,7 +106,7 @@ public:
             root->children[i] = NULL;
         }
     }
-    
+
     /** Inserts a word into the trie. */
     void insert(string word) {
         trie_node* node = root;
@@ -143,7 +143,7 @@ public:
         }
         // 仅仅是前缀
         return node->isKey;
-    }    
+    }
 ```
 
 我们来简单分析一下前缀树的复杂度。

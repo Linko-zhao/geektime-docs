@@ -182,7 +182,7 @@ drop table temp_t;
 上面这个例子是主键冲突后直接报错，如果是改写成
 
 ```
-insert into t values(11,10,10) on duplicate key update d=100; 
+insert into t values(11,10,10) on duplicate key update d=100;
 ```
 
 的话，就会给索引c上(5,10] 加一个排他的next-key lock（写锁）。
@@ -228,6 +228,7 @@ insert 语句如果出现唯一键冲突，会在冲突的唯一值上加共享�
 评论区留言点赞板：
 
 > @长杰 同学回答得非常准确。
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>huolang</span> 👍（112） 💬（28）<p>老师，死锁的例子，关于sessionA拿到的c=5的记录锁，sessionB和sessionC发现唯一键冲突会加上读锁我有几个疑惑：
 1. sessionA拿到的c=5的记录锁是写锁吗？
@@ -259,16 +260,16 @@ insert 语句如果出现唯一键冲突，会在冲突的唯一值上加共享�
 文中直接描述next-key lock是排他的，总让我认为gap lock和行锁都是x锁。
 
 不知道我理解得对不对？</p>2019-02-27</li><br/><li><span>老杨同志</span> 👍（32） 💬（1）<p>课后问题：
-      我用的最多还是insert into select 。如果数量比较大，会加上limit 100,000这种。并且看看后面的select条件是否走索引。缺点是会锁select的表。方法二：导出成excel，然后拼sql 成 insert into values(),(),()的形式。方法3，写类似淘宝调动的定时任务，任务的逻辑是查询100条记录，然后多个线程分到几个任务执行，比如是个线程，每个线程10条记录，插入后，在查询新的100条记录处理。
-      </p>2019-02-13</li><br/><li><span>Justin</span> 👍（25） 💬（7）<p>插入意向锁的gal lock和next key lock中的 gaplock互斥吗？</p>2019-02-15</li><br/><li><span>一大只😴</span> 👍（19） 💬（6）<p>老师，我想问下：insert 语句出现唯一键冲突，会加next-key lock，而产生死锁的例子中，同样也是唯一键冲突却只加了记录锁，然后我按照唯一键冲突中的两个例子试了试
+我用的最多还是insert into select 。如果数量比较大，会加上limit 100,000这种。并且看看后面的select条件是否走索引。缺点是会锁select的表。方法二：导出成excel，然后拼sql 成 insert into values(),(),()的形式。方法3，写类似淘宝调动的定时任务，任务的逻辑是查询100条记录，然后多个线程分到几个任务执行，比如是个线程，每个线程10条记录，插入后，在查询新的100条记录处理。
+</p>2019-02-13</li><br/><li><span>Justin</span> 👍（25） 💬（7）<p>插入意向锁的gal lock和next key lock中的 gaplock互斥吗？</p>2019-02-15</li><br/><li><span>一大只😴</span> 👍（19） 💬（6）<p>老师，我想问下：insert 语句出现唯一键冲突，会加next-key lock，而产生死锁的例子中，同样也是唯一键冲突却只加了记录锁，然后我按照唯一键冲突中的两个例子试了试
 1、比如t表中有两条记录(19,19,19)，(22,22,22)，这时候我再insert (22,22,22)造成了主键冲突，这时候加的就是(19,22]的next-key lock，这个insert为啥不是等值查询？
 2、根据死锁的例子，我又在t表中准备插入一行
-      session A :begin; insert into t values (25,25,25)
-      session B :insert into t values (25,25,25)  这时候sessionB锁等待
-      session C：insert into t values (24,24,24)  锁等待，等B锁等待超时，session C插入成功
-      那这里的session B应该是加了个(22,25]的next-key lock，并没有因为是唯一键退化成记录锁
+session A :begin; insert into t values (25,25,25)
+session B :insert into t values (25,25,25) 这时候sessionB锁等待
+session C：insert into t values (24,24,24) 锁等待，等B锁等待超时，session C插入成功
+那这里的session B应该是加了个(22,25]的next-key lock，并没有因为是唯一键退化成记录锁
 我想死锁的例子中t表已经有了(1,1,1),(2,2,2),(3,3,3),(4,4,4)4条记录，这时候insert (null,5,5)，是不是加的(4,5]这个next-key lock，由于是整型并且间隙非常小，所以将他当成记录锁？</p>2019-02-13</li><br/><li><span>inrtyx</span> 👍（17） 💬（2）<p>现在一般都用utf8mb4?</p>2019-04-07</li><br/><li><span>roaming</span> 👍（15） 💬（1）<p>MySQL8.0.12环境下，
-执行insert into t(c,d)  (select c+1, d from t force index(c) order by c desc limit 1);
+执行insert into t(c,d) (select c+1, d from t force index(c) order by c desc limit 1);
 slow log Rows_examined: 2
 Innodb_rows_read 的值增加1
 
@@ -277,8 +278,8 @@ Innodb_rows_read 的值增加1
 另外，select c+1, d from t force index(c) order by c desc limit 1 for update 是不是不能用作等值查询那样分析？因为如果算等值查询，根据优化1是没有间隙锁的。</p>2019-02-17</li><br/><li><span>Justin</span> 👍（11） 💬（2）<p>为什么insert 还会使用到next key lock 呢 ，我记得我原来看的资料写的是插入使用的是插入意向锁啊</p>2019-02-15</li><br/><li><span>信信</span> 👍（10） 💬（3）<p>老师好，
 图6下方“发生主键冲突的时候”是不是应该改为“发生唯一键冲突的时候”？因为c不是主键。
 还有，图7下方：T2时刻session b 发现“唯一键冲突”，这里为啥不是锁冲突？因为如果没有锁冲突，仅有唯一键冲突，就对应图6的情况，这时加的是next-key lock，而不仅仅是记录锁了。</p>2019-02-14</li><br/><li><span>王伯轩</span> 👍（9） 💬（4）<p>老师你好,去年双11碰到了dbcrash掉的情况.至今没有找到答案,心里渗得慌.老师帮忙分析下.  
-我是一个开发,关于db的知识更多是在应用和基本原理上面,实在是找不到原因. 我也搜了一些资料 感觉像是mysql的bug,不过在其buglist中没有找到完全一致的，当然也可能是我们业务也许导致库的压力大的原因.   
-应用端看到的现象是db没有响应，应用需要访问db的线程全部僵死.db表现是hang住 , 当时的诊断日志如下，表面表现为一直获取不到latch锁（被一个insert线程持有不释放） https:&#47;&#47;note.youdao.com&#47;ynoteshare1&#47;index.html?id=1771445db3ff1e08cbdd8328ea6765a7&amp;type=note#&#47;  隔离级别是rr
+我是一个开发,关于db的知识更多是在应用和基本原理上面,实在是找不到原因. 我也搜了一些资料 感觉像是mysql的bug,不过在其buglist中没有找到完全一致的，当然也可能是我们业务也许导致库的压力大的原因.  
+应用端看到的现象是db没有响应，应用需要访问db的线程全部僵死.db表现是hang住 , 当时的诊断日志如下，表面表现为一直获取不到latch锁（被一个insert线程持有不释放） https:&#47;&#47;note.youdao.com&#47;ynoteshare1&#47;index.html?id=1771445db3ff1e08cbdd8328ea6765a7&amp;type=note#&#47; 隔离级别是rr
 
 同样的crash双11当天后面又出现了一次（哭死）,
 都是重启数据库解决的,

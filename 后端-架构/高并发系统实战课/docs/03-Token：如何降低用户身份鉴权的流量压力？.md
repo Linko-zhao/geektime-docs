@@ -27,7 +27,7 @@ import "github.com/dgrijalva/jwt-go"
 
 //签名所需混淆密钥 不要太简单 容易被破解
 //也可以使用非对称加密，这样可以在客户端用公钥验签
-var secretString = []byte("jwt secret string 137 rick") 
+var secretString = []byte("jwt secret string 137 rick")
 
 type TokenPayLoad struct {
     UserId   uint64 `json:"userId"` //用户id
@@ -42,7 +42,7 @@ func GenToken(userId uint64, nickname string) (string, error) {
         NickName: nickname, //昵称
         //这里可以追加一些其他加密的数据进来
         //不要明文放敏感信息，如果需要放，必须再加密
-        
+
         //私有部分
         StandardClaims: jwt.StandardClaims{
             //两小时后失效
@@ -140,7 +140,7 @@ JWT的token解密很简单，第一段和第二段都是通过base64编码的。
 if decodeToken.StandardClaims.ExpiresAt < TimestampNow() - 300 {
   //请求下用户中心，问问这个人禁登陆没
   //....略具体
-  
+
   //重新发放token
   token, err := GenToken(.....)
   if err != nil {

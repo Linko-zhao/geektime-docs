@@ -173,7 +173,7 @@ Discard包通常会在解码或者播放的时候被丢弃，这个是需要注�
         <frame media_type="video" stream_index="0" key_frame="0" pts="16" pts_time="0.666667" pkt_dts="16" pkt_dts_time="0.666667" best_effort_timestamp="16" best_effort_timestamp_time="0.666667" pkt_duration="1" pkt_duration_time="0.041667" pkt_pos="15482" pkt_size="17" width="1920" height="800" pix_fmt="yuv420p" sample_aspect_ratio="1:1" pict_type="P" coded_picture_number="13" display_picture_number="0" interlaced_frame="0" top_field_first="0" repeat_pict="0" chroma_location="left"/>
         <frame media_type="video" stream_index="0" key_frame="0" pts="17" pts_time="0.708333" pkt_dts="17" pkt_dts_time="0.708333" best_effort_timestamp="17" best_effort_timestamp_time="0.708333" pkt_duration="1" pkt_duration_time="0.041667" pkt_pos="24496" pkt_size="13" width="1920" height="800" pix_fmt="yuv420p" sample_aspect_ratio="1:1" pict_type="B" coded_picture_number="18" display_picture_number="0" interlaced_frame="0" top_field_first="0" repeat_pict="0" chroma_location="left"/>
         <frame media_type="video" stream_index="0" key_frame="1" pts="18" pts_time="0.750000" pkt_dts="18" pkt_dts_time="0.750000" best_effort_timestamp="18" best_effort_timestamp_time="0.750000" pkt_duration="1" pkt_duration_time="0.041667" pkt_pos="18961" pkt_size="4554" width="1920" height="800" pix_fmt="yuv420p" sample_aspect_ratio="1:1" pict_type="I" coded_picture_number="17" display_picture_number="0" interlaced_frame="0" top_field_first="0" repeat_pict="0" chroma_location="left"/>
-        
+
 ```
 
 从视频帧信息中可以看到，第一个keyframe中携带着side\_data，是关于H.264的编码器相关的用户信息。也就是当我们使用开源的x264做视频编码的时候，会看到x264的标识信息。

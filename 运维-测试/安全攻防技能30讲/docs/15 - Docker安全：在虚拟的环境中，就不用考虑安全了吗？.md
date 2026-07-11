@@ -133,7 +133,7 @@ Snyk在2019年的[Docker漏洞统计报告](https://snyk.io/blog/top-ten-most-po
 以Node.js为例，在node的基础镜像中，默认创建了node这么一个具备较小权限的用户。因此，我们可以在Dockerfile中，加入一行USER node来使用这个最小权限用户。
 
 ```
-FROM node:10-alpine 
+FROM node:10-alpine
 ...
 USER node
 CMD [“node”, “index.js”]

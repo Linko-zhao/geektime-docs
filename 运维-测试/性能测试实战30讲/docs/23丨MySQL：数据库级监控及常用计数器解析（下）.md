@@ -83,15 +83,15 @@
 # Tables
 #    SHOW TABLE STATUS FROM `db_bank` LIKE 'mb_trans'\G
 #    SHOW CREATE TABLE `db_bank`.`mb_trans`\G
-UPDATE mb_trans  
-		SET 
-		resCode='PCX00000',resultMes='交易成功',payTranStatus='P03',payRouteCode='CMA'  
-		WHERE 
+UPDATE mb_trans
+		SET
+		resCode='PCX00000',resultMes='交易成功',payTranStatus='P03',payRouteCode='CMA'
+		WHERE
 		seqNo='20170619PM010394356875'\G
 # Converted for EXPLAIN
 # EXPLAIN /*!50100 PARTITIONS*/
-select  
-		resCode='PCX00000',resultMes='交易成功',payTranStatus='P03',payRouteCode='CMA' from mb_trans where  
+select
+		resCode='PCX00000',resultMes='交易成功',payTranStatus='P03',payRouteCode='CMA' from mb_trans where
 		seqNo='20170619PM010394356875'\G
 ```
 
@@ -323,7 +323,7 @@ mysql> analyze table t_user;
 | pa.t_user | analyze | status   | OK       |
 +-----------+---------+----------+----------+
 1 row in set (0.08 sec)
-// 执行语句 
+// 执行语句
 mysql> select * from t_user where user_name='Zee0046948';
 +--------------------------------------+-------------+------------+--------+----------------------+-------------+---------------------+
 | id                                   | user_number | user_name  | org_id | email                | mobile      | create_time         |
@@ -458,5 +458,5 @@ profiling分析sql语句的每一个层级，结合sql语句执行计划分析�
 先全局，在定向分析
 问题二：
 profiling，它可以把 SQL 执行的每一个步骤详细列出来，从一个 SQL 进入到数据库中，到执行完这整个生命周期。
-MySQL 的profiling在session级生效，所以当你用了慢日志，知道哪个 SQL 有问题之后，再用这个功能是最见成效的。</p>2022-04-24</li><br/><li><span>月亮和六便士</span> 👍（1） 💬（1）<p>看完昨天和今天的专栏，我有个想法，不管三七二十一，一上来先把慢日志拎出来，分析，然后执行计划，三板斧耍完了，然后在开始工作......</p>2020-03-12</li><br/><li><span>乐少</span> 👍（0） 💬（1）<p>老师哪里可以加微信群，也要学习下</p>2024-02-16</li><br/><li><span>OM</span> 👍（0） 💬（1）<p>数据库方面的性能诊断涉及操作系统层,网络层,存储层,应用层，通常将关联数据库的其他层通过诊断分析确定是否与数据库有关系,缩小诊断范围和找到性能问题症结。</p>2023-08-02</li><br/><li><span>Geek_33192c</span> 👍（0） 💬（1）<p>初学者得从哪里学起</p>2023-03-27</li><br/><li><span>学习学个屁</span> 👍（0） 💬（1）<p>mac 如何安装 pt-query-digest  总是安装不成功</p>2021-09-25</li><br/><li><span>学习学个屁</span> 👍（0） 💬（1）<p>这些工具有搭建教程吗老师</p>2021-09-25</li><br/><li><span>Promise</span> 👍（0） 💬（2）<p>老师mysql_exportor+Prometheus+Grafana这一套有搭建流程吗</p>2021-09-11</li><br/><li><span>LQQ</span> 👍（0） 💬（1）<p>老师，上文中提到 ID尾号为449F的sql 日志，标准差为823ms，95线为2s，平均值为957ms，如果是正态分布，根据标准差的定义，68%的请求应该在100ms~1780ms之间，您说的是大多数请求在100ms~1s内，可能是我太较真了，特意算了一下^_^</p>2020-07-01</li><br/><li><span>月亮和六便士</span> 👍（0） 💬（1）<p>老师，哪可以看到MySQL- grafana 里面各个指标的详细解释，现在看到指标一脸懵逼，不知道哪个指标什么意思，值到了多少代表有问题，应该怎么办？怎么破解</p>2020-04-25</li><br/><li><span>村夫</span> 👍（0） 💬（1）<p>老师我看show profile在5.7以后就被废弃了，还有就是我同一个sql执行多次，通过show prorile查看每次queryId，步骤差不多呀。不知道为啥呢？</p>2020-03-19</li><br/>
+MySQL 的profiling在session级生效，所以当你用了慢日志，知道哪个 SQL 有问题之后，再用这个功能是最见成效的。</p>2022-04-24</li><br/><li><span>月亮和六便士</span> 👍（1） 💬（1）<p>看完昨天和今天的专栏，我有个想法，不管三七二十一，一上来先把慢日志拎出来，分析，然后执行计划，三板斧耍完了，然后在开始工作......</p>2020-03-12</li><br/><li><span>乐少</span> 👍（0） 💬（1）<p>老师哪里可以加微信群，也要学习下</p>2024-02-16</li><br/><li><span>OM</span> 👍（0） 💬（1）<p>数据库方面的性能诊断涉及操作系统层,网络层,存储层,应用层，通常将关联数据库的其他层通过诊断分析确定是否与数据库有关系,缩小诊断范围和找到性能问题症结。</p>2023-08-02</li><br/><li><span>Geek_33192c</span> 👍（0） 💬（1）<p>初学者得从哪里学起</p>2023-03-27</li><br/><li><span>学习学个屁</span> 👍（0） 💬（1）<p>mac 如何安装 pt-query-digest 总是安装不成功</p>2021-09-25</li><br/><li><span>学习学个屁</span> 👍（0） 💬（1）<p>这些工具有搭建教程吗老师</p>2021-09-25</li><br/><li><span>Promise</span> 👍（0） 💬（2）<p>老师mysql_exportor+Prometheus+Grafana这一套有搭建流程吗</p>2021-09-11</li><br/><li><span>LQQ</span> 👍（0） 💬（1）<p>老师，上文中提到 ID尾号为449F的sql 日志，标准差为823ms，95线为2s，平均值为957ms，如果是正态分布，根据标准差的定义，68%的请求应该在100ms~~1780ms之间，您说的是大多数请求在100ms~~1s内，可能是我太较真了，特意算了一下^_^</p>2020-07-01</li><br/><li><span>月亮和六便士</span> 👍（0） 💬（1）<p>老师，哪可以看到MySQL- grafana 里面各个指标的详细解释，现在看到指标一脸懵逼，不知道哪个指标什么意思，值到了多少代表有问题，应该怎么办？怎么破解</p>2020-04-25</li><br/><li><span>村夫</span> 👍（0） 💬（1）<p>老师我看show profile在5.7以后就被废弃了，还有就是我同一个sql执行多次，通过show prorile查看每次queryId，步骤差不多呀。不知道为啥呢？</p>2020-03-19</li><br/>
 </ul>

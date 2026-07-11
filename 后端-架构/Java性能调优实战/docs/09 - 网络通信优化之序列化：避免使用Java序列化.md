@@ -47,20 +47,20 @@ Java官网安全编码指导方针中说明：“对不信任数据的反序列�
 对于需要长时间进行反序列化的对象，不需要执行任何代码，也可以发起一次攻击。攻击者可以创建循环对象链，然后将序列化后的对象传输到程序中反序列化，这种情况会导致hashCode方法被调用次数呈次方爆发式增长, 从而引发栈溢出异常。例如下面这个案例就可以很好地说明。
 
 ```
-Set root = new HashSet();  
-Set s1 = root;  
-Set s2 = new HashSet();  
-for (int i = 0; i < 100; i++) {  
-   Set t1 = new HashSet();  
-   Set t2 = new HashSet();  
-   t1.add("foo"); //使t2不等于t1  
-   s1.add(t1);  
-   s1.add(t2);  
-   s2.add(t1);  
-   s2.add(t2);  
-   s1 = t1;  
-   s2 = t2;   
-} 
+Set root = new HashSet();
+Set s1 = root;
+Set s2 = new HashSet();
+for (int i = 0; i < 100; i++) {
+   Set t1 = new HashSet();
+   Set t2 = new HashSet();
+   t1.add("foo"); //使t2不等于t1
+   s1.add(t1);
+   s1.add(t2);
+   s2.add(t1);
+   s2.add(t2);
+   s1 = t1;
+   s2 = t2;
+}
 ```
 
 2015年FoxGlove Security安全团队的breenmachine发布过一篇长博客，主要内容是：通过Apache Commons Collections，Java反序列化漏洞可以实现攻击。一度横扫了WebLogic、WebSphere、JBoss、Jenkins、OpenNMS的最新版，各大Java Web Server纷纷躺枪。
@@ -99,11 +99,11 @@ Java序列化中使用了ObjectOutputStream来实现对象转二进制编码，�
 User user = new User();
     	user.setUserName("test");
     	user.setPassword("test");
-    	
+
     	ByteArrayOutputStream os =new ByteArrayOutputStream();
     	ObjectOutputStream out = new ObjectOutputStream(os);
     	out.writeObject(user);
-    	
+
     	byte[] testByte = os.toByteArray();
     	System.out.print("ObjectOutputStream 字节编码长度：" + testByte.length + "\n");
 ```
@@ -117,7 +117,7 @@ User user = new User();
         byteBuffer.put(userName);
         byteBuffer.putInt(password.length);
         byteBuffer.put(password);
-        
+
         byteBuffer.flip();
         byte[] bytes = new byte[byteBuffer.remaining()];
     	System.out.print("ByteBuffer 字节编码长度：" + bytes.length+ "\n");
@@ -141,9 +141,9 @@ ByteBuffer 字节编码长度：16
 	User user = new User();
     	user.setUserName("test");
     	user.setPassword("test");
-    	
+
     	long startTime = System.currentTimeMillis();
-    	
+
     	for(int i=0; i<1000; i++) {
     		ByteArrayOutputStream os =new ByteArrayOutputStream();
         	ObjectOutputStream out = new ObjectOutputStream(os);
@@ -153,8 +153,8 @@ ByteBuffer 字节编码长度：16
         	byte[] testByte = os.toByteArray();
         	os.close();
     	}
-    
-    	
+
+
     	long endTime = System.currentTimeMillis();
     	System.out.print("ObjectOutputStream 序列化时间：" + (endTime - startTime) + "\n");
 ```
@@ -170,7 +170,7 @@ long startTime1 = System.currentTimeMillis();
             byteBuffer.put(userName);
             byteBuffer.putInt(password.length);
             byteBuffer.put(password);
-            
+
             byteBuffer.flip();
             byte[] bytes = new byte[byteBuffer.remaining()];
     	}
@@ -235,7 +235,7 @@ public class Singleton implements Serializable{
     private Singleton(){}
 
     public static Singleton getInstance(){
-       return singleInstance; 
+       return singleInstance;
     }
 }
 ```

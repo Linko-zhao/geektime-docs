@@ -49,7 +49,7 @@ Vue.js从版本1.x到版本3.x，官方代码案例和推荐使用都是模板�
   height: 32px;
   min-width: 80px;
   cursor: pointer;
-} 
+}
 </style>
 
 ```
@@ -112,7 +112,7 @@ Vue.js的模板可以直接使用HTML语法的属性（Attribute），例如clas
   height: 32px;
   min-width: 80px;
   cursor: pointer;
-} 
+}
 </style>
 ```
 
@@ -178,21 +178,20 @@ JSX语法，是JavaScript语法的一种语法扩展，支持在JavaScript直接
 现在，我把上面的Vue.js 3的模板语法实现的“加数器”组件换成JSX语法实现，你可以对比看看这两个语法的实现差异，如下所示：
 
 ```javascript
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive } from "vue";
 
 const Counter = defineComponent({
-
   setup() {
     const state = reactive({
-      count: 0
+      count: 0,
     });
     const onClick = () => {
-      state.count ++;
-    }
+      state.count++;
+    };
     return {
       state,
       onClick,
-    }
+    };
   },
 
   render(ctx) {
@@ -200,10 +199,12 @@ const Counter = defineComponent({
     return (
       <div class="counter">
         <div class="text">Count: {state.count}</div>
-        <button class="btn" onClick={onClick}>Add</button>
+        <button class="btn" onClick={onClick}>
+          Add
+        </button>
       </div>
-    )
-  }
+    );
+  },
 });
 
 export default Counter;
@@ -213,10 +214,10 @@ export default Counter;
 JSX语法其实可以直接看做是纯JavaScript文件代码，在JavaScript文件代码里定义Vue.js 3组件可以通过API defineComponent来进行声明定义：
 
 ```javascript
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 const Counter = defineComponent({
   // ...
-})
+});
 ```
 
 而模板语法有组件视图层相关的代码，类比JSX语法里定义组件中的render方法，如下述代码所示：
@@ -229,13 +230,14 @@ const Counter = defineComponent({
     return (
       <div class="counter">
         <div class="text">Count: {state.count}</div>
-        <button class="btn" onClick={onClick}>Add</button>
+        <button class="btn" onClick={onClick}>
+          Add
+        </button>
       </div>
-    )
-  }
+    );
+  },
   // ...
 });
-
 ```
 
 上述代码中，render函数返回的代码，就是JSX的写法，用来描述HTML模板内容。这里需要注意的是，所有JSX写法中都是用**单大括号“{state.count}”来作为内部变量处理，而Vue.js 3模板语法是通过双大括号来表示“{{state.count}}”**，单大括号描述变量这个是JSX通用写法，Vue.js的JSX语法也是遵循了这个通用写法。
@@ -247,7 +249,7 @@ const Counter = defineComponent({
   // 这里还可以是定义属性和组件引用
   props: {},
   components: {},
-  
+
   // ...
   setup() {
     const state = reactive({
@@ -270,7 +272,7 @@ const Counter = defineComponent({
 我们先回到最开始的JSX介绍中看看。我们说了，JSX其实也是JavaScript代码，在JavaScript代码中引用CSS代码，一般都是直接 import 对应的CSS文件。所以，在Vue.js中通过JSX语法开发组件，组件的CSS代码也是放在独立的CSS文件，最后通过import引用的，如下代码所示：
 
 ```javascript
-import './counter.css'
+import "./counter.css";
 ```
 
 到了这里，你是不是觉得JSX语法跟模板语法类比起来，都能找到一一对应关系，差别好像不是很大？
@@ -351,33 +353,27 @@ const onClick = () => {
 这时候，JSX语法就可以来解决这种“动态”的问题了。我们再用JSX实现一次上述功能的代码，如下所示：
 
 ```javascript
-import { defineComponent, ref } from 'vue';
-import Module01 from './module01.vue';
-import Module02 from './module02.vue';
-import Module03 from './module03.vue';
-import Module04 from './module04.vue';
+import { defineComponent, ref } from "vue";
+import Module01 from "./module01.vue";
+import Module02 from "./module02.vue";
+import Module03 from "./module03.vue";
+import Module04 from "./module04.vue";
 
 const App = defineComponent({
-
   setup() {
     const isReverse = ref(false);
     const onClick = () => {
       isReverse.value = !isReverse.value;
-    }
+    };
     return {
       isReverse,
       onClick,
-    }
+    };
   },
 
   render(ctx) {
     const { isReverse, onClick } = ctx;
-    const mods = [
-      <Module01 />,
-      <Module02 />,
-      <Module03 />,
-      <Module04 />
-    ]
+    const mods = [<Module01 />, <Module02 />, <Module03 />, <Module04 />];
     isReverse === true && mods.reverse();
     return (
       <div class="app">
@@ -388,8 +384,8 @@ const App = defineComponent({
           转换顺序: {`${isReverse}`}
         </button>
       </div>
-    )
-  }
+    );
+  },
 });
 
 export default App;
@@ -398,12 +394,7 @@ export default App;
 上述代码中，控制组件的动态顺序核心代码是这样的：
 
 ```javascript
-const mods = [
-  <Module01 />,
-  <Module02 />,
-  <Module03 />,
-  <Module04 />
-]
+const mods = [<Module01 />, <Module02 />, <Module03 />, <Module04 />];
 isReverse === true && mods.reverse();
 ```
 
@@ -454,8 +445,8 @@ const onOk = () => {
   <div class="app">
     <button class="btn" @click="onClickOpenDialog" >打开对话框</button>
   </div>
-  <Dialog 
-    :show="showDialog" 
+  <Dialog
+    :show="showDialog"
     :text="showText"
     @onOk="onDialogOk"
   />
@@ -488,64 +479,64 @@ const onDialogOk = () => {
 那么换成JSX写法会是怎样呢？我这里给你看一下JSX写法的对话框组件：
 
 ```javascript
-import { defineComponent, reactive, createApp, h, toRaw } from 'vue';
+import { defineComponent, reactive, createApp, h, toRaw } from "vue";
 
 const Dialog = defineComponent({
   props: {
     text: String,
   },
-  emits: [ 'onOk' ],
+  emits: ["onOk"],
   setup(props, context) {
     const { emit } = context;
     const state = reactive({
-      count: 0
+      count: 0,
     });
     const onOk = () => {
-      emit('onOk')
-    }
+      emit("onOk");
+    };
     return {
       props,
       onOk,
-    }
+    };
   },
   render(ctx) {
     const { props, onOk } = ctx;
     return (
       <div class="v-dialog-mask">
         <div class="v-dialog">
-          <div class="v-dialog-text">
-            {props.text}
-          </div>
+          <div class="v-dialog-text">{props.text}</div>
           <div class="v-dialog-footer">
-            <button class="v-dialog-btn" onClick={onOk}>确定</button>
+            <button class="v-dialog-btn" onClick={onOk}>
+              确定
+            </button>
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  },
 });
 
 export function createDialog(params = {}) {
-  const dom = document.createElement('div');
-  const body = document.querySelector('body');
+  const dom = document.createElement("div");
+  const body = document.querySelector("body");
   body.appendChild(dom);
   const app = createApp({
     render() {
       return h(Dialog, {
         text: params.text,
-        onOnOk: params.onOk
-      })
-    }
+        onOnOk: params.onOk,
+      });
+    },
   });
-  app.mount(dom)
+  app.mount(dom);
 
   return {
     close: () => {
       app.unmount();
       dom.remove();
-    }
-  }
-};
+    },
+  };
+}
 ```
 
 我们来分析上述JSX语法实现的对话框组件代码，核心思路是这样子的：
@@ -558,35 +549,35 @@ export function createDialog(params = {}) {
 使用时就是按照简单的方法使用，如下代码所示：
 
 ```javascript
-import { createDialog } from './dialog';
+import { createDialog } from "./dialog";
 
 // ...
 const dialog = createDialog({
   text: `温馨提示，这是第${showCount.value}次打开对话框`,
   onOk: () => {
     dialog.close();
-  }
+  },
 });
 ```
 
 如果要同时显示多个对话框，就直接执行多次调用，代码如下所示：
 
 ```javascript
-import { createDialog } from './dialog';
+import { createDialog } from "./dialog";
 
 // ...
 const dialog1 = createDialog({
   text: `温馨提示，这是第1个对话框`,
   onOk: () => {
     dialog1.close();
-  }
+  },
 });
 
 const dialog2 = createDialog({
   text: `温馨提示，这是第2个对话框`,
   onOk: () => {
     dialog2.close();
-  }
+  },
 });
 ```
 
@@ -626,16 +617,17 @@ const dialog2 = createDialog({
 前端开发组件经常会遇到组件的“递归使用”，也就是组件内部也循环使用了组件自己，那么，如何用模板语法和JSX语法处理组件的“自我递归使用”呢？
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/04)
+
 <div><strong>精选留言（12）</strong></div><ul>
 <li><span>深山大泽平原</span> 👍（7） 💬（3）<p>用模板语法的数组实现组件的reverse：
 
 &lt;template&gt;
-    &lt;div class=&quot;template-reverse-box&quot;&gt;
-        &lt;template v-for=&quot;item in comArr&quot;&gt;
-            &lt;component :is=&quot;item.name&quot;&gt;&lt;&#47;component&gt;
-        &lt;&#47;template&gt;
-        &lt;button @click=&quot;changeModule&quot;&gt;reverse&lt;&#47;button&gt;
-    &lt;&#47;div&gt;
+&lt;div class=&quot;template-reverse-box&quot;&gt;
+&lt;template v-for=&quot;item in comArr&quot;&gt;
+&lt;component :is=&quot;item.name&quot;&gt;&lt;&#47;component&gt;
+&lt;&#47;template&gt;
+&lt;button @click=&quot;changeModule&quot;&gt;reverse&lt;&#47;button&gt;
+&lt;&#47;div&gt;
 &lt;&#47;template&gt;
 &lt;script setup lang=&quot;ts&quot;&gt;
 import { reactive, markRaw} from &#39;vue&#39;;
@@ -645,28 +637,28 @@ import Module03 from &#39;.&#47;Module03.vue&#39;
 import Module04 from &#39;.&#47;Module04.vue&#39;
 
 type Item = {
-    name: any
+name: any
 }
 let comArr = reactive&lt;Item[]&gt;([
-    {
-        name: markRaw(Module01)
-    },
-    {
-        name: markRaw(Module02)
-    },
-    {
-        name: markRaw(Module03)
-    },
-    {
-        name: markRaw(Module04)
-    },
+{
+name: markRaw(Module01)
+},
+{
+name: markRaw(Module02)
+},
+{
+name: markRaw(Module03)
+},
+{
+name: markRaw(Module04)
+},
 ])
 const changeModule = () =&gt; {
-    comArr.reverse()
+comArr.reverse()
 }
 &lt;&#47;script&gt;</p>2022-12-08</li><br/><li><span>直须</span> 👍（2） 💬（4）<p>怎么在.vue文件中引入jsx组件呢</p>2023-02-09</li><br/><li><span>ZR-rd</span> 👍（2） 💬（4）<p>JSX 不能配置 scoped 避免 CSS 样式干扰，那么 JSX 应该如何做才能避免样式干扰呢</p>2022-12-02</li><br/><li><span>飞雪👻</span> 👍（0） 💬（2）<p>想请教一下, 我不太明白在用JSX写转换顺序, render函数中-------转换顺序: {`${isReverse}`}------ 为什么不直接写作{ isReverse } , 而是用模板字符串包裹呢 ?</p>2022-12-02</li><br/><li><span>都市夜归人</span> 👍（2） 💬（1）<p>用模板方法一样能通过调整数组的顺序去实现，而不是用v-if。这是为了使用JSX而这样做的吧，个人觉得例子举的不是很恰当。</p>2022-11-30</li><br/><li><span>请叫我潜水员</span> 👍（1） 💬（3）<p>dialog那个例子用模板是一样的效果，Dialog组件从dialog.vue中引入，然后创建一个相同的createDialog，使用效果一模一样。因为我就是这么用的</p>2022-11-29</li><br/><li><span>hao-kuai</span> 👍（0） 💬（0）<p>jsx的自由度+vue3度性能那不是要起飞了</p>2025-01-07</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>组件内递归调用，没有结束条件的话会卡死吧?</p>2024-08-31</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-08-31</li><br/><li><span>xhsndl</span> 👍（0） 💬（0）<p>1. 模板语法实现组件递归（借鉴了前辈的想法）
 &lt;template v-for=&quot;item in array&quot; :key=&quot;item&quot;&gt;
-    &lt;component :is=&quot;item&quot;&#47;&gt;
+&lt;component :is=&quot;item&quot;&#47;&gt;
 &lt;&#47;template&gt;
 &lt;script&gt;
 import A1 from &quot;.&#47;A1.vue&quot;
@@ -675,24 +667,24 @@ import A3 from &quot;.&#47;A3.vue&quot;
 import {reactive,markRaw} from &quot;vue&quot;
 
 let array = reactive([
-    markRaw(A1),
-    markRaw(A2),
-    markRaw(A3),
+markRaw(A1),
+markRaw(A2),
+markRaw(A3),
 ])
 &lt;&#47;script&gt;
 
 2. JSX实现模板组件递归
-想法是将组件构造函数引入，结合数组对象来进行实现
-&#47;&#47; 预先用jsx语法实现了A组件,假设用text接收参数、onOk接收点击事件的回调函数
-&#47;&#47; 创建组件后返回onClose方法
-&lt;script&gt;
-import {createA} from &quot;.&#47;A.jsx&quot;
+   想法是将组件构造函数引入，结合数组对象来进行实现
+   &#47;&#47; 预先用jsx语法实现了A组件,假设用text接收参数、onOk接收点击事件的回调函数
+   &#47;&#47; 创建组件后返回onClose方法
+   &lt;script&gt;
+   import {createA} from &quot;.&#47;A.jsx&quot;
 
 let A1 = createA({
-  text:&#39;123456&#39;,
-  onOk:() =&gt; {
-      A1.onClose()  
-  }  
+text:&#39;123456&#39;,
+onOk:() =&gt; {
+A1.onClose()  
+}  
 })
 &lt;&#47;script&gt;
 
@@ -703,11 +695,11 @@ import {createA} from &quot;.&#47;A.jsx&quot;
 import {reactive} from &quot;vue&quot;
 
 let array = reactive([&#39;123&#39;,&#39;456&#39;,&#39;789&#39;])
-array.forEach(item =&gt; 
-    let temp = createA(
-        text:item,
-        onOk:() =&gt; temp.onClose()
-    )
+array.forEach(item =&gt;
+let temp = createA(
+text:item,
+onOk:() =&gt; temp.onClose()
+)
 )
 &lt;&#47;script&gt;</p>2024-01-19</li><br/><li><span>Spike Jim.Fun</span> 👍（0） 💬（0）<p>jsx的css模块化可以使用postcss-modules实现</p>2023-12-09</li><br/><li><span>中欧校友</span> 👍（0） 💬（0）<p>模板语法递归在组件内用name名再次引用，JSX在组件函数内直接使用函数名调用实现梯柜</p>2023-07-30</li><br/>
 </ul>

@@ -88,7 +88,7 @@ perl mysqldumpslow.pl -s t -t 2 "C:\ProgramData\MySQL\MySQL Server 8.0\Data\DESK
 定位了查询慢的SQL之后，我们就可以使用EXPLAIN工具做针对性的分析，比如我们想要了解product\_comment和user表进行联查的时候所采用的的执行计划，可以使用下面这条语句：
 
 ```
-EXPLAIN SELECT comment_id, product_id, comment_text, product_comment.user_id, user_name FROM product_comment JOIN user on product_comment.user_id = user.user_id 
+EXPLAIN SELECT comment_id, product_id, comment_text, product_comment.user_id, user_name FROM product_comment JOIN user on product_comment.user_id = user.user_id
 ```
 
 ![](https://static001.geekbang.org/resource/image/ab/13/ab63d280a507eeb327bf154a0e87bf13.png?wh=1729%2A96)  
@@ -104,7 +104,7 @@ SQL执行的顺序是根据id从大到小执行的，也就是id越大越先执�
 比如我们对product\_comment数据表进行查询，设计了联合索引`composite_index (user_id, comment_text)`，然后对数据表中的`comment_id`、`comment_text`、`user_id`这三个字段进行查询，最后用EXPLAIN看下执行计划：
 
 ```
-EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment 
+EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment
 ```
 
 ![](https://static001.geekbang.org/resource/image/07/8f/07a47b0146b0e881381f78812914568f.png?wh=1730%2A77)  
@@ -124,7 +124,7 @@ EXPLAIN SELECT comment_id, product_id, comment_text, user_id FROM product_commen
 ref类型表示采用了非唯一索引，或者是唯一索引的非唯一性前缀。比如我们想要对`user_id=500000`的评论进行查询，使用EXPLAIN查看执行计划：
 
 ```
-EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment WHERE user_id = 500000 
+EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment WHERE user_id = 500000
 ```
 
 ![](https://static001.geekbang.org/resource/image/0a/b6/0a98105a776ce82bf6503fcad2ebe2b6.png?wh=1729%2A82)  
@@ -133,14 +133,14 @@ EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment WHERE user
 eq\_ref类型是使用主键或唯一索引时产生的访问方式，通常使用在多表联查中。假设我们对`product_comment`表和user表进行联查，关联条件是两张表的user\_id相等，使用EXPLAIN进行执行计划查看：
 
 ```
-EXPLAIN SELECT * FROM product_comment JOIN user WHERE product_comment.user_id = user.user_id 
+EXPLAIN SELECT * FROM product_comment JOIN user WHERE product_comment.user_id = user.user_id
 ```
 
 ![](https://static001.geekbang.org/resource/image/59/33/59a1c808e79e2462fa6ffe5d7623d433.png?wh=1730%2A106)  
 const类型表示我们使用了主键或者唯一索引（所有的部分）与常量值进行比较，比如我们想要查看`comment_id=500000`，查看执行计划：
 
 ```
-EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment WHERE comment_id = 500000 
+EXPLAIN SELECT comment_id, comment_text, user_id FROM product_comment WHERE comment_id = 500000
 ```
 
 ![](https://static001.geekbang.org/resource/image/6c/34/6c95ac56a800f1a89e3fb461418a4334.png?wh=1730%2A77)  
@@ -210,10 +210,10 @@ mysql > show profile;
 2. eq_ref - 双层循环，借助索引的唯一性，找到匹配就马上退出内层循环。
 3. const: 单层循环。
 
-按照循环次数递减的顺序排列它们，应该是 ref &gt; eq_ref &gt; const，循环次数越少，查询效率越高。</p>2019-08-26</li><br/><li><span>土土人</span> 👍（8） 💬（1）<p>oracle是否有对应工呢？</p>2019-08-26</li><br/><li><span>LJK</span> 👍（5） 💬（1）<p>SHOW PROFILE还会再有细致一点的说明么？一般看到都是sending data这个时间最长，不知道包含了哪些具体操作在里面？</p>2019-08-27</li><br/><li><span>leslie</span> 👍（30） 💬（2）<p>      explain看的东西不止这点吧：老师是不是针对错了DB，至少现实生产这点东西的定位完全不够；老师在生产中不看表的状态就做explain么？如果表的DML过高的话，explain的操作完全没有价值。
-     如果一张表的自增跑到了100万，数据量只有10万；说明这张表可能已经损坏了，第一步就是修复表而不是一开始做explain。就像我们拿到一台设备不是先去测功能，首先应当坚持设备是否完全OK再去测试，数据库不可能拿到的是一张全新的表；首先应当是表的性能评估，然后再说相关的检查吧。
-       个人觉得今天的讲解的时候漏了真正的第一步：设备没坚持就开始检查设备性能了。
-    </p>2019-08-27</li><br/><li><span>许童童</span> 👍（6） 💬（0）<p>你可以讲一下 ref、eq_ref 和 const 这三种类型的区别吗？查询效率有何不同？
+按照循环次数递减的顺序排列它们，应该是 ref &gt; eq_ref &gt; const，循环次数越少，查询效率越高。</p>2019-08-26</li><br/><li><span>土土人</span> 👍（8） 💬（1）<p>oracle是否有对应工呢？</p>2019-08-26</li><br/><li><span>LJK</span> 👍（5） 💬（1）<p>SHOW PROFILE还会再有细致一点的说明么？一般看到都是sending data这个时间最长，不知道包含了哪些具体操作在里面？</p>2019-08-27</li><br/><li><span>leslie</span> 👍（30） 💬（2）<p> explain看的东西不止这点吧：老师是不是针对错了DB，至少现实生产这点东西的定位完全不够；老师在生产中不看表的状态就做explain么？如果表的DML过高的话，explain的操作完全没有价值。
+如果一张表的自增跑到了100万，数据量只有10万；说明这张表可能已经损坏了，第一步就是修复表而不是一开始做explain。就像我们拿到一台设备不是先去测功能，首先应当坚持设备是否完全OK再去测试，数据库不可能拿到的是一张全新的表；首先应当是表的性能评估，然后再说相关的检查吧。
+个人觉得今天的讲解的时候漏了真正的第一步：设备没坚持就开始检查设备性能了。
+</p>2019-08-27</li><br/><li><span>许童童</span> 👍（6） 💬（0）<p>你可以讲一下 ref、eq_ref 和 const 这三种类型的区别吗？查询效率有何不同？
 ref 是使用了非唯一索引
 eq_ref 是使用了主键或唯一索引，一般在两表连接查询中索引
 const 是使用了主键或唯一索引 与常量值进行比较

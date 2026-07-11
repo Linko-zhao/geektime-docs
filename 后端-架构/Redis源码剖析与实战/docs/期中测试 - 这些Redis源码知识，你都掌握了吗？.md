@@ -22,7 +22,7 @@
 Redis源码中实现的哈希表在rehash时，会调用dictRehash函数。dictRehash函数的原型如下，它的参数n表示本次rehash要搬移n个哈希桶（bucket）中的数据。假设dictRehash被调用，并且n的传入值为10。但是，在dictRehash查找的10个bucket中，前5个bucket有数据，而后5个bucket没有数据，那么，本次调用dictRehash是否就只搬移了前5个bucket中的数据？
 
 ```
-int dictRehash(dict *d, int n) 
+int dictRehash(dict *d, int n)
 ```
 
 **第二题**
@@ -34,8 +34,8 @@ Redis的事件驱动框架是基于操作系统IO多路复用机制进行了封�
 <li><span>曾轼麟</span> 👍（6） 💬（0）<p>问题一：
 	应该是只搬运了前5个bucket数据，在函数中会初始化empty_visits为10倍的n，在每次调用改函数的时候最多会遍历10*n个空元素，并且每次只是递减empty_visits，最终当empty_visits为0的时候，方法会直接返回1，结束本次rehash并等待下一次继续，代码如下(返回1代表下次还需要rehash,返回0代表已经完成rehash)：
 
-	int empty_visits = n*10; &#47;* Max number of empty buckets to visit. *&#47;
-	while(d-&gt;ht[0].table[d-&gt;rehashidx] == NULL) {
+    int empty_visits = n*10; &#47;* Max number of empty buckets to visit. *&#47;
+    while(d-&gt;ht[0].table[d-&gt;rehashidx] == NULL) {
         d-&gt;rehashidx++;
         if (--empty_visits == 0) return 1;
     }
@@ -49,20 +49,19 @@ Redis的事件驱动框架是基于操作系统IO多路复用机制进行了封�
     de = nextde;
     }
 
-
-
 问题二：
 以epoll为例子
-	1、epoll_create
-		对应的调用函数有aeApiCreate，主要是创建epoll的数组最终整体赋值给aeEventLoop中的apidata，在Redis中所有的IO多路复用是封装成了aeApiState的结构体进行调用的。以epoll为例子，在aeApiState中epfd就是epoll的文件描述符数组。
+1、epoll_create
+对应的调用函数有aeApiCreate，主要是创建epoll的数组最终整体赋值给aeEventLoop中的apidata，在Redis中所有的IO多路复用是封装成了aeApiState的结构体进行调用的。以epoll为例子，在aeApiState中epfd就是epoll的文件描述符数组。
 
-	2、epoll_ctl
-		对应的函数有aeApiAddEvent和aeApiDelEvent，其中aeApiAddEvent主要是将已经创建的socket文件描述符，通过调用epoll_ctl方法交给epoll进行管理。而aeApiDelEvent就是移除或者修改对目标socket的管理。
+    2、epoll_ctl
+    	对应的函数有aeApiAddEvent和aeApiDelEvent，其中aeApiAddEvent主要是将已经创建的socket文件描述符，通过调用epoll_ctl方法交给epoll进行管理。而aeApiDelEvent就是移除或者修改对目标socket的管理。
 
-	3、epoll_wait
-		对应的函数有aeApiPoll，调用epoll_wait后会返回当前已经触发事件(产生了读，写的socket)，并将对应的socket文件描述符指针和读写类型掩码mask，记录在fired数组上等待后续IO线程的处理。
+    3、epoll_wait
+    	对应的函数有aeApiPoll，调用epoll_wait后会返回当前已经触发事件(产生了读，写的socket)，并将对应的socket文件描述符指针和读写类型掩码mask，记录在fired数组上等待后续IO线程的处理。
 
-	整体来说Redis就是通过封装实现了多个aeApixxx方法，从而抽象了各种IO多路复用的方法，并且能按照操作系统类型选择对应的IO多路复用的方式（在宏定义中修改头文件的方式）。
+    整体来说Redis就是通过封装实现了多个aeApixxx方法，从而抽象了各种IO多路复用的方法，并且能按照操作系统类型选择对应的IO多路复用的方式（在宏定义中修改头文件的方式）。
+
 </p>2021-09-14</li><br/><li><span>Milittle</span> 👍（2） 💬（0）<p>1. 第一个问题：empty_visits=n*10，空的都跳过，然后打满n个bucket以后，就停止本次rehash，不管empty_visits满不满无所谓。
 2. 从上层到底层：
 ae.c:aeCreateEventLoop-&gt;ae_epoll.c:aeApiCreate-&gt;epoll_create

@@ -310,7 +310,8 @@ df = pd.read_csv(&#39;data&#47;toutiao_cat&#47;toutiao_cat_data.txt&#39;, engine
 
        accuracy                               0.76       200
     macro avg       0.92      0.42      0.51       200
-weighted avg       0.81      0.76      0.71       200
+
+weighted avg 0.81 0.76 0.71 200
 
 极端随机森林模型 ExtraTreesClassifier() 下跑的结果
 
@@ -324,7 +325,8 @@ weighted avg       0.81      0.76      0.71       200
 
       accuracy                                0.75       200
     macro avg       0.95      0.40      0.49       200
-weighted avg       0.82      0.75      0.69       200
+
+weighted avg 0.82 0.75 0.69 200
 </p>2023-03-31</li><br/><li><span>Geek_513b7c</span> 👍（4） 💬（2）<p>老师，你能解释一下在ai中向量是什么意思吗？这几节看的云里雾里的</p>2023-03-28</li><br/><li><span>四月.  🕊</span> 👍（2） 💬（1）<p>请问一下老师，既然已经按照batch_size划分出来了prompt_batches，为什么在get_embeddings_with_backoff函数中还要划分一次batch呢？是不是重复了？</p>2023-04-05</li><br/><li><span>王平</span> 👍（2） 💬（1）<p>老师请问如果把时序数据，比如用户行为序列作为输入给openAI 的 embedding, 根据行为判断用户情感的效果会好吗？</p>2023-04-03</li><br/><li><span>高捷</span> 👍（1） 💬（1）<p>老师您好，想知道大概多久需要去同步一次embedding模型，大模型自己怎么更新迭代呢？</p>2023-05-13</li><br/><li><span>楚翔style</span> 👍（1） 💬（1）<p>花费多少token怎么算呢 
 一个问题一个token吗</p>2023-05-08</li><br/><li><span>R9Go</span> 👍（1） 💬（1）<p>https:&#47;&#47;github.com&#47;xuwenhao&#47;geektime-ai-course&#47;blob&#47;main&#47;data&#47;20_newsgroup_with_embedding.parquet
 这个数据是不是不全？</p>2023-05-02</li><br/><li><span>Geek_512735</span> 👍（1） 💬（1）<p>老师，请利用ChatGPT embedding的优势在什么地方？</p>2023-04-17</li><br/><li><span>Bank</span> 👍（1） 💬（1）<p>在读数据的时候报了这个错，请问如何解决呢？内存应该是足够的
@@ -339,12 +341,12 @@ Cell In[6], line 6
 
 。。。。。。
 -&gt; 2517 table = self._dataset.to_table(
-   2518     columns=columns, filter=self._filter_expression,
-   2519     use_threads=use_threads
-   2520 )
-   2522 # if use_pandas_metadata, restore the pandas metadata (which gets
-   2523 # lost if doing a specific `columns` selection in to_table)
-   2524 if use_pandas_metadata:
+2518 columns=columns, filter=self._filter_expression,
+2519 use_threads=use_threads
+2520 )
+2522 # if use_pandas_metadata, restore the pandas metadata (which gets
+2523 # lost if doing a specific `columns` selection in to_table)
+2524 if use_pandas_metadata:
 
 File D:\anaconda3\lib\site-packages\pyarrow\_dataset.pyx:332, in pyarrow._dataset.Dataset.to_table()
 

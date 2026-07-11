@@ -58,7 +58,7 @@ public class AdminUserService {
     public final User adminUser = new User("fujian");
     public User getAdminUser(){
         return adminUser;
-    }    
+    }
     public void login(){
         //
     }

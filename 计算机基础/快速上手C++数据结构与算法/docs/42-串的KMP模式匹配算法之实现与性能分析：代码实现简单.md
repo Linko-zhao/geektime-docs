@@ -15,36 +15,36 @@ void getNextArray( int next[])
 	//next数组下标为0和为1的元素值固定为0和1。其实next[0]里的值并没有用到
 	if (length < 1)
 		return;
-	
+
 	//next数组的前两个元素肯定是0和1
 	if (length == 1) //只有一个字符
 	{
 		next[0] = 0;
 		return;
 	}
-		
+
 	next[0] = 0;
 	next[1] = 1;
 	if (length == 2) //只有二个字符
 	{
 		return;
 	}
-		
+
 	//至少三个字符
 	int nextarry_idx = 2; //当前要处理的next数组下标
 	int max_pub_zhui = 0; //max_pub_zhui：最大公共前后缀包含的字符数量
-	
+
 	//循环的目的是给next数组赋值
 	while (nextarry_idx < length) 
 	{
 		int left_RMC_count = nextarry_idx; //left_RMC_count：如果当前字符与主串的字符不匹配，当前字符左侧有多少个字符
 		int max_pub_zhui = left_RMC_count - 1; //max_pub_zhui：最大公共前后缀包含的字符数量
-		
+
 		int start1idx = 0;
 		int start2idx = left_RMC_count - max_pub_zhui;
-		
+
 		int xhtimes = max_pub_zhui; //循环次数
-		
+
 		//本循环的目的是获取最长公共前后缀长度，代码写法无固定方式，选择自己容易理解的方式写即可
 		while (xhtimes > 0)
 		{
@@ -68,18 +68,18 @@ void getNextArray( int next[])
 	} //end while
 	return;
 }
-	
+
 //KMP模式匹配算法接口，返回子串中第一个字符在主串中的下标，如果没找到子串，则返回-1
 //next：下一步数组（前缀表/前缀数组）
 //pos：从主串的什么位置开始匹配子串，默认从位置0开始匹配子串
 int StrKMPIndex(const MySString& substr, int next[], int pos = 0)
 {
 	if (length < substr.length) //主串还没子串长，那不可能找到
-		return -1;		
-	
+		return -1;
+
 	int point1 = pos; //指向主串
 	int point2 = 0;  //指向子串
-	
+
 	while (ch[point1] != '\0' && substr.ch[point2] != '\0')
 	{
 		if (ch[point1] == substr.ch[point2])
@@ -91,7 +91,7 @@ int StrKMPIndex(const MySString& substr, int next[], int pos = 0)
 		else //两者不同
 		{
 			//point1和point2两个指针的处理
-			
+
 			if (point2 == 0) //下标0号位置子串的字符如果与主串字符不匹配则后续就要用子串的第1个字符（字符a）与主串下一位（1号下标位）字符做比较 
 			{
 				point1++; //主串指针指向下一位
@@ -103,7 +103,7 @@ int StrKMPIndex(const MySString& substr, int next[], int pos = 0)
 			}
 		}
 	}//end while
-	
+
 	if (substr.ch[point2] == '\0')
 	{
 		//找到了子串
@@ -122,7 +122,7 @@ mys13sub.StrAssign("ababaaababaa");
 int* mynextarray = new int[mys13sub.length];
 mys13sub.getNextArray(mynextarray); //获取next数组
 MySString mys13master; //主串
-mys13master.StrAssign("abbabbababaaababaaa");	
+mys13master.StrAssign("abbabbababaaababaaa");
 cout <<"StrKMPIndex()结果为"<< mys13master.StrKMPIndex(mys13sub, mynextarray) << endl;
 delete[]mynextarray; //释放资源
 ```
@@ -215,37 +215,37 @@ void getNextArray_Classic(int next[])
 {
 	if (length < 1)
 		return;
-	
+
 	//next数组的前两个元素肯定是0和1
 	if (length == 1) //只有一个字符
 	{
 		next[0] = 0;
 		return;
 	}
-		
+
 	next[0] = 0;
 	next[1] = 1;
 	if (length == 2) //只有二个字符
 	{
 		return;
 	}
-		
+
 	//至少三个字符
 	int next_idx = 2;    //需要求的next数组中下标为2的元素值
 	int qz_tail_idx = 0; //前缀末尾位置
-	
+
 	while (next_idx < length)
 	{
 		if (ch[qz_tail_idx] == ch[next_idx - 1])//next_idx-1代表后缀末尾位置
 		{
 			next[next_idx] = (qz_tail_idx + 1) + 1;   //qz_tail_idx+1就是前缀的宽度
-			next_idx++; 					
+			next_idx++;
 			qz_tail_idx++; //前缀末尾位置：其实这样写也OK：qz_tail_idx = next[next_idx - 1] - 1; 
 		}
 		else  
-		{	
+		{
 			qz_tail_idx = next[qz_tail_idx] - 1; //这句是最难理解的代码
-			
+
 			//qz_tail_idx允许等于0，等于0有机会下次while时再比较一次，所以下面只判断qz_tail_idx < 0 的情形
 			if (qz_tail_idx < 0)
 			{

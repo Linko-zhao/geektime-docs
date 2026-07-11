@@ -187,7 +187,7 @@ JavaScript执行流程细化图
 
 ```
 VariableEnvironment:
-     myname -> undefined, 
+     myname -> undefined,
      showName ->function : {console.log(myname)
 ```
 
@@ -228,7 +228,7 @@ JavaScript引擎开始执行“可执行代码”，按照顺序一行一行地�
 
 ```
 VariableEnvironment:
-     myname -> "极客时间", 
+     myname -> "极客时间",
      showName ->function : {console.log(myname)
 ```
 
@@ -248,7 +248,7 @@ showName();
 function showName() {
     console.log('极客时间');
 }
-showName(); 
+showName();
 ```
 
 在上面代码中，我们先定义了一个showName的函数，该函数打印出来“极客邦”；然后调用showName，并定义了一个showName函数，这个showName函数打印出来的是“极客时间”；最后接着继续调用showName。那么你能分析出来这两次调用打印出来的值是什么吗？
@@ -306,7 +306,7 @@ var showName = undefined
 function showName() {console.log(1)}
 
 执行阶段:
-showName()        &#47;&#47;输出1
+showName() &#47;&#47;输出1
 showName = function() {console.log(2)}
 
 分析：首先遇到声明的变量showName，并在变量环境中存一个showName属性，赋值为undefined; 又遇到声明的函数，也存一个showName的属性，但是发现之前有这个属性了，就将其覆盖掉，并指向堆中的声明的这个函数地址。所以在执行阶段调用showName()会输出1;执行showName = function() {console.log(2)}这句话是把堆中的另一个函数地址赋值给了showName属性，也就改变了其属性值，所以如果再调用showName()，那个会输出2. 这是不是体现了函数是对象，函数名是指针。
@@ -326,10 +326,10 @@ debugger;
 
 console.log(showName.toString())
 function showName() {
-    console.log(1)
+console.log(1)
 }
 var showName = function() {
-  console.log(2)
+console.log(2)
 }
 
 打印的是函数体，而非undefined，证明 undefined 不会覆盖函数声明！！</p>2019-08-21</li><br/><li><span>林展翔</span> 👍（29） 💬（1）<p>老师，可以请教下吗，在编译完成之后是单单生成了字节码，再到执行过程中变成对应平台的机器码？ 还是编译过程已经生成了对应平台的机器码， 执行阶段就直接去执行相应的机器码？</p>2019-08-20</li><br/><li><span>Geek_East</span> 👍（25） 💬（3）<p>lexical scope发生在编译阶段，会产生变量提升的效果；
@@ -343,11 +343,11 @@ function的声明主要有: function declaration, function expression
 更多JS请了解：
 https:&#47;&#47;geekeast.github.io&#47;jsscope.html</p>2019-11-28</li><br/><li><span>林高鸿</span> 👍（25） 💬（1）<p>老师，ES6 后不用 var，所以可否理解 Hoisting 为“权宜之计&#47;设计失误”呢？</p>2019-08-20</li><br/><li><span>YBB</span> 👍（23） 💬（4）<p>老师我想问下，一段javascript代码进入编译阶段是会对函数体内的代码也进行编译，还是只是将函数体的代码存储在堆，在执行中遇到该函数再去编译？</p>2019-08-26</li><br/><li><span>趁你还年轻233</span> 👍（13） 💬（3）<p>var showName;
 function showName() {
-    console.log(1)
+console.log(1)
 }
 showName();
 showName = function() {
-    console.log(2)
+console.log(2)
 };
 
 这样声明没有问题，可以正常输出1。
@@ -356,11 +356,11 @@ showName = function() {
 
 var showName = undefined;
 function showName() {
-    console.log(1)
+console.log(1)
 }
 showName();
 showName = function() {
-    console.log(2)
+console.log(2)
 };</p>2019-11-11</li><br/><li><span>林展翔</span> 👍（7） 💬（4）<p>x = 10 + 20;
 console.log(x);
 若对 x 未进行定义, 直接赋值, 可以输出
@@ -371,13 +371,13 @@ x = undefine
 console.log(x);
 x = 10 + 20;
 console.log(x);
-会出现报错  x is not defined
+会出现报错 x is not defined
 在这个地方 我的理解有什么问题吗 还是说 原来就没有 x = undefine 操作, 只是在 x = 10 + 20; 给 x 赋值了一下.</p>2019-08-20</li><br/><li><span>杨陆伟</span> 👍（3） 💬（3）<p>showName()
 function showName(){
-    console.log(1)
+console.log(1)
 }
 var showName=function(){
-    console.log(2)
+console.log(2)
 }
 showName()
 

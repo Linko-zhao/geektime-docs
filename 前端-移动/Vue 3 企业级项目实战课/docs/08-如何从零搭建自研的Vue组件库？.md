@@ -115,7 +115,6 @@ Less是CSS的“预处理语言”，意思是可以让CSS像写JavaScript那样
     "vue": "^3.2.39"
   }
 }
-
 ```
 
 上述代码中，我们给“基础组件库”子项目加上了“@my”这个私有前缀名称。这个是可以自定义的，你可以根据自己所在企业npm源站可使用的前缀名称进行定义，方便统一命名子项目，后续的其他子项目也可以加上同样的 “@xxx/”的前缀进行统一命名。
@@ -198,8 +197,8 @@ monorepo里有“软链接”实现子项目的npm模块依赖关系，我们就
 │   │       │   ├── index.ts        # 业务组件 - 组件索引文件
 │   │       │   └── style
 │   │       │       └── index.less  # 业务组件 - 组件样式文件
-│   │       ├── comp-001/*  
-│   │       ├── comp-002/*  
+│   │       ├── comp-001/*
+│   │       ├── comp-002/*
 │   │       ├── index.less
 │   │       └── index.ts
 │   └── components/
@@ -210,8 +209,8 @@ monorepo里有“软链接”实现子项目的npm模块依赖关系，我们就
 │           │   ├── index.ts        # 基础组件 - 组件索引文件
 │           │   └── style
 │           │       └── index.less  # 基础组件 - 组件样式文件
-│           ├── comp-001/*  
-│           ├── comp-002/*  
+│           ├── comp-001/*
+│           ├── comp-002/*
 │           ├── index.less
 │           └── index.ts
 ├── pnpm-workspace.yaml
@@ -234,52 +233,52 @@ monorepo里有“软链接”实现子项目的npm模块依赖关系，我们就
 脚本文件是 scripts/build-module.ts，具体代码如下：
 
 ```typescript
-import fs from 'node:fs';
-import { rollup } from 'rollup'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import VueMacros from 'unplugin-vue-macros/rollup'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import esbuild from 'rollup-plugin-esbuild'
-import glob from 'fast-glob'
-import type { OutputOptions } from 'rollup';
-import { resolvePackagePath } from './util';
+import fs from "node:fs";
+import { rollup } from "rollup";
+import vue from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import VueMacros from "unplugin-vue-macros/rollup";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import esbuild from "rollup-plugin-esbuild";
+import glob from "fast-glob";
+import type { OutputOptions } from "rollup";
+import { resolvePackagePath } from "./util";
 
 const getExternal = async (pkgDirName: string) => {
-  const pkgPath = resolvePackagePath(pkgDirName, 'package.json');
+  const pkgPath = resolvePackagePath(pkgDirName, "package.json");
   const manifest = require(pkgPath) as any;
-  const { dependencies = {}, peerDependencies = {}, devDependencies = {} } = manifest;
-  const deps: string[] = [...new Set([
-    ...Object.keys(dependencies), 
-    ...Object.keys(peerDependencies), 
-    ...Object.keys(devDependencies)
-  ])];
+  const {
+    dependencies = {},
+    peerDependencies = {},
+    devDependencies = {},
+  } = manifest;
+  const deps: string[] = [
+    ...new Set([
+      ...Object.keys(dependencies),
+      ...Object.keys(peerDependencies),
+      ...Object.keys(devDependencies),
+    ]),
+  ];
   return (id: string) => {
-    if (id.endsWith('.less')) {
+    if (id.endsWith(".less")) {
       return true;
     }
-    return deps.some(
-      (pkg) => id === pkg || id.startsWith(`${pkg}/`)
-    )
-  }
-}
+    return deps.some((pkg) => id === pkg || id.startsWith(`${pkg}/`));
+  };
+};
 
 const build = async (pkgDirName: string) => {
-
-  const pkgDistPath = resolvePackagePath(pkgDirName, 'dist');
+  const pkgDistPath = resolvePackagePath(pkgDirName, "dist");
   if (fs.existsSync(pkgDistPath) && fs.statSync(pkgDistPath).isDirectory()) {
-    fs.rmSync(pkgDistPath, { recursive: true })
+    fs.rmSync(pkgDistPath, { recursive: true });
   }
 
-  const input = await glob([
-    '**/*.{js,jsx,ts,tsx,vue}',
-    '!node_modules'
-  ], {
-    cwd: resolvePackagePath(pkgDirName, 'src'),
+  const input = await glob(["**/*.{js,jsx,ts,tsx,vue}", "!node_modules"], {
+    cwd: resolvePackagePath(pkgDirName, "src"),
     absolute: true,
     onlyFiles: true,
-  })
+  });
 
   const bundle = await rollup({
     input,
@@ -295,51 +294,50 @@ const build = async (pkgDirName: string) => {
         },
       }),
       nodeResolve({
-        extensions: ['.mjs', '.js', '.json', '.ts'],
+        extensions: [".mjs", ".js", ".json", ".ts"],
       }),
       commonjs(),
       esbuild({
         sourceMap: true,
-        target: 'es2015',
+        target: "es2015",
         loaders: {
-          '.vue': 'ts',
+          ".vue": "ts",
         },
       }),
     ],
     external: await getExternal(pkgDirName),
     treeshake: false,
-  })
+  });
 
   const options: OutputOptions[] = [
     // CommonJS 模块格式的编译
     {
-      format: 'cjs',
-      dir: resolvePackagePath(pkgDirName, 'dist', 'cjs'),
-      exports:'named',
+      format: "cjs",
+      dir: resolvePackagePath(pkgDirName, "dist", "cjs"),
+      exports: "named",
       preserveModules: true,
-      preserveModulesRoot: resolvePackagePath(pkgDirName, 'src'),
+      preserveModulesRoot: resolvePackagePath(pkgDirName, "src"),
       sourcemap: true,
-      entryFileNames: '[name].cjs',
+      entryFileNames: "[name].cjs",
     },
     // ES Module 模块格式的编译
     {
-      format: 'esm',
-      dir: resolvePackagePath(pkgDirName, 'dist', 'esm'),
+      format: "esm",
+      dir: resolvePackagePath(pkgDirName, "dist", "esm"),
       exports: undefined,
       preserveModules: true,
-      preserveModulesRoot: resolvePackagePath(pkgDirName, 'src'),
+      preserveModulesRoot: resolvePackagePath(pkgDirName, "src"),
       sourcemap: true,
-      entryFileNames: '[name].mjs',
-    }
-  ]
-  return Promise.all(options.map((option) => bundle.write(option)))
-}
+      entryFileNames: "[name].mjs",
+    },
+  ];
+  return Promise.all(options.map((option) => bundle.write(option)));
+};
 
-console.log('[TS] 开始编译所有子模块···')
-await build('components');
-await build('business');
-console.log('[TS] 编译所有子模块成功！')
-
+console.log("[TS] 开始编译所有子模块···");
+await build("components");
+await build("business");
+console.log("[TS] 编译所有子模块成功！");
 ```
 
 以上的编译脚本，就是基于Rollup来遍历所有Vue.js 3.x源码文件和TypeScript文件，再进行一一对应的编译。
@@ -356,16 +354,16 @@ console.log('[TS] 编译所有子模块成功！')
 │   │   ├── dist/
 │   │   │   ├── esm/
 │   │   │   │   ├── comp-000/*
-│   │   │   │   ├── comp-001/*  
-│   │   │   │   └── comp-002/*  
+│   │   │   │   ├── comp-001/*
+│   │   │   │   └── comp-002/*
 │   │   │   └── cjs/
 │   │   │       ├── comp-000/*
-│   │   │       ├── comp-001/*  
-│   │   │       └── comp-002/*  
-│   │   └── src/              
+│   │   │       ├── comp-001/*
+│   │   │       └── comp-002/*
+│   │   └── src/
 │   │       ├── comp-000/*
-│   │       ├── comp-001/*  
-│   │       └── comp-002/*  
+│   │       ├── comp-001/*
+│   │       └── comp-002/*
 │   └── ...
 └── ...
 ```
@@ -375,41 +373,48 @@ console.log('[TS] 编译所有子模块成功！')
 脚本文件是scripts/build-dts.ts，具体代码如下：
 
 ```typescript
-import process from 'node:process'
-import path from 'node:path';
-import fs from 'node:fs'
-import * as vueCompiler from 'vue/compiler-sfc'
-import glob from 'fast-glob';
-import { Project } from 'ts-morph'
-import type { CompilerOptions, SourceFile } from 'ts-morph'
-import { resolveProjectPath, resolvePackagePath } from './util';
+import process from "node:process";
+import path from "node:path";
+import fs from "node:fs";
+import * as vueCompiler from "vue/compiler-sfc";
+import glob from "fast-glob";
+import { Project } from "ts-morph";
+import type { CompilerOptions, SourceFile } from "ts-morph";
+import { resolveProjectPath, resolvePackagePath } from "./util";
 
-const tsWebBuildConfigPath = resolveProjectPath('tsconfig.web.build.json');
+const tsWebBuildConfigPath = resolveProjectPath("tsconfig.web.build.json");
 
 // 检查项目的类型是否正确
 function checkPackageType(project: Project) {
   const diagnostics = project.getPreEmitDiagnostics();
   if (diagnostics.length > 0) {
-    console.error(project.formatDiagnosticsWithColorAndContext(diagnostics))
-    const err = new Error('TypeScript类型描述文件构建失败！')
-    console.error(err)
-    throw err
+    console.error(project.formatDiagnosticsWithColorAndContext(diagnostics));
+    const err = new Error("TypeScript类型描述文件构建失败！");
+    console.error(err);
+    throw err;
   }
 }
 
 // 将*.d.ts文件复制到指定格式模块目录里
 async function copyDts(pkgDirName: string) {
-  const dtsPaths = await glob(['**/*.d.ts'], {
-    cwd: resolveProjectPath('dist', 'types', 'packages', pkgDirName, 'src'),
+  const dtsPaths = await glob(["**/*.d.ts"], {
+    cwd: resolveProjectPath("dist", "types", "packages", pkgDirName, "src"),
     absolute: false,
     onlyFiles: true,
   });
 
   dtsPaths.forEach((dts: string) => {
-    const dtsPath =  resolveProjectPath('dist', 'types', 'packages', pkgDirName, 'src', dts)
-    const cjsPath = resolvePackagePath(pkgDirName, 'dist', 'cjs', dts);
-    const esmPath = resolvePackagePath(pkgDirName, 'dist', 'esm', dts);
-    const content = fs.readFileSync(dtsPath, { encoding: 'utf8' });
+    const dtsPath = resolveProjectPath(
+      "dist",
+      "types",
+      "packages",
+      pkgDirName,
+      "src",
+      dts,
+    );
+    const cjsPath = resolvePackagePath(pkgDirName, "dist", "cjs", dts);
+    const esmPath = resolvePackagePath(pkgDirName, "dist", "esm", dts);
+    const content = fs.readFileSync(dtsPath, { encoding: "utf8" });
     fs.writeFileSync(cjsPath, content);
     fs.writeFileSync(esmPath, content);
   });
@@ -417,106 +422,106 @@ async function copyDts(pkgDirName: string) {
 
 // 添加源文件到项目里
 async function addSourceFiles(project: Project, pkgSrcDir: string) {
-  project.addSourceFileAtPath(resolveProjectPath('env.d.ts'))
+  project.addSourceFileAtPath(resolveProjectPath("env.d.ts"));
 
-  const globSourceFile = '**/*.{js?(x),ts?(x),vue}'
+  const globSourceFile = "**/*.{js?(x),ts?(x),vue}";
   const filePaths = await glob([globSourceFile], {
     cwd: pkgSrcDir,
     absolute: true,
     onlyFiles: true,
-  })
+  });
 
-  const sourceFiles: SourceFile[] = []
+  const sourceFiles: SourceFile[] = [];
   await Promise.all([
     ...filePaths.map(async (file) => {
-      if (file.endsWith('.vue')) {
-        const content = fs.readFileSync(file, { encoding: 'utf8' })
-        const hasTsNoCheck = content.includes('@ts-nocheck')
+      if (file.endsWith(".vue")) {
+        const content = fs.readFileSync(file, { encoding: "utf8" });
+        const hasTsNoCheck = content.includes("@ts-nocheck");
 
-        const sfc = vueCompiler.parse(content)
-        const { script, scriptSetup } = sfc.descriptor
+        const sfc = vueCompiler.parse(content);
+        const { script, scriptSetup } = sfc.descriptor;
         if (script || scriptSetup) {
           let content =
-            (hasTsNoCheck ? '// @ts-nocheck\n' : '') + (script?.content ?? '')
+            (hasTsNoCheck ? "// @ts-nocheck\n" : "") + (script?.content ?? "");
 
           if (scriptSetup) {
             const compiled = vueCompiler.compileScript(sfc.descriptor, {
-              id: 'temp',
-            })
-            content += compiled.content
+              id: "temp",
+            });
+            content += compiled.content;
           }
 
-          const lang = scriptSetup?.lang || script?.lang || 'js'
+          const lang = scriptSetup?.lang || script?.lang || "js";
           const sourceFile = project.createSourceFile(
             `${path.relative(process.cwd(), file)}.${lang}`,
-            content
-          )
-          sourceFiles.push(sourceFile)
+            content,
+          );
+          sourceFiles.push(sourceFile);
         }
       } else {
-        const sourceFile = project.addSourceFileAtPath(file)
-        sourceFiles.push(sourceFile)
+        const sourceFile = project.addSourceFileAtPath(file);
+        sourceFiles.push(sourceFile);
       }
     }),
-  ])
+  ]);
 
-  return sourceFiles
+  return sourceFiles;
 }
 
 // 生产Typescript类型描述文件
 async function generateTypesDefinitions(
   pkgDir: string,
   pkgSrcDir: string,
-  outDir: string
-){
+  outDir: string,
+) {
   const compilerOptions: CompilerOptions = {
     emitDeclarationOnly: true,
     outDir,
-  }
+  };
   const project = new Project({
     compilerOptions,
-    tsConfigFilePath: tsWebBuildConfigPath
-  })
+    tsConfigFilePath: tsWebBuildConfigPath,
+  });
 
-  const sourceFiles = await addSourceFiles(project, pkgSrcDir)
+  const sourceFiles = await addSourceFiles(project, pkgSrcDir);
   checkPackageType(project);
   await project.emit({
     emitOnlyDtsFiles: true,
-  })
+  });
 
   const tasks = sourceFiles.map(async (sourceFile) => {
-    const relativePath = path.relative(pkgDir, sourceFile.getFilePath())
+    const relativePath = path.relative(pkgDir, sourceFile.getFilePath());
 
-    const emitOutput = sourceFile.getEmitOutput()
-    const emitFiles = emitOutput.getOutputFiles()
+    const emitOutput = sourceFile.getEmitOutput();
+    const emitFiles = emitOutput.getOutputFiles();
     if (emitFiles.length === 0) {
-      throw new Error(`异常文件: ${relativePath}`)
+      throw new Error(`异常文件: ${relativePath}`);
     }
 
     const subTasks = emitFiles.map(async (outputFile) => {
-      const filepath = outputFile.getFilePath()
+      const filepath = outputFile.getFilePath();
       fs.mkdirSync(path.dirname(filepath), {
         recursive: true,
       });
-    })
+    });
 
-    await Promise.all(subTasks)
-  })
-  await Promise.all(tasks)
+    await Promise.all(subTasks);
+  });
+  await Promise.all(tasks);
 }
 
 async function build(pkgDirName) {
-  const outDir = resolveProjectPath('dist', 'types');
+  const outDir = resolveProjectPath("dist", "types");
   const pkgDir = resolvePackagePath(pkgDirName);
-  const pkgSrcDir = resolvePackagePath(pkgDirName, 'src');
+  const pkgSrcDir = resolvePackagePath(pkgDirName, "src");
   await generateTypesDefinitions(pkgDir, pkgSrcDir, outDir);
   await copyDts(pkgDirName);
 }
 
-console.log('[Dts] 开始编译d.ts文件···')
-await build('components');
-await build('business');
-console.log('[Dts] 编译d.ts文件成功！')
+console.log("[Dts] 开始编译d.ts文件···");
+await build("components");
+await build("business");
+console.log("[Dts] 编译d.ts文件成功！");
 ```
 
 以上代码是基于两个环节进行操作的，第一个环节是基于 vue/compiler-sfc 的Vue.js 3.x编译器，将Vue.js源码编译成 TypeScript代码，第二环节是结合原有其它TypeScript代码文件，进行TypeScript的类型文件生成。
@@ -533,13 +538,13 @@ console.log('[Dts] 编译d.ts文件成功！')
 │   │   │   │   ├── comp-000/
 │   │   │   │   │   ├── xxx.mjs
 │   │   │   │   │   └── xxx.d.ts
-│   │   │   │   └── **  
-│   │   │   └── cjs/ 
+│   │   │   │   └── **
+│   │   │   └── cjs/
 │   │   │       ├── comp-000/
 │   │   │       │   ├── xxx.cjs
 │   │   │       │   └── xxx.d.ts
-│   │   │       └── ** 
-│   │   └── src/               
+│   │   │       └── **
+│   │   └── src/
 │   │       └── **
 │   └── ...
 └── ...
@@ -552,50 +557,57 @@ console.log('[Dts] 编译d.ts文件成功！')
 脚本文件是 scripts/build-css.ts，具体代码如下：
 
 ```typescript
-import fs from 'node:fs';
-import path from 'node:path';
-import glob from 'fast-glob';
-import less from 'less';
-import { resolvePackagePath, wirteFile } from './util';
+import fs from "node:fs";
+import path from "node:path";
+import glob from "fast-glob";
+import less from "less";
+import { resolvePackagePath, wirteFile } from "./util";
 
 function compileLess(file: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const content = fs.readFileSync(file, { encoding: 'utf8' });
-    less.render(content, {
-      paths: [ path.dirname(file) ],
-      filename: file,
-      plugins: [],
-      javascriptEnabled: true
-    }).then((result) => {
-      resolve(result.css);
-    }).catch((err) => {
-      reject(err);
-    })
-  })
+    const content = fs.readFileSync(file, { encoding: "utf8" });
+    less
+      .render(content, {
+        paths: [path.dirname(file)],
+        filename: file,
+        plugins: [],
+        javascriptEnabled: true,
+      })
+      .then((result) => {
+        resolve(result.css);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 async function build(pkgDirName: string) {
-  const pkgDir = resolvePackagePath(pkgDirName, 'src');
-  const filePaths = await glob(['**/style/index.less'], {
+  const pkgDir = resolvePackagePath(pkgDirName, "src");
+  const filePaths = await glob(["**/style/index.less"], {
     cwd: pkgDir,
   });
-  const indexLessFilePath = resolvePackagePath(pkgDirName, 'src', 'index.less');
+  const indexLessFilePath = resolvePackagePath(pkgDirName, "src", "index.less");
   if (fs.existsSync(indexLessFilePath)) {
-    filePaths.push('index.less')
+    filePaths.push("index.less");
   }
-  for (let i = 0; i < filePaths.length; i ++) {
+  for (let i = 0; i < filePaths.length; i++) {
     const file = filePaths[i];
-    const absoluteFilePath = resolvePackagePath(pkgDirName, 'src', file);
+    const absoluteFilePath = resolvePackagePath(pkgDirName, "src", file);
     const cssContent = await compileLess(absoluteFilePath);
-    const cssPath = resolvePackagePath(pkgDirName, 'dist', 'css', file.replace(/.less$/, '.css'));
+    const cssPath = resolvePackagePath(
+      pkgDirName,
+      "dist",
+      "css",
+      file.replace(/.less$/, ".css"),
+    );
     wirteFile(cssPath, cssContent);
   }
-  
 }
-console.log('[CSS] 开始编译Less文件···')
-await build('components');
-await build('business');
-console.log('[CSS] 编译Less成功！')
+console.log("[CSS] 开始编译Less文件···");
+await build("components");
+await build("business");
+console.log("[CSS] 编译Less成功！");
 ```
 
 上述代码，主要是将Less文件以组件固定的目录格式一一对应编译到 dist目录里，具体编译结果如下所示：
@@ -610,14 +622,14 @@ console.log('[CSS] 编译Less成功！')
 │   │   │   │   ├── comp-000/
 │   │   │   │   │   └── style
 │   │   │   │   │         └── index.css
-│   │   │   │   └── **  
+│   │   │   │   └── **
 │   │   │   ├── esm/
 │   │   │   │   ├── comp-000/
-│   │   │   │   └── **  
-│   │   │   └── cjs/ 
+│   │   │   │   └── **
+│   │   │   └── cjs/
 │   │   │       ├── comp-000/
-│   │   │       └── ** 
-│   │   └── src/               
+│   │   │       └── **
+│   │   └── src/
 │   │       └── comp-000/
 │   │           └── style/
 │   │               └── index.less
@@ -662,33 +674,33 @@ console.log('[CSS] 编译Less成功！')
 以上配置就是可以让使用者在使用组件库的时候，可以全量使用，例如 ES Module格式使用：
 
 ```typescript
-import { Comp001, Comp002 } from '@my/components'
-import '@my/components/css/index.css'
+import { Comp001, Comp002 } from "@my/components";
+import "@my/components/css/index.css";
 ```
 
 换成 CommonJS格式使用：
 
 ```typescript
-const { Comp001, Comp002 } = require('@my/components');
-require('@my/components/css/index.css')
+const { Comp001, Comp002 } = require("@my/components");
+require("@my/components/css/index.css");
 ```
 
 也可以按需使用组件库，避免出现构建器对代码全量打包，例如 ES Module格式使用：
 
 ```typescript
-import Comp001 from '@my/components/esm/comp-001';
-import Comp002 from '@my/components/esm/comp-002';
-import '@my/components/css/comp-001/style/index.css';
-import '@my/components/css/comp-002/style/index.css'
+import Comp001 from "@my/components/esm/comp-001";
+import Comp002 from "@my/components/esm/comp-002";
+import "@my/components/css/comp-001/style/index.css";
+import "@my/components/css/comp-002/style/index.css";
 ```
 
 换成 CommonJS格式使用：
 
 ```typescript
-const Comp001 = require('@my/components/cjs/comp-001');
-const Comp002 = require('@my/components/cjs/comp-002');
-require('@my/components/css/comp-001/style/index.css');
-require('@my/components/css/comp-002/style/index.css');
+const Comp001 = require("@my/components/cjs/comp-001");
+const Comp002 = require("@my/components/cjs/comp-002");
+require("@my/components/css/comp-001/style/index.css");
+require("@my/components/css/comp-002/style/index.css");
 ```
 
 至此，我们就完成Vue.js 3.x自研组件库的开发入门了。
@@ -712,6 +724,7 @@ require('@my/components/css/comp-002/style/index.css');
 组件库的按需加载实现方式，还有其它的方案吗？欢迎在留言区参与讨论，期待你的回答，我们下一讲见。
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/08)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>ZR-rd</span> 👍（9） 💬（3）<p>提个建议：这么多文件配置完了但最后怎么用还是不太清楚。建议可以编写一个简单的组件进行示例，然后打包，发布，再在其他项目中引入使用，这样能够更清晰的了解组件库开发的整个流程</p>2022-12-16</li><br/><li><span>风太大太大</span> 👍（6） 💬（1）<p>按需加载实现方式，
 1. 文中提及的方案，手动按需加载。
@@ -726,13 +739,10 @@ import &#39;@my&#47;components&#47;css&#47;index.css&#39;
 3.我观察到loadsh关于按需加载的其他方案，例如loadsh.throttle，代码如下：import throttle from loadsh.throttle。看了一下代码，这块应该是开发者二次再上传loadsh.throttle到npm里了，所以这块也增加了维护负担，部署loadsh的时候需要二次部署
 
 坦白的说我，我心目中更友好的是方案3，需要我们上传npm包的时候上传写一段脚本，执行上传子包的地部署方案。最后代码如下，然后开发者使用的时候也是按需加载就可以了
- import Comp001  from &#39;@my&#47;components.Comp001&#39;
-
-
-
+import Comp001 from &#39;@my&#47;components.Comp001&#39;
 
 </p>2022-12-09</li><br/><li><span>海是蓝天的倒影</span> 👍（2） 💬（2）<p>`scripts&#47;build-module.ts`
-老师，源码打包编译成ES Module 和 CommonJS 模块两种代码的配置这块，可以详细讲下rollup执行过程吗？理解起来有点吃力</p>2022-12-13</li><br/><li><span>沉默的话唠</span> 👍（1） 💬（1）<p>到第二步主package.json没贴出来，确实pnpm i 后，啥都没有，直接 Already up-to-date。 
+老师，源码打包编译成ES Module 和 CommonJS 模块两种代码的配置这块，可以详细讲下rollup执行过程吗？理解起来有点吃力</p>2022-12-13</li><br/><li><span>沉默的话唠</span> 👍（1） 💬（1）<p>到第二步主package.json没贴出来，确实pnpm i 后，啥都没有，直接 Already up-to-date。
 
 去看了下源代码的package.json 都是配好了的，第二步的时候是什么也不知道是什么。
 

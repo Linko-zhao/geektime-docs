@@ -49,7 +49,7 @@
 
 - 代码的第1-12行，创建了CreateUserAPI类，其中包含了endpoint、操作方法PUT、InlineParam和Param的设置，并且构建了对应的request对象；
 - 代码的第14-19行，是测试的主体函数。这段函数的逻辑是这样的：
-  
+
   - 首先，构建CreateUserAPI的对象；
   - 然后，用CreateUserAPI对象的buildRequest方法结合输入参数构建request对象；
   - 接着，通过request对象的request()方法发起了API调用；

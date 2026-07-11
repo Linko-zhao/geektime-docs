@@ -79,7 +79,7 @@ Binlog Flush的执行过程大致如下：
 - 将队列中的线程提取出来，同时清空队列，以便后续提交事务的线程可以加入队列。
 - 持久化REDO日志。REDO日志持久化之后，即使实例发生崩溃重启，事务的Prepared状态也不会丢失。Leader线程持久化REDO日志时，其他线程的REDO日志也自动完成了持久化。
 - 依次将队列中所有线程的Binlog Cache都刷到Binlog文件中。
-  
+
   - 如果开启了GTID\_MODE，则给事务分配一个GTID。
   - 给事务分配last\_committed、sequence\_number，生成GTID事件，并将GTID事件写入到binlog文件中。注意这里GTID事件需要直接写入Binlog文件，而不是加入Binlog Cache，因为GTID事件要放在事务的其他事件之前。last\_committed值的计算方式跟参数binlog\_transaction\_dependency\_tracking的设置相关。
   - 将binlog cache中的事件写入到binlog文件中。这里只是将事件写到Binlog文件，还没有进行fsync操作。
@@ -114,10 +114,11 @@ Binlog Sync阶段的Leader线程完成相关处理后，进入到Commit阶段。
 
 - 更新max\_committed变量。下一个group进行提交的时候，会根据变量max\_committed的值来设置last\_committed值。
 - 在InnoDB存储引擎内提交事务。InnoDB引擎内部的提交需要进行一系列操作。包括：
-  
+
   - 设置事务回滚段的状态。
   - 如果开启了GTID\_MODE，在回滚段中记录事务的GTID。
   - 将事务从活动事务列表中移除。这一步完成之后，其它会话就能看到这个事务修改的数据了。
+
 - 更新gtid相关变量：gtid\_executed、gtid\_purged，更新gtid\_executed表。
 
 <!--THE END-->

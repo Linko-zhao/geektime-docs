@@ -579,6 +579,5 @@ $ make push REGISTRY_PREFIX=ccr.ccs.tencentyun.com&#47;marmotedu VERSION=v1.1.0
 
 上述命令，会构建 iam-apiserver-amd64、iam-authz-server-amd64、iam-pump-amd64、iamctl-amd64 四个镜像
 
-
 </p>2021-12-28</li><br/><li><span>Realm</span> 👍（0） 💬（1）<p>老师好！iam-apiserver使用到MySQL和cache，在k8s集群中部署以上4个应用，iam-apiserver的Pod连不上MySQL，应用拉不起来。</p>2021-09-26</li><br/>
 </ul>

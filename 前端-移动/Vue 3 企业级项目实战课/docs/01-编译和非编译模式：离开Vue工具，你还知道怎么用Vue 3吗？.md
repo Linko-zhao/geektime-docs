@@ -71,36 +71,44 @@
 上面贴出来的Vue.js 3 经过Vue.js 3官方的编译器编译结束后，核心的功能代码会编译出下面这样的结果。
 
 ```javascript
-import { 
-  toDisplayString, createElementVNode, openBlock,
-  createElementBlock, ref,
+import {
+  toDisplayString,
+  createElementVNode,
+  openBlock,
+  createElementBlock,
+  ref,
 } from "Vue.js";
 
-const _hoisted_1 = { class: "v-counter" }
-const _hoisted_2 = { class: "v-text" }
+const _hoisted_1 = { class: "v-counter" };
+const _hoisted_2 = { class: "v-text" };
 
 const __sfc__ = {
-  __name: 'App',
+  __name: "App",
   setup(__props) {
-    const num = ref(0)
+    const num = ref(0);
     const click = () => {
       num.value += 1;
-    }
+    };
     return (_ctx, _cache) => {
-      return (openBlock(), createElementBlock("div", _hoisted_1, [
-        createElementVNode(
-          "div", _hoisted_2, toDisplayString(num.value), 1),
-        createElementVNode("button", {
-          class: "v-btn",
-          onClick: click
-        }, "点击数字加1")
-      ]))
-    }
-  }
-
-}
-__sfc__.__file = "counter.Vue.js"
-export default __sfc__
+      return (
+        openBlock(),
+        createElementBlock("div", _hoisted_1, [
+          createElementVNode("div", _hoisted_2, toDisplayString(num.value), 1),
+          createElementVNode(
+            "button",
+            {
+              class: "v-btn",
+              onClick: click,
+            },
+            "点击数字加1",
+          ),
+        ])
+      );
+    };
+  },
+};
+__sfc__.__file = "counter.Vue.js";
+export default __sfc__;
 ```
 
 这个最终结果可以直接在支持ES Modules的浏览器环境运行，还可以将其再次经过 ES6+ 语法的编译，最后成为能在浏览器直接运行的ES5代码。
@@ -181,6 +189,7 @@ Vue.js 3非编译场景与Vue.js的JSX写法有什么联系吗？
 期待你的分享。如果今天的课程让你有所收获，也欢迎把文章分享给有需要的朋友，我们下节课再见！
 
 ### [完整的代码在这里](https://github.com/FE-star/vue3-course/tree/main/chapter/01)
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>Turalyon</span> 👍（10） 💬（2）<p>这个念经试的朗读听着脑瓜子疼</p>2023-05-13</li><br/><li><span>风太大太大</span> 👍（14） 💬（2）<p>Vue.js 3 非编译场景与 Vue.js 的 JSX 写法有什么联系吗？
 jsx写法是一个语法糖，最后会通过编译工具（babel）转化成 “非编译模式”的代码</p>2022-11-21</li><br/><li><span>周大大</span> 👍（13） 💬（1）<p>不论是createElementVNode、h、template、jsx都是为了生成vnode。h和createElementVNode用js写dom方式不友好，但是灵活。template和jsx用html写dom方式友好，但是templated不够灵活。jsx不仅拥有友好的书写方式，而且还可以通过{}实现动态值。</p>2022-11-23</li><br/><li><span>莫比斯</span> 👍（3） 💬（1）<p>Vue.js 3 非编译场景与 Vue.js 的 JSX 写法有什么联系吗？
@@ -190,43 +199,43 @@ jsx本质上还是需要走一段babel的编译过程，编译成vue可以识别
 这样做性能会更加快并且后续的代码好维护吗？</p>2023-03-18</li><br/><li><span>power</span> 👍（1） 💬（1）<p>Vue.js 3 非编译场景与 Vue.js 的 JSX 写法有什么联系吗？
 jsx和vue.js3非编译场景都是为了表现vNode，jsx更方便开发者理解和书写，jsx最终会被编译成非编译模式</p>2023-03-07</li><br/><li><span>前端WLOP</span> 👍（1） 💬（1）<p>示例图好好看 是用什么软件画的呀</p>2022-11-29</li><br/><li><span>Geek_b640fe</span> 👍（0） 💬（2）<p>浏览器直接运行，是指谷歌浏览器调试控制台直接运行吗</p>2022-11-23</li><br/><li><span>Geek_b640fe</span> 👍（0） 💬（2）<p>浏览器直接运行，是指比如 google浏览器的调试控制台，直接复制运行下面的?
 
-import { 
-  toDisplayString, createElementVNode, openBlock,
-  createElementBlock, ref,
+import {
+toDisplayString, createElementVNode, openBlock,
+createElementBlock, ref,
 } from &quot;Vue.js&quot;;
 
 const _hoisted_1 = { class: &quot;v-counter&quot; }
 const _hoisted_2 = { class: &quot;v-text&quot; }
 
-const __sfc__ = {
-  __name: &#39;App&#39;,
-  setup(__props) {
-    const num = ref(0)
-    const click = () =&gt; {
-      num.value += 1;
-    }
-    return (_ctx, _cache) =&gt; {
-      return (openBlock(), createElementBlock(&quot;div&quot;, _hoisted_1, [
-        createElementVNode(
-          &quot;div&quot;, _hoisted_2, toDisplayString(num.value), 1),
-        createElementVNode(&quot;button&quot;, {
-          class: &quot;v-btn&quot;,
-          onClick: click
-        }, &quot;点击数字加1&quot;)
-      ]))
-    }
-  }
+const **sfc** = {
+__name: &#39;App&#39;,
+setup(__props) {
+const num = ref(0)
+const click = () =&gt; {
+num.value += 1;
+}
+return (_ctx, _cache) =&gt; {
+return (openBlock(), createElementBlock(&quot;div&quot;, _hoisted_1, [
+createElementVNode(
+&quot;div&quot;, _hoisted_2, toDisplayString(num.value), 1),
+createElementVNode(&quot;button&quot;, {
+class: &quot;v-btn&quot;,
+onClick: click
+}, &quot;点击数字加1&quot;)
+]))
+}
+}
 
 }
-__sfc__.__file = &quot;counter.Vue.js&quot;
-export default __sfc__</p>2022-11-23</li><br/><li><span>hao-kuai</span> 👍（0） 💬（0）<p>JSX作为React的”template“语法，平衡了友好度和灵活度，最终还是会转换成基于Vnode的代码，然后经过渲染之后变成通过js的api生成的dom代码交给浏览器执行</p>2025-01-06</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-08-28</li><br/><li><span>陈彪</span> 👍（0） 💬（0）<p>Vue.js 3的非编译场景与JSX写法之间的联系在于，JSX作为一种语法糖，它允许开发者使用类似HTML的标记语法来编写Vue组件。这种写法直观且易于理解，特别是对于熟悉HTML的开发者来说。JSX最终会被Babel编译器转换成Vue.js 3的非编译模式代码，这种代码是Vue.js虚拟DOM（vNode）的表现形式，是非编译场景下的标准写法。
+**sfc**.__file = &quot;counter.Vue.js&quot;
+export default **sfc**</p>2022-11-23</li><br/><li><span>hao-kuai</span> 👍（0） 💬（0）<p>JSX作为React的”template“语法，平衡了友好度和灵活度，最终还是会转换成基于Vnode的代码，然后经过渲染之后变成通过js的api生成的dom代码交给浏览器执行</p>2025-01-06</li><br/><li><span>ifelse</span> 👍（0） 💬（0）<p>学习打卡</p>2024-08-28</li><br/><li><span>陈彪</span> 👍（0） 💬（0）<p>Vue.js 3的非编译场景与JSX写法之间的联系在于，JSX作为一种语法糖，它允许开发者使用类似HTML的标记语法来编写Vue组件。这种写法直观且易于理解，特别是对于熟悉HTML的开发者来说。JSX最终会被Babel编译器转换成Vue.js 3的非编译模式代码，这种代码是Vue.js虚拟DOM（vNode）的表现形式，是非编译场景下的标准写法。
 
 在非编译场景下，Vue.js 3使用&lt;template&gt;标签来编写模板代码，这些模板代码会被编译成JavaScript中的vNode对象。而使用JSX时，开发者可以直接编写出这些vNode的结构，从而在源代码中更清晰地看到最终渲染的HTML结构，这样做有以下好处：
 ● 代码可读性：JSX的标记语法让代码更接近最终渲染的结果，提高了代码的可读性。
 ● 开发体验：JSX可以提供更好的开发体验，例如在IDE中提供更好的自动完成和错误检查功能。
 ● 递归组件：在处理递归组件时，JSX可以更容易地表达递归的模板结构。</p>2024-03-01</li><br/><li><span>Michaels Geek</span> 👍（0） 💬（1）<p>杨大大，非编译模式demo(demo-counter-with-h.html), Counter的setup为什么要return两次才能正常渲染呢？
 
-```
+````
 const Counter = {
                 setup() {
                     const num = ref(0)
@@ -250,6 +259,7 @@ const Counter = {
                     }
                 }
             }
-```</p>2023-04-08</li><br/><li><span>🇴</span> 👍（0） 💬（0）<p>git仓库挂了</p>2023-01-15</li><br/><li><span>鐘</span> 👍（0） 💬（1）<p>請問後續會介紹低代碼嗎? 
+```</p>2023-04-08</li><br/><li><span>🇴</span> 👍（0） 💬（0）<p>git仓库挂了</p>2023-01-15</li><br/><li><span>鐘</span> 👍（0） 💬（1）<p>請問後續會介紹低代碼嗎?
 猜測低代碼平台是編譯模式(開發低代碼平台本身)和非編譯(資料庫資料轉換成組件)混用</p>2022-12-01</li><br/>
 </ul>
+````

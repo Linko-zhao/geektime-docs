@@ -42,7 +42,7 @@ tracefs虚拟文件系统下的文件操作，其实和我们常用的Linux proc
 # pwd
 /sys/kernel/debug/tracing
 # cat trace
- 
+
 # tracer: nop
 #
 # entries-in-buffer/entries-written: 0/0   #P:12
@@ -142,7 +142,7 @@ function
 # umount /tmp/fs
 # mount -t tmpfs tmpfs /tmp/fs
 # cat trace
- 
+
 # tracer: function
 #
 # entries-in-buffer/entries-written: 3/3   #P:12

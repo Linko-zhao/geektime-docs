@@ -127,9 +127,10 @@ Java核心类库中同样存在类似代码，例如Java 9中引入的Flow API�
 
 我来讲讲吧:
 首先理解scope:
+
 1. Singleton(单例) 在整个应用中,只创建bean的一个实例
 2. Propotype(原型) 每次注入或者通过Spring应用上下文获取的时候,都会创建一个新
-的bean实例。
+   的bean实例。
 3. Session(会话) 在Web应用中,为每个会话创建一个bean实例。
 4. Request(请求) 在Web应用中,为每个请求创建一个bean实例。
 

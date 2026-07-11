@@ -70,7 +70,7 @@ cur.execute('insert into heros values(?, ?, ?, ?, ?)', (10000, '夏侯惇', 7350
 需要注意的是，一条一条插入数据太麻烦，我们也可以批量插入，这里会使用到executemany方法，这时我们传入的参数就是一个元组，比如：
 
 ```
-cur.executemany('insert into heros values(?, ?, ?, ?, ?)', 
+cur.executemany('insert into heros values(?, ?, ?, ?, ?)',
            ((10000, '夏侯惇', 7350, 1746, '坦克'),
             (10001, '钟无艳', 7000, 1760, '战士'),
           (10002, '张飞', 8341, 100, '坦克'),
@@ -116,7 +116,7 @@ cur = conn.cursor()
 # 创建数据表
 cur.execute("CREATE TABLE IF NOT EXISTS heros (id int primary key, name text, hp_max real, mp_max real, role_main text)")
 # 插入英雄数据
-cur.executemany('insert into heros values(?, ?, ?, ?, ?)', 
+cur.executemany('insert into heros values(?, ?, ?, ?, ?)',
            ((10000, '夏侯惇', 7350, 1746, '坦克'),
             (10001, '钟无艳', 7000, 1760, '战士'),
           (10002, '张飞', 8341, 100, '坦克'),
@@ -125,7 +125,7 @@ cur.executemany('insert into heros values(?, ?, ?, ?, ?)',
 cur.execute("SELECT id, name, hp_max, mp_max, role_main FROM heros")
 result = cur.fetchall()
 print(result)
-# 提交事务 
+# 提交事务
 conn.commit()
 # 关闭游标
 cur.close()
@@ -194,7 +194,7 @@ SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'Chat\_%' esca
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>我</span> 👍（25） 💬（1）<p>年底可以导出聊天记录做个词云</p>2019-09-04</li><br/><li><span>Demon.Lee</span> 👍（12） 💬（1）<p>😄，微信聊天记录，涨姿势了</p>2019-09-04</li><br/><li><span>博弈</span> 👍（2） 💬（1）<p>涨姿势了，可以导出微信聊天记录了</p>2020-03-26</li><br/><li><span>Tesla</span> 👍（1） 💬（1）<p>这个聊天记录文件应该是不可编辑和替换的吧？</p>2019-09-22</li><br/><li><span>许童童</span> 👍（1） 💬（1）<p>学习了，老师。</p>2019-09-05</li><br/><li><span>小虾米</span> 👍（10） 💬（1）<p>现在已经不行了吧？
 
-在Wechat文件下的MicroMsg.db 已经不能用navicat或者sqlite导入了，需要密码了，而且不是微信密码。。</p>2020-11-09</li><br/><li><span>四喜</span> 👍（5） 💬（0）<p>微信居然没有对数据库进行加密吗？为什么呢</p>2020-03-02</li><br/><li><span>学习</span> 👍（4） 💬（2）<p>Navicat如何导入那个wenxin.db呢，有点不太明白，可以说个步骤吗？</p>2019-09-04</li><br/><li><span>和白白</span> 👍（3） 💬（0）<p>我测试的结果是，备份文件在 messsage_1.sqlite 文件中，可以将 原先的查询SQL 替换成 SELECT * FROM Files WHERE relativePath LIKE &#39;%message\__.sqlite&#39; ESCAPE &#39;\&#39;;  
+在Wechat文件下的MicroMsg.db 已经不能用navicat或者sqlite导入了，需要密码了，而且不是微信密码。。</p>2020-11-09</li><br/><li><span>四喜</span> 👍（5） 💬（0）<p>微信居然没有对数据库进行加密吗？为什么呢</p>2020-03-02</li><br/><li><span>学习</span> 👍（4） 💬（2）<p>Navicat如何导入那个wenxin.db呢，有点不太明白，可以说个步骤吗？</p>2019-09-04</li><br/><li><span>和白白</span> 👍（3） 💬（0）<p>我测试的结果是，备份文件在 messsage_1.sqlite 文件中，可以将 原先的查询SQL 替换成 SELECT * FROM Files WHERE relativePath LIKE &#39;%message\__.sqlite&#39; ESCAPE &#39;\&#39;;
 </p>2020-12-22</li><br/><li><span>RRR</span> 👍（2） 💬（0）<p>Chrome 的密码管理也是使用的 SQLite</p>2020-06-15</li><br/><li><span>victor666</span> 👍（2） 💬（0）<p>安卓开发默认的存储就是sqlite</p>2020-03-22</li><br/><li><span>ballgod</span> 👍（2） 💬（1）<p>电脑端只找到了Msg.db的文件，无法导入到navicat中，并且使用notepad打开是乱码，请教老师如何解决，谢谢</p>2019-12-29</li><br/><li><span>Hanqiu_Tan</span> 👍（2） 💬（0）<p>Use &quot;.open FILENAME&quot; to reopen on a persistent database.
 sqlite&gt; .open Manifest.db
 sqlite&gt; .tables

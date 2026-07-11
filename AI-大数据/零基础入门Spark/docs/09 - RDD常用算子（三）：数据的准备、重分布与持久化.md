@@ -293,8 +293,8 @@ res3: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 24, 25, 
 scala&gt; unionRDD.toDebugString
 res4: String =
 (16) UnionRDD[2] at union at &lt;console&gt;:27 []
- |   ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:23 []
- |   ParallelCollectionRDD[1] at parallelize at &lt;console&gt;:23 []
+| ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:23 []
+| ParallelCollectionRDD[1] at parallelize at &lt;console&gt;:23 []
 
 scala&gt; val data = Seq(rdd1, rdd2)
 scala&gt; data.foreach(println)
@@ -306,8 +306,8 @@ res6: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 24, 25, 
 scala&gt; reduceRDD.toDebugString
 res7: String =
 (16) UnionRDD[3] at union at &lt;console&gt;:25 []
- |   ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:23 []
- |   ParallelCollectionRDD[1] at parallelize at &lt;console&gt;:23 []
+| ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:23 []
+| ParallelCollectionRDD[1] at parallelize at &lt;console&gt;:23 []
 
 scala&gt; val addRDD = rdd1 ++ rdd2
 scala&gt; addRDD.collect
@@ -315,8 +315,9 @@ res15: Array[Int] = Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 21, 22, 23, 24, 25,
 scala&gt; addRDD.toDebugString
 res16: String =
 (16) UnionRDD[7] at $plus$plus at &lt;console&gt;:27 []
- |   ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:23 []
- |   ParallelCollectionRDD[1] at parallelize at &lt;console&gt;:23 []
+| ParallelCollectionRDD[0] at parallelize at &lt;console&gt;:23 []
+| ParallelCollectionRDD[1] at parallelize at &lt;console&gt;:23 []
+
 ```
 # coalesce 潜在隐患
 repartition和coalesce相比较，repartition由于引入了shuffle机制，对数据进行打散，混洗，重新平均分配，所以repartition操作较重，但是数据分配均匀。而coalesce只是粗力度移动数据，没有平均分配的过程，会导致数据分布不均匀，在计算时出现数据倾斜。
@@ -354,3 +355,4 @@ repartition也是通过colesce实现的，只不过repartition默认是要shuffl
 
 就是我从数据库里面读取的数据之后，dataframe 经过一系列处理，再输出之前，count 了一把，发现过滤得只有很少的数据了，于是我 coalesce(1) 缩到一个分区了，然后就直接内存爆了。我当时百思不得其解，为啥只有很少的数据还装不到一个分区里面去，现在看起来，是不是用了 coalesce(1) 就把源头的分区也改成了 1 的缘故啊？？？</p>2024-03-11</li><br/><li><span>岁月神偷</span> 👍（0） 💬（0）<p>对于 union这个算子，如果被合并的两个RDD分区数不一致，会出现什么情况</p>2023-08-06</li><br/><li><span>北森</span> 👍（0） 💬（0）<p>老师请教下，saveAsTextFile如果全量数据都存储到磁盘文件里，不是效率处理的更慢嘛？</p>2023-07-02</li><br/><li><span>无隅</span> 👍（0） 💬（0）<p>老师说的太棒了</p>2022-09-11</li><br/>
 </ul>
+```

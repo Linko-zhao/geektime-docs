@@ -478,7 +478,7 @@ root@ubuntu:&#47;usr&#47;sbin# dig +trace +nodnssec time.geekbang.org
 为什么只显示这些信息
 
 2）
-root@ubuntu:&#47;usr&#47;sbin# whereis  dnsmasq 
+root@ubuntu:&#47;usr&#47;sbin# whereis dnsmasq
 dnsmasq: &#47;usr&#47;sbin&#47;dnsmasq &#47;usr&#47;share&#47;man&#47;man8&#47;dnsmasq.8.gz
 root@ubuntu:&#47;usr&#47;sbin# &#47;usr&#47;sbin&#47;dnsmasq start
 

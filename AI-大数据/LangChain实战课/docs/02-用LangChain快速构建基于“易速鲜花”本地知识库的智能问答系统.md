@@ -66,13 +66,13 @@ from langchain.document_loaders import TextLoader
 # 加载Documents
 base_dir = '.\OneFlower' # 文档的存放目录
 documents = []
-for file in os.listdir(base_dir): 
+for file in os.listdir(base_dir):
     # 构建完整的文件路径
     file_path = os.path.join(base_dir, file)
     if file.endswith('.pdf'):
         loader = PyPDFLoader(file_path)
         documents.extend(loader.load())
-    elif file.endswith('.docx'): 
+    elif file.endswith('.docx'):
         loader = Docx2txtLoader(file_path)
         documents.extend(loader.load())
     elif file.endswith('.txt'):
@@ -216,13 +216,13 @@ def home():
 
         # 接收用户输入作为问题
         question = request.form.get('question')        
-        
+       
         # RetrievalQA链 - 读入问题，生成答案
         result = qa_chain({"query": question})
-        
+       
         # 把大模型的回答结果返回网页进行渲染
         return render_template('index.html', result=result)
-    
+   
     return render_template('index.html')
 
 if __name__ == "__main__":
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     <div class="container">
         <div class="header">
             <h1>易速鲜花内部问答系统</h1>
-            <img src="{{ url_for('static', filename='flower.png') }}" alt="flower logo" width="200"> 
+            <img src="{{ url_for('static', filename='flower.png') }}" alt="flower logo" width="200">
         </div>
         <form method="POST">
             <label for="question">Enter your question:</label><br>
@@ -289,6 +289,7 @@ if __name__ == "__main__":
 1. LangChain官方文档对 [Document QA 系统](https://docs.langchain.com/docs/use-cases/qa-docs)设计及实现的详细说明
 2. HuggingFace官网上的[文档问答](https://huggingface.co/tasks/document-question-answering)资源
 3. 论文[开放式表格与文本问题回答](https://arxiv.org/abs/2010.10439)，Chen, W., Chang, M.-W., Schlinger, E., Wang, W., &amp; Cohen, W. W. (2021). Open Question Answering over Tables and Text. ICLR 2021.
+
 <div><strong>精选留言（15）</strong></div><ul>
 <li><span>黄佳</span> 👍（16） 💬（2）<p>各位同学，好消息，本课代码我已经根据LangChain 0.2版本进行了更新，减少了warning！请大家Clone新的Github Repo参考DocQA_v0.2.py。https:&#47;&#47;github.com&#47;huangjia2019&#47;langchain
 </p>2024-06-10</li><br/><li><span>shatu</span> 👍（20） 💬（3）<p>学习小结：

@@ -102,7 +102,7 @@ total 73088
 这个CNI配置文件的内容如下所示：
 
 ```
-$ cat /etc/cni/net.d/10-flannel.conflist 
+$ cat /etc/cni/net.d/10-flannel.conflist
 {
   "name": "cbr0",
   "plugins": [
@@ -233,13 +233,13 @@ $ ip link set cni0 up
 $ ip link add eth0 type veth peer name vethb4963f3
 
 # 启动eth0设备
-$ ip link set eth0 up 
+$ ip link set eth0 up
 
 # 将Veth Pair设备的另一端（也就是vethb4963f3设备）放到宿主机（也就是Host Namespace）里
 $ ip link set vethb4963f3 netns $HOST_NS
 
 # 通过Host Namespace，启动宿主机上的vethb4963f3设备
-$ ip netns exec $HOST_NS ip link set vethb4963f3 up 
+$ ip netns exec $HOST_NS ip link set vethb4963f3 up
 ```
 
 这样，vethb4963f3就出现在了宿主机上，而且这个Veth Pair设备的另一端，就是容器里面的eth0。
@@ -320,7 +320,7 @@ $ ip addr add 10.244.0.1/24 dev cni0
 解答：没有亲历 Kubernetes 网络标准化的这个阶段，以下内容都是基于猜测，大家见笑了。
 最开始我觉得这就是为了提供更多的便利选择，有了 CNI，那么只要符合规则，什么插件都可以用，用户的自由度更高，这是 Google 和 Kubernetes 开放性的体现。但转念一想，如果 Kubernetes 一开始就有官方的解决方案，恐怕也不会有什么不妥，感觉要理解的更深，得追溯到 Kubernetes 创建之初的外部环境和 Google 的开源策略了。Github 上最早的 Kubernetes 版本是 0.4，其中的网络部分，最开始官方的实现方式就是 GCE 执行 salt 脚本创建 bridge，其他环境的推荐的方案是 Flannel 和 OVS。
 所以我猜测：
-首先给 Kubernetes 发展的时间是不多的（Docker 已经大红大紫了，再不赶紧就一统天下了），给开发团队的时间只够专心实现编排这种最核心的功能，网络功能恰好盟友 CoreOS 的 Flannel 可以拿过来用，所以也可以认为 Flannel 就是最初 Kubernetes 的官方网络插件。Kubernetes 发展起来之后，Flannel 在有些情况下就不够用了，15 年左右社区里 Calico 和  Weave 冒了出来，基本解决了网络问题，Kubernetes 就更不需要自己花精力来做这件事了，所以推出了 CNI，来做网络插件的标准化。我觉得假如社区里网络一直没有好的解决方案的话，Kubernetes 肯定还是会亲自上阵的。
+首先给 Kubernetes 发展的时间是不多的（Docker 已经大红大紫了，再不赶紧就一统天下了），给开发团队的时间只够专心实现编排这种最核心的功能，网络功能恰好盟友 CoreOS 的 Flannel 可以拿过来用，所以也可以认为 Flannel 就是最初 Kubernetes 的官方网络插件。Kubernetes 发展起来之后，Flannel 在有些情况下就不够用了，15 年左右社区里 Calico 和 Weave 冒了出来，基本解决了网络问题，Kubernetes 就更不需要自己花精力来做这件事了，所以推出了 CNI，来做网络插件的标准化。我觉得假如社区里网络一直没有好的解决方案的话，Kubernetes 肯定还是会亲自上阵的。
 其次，Google 开源项目毕竟也不是做慈善，什么都做的面面俱到，那要消耗更多的成本，当然是越多的外部资源为我所用越好了。感觉推出核心功能，吸引开发者过来做贡献的搞法，也算是巨头们开源的一种套路吧。</p>2018-11-11</li><br/><li><span>DJH</span> 👍（7） 💬（1）<p>&quot;实际上，对于 Weave、Calico 这样的网络方案来说，它们的 DaemonSet 只需要挂载宿主机的 &#47;opt&#47;cni&#47;bin&#47;，就可以实现插件可执行文件的安装了。&quot;这个是用hostpath类型的卷实现吗？</p>2018-11-09</li><br/><li><span>燕岭听涛</span> 👍（4） 💬（3）<p>老师，您好，咨询一个问题：flannel经常出现 no ip address available in range，出现后就只能重置节点。这个是什么原因造成的，为什么pod删除后不回收ip地址？或者还有别的解决办法吗？希望能收到您的回复。</p>2018-11-23</li><br/><li><span>慕世勋</span> 👍（1） 💬（1）<p>请教下目前有相对成熟的k8s商业网络解决方案吗，用于大规模集群使用,主要避免雪崩造成大规模故障，你也知道，网络是个很敏感的课题</p>2018-11-10</li><br/><li><span>Tim Zhang</span> 👍（1） 💬（1）<p>上一章节不是说介绍flannel的hostgw模式吗？</p>2018-11-09</li><br/><li><span>萧箫萧</span> 👍（0） 💬（1）<p>可以谈一下在pod内 请求一个域名的完整流程吗？ 比如说我最近遇到一个问题，reslove.conf这些文件内容都是正常的情况下，在某个image内为什么nslookup kuberenetes.default.svc.cluster.local 解析结果正常。
 nslookup kubernetes.default 解析到外网。像这类问题如何从理论角度分析？</p>2018-11-11</li><br/><li><span>Dale</span> 👍（0） 💬（1）<p>老师啥时候讲解一下calico，对比flannel网络优缺点哈</p>2018-11-09</li><br/><li><span>单朋荣</span> 👍（48） 💬（3）<p>其实本章难点在于实现网络方案对应的CNI插件，即配置Infra容器的网络栈，并连到网桥上。整体流程是：kubelet创建Pod-&gt;创建Infra容器-&gt;调用SetUpPod（）方法，该方法需要为CNI准备参数，然后调用CNI插件（flannel)为Infra配置网络；其中参数来源于1、dockershim设置的一组CNI环境变量；2、dockershim从CNI配置文件里（有flanneld启动后生成，类型为configmap）加载到的、默认插件的配置信息（network configuration)，这里对CNI插件的调用，实际是network configuration进行补充。参数准备好后，调用Flannel CNI-&gt;调用CNI bridge（所需参数即为上面：设置的CNI环境变量和补充的network configuation）来执行具体的操作流程。</p>2019-06-14</li><br/><li><span>阿棠</span> 👍（44） 💬（11）<p>前几章都很好理解，一到网络这块，就蒙了，没耐心看下去了</p>2018-11-21</li><br/><li><span>单朋荣</span> 👍（28） 💬（0）<p>把握几个核心，然后串起来，其它需要的东西再去拿就可以了。
 问题牵引：
@@ -337,7 +337,7 @@ nslookup kubernetes.default 解析到外网。像这类问题如何从理论角�
 
 串线（着重描述三个核心点之间的串联关系）：
 kubelet 创建 Pod -&gt;创建 Infra 容器。主要是由（CRI）**dockershim **调用 Docker API 创建并启动 Infra 容器-&gt; SetUpPod方法。方法的作用是：1.为 CNI 插件准备参数，2.然后调用 CNI 插件为 Infra 容器配置网络。
-1.所需参数-&gt;实现ADD&#47;DEL方法-&gt;CNI插件（*flannel插件*)实现。：
+1.所需参数-&gt;实现ADD&#47;DEL方法-&gt;CNI插件（_flannel插件_)实现。：
 1.1参数一：由 dockershim 设置的一组 CNI 环境变量，ADD&#47;DEL方法参数。
 1.2参数二：是 dockershim 从 CNI “配置文件”里加载到的、默认插件的配置信息；由*flannel网络方案本身*安装时生成。
 2.调用 CNI 插件:

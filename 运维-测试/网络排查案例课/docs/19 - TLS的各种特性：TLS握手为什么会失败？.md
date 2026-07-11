@@ -250,7 +250,7 @@ Cipher Suites (28 suites)
 于是，我们在OpenSSL命令前面加上 **strace**，以便于追踪OpenSSL在执行过程中，特别是在报告certificate has expired之前，具体发生了什么。执行这个命令：
 
 ```clojure
-strace openssl s_client -tlsextdebug -showcerts -connect abc.ebay.com:443 
+strace openssl s_client -tlsextdebug -showcerts -connect abc.ebay.com:443
 ```
 
 输出的关键部分如下：
@@ -373,7 +373,7 @@ curl -vk https://站点名
 以及使用 **OpenSSL命令**来检查证书的方法，也就是：
 
 ```clojure
-openssl s_client -tlsextdebug -showcerts -connect 站点名:443 
+openssl s_client -tlsextdebug -showcerts -connect 站点名:443
 ```
 
 另外在需要分析OpenSSL为什么报错的时候，你可以在前面加上 **strace**，这对于排查根因有不少的帮助。
@@ -419,8 +419,8 @@ openssl s_client -tlsextdebug -showcerts -connect 站点名:443
 
 curl -vk https:&#47;&#47;站点名
 
-openssl s_client -tlsextdebug -showcerts -connect 站点名:443 
-老师TLS case讲的很清楚 
+openssl s_client -tlsextdebug -showcerts -connect 站点名:443
+老师TLS case讲的很清楚
 
 </p>2022-03-17</li><br/><li><span>taochao_zs</span> 👍（1） 💬（1）<p>1 TLS是四次握手，前面2次是hello握手，后面2次是交换密钥握手
 2 会信任，只要中间证书是根证书签发出来的，可以验证证书的关系链是否一致（证书包含相同密钥和签名算法，完整性算法这些）。</p>2022-03-04</li><br/><li><span>Bachue Zhou</span> 👍（0） 💬（1）<p>感觉 openssl 从本地找到同名的证书后因为该证书过期就造成握手失败是一个设计缺陷，理论上应该始终是从服务器获取的，即使为了提高效率会使用本地缓存的证书，也不应该因为该缓存过期就判定握手失败，而是应该继续从服务器获取。另外，这也说明 tls 大幅增加了通讯复杂度，所以在内网里全部启用 https 通讯将大幅增加运维成本。所以我认为 http&#47;2 和 http&#47;3 强制要求启用 https 是设计错误，提高客户的使用成本，缩减了自己的适用范围。</p>2022-11-02</li><br/><li><span>taochao_zs</span> 👍（0） 💬（3）<p>杨老师有微信群吗，后面还想多和杨老师多多请教。</p>2022-03-04</li><br/><li><span>那时刻</span> 👍（0） 💬（2）<p>我们之前也遇到过tls偶尔握手失败的案例，抓包来看是，客户端发出client hello之后，收到服务器的rst消息，且这个rst消息的ttl的值是64，我们猜想是被防火墙阻止了。不知老师是否遇到这样的case？以及分析原因呢？</p>2022-03-04</li><br/><li><span>那时刻</span> 👍（0） 💬（1）<p>请问老师，PKI 里有交叉签名的技术，就是新老根证书对同一个新的中间证书进行签名，但并不适用于这个案例。 此时，对于这个中间证书签名的叶子证书，验证流程是如何呢？新老根证书都会验证么？</p>2022-03-04</li><br/><li><span>斯蒂芬.赵</span> 👍（0） 💬（0）<p>使用go的http client对一个重定向短链发起curl get请求的时候报错：remote error: tls: internal errors是啥原因？</p>2023-02-09</li><br/><li><span>piboye</span> 👍（0） 💬（0）<p>老师， 我看TLS 握手的时候 Server Key Exchange 里面除了 public_key 还有一个 signatrue,   Client Key Exchange 里面没有这个， 这个 signatrue 是起什么作用的？</p>2022-08-06</li><br/>

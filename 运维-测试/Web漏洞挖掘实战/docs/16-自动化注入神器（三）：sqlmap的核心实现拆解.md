@@ -17,12 +17,12 @@ try:
 
 ```python
 #传入到该函数的参数
-place=place 
-value=value 
-getRatioValue=True 
-noteResponseTime=False 
-silent=True 
-raise404=False 
+place=place
+value=value
+getRatioValue=True
+noteResponseTime=False
+silent=True
+raise404=False
 disableTampering=True
 ```
 

@@ -147,7 +147,8 @@ java 10之前： 手动设置jvm相关的选项，如：
 
 java 10+: UseContainerSupport， 默认开启
 
-------------------------------------------------------------------
+---
+
 mem问题
 
 需关注这几个参数：
@@ -160,18 +161,19 @@ mem问题
         [5.0+ 64 bit: 64M * 1.3 = 85M](http:&#47;&#47;www.oracle.com&#47;technetwork&#47;java&#47;javase&#47;tech&#47;vmoptions-jsp-140102.html)
     MaxMetaspaceSize: -1，无限制
 
---------------------------------
+---
+
 java5&#47;6&#47;7&#47;8u131-：务必设置上面提到的内存选项
 
-  懒人可考虑，虽然也不准确
-  java -Xmx`cat &#47;sys&#47;fs&#47;cgroup&#47;memory&#47;memory.limit_in_bytes`
+懒人可考虑，虽然也不准确
+java -Xmx`cat &#47;sys&#47;fs&#47;cgroup&#47;memory&#47;memory.limit_in_bytes`
 
 java8u131+和java9+
 
-	java 8u131+和java 9+-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
-	java 8u191+ UseContainerSupport默认开启，backported；java 9暂未backport这个feature
+    java 8u131+和java 9+-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+    java 8u191+ UseContainerSupport默认开启，backported；java 9暂未backport这个feature
 
 java 10+: UseContainerSupport， 默认开启
-------------------------------------------------------------------</p>2018-07-24</li><br/><li><span>paopao</span> 👍（25） 💬（0）<p>年前就遇到了文中Gc线程数超过k8s设置核心数，jvm直接挂掉，看这文章印象深刻</p>2019-06-20</li><br/><li><span>Harry陈祥</span> 👍（12） 💬（4）<p>老师您好。对于java8+docker的场景，docker的cpu 内存配额是可能动态变化和伸缩的， docker启动之前，不知道会被分配多大内存多少cpu，这种情况，应该怎么处理参数问题？
+\------------------------------------------------------------------</p>2018-07-24</li><br/><li><span>paopao</span> 👍（25） 💬（0）<p>年前就遇到了文中Gc线程数超过k8s设置核心数，jvm直接挂掉，看这文章印象深刻</p>2019-06-20</li><br/><li><span>Harry陈祥</span> 👍（12） 💬（4）<p>老师您好。对于java8+docker的场景，docker的cpu 内存配额是可能动态变化和伸缩的， docker启动之前，不知道会被分配多大内存多少cpu，这种情况，应该怎么处理参数问题？
 还有一个问题是：docker hub里面有java各个版本的镜像，这些镜像是否已经对文中提到的问题都做了适配？我们在构建docker的时候，直接from java镜像，而不再设置java options 会不会有问题？</p>2019-02-14</li><br/><li><span>随心而至</span> 👍（6） 💬（0）<p>本科毕业两年了，打了两年多的计算机科学的基础，后端这些都是通用的，编程语言真的只是一个工具，容器相关的原理还是需要学习，要不然玩不转。</p>2021-01-06</li><br/><li><span>sgl</span> 👍（6） 💬（0）<p>没有一种技术是万能的，需要理解技术的优点和不足，才能使用好它</p>2018-09-28</li><br/><li><span>正是那朵玫瑰</span> 👍（2） 💬（0）<p>目前容器只跑了java和consul的client进程，consul占的内存很小，java进程被kill掉后，consul进程还在，我们的java进程被kill掉都是在没有流量进来的时候，不过您说的使用swap区的我没有设置，不知道有没有什么影响？</p>2018-08-07</li><br/><li><span>樱小路依然</span> 👍（1） 💬（0）<p>时隔三年多再次看这个专栏，又有不一样的感受，当初对docker根本没什么概念，现在公司内已经全部容器化了，但是对服务在容器上跑会出现这些问题竟然没什么印象。回过头看，可能是因为服务启动脚本早就配置好了具体参数而我也没有多注意，学习到了，谢谢老师</p>2022-02-20</li><br/><li><span>Shy</span> 👍（1） 💬（0）<p>老师，我在容器中部署Java应用时遇到一个问题，应用中存在一些jar冲突，但在物理机上能正常启动，放到容器中必定会启动失败，这是怎么回事？</p>2020-05-07</li><br/><li><span>λ-Drive</span> 👍（0） 💬（0）<p>老师，docker会过度使用宿主机cpu的资源吗？</p>2021-03-24</li><br/>
 </ul>

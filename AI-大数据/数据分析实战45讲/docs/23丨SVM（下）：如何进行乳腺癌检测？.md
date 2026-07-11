@@ -107,11 +107,11 @@ Index(['id', 'diagnosis', 'radius_mean', 'texture_mean', 'perimeter_mean',
        'symmetry_worst', 'fractal_dimension_worst'],
       dtype='object')
          id diagnosis  radius_mean  texture_mean  perimeter_mean  area_mean  \
-0    842302         M        17.99         10.38          122.80     1001.0   
-1    842517         M        20.57         17.77          132.90     1326.0   
-2  84300903         M        19.69         21.25          130.00     1203.0   
-3  84348301         M        11.42         20.38           77.58      386.1   
-4  84358402         M        20.29         14.34          135.10     1297.0 
+0    842302         M        17.99         10.38          122.80     1001.0
+1    842517         M        20.57         17.77          132.90     1326.0
+2  84300903         M        19.69         21.25          130.00     1203.0
+3  84348301         M        11.42         20.38           77.58      386.1
+4  84358402         M        20.29         14.34          135.10     1297.0
 ```
 
 接下来，我们就要对数据进行清洗了。
@@ -161,7 +161,7 @@ plt.show()
 
 ```
 # 特征选择
-features_remain = ['radius_mean','texture_mean', 'smoothness_mean','compactness_mean','symmetry_mean', 'fractal_dimension_mean'] 
+features_remain = ['radius_mean','texture_mean', 'smoothness_mean','compactness_mean','symmetry_mean', 'fractal_dimension_mean']
 ```
 
 对特征进行选择之后，我们就可以准备训练集和测试集：
@@ -222,32 +222,34 @@ LinearSVC训练模型， 6个特征变量， 训练集准确率：93.9%，测试
 LinearSVC训练模型， 10个特征变量， 训练集准确率：99.4%，测试集准确率：96.0%
 
 结论：
+
 1. 增加特征变量可以提高准确率，可能是因为模型维度变高，模型变得更加复杂。可以看出特征变量的选取很重要。
 2. 训练集拟合都比较好，但是测试集准确率出现不同程度的下降。
 3. 模型训练的准确率与人类水平之间偏差可以通过增加特征变量或采用新的训练模型来降低；模型训练的准确率与测试集测试的准确率之间的方差可以通过正则化，提高泛化性能等方式来降低。</p>2019-02-27</li><br/><li><span>滢</span> 👍（14） 💬（1）<p>利用SVM做分类，特征选择影响度大，要想SVM分类准确，人工处理数据这一步很重要</p>2019-04-18</li><br/><li><span>hlz-123</span> 👍（11） 💬（1）<p>首先要说，老师的课讲得非常好，深奥的算法和理论通过生动有趣的例子让人通俗易懂，兴趣盎然。
-老师的本课案例中，对特征数据都做了Z-Score规范化处理（正态分布），准确率在90%以上，如果数据不做规范化处理，准确率在88%左右，我的问题：
-1、数据规范化处理，是不是人为地提供了准确率？实际情况，数据不一定是正态分布。
-2、模型建好后，在实际应用中去评估某个案例时，该案例数据是不是也要规范化，这样做是不是很麻烦并且数据对比不是很直观呢？</p>2019-03-16</li><br/><li><span>Rickie</span> 👍（7） 💬（1）<p>思考题：
-使用全部数据进行训练得到的准确率为0.9766，高于示例中的准确率。是否是由于多重共线性，使得测试结果偏高？</p>2019-02-05</li><br/><li><span>明翼</span> 👍（4） 💬（3）<p>老师我利用了结果和特征的相关性，选择特征，发现结果更好：
+   老师的本课案例中，对特征数据都做了Z-Score规范化处理（正态分布），准确率在90%以上，如果数据不做规范化处理，准确率在88%左右，我的问题：
+   1、数据规范化处理，是不是人为地提供了准确率？实际情况，数据不一定是正态分布。
+   2、模型建好后，在实际应用中去评估某个案例时，该案例数据是不是也要规范化，这样做是不是很麻烦并且数据对比不是很直观呢？</p>2019-03-16</li><br/><li><span>Rickie</span> 👍（7） 💬（1）<p>思考题：
+   使用全部数据进行训练得到的准确率为0.9766，高于示例中的准确率。是否是由于多重共线性，使得测试结果偏高？</p>2019-02-05</li><br/><li><span>明翼</span> 👍（4） 💬（3）<p>老师我利用了结果和特征的相关性，选择特征，发现结果更好：
+
 # 特征选择 按照结果和数据相关性选择特征准确率0.9707602339181286
+
 features_remain = [&#39;radius_mean&#39;,&#39;perimeter_mean&#39;,&#39;area_mean&#39;,&#39;concave points_mean&#39;,&#39;radius_worst&#39;,&#39;perimeter_worst&#39;,&#39;area_worst&#39;,&#39;concave points_worst&#39;]</p>2019-11-10</li><br/><li><span>Ricky</span> 👍（2） 💬（1）<p>谢谢，提2个问题，
 1）在实际应用中如何平衡特征变量和准确率的关系？有没有方法论？
 增加特征变量意味着增加运算时间，提高准确率，但是这个得失怎么把握？同时如何评估会增加多少运算时间，一个一个尝试似乎比较费劲吧
 2）此文的案例是选用平均值，丢弃了最大值和标准差，这个是多少案例的通用做法么？
 
 谢谢</p>2020-04-15</li><br/><li><span>恬恬</span> 👍（2） 💬（2）<p>对比几组feature后，发现用feature_worst进行训练，效果更好。
-1）SVC(kernel=&#39;linear&#39;)的测试集准确率为：99.42%；
-2)  LinearSVC()的测试集准确率为：97.07%
+1）SVC(kernel=&#39;linear&#39;)的测试集准确率为：99.42%；2) LinearSVC()的测试集准确率为：97.07%
 2）SVC()的测试集准确率为：96.49%
-觉得建模过程中，特征选择很重要，不同的数据集划分，正负样本是否平衡也会对结果有一定的影响，所以最好是可以采用交叉验证来训练模型。这个地方多次测试SVC(kernel=&#39;linear&#39;）和LinearSVC()，感觉还是会存在2个百分点左右的差异，这两个都算是线性分类，是因为采用了不同的线性核函数吗？还是其他参数或是方法差异的原因呢？</p>2020-03-31</li><br/><li><span>滢</span> 👍（2） 💬（1）<p>语言Python3.6  没有z-score规范化数据以及规范化后两种情况前提预测准确率，使用LinearSVC，选取所有mean属性
+觉得建模过程中，特征选择很重要，不同的数据集划分，正负样本是否平衡也会对结果有一定的影响，所以最好是可以采用交叉验证来训练模型。这个地方多次测试SVC(kernel=&#39;linear&#39;）和LinearSVC()，感觉还是会存在2个百分点左右的差异，这两个都算是线性分类，是因为采用了不同的线性核函数吗？还是其他参数或是方法差异的原因呢？</p>2020-03-31</li><br/><li><span>滢</span> 👍（2） 💬（1）<p>语言Python3.6 没有z-score规范化数据以及规范化后两种情况前提预测准确率，使用LinearSVC，选取所有mean属性
 
-import  pandas as  pd
-import  matplotlib.pyplot as  plt
-import  seaborn as  sns
-from sklearn.model_selection import  train_test_split
-from sklearn import  svm
-from sklearn import  metrics
-from sklearn.preprocessing import  StandardScaler
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn import metrics
+from sklearn.preprocessing import StandardScaler
 
 #导入数据
 path = &#39;&#47;Users&#47;apple&#47;Desktop&#47;GitHubProject&#47;Read mark&#47;数据分析&#47;geekTime&#47;data&#47;&#39;
@@ -283,8 +285,8 @@ plt.show()
 
 #特征选择，选择所有的mean数据
 feature_remain = [&#39;radius_mean&#39;, &#39;texture_mean&#39;, &#39;perimeter_mean&#39;,
-       &#39;area_mean&#39;, &#39;smoothness_mean&#39;, &#39;compactness_mean&#39;, &#39;concavity_mean&#39;,
-       &#39;concave points_mean&#39;, &#39;symmetry_mean&#39;, &#39;fractal_dimension_mean&#39;]
+&#39;area_mean&#39;, &#39;smoothness_mean&#39;, &#39;compactness_mean&#39;, &#39;concavity_mean&#39;,
+&#39;concave points_mean&#39;, &#39;symmetry_mean&#39;, &#39;fractal_dimension_mean&#39;]
 
 #抽取30%特征选择作为测试数据，其余作为训练集
 train,test = train_test_split(data,test_size=0.3)
@@ -343,21 +345,27 @@ model = svm.SVC(kernel=&quot;rbf&quot;,C=1.0,gamma=&quot;auto&quot;)
 model2 = svm.LinearSVC()
 &quot;&quot;&quot;
 kernel :
-    linear:线性模型，当模型为linearsvm时，就表明没有kernel参数
-    poly：多项式模型
-    rbf:高斯函数
-    sigmoid:sigmoid核函数
+linear:线性模型，当模型为linearsvm时，就表明没有kernel参数
+poly：多项式模型
+rbf:高斯函数
+sigmoid:sigmoid核函数
 C：目标函数的惩罚系数
 gamma :核函数系数
 &quot;&quot;&quot;
 
 #实战开始--加载数据
 data = pd.read_csv(&#39;data.csv&#39;,engine=&#39;python&#39;)
+
 # pd.set_option(&#39;display.max_columns&#39;,None)
+
 #查看一下数据信息
+
 # print(data.columns)
+
 # print(data.info())
+
 # print(data.head(5))
+
 # print(data[&#39;diagnosis&#39;].value_counts())
 
 #数据处理
@@ -370,19 +378,19 @@ feature_mean = data.columns[1:11]
 feature_se = data.columns[11:21]
 feature_max = data.columns[21:31]
 
-
 #统计一下肿瘤人数情况
 sns.countplot(data[&#39;diagnosis&#39;],label=&#39;Count&#39;)
+
 # plt.show()
 
 #查看各个特征的相关度
 corr = data[feature_mean].corr()
 plt.figure(figsize=(14,14))
 sns.heatmap(corr,annot=True)
+
 # plt.show()
 
 feature_sel = [&#39;radius_mean&#39;,&#39;texture_mean&#39;,&#39;smoothness_mean&#39;,&#39;compactness_mean&#39;,&#39;symmetry_mean&#39;,&#39;fractal_dimension_mean&#39;]
-
 
 train_data,test_data = train_test_split(data,test_size=0.3)
 
@@ -406,7 +414,6 @@ predict_label2 = model2.predict(test_feature)
 print(&quot;高斯准确率：&quot;,metrics.accuracy_score(test_label,predict_label))
 print(&quot;线性准确度：&quot;,metrics.accuracy_score(test_label,predict_label2))
 
-
 </p>2020-08-26</li><br/><li><span>朱一江</span> 👍（0） 💬（1）<p>我们所测的准确率是与train_y进行比较的吗
 </p>2020-08-22</li><br/><li><span>鱼非子</span> 👍（0） 💬（1）<p>import numpy as np
 import pandas as pd
@@ -417,11 +424,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn import svm
 from sklearn import metrics
 
-
 data = pd.read_csv(&quot;.&#47;data.csv&quot;)
 pd.set_option(&#39;display.max_columns&#39;, None)
+
 # print(data.head(5))
+
 # print(data.columns)
+
 # print(data.describe())
 
 features_mean = list(data.columns[2:12])
@@ -430,6 +439,7 @@ features_worst = list(data.columns[22:32])
 
 data.drop(&quot;id&quot;,axis=1,inplace=True)
 data[&#39;diagnosis&#39;] = data[&#39;diagnosis&#39;].map({&#39;M&#39;:1,&#39;B&#39;:0})
+
 # print(data.head(5))
 
 sns.countplot(data[&#39;diagnosis&#39;],label=&quot;Count&quot;)
@@ -444,6 +454,7 @@ features_remain = [&#39;radius_mean&#39;,&#39;texture_mean&#39;, &#39;smoothness
 X_train, X_test, y_train, y_test = train_test_split(data[features_remain], data[&#39;diagnosis&#39;], test_size=0.3,random_state=0)
 
 # 采用Z-Score规范化数据，保证每个特征维度的数据均值为0，方差为1
+
 ss = StandardScaler()
 X_train = ss.fit_transform(X_train)
 X_test = ss.transform(X_test)
