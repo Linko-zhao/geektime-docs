@@ -1,0 +1,6 @@
+services:
+  geektime:
+    container_name: geektime
+    image: geektime-docs:latest
+    ports:
+      - 8091:8091
