@@ -113,7 +113,7 @@ export function toIndexedArticle(category: Category, course: string, entry: Arti
     category,
     course,
     title: titleFrom(entry),
-    slug: entry.id.split('/').at(-1) || '',
+    slug: (entry.id.split('/').at(-1) || '').replace(/%/g, 'percent'),
     sourcePath: `${entry.id}.md`,
     order,
     entry,

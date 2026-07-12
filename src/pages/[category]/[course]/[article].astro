@@ -8,10 +8,13 @@ import { getSiteIndex, href, toIndexedArticle } from '../../../lib/content';
 
 export async function getStaticPaths() {
   const courses = await getSiteIndex();
-  return courses.flatMap((course) => course.articles.map((entry, order) => ({
-    params: { category: course.category, course: course.name, article: entry.id.split('/').at(-1) || '' },
-    props: { course, entry, order },
-  })));
+  return courses.flatMap((course) => course.articles.map((entry, order) => {
+    const slug = (entry.id.split('/').at(-1) || '').replace(/%/g, 'percent');
+    return {
+      params: { category: course.category, course: course.name, article: slug },
+      props: { course, entry, order },
+    };
+  }));
 }
 
 const { course, entry, order } = Astro.props;

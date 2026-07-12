@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import remarkTextr from 'remark-textr';
 import { existsSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
@@ -162,10 +163,12 @@ function preserveMissingMarkdownImages() {
 export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
+  compressHTML: true,
   build: {
     format: 'directory',
   },
   markdown: {
+    processor: unified(),
     remarkPlugins: [
       remarkProxyGeekbangImages,
       [remarkTextr, { plugins: [chineseTypography] }],
