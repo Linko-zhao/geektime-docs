@@ -21,3 +21,15 @@ const { articles, activeSlug } = Astro.props;
     ))}
   </ol>
 </aside>
+<script>
+  document.querySelectorAll<HTMLElement>('.article-sidebar').forEach((sidebar) => {
+    const activeArticle = sidebar.querySelector<HTMLElement>('a.active');
+    if (!activeArticle) return;
+
+    requestAnimationFrame(() => {
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const articleRect = activeArticle.getBoundingClientRect();
+      sidebar.scrollTop += articleRect.top - sidebarRect.top - (sidebar.clientHeight - activeArticle.clientHeight) / 2;
+    });
+  });
+</script>
