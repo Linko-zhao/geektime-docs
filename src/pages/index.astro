@@ -1,8 +1,33 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { categories, getSiteIndex, href } from '../lib/content';
+import { categories, getSiteIndex, href, toIndexedArticle } from '../lib/content';
+
+type SearchItem = {
+  type: 'course' | 'article';
+  title: string;
+  context: string;
+  href: string;
+};
 
 const courses = await getSiteIndex();
+const searchItems: SearchItem[] = [
+  ...courses.map((course) => ({
+    type: 'course' as const,
+    title: course.name,
+    context: course.category,
+    href: href(course.category, course.name),
+  })),
+  ...courses.flatMap((course) => course.articles.map((entry, index) => {
+    const article = toIndexedArticle(course.category, course.name, entry, index);
+    return {
+      type: 'article' as const,
+      title: article.title,
+      context: `${article.category} · ${article.course}`,
+      href: href(article.category, article.course, article.slug),
+    };
+  })),
+];
+const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
 <BaseLayout>
@@ -11,10 +36,82 @@ const courses = await getSiteIndex();
     <h1>极客时间文档</h1>
     <p>按当前文件夹层级浏览全部技术课程。</p>
   </section>
-  <section class="category-grid" aria-label="课程分类">
+  <section class="search-panel" aria-label="全站搜索">
+    <label for="site-search">搜索课程或文章</label>
+    <input id="site-search" type="search" autocomplete="off" placeholder="输入课程名或文章名" data-search-input>
+    <section class="search-region" data-search-region hidden>
+      <p data-search-status aria-live="polite"></p>
+      <ol class="search-results" data-search-results></ol>
+      <p class="search-empty" data-search-empty hidden>未找到匹配的课程或文章</p>
+    </section>
+  </section>
+  <section class="category-grid" aria-label="课程分类" data-category-grid>
     {categories.map((category) => {
       const grouped = courses.filter((course) => course.category === category);
       return <a class="category-card" href={href(category)}><h2>{category}</h2><span>{grouped.length} 门课程</span></a>;
     })}
   </section>
+  <script id="search-index" type="application/json" is:inline set:html={serializedSearchItems}></script>
+  <script>
+    type SearchResult = {
+      type: 'course' | 'article';
+      title: string;
+      context: string;
+      href: string;
+    };
+
+    const searchIndex = document.querySelector<HTMLScriptElement>('#search-index');
+    const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
+    const searchRegion = document.querySelector<HTMLElement>('[data-search-region]');
+    const categoryGrid = document.querySelector<HTMLElement>('[data-category-grid]');
+    const searchStatus = document.querySelector<HTMLElement>('[data-search-status]');
+    const searchResults = document.querySelector<HTMLOListElement>('[data-search-results]');
+    const searchEmpty = document.querySelector<HTMLElement>('[data-search-empty]');
+
+    if (searchIndex && searchInput && searchRegion && categoryGrid && searchStatus && searchResults && searchEmpty) {
+      const items = JSON.parse(searchIndex.textContent ?? '[]') as SearchResult[];
+      const normalize = (value: string) => value.trim().toLocaleLowerCase('zh-CN');
+
+      searchInput.addEventListener('input', () => {
+        const query = normalize(searchInput.value);
+        searchResults.replaceChildren();
+
+        if (!query) {
+          searchStatus.textContent = '';
+          searchEmpty.hidden = true;
+          searchRegion.hidden = true;
+          categoryGrid.hidden = false;
+          return;
+        }
+
+        const matches = items.filter((item) => normalize(item.title).includes(query));
+        searchRegion.hidden = false;
+        categoryGrid.hidden = true;
+        searchStatus.textContent = `找到 ${matches.length} 个结果`;
+        searchEmpty.hidden = matches.length > 0;
+
+        for (const match of matches) {
+          const item = document.createElement('li');
+          const link = document.createElement('a');
+          const type = document.createElement('span');
+          const title = document.createElement('span');
+          const context = document.createElement('span');
+
+          item.className = 'search-result-item';
+          link.className = 'search-result-link';
+          link.href = match.href;
+          type.className = 'search-result-type';
+          type.textContent = match.type === 'course' ? '课程' : '文章';
+          title.className = 'search-result-title';
+          title.textContent = match.title;
+          context.className = 'search-result-context';
+          context.textContent = match.context;
+
+          link.append(type, title, context);
+          item.append(link);
+          searchResults.append(item);
+        }
+      });
+    }
+  </script>
 </BaseLayout>
