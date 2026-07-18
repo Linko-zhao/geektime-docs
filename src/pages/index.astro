@@ -39,6 +39,11 @@ const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c
   <section class="search-panel" aria-label="全站搜索">
     <label for="site-search">搜索课程或文章</label>
     <input id="site-search" type="search" autocomplete="off" placeholder="输入课程名或文章名" data-search-input>
+    <div class="search-filters" role="group" aria-label="搜索结果类型">
+      <button type="button" data-search-filter="all" aria-pressed="true">全部</button>
+      <button type="button" data-search-filter="course" aria-pressed="false">课程</button>
+      <button type="button" data-search-filter="article" aria-pressed="false">文章</button>
+    </div>
     <section class="search-region" data-search-region hidden>
       <p data-search-status aria-live="polite"></p>
       <ol class="search-results" data-search-results></ol>
@@ -67,12 +72,22 @@ const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c
     const searchStatus = document.querySelector<HTMLElement>('[data-search-status]');
     const searchResults = document.querySelector<HTMLOListElement>('[data-search-results]');
     const searchEmpty = document.querySelector<HTMLElement>('[data-search-empty]');
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>('[data-search-filter]');
 
     if (searchIndex && searchInput && searchRegion && categoryGrid && searchStatus && searchResults && searchEmpty) {
+      type SearchFilter = 'all' | SearchResult['type'];
+
       const items = JSON.parse(searchIndex.textContent ?? '[]') as SearchResult[];
       const normalize = (value: string) => value.trim().toLocaleLowerCase('zh-CN');
+      let activeFilter: SearchFilter = 'all';
 
-      searchInput.addEventListener('input', () => {
+      const updateFilterButtons = () => {
+        filterButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.searchFilter === activeFilter));
+        });
+      };
+
+      const renderResults = () => {
         const query = normalize(searchInput.value);
         searchResults.replaceChildren();
 
@@ -84,7 +99,10 @@ const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c
           return;
         }
 
-        const matches = items.filter((item) => normalize(item.title).includes(query));
+        const matches = items.filter((item) => (
+          (activeFilter === 'all' || item.type === activeFilter) &&
+          normalize(item.title).includes(query)
+        ));
         searchRegion.hidden = false;
         categoryGrid.hidden = true;
         searchStatus.textContent = `找到 ${matches.length} 个结果`;
@@ -111,6 +129,17 @@ const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c
           item.append(link);
           searchResults.append(item);
         }
+      };
+
+      searchInput.addEventListener('input', renderResults);
+      filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.searchFilter;
+          if (filter !== 'all' && filter !== 'course' && filter !== 'article') return;
+          activeFilter = filter;
+          updateFilterButtons();
+          renderResults();
+        });
       });
     }
   </script>
