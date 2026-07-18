@@ -1,22 +1,148 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import { categories, getSiteIndex, href } from '../../lib/content';
+import { categories, getSiteIndex, href, toIndexedArticle } from '../../lib/content';
 
 export async function getStaticPaths() {
   return categories.map((category) => ({ params: { category }, props: { category } }));
 }
 
+type SearchItem = {
+  type: 'course' | 'article';
+  title: string;
+  context: string;
+  href: string;
+};
+
 const { category } = Astro.props;
 const courses = (await getSiteIndex()).filter((course) => course.category === category);
+const searchItems: SearchItem[] = [
+  ...courses.map((course) => ({
+    type: 'course' as const,
+    title: course.name,
+    context: course.category,
+    href: href(category, course.name),
+  })),
+  ...courses.flatMap((course) => course.articles.map((entry, index) => {
+    const article = toIndexedArticle(category, course.name, entry, index);
+    return {
+      type: 'article' as const,
+      title: article.title,
+      context: `${article.category} · ${article.course}`,
+      href: href(article.category, article.course, article.slug),
+    };
+  })),
+];
+const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
 <BaseLayout title={`${category} · 极客时间文档`}>
   <div class="container">
     <Breadcrumbs category={category} />
     <section class="page-intro compact"><h1>{category}</h1><p>{courses.length} 门课程</p></section>
-    <section class="course-grid">
+    <section class="search-panel" aria-label="分类内搜索">
+      <label for="site-search">搜索本分类的课程或文章</label>
+      <input id="site-search" type="search" autocomplete="off" placeholder="输入课程名或文章名" data-search-input>
+      <div class="search-filters" role="group" aria-label="搜索结果类型">
+        <button type="button" data-search-filter="all" aria-pressed="true">全部</button>
+        <button type="button" data-search-filter="course" aria-pressed="false">课程</button>
+        <button type="button" data-search-filter="article" aria-pressed="false">文章</button>
+      </div>
+      <section class="search-region" data-search-region hidden>
+        <p data-search-status aria-live="polite"></p>
+        <ol class="search-results" data-search-results></ol>
+        <p class="search-empty" data-search-empty hidden>未找到匹配的课程或文章</p>
+      </section>
+    </section>
+    <section class="course-grid" data-category-grid>
       {courses.map((course) => <a class="course-card" href={href(category, course.name)}><h2>{course.name}</h2><span>{course.articles.length} 篇文章</span></a>)}
     </section>
+    <script id="search-index" type="application/json" is:inline set:html={serializedSearchItems}></script>
+    <script>
+      type SearchResult = {
+        type: 'course' | 'article';
+        title: string;
+        context: string;
+        href: string;
+      };
+
+      const searchIndex = document.querySelector<HTMLScriptElement>('#search-index');
+      const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
+      const searchRegion = document.querySelector<HTMLElement>('[data-search-region]');
+      const categoryGrid = document.querySelector<HTMLElement>('[data-category-grid]');
+      const searchStatus = document.querySelector<HTMLElement>('[data-search-status]');
+      const searchResults = document.querySelector<HTMLOListElement>('[data-search-results]');
+      const searchEmpty = document.querySelector<HTMLElement>('[data-search-empty]');
+      const filterButtons = document.querySelectorAll<HTMLButtonElement>('[data-search-filter]');
+
+      if (searchIndex && searchInput && searchRegion && categoryGrid && searchStatus && searchResults && searchEmpty) {
+        type SearchFilter = 'all' | SearchResult['type'];
+
+        const items = JSON.parse(searchIndex.textContent ?? '[]') as SearchResult[];
+        const normalize = (value: string) => value.trim().toLocaleLowerCase('zh-CN');
+        let activeFilter: SearchFilter = 'all';
+
+        const updateFilterButtons = () => {
+          filterButtons.forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.searchFilter === activeFilter));
+          });
+        };
+
+        const renderResults = () => {
+          const query = normalize(searchInput.value);
+          searchResults.replaceChildren();
+
+          if (!query) {
+            searchStatus.textContent = '';
+            searchEmpty.hidden = true;
+            searchRegion.hidden = true;
+            categoryGrid.hidden = false;
+            return;
+          }
+
+          const matches = items.filter((item) => (
+            (activeFilter === 'all' || item.type === activeFilter) &&
+            normalize(item.title).includes(query)
+          ));
+          searchRegion.hidden = false;
+          categoryGrid.hidden = true;
+          searchStatus.textContent = `找到 ${matches.length} 个结果`;
+          searchEmpty.hidden = matches.length > 0;
+
+          for (const match of matches) {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            const type = document.createElement('span');
+            const title = document.createElement('span');
+            const context = document.createElement('span');
+
+            item.className = 'search-result-item';
+            link.className = 'search-result-link';
+            link.href = match.href;
+            type.className = 'search-result-type';
+            type.textContent = match.type === 'course' ? '课程' : '文章';
+            title.className = 'search-result-title';
+            title.textContent = match.title;
+            context.className = 'search-result-context';
+            context.textContent = match.context;
+
+            link.append(type, title, context);
+            item.append(link);
+            searchResults.append(item);
+          }
+        };
+
+        searchInput.addEventListener('input', renderResults);
+        filterButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const filter = button.dataset.searchFilter;
+            if (filter !== 'all' && filter !== 'course' && filter !== 'article') return;
+            activeFilter = filter;
+            updateFilterButtons();
+            renderResults();
+          });
+        });
+      }
+    </script>
   </div>
 </BaseLayout>
