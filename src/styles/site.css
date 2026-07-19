@@ -45,7 +45,7 @@ footer { border-top: 1px solid #e2e8f0; color: #64748b; text-align: center; padd
 .article-shell { display: grid; grid-template-columns: minmax(200px, 265px) minmax(0, 820px) minmax(180px, 245px); gap: 2rem; width: min(1600px, calc(100% - 2rem)); margin: 0 auto; }
 .article-sidebar, .toc { position: sticky; top: 1.5rem; align-self: start; max-height: calc(100vh - 3rem); overflow: auto; padding: 1.1rem; margin-top: 1.5rem; border: 1px solid #e2e8f0; border-radius: .75rem; background: white; }
 .article-sidebar h2, .toc summary { font-size: .95rem; font-weight: 700; margin: 0 0 .75rem; color: #334155; }
-.article-sidebar ol, .toc ol { padding-left: 1rem; margin: 0; }
+.article-sidebar ol { padding-left: 1rem; margin: 0; }.toc ul { padding: 0; margin: 0; list-style: none; }
 .article-sidebar li, .toc li { margin: .4rem 0; font-size: .84rem; }
 .article-sidebar a { color: #475569; display: block; }
 .article-sidebar a.active, .toc a.active { color: #2563eb; font-weight: 700; }
@@ -60,5 +60,5 @@ footer { border-top: 1px solid #e2e8f0; color: #64748b; text-align: center; padd
 .prose blockquote { border-left: .25rem solid #93c5fd; padding-left: 1rem; color: #475569; }.prose img { display: block; max-width: 100%; height: auto; margin: 1.25rem auto; }.prose a { overflow-wrap: anywhere; }
 .article-pagination { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; }.article-pagination a:last-child { text-align: right; }
 .not-found { padding: 8rem 0; text-align: center; }.not-found h1 { font-size: 5rem; }
-@media (max-width: 1100px) { .article-shell { grid-template-columns: minmax(180px, 240px) minmax(0, 1fr); }.toc { grid-column: 2; position: static; margin-top: 0; max-height: none; }.toc details:not([open]) ol { display: none; } }
+@media (max-width: 1100px) { .article-shell { grid-template-columns: minmax(180px, 240px) minmax(0, 1fr); }.toc { grid-column: 2; position: static; margin-top: 0; max-height: none; }.toc details:not([open]) ul { display: none; } }
 @media (max-width: 760px) { .site-header span { display: none; }.search-result-link { grid-template-columns: 1fr; row-gap: .25rem; }.search-result-type { grid-row: auto; justify-self: start; }.article-shell { display: block; width: min(100% - 1.5rem, 760px); }.article-sidebar { position: static; max-height: 15rem; margin: 1rem 0; }.toc { margin-bottom: 1rem; }.breadcrumbs { padding-top: 1rem; }.article-pagination { grid-template-columns: 1fr; }.article-pagination a:last-child { text-align: left; } }

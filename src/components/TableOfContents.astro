@@ -6,6 +6,10 @@ interface Heading {
 }
 
 const { headings } = Astro.props as { headings: Heading[] };
+
+function titleWithoutNumber(text: string) {
+  return text.replace(/^\s*(?:\d+(?:\.\d+)+\s+|\d+[.、．。:：)）]|[一二三四五六七八九十百千万]+[、．。:：)）])\s*/, '');
+}
 const items = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 ---
 
@@ -13,13 +17,13 @@ const items = headings.filter((heading) => heading.depth === 2 || heading.depth 
   <aside class="toc" aria-label="本页目录">
     <details open>
       <summary>本页目录</summary>
-      <ol>
+      <ul>
         {items.map((heading) => (
           <li class:list={{ nested: heading.depth === 3 }}>
-            <a href={`#${heading.slug}`} data-toc-link>{heading.text}</a>
+            <a href={`#${heading.slug}`} data-toc-link>{titleWithoutNumber(heading.text)}</a>
           </li>
         ))}
-      </ol>
+      </ul>
     </details>
   </aside>
 )}
