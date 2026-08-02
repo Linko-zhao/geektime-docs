@@ -49,7 +49,14 @@ footer { border-top: 1px solid #e2e8f0; color: #64748b; text-align: center; padd
 .article-list { padding: 0 0 4rem 1.5rem; margin: 0; }
 .article-list li { margin: .35rem 0; padding-left: .25rem; }
 .course-introduction { background: white; border: 1px solid #e2e8f0; border-radius: .75rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }.course-introduction > h2 { margin: 0; font-size: 1.15rem; color: #0f172a; }.course-introduction p { color: #64748b; margin: .5rem 0; }
-.article-shell { display: grid; grid-template-columns: minmax(200px, 265px) minmax(0, 820px) minmax(180px, 245px); gap: 2rem; width: min(1600px, calc(100% - 2rem)); margin: 0 auto; }
+.article-shell { display: grid; grid-template-columns: minmax(200px, 265px) minmax(0, 820px) minmax(200px, 265px); justify-content: center; gap: 2rem; width: min(1600px, calc(100% - 2rem)); margin: 0 auto; }
+.article-shell[data-focus-mode] { grid-template-columns: minmax(0, 820px); justify-content: center; }
+.article-shell[data-focus-mode] > .article-sidebar, .article-shell[data-focus-mode] > .toc { display: none; }
+.focus-mode-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; min-height: 44px; padding: 0; border: 1px solid #475569; border-radius: .5rem; background: transparent; color: white; cursor: pointer; font: inherit; }
+.focus-mode-toggle:hover { background: #1e293b; }
+.focus-mode-toggle[aria-pressed="true"] { border-color: #60a5fa; background: #2563eb; }
+.focus-mode-toggle:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+.focus-mode-toggle svg { width: 24px; height: 24px; }
 .article-sidebar, .toc { position: sticky; top: calc(var(--site-header-offset) + 1.5rem); align-self: start; max-height: calc(100vh - var(--site-header-offset) - 3rem); overflow: auto; padding: 1.1rem; margin-top: 1.5rem; border: 1px solid #e2e8f0; border-radius: .75rem; background: white; }
 .article-sidebar h2, .toc summary { font-size: .95rem; font-weight: 700; margin: 0 0 .75rem; color: #334155; }
 .article-sidebar ol { padding-left: 1rem; margin: 0; }.toc ul { padding: 0; margin: 0; list-style: none; }
@@ -79,6 +86,7 @@ footer { border-top: 1px solid #e2e8f0; color: #64748b; text-align: center; padd
   .site-header { padding-inline: .75rem; }
   .site-header span { display: none; }
   .mobile-article-navigation { display: block; }
+  .focus-mode-toggle { display: none; }
   .mobile-article-drawer-trigger, .drawer-close { display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; }
   .mobile-article-drawer-trigger { color: white; }
   .drawer-close { color: #334155; }
