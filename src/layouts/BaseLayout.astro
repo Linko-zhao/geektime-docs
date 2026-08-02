@@ -20,8 +20,75 @@ const { title = '极客时间文档' } = Astro.props;
     <header class="site-header">
       <a class="brand" href="/">极客时间文档</a>
       <span>技术课程 Markdown 阅读站</span>
+      <div class="header-actions"><slot name="header-actions" /></div>
     </header>
     <main><slot /></main>
+    <button type="button" class="back-to-top" data-back-to-top hidden aria-label="返回顶部">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
     <footer>极客时间文档 · 由 Astro 静态生成</footer>
+    <script>
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const backToTop = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+      const brand = document.querySelector<HTMLElement>('.brand');
+
+      if (header && backToTop && brand) {
+        let previousScrollY = window.scrollY;
+        let direction = 0;
+        let accumulatedDistance = 0;
+        let animationFrame: number | undefined;
+
+        const setHeaderHidden = (hidden: boolean) => {
+          header.toggleAttribute('data-scroll-hidden', hidden);
+          document.documentElement.classList.toggle('header-hidden', hidden);
+        };
+
+        const updateScrollState = () => {
+          const scrollY = window.scrollY;
+          backToTop.hidden = scrollY <= 400;
+
+          if (scrollY <= 60) {
+            setHeaderHidden(false);
+            previousScrollY = scrollY;
+            direction = 0;
+            accumulatedDistance = 0;
+            return;
+          }
+
+          const distance = scrollY - previousScrollY;
+          previousScrollY = scrollY;
+          if (distance === 0) return;
+
+          const nextDirection = distance > 0 ? 1 : -1;
+          if (nextDirection !== direction) {
+            direction = nextDirection;
+            accumulatedDistance = 0;
+          }
+          accumulatedDistance += Math.abs(distance);
+
+          if (accumulatedDistance >= 8) setHeaderHidden(direction > 0);
+        };
+
+        window.addEventListener('scroll', () => {
+          if (animationFrame !== undefined) return;
+          animationFrame = window.requestAnimationFrame(() => {
+            animationFrame = undefined;
+            updateScrollState();
+          });
+        }, { passive: true });
+
+        backToTop.addEventListener('click', () => {
+          brand.focus({ preventScroll: true });
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          });
+        });
+
+        updateScrollState();
+      }
+    </script>
   </body>
 </html>

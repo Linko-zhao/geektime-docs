@@ -1,0 +1,91 @@
+---
+import type { MarkdownHeading } from 'astro';
+import ArticleSidebar from './ArticleSidebar.astro';
+import TableOfContents from './TableOfContents.astro';
+import type { IndexedArticle } from '../lib/content';
+
+interface Props {
+  articles: IndexedArticle[];
+  activeSlug: string;
+  headings: MarkdownHeading[];
+}
+
+const { articles, activeSlug, headings } = Astro.props;
+---
+
+<div class="mobile-article-navigation">
+  <button
+    type="button"
+    class="mobile-article-drawer-trigger"
+    aria-label="打开文章导航"
+    aria-haspopup="dialog"
+    aria-controls="mobile-article-drawer"
+    aria-expanded="false"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+  <dialog id="mobile-article-drawer" class="mobile-article-drawer" aria-labelledby="mobile-article-drawer-title">
+    <header class="drawer-header">
+      <h2 id="mobile-article-drawer-title">文章导航</h2>
+      <button type="button" class="drawer-close" aria-label="关闭文章导航">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </header>
+    <div class="drawer-content">
+      <ArticleSidebar articles={articles} activeSlug={activeSlug} />
+      <TableOfContents headings={headings} />
+    </div>
+  </dialog>
+</div>
+
+<script>
+  const navigation = document.querySelector<HTMLElement>('.mobile-article-navigation');
+  const trigger = navigation?.querySelector<HTMLButtonElement>('.mobile-article-drawer-trigger');
+  const dialog = navigation?.querySelector<HTMLDialogElement>('.mobile-article-drawer');
+  const closeButton = dialog?.querySelector<HTMLButtonElement>('.drawer-close');
+
+  if (trigger && dialog && closeButton) {
+    const closeDrawer = () => {
+      if (dialog.open) dialog.close();
+    };
+
+    const centerActiveArticle = () => {
+      const sidebar = dialog.querySelector<HTMLElement>('.article-sidebar');
+      const activeArticle = sidebar?.querySelector<HTMLElement>('a.active');
+      if (!sidebar || !activeArticle) return;
+
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const articleRect = activeArticle.getBoundingClientRect();
+      sidebar.scrollTop += articleRect.top - sidebarRect.top - (sidebar.clientHeight - activeArticle.clientHeight) / 2;
+    };
+
+    trigger.addEventListener('click', () => {
+      dialog.showModal();
+      trigger.setAttribute('aria-expanded', 'true');
+      closeButton.focus();
+      requestAnimationFrame(centerActiveArticle);
+    });
+
+    closeButton.addEventListener('click', closeDrawer);
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) closeDrawer();
+    });
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeDrawer();
+    });
+    dialog.addEventListener('close', () => {
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.focus();
+    });
+    dialog.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeDrawer));
+
+    window.matchMedia('(max-width: 760px)').addEventListener('change', (event) => {
+      if (!event.matches) closeDrawer();
+    });
+  }
+</script>

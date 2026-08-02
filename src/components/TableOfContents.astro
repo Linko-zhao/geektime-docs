@@ -29,12 +29,14 @@ const items = headings.filter((heading) => heading.depth === 2 || heading.depth 
 )}
 
 <script>
-  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
-  const headings = links
-    .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
-    .filter((heading): heading is HTMLElement => heading !== null);
+  document.querySelectorAll<HTMLElement>('.toc').forEach((toc) => {
+    const links = [...toc.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+    const headings = links
+      .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+      .filter((heading): heading is HTMLElement => heading !== null);
 
-  if (headings.length) {
+    if (!headings.length) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         const active = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
@@ -44,5 +46,5 @@ const items = headings.filter((heading) => heading.depth === 2 || heading.depth 
       { rootMargin: '0px 0px -72% 0px' },
     );
     headings.forEach((heading) => observer.observe(heading));
-  }
+  });
 </script>

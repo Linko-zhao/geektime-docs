@@ -4,6 +4,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ArticleSidebar from '../../../components/ArticleSidebar.astro';
 import TableOfContents from '../../../components/TableOfContents.astro';
+import MobileArticleDrawer from '../../../components/MobileArticleDrawer.astro';
 import { getSiteIndex, href, toIndexedArticle } from '../../../lib/content';
 
 export async function getStaticPaths() {
@@ -26,6 +27,7 @@ const next = articles[order + 1];
 ---
 
 <BaseLayout title={`${article.title} · ${course.name}`}>
+  <MobileArticleDrawer slot="header-actions" articles={articles} activeSlug={article.slug} headings={headings} />
   <div class="article-shell">
     <ArticleSidebar articles={articles} activeSlug={article.slug} />
     <div class="article-main">
