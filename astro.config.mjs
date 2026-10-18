@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import { fromHtml } from 'hast-util-from-html';
+import { toHtml } from 'hast-util-to-html';
 import remarkTextr from 'remark-textr';
 import { existsSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
@@ -82,39 +83,60 @@ function buildCommentsSection(title, ul) {
   ]);
 }
 
-// The comment block arrives as an unparsed `raw` node: Astro runs user rehype
-// plugins before rehype-raw, so parse it with hast-util-from-html here.
-function rehypeFeaturedComments() {
-  const transformChildren = (children) => {
-    const replaced = [];
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      if (child.type === 'raw' && child.value.includes('精选留言')) {
-        const fragment = fromHtml(child.value, { fragment: true });
-        replaced.push(...transformChildren(fragment.children));
-        continue;
-      }
-      const isTitle = child.type === 'element' && child.tagName === 'div' && commentsTitlePattern.test(elementText(child).trim());
-      let j = i + 1;
-      while (children[j]?.type === 'text' && !children[j].value.trim()) j++;
-      const ul = children[j];
-      const section = isTitle && ul?.type === 'element' && ul.tagName === 'ul' ? buildCommentsSection(child, ul) : null;
-      if (section) {
-        replaced.push(section);
-        i = j;
-      } else {
-        replaced.push(child);
-      }
+function htmlToCommentsSection(html) {
+  const children = fromHtml(html, { fragment: true }).children;
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    const isTitle = child.type === 'element' && child.tagName === 'div' && commentsTitlePattern.test(elementText(child).trim());
+    let j = i + 1;
+    while (children[j]?.type === 'text' && !children[j].value.trim()) j++;
+    const ul = children[j];
+    if (isTitle && ul?.type === 'element' && ul.tagName === 'ul') {
+      const section = buildCommentsSection(child, ul);
+      if (section) return toHtml(section);
     }
-    return replaced;
-  };
+  }
+  return null;
+}
+
+// Flatten an mdast node back to its source HTML. `html` nodes are verbatim;
+// text nodes already had entities decoded by the markdown parser, so re-escape
+// them or code like `i<imgData` breaks the reparse. Markdown formatting parsed
+// inside a comment body (e.g. **bold**) degrades to plain text.
+function mdastSource(node) {
+  if (node.type === 'html') return node.value;
+  if (typeof node.value === 'string') return node.value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return (node.children ?? []).map(mdastSource).join('');
+}
+
+// Runs at the remark level: mdast keeps the original HTML in `html` nodes, and
+// comment lists broken by blank lines surface as following html/paragraph
+// siblings whose source we can merge until the list closes. (At the rehype
+// level that HTML is already split into raw nodes and escaped text.)
+function remarkFeaturedComments() {
   return (tree) => {
-    const transform = (node) => {
-      if (!Array.isArray(node?.children)) return;
-      node.children.forEach(transform);
-      node.children = transformChildren(node.children);
-    };
-    transform(tree);
+    const out = [];
+    for (let i = 0; i < tree.children.length; i++) {
+      const child = tree.children[i];
+      if (child.type === 'html' && child.value.includes('精选留言')) {
+        let html = child.value;
+        let j = i + 1;
+        // Comment bodies can contain literal `<ul>` examples, so a plain
+        // substring check stops early; only a trailing `</ul>` closes the list.
+        while (!html.trimEnd().endsWith('</ul>') && tree.children[j]) {
+          html += mdastSource(tree.children[j]);
+          j++;
+        }
+        const section = htmlToCommentsSection(html);
+        if (section) {
+          out.push({ type: 'html', value: section });
+          i = j - 1;
+          continue;
+        }
+      }
+      out.push(child);
+    }
+    tree.children = out;
   };
 }
 
@@ -273,12 +295,13 @@ export default defineConfig({
       },
     },
     remarkPlugins: [
+      remarkFeaturedComments,
       remarkProxyGeekbangImages,
       [remarkTextr, { plugins: [chineseTypography] }],
       remarkRestoreLiteralStrong,
       remarkInlineTypography,
     ],
-    rehypePlugins: [rehypeFeaturedComments, addImageAttributes],
+    rehypePlugins: [addImageAttributes],
   },
   vite: {
     server: {
