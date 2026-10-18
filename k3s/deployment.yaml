@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: geektime-docs
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geektime-docs
+
+  template:
+    metadata:
+      labels:
+        app: geektime-docs
+
+    spec:
+      containers:
+        - name: geektime-docs
+          image: ghcr.io/linko-zhao/geektime-docs:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8091
