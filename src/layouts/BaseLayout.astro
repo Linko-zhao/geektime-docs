@@ -14,13 +14,28 @@ const { title = '极客时间文档' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="极客时间 Markdown 文档" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Sora:wght@500..800&display=swap" />
     <title>{title}</title>
+    <script is:inline>
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'dark' || (!storedTheme && matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="/">极客时间文档</a>
       <span>技术课程 Markdown 阅读站</span>
-      <div class="header-actions"><slot name="header-actions" /></div>
+      <div class="header-actions">
+        <slot name="header-actions" />
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="切换深色模式">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        </button>
+      </div>
     </header>
     <main><slot /></main>
     <button type="button" class="back-to-top" data-back-to-top hidden aria-label="返回顶部">
@@ -89,6 +104,16 @@ const { title = '极客时间文档' } = Astro.props;
 
         updateScrollState();
       }
+
+      const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+      themeToggle?.addEventListener('click', () => {
+        const dark = document.documentElement.classList.toggle('dark');
+        try {
+          localStorage.setItem('theme', dark ? 'dark' : 'light');
+        } catch {
+          // Toggle still works when storage is unavailable.
+        }
+      });
     </script>
   </body>
 </html>

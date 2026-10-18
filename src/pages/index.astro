@@ -1,6 +1,8 @@
 ---
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { categories, getSiteIndex, href, toIndexedArticle } from '../lib/content';
+import { categories, href } from '../lib/content';
 
 type SearchItem = {
   type: 'course' | 'article';
@@ -9,29 +11,49 @@ type SearchItem = {
   href: string;
 };
 
-const courses = await getSiteIndex();
-const searchItems: SearchItem[] = [
-  ...courses.map((course) => ({
-    type: 'course' as const,
-    title: course.name,
-    context: course.category,
-    href: href(course.category, course.name),
-  })),
-  ...courses.flatMap((course) => course.articles.map((entry, index) => {
-    const article = toIndexedArticle(course.category, course.name, entry, index);
-    return {
-      type: 'article' as const,
-      title: article.title,
-      context: `${article.category} · ${article.course}`,
-      href: href(article.category, article.course, article.slug),
-    };
-  })),
-];
+interface CourseSummary {
+  category: string;
+  name: string;
+  articleCount: number;
+}
+
+// shortcut: 首页索引只走文件名（文件名即文章标题），不加载 Markdown 集合与正文；
+// 若以后需要按正文搜索，再引入构建期索引文件
+const root = process.cwd();
+const courses: CourseSummary[] = [];
+const searchItems: SearchItem[] = [];
+
+for (const category of categories) {
+  const categoryPath = join(root, category);
+  if (!existsSync(categoryPath)) continue;
+  for (const item of readdirSync(categoryPath, { withFileTypes: true })) {
+    if (!item.isDirectory()) continue;
+    const docsPath = join(categoryPath, item.name, 'docs');
+    if (!existsSync(docsPath)) continue;
+    const files = readdirSync(docsPath).filter((file) => file.toLowerCase().endsWith('.md'));
+    courses.push({ category, name: item.name, articleCount: files.length });
+    searchItems.push({
+      type: 'course',
+      title: item.name,
+      context: category,
+      href: href(category, item.name),
+    });
+    for (const file of files) {
+      const slug = file.replace(/\.md$/i, '').replace(/%/g, 'percent');
+      searchItems.push({
+        type: 'article',
+        title: slug,
+        context: `${category} · ${item.name}`,
+        href: href(category, item.name, slug),
+      });
+    }
+  }
+}
 const serializedSearchItems = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
 <BaseLayout>
-  <section class="page-intro">
+  <section class="page-intro hero">
     <p class="eyebrow">Markdown 文档库</p>
     <h1>极客时间文档</h1>
     <p>按当前文件夹层级浏览全部技术课程。</p>

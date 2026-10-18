@@ -169,6 +169,12 @@ export default defineConfig({
   },
   markdown: {
     processor: unified(),
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    },
     remarkPlugins: [
       remarkProxyGeekbangImages,
       [remarkTextr, { plugins: [chineseTypography] }],
