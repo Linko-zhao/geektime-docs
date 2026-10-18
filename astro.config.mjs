@@ -289,10 +289,8 @@ export default defineConfig({
   markdown: {
     processor: unified(),
     shikiConfig: {
-      themes: {
-        light: 'github-light',
-        dark: 'github-dark',
-      },
+      // 单遍高亮，明暗配色由 site.css 里的 --shiki-* 变量决定
+      theme: 'css-variables',
     },
     remarkPlugins: [
       remarkFeaturedComments,

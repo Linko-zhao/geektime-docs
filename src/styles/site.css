@@ -13,6 +13,17 @@
   --link: #2563eb;
   --code-bg: #ecf4fa;
   --code-border: #d4e5f0;
+  /* Shiki css-variables 主题，对齐 github-light */
+  --astro-code-foreground: #24292e;
+  --astro-code-token-constant: #005cc5;
+  --astro-code-token-string: #032f62;
+  --astro-code-token-comment: #6a737d;
+  --astro-code-token-keyword: #d73a49;
+  --astro-code-token-parameter: #e36209;
+  --astro-code-token-function: #6f42c1;
+  --astro-code-token-string-expression: #22863a;
+  --astro-code-token-punctuation: #24292e;
+  --astro-code-token-link: #032f62;
   color-scheme: light;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
   color: var(--foreground);
@@ -30,6 +41,17 @@ html.dark {
   --link: #60a5fa;
   --code-bg: #20242d;
   --code-border: rgb(255 255 255 / .08);
+  /* Shiki css-variables 主题，对齐 github-dark */
+  --astro-code-foreground: #e1e4e8;
+  --astro-code-token-constant: #79b8ff;
+  --astro-code-token-string: #9ecbff;
+  --astro-code-token-comment: #959da5;
+  --astro-code-token-keyword: #f97583;
+  --astro-code-token-parameter: #ffab70;
+  --astro-code-token-function: #b392f0;
+  --astro-code-token-string-expression: #85e89d;
+  --astro-code-token-punctuation: #e1e4e8;
+  --astro-code-token-link: #9ecbff;
   color-scheme: dark;
 }
 html.header-hidden { --site-header-offset: 0px; }
