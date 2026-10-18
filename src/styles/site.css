@@ -152,7 +152,7 @@ html.dark .article-list a:hover { box-shadow: 0 4px 12px rgb(0 0 0 / .4); }
 .comment-body p:last-child { margin-bottom: 0; }
 .comment-stats { display: flex; gap: .5rem; margin-top: .75rem; }
 .comment-stat { padding: .2rem .45rem; border-radius: .35rem; background: var(--primary-soft); color: var(--link); font-size: .75rem; font-weight: 700; }
-.comment-controls { display: none; align-items: center; justify-content: center; gap: .75rem; margin-top: .75rem; }
+.comment-controls { display: none; align-items: center; justify-content: center; gap: .75rem; margin: .75rem 0 2rem; }
 .comments[data-carousel] .comment-controls { display: flex; }
 .comment-controls button { padding: .35rem .7rem; border: 1px solid var(--border); border-radius: 999px; background: var(--card); color: var(--muted-foreground); cursor: pointer; font: inherit; font-size: .875rem; }
 .comment-controls button:hover { border-color: var(--primary); color: var(--link); }
