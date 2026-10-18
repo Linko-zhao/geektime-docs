@@ -92,8 +92,10 @@ html.dark .category-card:hover, html.dark .course-card:hover { box-shadow: 0 8px
 .category-card span, .course-card span { font-size: .875rem; color: var(--muted-foreground); }
 .breadcrumbs { display: flex; gap: .45rem; align-items: center; flex-wrap: wrap; padding-top: 1.5rem; font-size: .875rem; color: var(--muted-foreground); }
 .breadcrumbs > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 38ch; }
-.article-list { padding: 0 0 4rem 1.5rem; margin: 0; }
-.article-list li { margin: .35rem 0; padding-left: .25rem; }
+.article-list { padding: 0 0 4rem; margin: 0; list-style: none; display: grid; gap: .6rem; }
+.article-list a { display: block; background: var(--card); border: 1px solid var(--border); padding: .7rem 1rem; border-radius: .75rem; color: inherit; overflow-wrap: anywhere; transition: border-color .15s, box-shadow .15s; }
+.article-list a:hover { border-color: var(--primary); text-decoration: none; box-shadow: 0 4px 12px rgb(15 23 42 / .06); }
+html.dark .article-list a:hover { box-shadow: 0 4px 12px rgb(0 0 0 / .4); }
 .course-introduction { background: var(--card); border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
 .course-introduction > h2 { margin: 0; font-size: 1.15rem; color: var(--heading); }
 .course-introduction p { color: var(--muted-foreground); margin: .5rem 0; }
@@ -109,7 +111,7 @@ html.dark .category-card:hover, html.dark .course-card:hover { box-shadow: 0 8px
 .article-sidebar { border-right: 1px solid var(--border); border-radius: 0; }
 .toc { border-left: 1px solid var(--border); border-radius: 0; }
 .article-sidebar h2, .toc summary { font-size: .95rem; font-weight: 700; margin: 0 0 .75rem; padding-inline: .6rem; color: var(--heading); }
-.article-sidebar ol { padding-left: 1rem; margin: 0; }
+.article-sidebar ol { padding: 0; margin: 0; list-style: none; }
 .toc ul { padding: 0; margin: 0; list-style: none; }
 .article-sidebar li, .toc li { margin: .15rem 0; font-size: .84rem; }
 .article-sidebar a, .toc a { color: var(--muted-foreground); display: block; padding: .3rem .6rem; border-radius: .45rem; overflow-wrap: anywhere; }
@@ -137,7 +139,9 @@ html.dark .category-card:hover, html.dark .course-card:hover { box-shadow: 0 8px
 .prose img { display: block; max-width: 100%; height: auto; margin: 1.25rem auto; }
 .prose a { overflow-wrap: anywhere; }
 .article-pagination { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
-.article-pagination a { overflow-wrap: anywhere; }
+.article-pagination a { overflow-wrap: anywhere; display: block; background: var(--card); border: 1px solid var(--border); border-radius: .75rem; padding: .7rem 1rem; color: inherit; transition: border-color .15s, box-shadow .15s; }
+.article-pagination a:hover { border-color: var(--primary); text-decoration: none; box-shadow: 0 4px 12px rgb(15 23 42 / .06); }
+html.dark .article-pagination a:hover { box-shadow: 0 4px 12px rgb(0 0 0 / .4); }
 .article-pagination a:last-child { text-align: right; }
 .not-found { padding: 8rem 0; text-align: center; }
 .not-found h1 { font-size: 5rem; }
