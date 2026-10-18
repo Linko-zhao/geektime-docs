@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
+import { fromHtml } from 'hast-util-from-html';
 import remarkTextr from 'remark-textr';
 import { existsSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
@@ -18,6 +19,102 @@ function addImageAttributes() {
       if (Array.isArray(node?.children)) node.children.forEach(visit);
     };
     visit(tree);
+  };
+}
+
+const commentsTitlePattern = /^精选留言（\d+）$/;
+
+function h(tagName, properties, children) {
+  return { type: 'element', tagName, properties, children };
+}
+
+function elementText(node) {
+  if (node?.type === 'text') return node.value;
+  if (Array.isArray(node?.children)) return node.children.map(elementText).join('');
+  return '';
+}
+
+// Comment markup in the source markdown is raw HTML:
+// <li><span>name</span> 👍（likes） 💬（replies）<p>body</p>YYYY-MM-DD</li>
+function parseComment(li) {
+  const nameNode = li.children.find((child) => child.type === 'element' && child.tagName === 'span');
+  const body = li.children.filter((child) => child.type === 'element' && child.tagName === 'p');
+  const text = li.children.filter((child) => child.type === 'text').map((child) => child.value).join(' ');
+  return {
+    name: elementText(nameNode).trim(),
+    body,
+    likes: Number(text.match(/👍（(\d+)）/)?.[1] ?? 0),
+    replies: Number(text.match(/💬（(\d+)）/)?.[1] ?? 0),
+    date: text.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? '',
+  };
+}
+
+function buildCommentCard(comment) {
+  return h('li', { className: ['comment-card'] }, [
+    h('header', { className: ['comment-meta'] }, [
+      h('span', { className: ['comment-author'] }, [{ type: 'text', value: comment.name }]),
+      ...(comment.date
+        ? [h('time', { className: ['comment-date'], dateTime: comment.date }, [{ type: 'text', value: comment.date }])]
+        : []),
+    ]),
+    h('div', { className: ['comment-body'] }, comment.body),
+    h('footer', { className: ['comment-stats'] }, [
+      h('span', { className: ['comment-stat'] }, [{ type: 'text', value: `👍 ${comment.likes}` }]),
+      h('span', { className: ['comment-stat'] }, [{ type: 'text', value: `💬 ${comment.replies}` }]),
+    ]),
+  ]);
+}
+
+function buildCommentsSection(title, ul) {
+  const comments = ul.children
+    .filter((child) => child.type === 'element' && child.tagName === 'li')
+    .map(parseComment)
+    .sort((a, b) => b.likes - a.likes);
+  if (comments.length === 0) return null;
+  return h('section', { className: ['comments'] }, [
+    h('h2', { className: ['comments-title'] }, [{ type: 'text', value: elementText(title).trim() }]),
+    h('ul', { className: ['comment-list'] }, comments.map(buildCommentCard)),
+    h('div', { className: ['comment-controls'] }, [
+      h('button', { type: 'button', 'data-comment-prev': '' }, [{ type: 'text', value: '← 上一条' }]),
+      h('span', { className: ['comment-counter'] }, [{ type: 'text', value: `1 / ${comments.length}` }]),
+      h('button', { type: 'button', 'data-comment-next': '' }, [{ type: 'text', value: '下一条 →' }]),
+    ]),
+  ]);
+}
+
+// The comment block arrives as an unparsed `raw` node: Astro runs user rehype
+// plugins before rehype-raw, so parse it with hast-util-from-html here.
+function rehypeFeaturedComments() {
+  const transformChildren = (children) => {
+    const replaced = [];
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      if (child.type === 'raw' && child.value.includes('精选留言')) {
+        const fragment = fromHtml(child.value, { fragment: true });
+        replaced.push(...transformChildren(fragment.children));
+        continue;
+      }
+      const isTitle = child.type === 'element' && child.tagName === 'div' && commentsTitlePattern.test(elementText(child).trim());
+      let j = i + 1;
+      while (children[j]?.type === 'text' && !children[j].value.trim()) j++;
+      const ul = children[j];
+      const section = isTitle && ul?.type === 'element' && ul.tagName === 'ul' ? buildCommentsSection(child, ul) : null;
+      if (section) {
+        replaced.push(section);
+        i = j;
+      } else {
+        replaced.push(child);
+      }
+    }
+    return replaced;
+  };
+  return (tree) => {
+    const transform = (node) => {
+      if (!Array.isArray(node?.children)) return;
+      node.children.forEach(transform);
+      node.children = transformChildren(node.children);
+    };
+    transform(tree);
   };
 }
 
@@ -181,7 +278,7 @@ export default defineConfig({
       remarkRestoreLiteralStrong,
       remarkInlineTypography,
     ],
-    rehypePlugins: [addImageAttributes],
+    rehypePlugins: [rehypeFeaturedComments, addImageAttributes],
   },
   vite: {
     server: {

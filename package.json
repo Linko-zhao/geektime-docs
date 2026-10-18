@@ -17,6 +17,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/markdown-remark": "^7.2.1",
     "astro": "^7.0.7",
+    "hast-util-from-html": "^2.0.3",
     "prettier": "^3.6.2",
     "remark-textr": "^6.1.0",
     "typescript": "^5.8.3",

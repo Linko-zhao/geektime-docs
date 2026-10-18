@@ -138,6 +138,26 @@ html.dark .article-list a:hover { box-shadow: 0 4px 12px rgb(0 0 0 / .4); }
 .prose blockquote { border-left: .25rem solid var(--primary); padding-left: 1rem; color: var(--muted-foreground); }
 .prose img { display: block; max-width: 100%; height: auto; margin: 1.25rem auto; }
 .prose a { overflow-wrap: anywhere; }
+.comments { margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+.comments-title { margin: 0 0 1rem; color: var(--heading); font-size: 1.05rem; font-weight: 700; }
+.comment-list { display: grid; gap: .75rem; padding: 0; margin: 0; list-style: none; }
+.comment-list li + li { margin-top: 0; }
+.comment-card { background: var(--card); border: 1px solid var(--border); border-radius: .75rem; padding: 1rem 1.1rem; }
+.comments[data-carousel] .comment-card { display: none; }
+.comments[data-carousel] .comment-card[data-active] { display: block; }
+.comment-meta { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; margin-bottom: .5rem; }
+.comment-author { color: var(--heading); font-weight: 700; }
+.comment-date { color: var(--muted-foreground); font-size: .8rem; }
+.comment-body p { margin: 0 0 .5rem; }
+.comment-body p:last-child { margin-bottom: 0; }
+.comment-stats { display: flex; gap: .5rem; margin-top: .75rem; }
+.comment-stat { padding: .2rem .45rem; border-radius: .35rem; background: var(--primary-soft); color: var(--link); font-size: .75rem; font-weight: 700; }
+.comment-controls { display: none; align-items: center; justify-content: center; gap: .75rem; margin-top: .75rem; }
+.comments[data-carousel] .comment-controls { display: flex; }
+.comment-controls button { padding: .35rem .7rem; border: 1px solid var(--border); border-radius: 999px; background: var(--card); color: var(--muted-foreground); cursor: pointer; font: inherit; font-size: .875rem; }
+.comment-controls button:hover { border-color: var(--primary); color: var(--link); }
+.comment-controls button:focus-visible { outline: 3px solid var(--primary-soft); outline-offset: 2px; }
+.comment-counter { color: var(--muted-foreground); font-size: .875rem; }
 .article-pagination { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
 .article-pagination a { overflow-wrap: anywhere; display: block; background: var(--card); border: 1px solid var(--border); border-radius: .75rem; padding: .7rem 1rem; color: inherit; transition: border-color .15s, box-shadow .15s; }
 .article-pagination a:hover { border-color: var(--primary); text-decoration: none; box-shadow: 0 4px 12px rgb(15 23 42 / .06); }

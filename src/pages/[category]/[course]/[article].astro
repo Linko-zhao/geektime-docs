@@ -84,3 +84,23 @@ const next = articles[order + 1];
     });
   }
 </script>
+
+<script>
+  document.querySelectorAll('.comments').forEach((section) => {
+    const cards = Array.from(section.querySelectorAll('.comment-card'));
+    const counter = section.querySelector('.comment-counter');
+    if (cards.length < 2) return;
+
+    let index = 0;
+    const show = (next: number) => {
+      index = (next + cards.length) % cards.length;
+      cards.forEach((card, i) => card.toggleAttribute('data-active', i === index));
+      if (counter) counter.textContent = `${index + 1} / ${cards.length}`;
+    };
+
+    section.toggleAttribute('data-carousel', true);
+    show(0);
+    section.querySelector('[data-comment-prev]')?.addEventListener('click', () => show(index - 1));
+    section.querySelector('[data-comment-next]')?.addEventListener('click', () => show(index + 1));
+  });
+</script>
