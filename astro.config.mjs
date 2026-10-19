@@ -7,7 +7,6 @@ import { existsSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 
 const imageExtensions = new Set(['.avif', '.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']);
-const geekbangImageUrl = /^https?:\/\/static001(?:-test)?\.geekbang\.org\/resource\/image\//i;
 
 function addImageAttributes() {
   return (tree) => {
@@ -148,20 +147,6 @@ function chineseTypography(value) {
     .replace(new RegExp(`(${latinOrNumber})(?=${cjk})`, 'g'), '$1 ');
 }
 
-function proxyGeekbangImages(node) {
-  if (node?.type === 'image' && typeof node.url === 'string' && geekbangImageUrl.test(node.url)) {
-    const source = new URL(node.url);
-    // Keep the upstream host out of the public URL. The proxy only serves the
-    // fixed Geekbang image directory, which avoids an open-proxy endpoint.
-    node.url = `/image-proxy${source.pathname}${source.search}`;
-  }
-  if (Array.isArray(node?.children)) node.children.forEach(proxyGeekbangImages);
-}
-
-function remarkProxyGeekbangImages() {
-  return (tree) => proxyGeekbangImages(tree);
-}
-
 const inlineFormattingTypes = new Set(['strong', 'emphasis', 'delete']);
 const cjkCharacter = /[\u3400-\u9fff\uf900-\ufaff]/;
 const latinOrNumberCharacter = /[A-Za-z0-9]/;
@@ -294,7 +279,6 @@ export default defineConfig({
     },
     remarkPlugins: [
       remarkFeaturedComments,
-      remarkProxyGeekbangImages,
       [remarkTextr, { plugins: [chineseTypography] }],
       remarkRestoreLiteralStrong,
       remarkInlineTypography,
@@ -302,18 +286,6 @@ export default defineConfig({
     rehypePlugins: [addImageAttributes],
   },
   vite: {
-    server: {
-      proxy: {
-        '/image-proxy': {
-          target: 'https://static001.geekbang.org',
-          changeOrigin: true,
-          headers: { Referer: 'https://time.geekbang.org/' },
-          rewrite(path) {
-            return path.replace(/^\/image-proxy/, '');
-          },
-        },
-      },
-    },
     plugins: [preserveMissingMarkdownImages()],
   },
 });
